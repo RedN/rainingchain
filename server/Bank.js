@@ -62,7 +62,7 @@ Bank.click = function(key,slot,side){
 	}
 	if(side === 'right'){
 		var id = mainList[key].bankList[slot][0];
-		setOptionList(key,{
+		Button.optionList(key,{
 			'name':itemDb[id].name,
 			'option':[
 				{'name':'Withdraw 5','func':'transferBankInv','param':[id,5]},

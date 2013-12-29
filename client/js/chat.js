@@ -176,7 +176,7 @@ rightClickChat = function(name){
 	'param':[name],	
 	};
 		
-	setOptionList(option);
+	Button.optionList(option);
 }
 		
 		

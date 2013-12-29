@@ -197,12 +197,12 @@ Inventory.prototype.click = function(slot,side){
 		if(!mw.bank && !mw.shop && !mw.trade){
 			var item = itemDb[inv.data[slot][0]];
 			var player = fullList[key];
-			setOptionList(key,{'name':item.name,'option':item.option});
+			Button.optionList(key,{'name':item.name,'option':item.option});
 		}
 
 		if(mw.bank){
 			var id = this.data[slot][0];
-			setOptionList(key,{
+			Button.optionList(key,{
 				'name':itemDb[id].name,
 				'option':[
 					{'name':'Deposit 5','func':'transferInvBank','param':[id,5]},

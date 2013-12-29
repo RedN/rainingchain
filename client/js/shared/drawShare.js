@@ -31,7 +31,7 @@ Draw.loop=function (key){
 		
 		if(mainList[key].optionList){ Draw.optionList(key); }
 		
-		updateContext(key);
+		Button.context(key);
 	}
 	if(!server){
 		//Clear
@@ -39,7 +39,7 @@ Draw.loop=function (key){
 		for(var i in drawHtmlDiv){ drawHtmlDiv[i].style.visibility = 'hidden';}
 		drawSortList = [];
 		btnList = [];
-		updateDrag();
+		Input.event.mouse.drag.update();
 		
 		//Draw
 		Draw.map.b();   //below player
@@ -69,7 +69,7 @@ Draw.loop=function (key){
 		
 		if(optionList){ Draw.optionList(); }    //option when right-click
 		
-		updateContext();	//update for client buttons only
+		Button.context();	//update for client buttons only
 		Draw.context();     //top left
 		//clientContext = '';		
 	}
@@ -154,13 +154,13 @@ Draw.entity.mortal = function (key){
 				};
 				
 				if(mort.optionList){
-					info['right'] = {'func':'setOptionList','param':mort.optionList};
+					info['right'] = {'func':'Button.optionList','param':mort.optionList};
 				}
 				
 				
 				 
 				 
-				addButton(key,info);
+				Button.creation(key,info);
 			}
 		}
 	}	
@@ -253,7 +253,7 @@ Draw.entity.drop = function(key){
 			var numX = WIDTH2 + dropList[i].x - mList[key].x;
 			var numY = HEIGHT2 + dropList[i].y - mList[key].y;
 			
-			addButton(key,{
+			Button.creation(key,{
 			"rect":[numX,numX+32,numY,numY+32],
 			"left":{"func":pickDrop,"param":[i]},
 			'right':{'func':rightClickDrop,'param':[[dropList[i].x,dropList[i].x+32,dropList[i].y,dropList[i].y+32]]},
@@ -334,7 +334,7 @@ Draw.minimap = function (){ ctxrestore();
 	ctx.fillText(pref.mapZoom + '%',numX,numY);
 	
 	//client button
-	addButton(0,{
+	Button.creation(0,{
 		"rect":[numX,numX+disX,numY,numY+disY],
 		"left":{"func":(function(){ addInput('$pref,mapZoom,'); }),"param":[]},
 		"text":'Change Map Zoom.'
@@ -566,7 +566,7 @@ Draw.tab.main = function (key){ ctxrestore();
 		var numX = sx + 15 + vx * (i%100)  
 		var numY = oy + 8  + vy * Math.floor(i/100)
 		
-		addButton(key,{
+		Button.creation(key,{
 			"rect":[numX,numX+24,numY,numY+24],
 			"left":{"func":Chat.send.command,"param":['$tab,open,' + tabName[i]]},
 			'text':tabDName[i],
@@ -607,7 +607,7 @@ Draw.tab.inventory = function (key){ ctxrestore();
 			
 			var text = !(temp.selectInv && temp.reset && temp.reset.selectInv) ? 'Use ' + invList[i][0] : temp.selectInv.name + ' on ' + invList[i][0];
 			
-			addButton(key,{
+			Button.creation(key,{
 				"rect":[numX,numX+32,numY,numY+32],
 				"left":{"func":Chat.send.command,"param":['$tab,inv,click,left,' + i]},
 				"right":{"func":Chat.send.command,"param":['$tab,inv,click,right,' + i]},
@@ -631,7 +631,7 @@ Draw.tab.equip = function (key){ ctxrestore();
 		var numY = sy + 7 + 5 + 45 * i;
 				
 		if(server){	
-			addButton(key,{
+			Button.creation(key,{
 				"rect":[numX,numX+40,numY,numY+40],
 				"left":{"func":Mortal.swapWeapon,"param":[weaponPieceName[i]]},
 				"text":'Swap Weapon'
@@ -662,7 +662,7 @@ Draw.tab.equip = function (key){ ctxrestore();
 		
 		if(server){	
 			/*
-			addButton(key,{
+			Button.creation(key,{
 				"rect":[numX,numX+40,numY,numY+40],
 				//"left":{"func":openPopup,"param":['armor',fullList[key].armor.piece[armorPieceName[i]]]},
 				"text":'Swap Armor'
@@ -691,25 +691,25 @@ Draw.tab.equip = function (key){ ctxrestore();
 	var vy = 25;
 	
 	if(server){
-		addButton(key,{
+		Button.creation(key,{
 			"rect":[numX,numX+80+vy,numY,numY+20],
 			"left":{"func":openWindow,"param":['offensive']},
 			"text":'Open Offensive Window'
 			});
 		numY += vy;
-		addButton(key,{
+		Button.creation(key,{
 			"rect":[numX,numX+80+vy,numY,numY+20],
 			"left":{"func":openWindow,"param":['defensive']},
 			"text":'Open Defensive Window'
 			});
 		numY += vy;
-		addButton(key,{
+		Button.creation(key,{
 			"rect":[numX,numX+80+vy,numY,numY+20],
 			"left":{"func":openWindow,"param":['ability']},
 			"text":'Open Ability Window'
 			});
 		numY += vy;
-		addButton(key,{
+		Button.creation(key,{
 			"rect":[numX,numX+80+vy,numY,numY+20],
 			"left":{"func":openWindow,"param":['passive']},
 			"text":'Open Passive Window'
@@ -868,7 +868,7 @@ Draw.tab.friend = function(key){ ctxrestore();
 	//1
 	ctx.drawImage(iconSheet,count*ICON,iconIndex['FRIEND'],ICON,ICON,numX,numY,20,20);
 		
-	addButton(0,{
+	Button.creation(0,{
 			"rect":[numX,numX+20,numY,numY+20],
 			//'left':{'func':(function(){ addInput('$fl,add,');  }), 'param':[]},
 			"text":'Check Friend List.'
@@ -878,7 +878,7 @@ Draw.tab.friend = function(key){ ctxrestore();
 	count++;
 	numX += vx;
 	ctx.drawImage(iconSheet,count*ICON,iconIndex['FRIEND'],ICON,ICON,numX,numY,20,20);
-	addButton(0,{
+	Button.creation(0,{
 			"rect":[numX,numX+20,numY,numY+20],
 			//'left':{'func':(function(){ addInput('$fl,add,');  }), 'param':[]},
 			"text":'Check Mute List.'
@@ -887,7 +887,7 @@ Draw.tab.friend = function(key){ ctxrestore();
 	count++;
 	numX += vx;
 	ctx.drawImage(iconSheet,count*ICON,iconIndex['FRIEND'],ICON,ICON,numX,numY,20,20);
-	addButton(0,{
+	Button.creation(0,{
 			"rect":[numX,numX+20,numY,numY+20],
 			'left':{'func':(function(){ addInput('$fl,add,');  }), 'param':[]},
 			"text":'Add a friend.'
@@ -896,7 +896,7 @@ Draw.tab.friend = function(key){ ctxrestore();
 	count++;
 	numX += vx;
 	ctx.drawImage(iconSheet,count*ICON,iconIndex['FRIEND'],ICON,ICON,numX,numY,20,20);
-	addButton(0,{
+	Button.creation(0,{
 			"rect":[numX,numX+20,numY,numY+20],
 			'left':{'func':(function(){ addInput('$fl,remove,');  }), 'param':[]},
 			"text":'Remove a friend.'
@@ -1025,7 +1025,7 @@ Draw.window.main = function(key,title){ ctxrestore();
 		
 		//Close
 		ctx.drawImage(iconSheet,iconIndex['system.close'].x,iconIndex['system.close'].y,ICON,ICON,sx + w -20,sy,20,20);	
-		addButton(0,{
+		Button.creation(0,{
 			"rect":[sx + w -20,sx + w,sy,sy+20],
 			"left":{"func":Chat.send.command,"param":['$win,close']},
 			'text':'Close'
@@ -1076,7 +1076,7 @@ Draw.window.bank = function (key){ ctxrestore();
 	
 	ctx.font = '25px Fixedsys';
 	ctx.fillText(string,numX,numY);
-	addButton(0,{
+	Button.creation(0,{
 		"rect":[numX,numX+ctx.measureText(string).width,numY,numY+25],
 		"left":{"func":(function(){ addInput('$pref,bankTransferAmount,'); }),"param":[]},
 		"text":'Change X-Amount.'
@@ -1088,7 +1088,7 @@ Draw.window.bank = function (key){ ctxrestore();
 		var numX = sx + 40 + 40*(i%amountX);
 		var numY = sy + 70 + 40*Math.floor(i/amountX);
 		
-		addButton(0,{
+		Button.creation(0,{
 			"rect":[numX,numX+32,numY,numY+32],
 			"left":{"func":Chat.send.command,"param":['$win,bank,click,left,' + i]},
 			"right":{"func":Chat.send.command,"param":['$win,bank,click,right,' + i]},
@@ -1228,12 +1228,12 @@ Draw.window.ability.leftSide = function(){ ctxrestore();
 	old.abilityShowed = player.abilityList[old.abilityShowed] ? old.abilityShowed : Object.keys(player.abilityList)[0];
 	if(!old.abilityShowed) return;
 	
-	for(var i = 0 ; i < abilityInput.length ; i++){
+	for(var i = 0 ; i < Input.key.ability.length ; i++){
 		var numX = sx + 15;
 		var numY = sy + 60 + 30 * i;
 		
 		ctx.font = '25px Fixedsys';
-		ctx.fillText(abilityInput[i][0].toString().keyCodeToName(),numX,numY);
+		ctx.fillText(Input.key.ability[i][0].toString().keyCodeToName(),numX,numY);
 		
 		if(player.ability[i]){
 			var slot = iconIndex[player.ability[i].icon];
@@ -1248,7 +1248,7 @@ Draw.window.ability.leftSide = function(){ ctxrestore();
 		var text = '';
 		if(player.ability[i]){ text = player.ability[i].name; }
 		
-		addButton(0,{
+		Button.creation(0,{
 			"rect":[numX, numX+45 + 32, numY, numY + 32 ],
 			"left":{"func":Chat.send.command,"param":['$win,ability,swap,' + i + ',' + old.abilityShowed]},
 			'text':text + ' => ' + player.abilityList[old.abilityShowed].name
@@ -1310,7 +1310,7 @@ Draw.window.ability.abilityList = function(diffX){ ctxrestore();
 		
 		for(var i in player.abilityList){ 
 			if(player.abilityList[i].id === obj[ats][j].id){
-				addButton(0,{
+				Button.creation(0,{
 					"rect":[numX, numX + 20, numY, numY + 20 ],
 					"left":{"func":(function(a){ old.abilityShowed = a; }),"param":[obj[ats][j].id]},
 					'text':'Select Ability: ' + obj[ats][j].name
@@ -1440,7 +1440,7 @@ Draw.window.ability.generalInfo.upgrade = function(){
 	option.option[2] = {'name':'Use 100 Orbs','func':(function() { Chat.send.command('$win,ability,upgrade,' + name + ',100'); }),'param':[]};
 	option.option[3] = {'name':'Use X Orbs','func':(function() { addInput('$win,ability,upgrade,' + name + ','); }),'param':[]};
 	
-	setOptionList(option);
+	Button.optionList(option);
 }
 
 Draw.window.ability.generalInfo.upMod = function(mod){
@@ -1452,7 +1452,7 @@ Draw.window.ability.generalInfo.upMod = function(mod){
 	option.option[2] = {'name':'Use 100 Orbs','func':(function() { Chat.send.command('$win,ability,upMod,' + name + ',' + mod + ',100'); }),'param':[]};
 	option.option[3] = {'name':'Use X Orbs','func':(function() { addInput('$win,ability,upMod,' + name + ',' + mod + ','); }),'param':[]};
 	
-	setOptionList(option);
+	Button.optionList(option);
 }
 
 Draw.window.ability.action = function(diffX,diffY){ ctxrestore();
@@ -1564,7 +1564,7 @@ Draw.window.trade = function (key){ ctxrestore();
 		var numY = sy + 70 + 65*Math.floor(i/4);
 		
 		if(server){
-			addButton(key,{
+			Button.creation(key,{
 			"rect":[numX,numX+56,numY,numY+56],
 			"left":{"func":tradeLeftClick,"param":[i]},
 			"right":{"func":tradeRightClick,"param":[i]},
@@ -1586,7 +1586,7 @@ Draw.window.trade = function (key){ ctxrestore();
 		var numY = sy +  70 + 65*Math.floor(i/4);
 			
 		if(server){
-			addButton(key,{
+			Button.creation(key,{
 			"rect":[numX,numX+56,numY,numY+56],
 			'text':'Withdraw ' + itemDb[trade.tradeList[i][0]].name
 			});	
@@ -1602,13 +1602,13 @@ Draw.window.trade = function (key){ ctxrestore();
 	
 	if(server){
 		if(!trade.confirm.self){
-			addButton(key,{
+			Button.creation(key,{
 			"rect":[numX,numX+wi,numY,numY+he],
 			'text':'Click to Accept Trade',
 			'left':{'func':(function(key){ trade.confirm.self = 1; }),'param':[]}
 			});	
 		} else {
-			addButton(key,{
+			Button.creation(key,{
 			"rect":[numX,numX+wi,numY,numY+he],
 			'text':'Click to Refuse Trade',
 			'left':{'func':(function(key){ trade.confirm.self = 0; }),'param':[]}
@@ -1655,7 +1655,7 @@ Draw.window.shop = function (key){ ctxrestore();
 	
 	
 			if(server){
-				addButton(key,{
+				Button.creation(key,{
 				"rect":[numX,numX+48,numY,numY+48],
 				"left":{"func":shopLeftClick,"param":[stock,i]},
 				"right":{"func":shopRightClick,"param":[stock,i]},
@@ -1762,7 +1762,7 @@ Draw.window.passive.grid = function(key){ ctxrestore();
 			
 			//Button
 			if(typeof passiveGrid[i][j] === 'object'){
-				addButton(0,{
+				Button.creation(0,{
 				"rect":[numX,numX+ic,numY,numY+ic],
 				"right":{"func":Chat.send.command,"param":['$win,passive,select,' + i + ',' + j]},
 				'text':'Choose ' + (passiveGrid[i][j].stat ? statTo[passiveGrid[i][j].stat].name : uniqueBoostDb[passiveGrid[i][j].value].name) ,
@@ -1774,9 +1774,9 @@ Draw.window.passive.grid = function(key){ ctxrestore();
 	
 	if(hover){ Draw.window.passive.hover(hover); }
 
-	addButton(0,{
+	Button.creation(0,{
 		"rect":[sx,sx+w,sy+50,sy+50+h],	//+50 or close doesnt work
-		"left":{"func":startDrag,"param":[]},
+		"left":{"func":Input.event.mouse.drag,"param":[]},
 		});	
 	
 }
@@ -1984,8 +1984,8 @@ Draw.popup.equip = function(key,type){ ctxrestore();
 	if(equip === undefined){queryDb(type+'Db',id); return; }
 	if(equip === 0){return;} //waiting for query answer
 	
-	var posx = popupList[type].x || mouseX;
-	var posy = popupList[type].y || mouseY;
+	var posx = popupList[type].x || mouse.x;
+	var posy = popupList[type].y || mouse.y;
 	
 	var sx = Math.max(0,Math.min(posx-w,WIDTH-w));
 	var sy = Math.max(0,Math.min(posy-h,HEIGHT - h));	
@@ -2089,7 +2089,7 @@ Draw.optionList = function(key){ ctxrestore();
 			//var name = parseOptionName(option[i].name); //bug cuz would need to use mainList[key].pref
 			name = option[i].name;
 			
-			addButton(key,{
+			Button.creation(key,{
 			"rect":[sx,sx+w,sy+nameY+optionY*i,sy+nameY+optionY*(i+1)],
 			"left":option[i],
 			"text":name,	
@@ -2132,7 +2132,7 @@ Draw.optionList = function(key){ ctxrestore();
 			ctx.fillText(name,sx+optionX,sy+optionY*(i+1));
 			
 			if(optionList.client){ 
-				addButton(0,{
+				Button.creation(0,{
 					'rect':[sx,sx+w,sy+nameY+optionY*i,sy+nameY+optionY*(i+1)],
 					"left":option[i],
 					'text':name,
@@ -2256,7 +2256,7 @@ Draw.chat = function(key){ ctxrestore();
 		if(server){
 			if(dia.option){
 				for(var i in dia.option){
-					addButton(key,{
+					Button.creation(key,{
 					"rect":[numX,numX+h,numY+i*optionY,numY+optionY+i*optionY],
 					"left":{"func":Dialogue.option,"param":[dia.option[i]]},
 					"text":dia.option[i].text

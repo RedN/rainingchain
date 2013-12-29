@@ -89,19 +89,9 @@ deepClone = function(info,func){
 		return info;
 	}
 }
-
-deepString = function(info){
-	if(typeof info == 'object'){
-		return stringify(info);
-	} else {
-		return info;
-	}
-}
 stringify = function(string){
-	//return JSON.stringify(string);	
-	
-	if(typeof string == 'string'){ return '"' + string + '"'; }
-	else if(typeof string == 'number'){ return string.toString(); }
+	if(typeof string === 'string'){ return '"' + string + '"'; }
+	else if(typeof string === 'number'){ return string.toString(); }
 	else { return JSON.stringify(string); }
 }
 isEqual = function(obj0,obj1){
@@ -123,19 +113,21 @@ JSONf.parse = function(str) {
 
 //Via Array
 valueViaArray = function(d){
-	if(typeof d.array != 'object'){ return d.origin[array]; }
-	if(!d.origin){ d.origin = (server ? this : window);}
-	var origin = d.origin;
-	var array = d.array;
-	switch (array.length) {
-        case 1: return origin[array[0]]; break;
-        case 2: return origin[array[0]][array[1]];break;
-        case 3: return origin[array[0]][array[1]][array[2]];break;
-        case 4: return origin[array[0]][array[1]][array[2]][array[3]];break;
-		case 5: return origin[array[0]][array[1]][array[2]][array[3]][array[4]];break;
-		case 6: return origin[array[0]][array[1]][array[2]][array[3]][array[4]][array[5]];break;
-        default: break;
-    }
+	try {
+		if(typeof d.array != 'object'){ return d.origin[array]; }
+		if(!d.origin){ d.origin = (server ? this : window);}
+		var origin = d.origin;
+		var array = d.array;
+		switch (array.length) {
+			case 1: return origin[array[0]]; break;
+			case 2: return origin[array[0]][array[1]];break;
+			case 3: return origin[array[0]][array[1]][array[2]];break;
+			case 4: return origin[array[0]][array[1]][array[2]][array[3]];break;
+			case 5: return origin[array[0]][array[1]][array[2]][array[3]][array[4]];break;
+			case 6: return origin[array[0]][array[1]][array[2]][array[3]][array[4]][array[5]];break;
+			default: break;
+		}
+	} catch (err) { logError(err); }
 }
 changeViaArray = function(d){
 	try {
@@ -155,25 +147,33 @@ changeViaArray = function(d){
 	} catch (err) { logError(err); }
 }
 addViaArray = function(d){
-	if(!d.origin){ d.origin = window;}
-	var origin = d.origin;
-	var array = d.array;
-	var value = d.value;
-	switch (array.length) {
-        case 1: origin[array[0]] += value; break;
-        case 2: origin[array[0]][array[1]] += value;break;
-        case 3: origin[array[0]][array[1]][array[2]] += value;break;
-        case 4: origin[array[0]][array[1]][array[2]][array[3]] += value;break;
-		case 5: origin[array[0]][array[1]][array[2]][array[3]][array[4]] += value;break;
-		case 6: origin[array[0]][array[1]][array[2]][array[3]][array[4]][array[5]] += value;break;
-		default:  break;
-    }
+	try {
+		if(!d.origin){ d.origin = window;}
+		var origin = d.origin;
+		var array = d.array;
+		var value = d.value;
+		switch (array.length) {
+			case 1: origin[array[0]] += value; break;
+			case 2: origin[array[0]][array[1]] += value;break;
+			case 3: origin[array[0]][array[1]][array[2]] += value;break;
+			case 4: origin[array[0]][array[1]][array[2]][array[3]] += value;break;
+			case 5: origin[array[0]][array[1]][array[2]][array[3]][array[4]] += value;break;
+			case 6: origin[array[0]][array[1]][array[2]][array[3]][array[4]][array[5]] += value;break;
+			default:  break;
+		}
+	} catch (err) { logError(err); }
 }
 
 //Round
 round = function (num,decimals,str){
-	if(!str){ return Math.round(num*Math.pow(10,decimals))/Math.pow(10,decimals); }
+	if(!str){ 
+		decimals = decimals || 0;
+		return Math.round(num*Math.pow(10,decimals))/Math.pow(10,decimals); 
+	}
 	if(!decimals){ return Math.round(num).toString(); }
+	
+	
+	
 	var num = round(num,decimals).toString();
 	
 	var dot = num.indexOf('.');

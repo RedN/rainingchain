@@ -185,7 +185,7 @@ rightClickFriend = function(name){
 	};
 	
 	
-	setOptionList(option);
+	Button.optionList(option);
 }
 
 addInput = function(text,focus,add){

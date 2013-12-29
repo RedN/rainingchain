@@ -6,12 +6,12 @@ io.sockets.on('connection', function (socket) {
 			
 			var key = socket.key;
 			if(mainList[key]){
-				inputReset(key);    
+				Button.reset(key);    
 				
 				d[1] = minmax(d[1],0,WIDTH);
 				d[2] = minmax(d[2],0,HEIGHT);
 				
-				testButton(key,d[1],d[2],d[0]);
+				Button.test(key,d[1],d[2],d[0]);
 			}
 		} catch(err){ logError(err); disconnectPlayer(socket,'Reload the page'); } 
 	});

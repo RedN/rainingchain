@@ -51,9 +51,6 @@ Input.init(0);
 
 //### End Customization###
 
-
-
-
 Input.event = {}
 Input.event.key = function(code,dir,event){
 	var start = +$("#chatBoxInput").is(":focus");
@@ -139,10 +136,8 @@ Input.event.mouse.click = function(code,dir){
 		}
 		
 		socket.emit('click', [side,mouse.x,mouse.y]);
-		inputReset();
-	
-		
-		testButton(0,mouse.x,mouse.y,side);
+		Button.reset();
+		Button.test(0,mouse.x,mouse.y,side);
 	}
 }
 
@@ -152,38 +147,13 @@ Input.event.mouse.wheel = function(side){
 	}
 }
 
-
-
-
-//Mouse Down/Up ||| Key Down/Up
-$(document).mousedown(function(event) { Input.event.mouse.click(event.which,'down',event);});
-$(document).mouseup(function(event) {Input.event.mouse.click(event.which,'up',event);});
-document.onmousewheel = function(event){Input.event.mouse.wheel(event.wheelDeltaY > 0 ? 1 : 0);}
-document.addEventListener('keydown', function(event) {	Input.event.key(event.keyCode,'down',event);});
-document.addEventListener('keyup', function(event) {Input.event.key(event.keyCode,'up',event);});
-
-
-
-
-$(document).bind('contextmenu', function(e){return false;});	//Disable Right Click Context Menu and Lose Focus
-$(window).keydown(function(e) { if(e.ctrlKey) { e.preventDefault();}});	//Disable Ctrl Shortcut
-
-
-//Mouse
 Input.event.mouse.move = function (evt){
 	mouse.x = evt.x - canvasX;
 	mouse.y = evt.y - canvasY;
-	mouseX = evt.x - canvasX;
-	mouseY = evt.y - canvasY;
 	if(gameStarted) player.angle = atan2(mouse.x - WIDTH/2,mouse.y - HEIGHT/2);    //kept so updates faster aka feel more responsive
 }
 
-document.activeElement.addEventListener("mousemove", Input.event.mouse.move);
-
-
-
-//Drag	
-startDrag = function(){
+Input.event.mouse.drag = function(){
 	mouse.drag.active = 1;
 	mouse.drag.sx = mouse.x;
 	mouse.drag.sy = mouse.y;
@@ -192,7 +162,7 @@ startDrag = function(){
 	//mouse.left = 1;
 }
 
-updateDrag = function(){
+Input.event.mouse.drag.update  = function(){
 	if(mouse.drag.active && mouse.left){
 		mouse.drag.vx = mouse.x - mouse.drag.sx; 
 		mouse.drag.vy = mouse.y - mouse.drag.sy; 
@@ -206,19 +176,33 @@ updateDrag = function(){
 }	
 
 
+
+//Mouse Down/Up || Key Down/Up
+$(document).mousedown(function(event) { Input.event.mouse.click(event.which,'down',event);});
+$(document).mouseup(function(event) {Input.event.mouse.click(event.which,'up',event);});
+document.onmousewheel = function(event){Input.event.mouse.wheel(event.wheelDeltaY > 0 ? 1 : 0);}
+document.addEventListener('keydown', function(event) {	Input.event.key(event.keyCode,'down',event);});
+document.addEventListener('keyup', function(event) {Input.event.key(event.keyCode,'up',event);});
+document.activeElement.addEventListener("mousemove", Input.event.mouse.move);
+
+$(document).bind('contextmenu', function(e){return false;});	//Disable Right Click Context Menu and Lose Focus
+$(window).keydown(function(e) { if(e.ctrlKey) { e.preventDefault();}});	//Disable Ctrl Shortcut
+
 //Send
 Input.send = function(){
 	if($("#chatBoxInput").is(":focus") && Input.press.move.toString() !== "0,0,0,0"){ 
 		mouse.x = WIDTH2 + 10*input.move[0] - 10*Input.press.move[2];
 		mouse.y = HEIGHT2 + 10*input.move[1] - 10*Input.press.move[3];		
 	}
+
 	var d = {};
 	var newKey = Input.press.move.join('') + Input.press.ability.join('');
-	var newMouse = [round(mouse.x),round(mouse.y)]
+	var newMouse = [Math.round(mouse.x),Math.round(mouse.y)];
+
 	if(Input.send.old.key !== newKey){ d.i = newKey; }
 	if(Input.send.old.mouse.toString() !== newMouse.toString()){ d.m = newMouse; }
 	
-	if(d.i || d.m){ socket.emit("input", d ); }
+	if(d.i || d.m){ console.log(d); socket.emit("input", d ); }
 	
 	Input.send.old.key = newKey;
 	Input.send.old.mouse = newMouse;

@@ -1,5 +1,7 @@
+Button = {};
+
 //Button
-addButton = function (key,data){
+Button.creation = function (key,data){
 	if(server){ var list = mainList[key].btnList; } 
 		else { var list = btnList;	}
 
@@ -27,7 +29,7 @@ addButton = function (key,data){
 }
 
 //called everytime the player clicks. check the list of buttons at that frame and test for collision
-testButton = function (key,x,y,side){
+Button.test = function (key,x,y,side){
 	if(server){ var list = mainList[key].btnList; } 
 		else { var list = btnList;}
 		
@@ -51,7 +53,7 @@ testButton = function (key,x,y,side){
 }
 
 //check every frame if mouse is over something with a context (aka top left text)
-updateContext = function (key){
+Button.context = function (key){
 	if(server){ 
 		var list = mainList[key].btnList; 
 		var x = fullList[key].mouseX;
@@ -73,7 +75,7 @@ updateContext = function (key){
 	if(!server){ clientContext = {'server':server,'text':''}; }
 }
 
-setOptionList = function(key,option){
+Button.optionList = function(key,option){
 	if(server){
 		var player = fullList[key];
 		option.x = player.mouseX;
@@ -82,8 +84,8 @@ setOptionList = function(key,option){
 		mainList[key].optionList = option;
 	}
 	if(!server){
-		key.x = mouseX;
-		key.y = mouseY;
+		key.x = mouse.x;
+		key.y = mouse.y;
 		key.client = 1;
 		key.count = 2;
 		optionList = key;
@@ -92,7 +94,7 @@ setOptionList = function(key,option){
 
 
 //called when player clicks. used to remove popup
-inputReset = function(key){
+Button.reset = function(key){
 	if(server){
 		mainList[key].optionList = null;
 		mainList[key].popupList.weapon = 0;

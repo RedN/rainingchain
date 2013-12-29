@@ -41,7 +41,7 @@ rightClickDrop = function(key,rect){
 	}
 	
 	if(ol.option){ 
-		setOptionList(key,ol);  
+		Button.optionList(key,ol);  
 	}	
 }
 			
