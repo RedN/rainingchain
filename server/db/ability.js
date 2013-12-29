@@ -244,35 +244,35 @@ useAbiCons = function(seed){
 
 	var ab = deepClone(abiConsDb[an]);
 	
-	if(typeof ab.period === 'object'){ ab.period = rollMinMaxQual(ab.period,qua); }
+	if(typeof ab.period === 'object'){ ab.period = Craft.boost.generate.roll(ab.period,qua); }
 	
 	if(ab.action && ab.action.func === 'Combat.action.attack'){
 		var atk = ab.action.param.attack;
 		
 		//All
-		if(typeof atk.angle === 'object'){ atk.angle = rollMinMaxQual(atk.angle,qua); }
-		if(typeof atk.amount === 'object'){ atk.amount = rollMinMaxQual(atk.amount,qua); }
-		if(typeof atk.dmgMain === 'object'){ atk.dmgMain = rollMinMaxQual(atk.dmgMain,qua); }
+		if(typeof atk.angle === 'object'){ atk.angle = Craft.boost.generate.roll(atk.angle,qua); }
+		if(typeof atk.amount === 'object'){ atk.amount = Craft.boost.generate.roll(atk.amount,qua); }
+		if(typeof atk.dmgMain === 'object'){ atk.dmgMain = Craft.boost.generate.roll(atk.dmgMain,qua); }
 		for(var i in atk.dmgRatio){
-			if(typeof atk.dmgRatio[i] === 'object'){ atk.dmgRatio[i] = rollMinMaxQual(atk.dmgRatio[i],qua); }
+			if(typeof atk.dmgRatio[i] === 'object'){ atk.dmgRatio[i] = Craft.boost.generate.roll(atk.dmgRatio[i],qua); }
 		}
 		
 		//Status
 		for(var i in statusCName){
 			if(typeof atk[i] === 'object'){ 
-				if(typeof atk[i].chance === 'object'){ atk[i].chance = rollMinMaxQual(atk[i].chance,qua); }
-				if(typeof atk[i].magn === 'object'){ atk[i].magn = rollMinMaxQual(atk[i].magn,qua); }
-				if(typeof atk[i].time === 'object'){ atk[i].time = rollMinMaxQual(atk[i].time,qua); }
+				if(typeof atk[i].chance === 'object'){ atk[i].chance = Craft.boost.generate.roll(atk[i].chance,qua); }
+				if(typeof atk[i].magn === 'object'){ atk[i].magn = Craft.boost.generate.roll(atk[i].magn,qua); }
+				if(typeof atk[i].time === 'object'){ atk[i].time = Craft.boost.generate.roll(atk[i].time,qua); }
 			}
 		}
 		if(atk.leech){
-			if(typeof atk.leech.chance === 'object'){ atk.leech.chance = rollMinMaxQual(atk.leech.chance,qua); }
-			if(typeof atk.leech.magn === 'object'){ atk.leech.magn = rollMinMaxQual(atk.leech.magn,qua); }
-			if(typeof atk.leech.time === 'object'){ atk.leech.time = rollMinMaxQual(atk.leech.time,qua); }
+			if(typeof atk.leech.chance === 'object'){ atk.leech.chance = Craft.boost.generate.roll(atk.leech.chance,qua); }
+			if(typeof atk.leech.magn === 'object'){ atk.leech.magn = Craft.boost.generate.roll(atk.leech.magn,qua); }
+			if(typeof atk.leech.time === 'object'){ atk.leech.time = Craft.boost.generate.roll(atk.leech.time,qua); }
 		}
 		if(atk.pierce){
-			if(typeof atk.pierce.chance === 'object'){ atk.pierce.chance = rollMinMaxQual(atk.pierce.chance,qua); }
-			if(typeof atk.pierce.dmgReduc === 'object'){ atk.pierce.dmgReduc = rollMinMaxQual(atk.pierce.dmgReduc,qua); }
+			if(typeof atk.pierce.chance === 'object'){ atk.pierce.chance = Craft.boost.generate.roll(atk.pierce.chance,qua); }
+			if(typeof atk.pierce.dmgReduc === 'object'){ atk.pierce.dmgReduc = Craft.boost.generate.roll(atk.pierce.dmgReduc,qua); }
 		}
 		
 		//need to add curse etc...

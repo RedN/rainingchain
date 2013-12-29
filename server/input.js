@@ -8,8 +8,8 @@ io.sockets.on('connection', function (socket) {
 			if(mainList[key]){
 				Button.reset(key);    
 				
-				d[1] = minmax(d[1],0,WIDTH);
-				d[2] = minmax(d[2],0,HEIGHT);
+				d[1] = d[1].mm(0,WIDTH);
+				d[2] = d[2].mm(0,HEIGHT);
 				
 				Button.test(key,d[1],d[2],d[0]);
 			}

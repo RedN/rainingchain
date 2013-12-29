@@ -16,7 +16,9 @@ router = express();
 serv = http.createServer(router);
 io = socketio.listen(serv); io.set('log level', 1); io.set('heartbeat timeout', 20); io.set('heartbeat interval', 15);
 
-router.use(express.static(path.resolve(__dirname, 'client')));
+var newPath = 'server/';
+
+router.use(express.static(path.resolve(__dirname, newPath + 'client')));
 
 if(cloud9){ serv.listen(process.env.PORT, process.env.IP);}	//if using cloud9
 else {serv.listen(3000);}	//if using on own PC, go http://localhost:3000/ 
@@ -25,13 +27,13 @@ else {serv.listen(3000);}	//if using on own PC, go http://localhost:3000/
 
 
 
-require('./client/js/shared/essentialsShare');
+require('./' + newPath + 'client/js/shared/essentialsShare');
 
 db = require('./server/db/mongodb');
 main = require('./server/main');
 
 
-require('./client/js/shared/Player');
+require('./' + newPath + 'client/js/shared/Player');
 require('./server/entity/Mortal');
 require('./server/entity/Attack');
 require('./server/entity/Mortal_loop');
@@ -63,21 +65,21 @@ require('./server/db/Item');
 require('./server/db/Armor');
 require('./server/db/Weapon');
 		
-require('./client/js/shared/Collision');
-require('./client/js/shared/statShare');
-require('./client/js/shared/constant');
-require('./client/js/shared/buttonShare');
-require('./client/js/shared/spriteDb');
-require('./client/js/shared/mortShare');
-require('./client/js/shared/drawShare');
-require('./client/js/shared/commandShare');
-require('./client/js/shared/utilityShare');
-require('./client/js/shared/drawUtility');
-require('./client/js/shared/passiveGrid');
-require('./client/js/shared/queryShare');
-require('./client/js/shared/clanShare');
-require('./client/js/shared/questShare');
-require('./client/js/shared/equipBoost');
+require('./' + newPath + 'client/js/shared/Collision');
+require('./' + newPath + 'client/js/shared/statShare');
+require('./' + newPath + 'client/js/shared/constant');
+require('./' + newPath + 'client/js/shared/buttonShare');
+require('./' + newPath + 'client/js/shared/spriteDb');
+require('./' + newPath + 'client/js/shared/mortShare');
+require('./' + newPath + 'client/js/shared/drawShare');
+require('./' + newPath + 'client/js/shared/commandShare');
+require('./' + newPath + 'client/js/shared/utilityShare');
+require('./' + newPath + 'client/js/shared/drawUtility');
+require('./' + newPath + 'client/js/shared/passiveGrid');
+require('./' + newPath + 'client/js/shared/queryShare');
+require('./' + newPath + 'client/js/shared/clanShare');
+require('./' + newPath + 'client/js/shared/questShare');
+require('./' + newPath + 'client/js/shared/equipBoost');
 
 
 main.startGame();   //
