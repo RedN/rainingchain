@@ -1,4 +1,4 @@
-animList = [];
+aList = [];
 
 function initAnimDb(){
 	animDb ={
@@ -71,21 +71,19 @@ function initAnimDb(){
 		
 			
 			
-	for(var anims in animDb){
-		var anim = animDb[anims];
+	for(var i in animDb){
+		var anim = animDb[i];
 		
 		anim.layer = anim.layer || 'a';
 		anim.frameX = anim.frameX || Math.min(anim.frame,5);
 		anim.spd = anim.spd || 1;
 		anim.size = anim.size || 1;
 		anim.startY = anim.startY || 0;
-		anim.src = anim.src || 'img/Animation/' + anims + '.png';
+		anim.src = anim.src || 'img/anim/' + i + '.png';
 		
-		anim.name = anims;
-		anim.img = new Image();
-		anim.img.src = anim.src;
+		anim.name = i;
+		anim.img = newImage(anim.src);
 		preloader.push(anim.src);
-		animList[anims] = anim;
 	}
 	
 }
@@ -94,7 +92,7 @@ Anim = {};
 Anim.update = function (){
 	for(var i in aList){
 		var anim = aList[i];
-		var animFromDb = animList[anim.name];
+		var animFromDb = animDb[anim.name];
 		anim.timer += animFromDb.spd * anim.spdMod;
 		
 		anim.x = anim.target.x;
@@ -106,3 +104,19 @@ Anim.update = function (){
 		}	
 	}
 }
+
+//Add animation to the game. target can be a string to specific an actor, or an obj x:1,y:1
+addAnim = function(anim,target,sizeMod){
+	sizeMod = sizeMod || 1;
+	aList[a.id] = {'sizeMod':sizeMod,'name':anim,'target':target,'id':'a'+Math.randomId(5)};
+}
+
+
+
+
+
+
+
+
+
+

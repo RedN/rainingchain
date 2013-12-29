@@ -23,52 +23,49 @@
 */
 
 
-spriteList = {};
-animList = {};
-aList = [];
 
 initSpriteDb = function(){
-
+	
     spriteDb =	{
     	
     //PLAYER
     
-    	"pMace":{"src":"img/sprite/human.png","size":1.5,"side":[2,6,0,4,1,5,3,7],'hpBar':-40,'legs':35,
+    	"pMace":{"src":"mortal/human.png","size":1.5,"side":[2,6,0,4,1,5,3,7],'hpBar':-40,'legs':35,
     	"preHitBox":[ -12,12,-35,35 ],"preBumperBox":[ -12,12,0,35 ],
     	"anim": {
     		"Walk":{"startY":0,"frame":4,"sizeX":70,"sizeY":70,"dir":8,"spd":0.8,'walk':1,"next":"Walk"},
     		"Attack":{"startY":0,"frame":4,"sizeX":70,"sizeY":70,"dir":8,"spd":0.8,"next":"Walk"}
     	}},
     
-    	"pMace2":{"src":"img/sprite/pMace.png","size":1.5,"side":[3,2,1,0],'hpBar':-40,'legs':20,
+    	"pMace2":{"src":"mortal/pMace.png","size":1.5,"side":[3,2,1,0],'hpBar':-40,'legs':20,
     	"preHitBox":[ -20,20,-20,32 ],"preBumperBox":[ -12,12,4,30 ],
     	"anim": {
     		"Walk":{"startY":64*8,"frame":9,"sizeX":64,"sizeY":64,"dir":4,"spd":1,'walk':1,"next":"Walk"},
     		"Attack":{"startY":64*21,"frame":6,"sizeX":64*3,"sizeY":64*3,"dir":4,"spd":1,"next":"Walk"}
     	}},
     	
-    	"pSpear":{"src":"img/sprite/pSpear.png","size":1.5,"side":[3,2,1,0],'hpBar':-40,'legs':20,
+    	"pSpear":{"src":"mortal/pSpear.png","size":1.5,"side":[3,2,1,0],'hpBar':-40,'legs':20,
     	"preHitBox":[ -20,20,-20,32 ],"preBumperBox":[ -12,12,4,30 ],
     	"anim": {
     		"Walk":{"startY":64*8,"frame":9,"sizeX":64,"sizeY":64,"dir":4,"spd":1,'walk':1,"next":"Walk"},
     		"Attack":{"startY":64*21,"frame":8,"sizeX":64*3,"sizeY":64*3,"dir":4,"spd":1,"next":"Walk"}
     	}},
     	
-    	"pSword":{"src":"img/sprite/pSword.png","size":1.5,"side":[3,2,1,0],'hpBar':-40,'legs':20,
+    	"pSword":{"src":"mortal/pSword.png","size":1.5,"side":[3,2,1,0],'hpBar':-40,'legs':20,
     	"preHitBox":[ -20,20,-20,32 ],"preBumperBox":[ -12,12,4,30 ],
     	"anim": {
     		"Walk":{"startY":64*8,"frame":9,"sizeX":64,"sizeY":64,"dir":4,"spd":1,'walk':1,"next":"Walk"},
     		"Attack":{"startY":64*21,"frame":6,"sizeX":64*3,"sizeY":64*3,"dir":4,"spd":1,"next":"Walk"}
     	}},
     	
-    	"pBow":{"src":"img/sprite/pBow.png","size":1.5,"side":[3,2,1,0],'hpBar':-40,'legs':20,
+    	"pBow":{"src":"mortal/pBow.png","size":1.5,"side":[3,2,1,0],'hpBar':-40,'legs':20,
     	"preHitBox":[ -20,20,-20,32 ],"preBumperBox":[ -12,12,4,30 ],
     	"anim": {
     		"Walk":{"startY":64*8,"frame":9,"sizeX":64,"sizeY":64,"dir":4,"spd":1,'walk':1,"next":"Walk"},
     		"Attack":{"startY":64*16,"frame":13,"sizeX":64,"sizeY":64,"dir":4,"spd":1,"next":"Walk"}
     	}},
     	
-    	"pWand":{"src":"img/sprite/pWand.png","size":1.5,"side":[3,2,1,0],'hpBar':-40,'legs':20,
+    	"pWand":{"src":"mortal/pWand.png","size":1.5,"side":[3,2,1,0],'hpBar':-40,'legs':20,
     	"preHitBox":[ -20,20,-20,32 ],"preBumperBox":[ -12,12,4,30 ],
     	"anim": {
     		"Walk":{"startY":64*8,"frame":9,"sizeX":64,"sizeY":64,"dir":4,"spd":1,'walk':1,"next":"Walk"},
@@ -76,14 +73,14 @@ initSpriteDb = function(){
     	}},
     	
     //NPC
-    	"julie":{"src":"img/sprite/nSprite0.png","size":2,"side":[0,1,2,3],'hpBar':-22,'legs':16,
+    	"julie":{"src":"mortal/nSprite0.png","size":2,"side":[0,1,2,3],'hpBar':-22,'legs':16,
     	"preHitBox":[ -16,16,-16,16 ],"preBumperBox":[ -16,16,-16,16 ],
     	"anim": {
     		"Walk":{"startY":0,"frame":3,"sizeX":32,"sizeY":32,"dir":4,"spd":0.5,'walk':1,"next":"Walk"},
     	}},
     	
     //ENEMY
-    	"eSlime":{"src":"img/sprite/eSlime.png","size":1,"side":[0,1,2,3],'hpBar':-110,'legs':70,
+    	"eSlime":{"src":"mortal/eSlime.png","size":1,"side":[0,1,2,3],'hpBar':-110,'legs':70,
     	"preHitBox":[ -70,70,-45,90 ],"preBumperBox":[ -55,55,-15,80 ],
     	"anim": {
     		"Walk":{"startY":0,"frame":5,"sizeX":200,"sizeY":200,"dir":4,"spd":0.5,"next":"Walk"},
@@ -91,7 +88,7 @@ initSpriteDb = function(){
     		"Death":{"startY":800,"frame":5,"sizeX":200,"sizeY":200,"dir":4,"spd":0.5,"next":"Dead"}
     	}},
     
-    	"eTroll":{"src":"img/sprite/eTroll.png","size":1,"side":[0,1,2,3],'hpBar':-70,'legs':35,
+    	"eTroll":{"src":"mortal/eTroll.png","size":1,"side":[0,1,2,3],'hpBar':-70,'legs':35,
     	"preHitBox":[ -33,33,-30,64 ],"preBumperBox":[ -33,33,-30,64 ],
     	"anim": {
     		"Walk":{"startY":0,"frame":9,"sizeX":128,"sizeY":128,"dir":4,"spd":0.25,"next":"Walk"},
@@ -101,32 +98,32 @@ initSpriteDb = function(){
     	}},
     	
     //BULLET
-    	"fireball":{"src":"img/Bullet/fireball.png","size":1,"side":[0,1,2,3],
+    	"fireball":{"src":"bullet/fireball.png","size":1,"side":[0,1,2,3],
     	"anim": {
     		"Travel":{"startY":0,"frame":3,"sizeX":32,"sizeY":32,"dir":4,"spd":0.2,"next":"Travel"},
     	}},
     			
-    	"iceshard":{"src":"img/Bullet/iceshard.png","size":1,"side":[0,1,2,3,4,5,6,7],
+    	"iceshard":{"src":"bullet/iceshard.png","size":1,"side":[0,1,2,3,4,5,6,7],
     	"anim": {
     		"Travel":{"startY":0,"frame":1,"sizeX":54,"sizeY":54,"dir":8,"spd":0,"next":"Travel"},
     	}},
-    	"lightningball":{"src":"img/Bullet/lightningball.png","size":1,"side":[0],
+    	"lightningball":{"src":"bullet/lightningball.png","size":1,"side":[0],
     	"anim": {
     		"Travel":{"startY":0,"frame":1,"sizeX":32,"sizeY":32,"dir":1,"spd":0,"next":"Travel"},
     	}},
     	
-    	"arrow":{"src":"img/Bullet/arrow.png","size":1,"side":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15],
+    	"arrow":{"src":"bullet/arrow.png","size":1,"side":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15],
     	"anim": {
     		"Travel":{"startY":0,"frame":1,"sizeX":42,"sizeY":42,"dir":16,"spd":0,"next":"Travel"},
     	}},
     	
-    	"boomerang":{"src":"img/Bullet/boomerang.png","size":1,"side":[0],
+    	"boomerang":{"src":"bullet/boomerang.png","size":1,"side":[0],
     	"anim": {
     		"Travel":{"startY":0,"frame":8,"sizeX":52,"sizeY":52,"dir":1,"spd":1,"next":"Travel"},
     	}},
     	
     //Picture
-    	"barrier":{"src":"img/Picture/barrier.png","size":1,"side":[0],
+    	"barrier":{"src":"picture/barrier.png","size":1,"side":[0],
     	"anim": {
     		"Walk":{"startY":0,"frame":1,"sizeX":80,"sizeY":40,"dir":1,"spd":0,"next":"Walk"},
     	}},
@@ -174,21 +171,18 @@ initSpriteDb = function(){
     			sp.bumperBox[2] = { "x":sp.preBumperBox[0]*sp.size,"y":(sp.preBumperBox[2]+sp.preBumperBox[3])/2*sp.size };
     			sp.bumperBox[3] = { "x":(sp.preBumperBox[0]+sp.preBumperBox[1])/2*sp.size,"y":sp.preBumperBox[2]*sp.size };
     		}
-    		spriteList[i] = sp;	
     	}
     }
     
     if(!server){
         for(var i in spriteDb){
     		var sp = spriteDb[i];
+			sp.src = 'img/sprite/' + sp.src
     		sp.img = newImage(sp.src);
     		preloader.push(sp.src);
-    		
-    		spriteList[i] = sp;	
     	}
     }
 }
-
 
 
 
@@ -227,9 +221,9 @@ Sprite.change = function(mort,info){
 
 //Set the Sprite Bumper Box to fit the sizeMod
 Sprite.updateBumper = function(player){
-	if(spriteList[player.sprite.name].hitBox){	//Attack Dont
-		player.hitBox = deepClone(spriteList[player.sprite.name].hitBox);
-		player.bumperBox = deepClone(spriteList[player.sprite.name].bumperBox);	
+	if(spriteDb[player.sprite.name].hitBox){	//Attack Dont
+		player.hitBox = deepClone(spriteDb[player.sprite.name].hitBox);
+		player.bumperBox = deepClone(spriteDb[player.sprite.name].bumperBox);	
 	
 		for(var i = 0 ; i < player.hitBox.length ; i++){
 			player.hitBox[i].x *= player.sprite.sizeMod;
@@ -244,7 +238,7 @@ Sprite.updateBumper = function(player){
 
 Sprite.update = function (mort){
 	var spriteServer = mort.sprite;
-	var spriteFromDb = spriteList[spriteServer.name];
+	var spriteFromDb = spriteDb[spriteServer.name];
 	var image = spriteFromDb.img;
 	var animFromDb = spriteFromDb.anim[spriteServer.anim];
 	
@@ -271,14 +265,6 @@ Sprite.update = function (mort){
 
 
 
-
-//Sprite Animations
-
-//Add animation to the game. target can be a string to specific an actor, or an obj x:1,y:1
-addAnim = function(anim,target,sizeMod){
-	sizeMod = sizeMod || 1;
-	aList[a.id] = {'sizeMod':sizeMod,'name':anim,'target':target,'id':'a'+Math.randomId(5)};
-}
 
 
 

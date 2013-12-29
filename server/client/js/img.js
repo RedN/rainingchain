@@ -1,10 +1,10 @@
 var Img = {};
 Img.frame = {};
-Img.frame.window = newImage('img/Frame/window.png');
-Img.frame.postit = newImage('img/Frame/postit.png');
+Img.frame.window = newImage('img/img/interface/window.png');
+Img.frame.postit = newImage('img/img/interface/postit.png');
 
 //Icon
-var iconSheet = newImage("img/Icon/iconSheet.png");
+var iconSheet = newImage("img/img/iconSheet.png");
 var iconIndex = {};
 (function(){
 	var equip = 10;
@@ -59,7 +59,7 @@ var iconIndex = {};
 })();
 
 //Item
-Img.item = newImage("img/Icon/itemSheet.png");
+Img.item = newImage("img/img/itemSheet.png");
 var itemIndex = {};
 (function(){
 	var itemPreIndex =
@@ -95,7 +95,7 @@ var itemIndex = {};
 
 
 //Npc Face Sheet
-Img.face = newImage("img/Npc/npcFaceSheet.png");
+Img.face = newImage("img/img/faceSheet.png");
 
 
 

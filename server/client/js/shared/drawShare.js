@@ -42,8 +42,8 @@ Draw.loop=function (key){
 		Input.event.mouse.drag.update();
 		
 		//Draw
-		Draw.map.b();   //below player
-		Draw.anim.b();  //below player
+		Draw.map('b');   //below player
+		Draw.anim('b');  //below player
 		Draw.entity.drop();
 		
 		setSortList();  //sort actors by their y
@@ -51,8 +51,8 @@ Draw.loop=function (key){
 		
 		Draw.entity.bullet();
 		
-		Draw.anim.a();  //above player
-		Draw.map.a();   //above player
+		Draw.anim('a');  //above player
+		Draw.map('a');   //above player
 		
 		for(var i in mList){
 			if(mList[i].chatHead){ Draw.entity.mortal.chatHead(mList[i]); } //draw text over head
@@ -77,14 +77,14 @@ Draw.loop=function (key){
 
 
 //Draw Animation
-Draw.anim.a = function (){
+Draw.anim = function (layer){
 	ctx = ctxList.stage;
 	
 	for(var i in aList){
-		if(animList[aList[i].name].layer == 'a'){
+		if(animDb[aList[i].name].layer === layer){
 			
 			var anim = aList[i];
-			var animFromDb = animList[anim.name];
+			var animFromDb = animDb[anim.name];
 			var image = animFromDb.img;
 			var height = image.height;
 			var width = image.width;
@@ -105,32 +105,6 @@ Draw.anim.a = function (){
 	}
 }
 
-Draw.anim.b = function (){
-	ctx = ctxList.stage;
-	
-	for(var i in aList){
-		if(animList[aList[i].name].layer == 'b'){
-			var anim = aList[i];
-			var animFromDb = animList[anim.name];
-			var image = animFromDb.img;
-			var height = image.height;
-			var width = image.width;
-			var sizeX = image.width / animFromDb.frameX;
-			var slotX = anim.slot % animFromDb.frameX;
-			var slotY = Math.floor(anim.slot / animFromDb.frameX);
-			var sizeY = height / Math.ceil(animFromDb.frame / animFromDb.frameX);
-			var size = animFromDb.size*anim.sizeMod;
-			var startY = animFromDb.startY;
-			
-			ctx.drawImage(image,
-				sizeX*slotX,sizeY*slotY+startY,
-				sizeX,sizeY,
-				WIDTH2+anim.x-player.x-sizeX/2*size,HEIGHT2+anim.y-player.y-sizeY/2*size,
-				sizeX*size,sizeY*size
-				);
-		}
-	}
-}
 
 
 //{Draw Entity
@@ -175,7 +149,7 @@ Draw.entity.mortal.chatHead = function(mort){
 	ctx = ctxList.stage;
 	
 	var spriteServer = mort.sprite;
-	var spriteFromDb = spriteList[spriteServer.name];
+	var spriteFromDb = spriteDb[spriteServer.name];
 	var sizeMod = spriteFromDb.size* spriteServer.sizeMod;
 	
 	var numX = WIDTH2+mort.x-player.x;
@@ -194,7 +168,7 @@ Draw.entity.mortal.hpBar = function(mort){
 	ctx = ctxList.stage;
 	
 	var spriteServer = mort.sprite;
-	var spriteFromDb = spriteList[spriteServer.name];
+	var spriteFromDb = spriteDb[spriteServer.name];
 	var animFromDb = spriteFromDb.anim[spriteServer.anim];
 
 	var sizeMod = spriteFromDb.size* spriteServer.sizeMod;
@@ -221,7 +195,7 @@ Draw.entity.sprite = function (mort){
 	ctx = ctxList.stage;
 	
 	var spriteServer = mort.sprite;
-	var spriteFromDb = spriteList[spriteServer.name];
+	var spriteFromDb = spriteDb[spriteServer.name];
 	var image = spriteFromDb.img;
 	var animFromDb = spriteFromDb.anim[spriteServer.anim];
 	
@@ -451,12 +425,12 @@ Draw.context = function (){ ctxrestore();
 //}
 
 //Map
-Draw.map.b = function (){ ctxrestore();
+Draw.map = function (layer){ ctxrestore();
 	ctx = ctxList.stage;
 	
 	var mapX = Math.min(map.imgB.length-1,Math.max(0,Math.floor((player.x-1024)/2048)));
 	var mapY = Math.min(map.imgB[mapX].length-1,Math.max(0,Math.floor((player.y-1024)/2048)));
-	var mapXY = map.imgB[mapX][mapY];
+	var mapXY = layer === 'b'? map.imgB[mapX][mapY] : map.imgA[mapX][mapY];
 	var pX = player.x-mapX*2048;
 	var pY = player.y-mapY*2048;
 	
@@ -473,34 +447,7 @@ Draw.map.b = function (){ ctxrestore();
 	var tailleX = Math.min(endX-startX,mapXY.width);
 	var tailleY = Math.min(endY-startY,mapXY.height);
 	
-	ctx.drawImage(mapXY, startX,startY,tailleX,tailleY,(startX-numX)*2,(startY-numY)*2,tailleX*2,tailleY*2);
-	
-}
-
-Draw.map.a = function (){ ctxrestore();
-	ctx = ctxList.stage;
-	
-	var mapX = Math.min(map.imgB.length-1,Math.max(0,Math.floor((player.x-1024)/2048)));
-	var mapY = Math.min(map.imgB[mapX].length-1,Math.max(0,Math.floor((player.y-1024)/2048)));
-	var mapXY = map.imgA[mapX][mapY];
-	var pX = player.x-mapX*2048;
-	var pY = player.y-mapY*2048;
-	
-	var numX = (pX - WIDTH/2)/2 ;
-	var numY = (pY - HEIGHT/2) /2 ;
-	var longueur = WIDTH/2;
-	var hauteur = HEIGHT/2;
-	var diffX = numX + longueur - mapXY.width;
-	var diffY = numY + hauteur - mapXY.height;
-	var startX = Math.max(numX,0);
-	var startY = Math.max(numY,0);
-	var endX = Math.min(numX + longueur,mapXY.width)
-	var endY = Math.min(numY + hauteur,mapXY.height)
-	var tailleX = Math.min(endX-startX,mapXY.width);
-	var tailleY = Math.min(endY-startY,mapXY.height);
-	
-	ctx.drawImage(mapXY, startX,startY,tailleX,tailleY,(startX-numX)*2,(startY-numY)*2,tailleX*2,tailleY*2);
-	
+	ctx.drawImage(mapXY, startX,startY,tailleX,tailleY,(startX-numX)*2,(startY-numY)*2,tailleX*2,tailleY*2);	
 }
 
 
@@ -515,12 +462,12 @@ setSortList = function(){
 
 sortFunction = function (mort,mort1){
 	var spriteServer = mort.sprite;
-	var spriteFromDb = spriteList[spriteServer.name];
+	var spriteFromDb = spriteDb[spriteServer.name];
 	var sizeMod = spriteFromDb.size* spriteServer.sizeMod;
 	var y0 = mort.y + spriteFromDb.legs * sizeMod
 	
 	var spriteServer1 = mort1.sprite;
-	var spriteFromDb1 = spriteList[spriteServer1.name];
+	var spriteFromDb1 = spriteDb[spriteServer1.name];
 	var sizeMod1 = spriteFromDb1.size* spriteServer1.sizeMod;
 	var y1 = mort1.y + spriteFromDb1.legs * sizeMod1
 	
