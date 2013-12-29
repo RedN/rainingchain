@@ -1,5 +1,5 @@
 //Skill
-
+//testing github
 Skill = function(key,data){
     this.exp = {'melee':100000,'range':100000,'magic':100000,'metalwork':100000,'woodwork':100000,'leatherwork':100000,'geology':100000,'metallurgy':100000,'trapping':100000};
     this.lvl = {'melee':0,'range':0,'magic':0,'metalwork':0,'woodwork':0,'leatherwork':0,'geology':0,'metallurgy':0,'trapping':0};
