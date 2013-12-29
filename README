@@ -1,0 +1,24 @@
+I'm currently working on adding more comments about the functions.
+
+Check GAME_MECHANICS for brief RAW overview of how the game works.
+Check DESIGN_PLAN for brief RAW overview of future design of the game. (General Direction/Ideas)
+
+Before starting this project as a team, I will run a meeting to explain the current state of the game and tell more details about how it works.
+
+###################################################################
+
+To run the game yourself: http://www.youtube.com/watch?v=wu_XrmWvtM4
+-Install NodeJS: http://nodejs.org/
+-Download the game: File -> Download        (Or https://www.mediafire.com/?zackcz5k7seb204) Github link coming soon
+-Unzip.
+-From command line: node app.js in the rainingchain directory.
+-Go to http://localhost:3000/
+
+Note: Check LICENSE for copyright information.
+
+
+
+
+
+
+

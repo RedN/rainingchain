@@ -1,0 +1,261 @@
+Mortal = typeof Mortal !== 'undefined' ? Mortal : {};
+//data: x  y  map category variant lvl modAmount extra
+
+
+/*
+Mortal.creation.group(
+    {'x':3000,
+    'y':1800,
+    'map':map,
+    'vx':10,
+    'vy':10,
+    'respawn':100}
+    ,
+    [
+        {'amount':1,"category":"eSlime","variant":"Big","lvl":0,'modAmount':1},
+		{'amount':10,"category":"troll","variant":"ice","lvl":0,'modAmount':1},
+		]);
+*/		
+		
+
+Mortal.creation = function(data){
+	var e = defaultMortal('enemy');
+	e = Mortal.creation.db(e,data);
+	e = Mortal.creation.info(e,data);
+	e = useTemplate(e,e.extra,2);	//deep clone of function
+	e = Mortal.creation.optionList(e);
+	
+	e.data = data;
+	mList[e.id] = e;
+	fullList[e.id] = e;
+	
+	if(e.nevercombat){ Mortal.creation.nevercombat(e); }	
+	else {
+		e = Mortal.creation.mod(e,data); 
+		e = Mortal.creation.boost(e);
+	}
+	if(e.nevermove){ Mortal.creation.nevermove(e); }
+	
+	return e.id
+}
+
+Mortal.creation.group = function(gr,el){
+   	var id = Math.randomId();
+	var enemyIdList = [];
+	
+	gr = useTemplate(Mortal.creation.group.template(),gr);	
+	egList[id] = {
+		'id':id,
+		'param':[gr,el],        //used to revive group
+		'list':{},              //hold enemies
+		'respawn':gr.respawn,   //time before respawn when all monster dead
+	};
+	
+	el = arrayfy(el);
+	for(var i in el){
+		var amount = el[i].amount || 1;
+		for(var j = 0 ; j < amount; j++){
+			el[i] = useTemplate(el[i],gr);  //info about x,y,map
+			
+			var eid = Mortal.creation(el[i]);
+			var e = fullList[eid];
+			
+			enemyIdList.push(eid);
+			egList[id].list[eid] = e;
+			e.group = id;
+		}
+	}
+	return enemyIdList;
+	
+}
+
+Mortal.creation.group.template = function(){
+	return {'x':0,'y':0,'v':25,'map':'test','respawn':100}
+}
+
+
+Mortal.creation.boost = function(e){
+	for(var i in e.boost.list){ 
+        e.boost.list[i].base = valueViaArray({'origin':e,'array':e.boost.list[i].stat});	
+	}
+	return e;
+}
+
+Mortal.creation.db = function(e,d){
+	e = eDb[d.category][d.variant]();
+	for(var i in eDb[d.category][d.variant]) e[i] = eDb[d.category][d.variant][i];
+
+	
+	e.id = Math.randomId();
+	e.publicId = Math.random().toString(36).substring(13);
+	
+	
+	if(e.boss){	
+		var id = e.boss;
+		e.boss = bossDb[id]();
+		for(var i in bossDb[id]){e.boss[i] = bossDb[id][i];}
+		e.boss.parent = e; 
+	}
+	for(var i in e.ability){ 
+		var name = e.ability[i];
+		e.abilityChange.charge[name] = 0;
+		addAbility(e,name);
+		swapAbility(e,+i,name);
+	}
+	
+	initSprite(e,e.sprite);		//To set hitbox and bumper
+		
+	return e;
+}
+
+Mortal.creation.info = function(e,cr){
+    e.map = cr.map || 'test';
+	e.x = cr.x + Math.randomML() * (cr.v || 0); 
+	e.y = cr.y + Math.randomML() * (cr.v || 0); 
+	e.category = cr.category || 'eSlime'; 
+	e.variant = cr.variant || 'Regular'; 
+	e.lvl = cr.lvl || 0; 
+	e.modAmount = cr.modAmount !== undefined ?  cr.modAmount : 1;
+	e.extra = cr.extra || {};
+	return e;
+}
+
+Mortal.creation.mod = function(e,d){
+	var list = Object.keys(Mortal.creation.mod.list);
+	for(var i = 0 ; i < d.modAmount ; i++){
+		var choosen = list[Math.floor(Math.random()*list.length)];
+		e = Mortal.creation.mod.list[choosen](e);
+		e.name += ': ' + choosen;
+		e.context += ': ' + choosen;
+		e.modList.push(choosen);
+	}
+	return e;
+}
+
+Mortal.creation.mod.list = {
+	
+	'immuneFire': (function(e){ e.armor.def.fire = 1/0;  return e; }),
+	'immuneCold': (function(e){ e.armor.def.cold = 1/0;  return e; }),
+	'immuneLightning': (function(e){ e.armor.def.lightning = 1/0;  return e; }),
+	'immuneMelee': (function(e){ e.armor.def.melee = 1/0;  return e; }),
+	'immuneRange': (function(e){ e.armor.def.range = 1/0;  return e; }),
+	'immuneMagic': (function(e){ e.armor.def.magic = 1/0;  return e; }),
+
+	'immuneStatus': (function(e){ for(var i in e.resist){ e.resist[i] = 100; }  return e; }),
+
+	//'BAx2': (function(e){ e.bonus.bullet.amount *= 2; return e; }),
+
+	//'BAx4': (function(e){ e.bonus.bullet.amount *= 4; e.dmgMain /= 2; return e; }),
+	'regen': (function(e){ e.resource.hp.regen = e.resource.hp.max/250; return e; }),
+	'extraLife': (function(e){ e.resource.hp.max *= 2; e.hp *= 2; return e; }),
+	'leech': (function(e){ e.bonus.leech.chance = 0.5; e.bonus.leech.magn = 0.5; return e; }),
+	
+	
+	'atkSpd': (function(e){ e.atkSpd.main *= 2; return e; }),
+	
+	
+	'reflectPhysical': (function(e){ e.reflect = {"melee":0.5,"range":0.5,"magic":0.5,"fire":0,"cold":0,"lightning":0}; return e; }),
+	'reflectElemental': (function(e){ e.reflect = {"melee":0,"range":0,"magic":0,"fire":0.5,"cold":0.5,"lightning":0.5}; return e; }),
+	'aoe': (function(e){ e.bonus.strike.size *= 2; e.bonus.strike.maxHit *= 2; return e; }),
+	
+}
+
+Mortal.creation.optionList = function(e){
+	var ol = {'name':e.name,'option':[]};
+	
+	if(e.type === 'player') ol.option.push({'name':'Trade',"func":'openWindow',"param":['trade',e.id]});
+	if(e.dialogue)	ol.option.push({'name':'Talk To',"func":'talkTo',"param":[e.id]});
+	
+	e.optionList = ol;
+	return e;
+}
+
+Mortal.creation.nevercombat = function(mort){
+	mort.combat = 0;
+	
+	delete mort.killed;
+	delete mort.targetMod;
+	
+	
+	
+	delete mort.permBoost;
+	delete mort.boost;
+	
+	//General
+	delete mort.drop;
+	delete mort.item;
+	delete mort.pickRadius;
+	delete mort.target;
+	
+	//Combat
+	delete mort.attackReceived;	
+	delete mort.hitIf;
+	delete mort.targetIf;
+	delete mort.boss;
+	delete mort.deleteOnceDead;
+	delete mort.bonus;	
+	delete mort.mastery;
+	delete mort.ability;
+	delete mort.abilityList;
+	delete mort.atkSpd;
+	
+	//Def = DefMain * defArmor * mort.mastery.def
+	delete mort.hp;	
+	delete mort.mana;
+	delete mort.dodge;
+	delete mort.fury;
+	delete mort.resource;
+	
+	delete mort.def;
+	delete mort.defMain;
+	delete mort.armor;	
+	delete mort.reflect;
+	
+	//Resist
+	delete mort.knocked;
+	delete mort.burned;
+	delete mort.chilled;
+	delete mort.confused;	
+	delete mort.bleeded;
+	delete mort.drained;
+	delete mort.resist;
+	delete mort.resistMax;
+	
+	//Atk
+	delete mort.dmg;
+	delete mort.dmgMain;
+	delete mort.aim;
+	delete mort.weapon;
+	delete mort.ability;
+	delete mort.weaponList;
+	delete mort.moveRange
+	
+	
+	delete mort.summon
+	delete mort.summmoned;
+	
+	//For update:
+	mort.resource = {'hp':{'max':1}};
+	mort.hp = 1;
+}
+
+Mortal.creation.nevermove = function(mort){
+	mort.move = 0;
+		
+	delete mort.friction; 
+	delete mort.maxSpd;
+	delete mort.acc;
+	delete mort.mapMod; 
+	delete mort.moveAngle;
+	delete mort.spdX;
+	delete mort.spdY; 
+	delete mort.moveInput; 
+	delete mort.bumper; 
+	delete mort.changeDir; 
+	delete mort.moveRange;
+	
+	//For update:
+	mort.spdX = 0;
+	mort.spdY = 0;
+	mort.maxSpd = 1;
+}

@@ -1,0 +1,340 @@
+//List of handy functions.
+
+//Math
+sin = function (number){
+	return (Math.sin(number/180*Math.PI))
+}
+cos = function (number){
+	return (Math.cos(number/180*Math.PI))
+}
+atan = function (number){
+	return (Math.atan(number)/Math.PI*180)
+}
+atan2 = function (y,x){
+	return ((Math.atan2(y,x)/Math.PI*180)+360)%360
+}
+Math.log10 = function(num){
+    return Math.log(num) / Math.log(10);
+}
+Math.fact = function (num){
+	for(var start = 1; num > 1; num--){ start *= num;}
+	return start;
+};
+binarySearch = function(arr,value){
+	var startIndex  = 0,
+		stopIndex   = arr.length - 1,
+		middle      = Math.floor((stopIndex + startIndex)/2);
+	if(value < arr[0]) return 0;
+	while(!(value >= arr[middle] && value < arr[middle+1]) && startIndex < stopIndex){
+
+		if (value < arr[middle]){
+			stopIndex = middle - 1;
+		} else if (value > arr[middle]){
+			startIndex = middle + 1;
+		}
+
+		middle = Math.floor((stopIndex + startIndex)/2);
+	}
+
+	return middle;
+}
+Math.pyt = function(a,b){
+	return Math.sqrt(a*a+b*b);
+}
+Math.randomId = function(num){
+	num = num || 9;
+	return Math.random().toString(36).slice(2,num+2);
+}
+
+Math.randomML = function(){
+	return Math.random()*2-1
+}
+
+findMin = function(list,func){
+	var min = func(list[0]);
+	for(var i = 1 ; i  < list.length ; i++){
+		min = Math.min(min,func(list[i]));
+	}
+	return min;
+}
+findMax = function(list,func){
+	var max = func(list[0]);
+	for(var i = 1 ;i  < list.length ; i++){
+		max = Math.max(max,func(list[i]));
+	}
+	return max;
+}
+	
+Object.defineProperty(Number.prototype, "mm", {
+    enumerable: false,
+    value: function(min,max) {
+		if(min === undefined){ return this; }
+		if(max === undefined){ return Math.max(min,this); }
+		return Math.min(max,Math.max(min,this));
+	}
+});	
+	
+//Function
+innerFunction = function (func,param){
+	func.apply(this, param);	
+}
+
+//Copy
+
+deepClone = function(info,func){
+	if(typeof info === 'object'){
+		if(!func){	return JSON.parse(stringify(info)); }
+		return JSONf.parse(JSONf.stringify(info));
+	} else {
+		return info;
+	}
+}
+
+deepString = function(info){
+	if(typeof info == 'object'){
+		return stringify(info);
+	} else {
+		return info;
+	}
+}
+stringify = function(string){
+	//return JSON.stringify(string);	
+	
+	if(typeof string == 'string'){ return '"' + string + '"'; }
+	else if(typeof string == 'number'){ return string.toString(); }
+	else { return JSON.stringify(string); }
+}
+isEqual = function(obj0,obj1){
+	if(obj0 === undefined || obj1 === undefined){ return false;}	
+	return obj0 == obj1;
+}
+JSONf = {};
+JSONf.stringify = function(obj) {
+	return JSON.stringify(obj,function(key, value){
+		return (typeof value === 'function' ) ? value.toString() : value;
+	});
+}
+JSONf.parse = function(str) {
+	return JSON.parse(str,function(key, value){
+		if(typeof value !== 'string') return value;
+		return ( value.substring(0,8) === 'function') ? eval('('+value+')') : value;
+	});
+}
+
+//Via Array
+valueViaArray = function(d){
+	if(typeof d.array != 'object'){ return d.origin[array]; }
+	if(!d.origin){ d.origin = (server ? this : window);}
+	var origin = d.origin;
+	var array = d.array;
+	switch (array.length) {
+        case 1: return origin[array[0]]; break;
+        case 2: return origin[array[0]][array[1]];break;
+        case 3: return origin[array[0]][array[1]][array[2]];break;
+        case 4: return origin[array[0]][array[1]][array[2]][array[3]];break;
+		case 5: return origin[array[0]][array[1]][array[2]][array[3]][array[4]];break;
+		case 6: return origin[array[0]][array[1]][array[2]][array[3]][array[4]][array[5]];break;
+        default: break;
+    }
+}
+changeViaArray = function(d){
+	try {
+		if(!d.origin){ d.origin = window;}
+		var origin = d.origin;
+		var array = d.array;
+		var value = d.value;
+		switch (array.length) {
+			case 1: origin[array[0]] = value; break;
+			case 2: origin[array[0]][array[1]] = value;break;
+			case 3: origin[array[0]][array[1]][array[2]] = value;break;
+			case 4: origin[array[0]][array[1]][array[2]][array[3]] = value;break;
+			case 5: origin[array[0]][array[1]][array[2]][array[3]][array[4]] = value;break;
+			case 6: origin[array[0]][array[1]][array[2]][array[3]][array[4]][array[5]] = value;break;
+			default: break;
+		}	
+	} catch (err) { logError(err); }
+}
+addViaArray = function(d){
+	if(!d.origin){ d.origin = window;}
+	var origin = d.origin;
+	var array = d.array;
+	var value = d.value;
+	switch (array.length) {
+        case 1: origin[array[0]] += value; break;
+        case 2: origin[array[0]][array[1]] += value;break;
+        case 3: origin[array[0]][array[1]][array[2]] += value;break;
+        case 4: origin[array[0]][array[1]][array[2]][array[3]] += value;break;
+		case 5: origin[array[0]][array[1]][array[2]][array[3]][array[4]] += value;break;
+		case 6: origin[array[0]][array[1]][array[2]][array[3]][array[4]][array[5]] += value;break;
+		default:  break;
+    }
+}
+
+//Round
+round = function (num,decimals,str){
+	if(!str){ return Math.round(num*Math.pow(10,decimals))/Math.pow(10,decimals); }
+	if(!decimals){ return Math.round(num).toString(); }
+	var num = round(num,decimals).toString();
+	
+	var dot = num.indexOf('.');
+	if(dot == -1){ num += '.'; dot = num.length-1; }
+	
+	var missing0 = decimals - num.length + dot + 1;
+	
+	for(var i=0 ; i < missing0; i++){ num += '0'; }
+	
+	return num;
+}
+formatNum = function(num){
+	 return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
+
+//String
+String.prototype.replaceAll = function (find, replace) {
+    var str = this;
+    return str.replace(new RegExp(find, 'g'), replace);
+};
+String.prototype.keyCodeToName = function(){
+	var charCode = Number(this);
+	var boost = '';
+	
+	for(var i = Input.key.combo.length-1 ; i >= 0; i--){
+		if(charCode >= Input.key.combo[i].boost){
+			charCode -= Input.key.combo[i].boost;
+			boost = Input.key.combo[i].symbol;
+			break;
+		}
+	}
+		
+	if(charCode == 1) return boost + 'l';
+	if(charCode == 2) return boost + 'm';
+	if(charCode == 3) return boost + 'r';
+	if (charCode == 8) return boost + "backspace"; //  backspace
+	if (charCode == 9) return boost + "tab"; //  tab
+	if (charCode == 13) return boost + "enter"; //  enter
+	if (charCode == 16) return boost + "shift"; //  shift
+	if (charCode == 17) return boost + "ctrl"; //  ctrl
+	if (charCode == 18) return boost + "alt"; //  alt
+	if (charCode == 19) return boost + "pause/break"; //  pause/break
+	if (charCode == 20) return boost + "caps lock"; //  caps lock
+	if (charCode == 27) return boost + "escape"; //  escape
+    if (charCode == 32) return boost + "_";	 //space        
+    if (charCode == 33) return boost + "page up"; // page up, to avoid displaying alternate character and confusing people	         
+	if (charCode == 34) return boost + "page down"; // page down
+	if (charCode == 35) return boost + "end"; // end
+	if (charCode == 36) return boost + "home"; // home
+	if (charCode == 37) return boost + "left arrow"; // left arrow
+	if (charCode == 38) return boost + "up arrow"; // up arrow
+	if (charCode == 39) return boost + "right arrow"; // right arrow
+	if (charCode == 40) return boost + "down arrow"; // down arrow
+	if (charCode == 45) return boost + "insert"; // insert
+	if (charCode == 46) return boost + "delete"; // delete
+	if (charCode == 91) return boost + "left window"; // left window
+	if (charCode == 92) return boost + "right window"; // right window
+	if (charCode == 93) return boost + "select key"; // select key
+	if (charCode == 96) return boost + "N0"; // N0
+	if (charCode == 97) return boost + "N1"; // N1
+	if (charCode == 98) return boost + "N2"; // N2
+	if (charCode == 99) return boost + "N3"; // N3
+	if (charCode == 100) return boost + "N4"; // N4
+	if (charCode == 101) return boost + "N5"; // N5
+	if (charCode == 102) return boost + "N6"; // N6
+	if (charCode == 103) return boost + "N7"; // N7
+	if (charCode == 104) return boost + "N8"; // N8
+	if (charCode == 105) return boost + "N9"; // N9
+	if (charCode == 106) return boost + "multiply"; // multiply
+	if (charCode == 107) return boost + "add"; // add
+	if (charCode == 109) return boost + "subtract"; // subtract
+	if (charCode == 110) return boost + "decimal point"; // decimal point
+	if (charCode == 111) return boost + "divide"; // divide
+	if (charCode == 112) return boost + "F1"; // F1
+	if (charCode == 113) return boost + "F2"; // F2
+	if (charCode == 114) return boost + "F3"; // F3
+	if (charCode == 115) return boost + "F4"; // F4
+	if (charCode == 116) return boost + "F5"; // F5
+	if (charCode == 117) return boost + "F6"; // F6
+	if (charCode == 118) return boost + "F7"; // F7
+	if (charCode == 119) return boost + "F8"; // F8
+	if (charCode == 120) return boost + "F9"; // F9
+	if (charCode == 121) return boost + "F10"; // F10
+	if (charCode == 122) return boost + "F11"; // F11
+	if (charCode == 123) return boost + "F12"; // F12
+	if (charCode == 144) return boost + "num lock"; // num lock
+	if (charCode == 145) return boost + "scroll lock"; // scroll lock
+	if (charCode == 186) return boost + ";"; // semi-colon
+	if (charCode == 187) return boost + "="; // equal-sign
+	if (charCode == 188) return boost + ","; // comma
+	if (charCode == 189) return boost + "-"; // dash
+	if (charCode == 190) return boost + "."; // period
+	if (charCode == 191) return boost + "/"; // forward slash
+	if (charCode == 192) return boost + "`"; // grave accent
+	if (charCode == 219) return boost + "["; // open bracket
+	if (charCode == 220) return boost + "\\"; // back slash
+	if (charCode == 221) return boost + "]"; // close bracket
+	if (charCode == 222) return boost + "'"; // single quote
+
+	return boost + String.fromCharCode(charCode);
+ }
+String.prototype.capitalize = function() {
+    return this.charAt(0).toUpperCase() + this.slice(1);
+}
+String.prototype.numberOnly = function(num){
+	var a = this.replace(/[^\d.]/g, "");
+	if(num){ return +a; }
+	return a;
+}
+
+//Testing
+eval('permCo' + 'nsoleLog = function(){ co' + 'nsole.log.apply(co' + 'nsole,arguments); }');
+logError = function(err) {
+  if (typeof err === 'object') {
+    if (err.message) { permConsoleLog('\nMessage: ' + err.message) }
+    if (err.stack) { permConsoleLog(err.stack); }
+  } else {
+    permConsoleLog('logError :: argument is not an object');
+  }
+}
+
+//Misc
+distancePtPt = function(mort1,mort2){
+	return Math.sqrt((mort1.x - mort2.x)*(mort1.x - mort2.x) + (mort1.y - mort2.y)*(mort1.y - mort2.y));
+}
+customEscape = function(str){
+	if(typeof str !== 'string'){ return false }
+	
+	str.replaceAll('"','\"');
+	str.replaceAll("'","\'");
+	return str;
+}
+changeVisibility = function(id){
+	var el = document.getElementById(id);
+	el.style.visibility = el.style.visibility === 'hidden' ? 'visible' : 'hidden';
+}
+useTemplate = function(temp,obj,deep){
+	if(deep === undefined){ deep = 1; }
+	
+	if(deep == 1){ obj = deepClone(obj); }
+	else if(deep === 2){ obj = deepClone(obj,1); }
+	for(var i in obj){	temp[i] = obj[i];	}
+	return temp;
+}
+
+
+arrayfy = function(a){
+	return (a instanceof Array) ? a : [a];
+}
+
+
+
+newImage = function(src){
+	var tmp = new Image();
+	tmp.src = '/' + src;
+	return tmp
+}
+
+
+minmax = function(v,min,max){	//same than Number.mm
+	return Math.min(Math.max(v,min),max);
+}
+
+

@@ -1,0 +1,244 @@
+//############################################
+//temp
+var gameStarted = false;
+
+var timeStamp = 1372118670887;
+var context = {'text':''}, clientContext = {'text':''}, permContext = {'text':''};
+var help = '';
+var preloader = []; //hold all images to load
+
+
+var drawSortList = [];  //used to store the actors to draw in the right order (z-index)
+
+var fullList = {};  //EVERYTHING
+var mList = {}; //all mortals (player,enemy)
+var bList = {}; //all bullet
+
+var invList = {}; //all inventory (player id)
+var bankList = {};  //all bank (player id)
+var dropList = {};  //all drop
+
+var sList = {}; //all strike
+var aList = {}; //all animation
+var tradeList = []
+var friendList = {};
+
+var weaponDb = {}, armorDb = {}, abilityDb = {}, itemDb = {};   //local compilation of information so server doesnt send many times the same info
+
+//############################################
+
+//Set the init values from defaultMain.
+var initMain = (function(){ 
+	var main = defaultMain();
+	for(var i in main){
+		window[i] = main[i];
+	}
+})();
+
+//############################################
+
+var id, player; var key = null;
+var canvasX = 0, canvasY = 0;  
+var angle = 0;
+
+var ctxList = {};   //list of canvas (window,popup,stage)
+ 
+var initData;
+//############################################
+//############################################
+
+var btnList = [];   //all buttons
+var clientContext = null;
+
+var pref = Command.pref.default();   //preference (see commandShare.js)
+
+
+//Log In
+logIn = function(){
+	var user = document.getElementById("user").value;
+	var pass = document.getElementById("pass").value;
+	socket.emit('logIn', { 'username': user,'password': pass });
+}
+
+socket.on('logIn', function (data) {
+	if(!data.success){ writeLogInfo(data.message); }
+	else {	id = data.key; cloud9 = data.cloud9; startGame(data.data); } 	
+});
+
+writeLogInfo = function(text){
+	document.getElementById("logInfo").innerHTML = text;	
+}
+
+//New Player
+newPlayer = function (){
+	var user = document.getElementById("user").value;
+	var pass = document.getElementById("pass").value;
+	if(user && pass){ socket.emit('newPlayer', { 'username': user,'password': pass }); }
+}
+
+socket.on('newPlayer', function (data) {
+	writeLogInfo(data.message);
+});
+
+
+//############################################
+
+
+//Init
+startGame = function (data) {
+	document.getElementById("logInDiv").style.display = "none"; //remove enter user and psw
+	document.getElementById("gameDiv").style.display = "inline";    //show game
+	
+	initData = data;
+	for(var i in data.main){ window[i] = data.main[i]; }    //set init values sent by server
+	
+	initPassive();  //init Passive Grid
+	
+	//Add Canvas. param2 = z-index
+	var canvasDiv = document.getElementById("canvasDiv");   
+	addCanvas('stage','stage',-10);
+	addCanvas('win','windowCanvas',10);
+	addCanvas('passiveGrid','passiveGridCanvas',11);
+	addCanvas('pop','popCanvas',30);
+	
+	html.chat.text.innerHTML = 'Welcome!';
+	html.pm.text.innerHTML = '<br>'
+	
+	for(var i in chatBox){Chat.receive(chatBox[i]);}	chatBox = [];   //for offline pm
+	
+	//On Focus
+	$("#chatBoxInput" ).focus();	//initInput was as param???
+	
+	
+	
+	initDb(function(){
+		initLoop();
+		initPlayer(initData);
+		gameStarted = true;
+		socket.emit('clientReady',1); 
+		if(cloud9) { Chat.add('Warning, you are running under cloud9 servers. You may experience intense lagging. Downloading the project and running it locally is recommended.');}
+	});	
+	
+	
+	
+}
+
+//To add a canvas to the game
+addCanvas = function(name,id,z){
+	var cv = document.createElement("canvas");
+	cv.id = id;
+	cv.width = WIDTH;
+	cv.height = HEIGHT;
+	cv.style.border = '1px solid #000000';
+	cv.style.position = 'absolute';
+	cv.style.left = canvasX + 'px';
+	cv.style.top = canvasY + 'px';
+	cv.style.zIndex = z;
+	if(z > 0) cv.style.pointerEvents = "none";
+	
+	
+	disableDraggingFor(cv);
+	canvasDiv.appendChild(cv);
+	
+	ctxList[name] = cv.getContext("2d");
+	ctxList[name].font = '20px Fixedsys';
+	ctxList[name].fillStyle = 'black';
+	ctxList[name].textAlign = 'left';
+	ctxList[name].textBaseline = 'top';
+	ctxList[name].save();
+}
+
+
+initDb = function (cb){
+	initStatTo();   //stat db
+	initDefaultBonus(); //bonus related to the stats
+	initSpriteDb();
+	initAnimDb();
+	initSfxDb();
+	initMapDb();
+	initDefaultMortal();
+	initQuestDb();
+	initUniqueBoostDb();
+	//initAbilityModDb();   //need fixing
+	preload(preloader,function(){   //load images
+		cb.call();
+	});
+}
+
+//preload images
+preload = function(arr,cb){
+	var newimages=[], loadedimages=0
+	var arr=(typeof arr!="object")? [arr] : arr
+    function imageloadpost(){
+        ctxList.stage.clearRect(0,0,WIDTH,HEIGHT);
+		ctxList.stage.fillText('Loading... ' + loadedimages + '/' + arr.length,WIDTH2,HEIGHT2);
+		
+		loadedimages++
+        if (loadedimages==arr.length){
+            cb(newimages)
+        }
+    }
+    for (var i=0; i<arr.length; i++){
+        newimages[i]=new Image()
+        newimages[i].src=arr[i]
+        newimages[i].onload=function(){
+            imageloadpost()
+        }
+        newimages[i].onerror=function(){
+            imageloadpost()
+        }
+    }
+}
+ 
+
+ 
+ 
+//Loop
+initLoop = function (){
+	setInterval(Loop,40);   //update animations
+	
+}
+
+
+socket.on('warning', function (message) {
+	warningText.innerHTML = '<font color="red">' + message + '</font>';
+});
+
+//Help aka documentation. Called once at start of game. wiki-like parser
+parseHelp = function(data){
+	for(var i = 0 ; i < data.length ; i++){
+		
+		//Link
+		if(data[i] == '[' && data[i+1] == '['){
+			var start = i;
+			for(var j = start; j < data.length ; j++){
+				if(data[j] == ']' && data[j+1] == ']'){
+					var tag = data.slice(start+2,j);
+					data = data.replaceAll(
+					'\\[\\[' + tag + '\\]\\]',
+					'<helpLink onclick="updateHelp(\'' + tag + '\')" >' + tag + '</helpLink>'
+					);
+					break;
+				}
+			}
+		}
+		
+		//Title 
+		if(data[i] == '{' && data[i+1] == '{'){
+			var start = i;
+			for(var j = start; j < data.length ; j++){
+				if(data[j] == '}' && data[j+1] == '}'){
+					var end = j+1;
+					var tag = data.slice(start+2,end-1);
+					data = data.replaceAll(
+					'\\{\\{' + tag + '\\}\\}',
+					'<br><br><helpTag id="HELP' + tag + '" >' + tag + '</helpTag><br>'
+					);
+					break;
+				}
+			}
+		}
+	}
+	return data;
+}
+

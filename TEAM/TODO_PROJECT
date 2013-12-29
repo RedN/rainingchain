@@ -1,0 +1,110 @@
+This is the list of things to do when the team will be ready to start the project for real.
+Please ignore this for now.
+
+##########################################
+############      TODO     ###############
+##########################################
+
+###################################################
+#### Programmers:
+#Priority 1:
+-Prototype for Boost, Mort, Attack
+-Implement Sound System
+
+#Priority 2:
+-Buffer Life
+-Polish Instanced World
+-Passive Grid Zoom
+-Bank HTML5
+-Crafting Ability
+-Advanced Enemy Mods
+-Revamp Drop
+
+#Priority 3:
+-See Cooldown for ability
+-Portal to Friends
+-Multiplayer Quest
+-Add Mod to Quest Reward
+-Option show strike points
+-Auto-picker
+-Impove boostDb
+-Enemy AI for ability
+-Icon minimap
+-Ability Creation & Mod
+-Crafting System with White
+-Advanced Dialogue (Morrowind)
+
+###################################################
+#### Artists:
+#Priority 1:
+-Animations (at least one for melee, range, magic, fire, cold, lightning)
+-Change Image Folder structure
+
+#Priority 2:
+-Color Icons
+-Interface Elements
+
+#Priority 3:
+-Once Lore complete: 1 Spritesheet for each race
+
+###################################################
+#### Designer:
+-Revamp HTML CSS System
+
+
+###################################################
+#### Sound:
+-Find/Create Sound Effect for each major animation. (at least 1 melee, range, magic, fire, cold, lightning)
+
+
+###################################################
+#### Lore:
+Need Lore Base first.
+
+
+##########################################
+############      DONE     ###############
+##########################################
+
+#### Programmers:
+2013-12-13: Fixed strike Curse. -rc
+
+
+
+#### Artists:
+
+
+
+
+#### Designer:
+
+
+
+##########################################
+##########      Archive     ##############
+##########################################
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

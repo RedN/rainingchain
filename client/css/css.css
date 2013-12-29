@@ -1,0 +1,168 @@
+		/*
+		nothing => directly what u use inside <>
+		. => class
+		# => id
+		
+		
+		*/
+		
+		html {
+			overflow: auto;
+			cursor:default;
+		}
+		
+		a {
+			text-decoration: none;
+			cursor: default;
+		}
+		
+		body { 
+			cursor: default;
+			draggable:false;
+		}
+		p{
+			font-family:"Fixedsys";
+			font-size:20px;
+		}
+		textarea{
+			resize: none; 
+			text-align:left;
+		}
+		
+		canvas{
+			z-index:-1;
+		}
+		div{
+			draggable:false;
+			readonly:readonly;
+			disabled:disabled;
+			
+			height:auto;
+			width:auto;
+			
+			-webkit-touch-callout: none;
+			-webkit-user-select: none;
+			-khtml-user-select: none;
+			-moz-user-select: none;
+			-ms-user-select: none;
+			user-select: none;
+		}
+		
+		helpLink{
+			text-decoration:underline; 
+		}
+		
+		helpTag{
+			font-family:"Fixedsys";
+			font-size:20px;
+			font-weight:100;
+		}
+		
+		.onlyText{
+			background-color:transparent;
+			border: none;
+			outline: none;
+			overflow:hidden;
+			
+			-webkit-touch-callout: none;
+			-webkit-user-select: none;
+			-khtml-user-select: none;
+			-moz-user-select: none;
+			-ms-user-select: none;
+			user-select: none;	
+		}
+		.onlyTextScroll{
+			background-color:transparent;
+			border: none;
+			outline: none;
+			overflow-y: scroll;
+			overflow-x: hidden;		
+			
+			
+			-webkit-touch-callout: none;
+			-webkit-user-select: none;
+			-khtml-user-select: none;
+			-moz-user-select: none;
+			-ms-user-select: none;
+			user-select: none;			
+			
+			-moz-appearance: textfield-multiline;
+		}
+		
+		.container { 
+			-moz-appearance: textfield-multiline;
+		}
+		.hover:hover{
+			text-decoration:underline; 
+		}
+		
+		.shadow{
+			text-shadow: 1.5px  1.5px 0 #000;		
+		}
+		
+		
+		.posAbs {
+			position:absolute;
+		}
+		
+			
+		
+		/*Dialogue*/
+		#dialogueBoxText{
+			font-family:Fixedsys;
+			font-size:20px;
+		}
+		
+		
+		/*Win*/
+		#winDiv{
+			z-index:20;
+		}
+		
+		/*Pop*/
+		#popDiv{
+			z-index:40;
+		}
+		/*Help*/
+		#helpText{
+			text-align:justify;
+		}
+		
+		/*Warning*/
+		#warningDiv{
+			position:absolute;
+		}
+		#warningText{
+			text-align:justify;
+		}
+
+		
+		
+		/*Scroll Bar*/
+		.noSb {
+			overflow:hidden;
+		}
+		::-webkit-scrollbar {
+			width: 12px;
+		}
+		 
+		::-webkit-scrollbar-track {
+			-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3); 
+			-webkit-border-radius: 10px;
+			border-radius: 10px;
+		}
+		 
+		::-webkit-scrollbar-thumb {
+			-webkit-border-radius: 10px;
+			border-radius: 10px;
+			background: rgba(150,75,0,0.8); 
+			-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5); 
+		}
+		::-webkit-scrollbar-thumb:window-inactive {
+			background: rgba(150,75,0,0.4); 
+		}
+				
+		
+				
+		
+		

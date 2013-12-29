@@ -1,0 +1,43 @@
+#####################################################
+#How to Add a new Animation to the game and test it.#
+#####################################################
+
+Video Link: http://www.youtube.com/watch?v=Nn0Rbq7Rdao
+
+1- Create a new animation.
+2- Copy your image file under client/img/Animation
+3- Open client/js/sprite.js
+4- Add a new line in the animDb list using this format:
+
+"nameofthefile":{'frame':amount_of_frames_(total),'frameX':amount_of_frame_per_row,'spd':speed_factor},
+
+5- To test the animation in-game:
+Press F12 and go to the console. (Google Chrome)
+Write down: 
+
+initAnim({
+	id: Math.random(),
+	name: "myPic",  //put anim id
+	sizeMod: 1,
+	spdMod: 1,
+	target: {
+    	x: 1380,
+    	y: 347,
+	},
+});
+
+
+
+#######################################################################
+######## Write down your name if you have watched this tutorial #######
+#######################################################################
+
+
+
+
+
+
+
+
+
+

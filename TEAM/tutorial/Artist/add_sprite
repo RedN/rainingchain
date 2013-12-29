@@ -1,0 +1,59 @@
+#####################################################
+#How to Add a new Sprite to the game and test it.#
+#####################################################
+
+Video Link: http://www.youtube.com/watch?v=Pm-SbTRCDG8
+
+1- Create a new spritesheet.
+2- Copy your image file under client/img/Sprite
+3- Open client/js/shared/spriteDb.js
+4- Add a new line in the spriteDb list using this format:
+
+
+"pMace":{                               //id of the sprite
+    "src":"img/Sprite/human.png"        //image src
+    "size":1.5,                         //size factor
+    "side":[2,6,0,4,1,5,3,7],           //side[0] = 2 => the right-facing position is in the 3rd row. 
+    'hpBar':-40,                        //hp bar distance from center (in y)
+    'legs':35,                          //used when sorting draw by y.
+	"preHitBox":[ -12,12,-35,35 ],      //hitbox before size factor (for dmg collision)
+	"preBumperBox":[ -12,12,0,35 ],     //bumperbox before size factor  (for map collision)
+	"anim": {                           //list of animations
+		"Walk":{            //name
+		    "startY":0,     //startY pixel
+	    	"frame":4,      //how many frames?
+	    	"sizeX":70,     //size of 1 frame in x
+	    	"sizeY":70,     //size of 1 frame in y
+	    	"dir":8,        //how many direction can it face? (usually 4 or 8 if diagonal)
+	    	"spd":0.8,      //speed of animation. 1 spd => every game frame, it moves to the next frame
+	    	'walk':1,       //if walk, movement speed will impact frame spd
+	    	"next":"Walk"   //once animation complete, what animation to do?    //default is Walk
+	    },
+		"Attack":{"startY":0,"frame":4,"sizeX":70,"sizeY":70,"dir":8,"spd":0.8,"next":"Walk"},
+		"Death":{"startY":0,"frame":4,"sizeX":70,"sizeY":70,"dir":8,"spd":0.8,"next":"Walk"},
+	}},
+
+
+
+5- To test the sprite in-game:
+Press F12 and go to the console. (Google Chrome)
+Write down: 
+
+ts('changeSprite(p,{name:"id_of_sprite"})');
+
+
+
+#######################################################################
+######## Write down your name if you have watched this tutorial #######
+#######################################################################
+
+
+
+
+
+
+
+
+
+
+

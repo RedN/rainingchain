@@ -1,0 +1,378 @@
+var PRIORITY_TIMER = 1; var REG_TIMER = 5; var SLOW_TIMER = 25; 
+
+
+
+//Complex system to track the data that has changed and that need to be send to the client.
+
+initWatchList = function(){
+	//w = watch, a = array for value, s = array to send, f = function filter, n = name, c = condition to test
+	//NOTE: for .e being in 2 category, must put r:noreset. otherwise, second wont get
+	//MEANS PRIVATE MUST BE LAST
+	
+	watchList = {};
+	//Fulllist
+	watchList['enemy'] = {
+		'w':{'priority':[
+				{'a':['x'],'f':Math.round},
+				{'a':['y'],'f':Math.round},
+				{'a':['angle'],'f':Math.round},
+			],
+			'reg':[
+				{'a':['hp'],'f':Math.round,'c':(function(e){ return !e.nevercombat; })},
+				{'a':['resource','hp','max'],'f':Math.round,'c':(function(e){ return !e.nevercombat; })},
+				{'a':['sprite','name']},
+				{'a':['sprite','sizeMod']},
+			],
+			'slow':[
+				{'a':['combat']},
+				{'a':['spdX'],'f':Math.round,'c':(function(e){ return !e.nevermove; })},
+				{'a':['spdY'],'f':Math.round,'c':(function(e){ return !e.nevermove; })},
+			]},	
+		'e':{'priority':[],
+			'reg':[
+				{'a':['sprite','anim']},
+				{'a':['chatHead']},
+			]}
+	};
+		
+	watchList['bullet'] = {
+		'w':{'priority':[
+				{'a':['x'],'f':Math.round},
+				{'a':['y'],'f':Math.round},
+				{'a':['angle'],'f':Math.round},
+			],
+			'reg':[
+				{'a':['sprite','name']},
+				{'a':['sprite','sizeMod']},
+			]},	
+		'e':{'priority':[],
+			'reg':[]}
+	};
+	
+	watchList['player'] = {
+		'w':{'priority':[
+				{'a':['x'],'f':Math.round},
+				{'a':['y'],'f':Math.round},
+				{'a':['angle'],'f':Math.round},
+			],
+			'reg':[
+				{'a':['spdX'],'f':Math.round},
+				{'a':['spdY'],'f':Math.round},
+				{'a':['combat']},
+				{'a':['map'],'f':Change.send.convert.map},
+				{'a':['hp'],'f':Math.round},
+				{'a':['resource','hp','max'],'f':Math.round},
+				{'a':['sprite','name']},
+				{'a':['sprite','sizeMod']},
+			],
+			
+			
+			},	
+		'e':{'priority':[],
+			'reg':[
+				{'a':['sprite','anim'],'r':'noreset'},
+				{'a':['chatHead'],'r':'noreset'},
+			]}
+	};
+	
+	//Main
+	watchList['main'] = {
+		'w':{'priority':[],
+			'reg':[
+				{'a':['currentTab']},
+				{'a':['context']},
+				{'a':['dialogue']},	
+				
+				
+				{'a':['popupList','weapon']},
+				{'a':['popupList','armor']},
+				
+				{'a':['windowList','bank']},
+				{'a':['windowList','offensive']},
+				{'a':['windowList','defensive']},
+				{'a':['windowList','trade'],'f':Change.send.convert.tradeWindow},
+				{'a':['windowList','shop'],'f':Change.send.convert.shopWindow},
+				{'a':['windowList','ability']},
+				{'a':['windowList','passive']},
+				{'a':['windowList','quest']},
+				
+				{'a':['invList'],'f':Change.send.convert.Inventory},
+				{'a':['bankList'],'f':Change.send.convert.invList},
+				{'a':['tradeList'],'f':Change.send.convert.invList},
+				{'a':['optionList'],'f':Change.send.convert.optionList},
+				
+				{'a':['temp']},
+				{'a':['help']},
+				
+			],
+			'slow':[
+				{'a':['pref']},	
+				{'a':['friendList']},	
+				{'a':['muteList']},
+				
+				{'a':['quest']},
+				
+				{'a':['passivePt']},
+				{'a':['passive']},
+				{'a':['clanList']},						
+			]
+			},	
+		'e':{'priority':[],
+			'reg':[
+				{'a':['chatBox'],'r':[]},
+				{'a':['chatInput'],'r':''}
+			]}
+	};
+	
+	//Private
+	watchList['private'] = {
+		'w':{'priority':[
+				{'a':['x'],'f':Math.round},
+				{'a':['y'],'f':Math.round},
+				{'a':['angle'],'f':Math.round},
+			],
+			'reg':[
+				{'a':['spdX'],'f':Math.round},
+				{'a':['spdY'],'f':Math.round},
+				{'a':['map'],'f':Change.send.convert.map},
+				{'a':['hp'],'f':Math.round},
+				{'a':['mana'],'f':Math.round},
+				{'a':['dodge'],'f':Math.round},
+				{'a':['fury'],'f':Math.round},
+				{'a':['sprite','name']},
+				{'a':['sprite','sizeMod']},
+				
+				
+				{'a':['armor','piece','body','id'],'s':['armor','piece','body'],'f':(function(w){ return {'visual':w.visual,id:w.id} }) },
+				{'a':['armor','piece','helm','id'],'s':['armor','piece','helm'],'f':(function(w){ return {'visual':w.visual,id:w.id} }) },
+				{'a':['armor','piece','shield','id'],'s':['armor','piece','shield'],'f':(function(w){ return {'visual':w.visual,id:w.id} }) },
+				{'a':['armor','piece','bracelet','id'],'s':['armor','piece','bracelet'],'f':(function(w){ return {'visual':w.visual,id:w.id} }) },
+				{'a':['armor','piece','gloves','id'],'s':['armor','piece','gloves'],'f':(function(w){ return {'visual':w.visual,id:w.id} }) },
+				{'a':['armor','piece','boots','id'],'s':['armor','piece','boots'],'f':(function(w){ return {'visual':w.visual,id:w.id} }) },
+				{'a':['armor','piece','pants','id'],'s':['armor','piece','pants'],'f':(function(w){ return {'visual':w.visual,id:w.id} }) },
+				{'a':['armor','piece','amulet','id'],'s':['armor','piece','amulet'],'f':(function(w){ return {'visual':w.visual,id:w.id} }) },
+				{'a':['armor','piece','ring','id'],'s':['armor','piece','ring'],'f':(function(w){ return {'visual':w.visual,id:w.id} }) },
+				
+				
+				{'a':['weapon','id'],'s':['weapon'],'f':(function(w){ return {'type':w.type,'piece':w.piece,'visual':w.visual,id:w.id} }) },
+				{'a':['weaponList','melee','id'],'s':['weaponList','melee'],'f':(function(w){ return {'type':w.type,'visual':w.visual,id:w.id} }) },
+				{'a':['weaponList','range','id'],'s':['weaponList','range'],'f':(function(w){ return {'type':w.type,'visual':w.visual,id:w.id} }) },
+				{'a':['weaponList','magic','id'],'s':['weaponList','magic'],'f':(function(w){ return {'type':w.type,'visual':w.visual,id:w.id} }) },
+				
+				
+			],
+			'slow':[
+				{'a':['resource'],'f':(function(w){ for(var i in w){ for(var j in w[i]){ w[i][j] = Math.round(w[i][j]); }} })},
+				
+				{'a':['permBoost']},
+				{'a':['armor','def']},
+				{'a':['def']},
+				
+				{'a':['armor','piece','body','def']},
+				{'a':['armor','piece','helm','def']},
+				{'a':['armor','piece','shield','def']},
+				{'a':['armor','piece','bracelet','def']},
+				{'a':['armor','piece','gloves','def']},
+				{'a':['armor','piece','boots','def']},
+				{'a':['armor','piece','pants','def']},
+				{'a':['armor','piece','amulet','def']},
+				{'a':['armor','piece','ring','def']},
+				
+				
+				{'a':['ability'],'f':Change.send.convert.abilityList },
+				{'a':['abilityList'],'f':Change.send.convert.abilityList },
+				
+				{'a':['exp','melee']},
+				{'a':['exp','range']},
+				{'a':['exp','magic']},
+				{'a':['exp','smithing']},
+				{'a':['exp','fletching']},
+				{'a':['exp','crafting']},
+				{'a':['exp','mining']},
+				{'a':['exp','woodcutting']},
+				{'a':['exp','hunting']},
+				
+				{'a':['lvl','melee']},
+				{'a':['lvl','range']},
+				{'a':['lvl','magic']},
+				{'a':['lvl','smithing']},
+				{'a':['lvl','fletching']},
+				{'a':['lvl','crafting']},
+				{'a':['lvl','mining']},
+				{'a':['lvl','woodcutting']},
+				{'a':['lvl','hunting']},
+				
+			
+				
+			]
+			},	
+		'e':{'priority':[],
+			'reg':[
+				{'a':['sprite','anim']},
+				{'a':['chatHead']},
+			]}
+	};
+	watchList['strike'] = null;
+	watchList['drop'] = null;
+	watchList['shop'] = null;
+	
+	for(var i in watchList){
+		if(!watchList[i]){ watchList[i] = {'w':{'priority':[],'reg':[],'slow':[]},'e':{'priority':[],'reg':[],'slow':[]}}; }
+		
+		for(var j in watchList[i]){
+		    var w = watchList[i][j];
+			if(!w.priority){ watchList[i][j].priority = []; }
+			if(!w.reg){ watchList[i][j].reg = []; }
+			if(!w.slow){ watchList[i][j].slow = []; }
+			
+			for(var k in w){
+				for(var m in w[k]){
+					w[k][m].id = w[k][m].a.toString();
+				}
+			}
+		}
+	}
+	
+}
+
+updateChangeW = function(mort,info,pr){
+    //Test condition to test
+	if(info.c && !info.c(mort)){ return; }
+
+	//Get Old and New Value and Set Old = to New
+	var valRaw = valueViaArray({'origin':mort,'array':info.a});
+	var val0 = stringify(valRaw);                                   //Get new
+	if(!pr){ var val1 = mort.old[info.id]; } else {
+		var val1 = mort.privateOld[info.id]; }                      //Get old
+	
+	//Test !=
+	if(!isEqual( val0, val1)){
+		if(!pr){ mort.old[info.id] = val0; } else {                 //Set Old
+		mort.privateOld[info.id] = val0; }
+		
+		var a = info.a;
+		if(info.s){                                                 //Modify array of what to send
+			var a = info.s;
+			var valRaw = valueViaArray({'origin':mort,'array':info.s});
+			var val0 = stringify(valRaw);
+		}
+		
+		if(info.f && valRaw){                                       //Apply filter 
+		    if(info.f === 'toCLient'){ val0 = stringify() } 
+		    else {  val0 = stringify(info.f(valRaw,mort));	}
+		}
+		
+		if(!pr){ mort.change[a.toString()] = val0; } else {         //Add to change list for send.js know
+			mort.privateChange[a.toString()] = val0; }
+	}
+}	
+
+
+
+
+
+
+
+
+
+
+
+
+updateChangeE = function(mort,info,pr){
+	if(info.c && !info.c(mort)){ return; }
+	
+	var valRaw = valueViaArray({'origin':mort,'array':info.a});
+	
+	if(valRaw != null){ 
+		var val0 = stringify(valRaw); 
+		
+		var a = info.a;
+		
+		if(info.s){
+			var a = info.s;
+			var valRaw = valueViaArray({'origin':mort,'array':info.s});
+			var val0 = stringify(val0);
+		}
+		
+		if(info.f && valRaw && val0){	val0 = stringify(info.f(valRaw,mort));}
+		
+		if(info.r != 'noreset'){
+		changeViaArray({'origin':mort,'array':info.a,'value':null}); }
+		if(!pr){ mort.change[a.toString()] = val0; } else {
+			mort.privateChange[a.toString()] = val0; }
+		
+	}
+}
+
+Change.update = function(){
+	//Entity
+	for(var i in fullList){
+		var mort = fullList[i];
+		if(!mort.dead){
+			for(var j in watchList[mort.type].e.priority){
+				updateChangeE(mort,watchList[mort.type].e.priority[j]);	}
+			for(var j in watchList[mort.type].w.priority){
+				updateChangeW(mort,watchList[mort.type].w.priority[j]);	}
+				
+			if(frameCount % REG_TIMER === 0){
+				for(var j in watchList[mort.type].e.reg){
+					updateChangeE(mort,watchList[mort.type].e.reg[j]);}
+				for(var j in watchList[mort.type].w.reg){
+					updateChangeW(mort,watchList[mort.type].w.reg[j]);}
+			}
+			if(frameCount % SLOW_TIMER === 0){
+				for(var j in watchList[mort.type].e.slow){
+					updateChangeE(mort,watchList[mort.type].e.slow[j]);}
+				for(var j in watchList[mort.type].w.slow){
+					updateChangeW(mort,watchList[mort.type].w.slow[j]);}
+			}			
+		}
+	}
+	//MainList
+	for(var i in mainList){
+		var mort = mainList[i];
+		
+		for(var j in watchList.main.e.priority){
+			updateChangeE(mort,watchList.main.e.priority[j]);}
+		for(var j in watchList.main.w.priority){
+			updateChangeW(mort,watchList.main.w.priority[j]);}
+			
+		if(frameCount % REG_TIMER === 0){
+			for(var j in watchList.main.e.reg){
+				updateChangeE(mort,watchList.main.e.reg[j]);}
+			for(var j in watchList.main.w.reg){
+				updateChangeW(mort,watchList.main.w.reg[j]);}
+		}
+		if(frameCount % SLOW_TIMER === 0){
+			for(var j in watchList.main.e.slow){
+				updateChangeE(mort,watchList.main.e.slow[j]);}
+			for(var j in watchList.main.w.slow){
+				updateChangeW(mort,watchList.main.w.slow[j]);}
+		}
+	}
+	//Private
+	for(var i in mainList){
+		var mort = fullList[i];
+		for(var j in watchList.private.w.priority){
+			updateChangeW(mort,watchList.private.w.priority[j],1);}
+		for(var j in watchList.private.e.priority){
+			updateChangeE(mort,watchList.private.e.priority[j],1);}
+		if(frameCount % REG_TIMER === 0){
+			for(var j in watchList.private.w.reg){
+				updateChangeW(mort,watchList.private.w.reg[j],1);}
+			for(var j in watchList.private.e.reg){
+				updateChangeE(mort,watchList.private.e.reg[j],1);}
+		}
+		if(frameCount % SLOW_TIMER === 0){
+			for(var j in watchList.private.w.slow){
+				updateChangeW(mort,watchList.private.w.slow[j],1);}
+			for(var j in watchList.private.e.slow){
+				updateChangeE(mort,watchList.private.e.slow[j],1);}
+		}
+	}
+	
+	
+}
+
+
+

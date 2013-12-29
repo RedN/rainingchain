@@ -1,0 +1,35 @@
+If you have any question, ask them in TEAM/question.
+
+Video Link: http://www.youtube.com/watch?v=wu_XrmWvtM4
+
+-Install NodeJS: http://nodejs.org/
+-Download the game: File - Download     (Require read-Write Privilege) 
+-Unzip.
+-From command line: move to the rainingchain directory using cd.. and cd (folder_name)
+-Once inside the rainingchain folder, type node app.js in the command line.
+-Go to http://localhost:3000/ in your browser
+
+
+
+
+
+
+
+
+
+
+
+#######################################################################
+######## Write down your name if you have watched this tutorial #######
+#######################################################################
+-IdkWhatsRc
+-KyalChatten
+-Andallas
+-Kevyn
+-JesseGuarascia
+- Robin VdB -- not at home now so I can't test it. Will be tested on 23/12/2013
+
+
+
+
+

@@ -1,0 +1,36 @@
+####################################
+#How to Add a new Icon to the game #
+####################################
+
+Video Link: http://www.youtube.com/watch?v=3mgEazfGn8E
+
+0- Download the artist folder: LINK SOON
+1- Create a new icon (48x48).
+2- Open iconSheetAll.png under artist/Icon
+3- Add your icon to the list at the bottom.
+4- Open iconSheet.tmx using Tiled.
+5- Drag your icon to the right row/category.
+6- Save File.
+7- Save as image. (iconSheet.png)
+8- Go in client/img/Icon and overwrite iconSheet.png with your new iconSheet.png
+9- Open client/js/img
+10- Under iconPreIndex, in the category you have put your icon, add the name of your newly created icon.
+ex: 
+Before: 'body':{'y':equip+7,'x':['metal','wood','bone','hide']},
+After:  'body':{'y':equip+7,'x':['metal','wood','bone','hide','colored']},
+
+
+#######################################################################
+######## Write down your name if you have watched this tutorial #######
+#######################################################################
+
+
+
+
+
+
+
+
+
+
+

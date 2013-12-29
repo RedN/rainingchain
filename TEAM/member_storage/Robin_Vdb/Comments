@@ -1,0 +1,20 @@
+In this file I make comments on the code I read
+
+@@@@@@@@@@
+@TEMPLATE@
+@@@@@@@@@@
+file:
+line:
+category: bug / bad scripting / ....
+information:
+############
+
+############
+I think we should use a code format so we can both understand our code. A
+suggest that we use the google style[1]. It's easy to change all to code you've
+allready written by using Eclipse. I'll do that last one.
+
+[1] - http://google-styleguide.googlecode.com/svn/trunk/javascriptguide.xml
+
+Greetings,
+Robin VdB / GamesMaxed

@@ -1,0 +1,77 @@
+##############################################################################################################
+Ask Questions Here. Don't forget to specify your name and the date.
+##############################################################################################################
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+####Answered#####
+
+
+
+Instructions to launch unclear. - kyalchatten 9:46 EST Mon Dec 16
+
+To run the game yourself: (Video Guide coming soon)
+-Install NodeJS: http://nodejs.org/
+-Download the game: File - Download        (Or https://www.mediafire.com/?zackcz5k7seb204) 
+-Unzip.
+-From command line: move to the rainingchain directory using cd.. and cd (folder_name) (ex: cd rainingchain)
+-Once inside the rainingchain folder, type node app.js.
+-Go to http://localhost:3000/
+
+3:35pm EST
+
+
+
+When do you plan to have some sort of web server to host the game so we can test server compatibility? As well,
+I would suggest some sort of subreddit for ease of questions and update posting. Feel it would be much easier
+to manage and a lot cleaner.
+
+Answer: We can already run the game directly from cloud9 and it works great. I'm not really sure what you mean by server compatibility.
+I do plan to switch to Trello project manager for updates and TODO list when we get started with the tasks in TODO_Project. 
+
+    Sorry, wrote that in a sort of daze. What I meant was lag and desync between players using the server. Just for testing purposes.
+    As you've played Path of Exile, you know how much of a pain in the ass that can be at times.
+
+
+Could you assign smaller roles to specific people?  I feel like it would be helpful if you just started giving 
+people little tasks, its all a bit overwhelling ATM and I am not sure what I should be doing.
+
+Answer: You will only have a rough idea of how to contribute once I've done the meetings with each part of the team. 
+(Programmers, Artist, Audio, Designer, Lore)
+So many more things need to be said before I can actually give a role and ask tasks to someone.
+However, very little people wrote down their availability for the future meeting so everything is kinda in stand-by. 
+I guess I'll apply some pressure to get things moving. 
+
+
+
+
+
+[KC]: If I may interject, depending on what area you work in you may want to take initiative. For instance,
+      us lore people have it pretty easy, we get to write whatever we want and it can be omitted and altered
+      with relative ease. 
+
+Answer: I guess the lore can start thinking about some ideas. But at the same time, without an initial meeting, everyone are going run in different directions.
+
+
+
+
+
+
+
+
