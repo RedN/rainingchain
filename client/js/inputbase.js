@@ -150,7 +150,7 @@ Input.event.mouse.wheel = function(side){
 Input.event.mouse.move = function (evt){
 	mouse.x = evt.x - canvasX;
 	mouse.y = evt.y - canvasY;
-	if(gameStarted) player.angle = atan2(mouse.x - WIDTH/2,mouse.y - HEIGHT/2);    //kept so updates faster aka feel more responsive
+	//if(gameStarted) player.angle = atan2(mouse.x - WIDTH/2,mouse.y - HEIGHT/2);    //kept so updates faster aka feel more responsive
 }
 
 Input.event.mouse.drag = function(){
@@ -202,7 +202,7 @@ Input.send = function(){
 	if(Input.send.old.key !== newKey){ d.i = newKey; }
 	if(Input.send.old.mouse.toString() !== newMouse.toString()){ d.m = newMouse; }
 	
-	if(d.i || d.m){ console.log(d); socket.emit("input", d ); }
+	if(d.i || d.m){ socket.emit("input", d ); }
 	
 	Input.send.old.key = newKey;
 	Input.send.old.mouse = newMouse;

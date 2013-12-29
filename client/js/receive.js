@@ -48,8 +48,9 @@ try {
 	//Remove Inactive FullList
 	for(var i in fullList){
 		var mort = fullList[i];
-		if(mort){	mort.toRemove++;
-			if(mort.toRemove > 1 && (!mort.sprite || (mort.sprite && mort.sprite.anim && !mort.sprite.anim.remove))){
+		if(mort){	
+			mort.toRemove++;
+			if(mort.toRemove > 1){ //&& (!mort.sprite || (mort.sprite && mort.sprite.anim && !mort.sprite.anim.remove))){
 				remove(i);
 			}
 		}

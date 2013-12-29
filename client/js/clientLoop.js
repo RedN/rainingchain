@@ -46,7 +46,8 @@ Loop.update.chatHead = function(mort){	//weird name
 
 
 remove = function(i){
-	i = i === 'string' ? i : i.id;
+	i = typeof i === 'string' ? i : i.id;
+	console.log(i,fullList[i])
 	delete bList[i]; 
 	delete mList[i];
 	delete dropList[i]; 
