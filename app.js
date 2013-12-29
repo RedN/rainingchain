@@ -1,3 +1,4 @@
+//git commit -am "your message goes here"
 //git push -u origin master
 
 cloud9 = typeof process.env.PORT !== 'undefined';
