@@ -130,7 +130,7 @@ Change.update.init = function(){
 				{'array':['windowList','quest']},
 				
 				{'array':['invList'],'filter':'toClient'},
-				{'array':['bankList'],'filter':Change.send.convert.invList},
+				{'array':['bankList'],'filter':'toClient'},
 				{'array':['tradeList'],'filter':Change.send.convert.invList},
 				{'array':['optionList'],'filter':Change.send.convert.optionList},
 				

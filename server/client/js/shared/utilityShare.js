@@ -23,23 +23,22 @@ defaultMain = function(key){
 		'passivePt':0,
 		'chatInput':'',
 		'clanList':[],
+		'invList': ['','','','','','','','','','','','','','','','','','','','','','','',''],
 	};
 	if(server){
 		main['quest'] = defaultQuestVariable();
 		main['pref'] = Command.pref.default();
 		main['passive'] = defaultPassive();
 		main['invList'] = new Inventory(key);
-		main['old'] ={};
-	} else {
-	    main['invList'] = ['','','','','','','','','','','','','','','','','','','','','','','',''];
-	}
+		main['bankList'] = new Bank(key);
+		main['old'] = {};
+	} 
 	return main;
 }
 
 
 defaultPlayer = function(){
 	var p = defaultMortal('player');
-	//for(var k in defaultMortal.player){ p[k] = defaultMortal.player[k]; }
 	
 	p.id = Math.randomId();
 	p.publicId = Math.random().toString(36).substring(13);
@@ -58,12 +57,12 @@ defaultPlayer = function(){
 	p.activeList = {};
 	p.ability = [{id:'bulletMulti'}];
 	p.abilityList = {
-	                'bulletMulti':{id:'bulletMulti'},
-	                'bulletSingle':{id:'bulletSingle'},
-                    'strikeSingle':{id:'strikeSingle'},
-                    'dodgeRegular':{id:'dodgeRegular'},
-                    'stumble':{id:'stumble'},
-                    'summonDragon':{id:'summonDragon'},
+		'bulletMulti':{id:'bulletMulti'},
+		'bulletSingle':{id:'bulletSingle'},
+		'strikeSingle':{id:'strikeSingle'},
+		'dodgeRegular':{id:'dodgeRegular'},
+		'stumble':{id:'stumble'},
+		'summonDragon':{id:'summonDragon'},
 	};
 	
 	return p;
@@ -218,7 +217,7 @@ drawElementBar = function(x,y,w,h,data,noover){
 			ctx.fillStyle = Cst.element.toColor[i];
 			ctx.roundRect(x,y,length,h);
 		}
-		if(Collision.PtRect(Collision.getMouse(key),[x,x+length,y,y+h])){
+		if(Collision.PtRect(Collision.getMouse(),[x,x+length,y,y+h])){
 			var mouseOverRatio = i; 
 		}
 		x += length;

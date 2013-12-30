@@ -1,20 +1,20 @@
 var old = {'fl':'','quest':'','abilityShowed':'bulletMulti','abilityTypeShowed':'attack','abilitySub':''};
 
 Draw = {
-'window':{},
-'anim':{},
-'entity':{},
-'map':{},
-'minimap':{},
-'popup':{},
-'loop':{},
-'context':{},
-'tab':{},
+	'window':{},
+	'anim':{},
+	'entity':{},
+	'map':{},
+	'minimap':{},
+	'popup':{},
+	'loop':{},
+	'context':{},
+	'tab':{},
 };
 
 
 //Drawing Loop
-Draw.loop=function (key){
+Draw.loop = function (key){
 	if(server){
 		//Clear
 		mainList[key].btnList = [];
@@ -1335,7 +1335,6 @@ Draw.window.ability.generalInfo = function(diffX,diffY){ ctxrestore();
 	}
 }
 
-
 Draw.window.ability.upgrade = function(diffX,diffY){
 	var s = Draw.window.main.constant(); var sx = s.sx; var sy = s.sy; var mx = s.mx; var my = s.my; var zx = s.zx; var zy = s.zy; var dw = s.dw; var dh = s.dh; var mdx = s.mdx; var mcx = s.mcx; var w = s.w; var h = s.h; 
 	sx += diffX;
@@ -1369,7 +1368,6 @@ Draw.window.ability.upgrade = function(diffX,diffY){
 		old.abilityUpgrade = str;
 	}
 }	
-
 
 Draw.window.ability.generalInfo.mod = function(){
 	if(html.chat.input.value.indexOf('$win,ability,mod,') !== -1){

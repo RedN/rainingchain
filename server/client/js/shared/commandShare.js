@@ -178,7 +178,7 @@ Command.list['win,open'] = function(key,win,param0){
 
 Command.list['win,bank,click'] = function(key,side,id){
 	if(!mainList[key].windowList.bank){ Chat.add(key,'Access denied.'); return;}
-	Bank.click(key,id,side);
+	mainList[key].bankList.click(id,side);
 }
 
 Command.list['win,quest,toggleBonus'] = function(key,id,bonus){

@@ -9,7 +9,7 @@ var help = '';
 var canvasX = 0, canvasY = 0;  
 
 var ctxList = {};   //list of canvas (window,popup,stage)
- var drawSortList = [];  //used to store the actors to draw in the right order (z-index)
+var drawSortList = [];  //used to store the actors to draw in the right order (z-index)
 
 var fullList = {};  //EVERYTHING
 var mList = {}; //all mortals (player,enemy)

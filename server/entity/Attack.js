@@ -11,7 +11,7 @@ Attack.template = function(){
 	b.crY = 0;  //creation Y
 	b.map = 'test';
 	b.normal = 0;
-	b.maxTimer = 100;
+	b.maxTimer = 40;
 	b.timer = 0;
 	b.toRemove = 0;
 	b.spd = 15;
@@ -31,10 +31,6 @@ Attack.template = function(){
 	b.dmg = {'melee':0,'range':0,'magic':0,'fire':0,'cold':0,'lightning':0} ;
 	b.dmgMain = 1;
 		
-	//Bonus applies on top of weapon attack. If effect not on weapon, do nothing.
-	b.bonus = defaultBonus();
-	b.mastery = defaultMastery();
-	
 	//Mods
 	b.normal = 0;	//get set inside creation
 	b.nova = 0;
@@ -61,7 +57,7 @@ Attack.template = function(){
 	
 	
 	b.viewedBy = {};
-	b.viewedIf = function(){ return true; };
+	b.viewedIf = 'true';
 	
 
 	return b;

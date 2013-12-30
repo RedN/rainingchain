@@ -1,23 +1,13 @@
-Inventory = function(key,data,length,alwaysStack){
-	this.key = key;
-	this.alwaysStack = alwaysStack || false;	
-	
-	if(data){
-	    this.data = data;
-	    return this;
-	}
-	
-	length = length || 24; 
-    this.data = Array(length);	
+ItemList = function(size){
+	size = size || 24;
+	this.alwaysStack = false;
+	this.data = Array(size);	
     for(var i = 0 ; i < this.data.length ; i++) this.data[i] = [];
-    
     return this;
 }
 
-
-
 //Add item in inventory
-Inventory.prototype.add = function (id,amount){
+ItemList.prototype.add = function (id,amount){
 	amount = amount || 1;
 	if(itemDb[id].stack || this.alwaysStack){
 		if(this.have(id)){
@@ -36,7 +26,7 @@ Inventory.prototype.add = function (id,amount){
 }
 
 //Test if theres enough place for all the items (array of items)
-Inventory.prototype.test = function (array_items){
+ItemList.prototype.test = function (array_items){
 	//Fast Test this
 	if(array_items.length <= this.empty()){
 		return true;
@@ -56,7 +46,7 @@ Inventory.prototype.test = function (array_items){
 }
 
 //Return first position of first empty slot
-Inventory.prototype.firstEmpty = function(){
+ItemList.prototype.firstEmpty = function(){
     for(var i = 0; i < this.data.length; i++){
 	    if(this.data[i].length === 0){ 
 		    return i;	
@@ -66,7 +56,7 @@ Inventory.prototype.firstEmpty = function(){
 }
 
 //Remove item in inventory
-Inventory.prototype.remove = function (id,amount){
+ItemList.prototype.remove = function (id,amount){
 	amount = amount || 1;
 	if(itemDb[id].stack || this.alwaysStack){
 		for(var i = 0 ; i < this.data.length ; i ++){
@@ -91,7 +81,7 @@ Inventory.prototype.remove = function (id,amount){
 }
 
 //Return amount of empty slots. (If amount is speficied, return if empty
-Inventory.prototype.empty = function (amount){
+ItemList.prototype.empty = function (amount){
 	var empty = 0;
 	for(var i in this.data){
 		if(this.data[i].length === 0){ empty++; }
@@ -101,7 +91,7 @@ Inventory.prototype.empty = function (amount){
 	else {return (empty >= amount)}	
 }
 
-Inventory.prototype.have = function (id,amount,info){
+ItemList.prototype.have = function (id,amount,info){
 	amount = amount || 1;
 	info = info || "bool";
 	
@@ -133,12 +123,12 @@ Inventory.prototype.have = function (id,amount,info){
 }
 
 //return what info should be in db
-Inventory.prototype.toDb = function(){
+ItemList.prototype.toDb = function(){
     return this.data;
 }
 
 //return what to send to client 
-Inventory.prototype.toClient = function(){
+ItemList.prototype.toClient = function(){
     var ret = [];
 	
 	for(var i in this.data){
@@ -153,22 +143,51 @@ Inventory.prototype.toClient = function(){
 	return ret;
 }
 
-Inventory.prototype.toString = function(){
+ItemList.prototype.toString = function(){
     return this.data.toString();
 }
+
+ItemList.prototype.transfer = function(other,id,amount){
+	amount = amount || 1;
+	amount = Math.min(amount,this.have(id,0,'amount'));
+	if(!other.test([[id,amount]]) || amount === 0){
+		return false;
+	} 
+	this.remove(id,amount);
+	other.add(id,amount);	
+	return true;
+}
+
+
+
+
+
+
+
+//Inventory
+
+Inventory = function(key,data){
+	ItemList.apply( this, [24] );
+	this.alwaysStack = false;
+	this.type = 'inventory';
+	this.key = key;
+	this.data = data || this.data;
+	return this;
+}
+
+Inventory.prototype = new ItemList();
 
 Inventory.prototype.click = function(slot,side){
 	var key = this.key;
 	var m = mainList[key];
-	var inv = m.invList;
 	var mw = m.windowList;
-	if(!inv.data[slot][0]) return;
+	if(!this.data[slot].length) return;
 	
 		//Left
 	if(side === 'left'){
-		if(mw.bank){transferInvBank(key,inv.data[slot][0],1);	return;}
-		if(mw.trade){transferInvTrade(key,inv.data[slot][0],1);	return;}
-		if(mw.shop){transferInvShop(key,'player',inv.data[slot][0],1);	return;}
+		if(mw.bank){transferInvBank(key,this.data[slot][0],1);	return;}
+		if(mw.trade){transferInvTrade(key,this.data[slot][0],1);	return;}
+		if(mw.shop){transferInvShop(key,'player',this.data[slot][0],1);	return;}
 		
 		if(m.temp.selectInv){
 			var array = [this.data[slot][0]];
@@ -195,7 +214,7 @@ Inventory.prototype.click = function(slot,side){
 
 	if(side === 'right'){
 		if(!mw.bank && !mw.shop && !mw.trade){
-			var item = itemDb[inv.data[slot][0]];
+			var item = itemDb[this.data[slot][0]];
 			var player = fullList[key];
 			Button.optionList(key,{'name':item.name,'option':item.option});
 		}
@@ -216,5 +235,47 @@ Inventory.prototype.click = function(slot,side){
 		
 		if(mw.shop){transferInvShop(key,'player',this.data[slot][0],100);}
 	}
+}
 
-};
+
+
+
+Bank = function(key,data){
+	ItemList.apply( this, [40] );
+	this.alwaysStack = true;
+	this.type = 'bank';
+	this.key = key;
+	this.data = data || this.data;
+}
+
+Bank.prototype = new Inventory();
+
+Bank.prototype.click = function(slot,side){
+	if(!this.data[slot].length){ return; }
+	if(side === 'left'){
+		transferBankInv(key,this.data[slot][0],1);
+		return;
+	}
+	if(side === 'right'){
+		var id = this.data[slot][0];
+		Button.optionList(key,{
+			'name':itemDb[id].name,
+			'option':[
+				{'name':'Withdraw 5','func':'transferBankInv','param':[id,5]},
+				{'name':'Withdraw 25','func':'transferBankInv','param':[id,25]},
+				{'name':'Withdraw 100','func':'transferBankInv','param':[id,100]},
+				{'name':'Withdraw 1000','func':'transferBankInv','param':[id,1000]},
+				{'name':'Withdraw ' + mainList[key].pref.bankTransferAmount,'func':'transferBankInv','param':[id,mainList[key].pref.bankTransferAmount]},
+			]
+		});
+	}
+
+
+}
+
+
+
+
+
+
+

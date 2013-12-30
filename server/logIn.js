@@ -169,7 +169,6 @@ Save.load.initData = function(key){
             'passive':0,
             'friendList':0,
             'muteList':0,
-            //'bankList':Change.send.convert.invList,
             'chatBox':0,
             'pref':0,
             'quest':0,    
@@ -182,8 +181,8 @@ Save.load.initData = function(key){
         }
     }
 
-   data.main.invList = obj.main.invList.toClient();
-
+	data.main.invList = obj.main.invList.toClient();
+	data.main.bankList = obj.main.bankList.toClient();
     return data;
 }
 
@@ -300,12 +299,13 @@ Save.main = function(key,dbb){
 Save.main.compress = function(main){
     
     main.invList = main.invList.toDb();
-    
+    main.bankList = main.bankList.toDb();
     return main;
 }
 
 Save.main.uncompress = function(main,key){
     main.invList = new Inventory(key,main.invList);
+    main.bankList = new Bank(key,main.bankList);
     return main;
 }
 
