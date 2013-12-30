@@ -6,42 +6,32 @@ var timeStamp = 1372118670887;
 var context = {'text':''}, clientContext = {'text':''}, permContext = {'text':''};
 var help = '';
 
+var canvasX = 0, canvasY = 0;  
 
-var drawSortList = [];  //used to store the actors to draw in the right order (z-index)
+var ctxList = {};   //list of canvas (window,popup,stage)
+ var drawSortList = [];  //used to store the actors to draw in the right order (z-index)
 
 var fullList = {};  //EVERYTHING
 var mList = {}; //all mortals (player,enemy)
 var bList = {}; //all bullet
-
-var invList = {}; //all inventory (player id)
-var bankList = {};  //all bank (player id)
 var dropList = {};  //all drop
 
 var sList = {}; //all strike
 var aList = {}; //all animation
-var tradeList = []
-var friendList = {};
 
 var weaponDb = {}, armorDb = {}, abilityDb = {}, itemDb = {};   //local compilation of information so server doesnt send many times the same info
 
 //############################################
 
 //Set the init values from defaultMain.
-var initMain = (function(){ 
+(function(){ 
 	var main = defaultMain();
-	for(var i in main){
-		window[i] = main[i];
-	}
+	for(var i in main) window[i] = main[i];
 })();
 
 //############################################
 
-var id, player; var key = null;
-var canvasX = 0, canvasY = 0;  
-var angle = 0;
 
-var ctxList = {};   //list of canvas (window,popup,stage)
- 
 var initData;
 //############################################
 //############################################

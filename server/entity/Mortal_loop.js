@@ -231,7 +231,7 @@ Mortal.loop.boost = function(player,full){
 					var stat = player.boost[j][i].stat;
 					delete player.boost.list[stat].name[player.boost[j][i].name]
 					delete player.boost[j][i]; 
-					updateSpecificBoostStat(player,stat);
+					Mortal.update.boost(player,stat);
 				} else {
 					player.boost[j][i].timer -= array[j];
 				}
@@ -240,11 +240,11 @@ Mortal.loop.boost = function(player,full){
 	}
 	
 	for(var i in player.boost.toUpdate){
-		updateSpecificBoostStat(player,i);
+		Mortal.update.boost(player,i);
 		delete player.boost.toUpdate[i];
 	}
 	
-	if(full){for(var i in player.boost.list){updateSpecificBoostStat(player,i);}}
+	if(full){for(var i in player.boost.list){Mortal.update.boost(player,i);}}
 }
 
 Mortal.loop.activeList = function(mort){
@@ -279,9 +279,9 @@ Mortal.Enemy.loop.target = function(enemy){
     var targetList = {}; 
 	for (var i in enemy.activeList){
 		var tar = fullList[i];
-		var hIf = typeof enemy.targetIf == 'function' ? enemy.targetIf : hitIfList[enemy.targetIf];
+		var hIf = typeof enemy.targetIf == 'function' ? enemy.targetIf : Combat.hitIf.list[enemy.targetIf];
 			
-		if(globalTargetIf(enemy,tar) && hIf(tar,enemy)){
+		if(Combat.targetIf.global(enemy,tar) && hIf(tar,enemy)){
 			var diffX = enemy.x - tar.x;
 			var diffY = enemy.y - tar.y;
 			var diff = Math.sqrt(diffX*diffX+diffY*diffY);

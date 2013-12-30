@@ -179,9 +179,6 @@ rightClickChat = function(name){
 	Button.optionList(option);
 }
 		
-		
-
-	
 leftClickFriend = function(evt,str){
 	if(event.which === 1) addInput(str);
 

@@ -293,6 +293,60 @@ Combat.collision.damage.calculate =function(a,d){
 
 
 
+Combat.targetIf = {};
+Combat.hitIf = {};
+//List of commons Target if 
+Combat.targetIf.global = function(atk,def){
+	return atk.id != def.id && !def.dead && def.combat && (def.type == 'player' || def.type == 'enemy') && fullList[def.id];
+}
+
+//Used first in every target if test
+Combat.targetIf.list = {
+	'player':(function(tar,self){ 
+		try {
+			if(tar.summoned){
+				if(tar.summoned.father == self.id){ return false }
+				var hIf = typeof self.hitIf == 'function' ? self.hitIf : Combat.hitIf.list[self.hitIf];
+				return hIf(fullList[tar.summoned.father],self);
+			}
+			return tar.type == "enemy"; 
+		} catch(err) { logError(err); }
+	}),
+	'enemy':(function(tar,self){ 
+		try {
+		if(tar.summoned){
+			if(tar.summoned.father == self.id){ return false }
+			var hIf = typeof self.hitIf == 'function' ? self.hitIf : Combat.hitIf.list[self.hitIf];
+			return hIf(fullList[tar.summoned.father],self);
+		}
+		return tar.type == "player"; 
+		} catch(err) { logError(err); }
+	}),
+	'all':(function(tar,self){ return true }),
+	'true':(function(tar,self){ return true }),
+	'none':(function(tar,self){ return false }),
+	'false':(function(tar,self){ return false }),
+	'summoned':(function(tar,self){
+		try {
+			if(tar.id == self.summoned.father){ return false; }
+			var hIf = typeof fullList[self.summoned.father].hitIf == 'function' ? fullList[self.summoned.father].hitIf : Combat.hitIf.list[fullList[self.summoned.father].hitIf];
+			return hIf(tar,fullList[self.summoned.father]);
+		} catch(err) { logError(err); } //quickfix
+	}),
+};
+
+//Used first in every hit if test
+Combat.hitIf.global = function(atk,def){
+	return atk.id != def.id && atk.id != def.parent && !def.dead && def.combat && (def.type == 'player' || def.type == 'enemy') && fullList[def.id];
+};
+
+(function(){
+	for(var i in Combat.targetIf.list){Combat.targetIf.list[i].id = i;}
+	Combat.hitIf.list = Combat.targetIf.list;
+})();
+
+
+
 
 
 

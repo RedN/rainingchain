@@ -9,7 +9,9 @@ initClanDb = function(){
 	});
 }
 
-createClan = function(key,name){
+Clan = {};
+
+Clan.creation = function(key,name){
 	if(clanDb[name] !== undefined){
 		Chat.add(key,'This name is already taken.');	return;
 	}
@@ -18,12 +20,13 @@ createClan = function(key,name){
 	clanDb[name].memberList[player.name] = {'admin':1,'rank':10,'kick':1};
 
 	Chat.add(key,'Clan created.');
-	enterClanChat(key,name);
+	Clan.enter(key,name);
 	
 	db.clan.save(clanDb[name]);
 }
 
-enterClanChat = function(key,name){
+
+Clan.enter = function(key,name){
 	var main = mainList[key];
 	var pn = fullList[key].name;
 	
@@ -47,7 +50,7 @@ enterClanChat = function(key,name){
 
 }
 
-leaveClanChat = function(key,name){
+Clan.leave = function(key,name){
 	var pn = fullList[key].name;
 	var main = mainList[key];
 	

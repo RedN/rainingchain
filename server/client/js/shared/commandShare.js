@@ -203,7 +203,7 @@ Command.list['win,ability,swap'] = function(key,input,ab){
 	input = +input;
 	if(typeof input !== 'number' || typeof ab !== 'string'){ return; }
 	if(input < 0 || !fullList[key].abilityList[ab]){ return; } 
-	swapAbility(key,input,ab);
+	Mortal.swapAbility(key,input,ab);
 }
 
 Command.list['win,ability,mod'] = function(key,modid,abid){
@@ -238,16 +238,16 @@ Command.list['tab,inv,click'] = function(key,side,id){
 
 //Clan
 Command.list['cc,create'] = function(key,name){
-	createClan(key,name);	
+	Clan.creation(key,name);	
 }
 Command.list['cc,enter'] = function(key,name){
-	enterClanChat(key,name);	
+	Clan.enter(key,name);	
 }
 Command.list['cc,log'] = function(key,name){
-	enterClanChat(key,name);	
+	Clan.enter(key,name);	
 }
 Command.list['cc,leave'] = function(key,name){
-	leaveClanChat(key,name);	
+	Clan.leave(key,name);	
 }
 
 

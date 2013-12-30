@@ -20,6 +20,7 @@ a['bulletMulti'] = {
 */	
 	
 	
+Ability = {};
 	
 //default ability are inside logIn.js defaultPlayer
 
@@ -184,8 +185,8 @@ initAbility = function(a){
 	var item = {};
 	item.name = a.name;
 	item.visual = 'plan.planA';
-	item.option = [	{'name':'Examine Ability','func':'examineAbility','param':[a.id]},
-					{'name':'Learn Ability','func':'addAbility','param':[a.id]},
+	item.option = [	{'name':'Examine Ability','func':'Ability.examine','param':[a.id]},
+					{'name':'Learn Ability','func':'Mortal.learnAbility','param':[a.id]},
 	];
 	item.type = 'ability';
 	item.id = id;
@@ -194,7 +195,7 @@ initAbility = function(a){
 	return a.id;
 }
 
-examineAbility = function(){}
+Ability.examine = function(){}
 
 initAbiConsDb = function(){
 	abiConsDb = {}; var a = abiConsDb;
@@ -232,7 +233,7 @@ abilityOrbModDb = {
 /*
 ts("useAbiCons({'quality':1,'name':'fireball','lvl':10})")
 
-ts('addAbility(key,"t90ctbj4i")')
+ts('Mortal.learnAbility(key,"t90ctbj4i")')
 
 ts("addAbilityMod(key,'bulletMulti','x2b')")
 */
@@ -336,74 +337,33 @@ addAbilityMod = function(key,abid,mod){
 		
 		//Add
 		ab.modList[mod] = 0;
-		removeAbility(key,abid);
+		Mortal.removeAbility(key,abid);
 		ab.id = Math.randomId();
 		initAbility(ab);
-		addAbility(key,ab.id);
+		Mortal.learnAbility(key,ab.id);
 		Chat.add(key,'Mod Added.');
 		mainList[key].invList.remove('mod-'+ mod);	
 }
 
 //##############################################################
 
-swapAbility = function(key,abPos,abListPost){
-	var player = typeof key === 'object' ? key : fullList[key];
-	var abl = player.abilityList[abListPost];
-	
-	if(player.type === 'player'){
-		if(abPos === 4 && player.abilityList[abListPost].type !== 'healing'){Chat.add(key,'This ability slot can only support Healing abilities.'); return;}	
-		if(abPos === 5 && player.abilityList[abListPost].type !== 'dodge'){Chat.add(key,'This ability slot can only support Dodge abilities.'); return;}	
-	}
-	
-	player.ability[abPos] = player.abilityList[abListPost];
-	player.abilityChange = {'press':'000000000000000','charge':{}}
-	for(var i in player.ability){ 
-		if(player.ability[i]){
-			player.abilityChange.charge[player.ability[i].id] = 0;
-		}
-	}
-
-}
-
-addAbility = function(key,name){
-	var player = typeof key == 'object' ? key : fullList[key];
-	
-	if(player.abilityList[name]) return; //verify if already ahve
-	
-	var ab = uncompressAbility(deepClone(abilityDb[name]));
-		
-	player.abilityList[ab.id] = ab;
-}
-
-uncompressAbility = function(abi){	
-	var ab = typeof abi == 'object' ? abi : deepClone(abilityDb[abi]);
+Ability.uncompress = function(abi){	
+	var ab = typeof abi === 'object' ? abi : deepClone(abilityDb[abi]);
 	
 	for(var i in ab.modList){
 		ab = abilityModDb[i].func(ab,ab.modList[i],orbFormula(ab.modList[i]));
 	}
 	ab = abilityOrbModDb[ab.orb.upgrade.bonus](ab,ab.orb.upgrade.amount);
 	
-	if(ab.action && ab.action[0].func == 'Combat.action.attack'){
+	if(ab.action && ab.action[0].func === 'Combat.action.attack'){
 		var at = ab.action[0].param.attack[0];
-		
 		at = useTemplate(Attack.template(),at);
-		
-		eval('ab.action[0].param.attack[0] = function(){ return ' + stringify(at) + '}');
+		ab.action[0].param.attack[0] = new Function('return ' + stringify(at));
 	}
 	return ab;
 }
 
 //###############################################################
-
-removeAbility = function(key,name){
-	var player = typeof key == 'object' ? key : fullList[key];
-	delete player.abilityList[name];
-	for(var i in player.ability){
-		if(player.ability[i] && player.ability[i].id === name){
-			player.ability[i] = null;
-		}
-	}
-}
 
 abilityModClick = function(key,id){
 	if(!mainList[key].windowList.ability){
@@ -416,7 +376,7 @@ abilityModClick = function(key,id){
 }
 		
 //Default
-defaultAbility = function(){
+Ability.template = function(){
 	var ab = 
 	{'name':'Fire','tag':[],'icon':'melee.mace',
 		'cost':{"dodge":0},'reset':{'attack':0,'tag':{}},
@@ -437,7 +397,7 @@ defaultAbility = function(){
 
 }
 
-defaultAbilityAttack = function(){
+Ability.template.attack = function(){
 	return {
 	'type':"s",'angle':0,'amount':1,'aim': 0,'objImg':0,'hitImg':{'name':'attack3','sizeMod':0.5},
 	'delay':0,'maxHit':1,'w':1,'h':1,'maxRange':0,'minRange':0,
@@ -448,7 +408,7 @@ defaultAbilityAttack = function(){
 }
 
 //Random
-randomAttackElement = function(seed){
+Ability.template.attack.element = function(seed){
 	var possible = {
 		's':[
 			{'mod':1,'hit':'attack3','dmgRatio':{'melee':100,'range':0,'magic':0,'fire':5*Math.random(),'cold':5*Math.random(),'lightning':5*Math.random()}},

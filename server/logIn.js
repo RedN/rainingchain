@@ -231,11 +231,11 @@ Save.player.uncompress = function(player){
 
 
     for(var i in player.abilityList){
-        player.abilityList[i] = uncompressAbility(player.abilityList[i].id);
+        player.abilityList[i] = Ability.uncompress(player.abilityList[i].id);
     }
     for(var i in player.ability){
         if(player.ability[i]){
-            swapAbility(player,+i,player.ability[i].id);
+            Mortal.swapAbility(player,+i,player.ability[i].id);
         }
     }
     return player;

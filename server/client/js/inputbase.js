@@ -1,7 +1,6 @@
 //### Start Customization###
 
 var mouse = {x:0,y:0,drag:{active:0,sx:0,sy:0,vx:0,vy:0},left:0,right:0};
-var oldInput = ''; var oldMouse = '';
 
 Input = {};
 

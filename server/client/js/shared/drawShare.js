@@ -261,7 +261,7 @@ Draw.entity.drop = function(key){
 //{Upper Interface
 Draw.minimap = function (){ ctxrestore();
 	ctx = ctxList.stage;
-	
+	var map = mapList[player.map];
 	var mapX = Math.min(map.img.b.length-1,Math.max(0,Math.floor((player.x-1024)/2048)));
 	var mapY = Math.min(map.img.b[mapX].length-1,Math.max(0,Math.floor((player.y-1024)/2048)));
 	var mapXY = map.img.b[mapX][mapY];
@@ -427,7 +427,7 @@ Draw.context = function (){ ctxrestore();
 //Map
 Draw.map = function (layer){ ctxrestore();
 	ctx = ctxList.stage;
-	
+	var map = mapList[player.map];
 	var mapX = Math.min(map.img[layer].length-1,Math.max(0,Math.floor((player.x-1024)/2048)));
 	var mapY = Math.min(map.img[layer][mapX].length-1,Math.max(0,Math.floor((player.y-1024)/2048)));
 	var mapXY = map.img[layer][mapX][mapY];

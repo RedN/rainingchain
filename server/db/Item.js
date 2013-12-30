@@ -17,6 +17,8 @@ a['testing']    //testing is the item id
 			]};
 */
 
+Item = {};
+
 //Similar format than Weapon and Armor
 initItemDb = function (cb){
 	itemDb = {}; itemPreDb = {}; a = itemPreDb;
@@ -132,7 +134,7 @@ initItem = function(itemdb){
 	
 	db.item.update( {'id':itemdb.id}, itemdb, { upsert: true }, function(err) { if(err) throw err });
 	
-	var item = defaultItem();
+	var item = Item.template();
 		
 	for(var i in itemdb){ item[i] = itemdb[i];}
 	if(item.drop){	item.option.push({'name':'Drop','func':'dropInv','param':[item.id]})}
@@ -140,7 +142,7 @@ initItem = function(itemdb){
 	itemDb[item.id] = item;
 }
 
-defaultItem = function(){
+Item.template = function(){
 	var item = {
 	'name':'buggedItem',
 	'visual':'system.gold',
@@ -157,7 +159,7 @@ defaultItem = function(){
 	return item;
 }
 
-removeItemDb = function(id){
+Item.remove = function(id){
 	db.item.remove({id:id});
 	db.weapon.remove({id:id});
 	db.armor.remove({id:id});
@@ -165,6 +167,3 @@ removeItemDb = function(id){
 }
 
 
-useItem = function (key,item,slot){
-	keyFunction(key,item.option[slot].func,item.option[slot].param);
-}

@@ -24,7 +24,6 @@ if(!server){
 		for(var i in data.player){ player[i] = data.player[i]; }
 		
 		document.getElementById("chatUserName").innerHTML = player.name + ': '; 
-		map = mapList[player.map];
 	}
 }
 
@@ -128,6 +127,16 @@ Mortal.update.permBoost = function(player){
 	if(server){Mortal.loop.boost(player,1);}
 }
 
+Mortal.update.boost = function(player,stat){
+	changeViaArray({'origin':player,'array':player.boost.list[stat].stat,'value':player.boost.list[stat].base});
+	for(var i in player.boost.list[stat].name){
+		var boost = player.boost.list[stat].name[i];
+				
+		if(boost.type == '+'){	addViaArray({'origin':player,'array':player.boost.list[stat].stat,'value':boost.value}); }
+		else if(boost.type == '*'){	addViaArray({'origin':player,'array':player.boost.list[stat].stat,'value':(boost.value-1)*player.boost.list[stat].base}); }
+	}
+}
+
 //Add a boost to a mortal
 
 //list[i]: i = stat
@@ -173,19 +182,49 @@ Mortal.permBoost = function(p,source,boost){
 }
 
 
-
-updateSpecificBoostStat = function(player,stat){
-	changeViaArray({'origin':player,'array':player.boost.list[stat].stat,'value':player.boost.list[stat].base});
-	for(var i in player.boost.list[stat].name){
-		var boost = player.boost.list[stat].name[i];
-				
-		if(boost.type == '+'){	addViaArray({'origin':player,'array':player.boost.list[stat].stat,'value':boost.value}); }
-		else if(boost.type == '*'){	addViaArray({'origin':player,'array':player.boost.list[stat].stat,'value':(boost.value-1)*player.boost.list[stat].base}); }
+Mortal.talk = function(key,enemyId){
+	if(fullList[enemyId].dialogue){
+		fullList[enemyId].dialogue(key);
 	}
 }
 
 
 
+Mortal.removeAbility = function(key,name){
+	var player = typeof key == 'object' ? key : fullList[key];
+	delete player.abilityList[name];
+	for(var i in player.ability){
+		if(player.ability[i] && player.ability[i].id === name){
+			player.ability[i] = null;
+		}
+	}
+}
 
+Mortal.swapAbility = function(key,abPos,abListPost){
+	var player = typeof key === 'object' ? key : fullList[key];
+	var abl = player.abilityList[abListPost];
+	
+	if(player.type === 'player'){
+		if(abPos === 4 && player.abilityList[abListPost].type !== 'healing'){Chat.add(key,'This ability slot can only support Healing abilities.'); return;}	
+		if(abPos === 5 && player.abilityList[abListPost].type !== 'dodge'){Chat.add(key,'This ability slot can only support Dodge abilities.'); return;}	
+	}
+	
+	player.ability[abPos] = player.abilityList[abListPost];
+	player.abilityChange = {'press':'000000000000000','charge':{}}
+	for(var i in player.ability){ 
+		if(player.ability[i]){
+			player.abilityChange.charge[player.ability[i].id] = 0;
+		}
+	}
 
+}
 
+Mortal.learnAbility = function(key,name){
+	var player = typeof key == 'object' ? key : fullList[key];
+	
+	if(player.abilityList[name]) return; //verify if already ahve
+	
+	var ab = Ability.uncompress(deepClone(abilityDb[name]));
+		
+	player.abilityList[ab.id] = ab;
+}

@@ -99,8 +99,8 @@ Mortal.creation.db = function(e,d){
 	for(var i in e.ability){ 
 		var name = e.ability[i];
 		e.abilityChange.charge[name] = 0;
-		addAbility(e,name);
-		swapAbility(e,+i,name);
+		Mortal.learnAbility(e,name);
+		Mortal.swapAbility(e,+i,name);
 	}
 	
 	initSprite(e,e.sprite);		//To set hitbox and bumper
@@ -164,7 +164,7 @@ Mortal.creation.optionList = function(e){
 	var ol = {'name':e.name,'option':[]};
 	
 	if(e.type === 'player') ol.option.push({'name':'Trade',"func":'openWindow',"param":['trade',e.id]});
-	if(e.dialogue)	ol.option.push({'name':'Talk To',"func":'talkTo',"param":[e.id]});
+	if(e.dialogue)	ol.option.push({'name':'Talk To',"func":'Mortal.talk',"param":[e.id]});
 	
 	e.optionList = ol;
 	return e;

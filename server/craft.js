@@ -336,7 +336,7 @@ Craft.orb = function(key,orb,amount,wId,mod){
 		equip.boost.splice(rev,1);
 	}
 	
-	removeItemDb(equip.id);
+	Item.remove(equip.id);
 	equip.id = Math.randomId();
 	func(equip);
 	mainList[key].invList.remove(orb + '_orb',amount);
@@ -346,8 +346,8 @@ Craft.orb = function(key,orb,amount,wId,mod){
 		mainList[key].invList.add(equip.id);
 	}
 	if(type === 'ability'){
-		removeAbility(key,wId);
-		addAbility(key,equip.id);
+		Mortal.removeAbility(key,wId);
+		Mortal.learnAbility(key,equip.id);
 		Chat.add(key,'Ability Mod Upgraded.');
 	}
 }

@@ -325,6 +325,23 @@ superBoost = function(){
 }
 
 
+//Randomly select a mod in a list where mod[i].lvl >= lvl. Take into consideration the mod factor.
+randomViaMod = function(list,lvl){
+	var sum = 0; 
+	for(var i in list){ 
+		if(!lvl || (lvl && list[i].lvl <= lvl)){
+			sum += list[i].mod; 
+		}
+	}
+	var random = Math.random() * sum;
+	for(var i in list){ 
+		if(!lvl || (lvl && list[i].lvl <= lvl)){
+			if(random < list[i].mod){ return deepClone(list[i]); } 
+			random -= list[i].mod;	
+		}
+	}
+	return -1
+}
 
 
 //Combat: Sub Functions
@@ -385,7 +402,6 @@ Combat.action.attack.mod.weapon = function(weapon,attack){
 	}
 	return	attack;
 }
-//End
 
 Combat.action.attack.mod.weapon.compability = function(weapon,atk){
 	var attack = deepClone(atk);
