@@ -180,7 +180,7 @@ Input.event.mouse.drag.update  = function(){
 //Mouse Down/Up || Key Down/Up
 $(document).mousedown(function(event) { Input.event.mouse.click(event.which,'down',event);});
 $(document).mouseup(function(event) {Input.event.mouse.click(event.which,'up',event);});
-document.onmousewheel = function(event){Input.event.mouse.wheel(event.wheelDeltaY > 0 ? 1 : 0);}
+document.onmousewheel = function(event){Input.event.mouse.wheel(event.wheelDeltaY > 0 ? 1 : -1);}
 document.addEventListener('keydown', function(event) {	Input.event.key(event.keyCode,'down',event);});
 document.addEventListener('keyup', function(event) {Input.event.key(event.keyCode,'up',event);});
 document.activeElement.addEventListener("mousemove", Input.event.mouse.move);

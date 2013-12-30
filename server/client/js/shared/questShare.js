@@ -63,12 +63,12 @@ initQuestDb = function(){
 				'info':'Your hp is halved during this quest.',
 				'bonus':1.5,
 				'add':(function(key){
-					updateQuestBoost(key, q.id, 'halfHp',[
+					Quest.bonus.update(key, q.id, 'halfHp',[
 						{'stat':'hp-max','value':-500,'type':'base'}
 					]);
 				}),
 				'remove':(function(key){
-					updateQuestBoost(key, q.id, 'halfHp',[
+					Quest.bonus.update(key, q.id, 'halfHp',[
 						{'stat':'hp-max','value':-500,'type':'base'}
 					]);
 				}),
@@ -78,12 +78,12 @@ initQuestDb = function(){
 				'info':'Complete this quest in less than 1 hour.',
 				'bonus':1.2,
 				'add':(function(key){
-					updateQuestBoost(key, q.id, 'daemonSpd',[
+					Quest.bonus.update(key, q.id, 'daemonSpd',[
 						
 					]);
 				}),
 				'remove':(function(key){
-					updateQuestBoost(key, q.id, 'daemonSpd',[
+					Quest.bonus.update(key, q.id, 'daemonSpd',[
 						
 					]);
 				}),
@@ -149,8 +149,11 @@ initQuestDb = function(){
 	
 }
 
-//the quest bonus multiplier
-updateQuestBoost = function(key,qid,bid,b){
+Quest = {};
+
+Quest.bonus = {};
+
+Quest.bonus.update = function(key,qid,bid,b){
 	var mq = mainList[key].quest[qid];
 	if(mq.bonus[bid]){
 		Mortal.permBoost(key,'qb-'+qid+'-'+bid,b);
@@ -165,7 +168,7 @@ updateQuestBoost = function(key,qid,bid,b){
 }
 
 //when a player click on a quest bonus
-toggleQuestBonus = function(key,qid,bid){
+Quest.bonus.toggle = function(key,qid,bid){
 	if(!mainList[key].quest[qid].started){
 		mainList[key].quest[qid].bonus[bid] = !mainList[key].quest[qid].bonus[bid];
 		
@@ -182,7 +185,7 @@ toggleQuestBonus = function(key,qid,bid){
 }
 
 //roll the perm stat bonus and check if last one was better
-giveQuestStatReward = function(key,id){
+Quest.reward = function(key,id){
 	var qp = mainList[key].quest[id];
 	var q = qDb[id];
 	q.reward.quality = qp.bonusSum;	//change for all players
@@ -203,23 +206,21 @@ giveQuestStatReward = function(key,id){
 	} 
 }
 	
-updateQuestHint = function(key,id){
+Quest.hint = {};
+Quest.hint.update = function(key,id){
 	mainList[key].quest[id].hint = qDb[id].hintGiver(key,mainList[key].quest[id]);
 }
 
+Quest.req = {};
 //convert the quest req object into string
-convertQuestReq = function(qvar,req){
+Quest.req.convert = function(qvar,req){
 	if(!req){ return 'None.'; }
 	
 	var returnStr = '';
 	for(var i in req){
 		var q = req[i];
 		var temp = q.text;
-		
-		if(+qvar[+i]){
-			temp = '<del>' + temp + '</del>'; 
-		}
-		
+		if(+qvar[+i]) temp = '<del>' + temp + '</del>';	//if requirement is met
 		temp += '<br>';
 		returnStr += temp;
 	}
@@ -228,17 +229,14 @@ convertQuestReq = function(qvar,req){
 }
 
 //update the test about hte quest req (strike if done)
-updateQuestReq = function(key,id){
+Quest.req.update = function(key,id){
 	var temp = '';
 	
 	var q = qDb[id];
 	
 	for(var i in q.requirement){
-		if(q.requirement[i].func(key)){
-			temp += '1';
-		} else {
-			temp += '0';
-		}
+		if(q.requirement[i].func(key)){	temp += '1';}
+		else {temp += '0';}
 	}
 	mainList[key].quest[id].requirement = temp;
 }

@@ -179,7 +179,7 @@ initSpriteDb = function(){
     		var sp = spriteDb[i];
 			sp.src = 'img/sprite/' + sp.src
     		sp.img = newImage(sp.src);
-    		preloader.push(sp.src);
+    		Img.preloader.push(sp.src);
     	}
     }
 }

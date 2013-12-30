@@ -187,7 +187,7 @@ Command.list['win,quest,toggleBonus'] = function(key,id,bonus){
 	var q = qDb[id].bonus[bonus];
 	if(!q){ Chat.add(key,'Wrong Input.'); return; }
 	
-	toggleQuestBonus(key,id,bonus);
+	Quest.bonus.toggle(key,id,bonus);
 }
 
 Command.list['win,passive,select'] = function(key,i,j){

@@ -248,7 +248,7 @@ drawItem = function(info,xy,size){
 	
 	var name = typeof info === 'string' ? info : info[0];
 	var amount = typeof info === 'string' ? 1 : Math.floor(info[1]);
-	var slot = itemIndex[name];
+	var slot = Img.item.index[name];
 	ctx.drawImage(Img.item,slot.x,slot.y,ITEM,ITEM,xy[0],xy[1],size,size);
 	
 	if(amount > 1){

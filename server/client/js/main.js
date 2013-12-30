@@ -5,7 +5,6 @@ var gameStarted = false;
 var timeStamp = 1372118670887;
 var context = {'text':''}, clientContext = {'text':''}, permContext = {'text':''};
 var help = '';
-var preloader = []; //hold all images to load
 
 
 var drawSortList = [];  //used to store the actors to draw in the right order (z-index)
@@ -160,36 +159,12 @@ initDb = function (cb){
 	initQuestDb();
 	initUniqueBoostDb();
 	//initAbilityModDb();   //need fixing
-	preload(preloader,function(){   //load images
+	Img.preload(Img.preloader,function(){   //load images
 		cb.call();
 	});
 }
 
-//preload images
-preload = function(arr,cb){
-	var newimages=[], loadedimages=0
-	var arr=(typeof arr!="object")? [arr] : arr
-    function imageloadpost(){
-        ctxList.stage.clearRect(0,0,WIDTH,HEIGHT);
-		ctxList.stage.fillText('Loading... ' + loadedimages + '/' + arr.length,WIDTH2,HEIGHT2);
-		
-		loadedimages++
-        if (loadedimages==arr.length){
-            cb(newimages)
-        }
-    }
-    for (var i=0; i<arr.length; i++){
-        newimages[i]=new Image()
-        newimages[i].src=arr[i]
-        newimages[i].onload=function(){
-            imageloadpost()
-        }
-        newimages[i].onerror=function(){
-            imageloadpost()
-        }
-    }
-}
- 
+
 
  
  

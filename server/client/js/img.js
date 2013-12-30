@@ -1,10 +1,37 @@
 var Img = {};
+
+Img.preloader = []; //hold all images to load
+
+Img.preload = function(arr,cb){
+	var newimages = [];
+	var	loadedimages = 0;
+	var arr = (typeof arr !== "object") ? [arr] : arr
+    function imageloadpost(){
+        ctxList.stage.clearRect(0,0,WIDTH,HEIGHT);
+		ctxList.stage.fillText('Loading... ' + loadedimages + '/' + arr.length,WIDTH2,HEIGHT2);
+		
+		loadedimages++;
+        if (loadedimages === arr.length) cb(newimages);
+    }
+    for (var i = 0; i < arr.length; i++){
+        newimages[i] = new Image()
+        newimages[i].src = arr[i]
+        newimages[i].onload = function(){
+            imageloadpost()
+        }
+        newimages[i].onerror = function(){
+            imageloadpost()
+        }
+    }
+}
+ 
+
 Img.frame = {};
 Img.frame.window = newImage('img/img/interface/window.png');
 Img.frame.postit = newImage('img/img/interface/postit.png');
 
 //Icon
-var iconSheet = newImage("img/img/iconSheet.png");
+Img.icon = newImage("img/img/iconSheet.png");
 var iconIndex = {};
 (function(){
 	var equip = 10;
@@ -60,8 +87,8 @@ var iconIndex = {};
 
 //Item
 Img.item = newImage("img/img/itemSheet.png");
-var itemIndex = {};
 (function(){
+	Img.item.index = {};
 	var itemPreIndex =
 	{
 	'system':{'y':0,'x':['gold','ironSword','shield']},
@@ -83,11 +110,11 @@ var itemIndex = {};
 	};
 
 	for(var i in itemPreIndex){
-		itemIndex[i.toUpperCase()] = itemPreIndex[i].y * ITEM;
+		Img.item.index[i.toUpperCase()] = itemPreIndex[i].y * ITEM;
 		for(var j = 0 ; j < itemPreIndex[i].x.length; j++){
 			var x = j * ITEM;
 			var y = itemPreIndex[i].y * ITEM;
-			itemIndex[i + '.' + itemPreIndex[i].x[j]] = {'x':x,'y':y};
+			Img.item.index[i + '.' + itemPreIndex[i].x[j]] = {'x':x,'y':y};
 		}
 	}
 })();

@@ -262,9 +262,9 @@ Draw.entity.drop = function(key){
 Draw.minimap = function (){ ctxrestore();
 	ctx = ctxList.stage;
 	
-	var mapX = Math.min(map.imgB.length-1,Math.max(0,Math.floor((player.x-1024)/2048)));
-	var mapY = Math.min(map.imgB[mapX].length-1,Math.max(0,Math.floor((player.y-1024)/2048)));
-	var mapXY = map.imgB[mapX][mapY];
+	var mapX = Math.min(map.img.b.length-1,Math.max(0,Math.floor((player.x-1024)/2048)));
+	var mapY = Math.min(map.img.b[mapX].length-1,Math.max(0,Math.floor((player.y-1024)/2048)));
+	var mapXY = map.img.b[mapX][mapY];
 	var pX = player.x-mapX*2048;
 	var pY = player.y-mapY*2048;
 	
@@ -297,7 +297,7 @@ Draw.minimap = function (){ ctxrestore();
 	
 	ctx.drawImage(mapXY, startX,startY,tailleX,tailleY,sx+(startX-numX)/mapCst*2,sy + (startY-numY)/mapCst*2,tailleX/mapCst*2,tailleY/mapCst*2);
 	
-	ctx.drawImage(iconSheet,iconIndex['system.square'].x,iconIndex['system.square'].y,ICON,ICON,sx + WIDTH/pref.mapRatio/2-2,sy + HEIGHT/pref.mapRatio/2-2,4,4);
+	ctx.drawImage(Img.icon,iconIndex['system.square'].x,iconIndex['system.square'].y,ICON,ICON,sx + WIDTH/pref.mapRatio/2-2,sy + HEIGHT/pref.mapRatio/2-2,4,4);
 	
 	ctx.strokeRect(sx,sy,WIDTH/pref.mapRatio,HEIGHT/pref.mapRatio);
 	
@@ -339,7 +339,7 @@ Draw.minimap.icon = function(){
 			var cx = sx + WIDTH/ratio/2; //center
 			var cy = sy + HEIGHT/ratio/2;
 			
-			ctx.drawImage(iconSheet,slot.x,slot.y,ICON,ICON,cx+vx/zoom/ratio-9,cy+vy/zoom/ratio-9,18,18);
+			ctx.drawImage(Img.icon,slot.x,slot.y,ICON,ICON,cx+vx/zoom/ratio-9,cy+vy/zoom/ratio-9,18,18);
 			
 		}
 	}
@@ -395,7 +395,7 @@ Draw.resource.ability = function(sx,sy,w,h){ ctxrestore();
 		var numX = sx + 25 + (+i * (size + 10));
 		var numY = sy;
 		var slot = iconIndex[player.ability[i].icon];
-		ctx.drawImage(iconSheet,slot.x,slot.y,ICON,ICON,numX,numY,size,size);
+		ctx.drawImage(Img.icon,slot.x,slot.y,ICON,ICON,numX,numY,size,size);
 	}
 }
 
@@ -428,9 +428,9 @@ Draw.context = function (){ ctxrestore();
 Draw.map = function (layer){ ctxrestore();
 	ctx = ctxList.stage;
 	
-	var mapX = Math.min(map.imgB.length-1,Math.max(0,Math.floor((player.x-1024)/2048)));
-	var mapY = Math.min(map.imgB[mapX].length-1,Math.max(0,Math.floor((player.y-1024)/2048)));
-	var mapXY = layer === 'b'? map.imgB[mapX][mapY] : map.imgA[mapX][mapY];
+	var mapX = Math.min(map.img[layer].length-1,Math.max(0,Math.floor((player.x-1024)/2048)));
+	var mapY = Math.min(map.img[layer][mapX].length-1,Math.max(0,Math.floor((player.y-1024)/2048)));
+	var mapXY = map.img[layer][mapX][mapY];
 	var pX = player.x-mapX*2048;
 	var pY = player.y-mapY*2048;
 	
@@ -522,7 +522,7 @@ Draw.tab.main = function (key){ ctxrestore();
 			'help':Cst.tab.list[i].capitalize(),
 		});	
 		
-		ctx.drawImage(iconSheet,i*ICON,iconIndex['TAB'],ICON,ICON,numX,numY,24,24);
+		ctx.drawImage(Img.icon,i*ICON,iconIndex['TAB'],ICON,ICON,numX,numY,24,24);
 		if(currentTab === Cst.tab.list[i]){ctx.strokeRect(numX-1,numY-1,24+1,24+1);}
 		
 	}
@@ -592,7 +592,7 @@ Draw.tab.equip = function (key){ ctxrestore();
 			if(player.weapon.piece != Cst.equip.weapon.piece[i]){ ctx.globalAlpha = 0.5; } 
 			
 			var slot = iconIndex[player.weaponList[Cst.equip.weapon.piece[i]].visual];
-			ctx.drawImage(iconSheet,slot.x,slot.y,ICON,ICON,numX,numY,40,40);
+			ctx.drawImage(Img.icon,slot.x,slot.y,ICON,ICON,numX,numY,40,40);
 			ctx.globalAlpha = 1;
 			
 			if(Collision.PtRect(Collision.getMouse(key),[numX,numX+40,numY,numY+40])){
@@ -623,7 +623,7 @@ Draw.tab.equip = function (key){ ctxrestore();
 			var piece = player.armor.piece[Cst.equip.armor.piece[i]];
 			
 			var slot = iconIndex[piece.visual];
-			ctx.drawImage(iconSheet,slot.x,slot.y,ICON,ICON,numX+10,numY,40,40);
+			ctx.drawImage(Img.icon,slot.x,slot.y,ICON,ICON,numX+10,numY,40,40);
 			
 			if(Collision.PtRect(Collision.getMouse(key),[numX,numX+40,numY,numY+40])){
 				popupList.armor = piece.id;
@@ -670,25 +670,25 @@ Draw.tab.equip = function (key){ ctxrestore();
 		ctx.font = '18px Fixedsys';
 		
 		var slot = iconIndex['offensive.melee'];
-		ctx.drawImage(iconSheet,slot.x,slot.y,ICON,ICON,numX,numY,20,20);
+		ctx.drawImage(Img.icon,slot.x,slot.y,ICON,ICON,numX,numY,20,20);
 		ctx.fillText('Offensive',numX+vy,numY);
 		
 		numY += vy;
 		
 		var slot = iconIndex['body.metal'];
-		ctx.drawImage(iconSheet,slot.x,slot.y,ICON,ICON,numX,numY,20,20);
+		ctx.drawImage(Img.icon,slot.x,slot.y,ICON,ICON,numX,numY,20,20);
 		ctx.fillText('Defensive',numX+vy,numY);	
 
 		numY += vy;
 		
 		var slot = iconIndex['offensive.magic'];
-		ctx.drawImage(iconSheet,slot.x,slot.y,ICON,ICON,numX,numY,20,20);
+		ctx.drawImage(Img.icon,slot.x,slot.y,ICON,ICON,numX,numY,20,20);
 		ctx.fillText('Ability',numX+vy,numY);		
 
 		numY += vy;
 		
 		var slot = iconIndex['offensive.magic'];
-		ctx.drawImage(iconSheet,slot.x,slot.y,ICON,ICON,numX,numY,20,20);
+		ctx.drawImage(Img.icon,slot.x,slot.y,ICON,ICON,numX,numY,20,20);
 		ctx.fillText('Passive',numX+vy,numY);			
 	}
 	
@@ -712,7 +712,7 @@ Draw.tab.skill = function(key){ ctxrestore();
 			ctx.fillStyle = 'white';
 			
 			var slot = iconIndex['skill.' + Cst.skill.list[i]];
-			ctx.drawImage(iconSheet,slot.x,slot.y,ICON,ICON,numX,numY,20,20);
+			ctx.drawImage(Img.icon,slot.x,slot.y,ICON,ICON,numX,numY,20,20);
 			ctx.fillText(lvl[Cst.skill.list[i]],numX+30,numY);
 			
 			if(Collision.PtRect(Collision.getMouse(key),[numX,numX+vx,numY,numY+vy])){
@@ -743,7 +743,7 @@ Draw.tab.skill = function(key){ ctxrestore();
 		var expMod = player.bonus.exp[sk];
 		expMod = expMod == 1 ? '' : '  *' + round(expMod,2)
 		
-		ctx.drawImage(iconSheet,slot.x,slot.y,ICON,ICON,ssx+5,ssy+1,20,20);
+		ctx.drawImage(Img.icon,slot.x,slot.y,ICON,ICON,ssx+5,ssy+1,20,20);
 		ctx.fillTextU(sk.capitalize(),ssx + 5 + 30,ssy+1);
 		ctx.fillText('Level: ' + lvl,ssx + 5,ssy+1+25*1);
 		ctx.fillText('Exp: ' + exp +  expMod,ssx + 5,ssy+1+25*2);
@@ -815,7 +815,7 @@ Draw.tab.friend = function(key){ ctxrestore();
 	var count = 0;
 	//
 	//1
-	ctx.drawImage(iconSheet,count*ICON,iconIndex['FRIEND'],ICON,ICON,numX,numY,20,20);
+	ctx.drawImage(Img.icon,count*ICON,iconIndex['FRIEND'],ICON,ICON,numX,numY,20,20);
 		
 	Button.creation(0,{
 			"rect":[numX,numX+20,numY,numY+20],
@@ -826,7 +826,7 @@ Draw.tab.friend = function(key){ ctxrestore();
 	//2
 	count++;
 	numX += vx;
-	ctx.drawImage(iconSheet,count*ICON,iconIndex['FRIEND'],ICON,ICON,numX,numY,20,20);
+	ctx.drawImage(Img.icon,count*ICON,iconIndex['FRIEND'],ICON,ICON,numX,numY,20,20);
 	Button.creation(0,{
 			"rect":[numX,numX+20,numY,numY+20],
 			//'left':{'func':(function(){ addInput('$fl,add,');  }), 'param':[]},
@@ -835,7 +835,7 @@ Draw.tab.friend = function(key){ ctxrestore();
 	//3
 	count++;
 	numX += vx;
-	ctx.drawImage(iconSheet,count*ICON,iconIndex['FRIEND'],ICON,ICON,numX,numY,20,20);
+	ctx.drawImage(Img.icon,count*ICON,iconIndex['FRIEND'],ICON,ICON,numX,numY,20,20);
 	Button.creation(0,{
 			"rect":[numX,numX+20,numY,numY+20],
 			'left':{'func':(function(){ addInput('$fl,add,');  }), 'param':[]},
@@ -844,7 +844,7 @@ Draw.tab.friend = function(key){ ctxrestore();
 	//4
 	count++;
 	numX += vx;
-	ctx.drawImage(iconSheet,count*ICON,iconIndex['FRIEND'],ICON,ICON,numX,numY,20,20);
+	ctx.drawImage(Img.icon,count*ICON,iconIndex['FRIEND'],ICON,ICON,numX,numY,20,20);
 	Button.creation(0,{
 			"rect":[numX,numX+20,numY,numY+20],
 			'left':{'func':(function(){ addInput('$fl,remove,');  }), 'param':[]},
@@ -973,7 +973,7 @@ Draw.window.main = function(key,title){ ctxrestore();
 		}
 		
 		//Close
-		ctx.drawImage(iconSheet,iconIndex['system.close'].x,iconIndex['system.close'].y,ICON,ICON,sx + w -20,sy,20,20);	
+		ctx.drawImage(Img.icon,iconIndex['system.close'].x,iconIndex['system.close'].y,ICON,ICON,sx + w -20,sy,20,20);	
 		Button.creation(0,{
 			"rect":[sx + w -20,sx + w,sy,sy+20],
 			"left":{"func":Chat.send.command,"param":['$win,close']},
@@ -1079,7 +1079,7 @@ Draw.window.stat = function(key,type){ ctxrestore();
 			ctx.fillText(info.name + ':',numX,numY);
 			ctx.fillText(string,numX+125,numY);
 			var slot = iconIndex[info.icon];
-			ctx.drawImage(iconSheet,slot.x,slot.y,ICON,ICON,numX-30,numY,20,20)
+			ctx.drawImage(Img.icon,slot.x,slot.y,ICON,ICON,numX-30,numY,20,20)
 			
 			if(Collision.PtRect(Collision.getMouse(key),[numX,numX+500,numY,numY+30])){
 				var hover = i;
@@ -1122,8 +1122,8 @@ Draw.window.stat.hover = function(hover,type){ ctxrestore();
 	ctx.textAlign = 'left';
 	ctx.font = '25px Fixedsys';
 	var slot = iconIndex[info.icon];
-	ctx.drawImage(iconSheet,slot.x,slot.y,ICON,ICON,numX+50,numY,48,48);
-	ctx.drawImage(iconSheet,slot.x,slot.y,ICON,ICON,numX+400-100,numY,48,48);
+	ctx.drawImage(Img.icon,slot.x,slot.y,ICON,ICON,numX+50,numY,48,48);
+	ctx.drawImage(Img.icon,slot.x,slot.y,ICON,ICON,numX+400-100,numY,48,48);
 	
 	numY += 50;
 			
@@ -1186,7 +1186,7 @@ Draw.window.ability.leftSide = function(){ ctxrestore();
 		
 		if(player.ability[i]){
 			var slot = iconIndex[player.ability[i].icon];
-			ctx.drawImage(iconSheet,slot.x,slot.y,ICON,ICON,numX+45,numY,20,20);
+			ctx.drawImage(Img.icon,slot.x,slot.y,ICON,ICON,numX+45,numY,20,20);
 			
 			
 		} else {
@@ -1255,7 +1255,7 @@ Draw.window.ability.abilityList = function(diffX){ ctxrestore();
 		var numY = zy + charY*1.2 + Math.floor(+j/15) * 25;
 				
 		var slot = iconIndex[obj[ats][j].icon];
-		ctx.drawImage(iconSheet,slot.x,slot.y,ICON,ICON,numX,numY,20,20);
+		ctx.drawImage(Img.icon,slot.x,slot.y,ICON,ICON,numX,numY,20,20);
 		
 		for(var i in player.abilityList){ 
 			if(player.abilityList[i].id === obj[ats][j].id){
@@ -1283,7 +1283,7 @@ Draw.window.ability.generalInfo = function(diffX,diffY){ ctxrestore();
 	var ab = player.abilityList[old.abilityShowed];
 	var icon = 100;
 	var slot = iconIndex[ab.icon];
-	ctx.drawImage(iconSheet,slot.x,slot.y,ICON,ICON,zx,zy,icon,icon);
+	ctx.drawImage(Img.icon,slot.x,slot.y,ICON,ICON,zx,zy,icon,icon);
 	
 	//General Info
 	var gi = html.abilityWin.generalinfo;
@@ -1445,16 +1445,16 @@ Draw.window.ability.action.attack = function(diffX,diffY){  ctxrestore();
 	//Mods
 	for(var i in atk){
 		if(atk[i]){
-			if(convertAttackMod[i]){
+			if(Draw.convert.attackMod[i]){
 				//var slot = iconIndex[modToIcon[i]];
-				//ctx.drawImage(iconSheet,slot.x,slot.y,ICON,ICON,numX,numY,20,20);
+				//ctx.drawImage(Img.icon,slot.x,slot.y,ICON,ICON,numX,numY,20,20);
 				var tmp = atk[i];
 				
 				//Status
 				if(Cst.status.list.indexOf(i) !== -1){ tmp.chance = Math.pow(pref.abilityDmgCent,1.5)*atk[i].chance*atk.dmgRatio[Cst.status.toElement[i]];}
 				
 				if(tmp.chance !== undefined && tmp.chance <= 0.001){ continue;}
-				ctx.fillText('=> ' + convertAttackMod[i](tmp),zx+30,zy+25+30);
+				ctx.fillText('=> ' + Draw.convert.attackMod[i](tmp),zx+30,zy+25+30);
 				zy += 25;
 				
 			}
@@ -1473,7 +1473,7 @@ Draw.window.ability.action.boost = function(diffX,diffY){  ctxrestore();
 	
 	for(var i in boost){
 		var slot = iconIndex[statDb[boost[i].stat].icon];
-		ctx.drawImage(iconSheet,slot.x,slot.y,ICON,ICON,zx,zy,20,20);
+		ctx.drawImage(Img.icon,slot.x,slot.y,ICON,ICON,zx,zy,20,20);
 		var str = boost[i].type + round(boost[i].value,2) + ' ' + statDb[boost[i].stat].name + ' for ' + round(boost[i].time/25,2) + 's.';
 		ctx.fillText(str,zx+30,zy);
 		zy += 30;
@@ -1574,14 +1574,14 @@ Draw.window.trade = function (key){ ctxrestore();
 		ctx.fillText('Trade State ',numX+wi/2,numY+3);
 		ctx.strokeRect(numX,numY,wi,he);
 		if(trade.confirm.self){ 
-		ctx.drawImage(iconSheet,iconIndex['system.heart'].x,iconIndex['system.heart'].y,ICON,ICON,numX+7,numY+7,20,20);
-		} else { ctx.drawImage(iconSheet,iconIndex['system.close'].x,iconIndex['system.close'].y,ICON,ICON,numX+7,numY+7,20,20); }
+		ctx.drawImage(Img.icon,iconIndex['system.heart'].x,iconIndex['system.heart'].y,ICON,ICON,numX+7,numY+7,20,20);
+		} else { ctx.drawImage(Img.icon,iconIndex['system.close'].x,iconIndex['system.close'].y,ICON,ICON,numX+7,numY+7,20,20); }
 		
 		var numX = sx+570; var numY = h-50; var wi = 250; var he = 35;
 		ctx.fillText('Trade State ',numX+wi/2,numY+3);
 		ctx.strokeRect(numX,numY,wi,he);
-		if(trade.confirm.other){ ctx.drawImage(iconSheet,iconIndex['system.heart'].x,iconIndex['system.heart'].y,ICON,ICON,numX+7,numY+7,20,20);
-		} else { ctx.drawImage(iconSheet,iconIndex['system.close'].x,iconIndex['system.close'].y,ICON,ICON,numX+7,numY+7,20,20); }
+		if(trade.confirm.other){ ctx.drawImage(Img.icon,iconIndex['system.heart'].x,iconIndex['system.heart'].y,ICON,ICON,numX+7,numY+7,20,20);
+		} else { ctx.drawImage(Img.icon,iconIndex['system.close'].x,iconIndex['system.close'].y,ICON,ICON,numX+7,numY+7,20,20); }
 	}
 	
 }
@@ -1702,7 +1702,7 @@ Draw.window.passive.grid = function(key){ ctxrestore();
 			ctx.globalAlpha = 0.5;
 			if(+passive[i][j]){ ctx.globalAlpha = 1; }
 			var slot = passiveGrid[i][j].stat ? iconIndex[statDb[passiveGrid[i][j].stat].icon] : iconIndex[uniqueBoostDb[passiveGrid[i][j].value].icon];
-			ctx.drawImage(iconSheet,slot.x,slot.y,ICON,ICON,numX+border2,numY+border2,icon,icon);
+			ctx.drawImage(Img.icon,slot.x,slot.y,ICON,ICON,numX+border2,numY+border2,icon,icon);
 			
 			//Hover
 			if(!mouse.drag.active && Collision.PtRect(Collision.getMouse(key),[numX,numX+ic,numY,numY+ic])){
@@ -1762,7 +1762,7 @@ Draw.window.passive.hover = function(over){ ctxrestore();
 	//Info
 	var slot = iconIndex[st.icon];
 	
-	ctx.drawImage(iconSheet,slot.x,slot.y,ICON,ICON,ssx+5,ssy+1,20,20);
+	ctx.drawImage(Img.icon,slot.x,slot.y,ICON,ICON,ssx+5,ssy+1,20,20);
 	ctx.fillTextU(st.name,ssx + 5 + 30,ssy+1);
 	
 	if(over.stat){
@@ -1796,7 +1796,7 @@ Draw.window.quest = function (key){ ctxrestore();
 	
 	//Icon
 	var slot = iconIndex[q.icon];
-	ctx.drawImage(iconSheet,slot.x,slot.y,ICON,ICON,zx,zy,icon,icon);
+	ctx.drawImage(Img.icon,slot.x,slot.y,ICON,ICON,zx,zy,icon,icon);
 	
 	//Info
 	hq.info.style.left = icon + 5 + 'px'; 
@@ -1813,7 +1813,7 @@ Draw.window.quest = function (key){ ctxrestore();
 	str += 'State: ' + state + '<br>';
 	str += 'Reward: ' + round(q.reward.value[0],3,1) + ' - ' + round(q.reward.value[1],3,1) + ' in ' + statDb[q.reward.stat].name + '<br>';
 	if(mq.complete){
-		var boost = convertBoostDraw(mq.reward);
+		var boost = Draw.convert.boost(mq.reward);
 		str += 'Current Reward: ' + boost[1] + ' in ' + boost[0] + '(' + mq.rewardTier + ')' + '<br>';
 	}
 	
@@ -1866,7 +1866,7 @@ Draw.window.quest = function (key){ ctxrestore();
 	hq.requirement.style.width = dw/2 + 'px'
 	hq.requirement.style.height = charY*q.requirement.length*1.2 + 'px'
 	
-	hq.requirement.innerHTML = convertQuestReq(mq.requirement,q.requirement);
+	hq.requirement.innerHTML = Quest.req.convert(mq.requirement,q.requirement);
 	
 	
 	//Bonus	
@@ -1950,7 +1950,7 @@ Draw.popup.equip = function(key,type){ ctxrestore();
 	
 	//Draw icon
 	var slot = iconIndex[equip.visual];
-	ctx.drawImage(iconSheet,slot.x,slot.y,ICON,ICON,sx+2,sy+2,48,48);
+	ctx.drawImage(Img.icon,slot.x,slot.y,ICON,ICON,sx+2,sy+2,48,48);
 	
 	//Draw Name
 	ctx.font="25px Fixedsys";
@@ -1987,7 +1987,7 @@ Draw.popup.equip = function(key,type){ ctxrestore();
 	var sum = 0;
 	for(var i in equip.boost){
 		var boost = equip.boost[i];
-		var info = convertBoostDraw(boost);
+		var info = Draw.convert.boost(boost);
 		ctx.fillText('-' + info[0],sx+10,numY+sum*20);
 		ctx.fillText(info[1],sx+10+150,numY+sum*20);
 		sum++;

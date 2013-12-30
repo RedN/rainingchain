@@ -83,7 +83,7 @@ initAnimDb = function(){
 		
 		anim.name = i;
 		anim.img = newImage(anim.src);
-		preloader.push(anim.src);
+		Img.preloader.push(anim.src);
 	}
 	
 }

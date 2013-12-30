@@ -1,8 +1,8 @@
 //List of functions used by Draw.
-
+Draw.convert = {};
 //Convert a boost object into a string.
 //note: prototype.toString() would be better.
-convertBoostDraw = function(boost){
+Draw.convert.boost = function(boost){
 	if(boost.type === 'custom'){ return uniqueBoostDb[boost.value].name; }
 
 	var name = statDb[boost.stat].name;
@@ -38,7 +38,7 @@ convertBoostDraw = function(boost){
 }
 
 //Convert attack mod into a string
-convertAttackMod = {
+Draw.convert.attackMod = {
 	'bleed':(function(a){ return round(a.chance*100,2) + '% to Bleed for ' + round(a.magn*100*a.time,2) + '% Initial Dmg over ' + round(a.time/25,2) + 's.'; }),
 	'knock':(function(a){ return round(a.chance*100,2) + '% to Knockback by ' + round(a.magn*a.time,2) + ' pixel over ' + round(a.time/25,2) + 's.'; }),	
 	'drain':(function(a){ return round(a.chance*100,2) + '% to Drain ' + round(a.magn*100,2) + '% Mana.'; }),
@@ -60,19 +60,20 @@ convertAttackMod = {
 statListOperationInit = (function(){
 
 defListOperation = [
-	{'name':'Melee','icon':'defensive.melee','stat':[{'name':'x','stat':'def-melee-x'},{'name':'*','stat':'def-melee-*'},{'name':'^','stat':'def-melee-^'},{'name':'+','stat':'def-melee-+'}],'string':(function(){ return defConvertStringLeft('melee')})},
-	{'name':'Range','icon':'defensive.range','stat':[{'name':'x','stat':'def-range-x'},{'name':'*','stat':'def-range-*'},{'name':'^','stat':'def-range-^'},{'name':'+','stat':'def-range-+'}],'string':(function(){ return defConvertStringLeft('range')})},
-	{'name':'Magic','icon':'defensive.magic','stat':[{'name':'x','stat':'def-magic-x'},{'name':'*','stat':'def-magic-*'},{'name':'^','stat':'def-magic-^'},{'name':'+','stat':'def-magic-+'}],'string':(function(){ return defConvertStringLeft('magic')})},
-	{'name':'Fire','icon':'defensive.fire','stat':[{'name':'x','stat':'def-fire-x'},{'name':'*','stat':'def-fire-*'},{'name':'^','stat':'def-fire-^'},{'name':'+','stat':'def-fire-+'}],'string':(function(){ return defConvertStringLeft('fire')})},
-	{'name':'Cold','icon':'defensive.cold','stat':[{'name':'x','stat':'def-cold-x'},{'name':'*','stat':'def-cold-*'},{'name':'^','stat':'def-cold-^'},{'name':'+','stat':'def-cold-+'}],'string':(function(){ return defConvertStringLeft('cold')})},
-	{'name':'Lightning','icon':'defensive.lightning','stat':[{'name':'x','stat':'def-lightning-x'},{'name':'*','stat':'def-lightning-*'},{'name':'^','stat':'def-lightning-^'},{'name':'+','stat':'def-lightning-+'}],'string':(function(){ return defConvertStringLeft('lightning')})},
+	{'name':'Melee','icon':'offensive.melee','stat':[{'name':'x','stat':'def-melee-x'},{'name':'*','stat':'def-melee-*'},{'name':'^','stat':'def-melee-^'},{'name':'+','stat':'def-melee-+'}],'string':(function(){ return Draw.convert.elementMod('def','melee')})},
+	{'name':'Range','icon':'offensive.range','stat':[{'name':'x','stat':'def-range-x'},{'name':'*','stat':'def-range-*'},{'name':'^','stat':'def-range-^'},{'name':'+','stat':'def-range-+'}],'string':(function(){ return Draw.convert.elementMod('def','range')})},
+	{'name':'Magic','icon':'offensive.magic','stat':[{'name':'x','stat':'def-magic-x'},{'name':'*','stat':'def-magic-*'},{'name':'^','stat':'def-magic-^'},{'name':'+','stat':'def-magic-+'}],'string':(function(){ return Draw.convert.elementMod('def','magic')})},
+	{'name':'Fire','icon':'offensive.fire','stat':[{'name':'x','stat':'def-fire-x'},{'name':'*','stat':'def-fire-*'},{'name':'^','stat':'def-fire-^'},{'name':'+','stat':'def-fire-+'}],'string':(function(){ return Draw.convert.elementMod('def','fire')})},
+	{'name':'Cold','icon':'offensive.cold','stat':[{'name':'x','stat':'def-cold-x'},{'name':'*','stat':'def-cold-*'},{'name':'^','stat':'def-cold-^'},{'name':'+','stat':'def-cold-+'}],'string':(function(){ return Draw.convert.elementMod('def','cold')})},
+	{'name':'Lightning','icon':'offensive.lightning','stat':[{'name':'x','stat':'def-lightning-x'},{'name':'*','stat':'def-lightning-*'},{'name':'^','stat':'def-lightning-^'},{'name':'+','stat':'def-lightning-+'}],'string':(function(){ return Draw.convert.elementMod('def','lightning')})},
+		
+	{'name':'Burn','icon':'defensive.burn','stat':[{'name':'Resist','stat':'resist-burn'},{'name':'Max','stat':'resistMax-burn'}],'string':(function(){ return Draw.convert.statusMod('def','burn')})},
+	{'name':'Chill','icon':'defensive.chill','stat':[{'name':'Resist','stat':'resist-chill'},{'name':'Max','stat':'resistMax-chill'}],'string':(function(){ return Draw.convert.statusMod('def','chill')})},
+	{'name':'Confuse','icon':'defensive.confuse','stat':[{'name':'Resist','stat':'resist-confuse'},{'name':'Max','stat':'resistMax-confuse'}],'string':(function(){ return Draw.convert.statusMod('def','confuse')})},
+	{'name':'Knockback','icon':'defensive.knock','stat':[{'name':'Resist','stat':'resist-knock'},{'name':'Max','stat':'resistMax-knock'}],'string':(function(){ return Draw.convert.statusMod('def','knock')})},
+	{'name':'Bleed','icon':'defensive.bleed','stat':[{'name':'Resist','stat':'resist-bleed'},{'name':'Max','stat':'resistMax-bleed'}],'string':(function(){ return Draw.convert.statusMod('def','bleed')})},
+	{'name':'Drain','icon':'defensive.drain','stat':[{'name':'Resist','stat':'resist-drain'},{'name':'Max','stat':'resistMax-drain'}],'string':(function(){ return Draw.convert.statusMod('def','drain')})},
 	
-	{'name':'Burn','icon':'defensive.burn','stat':[{'name':'Resist','stat':'resist-burn'},{'name':'Max','stat':'resistMax-burn'}],'string':(function(){ return defConvertStringStatus('burn')})},
-	{'name':'Chill','icon':'defensive.chill','stat':[{'name':'Resist','stat':'resist-chill'},{'name':'Max','stat':'resistMax-chill'}],'string':(function(){ return defConvertStringStatus('chill')})},
-	{'name':'Confuse','icon':'defensive.confuse','stat':[{'name':'Resist','stat':'resist-confuse'},{'name':'Max','stat':'resistMax-confuse'}],'string':(function(){ return defConvertStringStatus('confuse')})},
-	{'name':'Knockback','icon':'defensive.knock','stat':[{'name':'Resist','stat':'resist-knock'},{'name':'Max','stat':'resistMax-knock'}],'string':(function(){ return defConvertStringStatus('knock')})},
-	{'name':'Bleed','icon':'defensive.bleed','stat':[{'name':'Resist','stat':'resist-bleed'},{'name':'Max','stat':'resistMax-bleed'}],'string':(function(){ return defConvertStringStatus('bleed')})},
-
 	{'name':'Speed','icon':'defensive.speed','stat':[{'name':'Max','stat':'maxSpd'},{'name':'Acc.','stat':'acc'},{'name':'Fric.','stat':'friction'}],'string':(function(){ return 'Max: ' + round(player.boost.list['maxSpd'].base,2,1) + ', Acc.: ' + round(player.boost.list['acc'].base,2,1)+ ', Fric.: ' + round(player.boost.list['friction'].base,2,1)})},
 	{'name':'Pick Radius','icon':'defensive.pickup','stat':[{'name':'Pick Radius','stat':'pickRadius'}],'string':(function(){ return round(player.boost.list['pickRadius'].base,2,1)})},
 	{'name':'Item Finding','icon':'defensive.item','stat':[{'name':'Quality','stat':'item-quality'},{'name':'Quantity','stat':'item-quantity'},{'name':'Rarity','stat':'item-rarity'}],'string':(function(){ return 'Qual.: ' + round(player.boost.list['item-quality'].base,2,1) + ', Quant.: ' + round(player.boost.list['item-quantity'].base,2,1)+ ', Rarity: ' + round(player.boost.list['item-rarity'].base,2,1)})},
@@ -88,25 +89,24 @@ defListOperation = [
 
 
 offListOperation = [
-	{'name':'Melee','icon':'offensive.melee','stat':[{'name':'x','stat':'dmg-melee-x'},{'name':'*','stat':'dmg-melee-*'},{'name':'^','stat':'dmg-melee-^'},{'name':'+','stat':'dmg-melee-+'}],'string':(function(){ return offConvertStringLeft('melee')})},
-	{'name':'Range','icon':'offensive.range','stat':[{'name':'x','stat':'dmg-range-x'},{'name':'*','stat':'dmg-range-*'},{'name':'^','stat':'dmg-range-^'},{'name':'+','stat':'dmg-range-+'}],'string':(function(){ return offConvertStringLeft('range')})},
-	{'name':'Magic','icon':'offensive.magic','stat':[{'name':'x','stat':'dmg-magic-x'},{'name':'*','stat':'dmg-magic-*'},{'name':'^','stat':'dmg-magic-^'},{'name':'+','stat':'dmg-magic-+'}],'string':(function(){ return offConvertStringLeft('magic')})},
-	{'name':'Fire','icon':'offensive.fire','stat':[{'name':'x','stat':'dmg-fire-x'},{'name':'*','stat':'dmg-fire-*'},{'name':'^','stat':'dmg-fire-^'},{'name':'+','stat':'dmg-fire-+'}],'string':(function(){ return offConvertStringLeft('fire')})},
-	{'name':'Cold','icon':'offensive.cold','stat':[{'name':'x','stat':'dmg-cold-x'},{'name':'*','stat':'dmg-cold-*'},{'name':'^','stat':'dmg-cold-^'},{'name':'+','stat':'dmg-cold-+'}],'string':(function(){ return offConvertStringLeft('cold')})},
-	{'name':'Lightning','icon':'offensive.lightning','stat':[{'name':'x','stat':'dmg-lightning-x'},{'name':'*','stat':'dmg-lightning-*'},{'name':'^','stat':'dmg-lightning-^'},{'name':'+','stat':'dmg-lightning-+'}],'string':(function(){ return offConvertStringLeft('lightning')})},
+	{'name':'Melee','icon':'offensive.melee','stat':[{'name':'x','stat':'dmg-melee-x'},{'name':'*','stat':'dmg-melee-*'},{'name':'^','stat':'dmg-melee-^'},{'name':'+','stat':'dmg-melee-+'}],'string':(function(){ return Draw.convert.elementMod('dmg','melee')})},
+	{'name':'Range','icon':'offensive.range','stat':[{'name':'x','stat':'dmg-range-x'},{'name':'*','stat':'dmg-range-*'},{'name':'^','stat':'dmg-range-^'},{'name':'+','stat':'dmg-range-+'}],'string':(function(){ return Draw.convert.elementMod('dmg','range')})},
+	{'name':'Magic','icon':'offensive.magic','stat':[{'name':'x','stat':'dmg-magic-x'},{'name':'*','stat':'dmg-magic-*'},{'name':'^','stat':'dmg-magic-^'},{'name':'+','stat':'dmg-magic-+'}],'string':(function(){ return Draw.convert.elementMod('dmg','magic')})},
+	{'name':'Fire','icon':'offensive.fire','stat':[{'name':'x','stat':'dmg-fire-x'},{'name':'*','stat':'dmg-fire-*'},{'name':'^','stat':'dmg-fire-^'},{'name':'+','stat':'dmg-fire-+'}],'string':(function(){ return Draw.convert.elementMod('dmg','fire')})},
+	{'name':'Cold','icon':'offensive.cold','stat':[{'name':'x','stat':'dmg-cold-x'},{'name':'*','stat':'dmg-cold-*'},{'name':'^','stat':'dmg-cold-^'},{'name':'+','stat':'dmg-cold-+'}],'string':(function(){ return Draw.convert.elementMod('dmg','cold')})},
+	{'name':'Lightning','icon':'offensive.lightning','stat':[{'name':'x','stat':'dmg-lightning-x'},{'name':'*','stat':'dmg-lightning-*'},{'name':'^','stat':'dmg-lightning-^'},{'name':'+','stat':'dmg-lightning-+'}],'string':(function(){ return Draw.convert.elementMod('dmg','lightning')})},
 	
 	{'name':'Weapon','icon':'offensive.melee','stat':[{'name':'Mace','stat':'weapon-mace'},{'name':'Spear','stat':'weapon-spear'},{'name':'Sword','stat':'weapon-sword'}],'string':(function(){ return 'Mace: ' + round(player.boost.list['weapon-mace'].base,2,1) + ', Spear: ' + round(player.boost.list['weapon-spear'].base,2,1) + ', Sword: ' + round(player.boost.list['weapon-sword'].base,2,1)						})},
 	{'name':'Weapon','icon':'offensive.range','stat':[{'name':'Bow','stat':'weapon-bow'},{'name':'Boomerang','stat':'weapon-boomerang'},{'name':'Crossbow','stat':'weapon-crossbow'}],'string':(function(){ return 'Bow: ' + round(player.boost.list['weapon-bow'].base,2,1) + ', Boom.: ' + round(player.boost.list['weapon-boomerang'].base,2,1) + ', CBow: ' + round(player.boost.list['weapon-crossbow'].base,2,1)						})},
 	{'name':'Weapon','icon':'offensive.magic','stat':[{'name':'Wand','stat':'weapon-wand'},{'name':'Staff','stat':'weapon-staff'},{'name':'Orb','stat':'weapon-orb'}],'string':(function(){ return 'Wand: ' + round(player.boost.list['weapon-wand'].base,2,1) + ', Staff: ' + round(player.boost.list['weapon-staff'].base,2,1) + ', Orb: ' + round(player.boost.list['weapon-orb'].base,2,1)						})},
 	
-	{'name':'Burn','icon':'offensive.burn','stat':[{'name':'Chance','stat':'burn-chance'},{'name':'Magn','stat':'burn-magn'},{'name':'Time','stat':'burn-time'}],'string':(function(){ return offConvertStringStatus('burn')})},
-	{'name':'Chill','icon':'offensive.chill','stat':[{'name':'Chance','stat':'chill-chance'},{'name':'Magn','stat':'chill-magn'},{'name':'Time','stat':'chill-time'}],'string':(function(){ return offConvertStringStatus('chill')})},
-	{'name':'Confuse','icon':'offensive.confuse','stat':[{'name':'Chance','stat':'confuse-chance'},{'name':'Magn','stat':'confuse-magn'},{'name':'Time','stat':'confuse-time'}],'string':(function(){ return offConvertStringStatus('confuse')})},
-	{'name':'Knockback','icon':'offensive.knock','stat':[{'name':'Chance','stat':'knock-chance'},{'name':'Magn','stat':'knock-magn'},{'name':'Time','stat':'knock-time'}],'string':(function(){ return offConvertStringStatus('knock')})},
-	{'name':'Bleed','icon':'offensive.bleed','stat':[{'name':'Chance','stat':'bleed-chance'},{'name':'Magn','stat':'bleed-magn'},{'name':'Time','stat':'bleed-time'}],'string':(function(){ return offConvertStringStatus('bleed')})},
-	{'name':'Drain','icon':'offensive.drain','stat':[{'name':'Chance','stat':'drain-chance'},{'name':'Magn','stat':'drain-magn'},{'name':'Time','stat':'drain-time'}],'string':(function(){ return offConvertStringStatus('drain')})},
-	
-	{'name':'Leech Hp','icon':'resource.hp','stat':[{'name':'Chance','stat':'leech-chance'},{'name':'Magn','stat':'leech-magn'},{'name':'Time','stat':'leech-time'}],'string':(function(){ return offConvertStringStatus('leech'); })},
+	{'name':'Burn','icon':'offensive.burn','stat':[{'name':'Chance','stat':'burn-chance'},{'name':'Magn','stat':'burn-magn'},{'name':'Time','stat':'burn-time'}],'string':(function(){ return Draw.convert.statusMod('off','burn')})},
+	{'name':'Chill','icon':'offensive.chill','stat':[{'name':'Chance','stat':'chill-chance'},{'name':'Magn','stat':'chill-magn'},{'name':'Time','stat':'chill-time'}],'string':(function(){ return Draw.convert.statusMod('off','chill')})},
+	{'name':'Confuse','icon':'offensive.confuse','stat':[{'name':'Chance','stat':'confuse-chance'},{'name':'Magn','stat':'confuse-magn'},{'name':'Time','stat':'confuse-time'}],'string':(function(){ return Draw.convert.statusMod('off','confuse')})},
+	{'name':'Knockback','icon':'offensive.knock','stat':[{'name':'Chance','stat':'knock-chance'},{'name':'Magn','stat':'knock-magn'},{'name':'Time','stat':'knock-time'}],'string':(function(){ return Draw.convert.statusMod('off','knock')})},
+	{'name':'Bleed','icon':'offensive.bleed','stat':[{'name':'Chance','stat':'bleed-chance'},{'name':'Magn','stat':'bleed-magn'},{'name':'Time','stat':'bleed-time'}],'string':(function(){ return Draw.convert.statusMod('off','bleed')})},
+	{'name':'Drain','icon':'offensive.drain','stat':[{'name':'Chance','stat':'drain-chance'},{'name':'Magn','stat':'drain-magn'},{'name':'Time','stat':'drain-time'}],'string':(function(){ return Draw.convert.statusMod('off','drain')})},
+	{'name':'Leech Hp','icon':'resource.hp','stat':[{'name':'Chance','stat':'leech-chance'},{'name':'Magn','stat':'leech-magn'},{'name':'Time','stat':'leech-time'}],'string':(function(){ return Draw.convert.statusMod('off','leech'); })},
 	
 	{'name':'Pierce','icon':'offensive.pierce','stat':[{'name':'Chance','stat':'pierce-chance'},{'name':'Dmg Mod','stat':'pierce-dmgReduc'}],'string':(function(){ return 'Chance: ' + round(player.boost.list['pierce-chance'].base,2,1) + ', Dmg Mod: ' + round(player.boost.list['pierce-dmgReduc'].base,2,1); })},
 	{'name':'Bullet','icon':'offensive.bullet','stat':[{'name':'Amount','stat':'bullet-amount'},{'name':'Aim','stat':'aim'}],'string':(function(){ return 'Amount: ' + round(player.boost.list['bullet-amount'].base,2,1) + ' , Aim: ' + round(player.boost.list['aim'].base,2,1); })},
@@ -121,44 +121,35 @@ offListOperation = [
 })();
 
 
-//{Convert	
-offConvertStringLeft = function(name){
-	var b0 = round(player.boost.list['dmg-' + name + '-x'].base,2,1);
-	var b1 = round(player.boost.list['dmg-' + name + '-*'].base,2,1);
-	var b2 = round(player.boost.list['dmg-' + name + '-^'].base,2,1);
-	var b3 = round(player.boost.list['dmg-' + name + '-+'].base,2,1);
-	var sum = round(Math.pow(player.boost.list['dmg-' + name + '-x'].base*player.boost.list['dmg-' + name + '-*'].base,player.boost.list['dmg-' + name + '-^'].base) + player.boost.list['dmg-' + name + '-+'].base,3);
+Draw.convert.elementMod = function(type,name){
+	type += '-';
+	var b0 = round(player.boost.list[type + name + '-x'].base,2,1);
+	var b1 = round(player.boost.list[type + name + '-*'].base,2,1);
+	var b2 = round(player.boost.list[type + name + '-^'].base,2,1);
+	var b3 = round(player.boost.list[type + name + '-+'].base,2,1);
+	var sum = round(Math.pow(player.boost.list[type + name + '-x'].base*player.boost.list[type + name + '-*'].base,player.boost.list[type + name + '-^'].base) + player.boost.list[type + name + '-+'].base,3);
 	var string = '( ' + b0 + ' * ' + b1 + ' ) ^ ' + b2 + ' + ' + b3 + ' = ' + sum;
 	return string
 }
 
-defConvertStringLeft = function(name){
-	var b0 = round(player.boost.list['def-' + name + '-x'].base,2,1);
-	var b1 = round(player.boost.list['def-' + name + '-*'].base,2,1);
-	var b2 = round(player.boost.list['def-' + name + '-^'].base,2,1);
-	var b3 = round(player.boost.list['def-' + name + '-+'].base,2,1);
-	var sum = round(Math.pow(player.boost.list['def-' + name + '-x'].base*player.boost.list['def-' + name + '-*'].base,player.boost.list['def-' + name + '-^'].base) + player.boost.list['def-' + name + '-+'].base,3);
-	var string = '( ' + b0 + ' * ' + b1 + ' ) ^ ' + b2 + ' + ' + b3 + ' = ' + sum;
-	return string
+Draw.convert.statusMod = function(type,name){
+	if(type === 'off'){
+		var b0 = round(player.boost.list[name + '-chance'].base,2,1);
+		var b1 = round(player.boost.list[name + '-magn'].base,2,1);
+		var b2 = round(player.boost.list[name + '-time'].base,2,1);
+
+		var string = '%: ' + b0 + ', Magn: ' + b1 + ', Time: ' + b2;
+		return string
+	}
+	if(type === 'def'){
+		var b0 = round(player.boost.list['resist-' + name].base,2,1);
+		var b1 = round(player.boost.list['resistMax-' + name].base,2,1);
+		
+		var string = 'Resist: ' + b0 + ', Max: ' + b1;
+		return string
+	}
 }
 
-offConvertStringStatus = function(name){
-	var b0 = round(player.boost.list[name + '-chance'].base,2,1);
-	var b1 = round(player.boost.list[name + '-magn'].base,2,1);
-	var b2 = round(player.boost.list[name + '-time'].base,2,1);
-
-	var string = '%: ' + b0 + ', Magn: ' + b1 + ', Time: ' + b2;
-	return string
-}
-
-defConvertStringStatus = function(name){
-	var b0 = round(player.boost.list['resist-' + name].base,2,1);
-	var b1 = round(player.boost.list['resistMax-' + name].base,2,1);
-	
-	var string = 'Resist: ' + b0 + ', Max: ' + b1;
-	return string
-}
-//}
 
 
 closeAllWindow = function(key){
@@ -179,8 +170,8 @@ openWindow = function(key,name,param){
 	}
 	if(name === 'quest'){
 		mainList[key].windowList.quest = param;
-		updateQuestReq(key,param);
-		updateQuestHint(key,param);
+		Quest.req.update(key,param);
+		Quest.hint.update(key,param);
 	}
 	if(name === 'trade'){
 		if(!mainList[param].windowList.trade){
