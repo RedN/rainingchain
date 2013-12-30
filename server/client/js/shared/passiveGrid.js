@@ -69,7 +69,7 @@ initPassiveGrid = function(){
 }
 
 randomAttribute = function(){
-	var array = Object.keys(statTo);
+	var array = Object.keys(statDb);
 	return array[Math.floor(Math.random()*array.length)]
 }
 

@@ -39,7 +39,7 @@ exports.startGame = function() {
 initServer = function (){
     require('async').series([initItemDb, initArmorDb, initWeaponDb, initAbilityDb,
         (function(){
-			initStatTo();
+			initStatDb();
 			initDefaultBonus();
 			
 			initAbilityModDb();

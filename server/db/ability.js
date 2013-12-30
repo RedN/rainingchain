@@ -258,7 +258,8 @@ useAbiCons = function(seed){
 		}
 		
 		//Status
-		for(var i in statusCName){
+		for(var st in Cst.status.list){
+			var i = Cst.status.list[st];
 			if(typeof atk[i] === 'object'){ 
 				if(typeof atk[i].chance === 'object'){ atk[i].chance = Craft.boost.generate.roll(atk[i].chance,qua); }
 				if(typeof atk[i].magn === 'object'){ atk[i].magn = Craft.boost.generate.roll(atk[i].magn,qua); }

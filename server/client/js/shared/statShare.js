@@ -1,7 +1,7 @@
 
 //if not playerOnly : cant be boosted with equip/curse for non player
-initStatTo = function(){
-	statTo = {
+initStatDb = function(){
+	statDb = {
 	    
 	//{Speed
 	'maxSpd':{
@@ -877,8 +877,8 @@ initStatTo = function(){
 
 }
 	
-	for(var i in statTo){
-		var s = statTo[i].boost;
+	for(var i in statDb){
+		var s = statDb[i].boost;
 		
 		s.name = {};
 		s.max = typeof s.max !== 'undefined' ? s.max : 100000;

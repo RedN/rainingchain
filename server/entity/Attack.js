@@ -160,7 +160,7 @@ Attack.creation.strike = function(player,s){
 		{'x':numX + s.crX + middleX,'y':numY + s.crY + middleY};
 	}
 	
-	if(s.objImg){ addAnim(s.objImg.name,{'x':s.crX + middleX,'y':s.crY + middleY,'map':s.map,'viewedIf':s.viewedIf},s.objImg.sizeMod);}
+	if(s.objImg){ Anim.creation(s.objImg.name,{'x':s.crX + middleX,'y':s.crY + middleY,'map':s.map,'viewedIf':s.viewedIf},s.objImg.sizeMod);}
 	
 	
 	

@@ -226,7 +226,7 @@ Command.list['win,ability,upMod'] = function(key,abid,mod,amount){
 
 //Tab
 Command.list['tab,open'] = function(key,tab){
-	if(tabCName[tab] === undefined){ Chat.add(key,'Wrong Input'); return; }
+	if(Cst.tab.list.indexOf(tab) === -1){ Chat.add(key,'Wrong Input'); return; }
 	mainList[key].currentTab = tab;
 }
 

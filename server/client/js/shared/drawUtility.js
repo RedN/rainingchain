@@ -5,7 +5,7 @@
 convertBoostDraw = function(boost){
 	if(boost.type === 'custom'){ return uniqueBoostDb[boost.value].name; }
 
-	var name = statTo[boost.stat].name;
+	var name = statDb[boost.stat].name;
 	
 	//Round and add %
 	var value = boost.value;
@@ -47,7 +47,7 @@ convertAttackMod = {
 	'confuse':(function(a){ return round(a.chance*100,2) + '% to Confuse for ' + round(a.time/25,2) + 's.'; }),
 	'leech':(function(a){ return round(a.chance*100,2) + '% to Life Leech ' + round(a.magn*100,2) + '% Hp'; }),
 	'pierce':(function(a){ return round(a.chance*100,2) + '% to Pierce, reducing this attack damage by ' + round(100-a.dmgReduc*100,2) + '% Dmg.'; }),
-	'curse':(function(a){ return round(a.chance*100,2) + '% to Lower ' + statTo[a.boost[0].stat].name + ' by ' + round(100-a.boost[0].value*100,2) + '% for ' + round(a.boost[0].time/25,2) + 's.'; }),
+	'curse':(function(a){ return round(a.chance*100,2) + '% to Lower ' + statDb[a.boost[0].stat].name + ' by ' + round(100-a.boost[0].value*100,2) + '% for ' + round(a.boost[0].time/25,2) + 's.'; }),
 	'boomerang':(function(a){ return 'Boomerang'; }),
 	'nova':(function(a){ return 'Nova'; }),
 	'parabole':(function(a){ return 'Parabole Bullet'; }),

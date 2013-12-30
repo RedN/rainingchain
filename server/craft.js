@@ -43,8 +43,8 @@ Craft.create.equip = function(seed){
 Craft.create.equip.armor = function(armor){
 	var seed = armor.seed;
 	
-	for(var k in elementName){
-		var i = elementName[k];
+	for(var k in Cst.element.list){
+		var i = Cst.element.list[k];
 		armor.defRatio[i] = Math.random()*0.5+0.5;
 	}
 	var mod = 0.9 + Math.pow(Math.random(),1/(seed.quality+1))*0.2;
@@ -119,13 +119,13 @@ Craft.seed = function(seed){ //need to fix for ability too
 	
 	if(!seed.category){ seed.category = 'armor'; }
 	if(seed.category == 'weapon' && !seed.piece){ 
-		seed.piece = weaponPieceName[Math.floor(Math.random()*weaponPieceName.length)];
+		seed.piece = Cst.equip.weapon.piece[Math.floor(Math.random()*Cst.equip.weapon.piece.length)];
 	}
 	if(seed.category == 'armor' && !seed.piece){ 
-		seed.piece = armorPieceName[Math.floor(Math.random()*armorPieceName.length)]; 
+		seed.piece = Cst.equip.armor.piece[Math.floor(Math.random()*Cst.equip.armor.piece.length)]; 
 	}
 	if(!seed.type && (seed.category == 'armor' || seed.category == 'weapon')){ 
-		seed.type =  typeForPiece[seed.piece][Math.floor(Math.random()*typeForPiece[seed.piece].length)]; 
+		seed.type =  Cst.equip[seed.piece][Math.floor(Math.random()*Cst.equip[seed.piece].length)]; 
 	}
 	
 	if(!seed.quality){ seed.quality = 0; }

@@ -135,7 +135,7 @@ Combat.collision = function(b,mort){
 	if(mort.attackReceived[b.hitId]) return;    //for pierce
     mort.attackReceived[b.hitId] = true;
 	
-	if(b.hitImg){addAnim(b.hitImg.name,mort.id,b.hitImg.sizeMod || 1);}
+	if(b.hitImg){Anim.creation(b.hitImg.name,mort.id,b.hitImg.sizeMod || 1);}
 	if(b.healing){ Mortal.changeResource(mort,b.healing); return; }
 	
 	if(b.crit.chance >= Math.random()){ b = Combat.collision.crit(b) }
@@ -254,8 +254,8 @@ Combat.collision.leech = function(mort,b){
 Combat.collision.reflect = function(dmg,bullet,mort){
 	var attacker = fullList[bullet.parent];
 	if(attacker && attacker.hp){
-		for(var i in elementName){
-			Mortal.changeHp(attacker,-mort.reflect[elementName[i]]*dmg[elementName[i]]/attacker.defMain);
+		for(var i in Cst.element.list){
+			Mortal.changeHp(attacker,-mort.reflect[Cst.element.list[i]]*dmg[Cst.element.list[i]]/attacker.defMain);
 		}
 	}
 }

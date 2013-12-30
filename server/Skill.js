@@ -29,13 +29,13 @@ Skill.prototype.updateLvl = function(key,sk){
 	var player = fullList[key];
 	var main = mainList[key];
 	
-	if(!sk) sk = skillName;
+	if(!sk) sk = Cst.skill.list;
 	else { sk = typeof sk == 'object' ? sk : [sk]; }
 	
 	for(var i in sk){
 		var skill = sk[i];
-		if(player.exp[skill] >= expChart[player.lvl[skill]+1]){
-			var newLvl = binarySearch(expChart,player.exp[skill]);
+		if(player.exp[skill] >= Cst.exp.list[player.lvl[skill]+1]){
+			var newLvl = binarySearch(Cst.exp.list,player.exp[skill]);
 			
 			var lvlDiff = newLvl-player.lvl[skill];
 			main.passivePt += lvlDiff;
@@ -48,7 +48,7 @@ Skill.prototype.updateLvl = function(key,sk){
 }
 
 Skill.prototype.lvlUp = function(key,skill){
-	Chat.add(key,'You are level ' + fullList[key].lvl[skill] + ' in ' + skillCName[skill] + '!');
+	Chat.add(key,'You are level ' + fullList[key].lvl[skill] + ' in ' + skill.capitalize() + '!');
 }
 
 Skill.prototype.testLvl = function(key,sk,lvl){

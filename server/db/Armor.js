@@ -156,8 +156,8 @@ defaultArmor = function(){
 	
 
 updateArmor = function(player){
-	for(var k in elementName){	//Each Element
-		var i = elementName[k];
+	for(var k in Cst.element.list){	//Each Element
+		var i = Cst.element.list[k];
 		var sum = 0;
 		for(var j in player.armor.piece){	//Each Piece
 			sum += player.armor.piece[j].def[i] * player.armor.piece[j].orb.upgrade.bonus;

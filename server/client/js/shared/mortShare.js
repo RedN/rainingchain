@@ -194,7 +194,7 @@ defaultPreMortal = function(type){
     	//if(server) mort.skill = new Skill();
 	}
 	
-	for(var i in mort.boost.list){  //init default statTo value
+	for(var i in mort.boost.list){  //init default statDb value
 		changeViaArray({'origin':mort,'array':mort.boost.list[i].stat,'value':mort.boost.list[i].base});
 	}
 	
@@ -229,10 +229,10 @@ initDefaultBoost = function(){
 	defaultMortBoost = {};
 	defaultEnemyBoost = {};
 	
-	for(var i in statTo){
-		defaultMortBoost[i] = statTo[i].boost;
-		if(!statTo[i].playerOnly){
-			defaultEnemyBoost[i] = statTo[i].boost;
+	for(var i in statDb){
+		defaultMortBoost[i] = statDb[i].boost;
+		if(!statDb[i].playerOnly){
+			defaultEnemyBoost[i] = statDb[i].boost;
 		}
 	}
 	
@@ -252,10 +252,10 @@ defaultMastery = function(){
 initDefaultBonus = function(){
 	var info = {};
 	
-	for(var i in statTo){
-		if(statTo[i].boost.stat[0] === 'bonus'){
-			var a = statTo[i].boost.stat;
-			var value = statTo[i].boost.base;
+	for(var i in statDb){
+		if(statDb[i].boost.stat[0] === 'bonus'){
+			var a = statDb[i].boost.stat;
+			var value = statDb[i].boost.base;
 			
 			if(a.length === 3){
 				info[a[1]] = info[a[1]] || {};

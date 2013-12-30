@@ -215,7 +215,7 @@ drawElementBar = function(x,y,w,h,data,noover){
 		var length = w*data[i]/total;
 		
 		if(length > 2){
-			ctx.fillStyle = colorForElement[i];
+			ctx.fillStyle = Cst.element.toColor[i];
 			ctx.roundRect(x,y,length,h);
 		}
 		if(Collision.PtRect(Collision.getMouse(key),[x,x+length,y,y+h])){
@@ -235,7 +235,7 @@ drawElementBar = function(x,y,w,h,data,noover){
 		
 		var text = mouseOverRatio.capitalize() + ': ' + amount;
 		var width = ctx.measureText(text).width;
-		ctx.fillStyle = colorForElement[mouseOverRatio];
+		ctx.fillStyle = Cst.element.toColor[mouseOverRatio];
 		ctx.roundRect(mx,my-30,width+10,30);
 		ctx.fillStyle = 'black';
 		ctx.fillText(text,mx+5,my+3-30);
@@ -316,7 +316,7 @@ ts("Mortal.permBoost(key,'asdsd',[{'type':'custom','value':'balancedAtk'}])")
 
 superBoost = function(){
 	var str = [];
-	for(var i in statTo){
+	for(var i in statDb){
 		str.push({'stat':i,'value':Math.random()*2,'type':'+'});
 	}
 	str = stringify(str);
@@ -341,9 +341,9 @@ Combat.action.attack.mod.bonus = function(bon,atk){
 	
 	//Status Effect
 	var list = ['time','magn','chance'];
-	for(var i in statusCName){
+	for(var i in Cst.status.list){
 		for(var j in list){
-			atk[i][list[j]] *= bon[i][list[j]];
+			atk[Cst.status.list[i]][list[j]] *= bon[Cst.status.list[i]][list[j]];
 		}
 	}
 	for(var j in list){

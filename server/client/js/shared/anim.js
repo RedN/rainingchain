@@ -1,6 +1,6 @@
 aList = [];
 
-function initAnimDb(){
+initAnimDb = function(){
 	animDb ={
 			"slash":{'frame':8},
 			"attack1":{'frame':3},
@@ -106,7 +106,7 @@ Anim.update = function (){
 }
 
 //Add animation to the game. target can be a string to specific an actor, or an obj x:1,y:1
-addAnim = function(anim,target,sizeMod){
+Anim.creation = function(anim,target,sizeMod){
 	sizeMod = sizeMod || 1;
 	aList[a.id] = {'sizeMod':sizeMod,'name':anim,'target':target,'id':'a'+Math.randomId(5)};
 }

@@ -12,7 +12,8 @@ initUniqueBoostDb = function(){
 			var mod;
 			var pbl = pb.list;
 			var array = ['x','*','^','+'];
-			for(var i in elementCName){
+			for(var st in Cst.element.list){
+				var i = Cst.element.list[st];
 				var min = 100000;
 				for(var j in array){
 					if(j == 3){ mod = 1; } else { mod = 0; }
@@ -34,7 +35,8 @@ initUniqueBoostDb = function(){
 			var mod;
 			var pbl = pb.list;
 			var array = ['x','*','^','+'];
-			for(var i in elementCName){
+			for(var st in Cst.element.list){
+				var i = Cst.element.list[st];
 				var min = 100000;
 				for(var j in array){
 					if(j == 3){ mod = 1; } else { mod = 0; }

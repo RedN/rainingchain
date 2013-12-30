@@ -379,7 +379,7 @@ Draw.resource.bar = function(numX,numY,w,h,name){	ctxrestore();
 	w -= 75 + 10;
 	w *= ratio;
 	
-	ctx.fillStyle = resourceToColor[name];
+	ctx.fillStyle = Cst.resource.toColor[name];
 	ctx.strokeStyle= "black";
 	ctx.roundRect(numX,numY,w,h,1,1,4);
 		
@@ -509,7 +509,7 @@ Draw.tab.main = function (key){ ctxrestore();
 	ctx.stroke();	
 	
 	
-	for(var i = 0 ; i < tabDName.length ; i++){
+	for(var i = 0 ; i < Cst.tab.list.length ; i++){
 		var vx = 30;
 		var vy = 0;
 		var numX = sx + 15 + vx * (i%100)  
@@ -517,13 +517,13 @@ Draw.tab.main = function (key){ ctxrestore();
 		
 		Button.creation(key,{
 			"rect":[numX,numX+24,numY,numY+24],
-			"left":{"func":Chat.send.command,"param":['$tab,open,' + tabName[i]]},
-			'text':tabDName[i],
-			'help':tabDName[i],
+			"left":{"func":Chat.send.command,"param":['$tab,open,' + Cst.tab.list[i]]},
+			'text':Cst.tab.list[i].capitalize(),
+			'help':Cst.tab.list[i].capitalize(),
 		});	
 		
 		ctx.drawImage(iconSheet,i*ICON,iconIndex['TAB'],ICON,ICON,numX,numY,24,24);
-		if(currentTab == tabName[i]){ctx.strokeRect(numX-1,numY-1,24+1,24+1);}
+		if(currentTab === Cst.tab.list[i]){ctx.strokeRect(numX-1,numY-1,24+1,24+1);}
 		
 	}
 	ctxrestore();
@@ -575,28 +575,28 @@ Draw.tab.equip = function (key){ ctxrestore();
 	
 	//Weapon
 	if(!server && typeof popupList.weapon !== 'object') popupList.weapon = 0;
-	for (var i = 0 ; i < weaponPieceName.length ; i++){
+	for (var i = 0 ; i < Cst.equip.weapon.piece.length ; i++){
 		var numX = sx + 10;
 		var numY = sy + 7 + 5 + 45 * i;
 				
 		if(server){	
 			Button.creation(key,{
 				"rect":[numX,numX+40,numY,numY+40],
-				"left":{"func":Mortal.swapWeapon,"param":[weaponPieceName[i]]},
+				"left":{"func":Mortal.swapWeapon,"param":[Cst.equip.weapon.piece[i]]},
 				"text":'Swap Weapon'
 			});
 		}
 		
 		if(!server){
-			var piece = weaponPieceName[i];
-			if(player.weapon.piece != weaponPieceName[i]){ ctx.globalAlpha = 0.5; } 
+			var piece = Cst.equip.weapon.piece[i];
+			if(player.weapon.piece != Cst.equip.weapon.piece[i]){ ctx.globalAlpha = 0.5; } 
 			
-			var slot = iconIndex[player.weaponList[weaponPieceName[i]].visual];
+			var slot = iconIndex[player.weaponList[Cst.equip.weapon.piece[i]].visual];
 			ctx.drawImage(iconSheet,slot.x,slot.y,ICON,ICON,numX,numY,40,40);
 			ctx.globalAlpha = 1;
 			
 			if(Collision.PtRect(Collision.getMouse(key),[numX,numX+40,numY,numY+40])){
-				popupList.weapon = player.weaponList[weaponPieceName[i]].id;
+				popupList.weapon = player.weaponList[Cst.equip.weapon.piece[i]].id;
 			}
 		}
 
@@ -605,7 +605,7 @@ Draw.tab.equip = function (key){ ctxrestore();
 	
 	//Armor
 	if(!server && typeof popupList.armor !== 'object') popupList.armor = 0;
-	for (i = 0 ; i < armorPieceName.length ; i++){
+	for (i = 0 ; i < Cst.equip.armor.piece.length ; i++){
 		var numX = sx + 55 + 45*(i%3);
 		var numY = sy + 7 + 5 + 45 * Math.floor(i/3);
 		
@@ -613,14 +613,14 @@ Draw.tab.equip = function (key){ ctxrestore();
 			/*
 			Button.creation(key,{
 				"rect":[numX,numX+40,numY,numY+40],
-				//"left":{"func":openPopup,"param":['armor',fullList[key].armor.piece[armorPieceName[i]]]},
+				//"left":{"func":openPopup,"param":['armor',fullList[key].armor.piece[Cst.equip.armor.piece[i]]]},
 				"text":'Swap Armor'
 				});
 			*/
 		}
 		
 		if(!server){
-			var piece = player.armor.piece[armorPieceName[i]];
+			var piece = player.armor.piece[Cst.equip.armor.piece[i]];
 			
 			var slot = iconIndex[piece.visual];
 			ctx.drawImage(iconSheet,slot.x,slot.y,ICON,ICON,numX+10,numY,40,40);
@@ -702,7 +702,7 @@ Draw.tab.skill = function(key){ ctxrestore();
 		else { var exp = player.exp; var lvl = player.lvl;	}
 	
 	
-	for (var i = 0 ; i < skillName.length ; i++){
+	for (var i = 0 ; i < Cst.skill.list.length ; i++){
 		var vx = 100;
 		var vy = 28;
 		var numX = sx + 18 + vx*Math.floor(i/9);
@@ -711,12 +711,12 @@ Draw.tab.skill = function(key){ ctxrestore();
 		if(!server){
 			ctx.fillStyle = 'white';
 			
-			var slot = iconIndex['skill.' + skillName[i]];
+			var slot = iconIndex['skill.' + Cst.skill.list[i]];
 			ctx.drawImage(iconSheet,slot.x,slot.y,ICON,ICON,numX,numY,20,20);
-			ctx.fillText(lvl[skillName[i]],numX+30,numY);
+			ctx.fillText(lvl[Cst.skill.list[i]],numX+30,numY);
 			
 			if(Collision.PtRect(Collision.getMouse(key),[numX,numX+vx,numY,numY+vy])){
-				var mouseover = skillName[i];
+				var mouseover = Cst.skill.list[i];
 			}
 			
 		}
@@ -744,12 +744,12 @@ Draw.tab.skill = function(key){ ctxrestore();
 		expMod = expMod == 1 ? '' : '  *' + round(expMod,2)
 		
 		ctx.drawImage(iconSheet,slot.x,slot.y,ICON,ICON,ssx+5,ssy+1,20,20);
-		ctx.fillTextU(skillCName[sk],ssx + 5 + 30,ssy+1);
+		ctx.fillTextU(sk.capitalize(),ssx + 5 + 30,ssy+1);
 		ctx.fillText('Level: ' + lvl,ssx + 5,ssy+1+25*1);
 		ctx.fillText('Exp: ' + exp +  expMod,ssx + 5,ssy+1+25*2);
 		
-		if(lvl < expChart.length){
-			var expNext = expChart[lvl+1]-exp;
+		if(lvl < Cst.exp.list.length){
+			var expNext = Cst.exp.list[lvl+1]-exp;
 			ctx.fillText('Next: ' + expNext,ssx + 5,ssy+1+25*3);
 		}		
 	}
@@ -1451,7 +1451,7 @@ Draw.window.ability.action.attack = function(diffX,diffY){  ctxrestore();
 				var tmp = atk[i];
 				
 				//Status
-				if(statusCName[i]){ tmp.chance = Math.pow(pref.abilityDmgCent,1.5)*atk[i].chance*atk.dmgRatio[statusToElement[i]];}
+				if(Cst.status.list.indexOf(i) !== -1){ tmp.chance = Math.pow(pref.abilityDmgCent,1.5)*atk[i].chance*atk.dmgRatio[Cst.status.toElement[i]];}
 				
 				if(tmp.chance !== undefined && tmp.chance <= 0.001){ continue;}
 				ctx.fillText('=> ' + convertAttackMod[i](tmp),zx+30,zy+25+30);
@@ -1472,9 +1472,9 @@ Draw.window.ability.action.boost = function(diffX,diffY){  ctxrestore();
 	var boost = ab.action[0].param[0];
 	
 	for(var i in boost){
-		var slot = iconIndex[statTo[boost[i].stat].icon];
+		var slot = iconIndex[statDb[boost[i].stat].icon];
 		ctx.drawImage(iconSheet,slot.x,slot.y,ICON,ICON,zx,zy,20,20);
-		var str = boost[i].type + round(boost[i].value,2) + ' ' + statTo[boost[i].stat].name + ' for ' + round(boost[i].time/25,2) + 's.';
+		var str = boost[i].type + round(boost[i].value,2) + ' ' + statDb[boost[i].stat].name + ' for ' + round(boost[i].time/25,2) + 's.';
 		ctx.fillText(str,zx+30,zy);
 		zy += 30;
 	}
@@ -1701,7 +1701,7 @@ Draw.window.passive.grid = function(key){ ctxrestore();
 			//Icon
 			ctx.globalAlpha = 0.5;
 			if(+passive[i][j]){ ctx.globalAlpha = 1; }
-			var slot = passiveGrid[i][j].stat ? iconIndex[statTo[passiveGrid[i][j].stat].icon] : iconIndex[uniqueBoostDb[passiveGrid[i][j].value].icon];
+			var slot = passiveGrid[i][j].stat ? iconIndex[statDb[passiveGrid[i][j].stat].icon] : iconIndex[uniqueBoostDb[passiveGrid[i][j].value].icon];
 			ctx.drawImage(iconSheet,slot.x,slot.y,ICON,ICON,numX+border2,numY+border2,icon,icon);
 			
 			//Hover
@@ -1714,7 +1714,7 @@ Draw.window.passive.grid = function(key){ ctxrestore();
 				Button.creation(0,{
 				"rect":[numX,numX+ic,numY,numY+ic],
 				"right":{"func":Chat.send.command,"param":['$win,passive,select,' + i + ',' + j]},
-				'text':'Choose ' + (passiveGrid[i][j].stat ? statTo[passiveGrid[i][j].stat].name : uniqueBoostDb[passiveGrid[i][j].value].name) ,
+				'text':'Choose ' + (passiveGrid[i][j].stat ? statDb[passiveGrid[i][j].stat].name : uniqueBoostDb[passiveGrid[i][j].value].name) ,
 				});	
 			}
 			
@@ -1745,7 +1745,7 @@ Draw.window.passive.hover = function(over){ ctxrestore();
 	var s = Draw.window.main.constant(); var sx = s.sx; var sy = s.sy; var mx = s.mx; var my = s.my; var zx = s.zx; var zy = s.zy; var dw = s.dw; var dh = s.dh; var mdx = s.mdx; var mcx = s.mcx; var w = s.w; var h = s.h; 
 	var ctx = ctxList.pop;
 	
-	var st = over.stat ? statTo[over.stat] : uniqueBoostDb[over.value];
+	var st = over.stat ? statDb[over.stat] : uniqueBoostDb[over.value];
 	
 	var vvx = 300;
 	var vvy = 100;
@@ -1811,7 +1811,7 @@ Draw.window.quest = function (key){ ctxrestore();
 	str += 'Name: ' + q.name + '<br>';
 	var state = mq.complete ? 'Complete' : (mq.started ? 'Started' : 'Not Started');
 	str += 'State: ' + state + '<br>';
-	str += 'Reward: ' + round(q.reward.value[0],3,1) + ' - ' + round(q.reward.value[1],3,1) + ' in ' + statTo[q.reward.stat].name + '<br>';
+	str += 'Reward: ' + round(q.reward.value[0],3,1) + ' - ' + round(q.reward.value[1],3,1) + ' in ' + statDb[q.reward.stat].name + '<br>';
 	if(mq.complete){
 		var boost = convertBoostDraw(mq.reward);
 		str += 'Current Reward: ' + boost[1] + ' in ' + boost[0] + '(' + mq.rewardTier + ')' + '<br>';

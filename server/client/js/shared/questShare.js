@@ -189,7 +189,7 @@ giveQuestStatReward = function(key,id){
 	
 	var boost = Craft.boost.generate(q.reward);
 	
-	Chat.add(key,"The quest reward rolled is " + round(boost.value,4) + ' in ' + statTo[boost.stat].name + '.');
+	Chat.add(key,"The quest reward rolled is " + round(boost.value,4) + ' in ' + statDb[boost.stat].name + '.');
 	
 	if(qp.reward === null || boost.value >= qp.reward.value){
 		Chat.add(key,"Congratulations! Your character grows stronger.");

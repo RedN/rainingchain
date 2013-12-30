@@ -150,7 +150,7 @@ addCanvas = function(name,id,z){
 
 
 initDb = function (cb){
-	initStatTo();   //stat db
+	initStatDb();   //stat db
 	initDefaultBonus(); //bonus related to the stats
 	initSpriteDb();
 	initAnimDb();
