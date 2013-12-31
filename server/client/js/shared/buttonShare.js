@@ -38,7 +38,6 @@ Button.test = function (key,x,y,side){
 			if(Collision.PtRect({"x":x,'y':y},list[i].rect)){
 				if(server) {
 					if(list[i][side].nokey){
-					console.log('hi',list);
 					innerFunction(list[i][side].func,list[i][side].param);} 
 					else {keyFunction(key,list[i][side].func,list[i][side].param);}
 					

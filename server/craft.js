@@ -17,7 +17,7 @@ Init.db.boost = function(){
 	//stats in [] are transformed into multiple stats using boostPreDbConvertList.
 	//value: [min,max], mod: chance to be picked
 	
-	boostPreDb = {};
+	var boostPreDb = {};
 	boostPreDb['melee'] = [
 		{'stat':['dmg'],'lvl':0,'mod':5,'value':[0.05,0.10]},
 	];
@@ -161,7 +161,7 @@ Init.db.boost = function(){
 		for(var m in toRemove){	boostPreDb[i].splice(boostPreDb[i].indexOf(toRemove[m]),1); }
 	}
 		
-	Db.boost = deepClone(boostPreDb);
+	Db.boost = boostPreDb;
 }
 
 Craft = {};

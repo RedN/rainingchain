@@ -1,7 +1,7 @@
 
 //Boost that grants a custom advanced special effect to a player. 
-initUniqueBoostDb = function(){
-	uniqueBoostDb = {}; var b = uniqueBoostDb;
+Init.db.customBoost = function(){
+	Db.customBoost = {}; var b = Db.customBoost;
 	
 	/*
 	b.balancedAtk = {

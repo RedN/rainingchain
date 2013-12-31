@@ -1091,7 +1091,7 @@ Draw.window.stat = function(key,type){ ctxrestore();
 		var numY = sy + 60 + 30* 15;
 		var str = 'Custom Effects: ';
 		for(var i in player.boost.custom){
-			str += uniqueBoostDb[i].name + ' - ';
+			str += Db.customBoost[i].name + ' - ';
 		}
 		str = str.slice(0,-3);
 		ctx.font = '30px Fixedsys';
@@ -1699,7 +1699,7 @@ Draw.window.passive.grid = function(key){ ctxrestore();
 			//Icon
 			ctx.globalAlpha = 0.5;
 			if(+passive[i][j]){ ctx.globalAlpha = 1; }
-			var slot = passiveGrid[i][j].stat ? iconIndex[Db.stat[passiveGrid[i][j].stat].icon] : iconIndex[uniqueBoostDb[passiveGrid[i][j].value].icon];
+			var slot = passiveGrid[i][j].stat ? iconIndex[Db.stat[passiveGrid[i][j].stat].icon] : iconIndex[Db.customBoost[passiveGrid[i][j].value].icon];
 			ctx.drawImage(Img.icon,slot.x,slot.y,ICON,ICON,numX+border2,numY+border2,icon,icon);
 			
 			//Hover
@@ -1712,7 +1712,7 @@ Draw.window.passive.grid = function(key){ ctxrestore();
 				Button.creation(0,{
 				"rect":[numX,numX+ic,numY,numY+ic],
 				"right":{"func":Chat.send.command,"param":['$win,passive,select,' + i + ',' + j]},
-				'text':'Choose ' + (passiveGrid[i][j].stat ? Db.stat[passiveGrid[i][j].stat].name : uniqueBoostDb[passiveGrid[i][j].value].name) ,
+				'text':'Choose ' + (passiveGrid[i][j].stat ? Db.stat[passiveGrid[i][j].stat].name : Db.customBoost[passiveGrid[i][j].value].name) ,
 				});	
 			}
 			
@@ -1743,7 +1743,7 @@ Draw.window.passive.hover = function(over){ ctxrestore();
 	var s = Draw.window.main.constant(); var sx = s.sx; var sy = s.sy; var mx = s.mx; var my = s.my; var zx = s.zx; var zy = s.zy; var dw = s.dw; var dh = s.dh; var mdx = s.mdx; var mcx = s.mcx; var w = s.w; var h = s.h; 
 	var ctx = ctxList.pop;
 	
-	var st = over.stat ? Db.stat[over.stat] : uniqueBoostDb[over.value];
+	var st = over.stat ? Db.stat[over.stat] : Db.customBoost[over.value];
 	
 	var vvx = 300;
 	var vvy = 100;

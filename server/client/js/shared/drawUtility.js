@@ -3,7 +3,7 @@ Draw.convert = {};
 //Convert a boost object into a string.
 //note: prototype.toString() would be better.
 Draw.convert.boost = function(boost){
-	if(boost.type === 'custom'){ return uniqueBoostDb[boost.value].name; }
+	if(boost.type === 'custom'){ return Db.customBoost[boost.value].name; }
 
 	var name = Db.stat[boost.stat].name;
 	

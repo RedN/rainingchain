@@ -62,7 +62,7 @@ require('./server/db/ArmorDb');
 require('./server/db/WeaponDb');
 		
 require('./' + clientPath + 'client/js/shared/Collision');
-require('./' + clientPath + 'client/js/shared/statShare');
+require('./' + clientPath + 'client/js/shared/stat');
 require('./' + clientPath + 'client/js/shared/constant');
 require('./' + clientPath + 'client/js/shared/buttonShare');
 require('./' + clientPath + 'client/js/shared/sprite');

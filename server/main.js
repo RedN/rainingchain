@@ -46,7 +46,7 @@ exports.initServer = function (){
 			Init.db.drop();
 			Change.update.init();
 			Init.db.boost();
-			initUniqueBoostDb();
+			Init.db.customBoost();
 			Init.mortal();
 			Init.db.enemy();
 			initBossDb();

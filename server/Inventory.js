@@ -164,8 +164,6 @@ ItemList.prototype.toString = function(){
 }
 
 ItemList.prototype.transfer = function(other,id,amount){
-	console.log('type',this.type);
-	
 	amount = amount || 1;
 	amount = Math.min(amount,this.have(id,0,'amount'));
 	if(!other.test([[id,amount]]) || amount === 0){
@@ -219,8 +217,6 @@ Inventory.prototype.click = function(slot,side){
 		
 		if(side === 'right'){ 
 			var id = this.data[slot][0];
-			
-			console.log(this.transfer);
 			
 			Button.optionList(key,{
 				'name':Db.item[id].name,

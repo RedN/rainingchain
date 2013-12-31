@@ -141,7 +141,7 @@ Mortal.update.permBoost = function(player){
 		pb.list[i].base = Math.min(pb.list[i].base,pb.list[i].max);	
 	}
 	
-	for(var j in pb.custom){ uniqueBoostDb[j].function(pb,player.id);}
+	for(var j in pb.custom){ Db.customBoost[j].function(pb,player.id);}
 	if(server){Mortal.loop.boost(player,1);}
 }
 

@@ -6,7 +6,7 @@ eval function on client
 questHint and much more...
 abilitymod
 combat.mod
-initUniqueBoostDb
+Init.db.customBoost
 
 
 

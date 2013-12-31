@@ -154,7 +154,7 @@ initDb = function (cb){
 	Init.db.map();
 	Init.mortal();
 	Init.db.quest();
-	initUniqueBoostDb();
+	Init.db.customBoost();
 	//initAbilityModDb();   //need fixing
 	Img.preload(Img.preloader,function(){   //load images
 		cb.call();
