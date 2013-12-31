@@ -27,7 +27,7 @@ Combat = {};
 
 //ACTION//
 Combat.action = function(id,action){
-    var player = typeof id === 'string' ? fullList[id] : id;
+    var player = typeof id === 'string' ? List.all[id] : id;
 	if(!player) return;
 
     if(action.anim)	changeSprite(player,{'anim':action.anim});
@@ -38,7 +38,7 @@ Combat.action = function(id,action){
     
 }
 Combat.action.attack = function(id,action){   
-	var player = typeof id === 'string' ? fullList[id] : id;
+	var player = typeof id === 'string' ? List.all[id] : id;
 	for(var i = 0 ; i < action.attack.length ; i ++){
 		//Add Bonus and mastery
 		var atk = typeof action.attack[i] === 'function' ? action.attack[i]() : deepClone(action.attack[i]); 
@@ -80,7 +80,7 @@ Combat.action.summon = function(key,info,enemy){
 	info.maxChild = info.maxChild || 1;
 	info.time = info.time || 1/0;
 	info.distance = info.distance || 500;
-	var master = fullList[key];
+	var master = List.all[key];
 	
 	if(!master.summon[name]){	master.summon[name] = {'child':{}}; }
 	
@@ -215,7 +215,7 @@ Combat.collision.status.knock = function(mort,b){
 Combat.collision.status.drain = function(mort,b){
 	var info = b.drain;
 	
-	var player = fullList[b.parent]; if(!player) return;
+	var player = List.all[b.parent]; if(!player) return;
 	
 	var amount = mort.resource.mana.max * 0.05 * info.magn;
 
@@ -242,7 +242,7 @@ Combat.collision.pierce = function(b){
 Combat.collision.leech = function(mort,b){
 	var info = b.drain;
 	
-	var player = fullList[b.parent]; if(!player) return;
+	var player = List.all[b.parent]; if(!player) return;
 	
 	var amount = (player.resource.hp.max-player.hp) * 0.01 * info.magn;
 
@@ -252,7 +252,7 @@ Combat.collision.leech = function(mort,b){
 }
 
 Combat.collision.reflect = function(dmg,bullet,mort){
-	var attacker = fullList[bullet.parent];
+	var attacker = List.all[bullet.parent];
 	if(attacker && attacker.hp){
 		for(var i in Cst.element.list){
 			Mortal.changeHp(attacker,-mort.reflect[Cst.element.list[i]]*dmg[Cst.element.list[i]]/attacker.defMain);
@@ -297,7 +297,7 @@ Combat.targetIf = {};
 Combat.hitIf = {};
 //List of commons Target if 
 Combat.targetIf.global = function(atk,def){
-	return atk.id != def.id && !def.dead && def.combat && (def.type == 'player' || def.type == 'enemy') && fullList[def.id];
+	return atk.id != def.id && !def.dead && def.combat && (def.type == 'player' || def.type == 'enemy') && List.all[def.id];
 }
 
 //Used first in every target if test
@@ -307,7 +307,7 @@ Combat.targetIf.list = {
 			if(tar.summoned){
 				if(tar.summoned.father == self.id){ return false }
 				var hIf = typeof self.hitIf == 'function' ? self.hitIf : Combat.hitIf.list[self.hitIf];
-				return hIf(fullList[tar.summoned.father],self);
+				return hIf(List.all[tar.summoned.father],self);
 			}
 			return tar.type == "enemy"; 
 		} catch(err) { logError(err); }
@@ -317,7 +317,7 @@ Combat.targetIf.list = {
 		if(tar.summoned){
 			if(tar.summoned.father == self.id){ return false }
 			var hIf = typeof self.hitIf == 'function' ? self.hitIf : Combat.hitIf.list[self.hitIf];
-			return hIf(fullList[tar.summoned.father],self);
+			return hIf(List.all[tar.summoned.father],self);
 		}
 		return tar.type == "player"; 
 		} catch(err) { logError(err); }
@@ -329,15 +329,15 @@ Combat.targetIf.list = {
 	'summoned':(function(tar,self){
 		try {
 			if(tar.id == self.summoned.father){ return false; }
-			var hIf = typeof fullList[self.summoned.father].hitIf == 'function' ? fullList[self.summoned.father].hitIf : Combat.hitIf.list[fullList[self.summoned.father].hitIf];
-			return hIf(tar,fullList[self.summoned.father]);
+			var hIf = typeof List.all[self.summoned.father].hitIf == 'function' ? List.all[self.summoned.father].hitIf : Combat.hitIf.list[List.all[self.summoned.father].hitIf];
+			return hIf(tar,List.all[self.summoned.father]);
 		} catch(err) { logError(err); } //quickfix
 	}),
 };
 
 //Used first in every hit if test
 Combat.hitIf.global = function(atk,def){
-	return atk.id != def.id && atk.id != def.parent && !def.dead && def.combat && (def.type == 'player' || def.type == 'enemy') && fullList[def.id];
+	return atk.id != def.id && atk.id != def.parent && !def.dead && def.combat && (def.type == 'player' || def.type == 'enemy') && List.all[def.id];
 };
 
 (function(){

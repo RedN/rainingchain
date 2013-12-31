@@ -74,7 +74,7 @@ Attack.creation = function(player,attack,extra){
 	attack = useTemplate(attack,extra); //need here so angle isnt player angle
 	s.crAngle = s.angle; s.moveAngle = s.angle;
 
-	fullList[s.id] = s;
+	List.all[s.id] = s;
 	ActiveList.add(s);
 	
 	if(attack.type === 'strike'){ return Attack.creation.strike(player,attack);}
@@ -113,7 +113,7 @@ Attack.creation.bullet = function(player,b){
 	
 	initSprite(b,{'name':b.objImg.name,'anim':"Travel",'sizeMod':b.objImg.sizeMod});
 	
-	bList[b.id] = b;
+	List.bullet[b.id] = b;
 	return b;
 }; 
 
@@ -160,7 +160,7 @@ Attack.creation.strike = function(player,s){
 	
 	
 	
-	sList[s.id] = s;
+	List.strike[s.id] = s;
 	
 	return s;
 }

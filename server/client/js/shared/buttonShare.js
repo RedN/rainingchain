@@ -2,7 +2,7 @@ Button = {};
 
 //Button
 Button.creation = function (key,data){
-	if(server){ var list = mainList[key].btnList; } 
+	if(server){ var list = List.main[key].btnList; } 
 		else { var list = btnList;	}
 
 	var button = {}
@@ -30,7 +30,7 @@ Button.creation = function (key,data){
 
 //called everytime the player clicks. check the list of buttons at that frame and test for collision
 Button.test = function (key,x,y,side){
-	if(server){ var list = mainList[key].btnList; } 
+	if(server){ var list = List.main[key].btnList; } 
 		else { var list = btnList;}
 		
 	for(var i = list.length-1 ; i >= 0 ; i--){
@@ -42,7 +42,7 @@ Button.test = function (key,x,y,side){
 					innerFunction(list[i][side].func,list[i][side].param);} 
 					else {keyFunction(key,list[i][side].func,list[i][side].param);}
 					
-					if(list[i].help) mainList[key].help = list[i].help;
+					if(list[i].help) List.main[key].help = list[i].help;
 				}
 				if(!server) {
 					innerFunction(list[i][side].func,list[i][side].param);
@@ -59,9 +59,9 @@ Button.test = function (key,x,y,side){
 //check every frame if mouse is over something with a context (aka top left text)
 Button.context = function (key){
 	if(server){ 
-		var list = mainList[key].btnList; 
-		var x = fullList[key].mouseX;
-		var y = fullList[key].mouseY;
+		var list = List.main[key].btnList; 
+		var x = List.all[key].mouseX;
+		var y = List.all[key].mouseY;
 	} else { 
 		var list = btnList;	
 		var x = mouse.x;
@@ -70,22 +70,22 @@ Button.context = function (key){
 		
 	for(var i = 0 ; i < list.length ; i++){
 		if(Collision.PtRect({"x":x,'y':y},list[i].rect)){
-			if(server){ mainList[key].context = {'server':server,'text':list[i].text}; }
+			if(server){ List.main[key].context = {'server':server,'text':list[i].text}; }
 			if(!server){ clientContext = {'server':server,'text':list[i].text}; }
 			return;
 		}	
 	}
-	if(server){ mainList[key].context = {'server':server,'text':''}; }
+	if(server){ List.main[key].context = {'server':server,'text':''}; }
 	if(!server){ clientContext = {'server':server,'text':''}; }
 }
 
 Button.optionList = function(key,option){
 	if(server){
-		var player = fullList[key];
+		var player = List.all[key];
 		option.x = player.mouseX;
 		option.y = player.mouseY,
 		option.server = server;
-		mainList[key].optionList = option;
+		List.main[key].optionList = option;
 	}
 	if(!server){
 		key.x = mouse.x;
@@ -100,15 +100,15 @@ Button.optionList = function(key,option){
 //called when player clicks. used to remove popup
 Button.reset = function(key){
 	if(server){
-		mainList[key].optionList = null;
-		mainList[key].popupList.weapon = 0;
-		mainList[key].popupList.armor = 0;
+		List.main[key].optionList = null;
+		List.main[key].popupList.weapon = 0;
+		List.main[key].popupList.armor = 0;
 		
-		for(var i in mainList[key].temp.reset){
-			mainList[key].temp.reset[i]--;
-			if(mainList[key].temp.reset[i] < 0){
-				delete mainList[key].temp[i];
-				delete mainList[key].temp.reset[i];
+		for(var i in List.main[key].temp.reset){
+			List.main[key].temp.reset[i]--;
+			if(List.main[key].temp.reset[i] < 0){
+				delete List.main[key].temp[i];
+				delete List.main[key].temp.reset[i];
 			}
 		}
 	}

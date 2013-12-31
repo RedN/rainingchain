@@ -1,5 +1,4 @@
 //Map
-var mapList = {};
 
 var Map = {};
 
@@ -8,12 +7,6 @@ initMapDb = function(){
     
 	mapDb = {
 		'test':[1,1],
-		/*
-		'ice'[1,1],
-		'fire'[1,1],
-		'twitch'[1,1],
-		'news'[1,1],
-		*/
 		'ryve':[3,1],
 	}
 
@@ -40,11 +33,9 @@ Map.creation = function(name,info){
 			}
 		}
 	}
-	mapList[name] = m;
+	List.map[name] = m;
 	
 }
-
-
 
 
 

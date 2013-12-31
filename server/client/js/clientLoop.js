@@ -12,16 +12,16 @@ Loop.send = function(){
 }
 
 Loop.update = function(){
-	for(var i in fullList){
-		if(fullList[i].sprite){	Sprite.update(fullList[i]); }
-		if(fullList[i].chatHead){ Loop.update.chatHead(fullList[i]); }
+	for(var i in List.all){
+		if(List.all[i].sprite){	Sprite.update(List.all[i]); }
+		if(List.all[i].chatHead){ Loop.update.chatHead(List.all[i]); }
 	}
 	Sprite.update(player);
 	if(player.chatHead){ Loop.update.chatHead(player); }
 	
 	Anim.update();
 	// BROKEN Mortal.update.permBoost(player);    //check if server send new boost info
-	map = mapList[player.map];
+	map = List.map[player.map];
 	if(weaponDb[player.weapon.id]){ player.weapon = weaponDb[player.weapon.id]; }
 	
 	//Add to ChatBox which was added by main
@@ -47,9 +47,9 @@ Loop.update.chatHead = function(mort){	//weird name
 
 remove = function(i){
 	i = typeof i === 'string' ? i : i.id;
-	delete bList[i]; 
-	delete mList[i];
-	delete dropList[i]; 
-	delete fullList[i]; 
+	delete List.bullet[i]; 
+	delete List.mortal[i];
+	delete List.drop[i]; 
+	delete List.all[i]; 
 
 }

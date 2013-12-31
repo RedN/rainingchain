@@ -125,8 +125,8 @@ initItemDb = function (cb){
 });}
 
 selectInv = function(key,obj){
-	mainList[key].temp.selectInv = obj;
-	mainList[key].temp.reset.selectInv = 1;
+	List.main[key].temp.selectInv = obj;
+	List.main[key].temp.reset.selectInv = 1;
 }
 
 

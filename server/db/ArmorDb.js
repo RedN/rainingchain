@@ -167,13 +167,13 @@ updateArmor = function(player){
 }
 
 switchArmor = function(key,name){
-	var old = fullList[key].armor.piece[armorDb[name].piece];
+	var old = List.all[key].armor.piece[armorDb[name].piece];
 	var armor = armorDb[name];
-	mList[key].armor.piece[armor.piece] = armor;
-	Mortal.permBoost(key,armor.piece,mList[key].armor.piece[armor.piece].boost);
-	updateArmor(mList[key]);
-	mainList[key].invList.remove(name);
-	mainList[key].invList.add(old.id);
+	List.mortal[key].armor.piece[armor.piece] = armor;
+	Mortal.permBoost(List.all[key],armor.piece,List.mortal[key].armor.piece[armor.piece].boost);
+	updateArmor(List.mortal[key]);
+	List.main[key].invList.remove(name);
+	List.main[key].invList.add(old.id);
 	
 }
 

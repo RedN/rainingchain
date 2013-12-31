@@ -21,26 +21,26 @@ Loop = function(){
 }
 
 Loop.Mortal = function(){
-	for (var i in mList ){     
-	    Mortal.loop(mList[i]); 
+	for (var i in List.mortal ){     
+	    Mortal.loop(List.mortal[i]); 
 	}
 }
 
 Loop.Bullet = function (){
-	for(var i in bList){
-		Bullet.loop(bList[i]);
+	for(var i in List.bullet){
+		Bullet.loop(List.bullet[i]);
 	}
 }
 Loop.Strike = function(){
-	for(var i in sList){
-		Strike.loop(sList[i]); 
+	for(var i in List.strike){
+		Strike.loop(List.strike[i]); 
 	}
 }
 
 
 Loop.EnemyGroup = function(){
-	for(var i in egList){
-		var g = egList[i];
+	for(var i in List.group){
+		var g = List.group[i];
 		var list = g.list;
 		var bool = true;
 		
@@ -54,13 +54,13 @@ Loop.EnemyGroup = function(){
 				continue;
 			}
 		}
-		if(!Object.keys(g.list)){ delete egList[i]; continue; } //if deleted all enemies in group
+		if(!Object.keys(g.list)){ delete List.group[i]; continue; } //if deleted all enemies in group
 		
 		if(bool){ //aka all dead
 			g.respawn--;
 			if(g.respawn <= 0){
 				Mortal.creation.group.apply(this,g.param); 
-				delete egList[i];
+				delete List.group[i];
 				continue;
 			}
 		}	
@@ -69,8 +69,8 @@ Loop.EnemyGroup = function(){
 
 //Check inactivity of players 
 Loop.logOut = function(){
-	for(var key in socketList){
-		if(socketList[key].toRemove){
+	for(var key in List.socket){
+		if(List.socket[key].toRemove){
 			disconnectPlayer(key,'Disconnected due to inactivity.');
 		}
 	}
@@ -94,10 +94,10 @@ ActiveList.test = function(mort,obj){
 
 
 ActiveList.add = function(bullet){
-	for(var i in mList){
-		if(ActiveList.test(mList[i],bullet)){ 
-			mList[i].activeList[bullet.id] = bullet.id;
-			if(mList[i].type != 'player' || bullet.type == 'strike'){ bullet.viewedBy[mList[i].id] = mList[i]; }
+	for(var i in List.mortal){
+		if(ActiveList.test(List.mortal[i],bullet)){ 
+			List.mortal[i].activeList[bullet.id] = bullet.id;
+			if(List.mortal[i].type != 'player' || bullet.type == 'strike'){ bullet.viewedBy[List.mortal[i].id] = List.mortal[i]; }
 		}
 	}
 }

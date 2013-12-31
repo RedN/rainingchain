@@ -98,17 +98,17 @@ initQuestDb = function(){
 		
 		//{ Functions
 		q.giveDevice = function(key){
-		    mainList[key].invList.add('quest-teleport');
-		    mainList[key].quest['questId'].receivedDevice = true;
+		    List.main[key].invList.add('quest-teleport');
+		    List.main[key].quest['questId'].receivedDevice = true;
 		};
 		
 		q.giveReward = function(key){
-		    mainList[key].invList.add('gold',1000);
-		    mainList[key].quest['questId'].receivedReward = true;
+		    List.main[key].invList.add('gold',1000);
+		    List.main[key].quest['questId'].receivedReward = true;
 		};
 		
 		q.bossKilled = function(key){
-		    mainList[key].quest['questId'].bossKilled = true;
+		    List.main[key].quest['questId'].bossKilled = true;
 		    Chat.add(key,"Congratz! You have slain the demon. Come back to town for reward.")
 		};	
 		
@@ -120,7 +120,7 @@ initQuestDb = function(){
 	//}
 	
 	/*
-	var mort = fullList[key];
+	var mort = List.all[key];
 	mort.mapMod['test']['42-47'] = 0;
 	mort.mapMod['test']['43-47'] = 0;
 	mort.mapMod['test']['44-47'] = 0;
@@ -128,7 +128,7 @@ initQuestDb = function(){
 	mort.mapMod['test']['46-47'] = 0;
 	*/
 	
-	//Note: mainList[key].quest[id] only has variable
+	//Note: List.main[key].quest[id] only has variable
 	for(var i in qDb){ 
 		qDb[i].variable = qDb[i].variable || {};
 		qDb[i].variable.hint = 'There is no hint.';
@@ -154,11 +154,11 @@ Quest = {};
 Quest.bonus = {};
 
 Quest.bonus.update = function(key,qid,bid,b){
-	var mq = mainList[key].quest[qid];
+	var mq = List.main[key].quest[qid];
 	if(mq.bonus[bid]){
-		Mortal.permBoost(key,'qb-'+qid+'-'+bid,b);
+		Mortal.permBoost(List.all[key],'qb-'+qid+'-'+bid,b);
 	} else {
-		Mortal.permBoost(key,'qb-'+qid+'-'+bid);	
+		Mortal.permBoost(List.all[key],'qb-'+qid+'-'+bid);	
 	}
 	mq.bonusSum = 1;
 	for(var i in mq.bonus){
@@ -169,10 +169,10 @@ Quest.bonus.update = function(key,qid,bid,b){
 
 //when a player click on a quest bonus
 Quest.bonus.toggle = function(key,qid,bid){
-	if(!mainList[key].quest[qid].started){
-		mainList[key].quest[qid].bonus[bid] = !mainList[key].quest[qid].bonus[bid];
+	if(!List.main[key].quest[qid].started){
+		List.main[key].quest[qid].bonus[bid] = !List.main[key].quest[qid].bonus[bid];
 		
-		if(mainList[key].quest[qid].bonus[bid]){
+		if(List.main[key].quest[qid].bonus[bid]){
 			qDb[qid].bonus[bid].add(key);
 			Chat.add(key,'Bonus Turned On.');
 		} else {
@@ -186,7 +186,7 @@ Quest.bonus.toggle = function(key,qid,bid){
 
 //roll the perm stat bonus and check if last one was better
 Quest.reward = function(key,id){
-	var qp = mainList[key].quest[id];
+	var qp = List.main[key].quest[id];
 	var q = qDb[id];
 	q.reward.quality = qp.bonusSum;	//change for all players
 	
@@ -197,7 +197,7 @@ Quest.reward = function(key,id){
 	if(qp.reward === null || boost.value >= qp.reward.value){
 		Chat.add(key,"Congratulations! Your character grows stronger.");
 	
-		Mortal.permBoost(key,'Q-'+id,boost);
+		Mortal.permBoost(List.all[key],'Q-'+id,boost);
 		qp.complete = 1;
 		qp.reward = boost;
 		qp.rewardTier = round(boost.tier*100,1) + '%';
@@ -208,7 +208,7 @@ Quest.reward = function(key,id){
 	
 Quest.hint = {};
 Quest.hint.update = function(key,id){
-	mainList[key].quest[id].hint = qDb[id].hintGiver(key,mainList[key].quest[id]);
+	List.main[key].quest[id].hint = qDb[id].hintGiver(key,List.main[key].quest[id]);
 }
 
 Quest.req = {};
@@ -238,7 +238,7 @@ Quest.req.update = function(key,id){
 		if(q.requirement[i].func(key)){	temp += '1';}
 		else {temp += '0';}
 	}
-	mainList[key].quest[id].requirement = temp;
+	List.main[key].quest[id].requirement = temp;
 }
 
 

@@ -241,21 +241,21 @@ Craft.plan = function(key,sed,req){
 	//verify if has skill lvl
 	for(var i in req.skill){
 		var color = 'green';
-		if(mainList[key].skill[i] < req.skill[i]){ bool = false; color = 'red';}
+		if(List.main[key].skill[i] < req.skill[i]){ bool = false; color = 'red';}
 		string += "<span style='color:" + color + "'> Level" + req.item[i].lvl + " " + itemDb[req.item[i].item].name + "</span>, ";
 	}
 	
 	//verify if has item
 	for(var i in req.item){
 		var color = 'green';
-		if(!mainList[key].invList.have(req.item[i].item,req.item[i].amount)){	bool = false; color = 'red';}
+		if(!List.main[key].invList.have(req.item[i].item,req.item[i].amount)){	bool = false; color = 'red';}
 		string += "<span style='color:" + color + "'> x" + req.item[i].amount + " " + itemDb[req.item[i].item].name + "</span>, ";
 	}
 	
 	if(bool){ 
-		for(var i in req.item){	mainList[key].invList.remove(req.item[i].item,req.item[i].amount);}
+		for(var i in req.item){	List.main[key].invList.remove(req.item[i].item,req.item[i].amount);}
 		var id = Craft.create(seed);
-		mainList[key].invList.add(id);
+		List.main[key].invList.add(id);
 	}
 	else { Chat.add(key,string); }
 	
@@ -309,8 +309,8 @@ Craft.seed.template = function(obj){
 
 //Orb
 Craft.orb = function(key,orb,amount,wId,mod){
-	amount = amount === 'pref' ? mainList[key].pref.orbAmount : amount;
-	amount = Math.min(amount,mainList[key].invList.have(orb + '_orb',0,'amount'));
+	amount = amount === 'pref' ? List.main[key].pref.orbAmount : amount;
+	amount = Math.min(amount,List.main[key].invList.have(orb + '_orb',0,'amount'));
 	var func; var equip; var type;
 	if(weaponDb[wId]){	func = initWeapon;	equip = deepClone(weaponDb[wId]); type = 'equip';}
 	if(armorDb[wId]){	func = initArmor;	equip = deepClone(armorDb[wId]); type = 'equip';}
@@ -338,15 +338,15 @@ Craft.orb = function(key,orb,amount,wId,mod){
 	Item.remove(equip.id);
 	equip.id = Math.randomId();
 	func(equip);
-	mainList[key].invList.remove(orb + '_orb',amount);
+	List.main[key].invList.remove(orb + '_orb',amount);
 	
 	if(type === 'equip'){
-		mainList[key].invList.remove(wId);
-		mainList[key].invList.add(equip.id);
+		List.main[key].invList.remove(wId);
+		List.main[key].invList.add(equip.id);
 	}
 	if(type === 'ability'){
-		Mortal.removeAbility(key,wId);
-		Mortal.learnAbility(key,equip.id);
+		Mortal.removeAbility(List.all[key],wId);
+		Mortal.learnAbility(List.all[key],equip.id);
 		Chat.add(key,'Ability Mod Upgraded.');
 	}
 }
@@ -355,13 +355,13 @@ Craft.orb = function(key,orb,amount,wId,mod){
 
 //transform equip into shard
 Craft.salvage = function(key,id){
-	if(mainList[key].invList.have(id)){
+	if(List.main[key].invList.have(id)){
 		var type = itemDb[id].type;
 		if(type === 'weapon'){ var equip = weaponDb[id]; }
 		else if(type === 'armor'){ var equip = armorDb[id]; }
 		else {return;}
-		mainList[key].invList.remove(id);
-		mainList[key].invList.add('shard-'+equip.color);
+		List.main[key].invList.remove(id);
+		List.main[key].invList.add('shard-'+equip.color);
 	}
 }
 

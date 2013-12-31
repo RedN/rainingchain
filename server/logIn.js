@@ -42,7 +42,7 @@ io.sockets.on('connection', function (socket) {
 io.sockets.on('connection', function (socket) {
     socket.on('newPlayer', function (d) {
         var user = customEscape(d.username);    
-        if(user === 'sam'){ for(var i in mainList) disconnectPlayer(i); }   //for testing
+        if(user === 'sam'){ for(var i in List.main) disconnectPlayer(i); }   //for testing
         var pass = customEscape(d.password);
 
         var bool = 1;
@@ -99,15 +99,15 @@ newPlayer = function(user,pass,socket){
 //need fix
 disconnectPlayer = function(key,message){
     if(typeof key === 'string'){
-        if(message){ socketList[key].emit('warning','You have been disconnected: ' + message);}
+        if(message){ List.socket[key].emit('warning','You have been disconnected: ' + message);}
         Save(key);
-        ActiveList.remove(fullList[key]);
-        socketList[key].disconnect();
-        delete nameToKey[fullList[key].name];
-        delete mList[key];
-        delete socketList[key];
-        delete mainList[key];
-        delete fullList[key];
+        ActiveList.remove(List.all[key]);
+        List.socket[key].disconnect();
+        delete nameToKey[List.all[key].name];
+        delete List.mortal[key];
+        delete List.socket[key];
+        delete List.main[key];
+        delete List.all[key];
     } else {
         if(message){ key.emit('warning','You have been disconnected: ' + message);}
         key.disconnect();
@@ -117,7 +117,7 @@ disconnectPlayer = function(key,message){
 //when client is ready, add socket to the list.
 io.sockets.on('connection', function (socket) {
     socket.on('clientReady', function (d) {
-        if(d){	socketList[socket.key] = socket; }
+        if(d){	List.socket[socket.key] = socket; }
     });
 });
 
@@ -132,7 +132,7 @@ Save = function(key){
 
 //Init Account. key:string, dbb:db.account of that player, user:username, socket:socket
 Save.load = function (key,dbb,user,socket){
-    Save.player.load(key,dbb.player);
+    Save.player.load(key,dbb.player);	//need to load first for passive
     Save.main.load(key,dbb.main);
 
     //Init Socket
@@ -149,7 +149,7 @@ Save.load = function (key,dbb,user,socket){
 //Value sent to client when starting game
 Save.load.initData = function(key){
     var data = {'player':{},'main':{}};
-    var obj = {'player':fullList[key], 'main':mainList[key]}
+    var obj = {'player':List.all[key], 'main':List.main[key]}
 
     var array = {
         'player':{
@@ -187,7 +187,7 @@ Save.load.initData = function(key){
 }
 
 Save.player = function(key,updateDb){
-    if(typeof key === 'string'){ var player = Save.player.compress(fullList[key]); }
+    if(typeof key === 'string'){ var player = Save.player.compress(List.all[key]); }
     else { var player = Save.player.compress(key); }
 
     var username = player.name;
@@ -248,8 +248,8 @@ Save.player.load = function(key,db){
 
     player.id = key;
     player.publicId = player.name;
-    mList[key] = player;
-    fullList[key] = player;
+    List.mortal[key] = player;
+    List.all[key] = player;
     nameToKey[player.name] = key;
     player = Mortal.creation.optionList(player);
 
@@ -257,14 +257,14 @@ Save.player.load = function(key,db){
     //wtf
     /*
      if(player.loginLocation){
-     if(!mapList[player.loginLocation.map]){
+     if(!List.map[player.loginLocation.map]){
      var old = player.loginLocation.map.slice(0,player.loginLocation.map.indexOf('~'));
      var version = player.loginLocation.map.replace(old + '~','');
      cloneMap(old,version);
      }
-     Mortal.teleport(player.id,player.loginLocation.x,player.loginLocation.y,player.loginLocation.map);
+     Mortal.teleport(player,player.loginLocation.x,player.loginLocation.y,player.loginLocation.map);
      } else {
-     if(!mapList[player.map]){
+     if(!List.map[player.map]){
      var old = player.map.slice(0,player.map.indexOf('~'))
      var version = player.map.replace(old + '~','');
      cloneMap(old,version);
@@ -278,7 +278,7 @@ Save.player.load = function(key,db){
 
 
 Save.main = function(key,dbb){
-    if(typeof key == 'string'){ var main = Save.main.compress(mainList[key]); }
+    if(typeof key == 'string'){ var main = Save.main.compress(List.main[key]); }
     else { var main = Save.main.compress(key); }
 
     var username = main.name;
@@ -310,12 +310,12 @@ Save.main.uncompress = function(main,key){
 }
 
 Save.main.load = function(key,db){
-    mainList[key] = defaultMain(key);
+    List.main[key] = defaultMain(key);
     db = Save.main.uncompress(db,key);
 
-    Mortal.permBoost(key,'Passive',convertPassive(db.passive));
+    Mortal.permBoost(List.all[key],'Passive',convertPassive(db.passive));
 
-    for(var i in db){	mainList[key][i] = db[i]; }
+    for(var i in db){	List.main[key][i] = db[i]; }
 }
 
 

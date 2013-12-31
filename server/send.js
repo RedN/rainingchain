@@ -2,7 +2,7 @@ Change = {};
 
 //Send what has changed to the client.
 Change.send = function(){
-	for (var key in socketList){
+	for (var key in List.socket){
 		var sa = {};
 	
 		sa.i = {'f':{},'p':{},'m':{}};  //init (first time seen by player)
@@ -10,16 +10,16 @@ Change.send = function(){
 		sa.a = [];  //animation
 		
 		//Update Private Player
-		var player = fullList[key];
+		var player = List.all[key];
 		sa.u.p = player.privateChange;
 		sa.u.p = Change.send.compressXYA(sa.u.p);
 		
 		
 		
-		//Update ActiveList AKA fullList
+		//Update ActiveList AKA List.all
 		var array = [];
 		for (var i in player.activeList){
-			var bool = true;	var obj = fullList[i];
+			var bool = true;	var obj = List.all[i];
 			
 			if(!obj){ delete player.activeList[i]; continue; }
 			
@@ -40,17 +40,17 @@ Change.send = function(){
 		}
 		
 		//Main
-		sa.u.m = mainList[key].change;
+		sa.u.m = List.main[key].change;
 		
 		//Anim
 		//note: remove map and viewedif from .target and slot?
-		for(var i in aList){
-			var testTarget = aList[i].target;
-			if(typeof testTarget !== 'object'){ testTarget = fullList[testTarget]; }
+		for(var i in List.anim){
+			var testTarget = List.anim[i].target;
+			if(typeof testTarget !== 'object'){ testTarget = List.all[testTarget]; }
 			
 			if(testTarget && ActiveList.test(player,testTarget))	{
-				if(typeof aList[i].target !== 'object'){ aList[i].target = fullList[aList[i].target].publicId; }
-				sa.a.push(aList[i]); 
+				if(typeof List.anim[i].target !== 'object'){ List.anim[i].target = List.all[List.anim[i].target].publicId; }
+				sa.a.push(List.anim[i]); 
 			}	
 		}
 		
@@ -69,7 +69,7 @@ Change.send = function(){
 		if(Object.keys(sa.u).length === 0){ delete sa.u }
 		if(Object.keys(sa).length === 0){ continue; }
 		//Send
-		socketList[key].emit('change', sa );
+		List.socket[key].emit('change', sa );
 	    
 	    Test.bandwidth('upload',sa);
 	}
@@ -98,9 +98,9 @@ Change.send.compressXYA = function(info){
 
 
 Change.send.reset = function(){
-	aList = {};
-	for(var i in fullList){ fullList[i].change = {};}
-	for(var i in mainList){ mainList[i].change = {}; fullList[i].privateChange = {};}
+	List.anim = {};
+	for(var i in List.all){ List.all[i].change = {};}
+	for(var i in List.main){ List.main[i].change = {}; List.all[i].privateChange = {};}
 }
 
 
@@ -207,7 +207,7 @@ Change.send.convert.tradeWindow = function(data){
 		draw.tradeList[i][0] = itemDb[data.tradeList[i][0]].visual;
 		draw.tradeList[i][1] = data.tradeList[i][1];
 	}
-	draw.trader = fullList[draw.trader].name;
+	draw.trader = List.all[draw.trader].name;
 	return draw;
 }
 

@@ -15,7 +15,7 @@ Clan.creation = function(key,name){
 	if(clanDb[name] !== undefined){
 		Chat.add(key,'This name is already taken.');	return;
 	}
-	var player = fullList[key];
+	var player = List.all[key];
 	clanDb[name] = {'name':name,'nick':name,'id':name,'memberList':{}}
 	clanDb[name].memberList[player.name] = {'admin':1,'rank':10,'kick':1};
 
@@ -27,8 +27,8 @@ Clan.creation = function(key,name){
 
 
 Clan.enter = function(key,name){
-	var main = mainList[key];
-	var pn = fullList[key].name;
+	var main = List.main[key];
+	var pn = List.all[key].name;
 	
 	if(!clanDb[name]){
 		Chat.add(key,'This clan doesn\'t exist.');	return;
@@ -51,8 +51,8 @@ Clan.enter = function(key,name){
 }
 
 Clan.leave = function(key,name){
-	var pn = fullList[key].name;
-	var main = mainList[key];
+	var pn = List.all[key].name;
+	var main = List.main[key];
 	
 	for(var i in main.clanList){
 		if(name == 'ALL' || i == 'name'){

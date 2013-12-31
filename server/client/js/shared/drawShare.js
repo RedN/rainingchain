@@ -17,19 +17,19 @@ Draw = {
 Draw.loop = function (key){
 	if(server){
 		//Clear
-		mainList[key].btnList = [];
+		List.main[key].btnList = [];
 		
 		//Draw	
 		Draw.entity.drop(key);
 		Draw.entity.mortal(key);
 		
-		if(mainList[key].dialogue && mainList[key].dialogue.option){ Draw.chat(key); }
+		if(List.main[key].dialogue && List.main[key].dialogue.option){ Draw.chat(key); }
 		
 		Draw.tab(key);
 		Draw.window(key);
 		Draw.popup(key);
 		
-		if(mainList[key].optionList){ Draw.optionList(key); }
+		if(List.main[key].optionList){ Draw.optionList(key); }
 		
 		Button.context(key);
 	}
@@ -54,8 +54,8 @@ Draw.loop = function (key){
 		Draw.anim('a');  //above player
 		Draw.map('a');   //above player
 		
-		for(var i in mList){
-			if(mList[i].chatHead){ Draw.entity.mortal.chatHead(mList[i]); } //draw text over head
+		for(var i in List.mortal){
+			if(List.mortal[i].chatHead){ Draw.entity.mortal.chatHead(List.mortal[i]); } //draw text over head
 		}
 		if(player.chatHead){ Draw.entity.mortal.chatHead(player); }
 		
@@ -80,10 +80,10 @@ Draw.loop = function (key){
 Draw.anim = function (layer){
 	ctx = ctxList.stage;
 	
-	for(var i in aList){
-		if(animDb[aList[i].name].layer === layer){
+	for(var i in List.anim){
+		if(animDb[List.anim[i].name].layer === layer){
 			
-			var anim = aList[i];
+			var anim = List.anim[i];
 			var animFromDb = animDb[anim.name];
 			var image = animFromDb.img;
 			var height = image.height;
@@ -110,10 +110,10 @@ Draw.anim = function (layer){
 //{Draw Entity
 Draw.entity.mortal = function (key){
 	if(server){
-		for(var i in fullList[key].activeList){
-			var mort = fullList[i];
+		for(var i in List.all[key].activeList){
+			var mort = List.all[i];
 			if(mort && !mort.dead && i != key && mort.hitBox){
-				var player = mList[key];
+				var player = List.mortal[key];
 				
 				var x = WIDTH2 + mort.x - player.x;
 				var y = HEIGHT2 + mort.y - player.y;
@@ -186,8 +186,8 @@ Draw.entity.mortal.hpBar = function(mort){
 }
 
 Draw.entity.bullet = function(){
-	for(var i in bList){
-		Draw.entity.sprite(bList[i]);
+	for(var i in List.bullet){
+		Draw.entity.sprite(List.bullet[i]);
 	}
 }
 
@@ -222,16 +222,16 @@ Draw.entity.sprite = function (mort){
 
 Draw.entity.drop = function(key){
 	if(server){
-		for(var i in dropList){
+		for(var i in List.drop){
 			
-			var numX = WIDTH2 + dropList[i].x - mList[key].x;
-			var numY = HEIGHT2 + dropList[i].y - mList[key].y;
+			var numX = WIDTH2 + List.drop[i].x - List.mortal[key].x;
+			var numY = HEIGHT2 + List.drop[i].y - List.mortal[key].y;
 			
 			Button.creation(key,{
 			"rect":[numX,numX+32,numY,numY+32],
 			"left":{"func":pickDrop,"param":[i]},
-			'right':{'func':rightClickDrop,'param':[[dropList[i].x,dropList[i].x+32,dropList[i].y,dropList[i].y+32]]},
-			'text':'Pick ' + itemDb[dropList[i].item].name,
+			'right':{'func':rightClickDrop,'param':[[List.drop[i].x,List.drop[i].x+32,List.drop[i].y,List.drop[i].y+32]]},
+			'text':'Pick ' + itemDb[List.drop[i].item].name,
 			
 			});	
 		
@@ -241,8 +241,8 @@ Draw.entity.drop = function(key){
 	if(!server){
 		ctx = ctxList.stage;
 		
-		for(var i in dropList){
-			var drop = dropList[i];
+		for(var i in List.drop){
+			var drop = List.drop[i];
 					
 			var numX = WIDTH2 + drop.x - player.x;
 			var numY = HEIGHT2 + drop.y - player.y;
@@ -260,7 +260,7 @@ Draw.entity.drop = function(key){
 //{Upper Interface
 Draw.minimap = function (){ ctxrestore();
 	ctx = ctxList.stage;
-	var map = mapList[player.map];
+	var map = List.map[player.map];
 	var mapX = Math.min(map.img.b.length-1,Math.max(0,Math.floor((player.x-1024)/2048)));
 	var mapY = Math.min(map.img.b[mapX].length-1,Math.max(0,Math.floor((player.y-1024)/2048)));
 	var mapXY = map.img.b[mapX][mapY];
@@ -327,8 +327,8 @@ Draw.minimap.icon = function(){
 	var h = HEIGHT/pref.mapRatio;
 	
 	
-	for(var i in mList){
-		var m = mList[i];
+	for(var i in List.mortal){
+		var m = List.mortal[i];
 		if(m.minimapIcon){
 			var vx = m.x - player.x;
 			var vy = m.y - player.y;
@@ -426,7 +426,7 @@ Draw.context = function (){ ctxrestore();
 //Map
 Draw.map = function (layer){ ctxrestore();
 	ctx = ctxList.stage;
-	var map = mapList[player.map];
+	var map = List.map[player.map];
 	var mapX = Math.min(map.img[layer].length-1,Math.max(0,Math.floor((player.x-1024)/2048)));
 	var mapY = Math.min(map.img[layer][mapX].length-1,Math.max(0,Math.floor((player.y-1024)/2048)));
 	var mapXY = map.img[layer][mapX][mapY];
@@ -452,8 +452,8 @@ Draw.map = function (layer){ ctxrestore();
 
 //Draw Objects
 setSortList = function(){
-	for(var i in mList){
-		drawSortList.push(mList[i]);
+	for(var i in List.mortal){
+		drawSortList.push(List.mortal[i]);
 	}
 	drawSortList.push(player);
 	drawSortList.sort(sortFunction);	
@@ -482,7 +482,7 @@ drawSort = function (){ ctxrestore();
 
 //{Tab	
 Draw.tab = function(key){ ctxrestore();
-	if(server){ var tab = mainList[key].currentTab; } 
+	if(server){ var tab = List.main[key].currentTab; } 
 		else { var tab = currentTab; }
 	
 	Draw.tab[tab](key);
@@ -612,7 +612,7 @@ Draw.tab.equip = function (key){ ctxrestore();
 			/*
 			Button.creation(key,{
 				"rect":[numX,numX+40,numY,numY+40],
-				//"left":{"func":openPopup,"param":['armor',fullList[key].armor.piece[Cst.equip.armor.piece[i]]]},
+				//"left":{"func":openPopup,"param":['armor',List.all[key].armor.piece[Cst.equip.armor.piece[i]]]},
 				"text":'Swap Armor'
 				});
 			*/
@@ -697,7 +697,7 @@ Draw.tab.skill = function(key){ ctxrestore();
 	var s = Draw.tab.main(key);	var sx = s.x; var sy = s.y; var w = s.w; var h = s.h; var mx = s.mx; var my = s.my;
 	ctx = ctxList.stage;
 	
-	if(server){ var exp = fullList[key].exp; var lvl = fullList[key].lvl; } 
+	if(server){ var exp = List.all[key].exp; var lvl = List.all[key].lvl; } 
 		else { var exp = player.exp; var lvl = player.lvl;	}
 	
 	
@@ -912,7 +912,7 @@ Draw.tab.setting = function(key){
 	
 //{Window
 Draw.window = function(key){ ctxrestore();
-	if(server){ var win = mainList[key].windowList; } 
+	if(server){ var win = List.main[key].windowList; } 
 		else { var win = windowList; }
 	
 	if(win.bank){Draw.window.bank(key);}
@@ -1496,8 +1496,8 @@ Draw.window.ability.action.summon = function(diffX,diffY){  ctxrestore();
 //}
 
 Draw.window.trade = function (key){ ctxrestore();
-	if(server){ var trade = mainList[key].windowList.trade; 
-				var	tList = mainList[key].tradeList;  } 
+	if(server){ var trade = List.main[key].windowList.trade; 
+				var	tList = List.main[key].tradeList;  } 
 		else {	var trade = windowList.trade;	
 				var tList = tradeList;	}
 	
@@ -1585,7 +1585,7 @@ Draw.window.trade = function (key){ ctxrestore();
 }
 
 Draw.window.shop = function (key){ ctxrestore();
-	if(server){ var shop = mainList[key].windowList.shop; } 
+	if(server){ var shop = List.main[key].windowList.shop; } 
 		else { var shop = windowList.shop;	}
 		
 	var s = Draw.window.main(key,shop.name);	var sx = s.sx; var sy = s.sy; var mx = s.mx; var my = s.my; var zx = s.zx; var zy = s.zy; var dw = s.dw; var dh = s.dh; var mdx = s.mdx; var mcx = s.mcx; var w = s.w; var h = s.h; 
@@ -1910,7 +1910,7 @@ Draw.window.quest = function (key){ ctxrestore();
 
 //{Popup
 Draw.popup = function(key){
-	if(server){ var pop = mainList[key].popupList; } 
+	if(server){ var pop = List.main[key].popupList; } 
 		else { var pop = popupList; }
 	
 	if(pop.weapon){Draw.popup.equip(key,'weapon');}
@@ -1994,12 +1994,12 @@ Draw.popup.equip = function(key,type){ ctxrestore();
 }
 
 openPopup = function(key,name,param){
-	var player = fullList[key];
+	var player = List.all[key];
 	if(name === 'weapon'){
-		mainList[key].popupList.weapon = {'x':player.mouseX,'y':player.mouseY,'info':param};
+		List.main[key].popupList.weapon = {'x':player.mouseX,'y':player.mouseY,'info':param};
 	}
 	if(name === 'armor'){
-		mainList[key].popupList.armor = {'x':player.mouseX,'y':player.mouseY,'info':param};
+		List.main[key].popupList.armor = {'x':player.mouseX,'y':player.mouseY,'info':param};
 	}
 	
 }
@@ -2007,7 +2007,7 @@ openPopup = function(key,name,param){
 
 //Option
 Draw.optionList = function(key){ ctxrestore();
-	if(server){ var opt = mainList[key].optionList; } 
+	if(server){ var opt = List.main[key].optionList; } 
 		else { var opt = optionList; }
 	ctx = ctxList.pop;
 	
@@ -2033,7 +2033,7 @@ Draw.optionList = function(key){ ctxrestore();
 	
 	if(server){
 		for(var i = 0 ; i < option.length ; i++){
-			//var name = parseOptionName(option[i].name); //bug cuz would need to use mainList[key].pref
+			//var name = parseOptionName(option[i].name); //bug cuz would need to use List.main[key].pref
 			name = option[i].name;
 			
 			Button.creation(key,{
@@ -2114,7 +2114,7 @@ parseOptionName = function(data){
 
 //Chat
 Draw.chat = function(key){ ctxrestore();
-	if(server){ var dia = mainList[key].dialogue; } 
+	if(server){ var dia = List.main[key].dialogue; } 
 		else { var dia = dialogue; }
 	ctx = ctxList.stage;
 	

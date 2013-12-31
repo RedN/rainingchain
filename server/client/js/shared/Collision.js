@@ -19,9 +19,9 @@ Collision.PtMap = function(pt,map,player){
 		return player.mapMod[map][gridX + '-' + gridY];
 	}
 	
-	if(mapList[map].grid[gridY] === undefined){ return  1;	} 
-	else if(mapList[map].grid[gridY][gridX] === undefined){return  1;} 
-	else {return Number(mapList[map].grid[gridY][gridX]);}
+	if(List.map[map].grid[gridY] === undefined){ return  1;	} 
+	else if(List.map[map].grid[gridY][gridX] === undefined){return  1;} 
+	else {return Number(List.map[map].grid[gridY][gridX]);}
 	return 1;
 }
 
@@ -71,7 +71,7 @@ Collision.PtRRect = function(pt,rotRect){
 
 
 Collision.getMouse = function(key){
-	if(server){ return {x:fullList[key].mouseX,y:fullList[key].mouseY}  }
+	if(server){ return {x:List.all[key].mouseX,y:List.all[key].mouseY}  }
 	else{ return {x:mouse.x,y:mouse.y} }
 }
 
@@ -83,9 +83,9 @@ Collision.BulletMortal = function(atk){
 		var player = atk.viewedBy[i];
 		if(Combat.hitIf.global(atk,player)){
 			var hIf = typeof atk.hitIf == 'function' ? atk.hitIf : Combat.hitIf.list[atk.hitIf];
-			if(!player || !fullList[atk.parent]){ return; }
+			if(!player || !List.all[atk.parent]){ return; }
 			
-			var a = hIf(player,fullList[atk.parent]);
+			var a = hIf(player,List.all[atk.parent]);
 			if((!atk.hitIfMod && a) || (atk.hitIfMod && !a)){
 				if(Collision.PtRect({'x':atk.x,'y':atk.y},Collision.getHitBox(player))){
 					Combat.collision(atk,player);
@@ -112,7 +112,7 @@ Collision.StrikeMortal = function(atk){
 		
 		//Test if can hit that target
 		var hIf = typeof atk.hitIf == 'function' ? atk.hitIf : Combat.hitIf.list[atk.hitIf];
-		var a = hIf(player,fullList[atk.parent]);
+		var a = hIf(player,List.all[atk.parent]);
 		if((!atk.hitIfMod && a) || (atk.hitIfMod && !a)){
 
 			//Test Center First with Rot Rect

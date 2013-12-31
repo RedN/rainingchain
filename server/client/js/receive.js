@@ -32,9 +32,9 @@ try {
     	for(var i in data.u.f){
             var changeList = data.u.f[i];
             for(var j in changeList){
-                changeViaArray({'origin':fullList[i],'array':j.split(','),'value':changeList[j]});
+                changeViaArray({'origin':List.all[i],'array':j.split(','),'value':changeList[j]});
     		}
-    		if(fullList[i]) fullList[i].toRemove = 0; 	
+    		if(List.all[i]) List.all[i].toRemove = 0; 	
     	}
     	
     
@@ -46,8 +46,8 @@ try {
 	}
 	
 	//Remove Inactive FullList
-	for(var i in fullList){
-		var mort = fullList[i];
+	for(var i in List.all){
+		var mort = List.all[i];
 		if(mort){	
 			mort.toRemove++;
 			if(mort.toRemove > 1){ //&& (!mort.sprite || (mort.sprite && mort.sprite.anim && !mort.sprite.anim.remove))){
@@ -90,22 +90,22 @@ Receive.init = function(obj){
 Receive.init.mortal = function(mort){
 	mort.toRemove = 0;
 	initSprite(mort,mort.sprite);
-	mList[mort.id] = mort;	
-	fullList[mort.id] = mort;	
+	List.mortal[mort.id] = mort;	
+	List.all[mort.id] = mort;	
 	
 }
 
 Receive.init.bullet = function(bullet){
 	bullet.toRemove = 0;
 	initSprite(bullet,bullet.sprite);
-	bList[bullet.id] = bullet;	
-	fullList[bullet.id] = bullet;	
+	List.bullet[bullet.id] = bullet;	
+	List.all[bullet.id] = bullet;	
 }
 
 Receive.init.anim = function(a){
 	if(typeof a.target === 'string'){
 		if(a.target === player.name){	a.target = player;
-		} else {a.target = fullList[a.target];}
+		} else {a.target = List.all[a.target];}
 	}
 	
 	a.id = Math.randomId();
@@ -116,7 +116,7 @@ Receive.init.anim = function(a){
 		a.y = a.target.y;
 		a.slot = 0;
 			
-		aList[a.id] = a;
+		List.anim[a.id] = a;
 	}
 	
 	if(sfxDb[animDb[a.name].sfx]){
@@ -130,8 +130,8 @@ Receive.init.anim = function(a){
 
 Receive.init.drop = function(drop){
 	drop.toRemove = 0;
-	dropList[drop.id] = drop;
-	fullList[drop.id] = drop;	
+	List.drop[drop.id] = drop;
+	List.all[drop.id] = drop;	
 }
 
 

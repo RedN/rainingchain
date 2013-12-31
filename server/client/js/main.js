@@ -11,13 +11,15 @@ var canvasX = 0, canvasY = 0;
 var ctxList = {};   //list of canvas (window,popup,stage)
 var drawSortList = [];  //used to store the actors to draw in the right order (z-index)
 
-var fullList = {};  //EVERYTHING
-var mList = {}; //all mortals (player,enemy)
-var bList = {}; //all bullet
-var dropList = {};  //all drop
+List = {};
+List.all = {};  //EVERYTHING
+List.mortal = {}; //all mortals (player,enemy)
+List.bullet = {}; //all bullet
+List.drop = {};  //all drop
 
-var sList = {}; //all strike
-var aList = {}; //all animation
+List.strike = {}; //all strike
+List.anim = {}; //all animation
+List.map = {};
 
 var weaponDb = {}, armorDb = {}, abilityDb = {}, itemDb = {};   //local compilation of information so server doesnt send many times the same info
 

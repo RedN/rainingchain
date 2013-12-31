@@ -7,8 +7,8 @@ var TIMER = {'priority':1,'reg':5,'slow':25};
 
 Change.update = function(){
 	//Entity
-	for(var i in fullList){
-		var mort = fullList[i];
+	for(var i in List.all){
+		var mort = List.all[i];
 		if(!mort.dead && mort.active !== false){
 		    for(var m in Change.update.list[mort.type]){         //m = watch or exist
     		    for (var k in Change.update.list[mort.type][m]){     //k = priority , reg , slow
@@ -17,8 +17,8 @@ Change.update = function(){
 		            	    Change.update[m](mort,Change.update.list[mort.type][m][k][j]);	
     }}}}}
 	//MainList
-	for(var i in mainList){
-		var mort = mainList[i];
+	for(var i in List.main){
+		var mort = List.main[i];
 		for(var m in Change.update.list.main){
     		for (var k in Change.update.list.main[m]){
     	        if(frameCount % TIMER[k] === 0){
@@ -26,8 +26,8 @@ Change.update = function(){
 			            Change.update[m](mort,Change.update.list.main[m][k][j]);	
     }}}}
 	//Private
-	for(var i in mainList){
-		var mort = fullList[i];
+	for(var i in List.main){
+		var mort = List.all[i];
     	for(var m in Change.update.list.priv){		
     	    for (var k in Change.update.list.priv[m]){
     	        if(frameCount % TIMER[k] === 0){

@@ -27,8 +27,8 @@ Mortal.loop = function(mort){
 		var i = mort.id;
 		if(frameCount % 2 == 0){ Draw.loop(i); }    //draw everything and add button
 		if(frameCount % 25 == 0){ Mortal.loop.friendList(mort); }    //check if any change in friend list
-		if(mainList[i].windowList.trade){ Mortal.loop.trade(mort); };    
-		if(mainList[i].dialogue){ Mortal.loop.dialogue(mort); }
+		if(List.main[i].windowList.trade){ Mortal.loop.trade(mort); };    
+		if(List.main[i].dialogue){ Mortal.loop.dialogue(mort); }
 		
 		Test.loop.player(i);	
 	}
@@ -140,19 +140,19 @@ Mortal.loop.summon = function(mort){
     //check if summon child still exist (assume player is the master)
 	for(var i in mort.summon){
 		for(var j in mort.summon[i].child){
-			if(!fullList[j]){ delete mort.summon[i].child[j]; }
+			if(!List.all[j]){ delete mort.summon[i].child[j]; }
 		}		
 	}
 	
 	//(assume player is child)
     if(mort.summoned && frameCount % 5 == 0){
-		if(!mort.summoned.father || !fullList[mort.summoned.father]){ Mortal.remove(mort); return; }
+		if(!mort.summoned.father || !List.all[mort.summoned.father]){ Mortal.remove(mort); return; }
 	    
 	    //if too far, teleport near master
-		if(mort.map != fullList[mort.summoned.father].map || distancePtPt(mort,fullList[mort.summoned.father]) >= mort.summoned.distance){
-			mort.x = fullList[mort.summoned.father].x + Math.random()*5-2;
-			mort.y = fullList[mort.summoned.father].y + Math.random()*5-2;
-			mort.map = fullList[mort.summoned.father].map;
+		if(mort.map != List.all[mort.summoned.father].map || distancePtPt(mort,List.all[mort.summoned.father]) >= mort.summoned.distance){
+			mort.x = List.all[mort.summoned.father].x + Math.random()*5-2;
+			mort.y = List.all[mort.summoned.father].y + Math.random()*5-2;
+			mort.map = List.all[mort.summoned.father].map;
 		}	
 		
 		mort.summoned.time -= 5;
@@ -165,9 +165,9 @@ Mortal.loop.summon = function(mort){
 //test collision with map
 Mortal.loop.bumper = function(mort){
 	mort.x = Math.max(mort.x,50);
-	mort.x = Math.min(mort.x,mapList[mort.map].grid[0].length*32-50);
+	mort.x = Math.min(mort.x,List.map[mort.map].grid[0].length*32-50);
 	mort.y = Math.max(mort.y,50);
-	mort.y = Math.min(mort.y,mapList[mort.map].grid.length*32-50);
+	mort.y = Math.min(mort.y,List.map[mort.map].grid.length*32-50);
 	
 	var bumperBox = mort.bumperBox;
 		
@@ -249,22 +249,22 @@ Mortal.loop.activeList = function(mort){
 	//Note: Could mix that together
 		
 	//Test Already in List if they deserve to stay
-	for(var j in mort.activeList){		//bug here if fullList[j] is undefined
-		if(!fullList[j]){
+	for(var j in mort.activeList){		//bug here if List.all[j] is undefined
+		if(!List.all[j]){
 			delete mort.activeList[j];
 			continue;
 		}
-		if(!ActiveList.test(mort,fullList[j])){
-			delete fullList[j].viewedBy[mort.id];
+		if(!ActiveList.test(mort,List.all[j])){
+			delete List.all[j].viewedBy[mort.id];
 			delete mort.activeList[j];
 		}
 	}
 	
 	//Add New Boys
-	for(var j in fullList){
-		if(ActiveList.test(mort,fullList[j]) && fullList[j].id != mort.id){
-			mort.activeList[j] = fullList[j].id;
-			if(mort.type !== 'player'){ fullList[j].viewedBy[mort.id] = mort;}
+	for(var j in List.all){
+		if(ActiveList.test(mort,List.all[j]) && List.all[j].id != mort.id){
+			mort.activeList[j] = List.all[j].id;
+			if(mort.type !== 'player'){ List.all[j].viewedBy[mort.id] = mort;}
 		}
 	}
 	
@@ -275,7 +275,7 @@ Mortal.loop.activeList = function(mort){
 Mortal.loop.target = function(enemy){
     var targetList = {}; 
 	for (var i in enemy.activeList){
-		var tar = fullList[i];
+		var tar = List.all[i];
 		var hIf = typeof enemy.targetIf == 'function' ? enemy.targetIf : Combat.hitIf.list[enemy.targetIf];
 			
 		if(Combat.targetIf.global(enemy,tar) && hIf(tar,enemy)){
@@ -295,15 +295,15 @@ Mortal.loop.target = function(enemy){
 }
 
 Mortal.loop.repulsion = function(enemy){
-	for(var i in mList){
-		if(enemy != mList[i]){
-			if(Collision.RectRect(Collision.getBumperBox(enemy),Collision.getBumperBox(mList[i]))){
-				var diffX = enemy.x- mList[i].x;
-				var diffY = enemy.y- mList[i].y;
+	for(var i in List.mortal){
+		if(enemy != List.mortal[i]){
+			if(Collision.RectRect(Collision.getBumperBox(enemy),Collision.getBumperBox(List.mortal[i]))){
+				var diffX = enemy.x- List.mortal[i].x;
+				var diffY = enemy.y- List.mortal[i].y;
 				var angle = atan2(diffY,diffX);
 				
 				enemy.spdX += 15*cos(angle); enemy.spdY += 15*sin(angle);
-				mList[i].spdX += -15*cos(angle); mList[i].spdY += -15*sin(angle);
+				List.mortal[i].spdX += -15*cos(angle); List.mortal[i].spdY += -15*sin(angle);
 			}		
 		}		
 	}
@@ -312,8 +312,8 @@ Mortal.loop.repulsion = function(enemy){
 //updat enemy input for movement.
 Mortal.loop.input = function(mort){
 	//Combat
-	if(mort.combat && mort.target && fullList[mort.target]){
-		var target = fullList[mort.target];
+	if(mort.combat && mort.target && List.all[mort.target]){
+		var target = List.all[mort.target];
 		var diffX = target.x - mort.x;
 		var diffY = target.y - mort.y;
 		var diff = Math.sqrt(diffX*diffX+diffY*diffY);
@@ -367,24 +367,24 @@ Mortal.loop.input = function(mort){
 //Non-Combat
 Mortal.loop.trade = function(mort){
 	var key = mort.id;
-	if(mainList[mainList[key].windowList.trade.trader]){
-		mainList[key].windowList.trade.tradeList = mainList[mainList[key].windowList.trade.trader].tradeList;	
-		mainList[key].windowList.trade.confirm.other = mainList[mainList[key].windowList.trade.trader].windowList.trade.confirm.self;
+	if(List.main[List.main[key].windowList.trade.trader]){
+		List.main[key].windowList.trade.tradeList = List.main[List.main[key].windowList.trade.trader].tradeList;	
+		List.main[key].windowList.trade.confirm.other = List.main[List.main[key].windowList.trade.trader].windowList.trade.confirm.self;
 	
-		if(mainList[key].windowList.trade.confirm.other && mainList[key].windowList.trade.confirm.self){
-			tradeItem(key,mainList[key].windowList.trade.trader);
+		if(List.main[key].windowList.trade.confirm.other && List.main[key].windowList.trade.confirm.self){
+			tradeItem(key,List.main[key].windowList.trade.trader);
 		}
 	} else {
-		mainList[key].windowList.trade = 0;
+		List.main[key].windowList.trade = 0;
 	}
 }
 
 //test if player has move away to end dialogue
 Mortal.loop.dialogue = function(mort){
 	var key = mort.id;
-	var dx = mainList[key].dialogueLoc.x;
-	var dy = mainList[key].dialogueLoc.y;
-	if(!Collision.PtRect({'x':mort.x,'y':morty},[dx-100,dx+100,dy-100,dy+100])){
+	var dx = List.main[key].dialogueLoc.x;
+	var dy = List.main[key].dialogueLoc.y;
+	if(!Collision.PtRect({'x':mort.x,'y':mort.y},[dx-100,dx+100,dy-100,dy+100])){
 		Dialogue.end(key);
 	}
 
@@ -393,14 +393,14 @@ Mortal.loop.dialogue = function(mort){
 
 Mortal.loop.friendList = function(mort){
 	var key = mort.id;
-	var fl = mainList[key].friendList;
+	var fl = List.main[key].friendList;
     
     var test = function(res){
 		fl[to].online = res;
 	};
 		
 	for(var i in fl){
-		testSendPm(fullList[key].name,i,test);			
+		testSendPm(List.all[key].name,i,test);			
 	}
 }
 

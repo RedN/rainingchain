@@ -153,31 +153,31 @@ Draw.convert.statusMod = function(type,name){
 
 
 closeAllWindow = function(key){
-	if(mainList[key].windowList.trade.trader){ mainList[mainList[key].windowList.trade.trader].windowList.trade = 0; }
+	if(List.main[key].windowList.trade.trader){ List.main[List.main[key].windowList.trade.trader].windowList.trade = 0; }
 	
-	for(var i in mainList[key].windowList){
-		mainList[key].windowList[i] = 0;
+	for(var i in List.main[key].windowList){
+		List.main[key].windowList[i] = 0;
 	}
 }
 
 openWindow = function(key,name,param){
 	closeAllWindow(key);
-	mainList[key].windowList[name] = 1;
+	List.main[key].windowList[name] = 1;
 	
 	
 	if(name === 'shop'){
-		mainList[key].windowList.shop = shopList[param];
+		List.main[key].windowList.shop = shopList[param];
 	}
 	if(name === 'quest'){
-		mainList[key].windowList.quest = param;
+		List.main[key].windowList.quest = param;
 		Quest.req.update(key,param);
 		Quest.hint.update(key,param);
 	}
 	if(name === 'trade'){
-		if(!mainList[param].windowList.trade){
+		if(!List.main[param].windowList.trade){
 			closeAllWindow(key);
-			mainList[key].windowList.trade = {'trader':param,'tradeList':mainList[param].tradeList,'confirm':{'self':0,'other':0}};
-			mainList[param].windowList.trade = {'trader':key,'tradeList':mainList[key].tradeList,'confirm':{'self':0,'other':0}};
+			List.main[key].windowList.trade = {'trader':param,'tradeList':List.main[param].tradeList,'confirm':{'self':0,'other':0}};
+			List.main[param].windowList.trade = {'trader':key,'tradeList':List.main[key].tradeList,'confirm':{'self':0,'other':0}};
 		} else { Chat.add(key,'This player is busy.');}
 	}
 }

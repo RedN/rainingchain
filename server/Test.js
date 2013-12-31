@@ -53,15 +53,15 @@ Test.serverStart = function(){
 
 //Called when player logs in
 Test.playerStart = function(key){
-    mainList[key].invList.add('gold');
-	mainList[key].invList.add('test');
-	mainList[key].invList.add('boost_orb',1000);
-	mainList[key].invList.add('upgrade_orb',1000);
-	mainList[key].invList.add('removal_orb',1000);
+    List.main[key].invList.add('gold');
+	List.main[key].invList.add('test');
+	List.main[key].invList.add('boost_orb',1000);
+	List.main[key].invList.add('upgrade_orb',1000);
+	List.main[key].invList.add('removal_orb',1000);
 	
-	/*mainList[key].invList.add('shield');
-    mainList[key].invList.add('summonWand');
-    mainList[key].invList.add('ironSword');*/
+	/*List.main[key].invList.add('shield');
+    List.main[key].invList.add('summonWand');
+    List.main[key].invList.add('ironSword');*/
 }
 
 //Call every frame for every mortal

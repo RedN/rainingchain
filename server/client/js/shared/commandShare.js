@@ -32,16 +32,16 @@ Command.list['fl,add'] = function(key,user,nick,comment,color){
 	if(!nick){ nick = user;}
 	if(!comment){ comment = '';}
 	if(!color){ color = 'cyan'; }
-	if(user == fullList[key].name){ Chat.add(key,"You are either bored or very lonely for trying this."); return }
+	if(user == List.all[key].name){ Chat.add(key,"You are either bored or very lonely for trying this."); return }
 	
-	if(mainList[key].friendList[user]){	Chat.add(key,"This player is already in your Friend List."); }
-	if(mainList[key].muteList[user]){	Chat.add(key,"This player is in your Mute List."); }
+	if(List.main[key].friendList[user]){	Chat.add(key,"This player is already in your Friend List."); }
+	if(List.main[key].muteList[user]){	Chat.add(key,"This player is in your Mute List."); }
 	
 	
-	if(!mainList[key].muteList[user] && !mainList[key].friendList[user]){
+	if(!List.main[key].muteList[user] && !List.main[key].friendList[user]){
 		db.account.find({username:user},function(err, results) {
 			if(results[0]){
-				mainList[key].friendList[user] = {'nick':nick,'comment':comment, 'color':color};
+				List.main[key].friendList[user] = {'nick':nick,'comment':comment, 'color':color};
 				Chat.add(key,"Friend added.");
 			}
 			if(!results[0]){Chat.add(key,"This player doesn't exist.");}
@@ -50,8 +50,8 @@ Command.list['fl,add'] = function(key,user,nick,comment,color){
 }
 
 Command.list['fl,remove'] = function(key,user){
-	if(mainList[key].friendList[user]){
-		delete mainList[key].friendList[user]
+	if(List.main[key].friendList[user]){
+		delete List.main[key].friendList[user]
 		Chat.add(key, 'Friend deleted.');
 	} else {
 		Chat.add(key, 'This player is not in your Friend List.');
@@ -60,8 +60,8 @@ Command.list['fl,remove'] = function(key,user){
 }
 
 Command.list['fl,comment'] = function(key,user,comment){
-	if(mainList[key].friendList[user]){
-		mainList[key].friendList[user].comment = comment;
+	if(List.main[key].friendList[user]){
+		List.main[key].friendList[user].comment = comment;
 		Chat.add(key, 'Friend Comment changed.');
 	} else {
 		Chat.add(key, 'This player is not in your Friend List.');
@@ -69,8 +69,8 @@ Command.list['fl,comment'] = function(key,user,comment){
 }
 
 Command.list['fl,nick'] = function(key,user,nick){
-	if(mainList[key].friendList[user]){
-		mainList[key].friendList[user].nick = nick;
+	if(List.main[key].friendList[user]){
+		List.main[key].friendList[user].nick = nick;
 		Chat.add(key, 'Friend Nick changed.');
 	} else {
 		Chat.add(key, 'This player is not in your Friend List.');
@@ -78,8 +78,8 @@ Command.list['fl,nick'] = function(key,user,nick){
 }
 
 Command.list['fl,color'] = function(key,user,color){
-	if(mainList[key].friendList[user]){
-		mainList[key].friendList[user].color = color;
+	if(List.main[key].friendList[user]){
+		List.main[key].friendList[user].color = color;
 		Chat.add(key, 'Friend Color changed.');
 	} else {
 		Chat.add(key, 'This player is not in your Friend List.');
@@ -89,7 +89,7 @@ Command.list['fl,color'] = function(key,user,color){
 Command.list['fl,pm'] = function(key,setting){
 	var possible = ['on','off','friend'];
 	if(possible.indexOf(setting) != -1){
-		mainList[key].pm = setting;
+		List.main[key].pm = setting;
 		Chat.add(key, "Private Setting changed to " + setting + '.');
 	} else {
 		Chat.add(key, "Wrong Private Setting. Use one of the following: " + possible.toString());
@@ -97,7 +97,7 @@ Command.list['fl,pm'] = function(key,setting){
 }
 
 Command.list['fl,offlinepm'] = function(key,to,text){
-	var from = fullList[key].name;
+	var from = List.all[key].name;
 	
 	text = customEscape(text);
 	to = customEscape(to);
@@ -131,15 +131,15 @@ Command.list['fl,offlinepm'] = function(key,to,text){
 
 //Mute
 Command.list['mute'] = function(key,user){
-	if(user == fullList[key].name){ Chat.add(key,"-.- Seriously?"); return }
+	if(user == List.all[key].name){ Chat.add(key,"-.- Seriously?"); return }
 	
-	if(mainList[key].friendList[user]){	Chat.add(key,"This player is in your Friend List."); }
-	if(mainList[key].muteList[user]){ Chat.add(key,"This player is alraedy in your Mute List."); }
+	if(List.main[key].friendList[user]){	Chat.add(key,"This player is in your Friend List."); }
+	if(List.main[key].muteList[user]){ Chat.add(key,"This player is alraedy in your Mute List."); }
 		
-	if(!mainList[key].friendList[user] && !mainList[key].muteList[user]){
+	if(!List.main[key].friendList[user] && !List.main[key].muteList[user]){
 		db.account.find({username:user},function(err, results) {
 			if(results[0]){
-				mainList[key].muteList[user] = {};
+				List.main[key].muteList[user] = {};
 				Chat.add(key,"Player muted.");
 			}
 			if(!results[0]){Chat.add(key,"This player doesn't exist.");}
@@ -149,13 +149,13 @@ Command.list['mute'] = function(key,user){
 
 //Pref. many different preference values can be changed. check Command.pref.verify for more detail.
 Command.list['pref'] = function(key,name,value){
-	if(mainList[key].pref[name] === undefined){ Chat.add(key, 'Invalid name.'); return; }
+	if(List.main[key].pref[name] === undefined){ Chat.add(key, 'Invalid name.'); return; }
 	
 	value = Command.pref.verify(name,value);
 	
 	if(value == 'Invalid value.'){ Chat.add(key, 'Invalid value.'); return; }
 	
-	mainList[key].pref[name] = value;
+	List.main[key].pref[name] = value;
 	Chat.add(key, 'Preferences Changed.');
 	
 }
@@ -169,7 +169,7 @@ Command.list['win,close'] = function(key){
 }
 
 Command.list['win,open'] = function(key,win,param0){
-	if(mainList[key].windowList[win] === undefined){ Chat.add(key,'Wrong Input'); return; }
+	if(List.main[key].windowList[win] === undefined){ Chat.add(key,'Wrong Input'); return; }
 	if(win === 'bank'){ Chat.add(key,'Access denied.'); return;}
 	if(win === 'quest' && qDb[param0] === undefined){ Chat.add(key,'Wrong Input'); return; }
 	
@@ -177,12 +177,12 @@ Command.list['win,open'] = function(key,win,param0){
 }
 
 Command.list['win,bank,click'] = function(key,side,id){
-	if(!mainList[key].windowList.bank){ Chat.add(key,'Access denied.'); return;}
-	mainList[key].bankList.click(id,side);
+	if(!List.main[key].windowList.bank){ Chat.add(key,'Access denied.'); return;}
+	List.main[key].bankList.click(id,side);
 }
 
 Command.list['win,quest,toggleBonus'] = function(key,id,bonus){
-	var mq = mainList[key].quest[id];
+	var mq = List.main[key].quest[id];
 	if(!mq){ Chat.add(key,'Wrong Input.'); return; }	
 	var q = qDb[id].bonus[bonus];
 	if(!q){ Chat.add(key,'Wrong Input.'); return; }
@@ -202,23 +202,23 @@ Command.list['win,passive,select'] = function(key,i,j){
 Command.list['win,ability,swap'] = function(key,input,ab){
 	input = +input;
 	if(typeof input !== 'number' || typeof ab !== 'string'){ return; }
-	if(input < 0 || !fullList[key].abilityList[ab]){ return; } 
-	Mortal.swapAbility(key,input,ab);
+	if(input < 0 || !List.all[key].abilityList[ab]){ return; } 
+	Mortal.swapAbility(List.all[key],input,ab);
 }
 
 Command.list['win,ability,mod'] = function(key,modid,abid){
-	if(!fullList[key].abilityList[abid] || !abilityModDb[modid] || !mainList[key].invList.have('mod-'+modid)){ Chat.add(key,'bad'); }
+	if(!List.all[key].abilityList[abid] || !abilityModDb[modid] || !List.main[key].invList.have('mod-'+modid)){ Chat.add(key,'bad'); }
 	addAbilityMod(key,abid,modid);
 }
 
 Command.list['win,ability,upgrade'] = function(key,abid,amount){
 	amount = +amount;
-	if(!amount || !fullList[key].abilityList[abid] || amount < 1){ Chat.add(key,'Wrong'); return;}
+	if(!amount || !List.all[key].abilityList[abid] || amount < 1){ Chat.add(key,'Wrong'); return;}
 	Craft.orb(key,'upgrade',amount,abid);	
 }
 Command.list['win,ability,upMod'] = function(key,abid,mod,amount){
 	amount = +amount;
-	if(!amount || !fullList[key].abilityList[abid] || amount < 1){ Chat.add(key,'Wrong'); return;}
+	if(!amount || !List.all[key].abilityList[abid] || amount < 1){ Chat.add(key,'Wrong'); return;}
 	Craft.orb(key,'upgrade',amount,abid,mod);	
 }
 
@@ -227,12 +227,12 @@ Command.list['win,ability,upMod'] = function(key,abid,mod,amount){
 //Tab
 Command.list['tab,open'] = function(key,tab){
 	if(Cst.tab.list.indexOf(tab) === -1){ Chat.add(key,'Wrong Input'); return; }
-	mainList[key].currentTab = tab;
+	List.main[key].currentTab = tab;
 }
 
 Command.list['tab,inv,click'] = function(key,side,id){
-	if(mainList[key].currentTab !== 'inventory'){ Chat.add(key,'Access denied.'); return;}
-	mainList[key].invList.click(id,side);
+	if(List.main[key].currentTab !== 'inventory'){ Chat.add(key,'Access denied.'); return;}
+	List.main[key].invList.click(id,side);
 }
 
 

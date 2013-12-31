@@ -10,7 +10,7 @@ Skill = function(key,data){
 //Need to work
 //Skill.prototype.
 Skill.prototype.addExp = function(key,sk,amount,bonus){
-	var player = fullList[key];
+	var player = List.all[key];
 	if(bonus === undefined){ bonus = true; }
 	
 	if(typeof sk != 'object'){	var skill = {};	skill[sk] = amount;	} 
@@ -26,8 +26,8 @@ Skill.prototype.addExp = function(key,sk,amount,bonus){
 }
 
 Skill.prototype.updateLvl = function(key,sk){
-	var player = fullList[key];
-	var main = mainList[key];
+	var player = List.all[key];
+	var main = List.main[key];
 	
 	if(!sk) sk = Cst.skill.list;
 	else { sk = typeof sk == 'object' ? sk : [sk]; }
@@ -48,11 +48,11 @@ Skill.prototype.updateLvl = function(key,sk){
 }
 
 Skill.prototype.lvlUp = function(key,skill){
-	Chat.add(key,'You are level ' + fullList[key].lvl[skill] + ' in ' + skill.capitalize() + '!');
+	Chat.add(key,'You are level ' + List.all[key].lvl[skill] + ' in ' + skill.capitalize() + '!');
 }
 
 Skill.prototype.testLvl = function(key,sk,lvl){
-	var player = fullList[key];
+	var player = List.all[key];
 	
 	if(typeof sk != 'object'){	var skill = {};	skill[sk] = lvl;	} 
 	else {var skill = sk;}

@@ -4,8 +4,8 @@ Bullet = {};
 Bullet.remove = function(b){
 	ActiveList.remove(b);
 	
-	delete bList[b.id];
-	delete fullList[b.id]
+	delete List.bullet[b.id];
+	delete List.all[b.id]
 }
 
 Bullet.loop = function(b){
@@ -82,9 +82,9 @@ Bullet.loop.move.boomerang = function(b){
 			b.boomerang.newId = 0;
 		}
 		
-		if(mList[b.parent]){
-			var diffX = b.x - mList[b.parent].x;
-			var diffY = b.y - mList[b.parent].y;
+		if(List.mortal[b.parent]){
+			var diffX = b.x - List.mortal[b.parent].x;
+			var diffY = b.y - List.mortal[b.parent].y;
 		
 			var diff = Math.sqrt(diffX*diffX + diffY *diffY);
 			
@@ -129,7 +129,7 @@ Strike.loop.collision = function(atk){
 Strike.remove = function(strike){
 	ActiveList.remove(strike);
 	
-	delete sList[strike.id];
-	delete fullList[strike.id]
+	delete List.strike[strike.id];
+	delete List.all[strike.id]
 }
 

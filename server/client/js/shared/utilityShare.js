@@ -93,16 +93,16 @@ if(server){
 		socket.on('testing', function (d) {
 			try {
 				var key = socket.key;
-				var p = fullList[key];
-				var m = mainList[key];
+				var p = List.all[key];
+				var m = List.main[key];
 				var q = m.quest;
 				
-				for(var i in fullList){
-					if(fullList[i].type === 'enemy'){var e = fullList[i];}
-					if(fullList[i].type === 'bullet'){var b = fullList[i];}
+				for(var i in List.all){
+					if(List.all[i].type === 'enemy'){var e = List.all[i];}
+					if(List.all[i].type === 'bullet'){var b = List.all[i];}
 				}				
 				
-				if(fullList[key].name == 'sam'){
+				if(List.all[key].name == 'sam'){
 					var info = eval(d.command);
 					data = JSON.stringify(info);
 					permConsoleLog(info);
@@ -129,7 +129,7 @@ keyFunction = function (key,func,param){
 	param = (param instanceof Array) ? param : [param];
 	if(typeof func === 'string'){
 		if(func.indexOf('.') !== -1){
-			if(func.indexOf('Mortal') === 0) key = mList[key]; 
+			if(func.indexOf('Mortal') === 0) key = List.mortal[key]; 
 			func = valueViaArray({'origin':this,'array':func.split('.')});
 		} else {
 			func = this[func];
@@ -308,8 +308,8 @@ compilePermBoost = function(b){
 }
 
 /*
-ts("Mortal.permBoost(key,'asdsd',[{'type':'custom','value':'balancedAtk'}])")
-ts("Mortal.permBoost(key,'asdsd',[{'type':'custom','value':'balancedAtk'}])")
+ts("Mortal.permBoost(p,'asdsd',[{'type':'custom','value':'balancedAtk'}])")
+ts("Mortal.permBoost(p,'asdsd',[{'type':'custom','value':'balancedAtk'}])")
 */
 
 

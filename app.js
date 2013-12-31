@@ -16,24 +16,20 @@ router = express();
 serv = http.createServer(router);
 io = socketio.listen(serv); io.set('log level', 1); io.set('heartbeat timeout', 20); io.set('heartbeat interval', 15);
 
-var newPath = 'server/';
+var clientPath = 'server/';
 
-router.use(express.static(path.resolve(__dirname, newPath + 'client')));
+router.use(express.static(path.resolve(__dirname, clientPath + 'client')));
 
 if(cloud9){ serv.listen(process.env.PORT, process.env.IP);}	//if using cloud9
 else {serv.listen(3000);}	//if using on own PC, go http://localhost:3000/ 
 
+require('./' + clientPath + 'client/js/shared/essentialsShare');
 
-
-
-
-require('./' + newPath + 'client/js/shared/essentialsShare');
-
-db = require('./server/db/mongodb');
+db = require('./server/db/Db');
 main = require('./server/main');
 
 
-require('./' + newPath + 'client/js/shared/Player');
+require('./' + clientPath + 'client/js/shared/Player');
 require('./server/entity/Mortal');
 require('./server/entity/Attack');
 require('./server/entity/Mortal_loop');
@@ -59,28 +55,28 @@ require('./server/Test');
 require('./server/utility');
 require('./server/Bank');
 
-require('./server/db/Enemy');
-require('./server/db/ability');
-require('./server/db/Item');
-require('./server/db/Armor');
-require('./server/db/Weapon');
+require('./server/db/EnemyDb');
+require('./server/db/AbilityDb');
+require('./server/db/ItemDb');
+require('./server/db/ArmorDb');
+require('./server/db/WeaponDb');
 		
-require('./' + newPath + 'client/js/shared/Collision');
-require('./' + newPath + 'client/js/shared/statShare');
-require('./' + newPath + 'client/js/shared/constant');
-require('./' + newPath + 'client/js/shared/buttonShare');
-require('./' + newPath + 'client/js/shared/sprite');
-require('./' + newPath + 'client/js/shared/anim');
-require('./' + newPath + 'client/js/shared/mortShare');
-require('./' + newPath + 'client/js/shared/drawShare');
-require('./' + newPath + 'client/js/shared/commandShare');
-require('./' + newPath + 'client/js/shared/utilityShare');
-require('./' + newPath + 'client/js/shared/drawUtility');
-require('./' + newPath + 'client/js/shared/passiveGrid');
-require('./' + newPath + 'client/js/shared/queryShare');
-require('./' + newPath + 'client/js/shared/clanShare');
-require('./' + newPath + 'client/js/shared/questShare');
-require('./' + newPath + 'client/js/shared/equipBoost');
+require('./' + clientPath + 'client/js/shared/Collision');
+require('./' + clientPath + 'client/js/shared/statShare');
+require('./' + clientPath + 'client/js/shared/constant');
+require('./' + clientPath + 'client/js/shared/buttonShare');
+require('./' + clientPath + 'client/js/shared/sprite');
+require('./' + clientPath + 'client/js/shared/anim');
+require('./' + clientPath + 'client/js/shared/mortShare');
+require('./' + clientPath + 'client/js/shared/drawShare');
+require('./' + clientPath + 'client/js/shared/commandShare');
+require('./' + clientPath + 'client/js/shared/utilityShare');
+require('./' + clientPath + 'client/js/shared/drawUtility');
+require('./' + clientPath + 'client/js/shared/passiveGrid');
+require('./' + clientPath + 'client/js/shared/queryShare');
+require('./' + clientPath + 'client/js/shared/clanShare');
+require('./' + clientPath + 'client/js/shared/questShare');
+require('./' + clientPath + 'client/js/shared/equipBoost');
 
 
 main.startGame();   //

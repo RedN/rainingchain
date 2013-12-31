@@ -26,8 +26,8 @@ Mortal.creation = function(data){
 	e = Mortal.creation.optionList(e);
 	
 	e.data = data;
-	mList[e.id] = e;
-	fullList[e.id] = e;
+	List.mortal[e.id] = e;
+	List.all[e.id] = e;
 	
 	if(e.nevercombat){ Mortal.creation.nevercombat(e); }	
 	else {
@@ -44,7 +44,7 @@ Mortal.creation.group = function(gr,el){
 	var enemyIdList = [];
 	
 	gr = useTemplate(Mortal.creation.group.template(),gr);	
-	egList[id] = {
+	List.group[id] = {
 		'id':id,
 		'param':[gr,el],        //used to revive group
 		'list':{},              //hold enemies
@@ -58,10 +58,10 @@ Mortal.creation.group = function(gr,el){
 			el[i] = useTemplate(el[i],gr);  //info about x,y,map
 			
 			var eid = Mortal.creation(el[i]);
-			var e = fullList[eid];
+			var e = List.all[eid];
 			
 			enemyIdList.push(eid);
-			egList[id].list[eid] = e;
+			List.group[id].list[eid] = e;
 			e.group = id;
 		}
 	}

@@ -5,7 +5,7 @@ io.sockets.on('connection', function (socket) {
 			Test.bandwidth('download',d);
 			
 			var key = socket.key;
-			if(mainList[key]){
+			if(List.main[key]){
 				Button.reset(key);    
 				
 				d[1] = d[1].mm(0,WIDTH);
@@ -20,7 +20,7 @@ io.sockets.on('connection', function (socket) {
 		try {
 		    Test.bandwidth('download',d);
             
-			var player = fullList[socket.key];
+			var player = List.all[socket.key];
 			
 			if(d.i){
                 //d.i format: right,down,left,up,ability0,ability1...

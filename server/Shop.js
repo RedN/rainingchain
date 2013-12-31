@@ -43,7 +43,7 @@ initShop = function(id,info,extra){
 	shop.type = 'shop';
 	shop.stock.player = [];
 	
-	fullList[shop.id] = shop;
+	List.all[shop.id] = shop;
 	shopList[shop.id] = shop;
 }
 
@@ -121,7 +121,7 @@ emptyShop = function (key,stock,amount){
 
 
 shopLeftClick = function(key,stock,slot){
-	var tmp = mainList[key].windowList.shop.stock[stock][slot];
+	var tmp = List.main[key].windowList.shop.stock[stock][slot];
 	var string = itemDb[tmp[0]].name;
 	string += ' costs ';
 	string += tmp[2];
@@ -130,16 +130,16 @@ shopLeftClick = function(key,stock,slot){
 }
 
 shopRightClick = function(key,stock,slot){
-	var tmp = mainList[key].windowList.shop.stock[stock][slot];
-	var shopid = mainList[key].windowList.shop.id;
+	var tmp = List.main[key].windowList.shop.stock[stock][slot];
+	var shopid = List.main[key].windowList.shop.id;
 	
-	var gold = mainList[key].invList.have('gold',1,'amount');
+	var gold = List.main[key].invList.have('gold',1,'amount');
 	var cost = tmp[2] * 1;
 	if(tmp[1] >= 1){
 		if(gold >= cost){
-			if(mainList[key].invList.test([[tmp[0],1]])){
-				mainList[key].invList.add(tmp[0],1);
-				mainList[key].invList.remove('gold',tmp[2]);
+			if(List.main[key].invList.test([[tmp[0],1]])){
+				List.main[key].invList.add(tmp[0],1);
+				List.main[key].invList.remove('gold',tmp[2]);
 				removeShop(shopid,stock,tmp[0],1);	
 			} else {Chat.add(key,'Your inventory is full.');	}		
 		} else {Chat.add(key,"You don't have enough money for this.");} 
@@ -150,26 +150,26 @@ shopRightClick = function(key,stock,slot){
 
 
 transferShopInv = function (key,stock,id,amount){
-	var tmp = mainList[key].windowList.shop.stock[stock];
-	var shopid = mainList[key].windowList.shop.id;
+	var tmp = List.main[key].windowList.shop.stock[stock];
+	var shopid = List.main[key].windowList.shop.id;
 	if(!amount){amount = 1;}
 	amount = Math.min(amount,haveShop(shopid,stock,id,0,'amount'));
 	if(!itemDb[id].stack){ amount = Math.min(amount,emptyShop(shopid,stock)); }
-	if(itemDb[id].stack && !mainList[key].invList.have(key,id) && !mainList[key].invList.empty(1)){ amount = 0 }
-	if(amount){	removeShop(shopid,stock,id,amount); mainList[key].invList.add(id,amount);	}
+	if(itemDb[id].stack && !List.main[key].invList.have(key,id) && !List.main[key].invList.empty(1)){ amount = 0 }
+	if(amount){	removeShop(shopid,stock,id,amount); List.main[key].invList.add(id,amount);	}
 }
 
 transferInvShop = function (key,stock,id,amount){
 	if(itemDb[id].sell){	
-		var tmp = mainList[key].windowList.shop.stock[stock];
-		var shopid = mainList[key].windowList.shop.id;
+		var tmp = List.main[key].windowList.shop.stock[stock];
+		var shopid = List.main[key].windowList.shop.id;
 		if(!amount){amount = 1;}
-		amount = Math.min(amount,mainList[key].invList.have(id,0,'amount'));
+		amount = Math.min(amount,List.main[key].invList.have(id,0,'amount'));
 		if(!haveShop(shopid,stock,id) && !emptyShop(shopid,stock,1)){ amount = 0 }
 		if(amount){	
 			addShop(shopid,stock,id,amount); 
-			mainList[key].invList.remove(id,amount);
-			mainList[key].invList.add('gold',amount*Math.floor(itemDb[id].value*SHOP_RESELL));
+			List.main[key].invList.remove(id,amount);
+			List.main[key].invList.add('gold',amount*Math.floor(itemDb[id].value*SHOP_RESELL));
 		}
 	} else {
 		Chat.add(key,"You can't sell this item");

@@ -3,17 +3,17 @@ Dialogue = {};
 //start dialogue. also set start x and y to end dialogue if player walks away
 Dialogue.start = function(key,d){
 	var dia = Dialogue.db[d.name][d.convo][d.node];
-	mainList[key].dialogue = dia;
-	mainList[key].dialogueLoc = {'x':fullList[key].x,'y':fullList[key].y};
+	List.main[key].dialogue = dia;
+	List.main[key].dialogueLoc = {'x':List.all[key].x,'y':List.all[key].y};
 	
-	if(mainList[key].dialogue.func){
-		keyFunction(key,mainList[key].dialogue.func,mainList[key].dialogue.param);
+	if(List.main[key].dialogue.func){
+		keyFunction(key,List.main[key].dialogue.func,List.main[key].dialogue.param);
 	}
 	
 }
 
 Dialogue.end = function(key){
-	mainList[key].dialogue = '';
+	List.main[key].dialogue = '';
 }
 
 Dialogue.option = function(key,option){
@@ -22,7 +22,7 @@ Dialogue.option = function(key,option){
 	if(option.next){
 		Dialogue.start(key,option.next);
 	} else {
-		mainList[key].dialogue = '';
+		List.main[key].dialogue = '';
 	}
 }
 

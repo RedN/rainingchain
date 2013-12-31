@@ -12,22 +12,23 @@ ctx = {'restore':(function(){}),'fillText':(function(){}),'drawImage':(function(
 ctxrestore = function(){};
 
 /////
+List = {};
+List.all = {};  //EVERYTHING
+List.mortal = {}; //all mortals (player,enemy)
+List.bullet = {}; //all bullet
+List.strike = {}; //all strike
+List.group = {}; //all enemy group
 
-fullList = {};  //EVERYTHING
-mList = {}; //all mortals (player,enemy)
-bList = {}; //all bullet
-sList = {}; //all strike
-egList = {}; //all enemy group
+List.drop = {};  //all drop
+List.anim = {}; //all animation
 
-dropList = {};  //all drop
-aList = {}; //all animation
-shopList = {}; //all shop
-
-mapList = {};   //all maps including instance
-mainList = {};  //all mainList of player. (player id) mainList[id].something on server => window.something on client
-socketList = {};    //all socket (player id)
+List.map = {};   //all maps including instance
+List.main = {};  //all List.main of player. (player id) List.main[id].something on server => window.something on client
+List.socket = {};    //all socket (player id)
 
 nameToKey = {}; //use to convert a player name into the player key
+shopList = {}; //all shop
+
 
 //Start Game
 exports.startGame = function() {

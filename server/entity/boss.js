@@ -168,8 +168,8 @@ updateBossTarget = function(boss){
 	var mort = boss.parent;
 	boss.target = {};
 	for(var key in mort.activeList){ 
-		if(fullList[key].type == 'player'){
-			boss.target[key] = fullList[key];	
+		if(List.all[key].type == 'player'){
+			boss.target[key] = List.all[key];	
 		}
 	}
 			

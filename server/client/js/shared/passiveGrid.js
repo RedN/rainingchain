@@ -104,14 +104,14 @@ defaultPassive = function(){
 
 //when palyer wants to add a passive
 selectPassive = function(key,ii,jj){
-	var main = mainList[key];
+	var main = List.main[key];
 	if(main.passivePt === 0){ Chat.add(key,"You don't have any Passive Points to use."); return;}
 	if(main.passive[ii][jj] === '1'){ Chat.add(key,"You already have this passive.");	return;}
 	if(!testPassive(main.passive,ii,jj)){Chat.add(key,"You can't choose this passive yet.");	return;}
 	
 	main.passivePt--;
 	main.passive[ii] = main.passive[ii].slice(0,jj) + '1' + main.passive[ii].slice(jj+1);
-	Mortal.permBoost(key,'Passive',convertPassive(main.passive));
+	Mortal.permBoost(List.all[key],'Passive',convertPassive(main.passive));
 }
 
 //convert the list of passive owned by player into actual boost.

@@ -38,14 +38,14 @@ Chat.parse = function(data){
 
 //add text to chat of player.
 Chat.add = function(key,type,text,extra){
-	mainList[key].chatBox = mainList[key].chatBox || [];
+	List.main[key].chatBox = List.main[key].chatBox || [];
     extra = extra || {};
 	if(text === undefined){ text = type; type = 'game';}
 	
 	extra.text = text;
 	extra.type = type;
 	
-	mainList[key].chatBox.push(extra);	
+	List.main[key].chatBox.push(extra);	
 }
 
 //when a player wants to send a text
@@ -54,7 +54,7 @@ Chat.send = function(data){
 	var text = Chat.parse(customEscape(data.text));      //text
 	var to = customEscape(data.to);                     //destination
 	var type = customEscape(data.type);                 //clan || pm || public
-	var from = fullList[key].name;                      //source
+	var from = List.all[key].name;                      //source
 			
 	if(!type || !text || !to || !from){ return; }
 	if(to === from){ Chat.add(key,"Ever heard of thinking in your head?"); return; }
@@ -67,9 +67,9 @@ Chat.send = function(data){
 
 Chat.send.public = function(key,text,to,type,from,data){
     if(text === data.text){
-		fullList[key].chatHead = {'text':text,'timer':25*10};
+		List.all[key].chatHead = {'text':text,'timer':25*10};
 	}
-	for(var i in mainList){	Chat.add(i,'public',text,{'from':from});}
+	for(var i in List.main){	Chat.add(i,'public',text,{'from':from});}
 	return;
 }
 
@@ -96,10 +96,10 @@ Chat.send.pm.test = function(from,to,cb){
 		if(r[0]){	//aka exist
 			var bool = r[0].id;
 			
-			if(!mainList[r[0].id]){ bool = false; } else {
-				if(mainList[r[0].id].pm == 'off'){ bool = false; }
-				if(mainList[r[0].id].pm == 'friend'){ 
-					if(!mainList[r[0].id].friendList[from]){ bool = false; }				
+			if(!List.main[r[0].id]){ bool = false; } else {
+				if(List.main[r[0].id].pm == 'off'){ bool = false; }
+				if(List.main[r[0].id].pm == 'friend'){ 
+					if(!List.main[r[0].id].friendList[from]){ bool = false; }				
 				}
 			}
 			cb(bool,from,to);
@@ -109,7 +109,7 @@ Chat.send.pm.test = function(from,to,cb){
 }
 
 Chat.send.pm.clan = function(key,text,to,type,from,data){
-    var clanName = mainList[key].clanList[+to];
+    var clanName = List.main[key].clanList[+to];
     		
     if(!clanName){ Chat.add(key,'You typed too many \"/\".'); return; }
     var clan = clanDb[clanName];

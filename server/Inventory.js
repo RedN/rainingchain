@@ -208,14 +208,14 @@ Inventory.prototype = new ItemList();
 
 Inventory.prototype.click = function(slot,side){
 	var key = this.key;
-	var m = mainList[key];
+	var m = List.main[key];
 	var mw = m.windowList;
 	if(!this.data[slot].length) return;
 	
 	
 	//If Bank Window
 	if(mw.bank){
-		if(side === 'left'){ this.transfer(mainList[this.key].bankList,this.data[slot][0],1); }
+		if(side === 'left'){ this.transfer(List.main[this.key].bankList,this.data[slot][0],1); }
 		
 		if(side === 'right'){ 
 			var id = this.data[slot][0];
@@ -241,10 +241,10 @@ Inventory.prototype.click = function(slot,side){
 	if(side === 'left'){	
 		if(m.temp.selectInv){
 			var array = [this.data[slot][0]];
-			for(var i = mainList[key].temp.selectInv.param.length-1 ; i >= 0 ; i--){
-				array.unshift(mainList[key].temp.selectInv.param[i]); }
+			for(var i = List.main[key].temp.selectInv.param.length-1 ; i >= 0 ; i--){
+				array.unshift(List.main[key].temp.selectInv.param[i]); }
 				
-			keyFunction(key,mainList[key].temp.selectInv.func,array);
+			keyFunction(key,List.main[key].temp.selectInv.func,array);
 			return;
 		}
 		
@@ -255,7 +255,7 @@ Inventory.prototype.click = function(slot,side){
 	}
 
 	if(side === 'shiftLeft'){
-		mainList[key].chatInput = ['[[' + item.id + ']]',0,1];
+		List.main[key].chatInput = ['[[' + item.id + ']]',0,1];
 	}
 
 
@@ -280,7 +280,7 @@ Bank.prototype = new Inventory();
 Bank.prototype.click = function(slot,side){
 	if(!this.data[slot].length){ return; }
 	if(side === 'left'){
-		var inv = mainList[this.key].invList;
+		var inv = List.main[this.key].invList;
 		this.transfer(inv,this.data[slot][0],1);
 		return;
 	}
@@ -293,14 +293,14 @@ Bank.prototype.click = function(slot,side){
 				{'name':'Withdraw 25','func':'transferBankInv','param':[id,25]},
 				{'name':'Withdraw 100','func':'transferBankInv','param':[id,100]},
 				{'name':'Withdraw 1000','func':'transferBankInv','param':[id,1000]},
-				{'name':'Withdraw ' + mainList[key].pref.bankTransferAmount,'func':'transferBankInv','param':[id,mainList[key].pref.bankTransferAmount]},
+				{'name':'Withdraw ' + List.main[key].pref.bankTransferAmount,'func':'transferBankInv','param':[id,List.main[key].pref.bankTransferAmount]},
 			]
 		});
 	}
 }
 transferBankInv = function(key,id,amount){
-	var bank = mainList[key].bankList;
-	var inv = mainList[key].invList;
+	var bank = List.main[key].bankList;
+	var inv = List.main[key].invList;
 	bank.transfer(inv,id,amount);
 }
 

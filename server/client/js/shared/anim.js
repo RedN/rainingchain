@@ -1,4 +1,4 @@
-aList = [];
+
 
 initAnimDb = function(){
 	animDb ={
@@ -90,8 +90,8 @@ initAnimDb = function(){
 
 Anim = {};
 Anim.update = function (){
-	for(var i in aList){
-		var anim = aList[i];
+	for(var i in List.anim){
+		var anim = List.anim[i];
 		var animFromDb = animDb[anim.name];
 		anim.timer += animFromDb.spd * anim.spdMod;
 		
@@ -100,7 +100,7 @@ Anim.update = function (){
 		
 		anim.slot = Math.floor(anim.timer);
 		if(anim.slot > animFromDb.frame){
-			delete aList[anim.id];
+			delete List.anim[anim.id];
 		}	
 	}
 }
@@ -108,7 +108,7 @@ Anim.update = function (){
 //Add animation to the game. target can be a string to specific an actor, or an obj x:1,y:1
 Anim.creation = function(anim,target,sizeMod){
 	sizeMod = sizeMod || 1;
-	aList[a.id] = {'sizeMod':sizeMod,'name':anim,'target':target,'id':'a'+Math.randomId(5)};
+	List.anim[a.id] = {'sizeMod':sizeMod,'name':anim,'target':target,'id':'a'+Math.randomId(5)};
 }
 
 

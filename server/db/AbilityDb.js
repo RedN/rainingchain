@@ -233,7 +233,7 @@ abilityOrbModDb = {
 /*
 ts("useAbiCons({'quality':1,'name':'fireball','lvl':10})")
 
-ts('Mortal.learnAbility(key,"t90ctbj4i")')
+ts('Mortal.learnAbility(p,"t90ctbj4i")')
 
 ts("addAbilityMod(key,'bulletMulti','x2b')")
 */
@@ -330,19 +330,19 @@ initAbilityModDb = function(){
 }
 //abid: Ability Id, mod: mod Id
 addAbilityMod = function(key,abid,mod){
-		//Verify
-		var ab = deepClone(abilityDb[abid]);
-		if(ab.modList[mod] !== undefined){ Chat.add(key,'This ability already has this mod.'); return; }
-		if(Object.keys(ab.modList).length > 5){ Chat.add(key,'This ability already has the maximal amount of mods.'); return; }
-		
-		//Add
-		ab.modList[mod] = 0;
-		Mortal.removeAbility(key,abid);
-		ab.id = Math.randomId();
-		initAbility(ab);
-		Mortal.learnAbility(key,ab.id);
-		Chat.add(key,'Mod Added.');
-		mainList[key].invList.remove('mod-'+ mod);	
+	//Verify
+	var ab = deepClone(abilityDb[abid]);
+	if(ab.modList[mod] !== undefined){ Chat.add(key,'This ability already has this mod.'); return; }
+	if(Object.keys(ab.modList).length > 5){ Chat.add(key,'This ability already has the maximal amount of mods.'); return; }
+	
+	//Add
+	ab.modList[mod] = 0;
+	Mortal.removeAbility(List.all[key],abid);
+	ab.id = Math.randomId();
+	initAbility(ab);
+	Mortal.learnAbility(List.all[key],ab.id);
+	Chat.add(key,'Mod Added.');
+	List.main[key].invList.remove('mod-'+ mod);	
 }
 
 //##############################################################
@@ -366,11 +366,11 @@ Ability.uncompress = function(abi){
 //###############################################################
 
 abilityModClick = function(key,id){
-	if(!mainList[key].windowList.ability){
+	if(!List.main[key].windowList.ability){
 		Chat.add(key,'The Ability Window needs to be opened to use this mod. It will have the following effect: <br>' + abilityModDb[id].info);
 		return;
 	} else {
-		mainList[key].chatInput = ['$win,ability,mod,' + id + ',',0];
+		List.main[key].chatInput = ['$win,ability,mod,' + id + ',',0];
 	}
 	
 }
