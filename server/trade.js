@@ -28,66 +28,6 @@ tradeItem = function(key,other){
 
 
 
-//Trade
-addTrade = function (key,id,amount){
-	if(!amount){ amount = 1; }
-	if(itemDb[id].stack && haveTrade(key,id)){
-		mainList[key].tradeList[haveTrade(key,id,1,"position")][1] += amount;
-	} else if(emptyTrade(key,1)){
-		mainList[key].tradeList.push([id,amount]);
-	}
-	mainList[key].windowList.trade.confirm = {'self':0,'other':0};
-	var other = mainList[key].windowList.trade.trader;
-	mainList[other].windowList.trade.confirm = {'self':0,'other':0};
-		
-}
-
-testAddTrade = function (key,id,amount){
-	if(!amount){ amount = 1; }
-	if(haveTrade(key,id)){ return 1 } 
-	else { return emptyTrade(key) >= 1;}
-}
-
-removeTrade = function (key,id,amount){
-	if(!amount){amount = 1;}	
-	for(var i = 0 ; i < mainList[key].tradeList.length ; i ++){
-		if(mainList[key].tradeList[i][0] == id){
-			mainList[key].tradeList[i][1] -= amount;
-			if(mainList[key].tradeList[i][1] <= 0){
-				mainList[key].tradeList.splice(i,1);
-				break;
-			}
-		}
-	}
-	mainList[key].windowList.trade.confirm = {'self':0,'other':0};
-	var other = mainList[key].windowList.trade.trader;
-	mainList[other].windowList.trade.confirm = {'self':0,'other':0};
-}
-
-emptyTrade = function (key,amount){
-	if(!amount){return (96 - mainList[key].tradeList.length)} 
-	else {return (96 - mainList[key].tradeList.length) >= amount}	
-}
-
-haveTrade = function (key,id,amount,info){
-	if(!amount){amount = 1;}
-	if(!info){info = "bool";}
-	
-	for(var i = 0 ; i < mainList[key].tradeList.length ; i++){
-		if(mainList[key].tradeList[i][0] == id){
-			if(info == "bool"){	return (mainList[key].tradeList[i][1] >= amount)} 
-			if(info == "amount"){return mainList[key].tradeList[i][1]}
-			if(info == "position"){	return i}
-			break;
-		}
-	}
-	if(info == "bool"){	return false} 
-	if(info == "amount"){return 0}
-	if(info == "position"){	return null	}
-
-}
-
-
 
 tradeLeftClick=function(key,slot){
 	if(mainList[key].tradeList[slot]){transferTradeInv(key,mainList[key].tradeList[slot][0],1);}
@@ -106,16 +46,6 @@ transferTradeInv = function (key,id,amount){
 	
 	if(amount){	removeTrade(key,id,amount);	mainList[key].invList.add(id,amount);	}
 }
-
-transferInvTrade = function (key,id,amount){
-	if(itemDb[id].trade){	
-		if(!amount){amount = 1;}
-		amount = Math.min(amount,mainList[key].invList.have(id,0,'amount'));
-		if(!haveTrade(key,id) && !emptyTrade(key,1)){ amount = 0 }
-		if(amount){	addTrade(key,id,amount);	mainList[key].invList.remove(id,amount);	}
-	} else { Chat.add(key,"You can't trade this item."); }
-}
-
 
 
 

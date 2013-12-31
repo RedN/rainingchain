@@ -277,7 +277,6 @@ Craft.seed = function(seed){ //need to fix for ability too
 	}
 	if(!seed.type && (seed.category === 'armor' || seed.category === 'weapon')){ 
 		seed.type =  Cst.equip[seed.piece].type[Math.floor(Math.random()*Cst.equip[seed.piece].type.length)]; 
-		console.log(seed.type);
 	}
 	
 	seed.quality = seed.quality  || 0; 

@@ -73,7 +73,6 @@ Mortal.creation.group.template = function(){
 	return {'x':0,'y':0,'v':25,'map':'test','respawn':100}
 }
 
-
 Mortal.creation.boost = function(e){
 	for(var i in e.boost.list){ 
         e.boost.list[i].base = valueViaArray({'origin':e,'array':e.boost.list[i].stat});	
@@ -259,3 +258,5 @@ Mortal.creation.nevermove = function(mort){
 	mort.spdY = 0;
 	mort.maxSpd = 1;
 }
+
+

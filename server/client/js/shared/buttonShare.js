@@ -37,7 +37,11 @@ Button.test = function (key,x,y,side){
 		if(list[i][side]){
 			if(Collision.PtRect({"x":x,'y':y},list[i].rect)){
 				if(server) {
-					keyFunction(key,list[i][side].func,list[i][side].param);
+					if(list[i][side].nokey){
+					console.log('hi',list);
+					innerFunction(list[i][side].func,list[i][side].param);} 
+					else {keyFunction(key,list[i][side].func,list[i][side].param);}
+					
 					if(list[i].help) mainList[key].help = list[i].help;
 				}
 				if(!server) {
@@ -51,7 +55,7 @@ Button.test = function (key,x,y,side){
 	}
 	
 }
-
+//ts('m.windowList.bank = 1')
 //check every frame if mouse is over something with a context (aka top left text)
 Button.context = function (key){
 	if(server){ 

@@ -127,8 +127,9 @@ keyFunction = function (key,func,param){
 	if(!server){param = func;func = key;}
 	
 	param = (param instanceof Array) ? param : [param];
-	if(typeof func == 'string'){
+	if(typeof func === 'string'){
 		if(func.indexOf('.') !== -1){
+			if(func.indexOf('Mortal') === 0) key = mList[key]; 
 			func = valueViaArray({'origin':this,'array':func.split('.')});
 		} else {
 			func = this[func];

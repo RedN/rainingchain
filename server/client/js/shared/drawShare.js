@@ -247,7 +247,6 @@ Draw.entity.drop = function(key){
 			var numX = WIDTH2 + drop.x - player.x;
 			var numY = HEIGHT2 + drop.y - player.y;
 			
-			console.log(drop.item);
 			drawItem(drop.item,[numX,numY]);
 		
 			
@@ -1033,6 +1032,7 @@ Draw.window.bank = function (key){ ctxrestore();
 	
 	//Draw Items
 	for (var i = 0 ; i < bankList.length ; i++){
+		if(!bankList[i].length) continue;
 		var amountX = Math.floor(w/40)-1;
 		var numX = sx + 40 + 40*(i%amountX);
 		var numY = sy + 70 + 40*Math.floor(i/amountX);
@@ -2039,7 +2039,7 @@ Draw.optionList = function(key){ ctxrestore();
 			Button.creation(key,{
 			"rect":[sx,sx+w,sy+nameY+optionY*i,sy+nameY+optionY*(i+1)],
 			"left":option[i],
-			"text":name,	
+			"text":name,			
 			});
 		}
 	}

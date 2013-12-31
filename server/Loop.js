@@ -49,7 +49,7 @@ Loop.EnemyGroup = function(){
 			if(!e){ delete list[j];  continue; }
 			if(!e.dead){ bool = false; }
 			if(e.dead && e.deleteOnceDead){
-				Mortal.Enemy.remove(e);
+				Mortal.remove(e);
 				delete list[j];
 				continue;
 			}
@@ -114,33 +114,4 @@ ActiveList.remove = function(b){
 
 
 
-//Death
-startDeath = function(enemy){
-	enemy.killed = 1;
-	enemy.maxSpd = 0;
-	enemy.spdX = 0;
-	enemy.spdY = 0;
-	Sprite.change(enemy,{'anim':'Death'});
-	//death(enemy);
-}
-
-death = function(enemy){
-	enemy.dead = 1;
-	
-	var killer = null; var max = 0;
-	for(var i in enemy.damagedBy){
-		if(enemy.damagedBy[i] > max){
-			killer = i;
-		}
-	}
-	enemyDropItem(enemy,fullList[killer]);
-	if(enemy.death){ enemy.death(killer); }	//custom death function (ex quest)
-	
-	ActiveList.remove(enemy);
-}
-
-revive = function(enemy){
-	//enemy.extra.id = enemy.id
-	//addEnemy(enemy.data,enemy.extra)
-}
 

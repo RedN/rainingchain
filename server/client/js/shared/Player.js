@@ -4,15 +4,13 @@
 
 //Mortal
 Mortal = typeof Mortal !== 'undefined' ? Mortal : {};
-Mortal.Enemy = {};
-Mortal.Player = {};
 
-//Mortal.Enemy.remove 
-Mortal.Enemy.remove = function(enemy){
-	ActiveList.remove(enemy);
+//Mortal.remove 
+Mortal.remove = function(mort){
+	ActiveList.remove(mort);
 	
-	delete mList[enemy.id];
-	delete fullList[enemy.id]
+	delete mList[mort.id];
+	delete fullList[mort.id]
 }
 
 
@@ -228,3 +226,36 @@ Mortal.learnAbility = function(key,name){
 		
 	player.abilityList[ab.id] = ab;
 }
+
+
+//Death
+Mortal.death = function(enemy){
+	enemy.dead = 1;
+	
+	var killer = null; var max = 0;
+	for(var i in enemy.damagedBy){
+		if(enemy.damagedBy[i] > max){
+			killer = i;
+		}
+	}
+	enemyDropItem(enemy,fullList[killer]);
+	if(enemy.death){ enemy.death(killer); }	//custom death function (ex quest)
+	
+	ActiveList.remove(enemy);
+}
+
+Mortal.death.start = function(enemy){
+	enemy.killed = 1;
+	enemy.maxSpd = 0;
+	enemy.spdX = 0;
+	enemy.spdY = 0;
+	Sprite.change(enemy,{'anim':'Death'});
+	//death(enemy);
+}
+
+Mortal.revive = function(enemy){
+	//enemy.extra.id = enemy.id
+	//addEnemy(enemy.data,enemy.extra)
+}
+
+

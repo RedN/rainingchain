@@ -21,8 +21,12 @@ ItemList.prototype.add = function (id,amount){
 			this.data[this.firstEmpty()] = [id,1];
 		}
 	}
-	
-	
+}
+
+ItemList.prototype.add.bulk = function (array_items){
+	for(var i in array_items){
+		this.add(array_items[0],array_items[1] || 1);
+	}	
 }
 
 //Test if theres enough place for all the items (array of items)
@@ -80,6 +84,12 @@ ItemList.prototype.remove = function (id,amount){
 	
 }
 
+ItemList.prototype.remove.bulk = function (array_items){
+	for(var i in array_items){
+		this.remove(array_items[0],array_items[1] || 1);
+	}	
+}
+
 //Return amount of empty slots. (If amount is speficied, return if empty
 ItemList.prototype.empty = function (amount){
 	var empty = 0;
@@ -122,6 +132,12 @@ ItemList.prototype.have = function (id,amount,info){
 
 }
 
+ItemList.prototype.have.bulk = function (array_items){
+	for(var i in array_items){
+		if(!this.have(array_items[0],array_items[1] || 1)) return false;
+	}	
+	return true;
+}
 //return what info should be in db
 ItemList.prototype.toDb = function(){
     return this.data;
@@ -148,6 +164,8 @@ ItemList.prototype.toString = function(){
 }
 
 ItemList.prototype.transfer = function(other,id,amount){
+	console.log('type',this.type);
+	
 	amount = amount || 1;
 	amount = Math.min(amount,this.have(id,0,'amount'));
 	if(!other.test([[id,amount]]) || amount === 0){
@@ -158,14 +176,25 @@ ItemList.prototype.transfer = function(other,id,amount){
 	return true;
 }
 
-
-
+ItemList.prototype.transfer.bulk = function(other,array_items,allornothing){
+	allornothing = allornothing || true;
+	if(allornothing){
+		if((!other.test.transfer(array_items) || !this.have.bulk(array_items)))		return false;
+	} else {
+		array_items = deepClone(array_items);
+		for(var i in array_items){
+			array_items[i][1] = Math.min((array_items[i][1] || 1),this.have(array_items[i][0],0,'amount'));
+		}
+	}
+	this.remove.bulk(array_items);
+	other.add.bulk(array_items);
+	return true;	
+}
 
 
 
 
 //Inventory
-
 Inventory = function(key,data){
 	ItemList.apply( this, [24] );
 	this.alwaysStack = false;
@@ -183,12 +212,33 @@ Inventory.prototype.click = function(slot,side){
 	var mw = m.windowList;
 	if(!this.data[slot].length) return;
 	
-		//Left
-	if(side === 'left'){
-		if(mw.bank){transferInvBank(key,this.data[slot][0],1);	return;}
-		if(mw.trade){transferInvTrade(key,this.data[slot][0],1);	return;}
-		if(mw.shop){transferInvShop(key,'player',this.data[slot][0],1);	return;}
+	
+	//If Bank Window
+	if(mw.bank){
+		if(side === 'left'){ this.transfer(mainList[this.key].bankList,this.data[slot][0],1); }
 		
+		if(side === 'right'){ 
+			var id = this.data[slot][0];
+			
+			console.log(this.transfer);
+			
+			Button.optionList(key,{
+				'name':itemDb[id].name,
+				'option':[
+					{'name':'Deposit 5','func':this.transfer,'param':[m.bankList,id,5],'nokey':true},
+					{'name':'Deposit 25','func':this.transfer,'param':[m.bankList,id,25],'nokey':true},
+					{'name':'Deposit 100','func':this.transfer,'param':[m.bankList,id,100],'nokey':true},
+					{'name':'Deposit 1000','func':this.transfer,'param':[m.bankList,id,1000],'nokey':true},
+					{'name':'Deposit ' + m.pref.bankTransferAmount,'func':this.transfer,'param':[m.bankList,id,m.pref.bankTransferAmount],'nokey':true},
+				]
+			});
+		}
+		return;		
+	}
+	
+	//No Window
+	var item = itemDb[this.data[slot][0]];
+	if(side === 'left'){	
 		if(m.temp.selectInv){
 			var array = [this.data[slot][0]];
 			for(var i = mainList[key].temp.selectInv.param.length-1 ; i >= 0 ; i--){
@@ -198,42 +248,19 @@ Inventory.prototype.click = function(slot,side){
 			return;
 		}
 		
-		var item = itemDb[this.data[slot][0]];
-		if(item.option[0] && item.option[0].name != 'Drop' && item.option[0].func){
+		if(item.option[0] && item.option[0].name !== 'Drop' && item.option[0].func){
 			keyFunction(key,item.option[0].func,item.option[0].param); 
 			if(item.remove){ this.remove(key,item.id); }
-		}
-	}	
-
+		}	
+	}
 
 	if(side === 'shiftLeft'){
-		var item = itemDb[this.data[slot][0]];
 		mainList[key].chatInput = ['[[' + item.id + ']]',0,1];
 	}
 
 
 	if(side === 'right'){
-		if(!mw.bank && !mw.shop && !mw.trade){
-			var item = itemDb[this.data[slot][0]];
-			var player = fullList[key];
-			Button.optionList(key,{'name':item.name,'option':item.option});
-		}
-
-		if(mw.bank){
-			var id = this.data[slot][0];
-			Button.optionList(key,{
-				'name':itemDb[id].name,
-				'option':[
-					{'name':'Deposit 5','func':'transferInvBank','param':[id,5]},
-					{'name':'Deposit 25','func':'transferInvBank','param':[id,25]},
-					{'name':'Deposit 100','func':'transferInvBank','param':[id,100]},
-					{'name':'Deposit 1000','func':'transferInvBank','param':[id,1000]},
-					{'name':'Deposit ' + m.pref.bankTransferAmount,'func':'transferInvBank','param':[id,m.pref.bankTransferAmount]},
-				]
-			});
-		}
-		
-		if(mw.shop){transferInvShop(key,'player',this.data[slot][0],100);}
+		Button.optionList(key,{'name':item.name,'option':item.option});
 	}
 }
 
@@ -253,7 +280,8 @@ Bank.prototype = new Inventory();
 Bank.prototype.click = function(slot,side){
 	if(!this.data[slot].length){ return; }
 	if(side === 'left'){
-		transferBankInv(key,this.data[slot][0],1);
+		var inv = mainList[this.key].invList;
+		this.transfer(inv,this.data[slot][0],1);
 		return;
 	}
 	if(side === 'right'){
@@ -269,10 +297,12 @@ Bank.prototype.click = function(slot,side){
 			]
 		});
 	}
-
-
 }
-
+transferBankInv = function(key,id,amount){
+	var bank = mainList[key].bankList;
+	var inv = mainList[key].invList;
+	bank.transfer(inv,id,amount);
+}
 
 
 
