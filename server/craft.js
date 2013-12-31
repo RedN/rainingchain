@@ -13,7 +13,7 @@ lvl = lvl used for boosts
 
 
 //BOOST
-initBoostDb = function(){
+Init.db.boost = function(){
 	//stats in [] are transformed into multiple stats using boostPreDbConvertList.
 	//value: [min,max], mod: chance to be picked
 	
@@ -161,7 +161,7 @@ initBoostDb = function(){
 		for(var m in toRemove){	boostPreDb[i].splice(boostPreDb[i].indexOf(toRemove[m]),1); }
 	}
 		
-	boostDb = deepClone(boostPreDb);
+	Db.boost = deepClone(boostPreDb);
 }
 
 Craft = {};
@@ -242,14 +242,14 @@ Craft.plan = function(key,sed,req){
 	for(var i in req.skill){
 		var color = 'green';
 		if(List.main[key].skill[i] < req.skill[i]){ bool = false; color = 'red';}
-		string += "<span style='color:" + color + "'> Level" + req.item[i].lvl + " " + itemDb[req.item[i].item].name + "</span>, ";
+		string += "<span style='color:" + color + "'> Level" + req.item[i].lvl + " " + Db.item[req.item[i].item].name + "</span>, ";
 	}
 	
 	//verify if has item
 	for(var i in req.item){
 		var color = 'green';
 		if(!List.main[key].invList.have(req.item[i].item,req.item[i].amount)){	bool = false; color = 'red';}
-		string += "<span style='color:" + color + "'> x" + req.item[i].amount + " " + itemDb[req.item[i].item].name + "</span>, ";
+		string += "<span style='color:" + color + "'> x" + req.item[i].amount + " " + Db.item[req.item[i].item].name + "</span>, ";
 	}
 	
 	if(bool){ 
@@ -312,9 +312,9 @@ Craft.orb = function(key,orb,amount,wId,mod){
 	amount = amount === 'pref' ? List.main[key].pref.orbAmount : amount;
 	amount = Math.min(amount,List.main[key].invList.have(orb + '_orb',0,'amount'));
 	var func; var equip; var type;
-	if(weaponDb[wId]){	func = initWeapon;	equip = deepClone(weaponDb[wId]); type = 'equip';}
-	if(armorDb[wId]){	func = initArmor;	equip = deepClone(armorDb[wId]); type = 'equip';}
-	if(abilityDb[wId]){	func = initAbility;	equip = deepClone(abilityDb[wId]); type = 'ability';}
+	if(Db.weapon[wId]){	func = initWeapon;	equip = deepClone(Db.weapon[wId]); type = 'equip';}
+	if(Db.armor[wId]){	func = initArmor;	equip = deepClone(Db.armor[wId]); type = 'equip';}
+	if(Db.ability[wId]){	func = initAbility;	equip = deepClone(Db.ability[wId]); type = 'ability';}
 	if(!equip){	Chat.add(key,"You can't use this orb on this item.");return; }
 	
 	if(orb === 'boost'){
@@ -356,9 +356,9 @@ Craft.orb = function(key,orb,amount,wId,mod){
 //transform equip into shard
 Craft.salvage = function(key,id){
 	if(List.main[key].invList.have(id)){
-		var type = itemDb[id].type;
-		if(type === 'weapon'){ var equip = weaponDb[id]; }
-		else if(type === 'armor'){ var equip = armorDb[id]; }
+		var type = Db.item[id].type;
+		if(type === 'weapon'){ var equip = Db.weapon[id]; }
+		else if(type === 'armor'){ var equip = Db.armor[id]; }
 		else {return;}
 		List.main[key].invList.remove(id);
 		List.main[key].invList.add('shard-'+equip.color);
@@ -383,7 +383,7 @@ Craft.boost = function(seed,where,amount){
 }
 
 Craft.boost.generate = function(seed){
-	var boost = randomViaMod(boostDb[seed.piece],seed.lvl);
+	var boost = randomViaMod(Db.boost[seed.piece],seed.lvl);
 	var value = Craft.boost.generate.roll(boost.value,seed.quality);
 	
 	return {'stat':boost.stat,

@@ -21,7 +21,13 @@ List.strike = {}; //all strike
 List.anim = {}; //all animation
 List.map = {};
 
-var weaponDb = {}, armorDb = {}, abilityDb = {}, itemDb = {};   //local compilation of information so server doesnt send many times the same info
+Db = {};
+Db.weapon = {};
+Db.armor = {};
+Db.ability = {};
+Db.item = {};   //local compilation of information so server doesnt send many times the same info
+
+
 
 //############################################
 
@@ -103,9 +109,9 @@ startGame = function (data) {
 	
 	
 	initDb(function(){
-		initLoop();
 		initPlayer(initData);
 		gameStarted = true;
+		setInterval(Loop,40);
 		socket.emit('clientReady',1); 
 		if(cloud9) { Chat.add('Warning, you are running under cloud9 servers. You may experience intense lagging. Downloading the project and running it locally is recommended.');}
 	});	
@@ -141,14 +147,13 @@ addCanvas = function(name,id,z){
 
 
 initDb = function (cb){
-	initStatDb();   //stat db
-	initDefaultBonus(); //bonus related to the stats
-	initSpriteDb();
-	initAnimDb();
-	initSfxDb();
-	initMapDb();
-	initDefaultMortal();
-	initQuestDb();
+	Init.db.stat();
+	Init.db.sprite();
+	Init.db.anim();
+	Init.db.sfx();
+	Init.db.map();
+	Init.mortal();
+	Init.db.quest();
 	initUniqueBoostDb();
 	//initAbilityModDb();   //need fixing
 	Img.preload(Img.preloader,function(){   //load images
@@ -160,11 +165,7 @@ initDb = function (cb){
 
  
  
-//Loop
-initLoop = function (){
-	setInterval(Loop,40);   //update animations
-	
-}
+
 
 
 socket.on('warning', function (message) {

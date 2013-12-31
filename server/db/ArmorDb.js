@@ -1,8 +1,8 @@
 //Armor
 
 //Exact same system than Weapon.js
-initArmorDb = function (cb){
-	armorDb = {};
+Init.db.armor = function (cb){
+	Db.armor = {};
 	armorPreDb = {};
 
 	db.armor.find({},{'_id':0},function(err, results) { if(err) throw err
@@ -107,7 +107,7 @@ initArmor = function(equip,mi){
 	
 	for(var j in equip.defRatio){ equip.def[j] = equip.defRatio[j] * equip.defMain; }
 	
-	armorDb[equip.id] = equip;
+	Db.armor[equip.id] = equip;
 	equip.color = Craft.create.equip.color(equip);
 	
 	var id = equip.id;
@@ -117,7 +117,7 @@ initArmor = function(equip,mi){
 	item.name = equip.name;
 	item.visual = equip.piece + '.' + equip.type;
 	item.option = [	{'name':'Examine Armor','func':'examineArmor','param':[equip.id]},
-					{'name':'Change Armor','func':'switchArmor','param':[equip.id]},
+					{'name':'Change Armor','func':'Mortal.switchArmor','param':[equip.id]},
 					{'name':'Salvage','func':'Craft.salvage','param':[equip.id]},
 	];
 	item.type = 'armor';
@@ -155,29 +155,8 @@ defaultArmor = function(){
 	
 	
 
-updateArmor = function(player){
-	for(var k in Cst.element.list){	//Each Element
-		var i = Cst.element.list[k];
-		var sum = 0;
-		for(var j in player.armor.piece){	//Each Piece
-			sum += player.armor.piece[j].def[i] * player.armor.piece[j].orb.upgrade.bonus;
-		}
-		player.armor.def[i] = sum;
-	}
-}
-
-switchArmor = function(key,name){
-	var old = List.all[key].armor.piece[armorDb[name].piece];
-	var armor = armorDb[name];
-	List.mortal[key].armor.piece[armor.piece] = armor;
-	Mortal.permBoost(List.all[key],armor.piece,List.mortal[key].armor.piece[armor.piece].boost);
-	updateArmor(List.mortal[key]);
-	List.main[key].invList.remove(name);
-	List.main[key].invList.add(old.id);
-	
-}
 
 examineArmor = function(key, id){
-	openPopup(key,'armor',armorDb[id]);
+	openPopup(key,'armor',Db.armor[id]);
 }
 

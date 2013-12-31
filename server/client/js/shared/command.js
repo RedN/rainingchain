@@ -171,7 +171,7 @@ Command.list['win,close'] = function(key){
 Command.list['win,open'] = function(key,win,param0){
 	if(List.main[key].windowList[win] === undefined){ Chat.add(key,'Wrong Input'); return; }
 	if(win === 'bank'){ Chat.add(key,'Access denied.'); return;}
-	if(win === 'quest' && qDb[param0] === undefined){ Chat.add(key,'Wrong Input'); return; }
+	if(win === 'quest' && Db.quest[param0] === undefined){ Chat.add(key,'Wrong Input'); return; }
 	
 	openWindow(key,win,param0);
 }
@@ -184,7 +184,7 @@ Command.list['win,bank,click'] = function(key,side,id){
 Command.list['win,quest,toggleBonus'] = function(key,id,bonus){
 	var mq = List.main[key].quest[id];
 	if(!mq){ Chat.add(key,'Wrong Input.'); return; }	
-	var q = qDb[id].bonus[bonus];
+	var q = Db.quest[id].bonus[bonus];
 	if(!q){ Chat.add(key,'Wrong Input.'); return; }
 	
 	Quest.bonus.toggle(key,id,bonus);

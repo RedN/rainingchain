@@ -9,9 +9,9 @@ if(server){
 			var source;
 			
 			switch(db){
-				case 'armorDb': source = armorDb; 	break;		
-				case 'weaponDb': source = weaponDb;	break;	
-				case 'abilityDb': source = abilityDb;	break;		
+				case 'Db.armor': source = Db.armor; 	break;		
+				case 'Db.weapon': source = Db.weapon;	break;	
+				case 'Db.ability': source = Db.ability;	break;		
 			}
 			
 			if(source && source[id]){

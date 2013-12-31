@@ -1,6 +1,6 @@
 //Enemy
 
-initEDb = function(){ ePreDb = {};
+Init.db.enemy = function(){ ePreDb = {};
 
 	ePreDb["eSlime"] = {}; //{
 	ePreDb["eSlime"]["Big"] = { //{
@@ -99,22 +99,24 @@ initEDb = function(){ ePreDb = {};
 	
 	
 	//Turn Object into function
-	eDb = {};
-	for(var i in ePreDb){ eDb[i] = {}; 
+	Db.enemy = {};
+	for(var i in ePreDb){ Db.enemy[i] = {}; 
 		for(var j in ePreDb[i]){
 			
-			var mort = defaultMortal('enemy');
+			var temp = Mortal.creation.template('enemy');
+			console.log(Object.keys(temp));
 			var e = ePreDb[i][j];
-			e = useTemplate(mort,e);
+			e = useTemplate(temp,e);
 			
 			e.context = e.name; 
 			if(e.combat && !e.nevercombat){ e.context += ' | Lvl: ' + e.lvl;}
 			e.hp = e.resource.hp.max;
 			e.def = e.armor.def;
 			
-			eDb[i][j] =	new Function('return ' + stringify(e));
+			Db.enemy[i][j] = new Function('return ' + stringify(e));	//not used atm. currently creating from scratch everytime
 		}
-	}		
+	}
+	
 }
 //
 

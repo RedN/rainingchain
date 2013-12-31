@@ -1,5 +1,5 @@
 //Map
-initMapDb=function (){
+Init.db.map=function (){
 	
 	List.map = {};
 	
@@ -75,7 +75,7 @@ initMapDb=function (){
 	List.map['fire'].load = function(map){ 
 		/*addEnemy ({"x":WIDTH,"y":WIDTH,"map":map,"category":"boss","variant":"fireTroll","lvl":0}
 			,{'death':(function(killer){
-				qDb['fireBoss'].bossKilled(killer);
+				Db.quest['fireBoss'].bossKilled(killer);
 			})}
 		);*/
 	}
@@ -110,7 +110,7 @@ initMapDb=function (){
 			{'amount':1,"category":"boss","variant":"iceTroll","lvl":0,'modAmount':1,
 			    extra:{
     			    death:(function(key){
-    			    	qDb['questId'].bossKilled(key);
+    			    	Db.quest['questId'].bossKilled(key);
     		        })
 		        }
 		    }

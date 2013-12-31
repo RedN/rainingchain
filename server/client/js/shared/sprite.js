@@ -24,9 +24,9 @@
 
 
 
-initSpriteDb = function(){
+Init.db.sprite = function(){
 	
-    spriteDb =	{
+    Db.sprite =	{
     	
     //PLAYER
     
@@ -134,12 +134,12 @@ initSpriteDb = function(){
     }
     
     
-    for(var i in spriteDb){
-    	if(!spriteDb[i].size){  spriteDb[i].size = 1; }
-    	if(!spriteDb[i].legs){  spriteDb[i].legs = 0; }
+    for(var i in Db.sprite){
+    	if(!Db.sprite[i].size){  Db.sprite[i].size = 1; }
+    	if(!Db.sprite[i].legs){  Db.sprite[i].legs = 0; }
     	
-    	for(var j in spriteDb[i]){
-    		var anim = spriteDb[i][j];
+    	for(var j in Db.sprite[i]){
+    		var anim = Db.sprite[i][j];
     		anim.startY = anim.startY || 0; 
     		anim.spd = anim.spd || 1; 
     		anim.next = anim.next || 'Walk';
@@ -155,8 +155,8 @@ initSpriteDb = function(){
         //hitbox: used for dmg collisions
         //bumperbox: used for map collisions
 
-        for(var i in spriteDb){
-    		var sp = spriteDb[i];
+        for(var i in Db.sprite){
+    		var sp = Db.sprite[i];
     		sp.sizeMod = 1;
     		if(sp.preHitBox){
     			sp.hitBox = []; sp.bumperBox = [];
@@ -175,8 +175,8 @@ initSpriteDb = function(){
     }
     
     if(!server){
-        for(var i in spriteDb){
-    		var sp = spriteDb[i];
+        for(var i in Db.sprite){
+    		var sp = Db.sprite[i];
 			sp.src = 'img/sprite/' + sp.src
     		sp.img = newImage(sp.src);
     		Img.preloader.push(sp.src);
@@ -186,11 +186,13 @@ initSpriteDb = function(){
 
 
 
-initSprite = function(player,info){
-	player.sprite = useTemplate(defaultSprite(),info);
+Sprite = {};
+
+Sprite.creation = function(player,info){
+	player.sprite = useTemplate(Sprite.template(),info);
     if(server)	Sprite.updateBumper(player);
 }
-defaultSprite = function(){
+Sprite.template = function(){
 	return {
     	name:'pBow',
     	anim:'Walk',
@@ -203,10 +205,9 @@ defaultSprite = function(){
 }
 
 
-Sprite = {};
 Sprite.change = function(mort,info){
     if(!mort || !mort.sprite) return;
-    if(info.name){ initSprite(mort,info);}
+    if(info.name){ Sprite.creation(mort,info);}
 	if(info.anim){ 
 		mort.sprite.anim = info.anim;
 		mort.sprite.startX = 0;
@@ -221,9 +222,9 @@ Sprite.change = function(mort,info){
 
 //Set the Sprite Bumper Box to fit the sizeMod
 Sprite.updateBumper = function(player){
-	if(spriteDb[player.sprite.name].hitBox){	//Attack Dont
-		player.hitBox = deepClone(spriteDb[player.sprite.name].hitBox);
-		player.bumperBox = deepClone(spriteDb[player.sprite.name].bumperBox);	
+	if(Db.sprite[player.sprite.name].hitBox){	//Attack Dont
+		player.hitBox = deepClone(Db.sprite[player.sprite.name].hitBox);
+		player.bumperBox = deepClone(Db.sprite[player.sprite.name].bumperBox);	
 	
 		for(var i = 0 ; i < player.hitBox.length ; i++){
 			player.hitBox[i].x *= player.sprite.sizeMod;
@@ -238,7 +239,7 @@ Sprite.updateBumper = function(player){
 
 Sprite.update = function (mort){
 	var spriteServer = mort.sprite;
-	var spriteFromDb = spriteDb[spriteServer.name];
+	var spriteFromDb = Db.sprite[spriteServer.name];
 	var image = spriteFromDb.img;
 	var animFromDb = spriteFromDb.anim[spriteServer.anim];
 	

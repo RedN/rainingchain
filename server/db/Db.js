@@ -1,9 +1,9 @@
 var databaseURI = 'mongodb://test:' + dbpsw + '@widmore.mongohq.com:10010/RainingChain_copy';  
 var collections = ["ability","weapon","armor","account","item","clan"];
-var db = require("mongojs").connect(databaseURI, collections);
+
+db = require("mongojs").connect(databaseURI, collections);
 
 //delete everything in db
-// ONLY FOR TESTING, should be deleted after release.
 db.deleteAll = function(){
    	for(var i in collections){
 		db[collections[i]].remove();
@@ -52,4 +52,8 @@ db.filterDb = function(){
 //db.filterDb();
 
 
-module.exports = db;
+
+
+
+Init = {};
+Init.db = {};

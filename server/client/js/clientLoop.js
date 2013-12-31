@@ -22,7 +22,7 @@ Loop.update = function(){
 	Anim.update();
 	// BROKEN Mortal.update.permBoost(player);    //check if server send new boost info
 	map = List.map[player.map];
-	if(weaponDb[player.weapon.id]){ player.weapon = weaponDb[player.weapon.id]; }
+	if(Db.weapon[player.weapon.id]){ player.weapon = Db.weapon[player.weapon.id]; }
 	
 	//Add to ChatBox which was added by main
 	for(var i in chatBox) Chat.receive(chatBox[i]);		

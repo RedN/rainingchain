@@ -111,7 +111,7 @@ Attack.creation.bullet = function(player,b){
 	if(!b.nova && !b.onHit){ delete b.bonus; }
 	if(!b.sin && !b.parabole && !b.boomerang) { b.normal = 1; }
 	
-	initSprite(b,{'name':b.objImg.name,'anim':"Travel",'sizeMod':b.objImg.sizeMod});
+	Sprite.creation(b,{'name':b.objImg.name,'anim':"Travel",'sizeMod':b.objImg.sizeMod});
 	
 	List.bullet[b.id] = b;
 	return b;

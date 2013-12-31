@@ -2,7 +2,7 @@ Dialogue = {};
 
 //start dialogue. also set start x and y to end dialogue if player walks away
 Dialogue.start = function(key,d){
-	var dia = Dialogue.db[d.name][d.convo][d.node];
+	var dia = Db.dialogue[d.name][d.convo][d.node];
 	List.main[key].dialogue = dia;
 	List.main[key].dialogueLoc = {'x':List.all[key].x,'y':List.all[key].y};
 	
@@ -28,17 +28,17 @@ Dialogue.option = function(key,option){
 
 
 
-Dialogue.init = function(){
-	Dialogue.db = {}
-	Dialogue.db['Jenny'] = {};
-	Dialogue.db['Jenny']['quest'] = {
+Init.db.dialogue = function(){
+	Db.dialogue = {}
+	Db.dialogue['Jenny'] = {};
+	Db.dialogue['Jenny']['quest'] = {
 		'intro':{
 			'text':'Do you want to help me out?',
 			'face':'Jenny',
 			'option':[
 				{'text':"Sure.",
 					'next':{'node':'yes'},
-					'func':(function(key){  qDb['questId'].giveDevice(key); }),'param':[]
+					'func':(function(key){  Db.quest['questId'].giveDevice(key); }),'param':[]
 				},
 				{'text':"No. I got other things to do.",
 					'next':{'node':'no'}},
@@ -57,7 +57,7 @@ Dialogue.init = function(){
 				
 		'gratz':{
 			'text':'Thanks you so much for your help. I can now unlock the barrier.',
-			'func':(function(key){  qDb['questId'].giveReward(key); }),'param':[],
+			'func':(function(key){  Db.quest['questId'].giveReward(key); }),'param':[],
 			},
 		'gratz2':{
 			'text':'Thanks again.',
@@ -66,21 +66,21 @@ Dialogue.init = function(){
 	
 	
 	//Face Db
-	Dialogue.db.face = {
+	Db.dialogue.face = {
 	'Jenny':{'x':0,'y':0,'name':'Jenny'}
 	}
 	
-	for(var i in Dialogue.db){	
-		var npc = Dialogue.db[i];
-		if(npc.face === undefined){ npc.face = Dialogue.db.face[i] }		
+	for(var i in Db.dialogue){	
+		var npc = Db.dialogue[i];
+		if(npc.face === undefined){ npc.face = Db.dialogue.face[i] }		
 		
-		for(var j in Dialogue.db[i]){	
-			var convo = Dialogue.db[i][j];
+		for(var j in Db.dialogue[i]){	
+			var convo = Db.dialogue[i][j];
 			for(var k in convo){	
 				var node = convo[k];
 				
 				if(node.face === undefined){ node.face = npc.face;}
-				else if(node.face){	node.face = Dialogue.db.face[node.face];}
+				else if(node.face){	node.face = Db.dialogue.face[node.face];}
 				
 				for(var m in node.option){
 					var next = node.option[m].next;

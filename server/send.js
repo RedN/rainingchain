@@ -142,7 +142,7 @@ Change.send.init.drop = function(drop){
 	draw.y = Math.round(drop.y);
 	draw.id = drop.publicId;
 	draw.type = drop.type;
-	draw.item = itemDb[drop.item].visual;
+	draw.item = Db.item[drop.item].visual;
 	
 	return draw;
 }
@@ -170,12 +170,12 @@ Change.send.convert.shopWindow = function(shop){
 	draw.stock = {'player':[],'default':[]};
 	for(var i in shop.stock.player){
 		draw.stock.player[i] = [];
-		draw.stock.player[i][0] = itemDb[shop.stock.player[i][0]].visual;
+		draw.stock.player[i][0] = Db.item[shop.stock.player[i][0]].visual;
 		draw.stock.player[i][1] = shop.stock.player[i][1];
 	}
 	for(var i in shop.stock.default){
 		draw.stock.default[i] = [];
-		draw.stock.default[i][0] = itemDb[shop.stock.default[i][0]].visual;
+		draw.stock.default[i][0] = Db.item[shop.stock.default[i][0]].visual;
 		draw.stock.default[i][1] = shop.stock.default[i][1];
 	}
 	return draw;
@@ -190,7 +190,7 @@ Change.send.convert.invList = function(data){
 		draw[i] = '';
 		if(data[i][0]){
 			draw[i] = [];
-			draw[i][0] = itemDb[data[i][0]].visual;
+			draw[i][0] = Db.item[data[i][0]].visual;
 			draw[i][1] = data[i][1];
 		}
 	}
@@ -204,7 +204,7 @@ Change.send.convert.tradeWindow = function(data){
 	var draw = deepClone(data);
 	for(var i in draw.tradeList){
 		draw.tradeList[i] = [];
-		draw.tradeList[i][0] = itemDb[data.tradeList[i][0]].visual;
+		draw.tradeList[i][0] = Db.item[data.tradeList[i][0]].visual;
 		draw.tradeList[i][1] = data.tradeList[i][1];
 	}
 	draw.trader = List.all[draw.trader].name;

@@ -1,6 +1,14 @@
 //Player
 //Check client/shared/mortalShare for player attributes information
 
+if(!server){
+	initPlayer = function(data){    //use data sent from server and default to create the player
+		player = Mortal.creation.template('player');
+		for(var i in data.player){ player[i] = data.player[i]; }
+		
+		document.getElementById("chatUserName").innerHTML = player.name + ': '; 
+	}
+}
 
 //Mortal
 Mortal = typeof Mortal !== 'undefined' ? Mortal : {};
@@ -14,15 +22,26 @@ Mortal.remove = function(mort){
 }
 
 
-
-
-if(!server){
-	initPlayer = function(data){    //use data sent from server and default to create the player
-		player = defaultMortal('player');
-		for(var i in data.player){ player[i] = data.player[i]; }
-		
-		document.getElementById("chatUserName").innerHTML = player.name + ': '; 
+Mortal.updateArmor = function(mort){
+	for(var k in Cst.element.list){	//Each Element
+		var i = Cst.element.list[k];
+		var sum = 0;
+		for(var j in mort.armor.piece){	//Each Piece
+			sum += mort.armor.piece[j].def[i] * mort.armor.piece[j].orb.upgrade.bonus;
+		}
+		mort.armor.def[i] = sum;
 	}
+}
+
+Mortal.switchArmor = function(mort,name){
+	var old = mort.armor.piece[Db.armor[name].piece];
+	var armor = Db.armor[name];
+	mort.armor.piece[armor.piece] = armor;
+	Mortal.permBoost(mort,armor.piece,mort.armor.piece[armor.piece].boost);
+	Mortal.updateArmor(mort);
+	List.main[mort.id].invList.remove(name);
+	List.main[mort.id].invList.add(old.id);
+	
 }
 
 
@@ -39,11 +58,11 @@ Mortal.changeResource = function(mort,heal){
 
 //Equip a weapon from the inventory. Set is as current weapon. Remove the old weapon of same piece.
 Mortal.switchWeapon = function(mort,name){
-	var old = mort.weaponList[weaponDb[name].piece];
-	mort.weaponList[weaponDb[name].piece] = weaponDb[name];
+	var old = mort.weaponList[Db.weapon[name].piece];
+	mort.weaponList[Db.weapon[name].piece] = Db.weapon[name];
 	List.main[mort.id].invList.remove(name);
 	List.main[mort.id].invList.add(old.id);
-	Mortal.swapWeapon(mort,weaponDb[name].piece);
+	Mortal.swapWeapon(mort,Db.weapon[name].piece);
 }
 
 //Equip a weapon already present in the weaponList
@@ -217,7 +236,7 @@ Mortal.swapAbility = function(mort,abPos,abListPost){
 Mortal.learnAbility = function(mort,name){
 	if(mort.abilityList[name]) return; //verify if already ahve
 	
-	var ab = Ability.uncompress(deepClone(abilityDb[name]));
+	var ab = Ability.uncompress(deepClone(Db.ability[name]));
 		
 	mort.abilityList[ab.id] = ab;
 }

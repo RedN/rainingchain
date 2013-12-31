@@ -25,12 +25,12 @@ else {serv.listen(3000);}	//if using on own PC, go http://localhost:3000/
 
 require('./' + clientPath + 'client/js/shared/essentialsShare');
 
-db = require('./server/db/Db');
+require('./server/db/Db');
 main = require('./server/main');
 
 
-require('./' + clientPath + 'client/js/shared/Player');
-require('./server/entity/Mortal');
+require('./' + clientPath + 'client/js/shared/Mortal');
+require('./server/entity/Mortal_creation');
 require('./server/entity/Attack');
 require('./server/entity/Mortal_loop');
 require('./server/entity/Attack_loop');
@@ -67,9 +67,9 @@ require('./' + clientPath + 'client/js/shared/constant');
 require('./' + clientPath + 'client/js/shared/buttonShare');
 require('./' + clientPath + 'client/js/shared/sprite');
 require('./' + clientPath + 'client/js/shared/anim');
-require('./' + clientPath + 'client/js/shared/mortShare');
+require('./' + clientPath + 'client/js/shared/Mortal_init');
 require('./' + clientPath + 'client/js/shared/drawShare');
-require('./' + clientPath + 'client/js/shared/commandShare');
+require('./' + clientPath + 'client/js/shared/command');
 require('./' + clientPath + 'client/js/shared/utilityShare');
 require('./' + clientPath + 'client/js/shared/drawUtility');
 require('./' + clientPath + 'client/js/shared/passiveGrid');
@@ -79,4 +79,4 @@ require('./' + clientPath + 'client/js/shared/questShare');
 require('./' + clientPath + 'client/js/shared/equipBoost');
 
 
-main.startGame();   //
+main.initServer();   //

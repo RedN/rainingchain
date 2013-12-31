@@ -89,7 +89,7 @@ Receive.init = function(obj){
 
 Receive.init.mortal = function(mort){
 	mort.toRemove = 0;
-	initSprite(mort,mort.sprite);
+	Sprite.creation(mort,mort.sprite);
 	List.mortal[mort.id] = mort;	
 	List.all[mort.id] = mort;	
 	
@@ -97,7 +97,7 @@ Receive.init.mortal = function(mort){
 
 Receive.init.bullet = function(bullet){
 	bullet.toRemove = 0;
-	initSprite(bullet,bullet.sprite);
+	Sprite.creation(bullet,bullet.sprite);
 	List.bullet[bullet.id] = bullet;	
 	List.all[bullet.id] = bullet;	
 }
@@ -119,8 +119,8 @@ Receive.init.anim = function(a){
 		List.anim[a.id] = a;
 	}
 	
-	if(sfxDb[animDb[a.name].sfx]){
-		var sfx = Sfx.play(animDb[a.name].sfx);
+	if(sfxDb[Db.anim[a.name].sfx]){
+		var sfx = Sfx.play(Db.anim[a.name].sfx);
 		sfx.volume = Math.max(0.1,1 - 0.2*Math.floor(distancePtPt(player,a)/50));	
 		sfx.play();
 	}

@@ -38,7 +38,7 @@ defaultMain = function(key){
 
 
 defaultPlayer = function(){
-	var p = defaultMortal('player');
+	var p = Mortal.creation.template('player');
 	
 	p.id = Math.randomId();
 	p.publicId = Math.random().toString(36).substring(13);
@@ -53,7 +53,7 @@ defaultPlayer = function(){
 	p.name = 'player0000';
 	p.active = 1;
 	p.loginLocation = null;
-	initSprite(p,p.sprite);
+	Sprite.creation(p,p.sprite);
 	p.activeList = {};
 	p.ability = [{id:'bulletMulti'}];
 	p.abilityList = {
@@ -316,7 +316,7 @@ ts("Mortal.permBoost(p,'asdsd',[{'type':'custom','value':'balancedAtk'}])")
 
 superBoost = function(){
 	var str = [];
-	for(var i in statDb){
+	for(var i in Db.stat){
 		str.push({'stat':i,'value':Math.random()*2,'type':'+'});
 	}
 	str = stringify(str);
@@ -354,7 +354,7 @@ Combat.action.attack.mod = function(player,atk){
 }
 
 Combat.action.attack.mod.bonus = function(bon,atk){
-	var bon = useTemplate(defaultBonus(),bon,0);
+	var bon = useTemplate(Mortal.creation.template.bonus(),bon,0);
 	
 	//Status Effect
 	var list = ['time','magn','chance'];

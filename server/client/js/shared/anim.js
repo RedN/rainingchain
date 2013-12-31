@@ -1,7 +1,7 @@
 
 
-initAnimDb = function(){
-	animDb ={
+Init.db.anim = function(){
+	Db.anim ={
 			"slash":{'frame':8},
 			"attack1":{'frame':3},
 			"attack2":{'frame':8},
@@ -71,8 +71,8 @@ initAnimDb = function(){
 		
 			
 			
-	for(var i in animDb){
-		var anim = animDb[i];
+	for(var i in Db.anim){
+		var anim = Db.anim[i];
 		
 		anim.layer = anim.layer || 'a';
 		anim.frameX = anim.frameX || Math.min(anim.frame,5);
@@ -92,7 +92,7 @@ Anim = {};
 Anim.update = function (){
 	for(var i in List.anim){
 		var anim = List.anim[i];
-		var animFromDb = animDb[anim.name];
+		var animFromDb = Db.anim[anim.name];
 		anim.timer += animFromDb.spd * anim.spdMod;
 		
 		anim.x = anim.target.x;

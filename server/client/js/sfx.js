@@ -1,4 +1,4 @@
-initSfxDb = function(){
+Init.db.sfx = function(){
 	sfxDb = {
 		'fire1':{},
         

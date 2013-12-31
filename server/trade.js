@@ -41,8 +41,8 @@ tradeRightClick=function(key,slot){
 transferTradeInv = function (key,id,amount){
 	if(!amount){amount = 1;}
 	amount = Math.min(amount,haveTrade(key,id,0,'amount'));
-	if(!itemDb[id].stack){ amount = Math.min(amount,List.main[key].invList.empty()); }
-	if(itemDb[id].stack && !List.main[key].invList.have(id) && !List.main[key].invList.empty(1)){ amount = 0 }
+	if(!Db.item[id].stack){ amount = Math.min(amount,List.main[key].invList.empty()); }
+	if(Db.item[id].stack && !List.main[key].invList.have(id) && !List.main[key].invList.empty(1)){ amount = 0 }
 	
 	if(amount){	removeTrade(key,id,amount);	List.main[key].invList.add(id,amount);	}
 }

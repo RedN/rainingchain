@@ -1,8 +1,8 @@
 //Weapon
 
 //Init the Weapon Database
-initWeaponDb = function (cb){
-	weaponDb = {};
+Init.db.weapon = function (cb){
+	Db.weapon = {};
 	weaponPreDb = {};
 	
 	//Get the info from the actual MongoDb
@@ -136,7 +136,7 @@ initWeapon = function(equip){
 		equip.dmgRatio = normalizeRatio(equip.dmgRatio);
 		for(var i in equip.dmgRatio){ equip.dmg[i] = equip.dmgRatio[i] * equip.dmgMain; }
 	}
-	weaponDb[equip.id] = equip;
+	Db.weapon[equip.id] = equip;
 	equip.color = Craft.create.equip.color(equip);
 	
 	//Create the item version of the weapon
@@ -191,7 +191,7 @@ if self found => all boost become *1.1
 
 
 examineWeapon = function(key, id){
-	openPopup(key,'weapon',weaponDb[id]);
+	openPopup(key,'weapon',Db.weapon[id]);
 }
 
 

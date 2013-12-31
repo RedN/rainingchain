@@ -11,7 +11,7 @@ Chat.parse = function(data){
 				if(data[j] == ']' && data[j+1] == ']'){
 					var id = data.slice(start+2,j);
 					
-					var item = itemDb[id];
+					var item = Db.item[id];
 					
 					if(item){
 						if(item.type == 'armor' || item.type == 'weapon'){
@@ -112,7 +112,7 @@ Chat.send.pm.clan = function(key,text,to,type,from,data){
     var clanName = List.main[key].clanList[+to];
     		
     if(!clanName){ Chat.add(key,'You typed too many \"/\".'); return; }
-    var clan = clanDb[clanName];
+    var clan = Db.clan[clanName];
     if(!clan){ Chat.add(key,'This clan doesn\'t exist. Strange...'); return; }
     
     for(var i in clan.memberList){	

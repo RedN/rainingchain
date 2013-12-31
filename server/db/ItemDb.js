@@ -20,8 +20,8 @@ a['testing']    //testing is the item id
 Item = {};
 
 //Similar format than Weapon and Armor
-initItemDb = function (cb){
-	itemDb = {}; itemPreDb = {}; a = itemPreDb;
+Init.db.item = function (cb){
+	Db.item = {}; itemPreDb = {}; a = itemPreDb;
 	
 	db.item.find({},{'_id':0},function(err, results) { if(err) throw err
 		for(var i in results){
@@ -139,7 +139,7 @@ initItem = function(itemdb){
 	for(var i in itemdb){ item[i] = itemdb[i];}
 	if(item.drop){	item.option.push({'name':'Drop','func':'dropInv','param':[item.id]})}
 
-	itemDb[item.id] = item;
+	Db.item[item.id] = item;
 }
 
 Item.template = function(){

@@ -2,8 +2,8 @@
 
 var DROP_TIMER = 25*30;
 
-initDropDb = function(){
-	dropDb = {
+Init.db.drop = function(){
+	Db.drop = {
 		'regular':
 			[	{'item':'gold','min':1,'max':10,'chance':1/4},
 				{'item':'lobster','min':1,'max':1,'chance':1/4},
@@ -36,7 +36,7 @@ rightClickDrop = function(key,rect){
 	for(var i in List.drop){
 		var d = List.drop[i];
 		if(d.map == List.all[key].map && Collision.RectRect(rect,[d.x,d.x+32,d.y,d.y+32]) ){
-			ol.option.push({'name':'Pick ' + itemDb[List.drop[i].item].name,'func':'pickDrop','param':[i]});
+			ol.option.push({'name':'Pick ' + Db.item[List.drop[i].item].name,'func':'pickDrop','param':[i]});
 		}
 	}
 	
@@ -78,7 +78,7 @@ enemyDropItem = function(enemy,killer){
 	for(var i in drop.category){
 		
 		if(drop.category[i] != 'plan'){
-			var list = dropDb[drop.category[i]];
+			var list = Db.drop[drop.category[i]];
 			for(var j in list){
 				var item = list[j];
 				if(Math.pow(Math.random(),quantity+1) < item.chance){
@@ -87,7 +87,7 @@ enemyDropItem = function(enemy,killer){
 				}	
 			}
 		} else {
-			if(Math.pow(Math.random(),(quantity+1)) < dropDb.plan){
+			if(Math.pow(Math.random(),(quantity+1)) < Db.drop.plan){
 				var itemId = 'planA' + Math.randomId();
 				var item = {'name':"Plan",'visual':'plan.planA',
 							'option':[	{'name':'Craft Item','func':'Craft.plan',
@@ -112,7 +112,7 @@ removeDrop = function(drop){
 }
 
 dropInv = function(key, iii){
-	var item = itemDb[iii];
+	var item = Db.item[iii];
 	var player = List.all[key];
 	var amount = 1;
 	if(item.stack){ amount = List.main[key].invList.have(iii,'amount'); }

@@ -19,7 +19,7 @@ initShopDb = function(){
 	for(var i in shopDb){
 		for(var j in shopDb[i].stock.default){
 			if(!shopDb[i].stock.default[j][2]){
-				shopDb[i].stock.default[j][2] = itemDb[shopDb[i].stock.default[j][0]].value;
+				shopDb[i].stock.default[j][2] = Db.item[shopDb[i].stock.default[j][0]].value;
 			}
 			shopDb[i].stock.default[j][3] = shopDb[i].stock.default[j][1]; 
 		}
@@ -90,7 +90,7 @@ addShop = function (key,stock,id,amount){
 	if(haveShop(key,stock,id)){
 		tmp[haveShop(key,stock,id,1,"position")][1] += amount;
 	} else if(emptyShop(key,stock,1)){
-		tmp.push([id,amount,itemDb[id].value]);
+		tmp.push([id,amount,Db.item[id].value]);
 	}
 }
 
@@ -122,7 +122,7 @@ emptyShop = function (key,stock,amount){
 
 shopLeftClick = function(key,stock,slot){
 	var tmp = List.main[key].windowList.shop.stock[stock][slot];
-	var string = itemDb[tmp[0]].name;
+	var string = Db.item[tmp[0]].name;
 	string += ' costs ';
 	string += tmp[2];
 	string += ' GP each.';
@@ -154,13 +154,13 @@ transferShopInv = function (key,stock,id,amount){
 	var shopid = List.main[key].windowList.shop.id;
 	if(!amount){amount = 1;}
 	amount = Math.min(amount,haveShop(shopid,stock,id,0,'amount'));
-	if(!itemDb[id].stack){ amount = Math.min(amount,emptyShop(shopid,stock)); }
-	if(itemDb[id].stack && !List.main[key].invList.have(key,id) && !List.main[key].invList.empty(1)){ amount = 0 }
+	if(!Db.item[id].stack){ amount = Math.min(amount,emptyShop(shopid,stock)); }
+	if(Db.item[id].stack && !List.main[key].invList.have(key,id) && !List.main[key].invList.empty(1)){ amount = 0 }
 	if(amount){	removeShop(shopid,stock,id,amount); List.main[key].invList.add(id,amount);	}
 }
 
 transferInvShop = function (key,stock,id,amount){
-	if(itemDb[id].sell){	
+	if(Db.item[id].sell){	
 		var tmp = List.main[key].windowList.shop.stock[stock];
 		var shopid = List.main[key].windowList.shop.id;
 		if(!amount){amount = 1;}
@@ -169,7 +169,7 @@ transferInvShop = function (key,stock,id,amount){
 		if(amount){	
 			addShop(shopid,stock,id,amount); 
 			List.main[key].invList.remove(id,amount);
-			List.main[key].invList.add('gold',amount*Math.floor(itemDb[id].value*SHOP_RESELL));
+			List.main[key].invList.add('gold',amount*Math.floor(Db.item[id].value*SHOP_RESELL));
 		}
 	} else {
 		Chat.add(key,"You can't sell this item");

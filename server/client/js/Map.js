@@ -2,7 +2,7 @@
 
 var Map = {};
 
-initMapDb = function(){
+Init.db.map = function(){
     //[amount of sub-map in X, amount of sub-maps in Y]
     
 	mapDb = {

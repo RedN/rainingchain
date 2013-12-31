@@ -9,7 +9,7 @@ ItemList = function(size){
 //Add item in inventory
 ItemList.prototype.add = function (id,amount){
 	amount = amount || 1;
-	if(itemDb[id].stack || this.alwaysStack){
+	if(Db.item[id].stack || this.alwaysStack){
 		if(this.have(id)){
 			this.data[this.have(id,1,"position")][1] += amount;
 		} else if(this.empty(1)){
@@ -41,8 +41,8 @@ ItemList.prototype.test = function (array_items){
 		if(typeof item[0] !== 'string'){ item[0] = item[0].id; }	//Case put obj instead of id
 		if(!item[1]){ item[1] = 1; }
 		
-		if( (!itemDb[item[0]].stack && (!this.bank || this.bank && !this.have(item[0]))) ||
-		        (itemDb[item[0]].stack && !this.have(item[0]))  ){
+		if( (!Db.item[item[0]].stack && (!this.bank || this.bank && !this.have(item[0]))) ||
+		        (Db.item[item[0]].stack && !this.have(item[0]))  ){
 			spaceNeeded++;
 		}	
 	}
@@ -62,7 +62,7 @@ ItemList.prototype.firstEmpty = function(){
 //Remove item in inventory
 ItemList.prototype.remove = function (id,amount){
 	amount = amount || 1;
-	if(itemDb[id].stack || this.alwaysStack){
+	if(Db.item[id].stack || this.alwaysStack){
 		for(var i = 0 ; i < this.data.length ; i ++){
 			if(this.data[i][0] === id){
 				this.data[i][1] -= amount;
@@ -105,7 +105,7 @@ ItemList.prototype.have = function (id,amount,info){
 	amount = amount || 1;
 	info = info || "bool";
 	
-	if(itemDb[id].stack || this.alwaysStack){	
+	if(Db.item[id].stack || this.alwaysStack){	
 		for(var i = 0 ; i < this.data.length ; i++){
 			if(this.data[i][0] === id){
 				if(info == "bool"){	return (this.data[i][1] >= amount)} 
@@ -151,7 +151,7 @@ ItemList.prototype.toClient = function(){
 		ret[i] = '';
 		if(this.data[i][0]){
             ret[i] = [];
-            ret[i][0] = itemDb[this.data[i][0]].visual;
+            ret[i][0] = Db.item[this.data[i][0]].visual;
 			ret[i][1] = this.data[i][1];
 		}
 	}
@@ -223,7 +223,7 @@ Inventory.prototype.click = function(slot,side){
 			console.log(this.transfer);
 			
 			Button.optionList(key,{
-				'name':itemDb[id].name,
+				'name':Db.item[id].name,
 				'option':[
 					{'name':'Deposit 5','func':this.transfer,'param':[m.bankList,id,5],'nokey':true},
 					{'name':'Deposit 25','func':this.transfer,'param':[m.bankList,id,25],'nokey':true},
@@ -237,7 +237,7 @@ Inventory.prototype.click = function(slot,side){
 	}
 	
 	//No Window
-	var item = itemDb[this.data[slot][0]];
+	var item = Db.item[this.data[slot][0]];
 	if(side === 'left'){	
 		if(m.temp.selectInv){
 			var array = [this.data[slot][0]];
@@ -287,7 +287,7 @@ Bank.prototype.click = function(slot,side){
 	if(side === 'right'){
 		var id = this.data[slot][0];
 		Button.optionList(key,{
-			'name':itemDb[id].name,
+			'name':Db.item[id].name,
 			'option':[
 				{'name':'Withdraw 5','func':'transferBankInv','param':[id,5]},
 				{'name':'Withdraw 25','func':'transferBankInv','param':[id,25]},

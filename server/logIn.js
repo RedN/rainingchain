@@ -220,13 +220,12 @@ Save.player.compress = function(player){
 
 Save.player.uncompress = function(player){
 
-    player.weapon = weaponDb[player.weapon.id];
-    for(var i in player.weaponList){ player.weaponList[i] = weaponDb[player.weaponList[i].id]; }
+    player.weapon = Db.weapon[player.weapon.id];
+    for(var i in player.weaponList){ player.weaponList[i] = Db.weapon[player.weaponList[i].id]; }
 
-    for(var i in player.armor.piece){ player.armor.piece[i] = armorDb[player.armor.piece[i].id]; }
+    for(var i in player.armor.piece){ player.armor.piece[i] = Db.armor[player.armor.piece[i].id]; }
     player.armor.def = {'melee':1,'range':1,'magic':1,'fire':1,'cold':1,'lightning':1};
-    player.armor.resist = {'burn':0,'chill':0,'confuse':0,'knock':0};
-    updateArmor(player);
+    Mortal.updateArmor(player);
 
 
     for(var i in player.abilityList){

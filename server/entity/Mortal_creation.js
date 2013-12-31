@@ -19,7 +19,7 @@ Mortal.creation.group(
 		
 
 Mortal.creation = function(data){
-	var e = defaultMortal('enemy');
+	var e = Mortal.creation.template('enemy');
 	e = Mortal.creation.db(e,data);
 	e = Mortal.creation.info(e,data);
 	e = useTemplate(e,e.extra,2);	//deep clone of function
@@ -81,8 +81,8 @@ Mortal.creation.boost = function(e){
 }
 
 Mortal.creation.db = function(e,d){
-	e = eDb[d.category][d.variant]();
-	for(var i in eDb[d.category][d.variant]) e[i] = eDb[d.category][d.variant][i];
+	e = Db.enemy[d.category][d.variant]();
+	for(var i in Db.enemy[d.category][d.variant]) e[i] = Db.enemy[d.category][d.variant][i];
 
 	
 	e.id = Math.randomId();
@@ -102,7 +102,7 @@ Mortal.creation.db = function(e,d){
 		Mortal.swapAbility(e,+i,name);
 	}
 	
-	initSprite(e,e.sprite);		//To set hitbox and bumper
+	Sprite.creation(e,e.sprite);		//To set hitbox and bumper
 		
 	return e;
 }

@@ -81,10 +81,10 @@ Draw.anim = function (layer){
 	ctx = ctxList.stage;
 	
 	for(var i in List.anim){
-		if(animDb[List.anim[i].name].layer === layer){
+		if(Db.anim[List.anim[i].name].layer === layer){
 			
 			var anim = List.anim[i];
-			var animFromDb = animDb[anim.name];
+			var animFromDb = Db.anim[anim.name];
 			var image = animFromDb.img;
 			var height = image.height;
 			var width = image.width;
@@ -149,7 +149,7 @@ Draw.entity.mortal.chatHead = function(mort){
 	ctx = ctxList.stage;
 	
 	var spriteServer = mort.sprite;
-	var spriteFromDb = spriteDb[spriteServer.name];
+	var spriteFromDb = Db.sprite[spriteServer.name];
 	var sizeMod = spriteFromDb.size* spriteServer.sizeMod;
 	
 	var numX = WIDTH2+mort.x-player.x;
@@ -168,7 +168,7 @@ Draw.entity.mortal.hpBar = function(mort){
 	ctx = ctxList.stage;
 	
 	var spriteServer = mort.sprite;
-	var spriteFromDb = spriteDb[spriteServer.name];
+	var spriteFromDb = Db.sprite[spriteServer.name];
 	var animFromDb = spriteFromDb.anim[spriteServer.anim];
 
 	var sizeMod = spriteFromDb.size* spriteServer.sizeMod;
@@ -195,7 +195,7 @@ Draw.entity.sprite = function (mort){
 	ctx = ctxList.stage;
 	
 	var spriteServer = mort.sprite;
-	var spriteFromDb = spriteDb[spriteServer.name];
+	var spriteFromDb = Db.sprite[spriteServer.name];
 	var image = spriteFromDb.img;
 	var animFromDb = spriteFromDb.anim[spriteServer.anim];
 	
@@ -231,7 +231,7 @@ Draw.entity.drop = function(key){
 			"rect":[numX,numX+32,numY,numY+32],
 			"left":{"func":pickDrop,"param":[i]},
 			'right':{'func':rightClickDrop,'param':[[List.drop[i].x,List.drop[i].x+32,List.drop[i].y,List.drop[i].y+32]]},
-			'text':'Pick ' + itemDb[List.drop[i].item].name,
+			'text':'Pick ' + Db.item[List.drop[i].item].name,
 			
 			});	
 		
@@ -461,12 +461,12 @@ setSortList = function(){
 
 sortFunction = function (mort,mort1){
 	var spriteServer = mort.sprite;
-	var spriteFromDb = spriteDb[spriteServer.name];
+	var spriteFromDb = Db.sprite[spriteServer.name];
 	var sizeMod = spriteFromDb.size* spriteServer.sizeMod;
 	var y0 = mort.y + spriteFromDb.legs * sizeMod
 	
 	var spriteServer1 = mort1.sprite;
-	var spriteFromDb1 = spriteDb[spriteServer1.name];
+	var spriteFromDb1 = Db.sprite[spriteServer1.name];
 	var sizeMod1 = spriteFromDb1.size* spriteServer1.sizeMod;
 	var y1 = mort1.y + spriteFromDb1.legs * sizeMod1
 	
@@ -886,7 +886,7 @@ Draw.tab.quest = function(key){ ctxrestore();
 		
 		for(var i in quest){
 			var q = quest[i];
-			var qdb = qDb[i];
+			var qdb = Db.quest[i];
 			
 			var color = q.complete ? 'green' : (q.started ? 'yellow' : 'red');
 			
@@ -1470,9 +1470,9 @@ Draw.window.ability.action.boost = function(diffX,diffY){  ctxrestore();
 	var boost = ab.action[0].param[0];
 	
 	for(var i in boost){
-		var slot = iconIndex[statDb[boost[i].stat].icon];
+		var slot = iconIndex[Db.stat[boost[i].stat].icon];
 		ctx.drawImage(Img.icon,slot.x,slot.y,ICON,ICON,zx,zy,20,20);
-		var str = boost[i].type + round(boost[i].value,2) + ' ' + statDb[boost[i].stat].name + ' for ' + round(boost[i].time/25,2) + 's.';
+		var str = boost[i].type + round(boost[i].value,2) + ' ' + Db.stat[boost[i].stat].name + ' for ' + round(boost[i].time/25,2) + 's.';
 		ctx.fillText(str,zx+30,zy);
 		zy += 30;
 	}
@@ -1515,7 +1515,7 @@ Draw.window.trade = function (key){ ctxrestore();
 			"rect":[numX,numX+56,numY,numY+56],
 			"left":{"func":tradeLeftClick,"param":[i]},
 			"right":{"func":tradeRightClick,"param":[i]},
-			'text':'Withdraw ' + itemDb[tList[i][0]].name
+			'text':'Withdraw ' + Db.item[tList[i][0]].name
 			});	
 		}
 		
@@ -1535,7 +1535,7 @@ Draw.window.trade = function (key){ ctxrestore();
 		if(server){
 			Button.creation(key,{
 			"rect":[numX,numX+56,numY,numY+56],
-			'text':'Withdraw ' + itemDb[trade.tradeList[i][0]].name
+			'text':'Withdraw ' + Db.item[trade.tradeList[i][0]].name
 			});	
 		}
 		
@@ -1606,7 +1606,7 @@ Draw.window.shop = function (key){ ctxrestore();
 				"rect":[numX,numX+48,numY,numY+48],
 				"left":{"func":shopLeftClick,"param":[stock,i]},
 				"right":{"func":shopRightClick,"param":[stock,i]},
-				'text':'Price of ' + itemDb[shop.stock[stock][i][0]].name
+				'text':'Price of ' + Db.item[shop.stock[stock][i][0]].name
 				});
 			}
 			
@@ -1699,7 +1699,7 @@ Draw.window.passive.grid = function(key){ ctxrestore();
 			//Icon
 			ctx.globalAlpha = 0.5;
 			if(+passive[i][j]){ ctx.globalAlpha = 1; }
-			var slot = passiveGrid[i][j].stat ? iconIndex[statDb[passiveGrid[i][j].stat].icon] : iconIndex[uniqueBoostDb[passiveGrid[i][j].value].icon];
+			var slot = passiveGrid[i][j].stat ? iconIndex[Db.stat[passiveGrid[i][j].stat].icon] : iconIndex[uniqueBoostDb[passiveGrid[i][j].value].icon];
 			ctx.drawImage(Img.icon,slot.x,slot.y,ICON,ICON,numX+border2,numY+border2,icon,icon);
 			
 			//Hover
@@ -1712,7 +1712,7 @@ Draw.window.passive.grid = function(key){ ctxrestore();
 				Button.creation(0,{
 				"rect":[numX,numX+ic,numY,numY+ic],
 				"right":{"func":Chat.send.command,"param":['$win,passive,select,' + i + ',' + j]},
-				'text':'Choose ' + (passiveGrid[i][j].stat ? statDb[passiveGrid[i][j].stat].name : uniqueBoostDb[passiveGrid[i][j].value].name) ,
+				'text':'Choose ' + (passiveGrid[i][j].stat ? Db.stat[passiveGrid[i][j].stat].name : uniqueBoostDb[passiveGrid[i][j].value].name) ,
 				});	
 			}
 			
@@ -1743,7 +1743,7 @@ Draw.window.passive.hover = function(over){ ctxrestore();
 	var s = Draw.window.main.constant(); var sx = s.sx; var sy = s.sy; var mx = s.mx; var my = s.my; var zx = s.zx; var zy = s.zy; var dw = s.dw; var dh = s.dh; var mdx = s.mdx; var mcx = s.mcx; var w = s.w; var h = s.h; 
 	var ctx = ctxList.pop;
 	
-	var st = over.stat ? statDb[over.stat] : uniqueBoostDb[over.value];
+	var st = over.stat ? Db.stat[over.stat] : uniqueBoostDb[over.value];
 	
 	var vvx = 300;
 	var vvy = 100;
@@ -1781,7 +1781,7 @@ Draw.window.quest = function (key){ ctxrestore();
 	ctx = ctxList.win;
 	if(server){ return; }
 	
-	var q = qDb[windowList.quest];
+	var q = Db.quest[windowList.quest];
 	var hq = html.questWin;
 	var mq = quest[windowList.quest];
 	
@@ -1809,7 +1809,7 @@ Draw.window.quest = function (key){ ctxrestore();
 	str += 'Name: ' + q.name + '<br>';
 	var state = mq.complete ? 'Complete' : (mq.started ? 'Started' : 'Not Started');
 	str += 'State: ' + state + '<br>';
-	str += 'Reward: ' + round(q.reward.value[0],3,1) + ' - ' + round(q.reward.value[1],3,1) + ' in ' + statDb[q.reward.stat].name + '<br>';
+	str += 'Reward: ' + round(q.reward.value[0],3,1) + ' - ' + round(q.reward.value[1],3,1) + ' in ' + Db.stat[q.reward.stat].name + '<br>';
 	if(mq.complete){
 		var boost = Draw.convert.boost(mq.reward);
 		str += 'Current Reward: ' + boost[1] + ' in ' + boost[0] + '(' + mq.rewardTier + ')' + '<br>';

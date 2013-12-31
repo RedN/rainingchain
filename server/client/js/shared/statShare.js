@@ -1,7 +1,7 @@
 
 //if not playerOnly : cant be boosted with equip/curse for non player
-initStatDb = function(){
-	statDb = {
+Init.db.stat = function(){
+	Db.stat = {
 	    
 	//{Speed
 	'maxSpd':{
@@ -877,8 +877,8 @@ initStatDb = function(){
 
 }
 	
-	for(var i in statDb){
-		var s = statDb[i].boost;
+	for(var i in Db.stat){
+		var s = Db.stat[i].boost;
 		
 		s.name = {};
 		s.max = typeof s.max !== 'undefined' ? s.max : 100000;
@@ -889,7 +889,45 @@ initStatDb = function(){
 		s.permBase = s.base;
 		
 	}
-	
+	Init.db.stat.bonus();
+	Init.db.stat.boost();
 }
 
 	
+Init.db.stat.bonus = function(){
+	var info = {};
+	
+	for(var i in Db.stat){
+		if(Db.stat[i].boost.stat[0] === 'bonus'){
+			var a = Db.stat[i].boost.stat;
+			var value = Db.stat[i].boost.base;
+			
+			if(a.length === 3){
+				info[a[1]] = info[a[1]] || {};
+				info[a[1]][a[2]] = value;
+			}
+			if(a.length === 4){
+				info[a[1]] = info[a[1]] || {};
+				info[a[1]][a[2]] = info[a[1]][a[2]] || {};
+				info[a[1]][a[2]][a[3]]= value;
+			}
+		}
+	}
+	Mortal.creation.template.bonus = new Function('return ' + stringify(info));
+}
+
+
+Init.db.stat.boost = function(){
+	var p = {};
+	var e = {};
+	
+	for(var i in Db.stat){
+		p[i] = Db.stat[i].boost;
+		if(!Db.stat[i].playerOnly){
+			e[i] = Db.stat[i].boost;
+		}
+	}
+
+	Mortal.creation.template.boost = new Function('type', 'return type === "player" ? ' + stringify(p) + ' : ' + stringify(e));
+}
+

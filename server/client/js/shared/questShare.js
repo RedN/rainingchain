@@ -1,9 +1,9 @@
-initQuestDb = function(){
-	qDb = {};
+Init.db.quest = function(){
+	Db.quest = {};
 	
 	//Model
 	//{questId
-	qDb['questId'] = function(){
+	Db.quest['questId'] = function(){
 		var q = {};
 		q.id = 'questId';
 		q.name = 'Default Quest';
@@ -23,14 +23,14 @@ initQuestDb = function(){
 		};
 		
 		/*
-		Dialogue.db['Jenny']['quest'] = {
+		Db.dialogue['Jenny']['quest'] = {
 		'intro':{
 			'text':'Do you want to help me out?',
 			'face':'Jenny',
 			'option':[
 				{'text':"Sure.",
 					'next':{'node':'yes'},
-					'func':(function(key){  qDb['questId'].giveDevice(key); }),'param':[]
+					'func':(function(key){  Db.quest['questId'].giveDevice(key); }),'param':[]
 				},
 				{'text':"No. I got other things to do.",
 					'next':{'node':'no'}},
@@ -49,7 +49,7 @@ initQuestDb = function(){
 				
 		'gratz':{
 			'text':'Thanks you so much for your help. I can now unlock the barrier.',
-			'func':(function(key){  qDb['questId'].giveReward(key); }),'param':[],
+			'func':(function(key){  Db.quest['questId'].giveReward(key); }),'param':[],
 			},
 		'gratz2':{
 			'text':'Thanks again.',
@@ -129,21 +129,21 @@ initQuestDb = function(){
 	*/
 	
 	//Note: List.main[key].quest[id] only has variable
-	for(var i in qDb){ 
-		qDb[i].variable = qDb[i].variable || {};
-		qDb[i].variable.hint = 'There is no hint.';
-		qDb[i].variable.rewardTier = '0%';
-		qDb[i].variable.reward = null;
-		qDb[i].variable.requirement = '';
-		qDb[i].variable.complete = 0;
-		qDb[i].variable.started = 0;
-		qDb[i].variable.bonusSum = 0;
-		qDb[i].variable.bonus = {};
-		for(var j in qDb[i].bonus){ qDb[i].variable.bonus[j] = 0; }
-		for(var j in qDb[i].requirement){ qDb[i].variable.requirement += '0'; }
+	for(var i in Db.quest){ 
+		Db.quest[i].variable = Db.quest[i].variable || {};
+		Db.quest[i].variable.hint = 'There is no hint.';
+		Db.quest[i].variable.rewardTier = '0%';
+		Db.quest[i].variable.reward = null;
+		Db.quest[i].variable.requirement = '';
+		Db.quest[i].variable.complete = 0;
+		Db.quest[i].variable.started = 0;
+		Db.quest[i].variable.bonusSum = 0;
+		Db.quest[i].variable.bonus = {};
+		for(var j in Db.quest[i].bonus){ Db.quest[i].variable.bonus[j] = 0; }
+		for(var j in Db.quest[i].requirement){ Db.quest[i].variable.requirement += '0'; }
 	}
 	var quest = {};
-	for(var i in qDb){ quest[i] = deepClone(qDb[i].variable);}
+	for(var i in Db.quest){ quest[i] = deepClone(Db.quest[i].variable);}
 	eval('defaultQuestVariable = function(){ return ' + stringify(quest) + '}');
 	
 	
@@ -162,7 +162,7 @@ Quest.bonus.update = function(key,qid,bid,b){
 	}
 	mq.bonusSum = 1;
 	for(var i in mq.bonus){
-		if(mq.bonus[i]){	mq.bonusSum *= qDb[qid].bonus[i].bonus; }
+		if(mq.bonus[i]){	mq.bonusSum *= Db.quest[qid].bonus[i].bonus; }
 	}
 	
 }
@@ -173,10 +173,10 @@ Quest.bonus.toggle = function(key,qid,bid){
 		List.main[key].quest[qid].bonus[bid] = !List.main[key].quest[qid].bonus[bid];
 		
 		if(List.main[key].quest[qid].bonus[bid]){
-			qDb[qid].bonus[bid].add(key);
+			Db.quest[qid].bonus[bid].add(key);
 			Chat.add(key,'Bonus Turned On.');
 		} else {
-			qDb[qid].bonus[bid].remove(key);
+			Db.quest[qid].bonus[bid].remove(key);
 			Chat.add(key,'Bonus Turned Off.');
 		}
 	} else {
@@ -187,12 +187,12 @@ Quest.bonus.toggle = function(key,qid,bid){
 //roll the perm stat bonus and check if last one was better
 Quest.reward = function(key,id){
 	var qp = List.main[key].quest[id];
-	var q = qDb[id];
+	var q = Db.quest[id];
 	q.reward.quality = qp.bonusSum;	//change for all players
 	
 	var boost = Craft.boost.generate(q.reward);
 	
-	Chat.add(key,"The quest reward rolled is " + round(boost.value,4) + ' in ' + statDb[boost.stat].name + '.');
+	Chat.add(key,"The quest reward rolled is " + round(boost.value,4) + ' in ' + Db.stat[boost.stat].name + '.');
 	
 	if(qp.reward === null || boost.value >= qp.reward.value){
 		Chat.add(key,"Congratulations! Your character grows stronger.");
@@ -208,7 +208,7 @@ Quest.reward = function(key,id){
 	
 Quest.hint = {};
 Quest.hint.update = function(key,id){
-	List.main[key].quest[id].hint = qDb[id].hintGiver(key,List.main[key].quest[id]);
+	List.main[key].quest[id].hint = Db.quest[id].hintGiver(key,List.main[key].quest[id]);
 }
 
 Quest.req = {};
@@ -232,7 +232,7 @@ Quest.req.convert = function(qvar,req){
 Quest.req.update = function(key,id){
 	var temp = '';
 	
-	var q = qDb[id];
+	var q = Db.quest[id];
 	
 	for(var i in q.requirement){
 		if(q.requirement[i].func(key)){	temp += '1';}

@@ -24,8 +24,8 @@ Ability = {};
 	
 //default ability are inside logIn.js defaultPlayer
 
-initAbilityDb = function(cb){
-	abilityDb = {}; abilityPreDb = {}; var a = abilityPreDb;
+Init.db.ability = function(cb){
+	Db.ability = {}; abilityPreDb = {}; var a = abilityPreDb;
 	//note: defaultplayer depends on at least 1 ability
 	db.ability.find({},{'_id':0},function(err, results) { if(err) throw err
 		for(var i in results){
@@ -155,7 +155,7 @@ initAbility = function(a){
 	//Setting Ability
 	db.ability.update( {'id':a.id}, a, { upsert: true }, function(err) { if(err) throw err });	
 	
-	abilityDb[a.id] = a;	
+	Db.ability[a.id] = a;	
 	a.spd.main = a.spd.main / (a.spd.main + a.spd.support);
 	a.spd.support = 1- a.spd.main;
 	a.cost = a.cost || {};
@@ -331,7 +331,7 @@ initAbilityModDb = function(){
 //abid: Ability Id, mod: mod Id
 addAbilityMod = function(key,abid,mod){
 	//Verify
-	var ab = deepClone(abilityDb[abid]);
+	var ab = deepClone(Db.ability[abid]);
 	if(ab.modList[mod] !== undefined){ Chat.add(key,'This ability already has this mod.'); return; }
 	if(Object.keys(ab.modList).length > 5){ Chat.add(key,'This ability already has the maximal amount of mods.'); return; }
 	
@@ -348,7 +348,7 @@ addAbilityMod = function(key,abid,mod){
 //##############################################################
 
 Ability.uncompress = function(abi){	
-	var ab = typeof abi === 'object' ? abi : deepClone(abilityDb[abi]);
+	var ab = typeof abi === 'object' ? abi : deepClone(Db.ability[abi]);
 	
 	for(var i in ab.modList){
 		ab = abilityModDb[i].func(ab,ab.modList[i],orbFormula(ab.modList[i]));
