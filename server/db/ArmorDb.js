@@ -94,7 +94,7 @@ Init.db.armor = function (cb){
 	
 	for(var i in armorPreDb){	
 		armorPreDb[i].id = i;
-		initArmor(armorPreDb[i]);	
+		Armor.creation(armorPreDb[i]);	
 	}
 	
 	cb.call();
@@ -102,29 +102,28 @@ Init.db.armor = function (cb){
 	
 }); }
 
-initArmor = function(equip,mi){
-	equip = useTemplate(defaultArmor(),equip);
+Armor = {};
+
+Armor.creation = function(equip,mi){
+	equip = useTemplate(Armor.template(),equip);
 	
 	for(var j in equip.defRatio){ equip.def[j] = equip.defRatio[j] * equip.defMain; }
 	
 	Db.armor[equip.id] = equip;
 	equip.color = Craft.create.equip.color(equip);
 	
-	var id = equip.id;
-	
-	
 	var item = {};
 	item.name = equip.name;
 	item.visual = equip.piece + '.' + equip.type;
-	item.option = [	{'name':'Examine Armor','func':'examineArmor','param':[equip.id]},
+	item.option = [	{'name':'Examine Armor','func':'Armor.examine','param':[equip.id]},
 					{'name':'Change Armor','func':'Mortal.switchArmor','param':[equip.id]},
 					{'name':'Salvage','func':'Craft.salvage','param':[equip.id]},
 	];
 	item.type = 'armor';
-	item.id = id;
+	item.id = equip.id;
 	
 	
-	initItem(item);
+	Item.creation(item);
 		
 	
 	db.armor.update( {'id':equip.id}, equip, { upsert: true }, function(err) { if(err) throw err });
@@ -133,7 +132,7 @@ initArmor = function(equip,mi){
 
 //################################################
 
-defaultArmor = function(){
+Armor.template = function(){
 	var armor = {
 	'name':"Hello Kitty",
 	'piece':'pants',
@@ -156,7 +155,7 @@ defaultArmor = function(){
 	
 
 
-examineArmor = function(key, id){
+Armor.examine = function(key, id){
 	openPopup(key,'armor',Db.armor[id]);
 }
 

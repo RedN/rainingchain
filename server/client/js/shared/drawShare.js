@@ -229,8 +229,8 @@ Draw.entity.drop = function(key){
 			
 			Button.creation(key,{
 			"rect":[numX,numX+32,numY,numY+32],
-			"left":{"func":pickDrop,"param":[i]},
-			'right':{'func':rightClickDrop,'param':[[List.drop[i].x,List.drop[i].x+32,List.drop[i].y,List.drop[i].y+32]]},
+			"left":{"func":'Mortal.pickDrop',"param":[i]},
+			'right':{'func':'Mortal.rightClickDrop','param':[[List.drop[i].x,List.drop[i].x+32,List.drop[i].y,List.drop[i].y+32]]},
 			'text':'Pick ' + Db.item[List.drop[i].item].name,
 			
 			});	
@@ -581,7 +581,7 @@ Draw.tab.equip = function (key){ ctxrestore();
 		if(server){	
 			Button.creation(key,{
 				"rect":[numX,numX+40,numY,numY+40],
-				"left":{"func":Mortal.swapWeapon,"param":[Cst.equip.weapon.piece[i]]},
+				"left":{"func":'Mortal.swapWeapon',"param":[Cst.equip.weapon.piece[i]]},
 				"text":'Swap Weapon'
 			});
 		}
@@ -2253,6 +2253,16 @@ Draw.chat = function(key){ ctxrestore();
 
 
 
+Mortal.dropInv = function(mort, iii){
+	var key = mort.id;
+	var item = Db.item[iii];
+	var player = List.all[key];
+	var amount = 1;
+	if(item.stack){ amount = List.main[key].invList.have(iii,'amount'); }
+	
+	Drop.creation({'x':player.x,'y':player.y,'map':player.map,'item':iii,'amount':amount,'timer':25*30});
+	List.main[key].invList.remove(iii,amount);
+}
 
 
 

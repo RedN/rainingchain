@@ -190,7 +190,7 @@ initAbility = function(a){
 	];
 	item.type = 'ability';
 	item.id = id;
-	initItem(item);
+	Item.creation(item);
 	
 	return a.id;
 }
@@ -322,7 +322,7 @@ initAbilityModDb = function(){
 		item.option = [	{'name':'Select Mod','func':'abilityModClick','param':[i]} ];
 		item.type = 'mod';
 		item.id = 'mod-'+i;
-		initItem(item);
+		Item.creation(item);
 	
 	}
 	

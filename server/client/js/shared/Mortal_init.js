@@ -133,7 +133,7 @@ Init.mortal = function(){
 		mort.weaponList = {"melee":{'id':"mace"},"range":{'id':"boomerang"},"magic":{'id':"wand"}};
 		
 		
-		if(server && type == 'player'){
+		if(server && type === 'player'){
 			mort.weapon = Db.weapon[mort.weapon.id];
 			for(var i in mort.weaponList){ 	mort.weaponList[i] = Db.weapon[mort.weaponList[i].id];}
 		}

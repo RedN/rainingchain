@@ -37,6 +37,13 @@ Loop.Strike = function(){
 	}
 }
 
+Loop.Drop = function(){
+	for(var i in List.drop){ 
+		var drop = List.drop[i];
+		drop.timer--; 
+		if(drop.timer <= 0){ Drop.remove(drop); }
+	}
+}
 
 Loop.EnemyGroup = function(){
 	for(var i in List.group){

@@ -9,6 +9,17 @@ if(!server){
 	}
 }
 
+
+
+
+selectInv = function(key,obj){
+	List.main[key].temp.selectInv = obj;
+	List.main[key].temp.reset.selectInv = 1;
+}
+
+
+
+
 //Mortal
 Mortal = typeof Mortal !== 'undefined' ? Mortal : {};
 
@@ -66,6 +77,7 @@ Mortal.switchWeapon = function(mort,name){
 
 //Equip a weapon already present in the weaponList
 Mortal.swapWeapon = function(mort,piece){
+	console.log(mort);
 	mort.weapon = mort.weaponList[piece];
 	
 	Sprite.change(mort,mort.weapon.sprite);
@@ -261,7 +273,7 @@ Mortal.death = function(mort){	//only for enemy atm
 			killer = i;
 		}
 	}
-	enemyDropItem(mort,List.all[killer]);
+	Mortal.dropItem(mort,List.all[killer]);
 	if(mort.death){ mort.death(killer); }	//custom death function (ex quest)
 	
 	ActiveList.remove(mort);
@@ -281,4 +293,73 @@ Mortal.revive = function(mort){
 	//addEnemy(mort.data,mort.extra)
 }
 
+Mortal.dropItem = function(mort,killer){
+	var drop = mort.drop;
+	
+	var quantity = drop.mod.quantity; 
+	var quality = drop.mod.quality;
+	var rarity = drop.mod.rarity;
+	if(killer){ 
+		quantity += killer.item.quantity; 
+		quality += killer.item.quality; 
+		rarity += killer.item.rarity; 
+	}
+	
+	
+	
+	for(var i in drop.category){
+	
+		if(drop.category[i] !== 'plan'){
+			var list = Db.drop[drop.category[i]];
+			for(var j in list){
+				var item = list[j];
+				if(Math.pow(Math.random(),quantity+1) < item.chance){
+					var amount = Math.floor(item.min + (item.max-item.min)*( Math.pow(Math.random(),1/(quantity+1)))) ;	//player quantity
+					Drop.creation({'x':mort.x+(Math.random()-0.5)*50,'y':mort.y+(Math.random()-0.5)*50,'map':mort.map,'item':item.item,'amount':amount,'timer':Drop.timer});		
+				}	
+			}
+		} else {
+			if(Math.pow(Math.random(),(quantity+1)) < Db.drop.plan){
+				var itemId = 'planA' + Math.randomId();
+				var item = {'name':"Plan",'visual':'plan.planA',
+							'option':[	{'name':'Craft Item','func':'Craft.plan',
+										'param':[{'lvl':Math.max(0,Math.floor(mort.lvl*1+(Math.random()-0.5)*15)),'rarity':rarity,'quality':quality},{'item':[{'item':itemId,'amount':1}]}]}
+							]};
+				
+				
+				item.id = itemId;
+				Item.creation(item);
+				
+				Drop.creation({'x':mort.x+(Math.random()-0.5)*50,'y':mort.y+(Math.random()-0.5)*50,'map':mort.map,'item':itemId,'amount':1,'timer':Drop.timer});		
+			}
+		}
+	}
+}
 
+Mortal.pickDrop = function (mort,id){
+	var main = List.main[mort.id];
+	var drop = List.drop[id];
+		
+	if(drop){
+		if(distancePtPt(mort,drop) <= mort.pickRadius && main.invList.test([[List.drop[id].item,List.drop[id].amount]])){
+			main.invList.add(drop.item,drop.amount);
+			Drop.remove(drop);		
+		}
+	}
+}
+
+Mortal.rightClickDrop = function(mort,rect){
+	var key = mort.id;
+	var ol = {'name':'Pick Items','option':[]};
+	for(var i in List.drop){
+		var d = List.drop[i];
+		if(d.map == List.all[key].map && Collision.RectRect(rect,[d.x,d.x+32,d.y,d.y+32]) ){
+			ol.option.push({'name':'Pick ' + Db.item[List.drop[i].item].name,'func':'pickDrop','param':[i]});
+		}
+	}
+	
+	if(ol.option){ 
+		Button.optionList(key,ol);  
+	}	
+}
+	

@@ -151,7 +151,7 @@ initWeapon = function(equip){
 	];
 	item.id = id;
 	item.type = 'weapon';
-	initItem(item);
+	Item.creation(item);
 			
 	
 	db.weapon.update( {'id':equip.id}, equip, { upsert: true }, function(err) {});

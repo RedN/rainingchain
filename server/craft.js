@@ -176,7 +176,7 @@ Craft.create.equip = function(seed){
 		var equip = defaultWeapon();
 	}
 	if(seed.category === 'armor'){
-		var equip = defaultArmor();
+		var equip = Armor.template();
 	}
 	
 	equip.piece = seed.piece;
@@ -203,7 +203,7 @@ Craft.create.equip.armor = function(armor){
 	armor.defMain = Math.pow(seed.lvl+10,1.5)/30 * mod;	
 
 	
-	initArmor(armor);
+	Armor.creation(armor);
 	return armor.id;
 }
 
@@ -313,7 +313,7 @@ Craft.orb = function(key,orb,amount,wId,mod){
 	amount = Math.min(amount,List.main[key].invList.have(orb + '_orb',0,'amount'));
 	var func; var equip; var type;
 	if(Db.weapon[wId]){	func = initWeapon;	equip = deepClone(Db.weapon[wId]); type = 'equip';}
-	if(Db.armor[wId]){	func = initArmor;	equip = deepClone(Db.armor[wId]); type = 'equip';}
+	if(Db.armor[wId]){	func = Armor.creation;	equip = deepClone(Db.armor[wId]); type = 'equip';}
 	if(Db.ability[wId]){	func = initAbility;	equip = deepClone(Db.ability[wId]); type = 'ability';}
 	if(!equip){	Chat.add(key,"You can't use this orb on this item.");return; }
 	

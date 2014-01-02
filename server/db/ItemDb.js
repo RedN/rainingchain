@@ -117,20 +117,16 @@ Init.db.item = function (cb){
 	
 	for(var i in itemPreDb){	
 		itemPreDb[i].id = i;
-		initItem(itemPreDb[i],i);
+		Item.creation(itemPreDb[i],i);
 	}
 	
 	cb.call();
 	
 });}
 
-selectInv = function(key,obj){
-	List.main[key].temp.selectInv = obj;
-	List.main[key].temp.reset.selectInv = 1;
-}
 
 
-initItem = function(itemdb){
+Item.creation = function(itemdb){
 	
 	db.item.update( {'id':itemdb.id}, itemdb, { upsert: true }, function(err) { if(err) throw err });
 	
