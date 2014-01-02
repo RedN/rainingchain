@@ -10,7 +10,7 @@ Init.db.enemy = function(){ ePreDb = {};
 		"weapon":{'dmgMain':1,'dmgRatio':{'melee':1,'range':1,'magic':1,'fire':1,'cold':1,'lightning':1}},
 		'resource':{'hp':{'max':12,'regen':0},'mana':{'max':123,'regen':12}},
 		'armorMain':1,
-		"armor":{'def':{'melee':1,'range':1,'magic':1,'fire':1,'cold':1,'lightning':1}},
+		"equip":{'def':{'melee':1,'range':1,'magic':1,'fire':1,'cold':1,'lightning':1}},
 		"acc":2,
 		"maxSpd":5,
 	    "moveRange":{'ideal':200,"confort":100,"aggressive":300,"farthest":600},	
@@ -26,7 +26,7 @@ Init.db.enemy = function(){ ePreDb = {};
 		"weapon":{'dmgMain':1,'dmgRatio':{'melee':1,'range':1,'magic':1,'fire':1,'cold':1,'lightning':1}},
 		'resource':{'hp':{'max':12,'regen':0},'mana':{'max':123,'regen':12}},
 		'armorMain':1,
-		"armor":{'def':{'melee':1,'range':1,'magic':1,'fire':1,'cold':1,'lightning':1}},
+		"equip":{'def':{'melee':1,'range':1,'magic':1,'fire':1,'cold':1,'lightning':1}},
 		"acc":2,
 		"maxSpd":5,
 		"moveRange":{'ideal':200,"confort":50,"aggressive":400,"farthest":600},	
@@ -42,7 +42,7 @@ Init.db.enemy = function(){ ePreDb = {};
 		"weapon":{'dmgMain':1,'dmgRatio':{'melee':1,'range':1,'magic':1,'fire':1,'cold':1,'lightning':1}},
 		'resource':{'hp':{'max':12,'regen':0},'mana':{'max':123,'regen':12}},
 		'armorMain':1,
-		"armor":{'def':{'melee':1,'range':1,'magic':1,'fire':1,'cold':1,'lightning':1}},
+		"equip":{'def':{'melee':1,'range':1,'magic':1,'fire':1,'cold':1,'lightning':1}},
 		"acc":2,
 		"maxSpd":10,
 		'boss':'iceTroll',
@@ -63,7 +63,7 @@ Init.db.enemy = function(){ ePreDb = {};
 		"weapon":{'dmgMain':1,'dmgRatio':{'melee':1,'range':1,'magic':1,'fire':1,'cold':1,'lightning':1}},
 		'resource':{'hp':{'max':12,'regen':0},'mana':{'max':123,'regen':12}},
 		'armorMain':1,
-		"armor":{'def':{'melee':1,'range':1,'magic':1,'fire':1,'cold':1,'lightning':1}},
+		"equip":{'def':{'melee':1,'range':1,'magic':1,'fire':1,'cold':1,'lightning':1}},
 		"acc":2,
 		"maxSpd":10,
 		"moveRange":{'ideal':150,"confort":50,"aggressive":400,"farthest":600},	
@@ -110,7 +110,7 @@ Init.db.enemy = function(){ ePreDb = {};
 			e.context = e.name; 
 			if(e.combat && !e.nevercombat){ e.context += ' | Lvl: ' + e.lvl;}
 			e.hp = e.resource.hp.max;
-			e.def = e.armor.def;
+			e.def = e.equip.def;
 			
 			Db.enemy[i][j] = new Function('return ' + stringify(e));	//not used atm. currently creating from scratch everytime
 		}

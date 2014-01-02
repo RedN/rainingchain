@@ -58,8 +58,7 @@ require('./server/Bank');
 require('./server/db/EnemyDb');
 require('./server/db/AbilityDb');
 require('./server/db/ItemDb');
-require('./server/db/ArmorDb');
-require('./server/db/WeaponDb');
+require('./server/db/EquipDb');
 		
 require('./' + clientPath + 'client/js/shared/Collision');
 require('./' + clientPath + 'client/js/shared/stat');

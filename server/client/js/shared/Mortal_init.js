@@ -74,7 +74,8 @@ Init.mortal = function(){
 		//Def = DefMain * defArmor * mort.mastery.def
 		mort.def =  {"melee":1,"range":1,"magic":1,"fire":1,"cold":1,"lightning":1} ;
 		mort.defMain = 1;
-		mort.armor={
+		mort.weapon = {"id":"mace"};
+		mort.equip = {
 			"piece":{
 				"bracelet":{"id":"bracelet"},
 				"helm":{"id":"metalhelm"},
@@ -85,13 +86,18 @@ Init.mortal = function(){
 				"boots":{"id":"boots"},
 				"pants":{"id":"pants"},
 				"ring":{"id":"ring"},
-				},
+				"melee":{'id':"mace"},
+				"range":{'id':"boomerang"},
+				"magic":{'id':"wand"},
+			},
 			"def":{"melee":1,"range":1,"magic":1,"fire":1,"cold":1,"lightning":1},
+			"dmg":{"melee":1,"range":1,"magic":1,"fire":1,"cold":1,"lightning":1},
 		};	
-		
+				
 		if(server && type == 'player'){
-			for(var i in mort.armor.piece){	mort.armor.piece[i] = Db.armor[mort.armor.piece[i].id];}
-			Mortal.updateArmor(mort);
+			mort.weapon = Db.equip[mort.weapon.id];
+			for(var i in mort.equip.piece){	mort.equip.piece[i] = Db.equip[mort.equip.piece[i].id];}
+			Mortal.updateEquip(mort);
 		}
 		
 		mort.reflect = {"melee":0,"range":0,"magic":0,"fire":0,"cold":0,"lightning":0}; //% reflected
@@ -129,14 +135,6 @@ Init.mortal = function(){
 		
 		mort.aim = 0;       //difference between mouse and actually bullet direction
 		mort.atkSpd = {'main':1,'support':1};	
-		mort.weapon = {"id":"mace"};	
-		mort.weaponList = {"melee":{'id':"mace"},"range":{'id':"boomerang"},"magic":{'id':"wand"}};
-		
-		
-		if(server && type === 'player'){
-			mort.weapon = Db.weapon[mort.weapon.id];
-			for(var i in mort.weaponList){ 	mort.weaponList[i] = Db.weapon[mort.weaponList[i].id];}
-		}
 		
 		//Ability
 		mort.ability = [];
@@ -192,13 +190,11 @@ Init.mortal = function(){
 				'exp':{'melee':100000,'range':100000,'magic':100000,'metalwork':100000,'woodwork':100000,'leatherwork':100000,'geology':100000,'metallurgy':100000,'trapping':100000},
 				'lvl':{'melee':0,'range':0,'magic':0,'metalwork':0,'woodwork':0,'leatherwork':0,'geology':0,'metallurgy':0,'trapping':0},
 			} 
-			//if(server) mort.skill = new Skill();
 		}
 		
 		for(var i in mort.boost.list){  //init default Db.stat value
 			changeViaArray({'origin':mort,'array':mort.boost.list[i].stat,'value':mort.boost.list[i].base});
 		}
-		
 		return mort;
 	}
 

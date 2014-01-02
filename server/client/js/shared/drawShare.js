@@ -1,4 +1,5 @@
 var old = {'fl':'','quest':'','abilityShowed':'bulletMulti','abilityTypeShowed':'attack','abilitySub':''};
+var key = 1;
 
 Draw = {
 	'window':{},
@@ -25,11 +26,10 @@ Draw.loop = function (key){
 		
 		if(List.main[key].dialogue && List.main[key].dialogue.option){ Draw.chat(key); }
 		
-		Draw.tab(key);
 		Draw.window(key);
 		Draw.popup(key);
 		
-		if(List.main[key].optionList){ Draw.optionList(key); }
+		Draw.optionList(key);
 		
 		Button.context(key);
 	}
@@ -37,7 +37,6 @@ Draw.loop = function (key){
 		//Clear
 		for(var i in ctxList){ctxList[i].clearRect(0, 0, WIDTH, HEIGHT);}
 		for(var i = 0 ; i < drawHtmlDiv.length; i++){ drawHtmlDiv[i].style.visibility = 'hidden';}
-		drawSortList = [];
 		btnList = [];
 		Input.event.mouse.drag.update();
 		
@@ -45,20 +44,11 @@ Draw.loop = function (key){
 		Draw.map('b');   //below player
 		Draw.anim('b');  //below player
 		Draw.entity.drop();
-		
-		setSortList();  //sort actors by their y
-		drawSort();     //then draw them
-		
+		Draw.entity.mortal();  		
 		Draw.entity.bullet();
-		
 		Draw.anim('a');  //above player
 		Draw.map('a');   //above player
-		
-		for(var i in List.mortal){
-			if(List.mortal[i].chatHead){ Draw.entity.mortal.chatHead(List.mortal[i]); } //draw text over head
-		}
-		if(player.chatHead){ Draw.entity.mortal.chatHead(player); }
-		
+				
 		Draw.tab();     //bottom right
 		Draw.minimap(); //top right
 		Draw.resource();    //below map (hp, mana, fury)
@@ -67,7 +57,7 @@ Draw.loop = function (key){
 		Draw.window();
 		Draw.popup();
 		
-		if(optionList){ Draw.optionList(); }    //option when right-click
+		Draw.optionList();    //option when right-click
 		
 		Button.context();	//update for client buttons only
 		Draw.context();     //top left
@@ -111,19 +101,15 @@ Draw.anim = function (layer){
 Draw.entity.mortal = function (key){
 	if(server){
 		for(var i in List.all[key].activeList){
-			var mort = List.all[i];
-			if(mort && !mort.dead && i != key && mort.hitBox){
+			var mort = List.mortal[i];
+			if(mort && !mort.dead && i !== key && mort.hitBox){
 				var player = List.mortal[key];
 				
 				var x = WIDTH2 + mort.x - player.x;
 				var y = HEIGHT2 + mort.y - player.y;
-				var maxX = x + mort.hitBox[0].x ;
-				var maxY = y + mort.hitBox[1].y ;
-				var minX = x + mort.hitBox[2].x ;
-				var minY = y + mort.hitBox[3].y ;
 				
 				var info = {
-					"rect":[minX,maxX,minY,maxY],
+					"rect":Collision.getHitBox({x:x,y:y,hitBox:mort.hitBox}),
 					"text":mort.context
 				};
 				
@@ -131,20 +117,41 @@ Draw.entity.mortal = function (key){
 					info['right'] = {'func':'Button.optionList','param':mort.optionList};
 				}
 				
-				
-				 
-				 
 				Button.creation(key,info);
 			}
 		}
 	}	
 	if(!server){
-		var mort = key;
-		Draw.entity.sprite(mort);
-		if(mort.combat){ Draw.entity.mortal.hpBar(mort); }
+		var array = Draw.entity.mortal.sort();
+		for(var i = 0 ; i < array.length ; i ++){
+			var mort = array[i];
+			Draw.entity.sprite(mort);
+			if(mort.combat) Draw.entity.mortal.hpBar(mort); 
+			if(mort.chatHead) Draw.entity.mortal.chatHead(mort); 
+		}
 	}
 }	
 	
+Draw.entity.mortal.sort = function(){
+	var drawSortList = [];
+	for(var i in List.mortal){
+		drawSortList.push(List.mortal[i]);
+	}
+	drawSortList.push(player);
+	drawSortList.sort(function (mort,mort1){
+		var spriteFromDb = Db.sprite[mort.sprite.name];
+		var sizeMod = spriteFromDb.size* mort.sprite.sizeMod;
+		var y0 = mort.y + spriteFromDb.legs * sizeMod
+		
+		var spriteFromDb1 = Db.sprite[mort1.sprite.name];
+		var sizeMod1 = spriteFromDb1.size* mort1.sprite.sizeMod;
+		var y1 = mort1.y + spriteFromDb1.legs * sizeMod1
+		
+		return y0-y1;	
+	});	
+	return drawSortList;	
+}
+
 Draw.entity.mortal.chatHead = function(mort){
 	ctx = ctxList.stage;
 	
@@ -163,7 +170,6 @@ Draw.entity.mortal.chatHead = function(mort){
 	updateChatHead(mort);	
 }		
 
-//Draw Hp bar above head
 Draw.entity.mortal.hpBar = function(mort){
 	ctx = ctxList.stage;
 	
@@ -223,16 +229,15 @@ Draw.entity.sprite = function (mort){
 Draw.entity.drop = function(key){
 	if(server){
 		for(var i in List.drop){
-			
-			var numX = WIDTH2 + List.drop[i].x - List.mortal[key].x;
-			var numY = HEIGHT2 + List.drop[i].y - List.mortal[key].y;
+			var drop = List.drop[i];
+			var numX = WIDTH2 + drop.x - List.mortal[key].x;
+			var numY = HEIGHT2 + drop.y - List.mortal[key].y;
 			
 			Button.creation(key,{
 			"rect":[numX,numX+32,numY,numY+32],
 			"left":{"func":'Mortal.pickDrop',"param":[i]},
-			'right':{'func':'Mortal.rightClickDrop','param':[[List.drop[i].x,List.drop[i].x+32,List.drop[i].y,List.drop[i].y+32]]},
-			'text':'Pick ' + Db.item[List.drop[i].item].name,
-			
+			'right':{'func':'Mortal.rightClickDrop','param':[[drop.x,drop.x+32,drop.y,drop.y+32]]},
+			'text':'Pick ' + Db.item[drop.item].name,
 			});	
 		
 		}
@@ -248,9 +253,6 @@ Draw.entity.drop = function(key){
 			var numY = HEIGHT2 + drop.y - player.y;
 			
 			drawItem(drop.item,[numX,numY]);
-		
-			
-			//ctx.drawImage(Img.item,slot.x,slot.y,ITEM,ITEM,numX,numY,32,32);	
 		}
 	}
 }
@@ -450,69 +452,37 @@ Draw.map = function (layer){ ctxrestore();
 }
 
 
-//Draw Objects
-setSortList = function(){
-	for(var i in List.mortal){
-		drawSortList.push(List.mortal[i]);
-	}
-	drawSortList.push(player);
-	drawSortList.sort(sortFunction);	
-}
-
-sortFunction = function (mort,mort1){
-	var spriteServer = mort.sprite;
-	var spriteFromDb = Db.sprite[spriteServer.name];
-	var sizeMod = spriteFromDb.size* spriteServer.sizeMod;
-	var y0 = mort.y + spriteFromDb.legs * sizeMod
-	
-	var spriteServer1 = mort1.sprite;
-	var spriteFromDb1 = Db.sprite[spriteServer1.name];
-	var sizeMod1 = spriteFromDb1.size* spriteServer1.sizeMod;
-	var y1 = mort1.y + spriteFromDb1.legs * sizeMod1
-	
-	return y0-y1	
-}
-
-drawSort = function (){ ctxrestore();
-	for(var i = 0 ; i < drawSortList.length ; i ++){
-		Draw.entity.mortal(drawSortList[i]);
-	}
-}
 
 
 //{Tab	
 Draw.tab = function(key){ ctxrestore();
-	if(server){ var tab = List.main[key].currentTab; } 
-		else { var tab = currentTab; }
-	
-	Draw.tab[tab](key);
+	Draw.tab[currentTab]();
 }
 
-Draw.tab.main = function (key){ ctxrestore();
-	var s = Draw.tab.main.constant(); var oh = s.oh; var oy = s.oy; var sx = s.x; var sy = s.y; var w = s.w; var h = s.h; var mx = s.mx; var my = s.my;
-	if(server) return s;
+Draw.tab.main = function (){ ctxrestore();
+	var s = Draw.tab.main.constant(); 
 	ctx = ctxList.stage;
 	
 	//Main Frame
 	ctx.globalAlpha = 0.8;
 	ctx.fillStyle = '#6D6968';
-	ctx.fillRect(sx,oy,w,oh);
+	ctx.fillRect(s.x,s.oy,s.w,s.oh);
 	
 	ctx.globalAlpha = 1;
 	ctx.strokeStyle = 'black';
-	ctx.strokeRect(sx,oy,w,oh);
+	ctx.strokeRect(s.x,s.oy,s.w,s.oh);
 	
 	ctx.beginPath();
-	ctx.moveTo(sx,sy);
-	ctx.lineTo(sx+w,sy);
+	ctx.moveTo(s.x,s.y);
+	ctx.lineTo(s.x+s.w,s.y);
 	ctx.stroke();	
 	
 	
 	for(var i = 0 ; i < Cst.tab.list.length ; i++){
 		var vx = 30;
 		var vy = 0;
-		var numX = sx + 15 + vx * (i%100)  
-		var numY = oy + 8  + vy * Math.floor(i/100)
+		var numX = s.x + 15 + vx * (i%100)  
+		var numY = s.oy + 8  + vy * Math.floor(i/100)
 		
 		Button.creation(key,{
 			"rect":[numX,numX+24,numY,numY+24],
@@ -536,22 +506,28 @@ Draw.tab.main.constant = function(){
 	var startY = HEIGHT-sizeY;
 	
 	var dy = 40;
-	var s = {'oh':sizeY,'oy':startY,'x':startX,'y':startY+dy,'w':sizeX,'h':sizeY-dy,'mx':(startX+sizeX)/2};
-	return s;
+	return {
+		'oh':sizeY,		//overall height
+		'oy':startY,	//overall starting y
+		'x':startX,		//starting x
+		'y':startY+dy,	//starting y
+		'w':sizeX,		//width
+		'h':sizeY-dy,	//height
+		'mx':(startX+sizeX)/2,		//middle x	
+	}
+	
 }
 		
-Draw.tab.inventory = function (key){ ctxrestore();
-	var s = Draw.tab.main(key);	var sx = s.x; var sy = s.y; var w = s.w; var h = s.h; var mx = s.mx; var my = s.my;
+Draw.tab.inventory = function (){ ctxrestore();
+	var s = Draw.tab.main();	
 	ctx = ctxList.stage;
-	
-	if(server){ return; }
 	
 	//Draw Items
 	for (i = 0 ; i < invList.length ; i++){
 		if(invList[i]){
 			var amountX = 4;
-			var numX = sx + 20 + 42*(i%amountX);
-			var numY = sy + 15 + 41 * Math.floor(i/amountX);
+			var numX = s.x + 20 + 42*(i%amountX);
+			var numY = s.y + 15 + 41 * Math.floor(i/amountX);
 			
 			var text = !(temp.selectInv && temp.reset && temp.reset.selectInv) ? 'Use ' + invList[i][0] : temp.selectInv.name + ' on ' + invList[i][0];
 			
@@ -568,151 +544,106 @@ Draw.tab.inventory = function (key){ ctxrestore();
 	}		
 }
 
-Draw.tab.equip = function (key){ ctxrestore();
-	var s = Draw.tab.main(key);	var sx = s.x; var sy = s.y; var w = s.w; var h = s.h; var mx = s.mx; var my = s.my;
+Draw.tab.equip = function (){ ctxrestore();
+	var s = Draw.tab.main();	
 	ctx = ctxList.stage;
 	
 	//Weapon
 	if(!server && typeof popupList.weapon !== 'object') popupList.weapon = 0;
 	for (var i = 0 ; i < Cst.equip.weapon.piece.length ; i++){
-		var numX = sx + 10;
-		var numY = sy + 7 + 5 + 45 * i;
-				
-		if(server){	
-			Button.creation(key,{
-				"rect":[numX,numX+40,numY,numY+40],
-				"left":{"func":'Mortal.swapWeapon',"param":[Cst.equip.weapon.piece[i]]},
-				"text":'Swap Weapon'
-			});
+		var numX = s.x + 10;
+		var numY = s.y + 7 + 5 + 45 * i;
+						
+		
+		var piece = Cst.equip.weapon.piece[i];
+		if(player.weapon.piece != Cst.equip.weapon.piece[i]){ ctx.globalAlpha = 0.5; } 
+		
+		var slot = iconIndex[player.equip.piece[Cst.equip.weapon.piece[i]].visual];
+		ctx.drawImage(Img.icon,slot.x,slot.y,ICON,ICON,numX,numY,40,40);
+		ctx.globalAlpha = 1;
+		
+		if(Collision.PtRect(Collision.getMouse(),[numX,numX+40,numY,numY+40])){
+			popupList.weapon = player.equip.piece[Cst.equip.weapon.piece[i]].id;
 		}
 		
-		if(!server){
-			var piece = Cst.equip.weapon.piece[i];
-			if(player.weapon.piece != Cst.equip.weapon.piece[i]){ ctx.globalAlpha = 0.5; } 
-			
-			var slot = iconIndex[player.weaponList[Cst.equip.weapon.piece[i]].visual];
-			ctx.drawImage(Img.icon,slot.x,slot.y,ICON,ICON,numX,numY,40,40);
-			ctx.globalAlpha = 1;
-			
-			if(Collision.PtRect(Collision.getMouse(key),[numX,numX+40,numY,numY+40])){
-				popupList.weapon = player.weaponList[Cst.equip.weapon.piece[i]].id;
-			}
-		}
-
+		Button.creation(key,{
+			"rect":[numX,numX+40,numY,numY+40],
+			"left":{"func":Chat.send.command,"param":['$tab,swapWeapon,' + Cst.equip.weapon.piece[i]]},
+			"text":'Swap Weapon'
+		});
 			
 	}
 	
 	//Armor
 	if(!server && typeof popupList.armor !== 'object') popupList.armor = 0;
 	for (i = 0 ; i < Cst.equip.armor.piece.length ; i++){
-		var numX = sx + 55 + 45*(i%3);
-		var numY = sy + 7 + 5 + 45 * Math.floor(i/3);
+		var numX = s.x + 55 + 45*(i%3);
+		var numY = s.y + 7 + 5 + 45 * Math.floor(i/3);
+		var piece = player.equip.piece[Cst.equip.armor.piece[i]];
 		
-		if(server){	
-			/*
-			Button.creation(key,{
-				"rect":[numX,numX+40,numY,numY+40],
-				//"left":{"func":openPopup,"param":['armor',List.all[key].armor.piece[Cst.equip.armor.piece[i]]]},
-				"text":'Swap Armor'
-				});
-			*/
+		var slot = iconIndex[piece.visual];
+		ctx.drawImage(Img.icon,slot.x,slot.y,ICON,ICON,numX+10,numY,40,40);
+		
+		if(Collision.PtRect(Collision.getMouse(key),[numX,numX+40,numY,numY+40])){
+			popupList.armor = piece.id;
 		}
 		
-		if(!server){
-			var piece = player.armor.piece[Cst.equip.armor.piece[i]];
-			
-			var slot = iconIndex[piece.visual];
-			ctx.drawImage(Img.icon,slot.x,slot.y,ICON,ICON,numX+10,numY,40,40);
-			
-			if(Collision.PtRect(Collision.getMouse(key),[numX,numX+40,numY,numY+40])){
-				popupList.armor = piece.id;
-			}
-		}
 	}
 	
 	
 	
 	
 	//AdvancedWindow
-	var numX = sx + 10;
-	var numY = sy + 150;
+	var numX = s.x + 10;
+	var numY = s.y + 150;
 	var vy = 25;
+		
+	ctx.fillStyle = 'white';
+	ctx.font = '18px Fixedsys';
 	
-	if(server){
-		Button.creation(key,{
-			"rect":[numX,numX+80+vy,numY,numY+20],
-			"left":{"func":openWindow,"param":['offensive']},
-			"text":'Open Offensive Window'
-			});
-		numY += vy;
-		Button.creation(key,{
-			"rect":[numX,numX+80+vy,numY,numY+20],
-			"left":{"func":openWindow,"param":['defensive']},
-			"text":'Open Defensive Window'
-			});
-		numY += vy;
-		Button.creation(key,{
-			"rect":[numX,numX+80+vy,numY,numY+20],
-			"left":{"func":openWindow,"param":['ability']},
-			"text":'Open Ability Window'
-			});
-		numY += vy;
-		Button.creation(key,{
-			"rect":[numX,numX+80+vy,numY,numY+20],
-			"left":{"func":openWindow,"param":['passive']},
-			"text":'Open Passive Window'
-			});
-	}
+	var array = [
+		['offensive','offensive.melee'],
+		['defensive','body.metal'],
+		['ability','offensive.magic'],
+		['passive','offensive.magic'],
+	];
 	
-	if(!server){
-		ctx.fillStyle = 'white';
-		ctx.font = '18px Fixedsys';
-		
-		var slot = iconIndex['offensive.melee'];
+	for(var i in array){
+		var name = array[i][0];
+		var capname = name.capitalize();
+		//Offensive
+		var slot = iconIndex[array[i][1]];
 		ctx.drawImage(Img.icon,slot.x,slot.y,ICON,ICON,numX,numY,20,20);
-		ctx.fillText('Offensive',numX+vy,numY);
-		
+		ctx.fillText(capname,numX+vy,numY);
+		Button.creation(key,{
+			"rect":[numX,numX+80+vy,numY,numY+20],
+			"left":{"func":Chat.send.command,"param":['$win,open,' + name]},
+			"text":'Open ' + capname + ' Window'
+			});
 		numY += vy;
-		
-		var slot = iconIndex['body.metal'];
-		ctx.drawImage(Img.icon,slot.x,slot.y,ICON,ICON,numX,numY,20,20);
-		ctx.fillText('Defensive',numX+vy,numY);	
-
-		numY += vy;
-		
-		var slot = iconIndex['offensive.magic'];
-		ctx.drawImage(Img.icon,slot.x,slot.y,ICON,ICON,numX,numY,20,20);
-		ctx.fillText('Ability',numX+vy,numY);		
-
-		numY += vy;
-		
-		var slot = iconIndex['offensive.magic'];
-		ctx.drawImage(Img.icon,slot.x,slot.y,ICON,ICON,numX,numY,20,20);
-		ctx.fillText('Passive',numX+vy,numY);			
 	}
 	
 }
 		
-Draw.tab.skill = function(key){ ctxrestore();
-	var s = Draw.tab.main(key);	var sx = s.x; var sy = s.y; var w = s.w; var h = s.h; var mx = s.mx; var my = s.my;
-	ctx = ctxList.stage;
+Draw.tab.skill = function(){ ctxrestore();
+	var s = Draw.tab.main();	
+	if(server){ return; }
 	
-	if(server){ var exp = List.all[key].exp; var lvl = List.all[key].lvl; } 
-		else { var exp = player.exp; var lvl = player.lvl;	}
+	ctx = ctxList.stage;
 	
 	
 	for (var i = 0 ; i < Cst.skill.list.length ; i++){
 		var vx = 100;
 		var vy = 28;
-		var numX = sx + 18 + vx*Math.floor(i/9);
-		var numY = sy + 5  + vy *(i%9);
+		var numX = s.x + 18 + vx*Math.floor(i/9);
+		var numY = s.y + 5  + vy *(i%9);
 			
 		if(!server){
 			ctx.fillStyle = 'white';
 			
 			var slot = iconIndex['skill.' + Cst.skill.list[i]];
 			ctx.drawImage(Img.icon,slot.x,slot.y,ICON,ICON,numX,numY,20,20);
-			ctx.fillText(lvl[Cst.skill.list[i]],numX+30,numY);
+			ctx.fillText(player.skill.lvl[Cst.skill.list[i]],numX+30,numY);
 			
 			if(Collision.PtRect(Collision.getMouse(key),[numX,numX+vx,numY,numY+vy])){
 				var mouseover = Cst.skill.list[i];
@@ -720,7 +651,7 @@ Draw.tab.skill = function(key){ ctxrestore();
 			
 		}
 	}
-	if(!server && mouseover){
+	if(mouseover){
 		var sk = mouseover;
 			
 		var vvx = 200;
@@ -754,8 +685,8 @@ Draw.tab.skill = function(key){ ctxrestore();
 	}
 }	
 
-Draw.tab.friend = function(key){ ctxrestore();
-	var s = Draw.tab.main(key);	var sx = s.x; var sy = s.y; var w = s.w; var h = s.h; var mx = s.mx; var my = s.my;
+Draw.tab.friend = function(){ ctxrestore();
+	var s = Draw.tab.main();	
 	ctx = ctxList.stage;
 	
 	if(server){  return } 
@@ -766,8 +697,8 @@ Draw.tab.friend = function(key){ ctxrestore();
 	
 	var divX = 5;
 	var divY = 5;
-	var numX = sx + divX;
-	var numY = sy + divY;
+	var numX = s.x + divX;
+	var numY = s.y + divY;
 	var charY = 22;
 	var iconY = 40;
 	
@@ -777,8 +708,8 @@ Draw.tab.friend = function(key){ ctxrestore();
 	
 	
 	hf.text.style.font = charY + 'px Fixedsys';
-	hf.text.style.width = (w - 2*divX) + 'px'
-	hf.text.style.height = (h - iconY- 2*divY) + 'px'
+	hf.text.style.width = (s.w - 2*divX) + 'px'
+	hf.text.style.height = (s.h - iconY- 2*divY) + 'px'
 	
 	if(stringify(old.fc) != stringify(list)){
 		old.fc = list;
@@ -805,17 +736,17 @@ Draw.tab.friend = function(key){ ctxrestore();
 			
 		}
 	}
-
+	
+	//Drawing Button at bottom
 	var divX = 25;
 	var divY = 5;
-	var numX = sx + divX; 
-	var numY = sy + h - iconY + divY;	
+	var numX = s.x + divX; 
+	var numY = s.y + s.h - iconY + divY;	
 	var vx = 40;
 	var count = 0;
 	//
 	//1
 	ctx.drawImage(Img.icon,count*ICON,iconIndex['FRIEND'],ICON,ICON,numX,numY,20,20);
-		
 	Button.creation(0,{
 			"rect":[numX,numX+20,numY,numY+20],
 			//'left':{'func':(function(){ addInput('$fl,add,');  }), 'param':[]},
@@ -823,8 +754,7 @@ Draw.tab.friend = function(key){ ctxrestore();
 			});	
 	
 	//2
-	count++;
-	numX += vx;
+	count++; numX += vx;
 	ctx.drawImage(Img.icon,count*ICON,iconIndex['FRIEND'],ICON,ICON,numX,numY,20,20);
 	Button.creation(0,{
 			"rect":[numX,numX+20,numY,numY+20],
@@ -832,8 +762,7 @@ Draw.tab.friend = function(key){ ctxrestore();
 			"text":'Check Mute List.'
 			});
 	//3
-	count++;
-	numX += vx;
+	count++; numX += vx;
 	ctx.drawImage(Img.icon,count*ICON,iconIndex['FRIEND'],ICON,ICON,numX,numY,20,20);
 	Button.creation(0,{
 			"rect":[numX,numX+20,numY,numY+20],
@@ -841,8 +770,7 @@ Draw.tab.friend = function(key){ ctxrestore();
 			"text":'Add a friend.'
 			});
 	//4
-	count++;
-	numX += vx;
+	count++; numX += vx;
 	ctx.drawImage(Img.icon,count*ICON,iconIndex['FRIEND'],ICON,ICON,numX,numY,20,20);
 	Button.creation(0,{
 			"rect":[numX,numX+20,numY,numY+20],
@@ -857,7 +785,7 @@ Draw.tab.friend = function(key){ ctxrestore();
 }
 
 Draw.tab.quest = function(key){ ctxrestore();
-	var s = Draw.tab.main(key);	var sx = s.x; var sy = s.y; var w = s.w; var h = s.h; var mx = s.mx; var my = s.my;
+	var s = Draw.tab.main(key);	
 	ctx = ctxList.stage;
 	
 	if(server){  return; }
@@ -866,8 +794,8 @@ Draw.tab.quest = function(key){ ctxrestore();
 	
 	var divX = 10;
 	var divX = 5;
-	var numX = sx + divX;
-	var numY = sy + divX;
+	var numX = s.x + divX;
+	var numY = s.y + divX;
 	var charY = 15;
 	var iconY = 40;
 	
@@ -876,8 +804,8 @@ Draw.tab.quest = function(key){ ctxrestore();
 	html.questTab.div.style.visibility = 'visible';
 	
 	html.questTab.text.style.font = charY + 'px Fixedsys';
-	html.questTab.text.style.width = (w - 2*divX) + 'px'
-	html.questTab.text.style.height = (h - iconY- 2*divX) + 'px'
+	html.questTab.text.style.width = (s.w - 2*divX) + 'px'
+	html.questTab.text.style.height = (s.h - iconY- 2*divX) + 'px'
 	
 	if(old.quest !== stringify(quest)){
 		old.quest = stringify(quest);
@@ -906,6 +834,7 @@ Draw.tab.quest = function(key){ ctxrestore();
 }
 
 Draw.tab.setting = function(key){ 
+
 }
 //}
 
@@ -927,7 +856,12 @@ Draw.window = function(key){ ctxrestore();
 
 Draw.window.main = function(key,title){ ctxrestore();	
 	ctx = ctxList.win;
-	var s = Draw.window.main.constant(); var sx = s.sx; var sy = s.sy; var mx = s.mx; var my = s.my; var zx = s.zx; var zy = s.zy; var dw = s.dw; var dh = s.dh; var mdx = s.mdx; var mcx = s.mcx; var w = s.w; var h = s.h; 
+	var s = Draw.window.main.constant(); 
+	var sx = s.x; 
+	var sy = s.y; 
+	var mx = s.mx; 
+	var my = s.my; 
+	var zx = s.zx; var zy = s.zy; var dw = s.dw; var dh = s.dh; var mdx = s.mdx; var mcx = s.mcx; var w = s.w; var h = s.h; 
 	
 	//Close
 	if(!server){
@@ -992,8 +926,8 @@ Draw.window.main.constant = function(){
 	var marginX = 15;
 	var marginY = 60;
 	var s = {
-	'sx':startX,
-	'sy':startY,
+	'x':startX,
+	'y':startY,
 	'mx':marginX,
 	'my':marginY,
 	'zx':startX + marginX,
@@ -1009,7 +943,7 @@ Draw.window.main.constant = function(){
 }
 
 Draw.window.bank = function (key){ ctxrestore();
-	var s = Draw.window.main(key,'Bank');	var sx = s.sx; var sy = s.sy; var mx = s.mx; var my = s.my; var zx = s.zx; var zy = s.zy; var dw = s.dw; var dh = s.dh; var mdx = s.mdx; var mcx = s.mcx; var w = s.w; var h = s.h; 
+	var s = Draw.window.main(key,'Bank');	var sx = s.x; var sy = s.y; var mx = s.mx; var my = s.my; var zx = s.zx; var zy = s.zy; var dw = s.dw; var dh = s.dh; var mdx = s.mdx; var mcx = s.mcx; var w = s.w; var h = s.h; 
 	ctx = ctxList.win;
 	
 	if(server){ return; } 
@@ -1059,7 +993,7 @@ Draw.window.defensive = function (key){ ctxrestore();
 
 Draw.window.stat = function(key,type){ ctxrestore();
 	var obj = {'offensive':0,'defensive':0,'ability':0,'passive':0}; obj[type] = 1;
-	var s = Draw.window.main(key,obj);	var sx = s.sx; var sy = s.sy; var mx = s.mx; var my = s.my; var zx = s.zx; var zy = s.zy; var dw = s.dw; var dh = s.dh; var mdx = s.mdx; var mcx = s.mcx; var w = s.w; var h = s.h; 
+	var s = Draw.window.main(key,obj);	var sx = s.x; var sy = s.y; var mx = s.mx; var my = s.my; var zx = s.zx; var zy = s.zy; var dw = s.dw; var dh = s.dh; var mdx = s.mdx; var mcx = s.mcx; var w = s.w; var h = s.h; 
 	ctx = ctxList.win;
 
 	if(!server){
@@ -1104,7 +1038,7 @@ Draw.window.stat = function(key,type){ ctxrestore();
 }
 
 Draw.window.stat.hover = function(hover,type){ ctxrestore();
-	var s = Draw.window.main.constant(); var sx = s.sx; var sy = s.sy; var mx = s.mx; var my = s.my; var zx = s.zx; var zy = s.zy; var dw = s.dw; var dh = s.dh; var mdx = s.mdx; var mcx = s.mcx; var w = s.w; var h = s.h; 
+	var s = Draw.window.main.constant(); var sx = s.x; var sy = s.y; var mx = s.mx; var my = s.my; var zx = s.zx; var zy = s.zy; var dw = s.dw; var dh = s.dh; var mdx = s.mdx; var mcx = s.mcx; var w = s.w; var h = s.h; 
 	var listOperation = (type == 'offensive') ? offListOperation : defListOperation;
 	var numX = sx + 550 + Math.floor(hover/15) * -450-15;
 	var numY = sy + 70;
@@ -1146,7 +1080,7 @@ Draw.window.stat.hover = function(hover,type){ ctxrestore();
 
 //{ Ability
 Draw.window.ability = function (key){ ctxrestore();
-	var s = Draw.window.main(key,{'offensive':0,'defensive':0,'ability':1,'passive':0});	var sx = s.sx; var sy = s.sy; var mx = s.mx; var my = s.my; var zx = s.zx; var zy = s.zy; var dw = s.dw; var dh = s.dh; var mdx = s.mdx; var mcx = s.mcx; var w = s.w; var h = s.h; 
+	var s = Draw.window.main(key,{'offensive':0,'defensive':0,'ability':1,'passive':0});	var sx = s.x; var sy = s.y; var mx = s.mx; var my = s.my; var zx = s.zx; var zy = s.zy; var dw = s.dw; var dh = s.dh; var mdx = s.mdx; var mcx = s.mcx; var w = s.w; var h = s.h; 
 	if(server){ return; }  
 	ctx = ctxList.win;
 	
@@ -1173,7 +1107,7 @@ Draw.window.ability = function (key){ ctxrestore();
 }
 
 Draw.window.ability.leftSide = function(){ ctxrestore();
-	var s = Draw.window.main.constant(); var sx = s.sx; var sy = s.sy; var mx = s.mx; var my = s.my; var zx = s.zx; var zy = s.zy; var dw = s.dw; var dh = s.dh; var mdx = s.mdx; var mcx = s.mcx; var w = s.w; var h = s.h; 
+	var s = Draw.window.main.constant(); var sx = s.x; var sy = s.y; var mx = s.mx; var my = s.my; var zx = s.zx; var zy = s.zy; var dw = s.dw; var dh = s.dh; var mdx = s.mdx; var mcx = s.mcx; var w = s.w; var h = s.h; 
 	old.abilityShowed = player.abilityList[old.abilityShowed] ? old.abilityShowed : Object.keys(player.abilityList)[0];
 	if(!old.abilityShowed) return;
 	
@@ -1206,7 +1140,7 @@ Draw.window.ability.leftSide = function(){ ctxrestore();
 }
 
 Draw.window.ability.abilityList = function(diffX){ ctxrestore();
-	var s = Draw.window.main.constant(); var sx = s.sx; var sy = s.sy; var mx = s.mx; var my = s.my; var zx = s.zx; var zy = s.zy; var dw = s.dw; var dh = s.dh; var mdx = s.mdx; var mcx = s.mcx; var w = s.w; var h = s.h; 
+	var s = Draw.window.main.constant(); var sx = s.x; var sy = s.y; var mx = s.mx; var my = s.my; var zx = s.zx; var zy = s.zy; var dw = s.dw; var dh = s.dh; var mdx = s.mdx; var mcx = s.mcx; var w = s.w; var h = s.h; 
 	
 	mx += diffX; 
 	
@@ -1270,7 +1204,7 @@ Draw.window.ability.abilityList = function(diffX){ ctxrestore();
 }
 
 Draw.window.ability.generalInfo = function(diffX,diffY){ ctxrestore();
-	var s = Draw.window.main.constant(); var sx = s.sx; var sy = s.sy; var mx = s.mx; var my = s.my; var zx = s.zx; var zy = s.zy; var dw = s.dw; var dh = s.dh; var mdx = s.mdx; var mcx = s.mcx; var w = s.w; var h = s.h; 
+	var s = Draw.window.main.constant(); var sx = s.x; var sy = s.y; var mx = s.mx; var my = s.my; var zx = s.zx; var zy = s.zy; var dw = s.dw; var dh = s.dh; var mdx = s.mdx; var mcx = s.mcx; var w = s.w; var h = s.h; 
 	sx += diffX;
 	sy += diffY;
 	zx += diffX;
@@ -1336,7 +1270,7 @@ Draw.window.ability.generalInfo = function(diffX,diffY){ ctxrestore();
 }
 
 Draw.window.ability.upgrade = function(diffX,diffY){
-	var s = Draw.window.main.constant(); var sx = s.sx; var sy = s.sy; var mx = s.mx; var my = s.my; var zx = s.zx; var zy = s.zy; var dw = s.dw; var dh = s.dh; var mdx = s.mdx; var mcx = s.mcx; var w = s.w; var h = s.h; 
+	var s = Draw.window.main.constant(); var sx = s.x; var sy = s.y; var mx = s.mx; var my = s.my; var zx = s.zx; var zy = s.zy; var dw = s.dw; var dh = s.dh; var mdx = s.mdx; var mcx = s.mcx; var w = s.w; var h = s.h; 
 	sx += diffX;
 	sy += diffY;
 	zx += diffX;
@@ -1411,7 +1345,7 @@ Draw.window.ability.action = function(diffX,diffY){ ctxrestore();
 }
 
 Draw.window.ability.action.attack = function(diffX,diffY){  ctxrestore();
-	var s = Draw.window.main.constant(); var sx = s.sx; var sy = s.sy; var mx = s.mx; var my = s.my; var zx = s.zx; var zy = s.zy; var dw = s.dw; var dh = s.dh; var mdx = s.mdx; var mcx = s.mcx; var w = s.w; var h = s.h; 
+	var s = Draw.window.main.constant(); var sx = s.x; var sy = s.y; var mx = s.mx; var my = s.my; var zx = s.zx; var zy = s.zy; var dw = s.dw; var dh = s.dh; var mdx = s.mdx; var mcx = s.mcx; var w = s.w; var h = s.h; 
 	sx += diffX;
 	sy += diffY;
 	zx += diffX;
@@ -1461,7 +1395,7 @@ Draw.window.ability.action.attack = function(diffX,diffY){  ctxrestore();
 }
 
 Draw.window.ability.action.boost = function(diffX,diffY){  ctxrestore();
-	var s = Draw.window.main.constant(); var sx = s.sx; var sy = s.sy; var mx = s.mx; var my = s.my; var zx = s.zx; var zy = s.zy; var dw = s.dw; var dh = s.dh; var mdx = s.mdx; var mcx = s.mcx; var w = s.w; var h = s.h; 
+	var s = Draw.window.main.constant(); var sx = s.x; var sy = s.y; var mx = s.mx; var my = s.my; var zx = s.zx; var zy = s.zy; var dw = s.dw; var dh = s.dh; var mdx = s.mdx; var mcx = s.mcx; var w = s.w; var h = s.h; 
 	sx += diffX;
 	sy += diffY;
 	zx += diffX;
@@ -1480,7 +1414,7 @@ Draw.window.ability.action.boost = function(diffX,diffY){  ctxrestore();
 }
 
 Draw.window.ability.action.summon = function(diffX,diffY){  ctxrestore();
-	var s = Draw.window.main.constant(); var sx = s.sx; var sy = s.sy; var mx = s.mx; var my = s.my; var zx = s.zx; var zy = s.zy; var dw = s.dw; var dh = s.dh; var mdx = s.mdx; var mcx = s.mcx; var w = s.w; var h = s.h; 
+	var s = Draw.window.main.constant(); var sx = s.x; var sy = s.y; var mx = s.mx; var my = s.my; var zx = s.zx; var zy = s.zy; var dw = s.dw; var dh = s.dh; var mdx = s.mdx; var mcx = s.mcx; var w = s.w; var h = s.h; 
 	sx += diffX;
 	sy += diffY;
 	zx += diffX;
@@ -1501,7 +1435,7 @@ Draw.window.trade = function (key){ ctxrestore();
 		else {	var trade = windowList.trade;	
 				var tList = tradeList;	}
 	
-	var s = Draw.window.main(key,'Trading ' + trade.trader);	var sx = s.sx; var sy = s.sy; var mx = s.mx; var my = s.my; var zx = s.zx; var zy = s.zy; var dw = s.dw; var dh = s.dh; var mdx = s.mdx; var mcx = s.mcx; var w = s.w; var h = s.h; 
+	var s = Draw.window.main(key,'Trading ' + trade.trader);	var sx = s.x; var sy = s.y; var mx = s.mx; var my = s.my; var zx = s.zx; var zy = s.zy; var dw = s.dw; var dh = s.dh; var mdx = s.mdx; var mcx = s.mcx; var w = s.w; var h = s.h; 
 	ctx = ctxList.win;
 	
 	
@@ -1588,7 +1522,7 @@ Draw.window.shop = function (key){ ctxrestore();
 	if(server){ var shop = List.main[key].windowList.shop; } 
 		else { var shop = windowList.shop;	}
 		
-	var s = Draw.window.main(key,shop.name);	var sx = s.sx; var sy = s.sy; var mx = s.mx; var my = s.my; var zx = s.zx; var zy = s.zy; var dw = s.dw; var dh = s.dh; var mdx = s.mdx; var mcx = s.mcx; var w = s.w; var h = s.h; 
+	var s = Draw.window.main(key,shop.name);	var sx = s.x; var sy = s.y; var mx = s.mx; var my = s.my; var zx = s.zx; var zy = s.zy; var dw = s.dw; var dh = s.dh; var mdx = s.mdx; var mcx = s.mcx; var w = s.w; var h = s.h; 
 	ctx = ctxList.win;
 	
 	//Draw Items
@@ -1621,7 +1555,7 @@ Draw.window.shop = function (key){ ctxrestore();
 
 //{ Passive
 Draw.window.passive = function (key){ ctxrestore();
-	var s = Draw.window.main(key,{'offensive':0,'defensive':0,'ability':0,'passive':1});	var sx = s.sx; var sy = s.sy; var mx = s.mx; var my = s.my; var zx = s.zx; var zy = s.zy; var dw = s.dw; var dh = s.dh; var mdx = s.mdx; var mcx = s.mcx; var w = s.w; var h = s.h; 
+	var s = Draw.window.main(key,{'offensive':0,'defensive':0,'ability':0,'passive':1});	var sx = s.x; var sy = s.y; var mx = s.mx; var my = s.my; var zx = s.zx; var zy = s.zy; var dw = s.dw; var dh = s.dh; var mdx = s.mdx; var mcx = s.mcx; var w = s.w; var h = s.h; 
 	ctx = ctxList.win;
 	if(server){ return; }
 	
@@ -1659,7 +1593,7 @@ Draw.window.passive = function (key){ ctxrestore();
 }
 
 Draw.window.passive.grid = function(key){ ctxrestore();
-	var s = Draw.window.main.constant();	var sx = s.sx; var sy = s.sy; var mx = s.mx; var my = s.my; var zx = s.zx; var zy = s.zy; var dw = s.dw; var dh = s.dh; var mdx = s.mdx; var mcx = s.mcx; var w = s.w; var h = s.h; 
+	var s = Draw.window.main.constant();	var sx = s.x; var sy = s.y; var mx = s.mx; var my = s.my; var zx = s.zx; var zy = s.zy; var dw = s.dw; var dh = s.dh; var mdx = s.mdx; var mcx = s.mcx; var w = s.w; var h = s.h; 
 	ctx = ctxList.passiveGrid;
 	
 	//Update Drag
@@ -1740,7 +1674,7 @@ Draw.window.passive.grid.info = {
 }
 
 Draw.window.passive.hover = function(over){ ctxrestore();
-	var s = Draw.window.main.constant(); var sx = s.sx; var sy = s.sy; var mx = s.mx; var my = s.my; var zx = s.zx; var zy = s.zy; var dw = s.dw; var dh = s.dh; var mdx = s.mdx; var mcx = s.mcx; var w = s.w; var h = s.h; 
+	var s = Draw.window.main.constant(); var sx = s.x; var sy = s.y; var mx = s.mx; var my = s.my; var zx = s.zx; var zy = s.zy; var dw = s.dw; var dh = s.dh; var mdx = s.mdx; var mcx = s.mcx; var w = s.w; var h = s.h; 
 	var ctx = ctxList.pop;
 	
 	var st = over.stat ? Db.stat[over.stat] : Db.customBoost[over.value];
@@ -1777,7 +1711,7 @@ Draw.window.passive.hover = function(over){ ctxrestore();
 //}
 
 Draw.window.quest = function (key){ ctxrestore();
-	var s = Draw.window.main(key,'Quest');	var sx = s.sx; var sy = s.sy; var mx = s.mx; var my = s.my; var zx = s.zx; var zy = s.zy; var dw = s.dw; var dh = s.dh; var mdx = s.mdx; var mcx = s.mcx; var w = s.w; var h = s.h; 
+	var s = Draw.window.main(key,'Quest');	var sx = s.x; var sy = s.y; var mx = s.mx; var my = s.my; var zx = s.zx; var zy = s.zy; var dw = s.dw; var dh = s.dh; var mdx = s.mdx; var mcx = s.mcx; var w = s.w; var h = s.h; 
 	ctx = ctxList.win;
 	if(server){ return; }
 	
@@ -2009,6 +1943,7 @@ openPopup = function(key,name,param){
 Draw.optionList = function(key){ ctxrestore();
 	if(server){ var opt = List.main[key].optionList; } 
 		else { var opt = optionList; }
+	if(!opt) return;
 	ctx = ctxList.pop;
 	
 	//Draw Item Options

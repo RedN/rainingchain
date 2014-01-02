@@ -126,13 +126,12 @@ Init.db.item = function (cb){
 
 
 
-Item.creation = function(itemdb){
+Item.creation = function(item){
 	
-	db.item.update( {'id':itemdb.id}, itemdb, { upsert: true }, function(err) { if(err) throw err });
+	db.item.update( {'id':item.id}, item, { upsert: true }, function(err) { if(err) throw err });
 	
-	var item = Item.template();
-		
-	for(var i in itemdb){ item[i] = itemdb[i];}
+	item = useTemplate(Item.template(),item);
+	
 	if(item.drop){	item.option.push({'name':'Drop','func':'dropInv','param':[item.id]})}
 
 	Db.item[item.id] = item;
@@ -140,25 +139,25 @@ Item.creation = function(itemdb){
 
 Item.template = function(){
 	var item = {
-	'name':'buggedItem',
-	'visual':'system.gold',
-	'trade':1, 
-	'sell':0,  
-	'drop':1,
-	'remove':0,
-	'bank':1,
-	'stack':0,
-	'value':1,
-	'option': [],
-	'type':'item',
+		'name':'buggedItem',
+		'visual':'system.gold',
+		'trade':1, 
+		'sell':0,  
+		'drop':1,
+		'remove':0,
+		'bank':1,
+		'stack':0,
+		'value':1,
+		'option': [],
+		'type':'item',
 	}
 	return item;
 }
 
 Item.remove = function(id){
 	db.item.remove({id:id});
-	db.weapon.remove({id:id});
-	db.armor.remove({id:id});
+	db.equip.remove({id:id});
+	db.equip.remove({id:id});
 	db.ability.remove({id:id});
 }
 

@@ -1,5 +1,5 @@
 var databaseURI = 'mongodb://test:' + dbpsw + '@widmore.mongohq.com:10010/RainingChain_copy';  
-var collections = ["ability","weapon","armor","account","item","clan"];
+var collections = ["ability","equip","account","item","clan"];
 
 db = require("mongojs").connect(databaseURI, collections);
 
@@ -22,26 +22,18 @@ db.filterDb = function(){
 			var list = [];
 			for(var j in a.main.invList){list.push(a.main.invList[i][0]);}
 			for(var j in a.main.bankList){list.push(a.main.bankList[i][0]);}
-			for(var j in a.player.weaponList){list.push(a.player.weaponList[j].id);}
-			for(var j in a.player.armor.piece){list.push(a.player.armor.piece[j].id);}
+			for(var j in a.player.equip.piece){list.push(a.player.equip.piece[j].id);}
+			for(var j in a.player.equip.piece){list.push(a.player.equip.piece[j].id);}
 			for(var j in list){	bigList[list[j]] = true;}
 		}
 		permConsoleLog('list of items exisiting:\n',Object.keys(bigList));
 			
-		db.weapon.find(function(er,res){ if(er) throw er;
-			var weaponList = {};
-			for(var i in res){weaponList[res[i].id] = true;	}
-			for(var i in bigList){	delete weaponList[i];}
-			permConsoleLog(Object.keys(weaponList).length + 'unused weapon\n',Object.keys(weaponList));
-			for(var i in weaponList){db.weapon.remove({'id':i});}
-		});
-		
-		db.armor.find(function(er,res){ if(er) throw er;
-			var weaponList = {};
-			for(var i in res){weaponList[res[i].id] = true;	}
-			for(var i in bigList){	delete weaponList[i];}
-			permConsoleLog(Object.keys(weaponList).length + 'unused armors\n',Object.keys(weaponList));
-			for(var i in weaponList){db.armor.remove({'id':i});}
+		db.equip.find(function(er,res){ if(er) throw er;
+			var equipList = {};
+			for(var i in res){equipList[res[i].id] = true;	}
+			for(var i in bigList){	delete equipList[i];}
+			permConsoleLog(Object.keys(equipList).length + 'unused weapon\n',Object.keys(equipList));
+			for(var i in equipList){db.equip.remove({'id':i});}
 		});
 		
 	});

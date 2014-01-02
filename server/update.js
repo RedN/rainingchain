@@ -175,21 +175,22 @@ Change.update.init = function(){
 				{'array':['sprite','sizeMod']},
 				
 				
-				{'array':['armor','piece','body','id'],'sendArray':['armor','piece','body'],'sendFilter':(function(w){ return {'visual':w.visual,id:w.id} }) },
-				{'array':['armor','piece','helm','id'],'sendArray':['armor','piece','helm'],'sendFilter':(function(w){ return {'visual':w.visual,id:w.id} }) },
-				{'array':['armor','piece','shield','id'],'sendArray':['armor','piece','shield'],'sendFilter':(function(w){ return {'visual':w.visual,id:w.id} }) },
-				{'array':['armor','piece','bracelet','id'],'sendArray':['armor','piece','bracelet'],'sendFilter':(function(w){ return {'visual':w.visual,id:w.id} }) },
-				{'array':['armor','piece','gloves','id'],'sendArray':['armor','piece','gloves'],'sendFilter':(function(w){ return {'visual':w.visual,id:w.id} }) },
-				{'array':['armor','piece','boots','id'],'sendArray':['armor','piece','boots'],'sendFilter':(function(w){ return {'visual':w.visual,id:w.id} }) },
-				{'array':['armor','piece','pants','id'],'sendArray':['armor','piece','pants'],'sendFilter':(function(w){ return {'visual':w.visual,id:w.id} }) },
-				{'array':['armor','piece','amulet','id'],'sendArray':['armor','piece','amulet'],'sendFilter':(function(w){ return {'visual':w.visual,id:w.id} }) },
-				{'array':['armor','piece','ring','id'],'sendArray':['armor','piece','ring'],'sendFilter':(function(w){ return {'visual':w.visual,id:w.id} }) },
+				{'array':['equip','piece','body','id'],'sendArray':['equip','piece','body'],'sendFilter':(function(w){ return {'visual':w.visual,id:w.id} }) },
+				{'array':['equip','piece','helm','id'],'sendArray':['equip','piece','helm'],'sendFilter':(function(w){ return {'visual':w.visual,id:w.id} }) },
+				{'array':['equip','piece','shield','id'],'sendArray':['equip','piece','shield'],'sendFilter':(function(w){ return {'visual':w.visual,id:w.id} }) },
+				{'array':['equip','piece','bracelet','id'],'sendArray':['equip','piece','bracelet'],'sendFilter':(function(w){ return {'visual':w.visual,id:w.id} }) },
+				{'array':['equip','piece','gloves','id'],'sendArray':['equip','piece','gloves'],'sendFilter':(function(w){ return {'visual':w.visual,id:w.id} }) },
+				{'array':['equip','piece','boots','id'],'sendArray':['equip','piece','boots'],'sendFilter':(function(w){ return {'visual':w.visual,id:w.id} }) },
+				{'array':['equip','piece','pants','id'],'sendArray':['equip','piece','pants'],'sendFilter':(function(w){ return {'visual':w.visual,id:w.id} }) },
+				{'array':['equip','piece','amulet','id'],'sendArray':['equip','piece','amulet'],'sendFilter':(function(w){ return {'visual':w.visual,id:w.id} }) },
+				{'array':['equip','piece','ring','id'],'sendArray':['equip','piece','ring'],'sendFilter':(function(w){ return {'visual':w.visual,id:w.id} }) },
+				
+				{'array':['equip','piece','melee','id'],'sendArray':['equip','piece','melee'],'sendFilter':(function(w){ return {'visual':w.visual,id:w.id} }) },
+				{'array':['equip','piece','range','id'],'sendArray':['equip','piece','range'],'sendFilter':(function(w){ return {'visual':w.visual,id:w.id} }) },
+				{'array':['equip','piece','magic','id'],'sendArray':['equip','piece','magic'],'sendFilter':(function(w){ return {'visual':w.visual,id:w.id} }) },
 				
 				
 				{'array':['weapon','id'],'sendArray':['weapon'],'sendFilter':(function(w){ return {'type':w.type,'piece':w.piece,'visual':w.visual,id:w.id} }) },
-				{'array':['weaponList','melee','id'],'sendArray':['weaponList','melee'],'sendFilter':(function(w){ return {'type':w.type,'visual':w.visual,id:w.id} }) },
-				{'array':['weaponList','range','id'],'sendArray':['weaponList','range'],'sendFilter':(function(w){ return {'type':w.type,'visual':w.visual,id:w.id} }) },
-				{'array':['weaponList','magic','id'],'sendArray':['weaponList','magic'],'sendFilter':(function(w){ return {'type':w.type,'visual':w.visual,id:w.id} }) },
 				
 				
 			],
@@ -197,20 +198,10 @@ Change.update.init = function(){
 				{'array':['resource'],'filter':(function(w){ for(var i in w){ for(var j in w[i]){ w[i][j] = Math.round(w[i][j]); }} })},
 				
 				{'array':['permBoost']},
-				{'array':['armor','def']},
+				{'array':['equip','def']},
+				{'array':['equip','dmg']},
 				{'array':['def']},
-				
-				//???
-				{'array':['armor','piece','body','def']},
-				{'array':['armor','piece','helm','def']},
-				{'array':['armor','piece','shield','def']},
-				{'array':['armor','piece','bracelet','def']},
-				{'array':['armor','piece','gloves','def']},
-				{'array':['armor','piece','boots','def']},
-				{'array':['armor','piece','pants','def']},
-				{'array':['armor','piece','amulet','def']},
-				{'array':['armor','piece','ring','def']},
-				
+						
 				
 				{'array':['ability'],'filter':Change.send.convert.abilityList },
 				{'array':['abilityList'],'filter':Change.send.convert.abilityList },

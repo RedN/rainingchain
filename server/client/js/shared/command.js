@@ -235,6 +235,11 @@ Command.list['tab,inv,click'] = function(key,side,id){
 	List.main[key].invList.click(id,side);
 }
 
+Command.list['tab,swapWeapon'] = function(key,type){
+	if(['melee','range','magic'].indexOf(type) === -1){ Chat.add(key,'Invalid Param.'); return;}
+	Mortal.swapWeapon(List.all[key],type);
+}
+
 
 //Clan
 Command.list['cc,create'] = function(key,name){

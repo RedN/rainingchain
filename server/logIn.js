@@ -157,9 +157,8 @@ Save.load.initData = function(key){
             'x':0,
             'y':0,
             'map':0,
-            'armor':0,
+            'equip':0,
             'weapon':0,
-            'weaponList':0,
             'skill':0,
             'ability':Change.send.convert.abilityList,
             'abilityList':Change.send.convert.abilityList
@@ -194,7 +193,7 @@ Save.player = function(key,updateDb){
 
     var save = {};
 
-    var toSave = ['x','y','map','name','context','weapon','weaponList','armor','loginLocation','mapMod','exp','lvl','ability','abilityList'];
+    var toSave = ['x','y','map','name','context','weapon','equip','loginLocation','mapMod','exp','lvl','ability','abilityList'];
     for(var i in toSave){	save[toSave[i]] = player[toSave[i]]; }
 
     if(updateDb !== false){
@@ -204,9 +203,8 @@ Save.player = function(key,updateDb){
 
 Save.player.compress = function(player){
     player.weapon = {"id":player.weapon.id};
-    for(var i in player.weaponList){ player.weaponList[i] = {"id":player.weaponList[i].id}; }
-    for(var i in player.armor.piece){ player.armor.piece[i] = {"id":player.armor.piece[i].id}; }
-    player.armor = {'piece':player.armor.piece};
+    for(var i in player.equip.piece){ player.equip.piece[i] = {"id":player.equip.piece[i].id}; }
+    player.equip = {'piece':player.equip.piece};
 
     for(var i in player.ability){
         if(player.ability[i]){
@@ -220,12 +218,11 @@ Save.player.compress = function(player){
 
 Save.player.uncompress = function(player){
 
-    player.weapon = Db.weapon[player.weapon.id];
-    for(var i in player.weaponList){ player.weaponList[i] = Db.weapon[player.weaponList[i].id]; }
-
-    for(var i in player.armor.piece){ player.armor.piece[i] = Db.armor[player.armor.piece[i].id]; }
-    player.armor.def = {'melee':1,'range':1,'magic':1,'fire':1,'cold':1,'lightning':1};
-    Mortal.updateArmor(player);
+    player.weapon = Db.equip[player.weapon.id];
+    for(var i in player.equip.piece){ player.equip.piece[i] = Db.equip[player.equip.piece[i].id]; }
+    player.equip.def = {'melee':1,'range':1,'magic':1,'fire':1,'cold':1,'lightning':1};
+    player.equip.dmg = {'melee':1,'range':1,'magic':1,'fire':1,'cold':1,'lightning':1};
+    Mortal.updateEquip(player);
 
 
     for(var i in player.abilityList){

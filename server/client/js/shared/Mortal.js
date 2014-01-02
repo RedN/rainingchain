@@ -32,27 +32,53 @@ Mortal.remove = function(mort){
 }
 
 
-Mortal.updateArmor = function(mort){
+
+
+
+
+Mortal.updateEquip = function(mort){
+	//only update armor atm
 	for(var k in Cst.element.list){	//Each Element
 		var i = Cst.element.list[k];
 		var sum = 0;
-		for(var j in mort.armor.piece){	//Each Piece
-			sum += mort.armor.piece[j].def[i] * mort.armor.piece[j].orb.upgrade.bonus;
+		for(var j in mort.equip.piece){	//Each Piece
+			sum += mort.equip.piece[j].def[i] * mort.equip.piece[j].orb.upgrade.bonus;
 		}
-		mort.armor.def[i] = sum;
+		mort.equip.def[i] = sum;
 	}
 }
 
-Mortal.switchArmor = function(mort,name){
-	var old = mort.armor.piece[Db.armor[name].piece];
-	var armor = Db.armor[name];
-	mort.armor.piece[armor.piece] = armor;
-	Mortal.permBoost(mort,armor.piece,mort.armor.piece[armor.piece].boost);
-	Mortal.updateArmor(mort);
+Mortal.switchEquip = function(mort,name){
+	var old = mort.equip.piece[Db.equip[name].piece];
+	var equip = Db.equip[name];
+	mort.equip.piece[equip.piece] = equip;
+	
+	Mortal.permBoost(mort,equip.piece,mort.equip.piece[equip.piece].boost);
+	Mortal.updateEquip(mort);
 	List.main[mort.id].invList.remove(name);
 	List.main[mort.id].invList.add(old.id);
 	
+	if(Cst.equip.weapon.piece.indexOf(equip.piece) !== -1){
+		Mortal.swapWeapon(mort,equip.piece);
+	}
 }
+
+
+
+//Equip a weapon already present in the weaponList
+Mortal.swapWeapon = function(mort,piece){
+	mort.weapon = mort.equip.piece[piece];
+	
+	Sprite.change(mort,mort.weapon.sprite);
+	Mortal.permBoost(mort,'weapon',mort.weapon.boost);
+}
+
+
+
+
+
+
+
 
 
 Mortal.changeHp = function(mort,amount){
@@ -66,23 +92,6 @@ Mortal.changeResource = function(mort,heal){
 	}
 }
 
-//Equip a weapon from the inventory. Set is as current weapon. Remove the old weapon of same piece.
-Mortal.switchWeapon = function(mort,name){
-	var old = mort.weaponList[Db.weapon[name].piece];
-	mort.weaponList[Db.weapon[name].piece] = Db.weapon[name];
-	List.main[mort.id].invList.remove(name);
-	List.main[mort.id].invList.add(old.id);
-	Mortal.swapWeapon(mort,Db.weapon[name].piece);
-}
-
-//Equip a weapon already present in the weaponList
-Mortal.swapWeapon = function(mort,piece){
-	console.log(mort);
-	mort.weapon = mort.weaponList[piece];
-	
-	Sprite.change(mort,mort.weapon.sprite);
-	Mortal.permBoost(mort,'weapon',mort.weapon.boost);
-}
 
 //Teleport player. if no map specified, stay in same map.
 Mortal.teleport = function(mort,x,y,map){
@@ -105,7 +114,7 @@ Mortal.update.mastery = function(player){
 }
 
 Mortal.update.def = function(player){
-	for(var i in player.def){ player.def[i] = player.armor.def[i] * player.mastery.def[i].sum;}
+	for(var i in player.def){ player.def[i] = player.equip.def[i] * player.mastery.def[i].sum;}
 }
 
 Mortal.update.permBoost = function(player){

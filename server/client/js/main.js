@@ -5,12 +5,8 @@ var context = {'text':''}, clientContext = {'text':''}, permContext = {'text':''
 var help = '';
 
 var btnList = [];   //all buttons
-var clientContext = null;
-
 var pref = Command.pref.default();   //preference (see commandShare.js)
-
 var ctxList = {};   //list of canvas (window,popup,stage)
-var drawSortList = [];  //used to store the actors to draw in the right order (z-index)
 
 List = {
 	all:{},		//EVERYTHING (player id refers to mortal)
@@ -27,8 +23,7 @@ List = {
 };
 
 Db = {	//local compilation of information so server doesnt send many times the same info
-	weapon:{},
-	armor:{},
+	equip:{},
 	ability:{},
 	item:{},
 };  
@@ -52,25 +47,26 @@ Sign.in = function(){
 	socket.emit('signIn', { 'username': user,'password': pass });
 }
 
-socket.on('signIn', function (data) {
-	if(data.success){ id = data.key; cloud9 = data.cloud9; Init.game(data.data);  }
-	else { Sign.log(data.message);  } 	
-});
-
-Sign.log = function(text){
-	$("#logInfo")[0].innerHTML = text;	
-}
-
-//New Player
 Sign.up = function (){
 	var user = $("#user")[0].value;
 	var pass = $("#pass")[0].value;
 	if(user && pass){ socket.emit('signUp', { 'username': user,'password': pass }); }
 }
 
+Sign.log = function(text){
+	$("#logInfo")[0].innerHTML = text;	
+}
+
+
+socket.on('signIn', function (data) {
+	if(data.success){ id = data.key; cloud9 = data.cloud9; Init.game(data.data);  }
+	else { Sign.log(data.message);  } 	
+});
+
 socket.on('signUp', function (data) {
 	Sign.log(data.message);
 });
+
 
 
 //############################################

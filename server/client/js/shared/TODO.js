@@ -1,5 +1,8 @@
 
 
+fix ability draw
+fix query
+fix popup
 
 system to send mass info to client at start
 eval function on client

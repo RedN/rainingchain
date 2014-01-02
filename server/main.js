@@ -32,7 +32,7 @@ shopList = {}; //all shop
 
 //Sync DB and Server when Server starts
 exports.initServer = function (){
-    require('async').series([Init.db.item, Init.db.armor, Init.db.weapon, Init.db.ability,
+    require('async').series([Init.db.item, Init.db.equip, Init.db.ability,
         (function(){
 			Init.db.stat();
 			

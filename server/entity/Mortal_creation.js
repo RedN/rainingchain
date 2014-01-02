@@ -133,12 +133,12 @@ Mortal.creation.mod = function(e,d){
 
 Mortal.creation.mod.list = {
 	
-	'immuneFire': (function(e){ e.armor.def.fire = 1/0;  return e; }),
-	'immuneCold': (function(e){ e.armor.def.cold = 1/0;  return e; }),
-	'immuneLightning': (function(e){ e.armor.def.lightning = 1/0;  return e; }),
-	'immuneMelee': (function(e){ e.armor.def.melee = 1/0;  return e; }),
-	'immuneRange': (function(e){ e.armor.def.range = 1/0;  return e; }),
-	'immuneMagic': (function(e){ e.armor.def.magic = 1/0;  return e; }),
+	'immuneFire': (function(e){ e.equip.def.fire = 1/0;  return e; }),
+	'immuneCold': (function(e){ e.equip.def.cold = 1/0;  return e; }),
+	'immuneLightning': (function(e){ e.equip.def.lightning = 1/0;  return e; }),
+	'immuneMelee': (function(e){ e.equip.def.melee = 1/0;  return e; }),
+	'immuneRange': (function(e){ e.equip.def.range = 1/0;  return e; }),
+	'immuneMagic': (function(e){ e.equip.def.magic = 1/0;  return e; }),
 
 	'immuneStatus': (function(e){ for(var i in e.resist){ e.resist[i] = 100; }  return e; }),
 
@@ -206,8 +206,7 @@ Mortal.creation.nevercombat = function(mort){
 	delete mort.resource;
 	
 	delete mort.def;
-	delete mort.defMain;
-	delete mort.armor;	
+	delete mort.defMain;	
 	delete mort.reflect;
 	
 	//Resist
@@ -226,7 +225,7 @@ Mortal.creation.nevercombat = function(mort){
 	delete mort.aim;
 	delete mort.weapon;
 	delete mort.ability;
-	delete mort.weaponList;
+	delete mort.equip;
 	delete mort.moveRange
 	
 	

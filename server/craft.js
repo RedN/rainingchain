@@ -172,13 +172,7 @@ Craft.create = function(seed){
 }
 
 Craft.create.equip = function(seed){
-	if(seed.category === 'weapon'){
-		var equip = defaultWeapon();
-	}
-	if(seed.category === 'armor'){
-		var equip = Armor.template();
-	}
-	
+	var equip = Equip.template();
 	equip.piece = seed.piece;
 	equip.type = seed.type;
 	equip.visual = seed.piece + '.' + seed.type;
@@ -189,39 +183,23 @@ Craft.create.equip = function(seed){
 	equip.boost = Craft.boost(seed,equip.boost,seed.amount);
 	equip.id = Math.randomId();
 	
-	return Craft.create.equip[seed.category](equip);
-}
-
-Craft.create.equip.armor = function(armor){
-	var seed = armor.seed;
 	
 	for(var k in Cst.element.list){
 		var i = Cst.element.list[k];
-		armor.defRatio[i] = Math.random()*0.5+0.5;
+		equip.defRatio[i] = Math.random()*0.5+0.5;
+		equip.dmgRatio[i] = Math.random()*0.5+0.5;
 	}
 	var mod = 0.9 + Math.pow(Math.random(),1/(seed.quality+1))*0.2;
-	armor.defMain = Math.pow(seed.lvl+10,1.5)/30 * mod;	
-
+	equip.defMain = Math.pow(seed.lvl+10,1.5)/30 * mod;	
+	equip.dmgMain = Math.pow(seed.lvl+10,1.5)/30 * mod;	
 	
-	Armor.creation(armor);
-	return armor.id;
+	Equip.creation(equip);
+	
+	return equip.id;
 }
 
-Craft.create.equip.weapon = function(weapon){
-	var seed = weapon.seed;
-	
-	var mod = 0.9 + Math.pow(Math.random(),1/(seed.quality+1))*0.2;
-	weapon.dmgMain = Math.pow(seed.lvl+10,1.5)/30 * mod;	
-	
-	//Crappy dmgRatio system
-	for(var i in weapon.dmgRatio){
-		weapon.dmgRatio[i] = Math.random();
-	}
-	weapon.dmgRatio[seed.piece] += 0.50;
-	
-	initWeapon(weapon);
-	return weapon.id;
-}
+
+
 
 Craft.create.equip.color = function(w){
 	if(w.boost.length === 0) return 'white'; 
@@ -312,8 +290,8 @@ Craft.orb = function(key,orb,amount,wId,mod){
 	amount = amount === 'pref' ? List.main[key].pref.orbAmount : amount;
 	amount = Math.min(amount,List.main[key].invList.have(orb + '_orb',0,'amount'));
 	var func; var equip; var type;
-	if(Db.weapon[wId]){	func = initWeapon;	equip = deepClone(Db.weapon[wId]); type = 'equip';}
-	if(Db.armor[wId]){	func = Armor.creation;	equip = deepClone(Db.armor[wId]); type = 'equip';}
+	if(Db.equip[wId]){	func = initWeapon;	equip = deepClone(Db.equip[wId]); type = 'equip';}
+	if(Db.equip[wId]){	func = Armor.creation;	equip = deepClone(Db.equip[wId]); type = 'equip';}
 	if(Db.ability[wId]){	func = initAbility;	equip = deepClone(Db.ability[wId]); type = 'ability';}
 	if(!equip){	Chat.add(key,"You can't use this orb on this item.");return; }
 	
@@ -357,8 +335,8 @@ Craft.orb = function(key,orb,amount,wId,mod){
 Craft.salvage = function(key,id){
 	if(List.main[key].invList.have(id)){
 		var type = Db.item[id].type;
-		if(type === 'weapon'){ var equip = Db.weapon[id]; }
-		else if(type === 'armor'){ var equip = Db.armor[id]; }
+		if(type === 'weapon'){ var equip = Db.equip[id]; }
+		else if(type === 'armor'){ var equip = Db.equip[id]; }
 		else {return;}
 		List.main[key].invList.remove(id);
 		List.main[key].invList.add('shard-'+equip.color);

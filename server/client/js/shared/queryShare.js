@@ -9,8 +9,8 @@ if(server){
 			var source;
 			
 			switch(db){
-				case 'Db.armor': source = Db.armor; 	break;		
-				case 'Db.weapon': source = Db.weapon;	break;	
+				case 'Db.equip': source = Db.equip; 	break;		
+				case 'Db.equip': source = Db.equip;	break;	
 				case 'Db.ability': source = Db.ability;	break;		
 			}
 			
