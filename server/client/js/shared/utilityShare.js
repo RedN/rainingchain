@@ -28,7 +28,7 @@ defaultMain = function(key){
 	if(server){
 		main['quest'] = defaultQuestVariable();
 		main['pref'] = Command.pref.default();
-		main['passive'] = defaultPassive();
+		main['passive'] = Passive.template();
 		main['invList'] = new Inventory(key);
 		main['bankList'] = new Bank(key);
 		main['old'] = {};

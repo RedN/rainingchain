@@ -17,6 +17,7 @@ List = {
 	all:{},		//EVERYTHING (player id refers to mortal)
 	mortal:{},	//all mortals (player,enemy)
 	bullet:{},	//all bullet
+	anim:{},	//all anim
 	strike:{},	//all strike
 	group:{},	//all enemy group
 	drop:{},	//all drop
@@ -54,7 +55,7 @@ exports.initServer = function (){
 			Init.db.quest();
 			initLoadMap();
 			
-			initPassiveGrid();
+			Init.db.passive();
 			Init.db.clan();
 			initAbiConsDb();
 			Test.serverStart();

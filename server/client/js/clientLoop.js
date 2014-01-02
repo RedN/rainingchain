@@ -53,3 +53,6 @@ remove = function(i){
 	delete List.all[i]; 
 
 }
+
+
+

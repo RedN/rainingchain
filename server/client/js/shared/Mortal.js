@@ -5,8 +5,7 @@ if(!server){
 	initPlayer = function(data){    //use data sent from server and default to create the player
 		player = Mortal.creation.template('player');
 		for(var i in data.player){ player[i] = data.player[i]; }
-		
-		document.getElementById("chatUserName").innerHTML = player.name + ': '; 
+		$("#chatUserName")[0].innerHTML = player.name + ': '; 
 	}
 }
 
@@ -142,7 +141,6 @@ Mortal.update.permBoost = function(player){
 	}
 	
 	for(var j in pb.custom){ Db.customBoost[j].function(pb,player.id);}
-	if(server){Mortal.loop.boost(player,1);}
 }
 
 Mortal.update.boost = function(player,stat){
@@ -150,8 +148,8 @@ Mortal.update.boost = function(player,stat){
 	for(var i in player.boost.list[stat].name){
 		var boost = player.boost.list[stat].name[i];
 				
-		if(boost.type == '+'){	addViaArray({'origin':player,'array':player.boost.list[stat].stat,'value':boost.value}); }
-		else if(boost.type == '*'){	addViaArray({'origin':player,'array':player.boost.list[stat].stat,'value':(boost.value-1)*player.boost.list[stat].base}); }
+		if(boost.type === '+'){	addViaArray({'origin':player,'array':player.boost.list[stat].stat,'value':boost.value}); }
+		else if(boost.type === '*'){	addViaArray({'origin':player,'array':player.boost.list[stat].stat,'value':(boost.value-1)*player.boost.list[stat].base}); }
 	}
 }
 
@@ -197,14 +195,11 @@ Mortal.permBoost = function(mort,source,boost){
 	Mortal.update.def(mort);
 }
 
-
 Mortal.talk = function(mort,enemyId){
 	if(List.all[enemyId].dialogue){
 		List.all[enemyId].dialogue(mort.id);
 	}
 }
-
-
 
 Mortal.removeAbility = function(mort,name){
 	delete mort.abilityList[name];
@@ -240,6 +235,20 @@ Mortal.learnAbility = function(mort,name){
 		
 	mort.abilityList[ab.id] = ab;
 }
+
+//when palyer wants to add a passive
+Mortal.selectPassive = function(mort,ii,jj){
+	var key = mort.id;
+	var main = List.main[key];
+	if(main.passivePt === 0){ Chat.add(key,"You don't have any Passive Points to use."); return;}
+	if(main.passive[ii][jj] === '1'){ Chat.add(key,"You already have this passive.");	return;}
+	if(!Passive.test(main.passive,ii,jj)){Chat.add(key,"You can't choose this passive yet.");	return;}
+	
+	main.passivePt--;
+	main.passive[ii] = main.passive[ii].slice(0,jj) + '1' + main.passive[ii].slice(jj+1);
+	Mortal.permBoost(List.all[key],'Passive',Passive.convert(main.passive));
+}
+
 
 
 //Death

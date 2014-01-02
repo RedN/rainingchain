@@ -196,7 +196,7 @@ Command.list['win,passive,select'] = function(key,i,j){
 	
 	if(typeof i !== 'number' || typeof j !== 'number'){ return; }
 	
-	selectPassive(key,i,j);
+	Mortal.selectPassive(key,i,j);
 }
 
 Command.list['win,ability,swap'] = function(key,input,ab){

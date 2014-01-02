@@ -59,11 +59,11 @@
 		
 		
 		
-		<section id="logInDiv">
+		<section id="signDiv">
 			Username: <input type="text" id="user" value="sam"> <br>
 			Password: <input type="password" id="pass" value="sam"><br>
-			<input type="submit" value="Log In"  onclick="logIn()">
-			<input type="submit" value="New Player"  onclick="newPlayer()"><br>
+			<input type="submit" value="Sign In"  onclick="Sign.in()">
+			<input type="submit" value="Sign Up"  onclick="Sign.up()"><br>
 			<span id="logInfo"></span>
 		</section>
 		
@@ -150,14 +150,14 @@
 		*/
 		
 		
-		document.getElementById("helpDiv").style.top = HEIGHT + 5 + 'px';
-		document.getElementById("helpDiv").style.width = '90%';
-		document.getElementById("helpText").style.width = '90%';
-		document.getElementById("helpText").style.height = '170px';
-		document.getElementById("warningDiv").style.top = 5 + 'px';
+		$("#helpDiv")[0].style.top = HEIGHT + 5 + 'px';
+		$("#helpDiv")[0].style.width = '90%';
+		$("#helpText")[0].style.width = '90%';
+		$("#helpText")[0].style.height = '170px';
+		$("#warningDiv")[0].style.top = 5 + 'px';
 		
 		$.get('/js/help.html').success(function(data){
-			$('#helpText').html(parseHelp(data));
+			$('#helpText').html(Init.help(data));
 		});
 		
 		$('#chatForm').submit(function(e) {
@@ -166,26 +166,26 @@
 		});
 		
 		var html = {
-		'chat':{'div': document.getElementById("chatBoxDiv"),'text': document.getElementById("chatBoxText"),'input': document.getElementById("chatBoxInput")},
-		'pm':{'div':document.getElementById("pmBoxDiv"),'text':document.getElementById("pmBoxText")},
-		'dialogue':{'div':document.getElementById("dialogueBoxDiv"),'text':document.getElementById("dialogueBoxText")},
-		'friendTab':{'div':document.getElementById("friendListDiv"),'text':document.getElementById("friendListText")},
-		'questTab':{'div':document.getElementById("questListDiv"),'text':document.getElementById("questListText")},
-		'questWin':{'div':document.getElementById("questWin" + "Div"),
-					'info':document.getElementById("questWin" + "Info"),
-					'hint':document.getElementById("questWin" + "Hint"),
-					'description':document.getElementById("questWin" + "Description"),
-					'requirement':document.getElementById("questWin" + "Requirement"),
-					'bonus':document.getElementById("questWin" + "Bonus"),
-					},	
-		'win':{'div':document.getElementById("win" + "Div"),'title':document.getElementById("win" + "Title")},	
-		'abilityWin':{'div':document.getElementById("abilityWin" + "Div"),
-					'subtitle':document.getElementById("abilityWin" + "SubTitle"),
-					'generalinfo':document.getElementById("abilityWin" + "GeneralInfo"),
-					'upgrade':document.getElementById("abilityWin" + "Upgrade"),
-					},	
-		
-		'passiveWin':{'div':document.getElementById("passiveWin" + "Div"),'text':document.getElementById("passiveWin" + "Text")}
+			'chat':{'div': $("#chatBoxDiv")[0],'text': $("#chatBoxText")[0],'input': $("#chatBoxInput")[0]},
+			'pm':{'div':$("#pmBoxDiv")[0],'text':$("#pmBoxText")[0]},
+			'dialogue':{'div':$("#dialogueBoxDiv")[0],'text':$("#dialogueBoxText")[0]},
+			'friendTab':{'div':$("#friendListDiv")[0],'text':$("#friendListText")[0]},
+			'questTab':{'div':$("#questListDiv")[0],'text':$("#questListText")[0]},
+			'questWin':{'div':$("#questWin" + "Div")[0],
+						'info':$("#questWin" + "Info")[0],
+						'hint':$("#questWin" + "Hint")[0],
+						'description':$("#questWin" + "Description")[0],
+						'requirement':$("#questWin" + "Requirement")[0],
+						'bonus':$("#questWin" + "Bonus")[0],
+						},	
+			'win':{'div':$("#win" + "Div")[0],'title':$("#win" + "Title")[0]},	
+			'abilityWin':{'div':$("#abilityWin" + "Div")[0],
+						'subtitle':$("#abilityWin" + "SubTitle")[0],
+						'generalinfo':$("#abilityWin" + "GeneralInfo")[0],
+						'upgrade':$("#abilityWin" + "Upgrade")[0],
+						},	
+			
+			'passiveWin':{'div':$("#passiveWin" + "Div")[0],'text':$("#passiveWin" + "Text")[0]}
 					
 		};
 		

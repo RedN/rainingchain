@@ -36,7 +36,7 @@ Draw.loop = function (key){
 	if(!server){
 		//Clear
 		for(var i in ctxList){ctxList[i].clearRect(0, 0, WIDTH, HEIGHT);}
-		for(var i in drawHtmlDiv){ drawHtmlDiv[i].style.visibility = 'hidden';}
+		for(var i = 0 ; i < drawHtmlDiv.length; i++){ drawHtmlDiv[i].style.visibility = 'hidden';}
 		drawSortList = [];
 		btnList = [];
 		Input.event.mouse.drag.update();
@@ -1692,7 +1692,7 @@ Draw.window.passive.grid = function(key){ ctxrestore();
 			
 			//Border
 			ctx.globalAlpha = 0.5;
-			if(pref.passiveView === 'normal'){ ctx.fillStyle =	+passive[i][j] ? 'green' : (testPassive(passive,i,j) ? '#FFFF00': 'red');}
+			if(pref.passiveView === 'normal'){ ctx.fillStyle =	+passive[i][j] ? 'green' : (Passive.test(passive,i,j) ? '#FFFF00': 'red');}
 			if(pref.passiveView === 'heat'){var n = (passiveGrid[i][j].count-passiveGrid.min) / (passiveGrid.max-passiveGrid.min);	ctx.fillStyle =	gradientRG(n);}
 			ctx.fillRect(numX,numY,ic,ic);
 		

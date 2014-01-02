@@ -1,31 +1,37 @@
 //############################################
-//temp
-var gameStarted = false;
 
-var timeStamp = 1372118670887;
+var gameStarted = false;
 var context = {'text':''}, clientContext = {'text':''}, permContext = {'text':''};
 var help = '';
 
-var canvasX = 0, canvasY = 0;  
+var btnList = [];   //all buttons
+var clientContext = null;
+
+var pref = Command.pref.default();   //preference (see commandShare.js)
 
 var ctxList = {};   //list of canvas (window,popup,stage)
 var drawSortList = [];  //used to store the actors to draw in the right order (z-index)
 
-List = {};
-List.all = {};  //EVERYTHING
-List.mortal = {}; //all mortals (player,enemy)
-List.bullet = {}; //all bullet
-List.drop = {};  //all drop
+List = {
+	all:{},		//EVERYTHING (player id refers to mortal)
+	mortal:{},	//all mortals (player,enemy)
+	bullet:{},	//all bullet
+	anim:{},	//all anim
+	strike:{},	//all strike
+	group:{},	//all enemy group
+	drop:{},	//all drop
+	map:{},		//all animation
+	main:{},	//all List.main of player. (player id) List.main[id].something on server => window.something on client
+	map:{},		//all maps including instance 
+	socket:{},	//all socket (player id)
+};
 
-List.strike = {}; //all strike
-List.anim = {}; //all animation
-List.map = {};
-
-Db = {};
-Db.weapon = {};
-Db.armor = {};
-Db.ability = {};
-Db.item = {};   //local compilation of information so server doesnt send many times the same info
+Db = {	//local compilation of information so server doesnt send many times the same info
+	weapon:{},
+	armor:{},
+	ability:{},
+	item:{},
+};  
 
 
 
@@ -37,44 +43,33 @@ Db.item = {};   //local compilation of information so server doesnt send many ti
 	for(var i in main) window[i] = main[i];
 })();
 
-//############################################
-
-
-var initData;
-//############################################
-//############################################
-
-var btnList = [];   //all buttons
-var clientContext = null;
-
-var pref = Command.pref.default();   //preference (see commandShare.js)
-
 
 //Log In
-logIn = function(){
-	var user = document.getElementById("user").value;
-	var pass = document.getElementById("pass").value;
-	socket.emit('logIn', { 'username': user,'password': pass });
+Sign = {};
+Sign.in = function(){
+	var user = $("#user")[0].value;
+	var pass = $("#pass")[0].value;
+	socket.emit('signIn', { 'username': user,'password': pass });
 }
 
-socket.on('logIn', function (data) {
-	if(!data.success){ writeLogInfo(data.message); }
-	else {	id = data.key; cloud9 = data.cloud9; startGame(data.data); } 	
+socket.on('signIn', function (data) {
+	if(data.success){ id = data.key; cloud9 = data.cloud9; Init.game(data.data);  }
+	else { Sign.log(data.message);  } 	
 });
 
-writeLogInfo = function(text){
-	document.getElementById("logInfo").innerHTML = text;	
+Sign.log = function(text){
+	$("#logInfo")[0].innerHTML = text;	
 }
 
 //New Player
-newPlayer = function (){
-	var user = document.getElementById("user").value;
-	var pass = document.getElementById("pass").value;
-	if(user && pass){ socket.emit('newPlayer', { 'username': user,'password': pass }); }
+Sign.up = function (){
+	var user = $("#user")[0].value;
+	var pass = $("#pass")[0].value;
+	if(user && pass){ socket.emit('signUp', { 'username': user,'password': pass }); }
 }
 
-socket.on('newPlayer', function (data) {
-	writeLogInfo(data.message);
+socket.on('signUp', function (data) {
+	Sign.log(data.message);
 });
 
 
@@ -82,17 +77,16 @@ socket.on('newPlayer', function (data) {
 
 
 //Init
-startGame = function (data) {
-	document.getElementById("logInDiv").style.display = "none"; //remove enter user and psw
-	document.getElementById("gameDiv").style.display = "inline";    //show game
+Init.game = function (data) {
+	$("#signDiv")[0].style.display = "none"; 	//remove enter user and psw
+	$("#gameDiv")[0].style.display = "inline";  //show game
 	
-	initData = data;
 	for(var i in data.main){ window[i] = data.main[i]; }    //set init values sent by server
 	
-	initPassive();  //init Passive Grid
+	Passive.init();  //init Passive Grid
 	
 	//Add Canvas. param2 = z-index
-	var canvasDiv = document.getElementById("canvasDiv");   
+	canvasDiv = $("#canvasDiv")[0];   
 	addCanvas('stage','stage',-10);
 	addCanvas('win','windowCanvas',10);
 	addCanvas('passiveGrid','passiveGridCanvas',11);
@@ -103,21 +97,23 @@ startGame = function (data) {
 	
 	for(var i in chatBox){Chat.receive(chatBox[i]);}	chatBox = [];   //for offline pm
 	
-	//On Focus
-	$("#chatBoxInput" ).focus();	//initInput was as param???
 	
-	
-	
-	initDb(function(){
-		initPlayer(initData);
+	Init.db.stat();
+	Init.db.sprite();
+	Init.db.anim();
+	Init.db.sfx();
+	Init.db.map();
+	Init.mortal();
+	Init.db.quest();
+	Init.db.customBoost();
+	//initAbilityModDb();   //need fixing
+	Img.preload(Img.preloader,function(){   //load images
+		initPlayer(data);
 		gameStarted = true;
 		setInterval(Loop,40);
 		socket.emit('clientReady',1); 
 		if(cloud9) { Chat.add('Warning, you are running under cloud9 servers. You may experience intense lagging. Downloading the project and running it locally is recommended.');}
-	});	
-	
-	
-	
+	});
 }
 
 //To add a canvas to the game
@@ -128,8 +124,8 @@ addCanvas = function(name,id,z){
 	cv.height = HEIGHT;
 	cv.style.border = '1px solid #000000';
 	cv.style.position = 'absolute';
-	cv.style.left = canvasX + 'px';
-	cv.style.top = canvasY + 'px';
+	cv.style.left = '0px';
+	cv.style.top = '0px';
 	cv.style.zIndex = z;
 	if(z > 0) cv.style.pointerEvents = "none";
 	
@@ -146,22 +142,6 @@ addCanvas = function(name,id,z){
 }
 
 
-initDb = function (cb){
-	Init.db.stat();
-	Init.db.sprite();
-	Init.db.anim();
-	Init.db.sfx();
-	Init.db.map();
-	Init.mortal();
-	Init.db.quest();
-	Init.db.customBoost();
-	//initAbilityModDb();   //need fixing
-	Img.preload(Img.preloader,function(){   //load images
-		cb.call();
-	});
-}
-
-
 
  
  
@@ -173,7 +153,7 @@ socket.on('warning', function (message) {
 });
 
 //Help aka documentation. Called once at start of game. wiki-like parser
-parseHelp = function(data){
+Init.help = function(data){
 	for(var i = 0 ; i < data.length ; i++){
 		
 		//Link

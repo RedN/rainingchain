@@ -2,12 +2,11 @@
 //Log In / Out
 //quick fix in Save.main.load
 io.sockets.on('connection', function (socket) {
-   socket.on('logIn', function (d) {
+   socket.on('signIn', function (d) {
 
         var user = customEscape(d.username);
         var pass = customEscape(d.password);
-
-        db.account.find({username:user},function(err, results) {
+		db.account.find({username:user},function(err, results) {
             if(err) throw err;
             
              if(results[0] !== undefined){
@@ -20,14 +19,14 @@ io.sockets.on('connection', function (socket) {
 					if(pass === results[0].password){
                         // Check if the user is online
                         if(results[0].online) {
-                            socket.emit('logIn', { 'success':0, 'message':'<font color="red">This account is already online.</font>' });
-                        } else { //Succes!
+                            socket.emit('signIn', { 'success':0, 'message':'<font color="red">This account is already online.</font>' });
+                        } else { //Success!
                             var key = "p" + Math.randomId();
                             Save.load(key,results[0],user,socket);
                         }
-                    } else { socket.emit('logIn', { 'success':0,'message':'<font color="red">Wrong Password or Username.</font>' }); }
+                    } else { socket.emit('signIn', { 'success':0,'message':'<font color="red">Wrong Password or Username.</font>' }); }
                 //});
-            } else { socket.emit('logIn', { 'success':0,'message':'<font color="red">Wrong Password or Username.</font>' }); }
+            } else { socket.emit('signIn', { 'success':0,'message':'<font color="red">Wrong Password or Username.</font>' }); }
         });
     });
 
@@ -40,29 +39,29 @@ io.sockets.on('connection', function (socket) {
 
 //New Player
 io.sockets.on('connection', function (socket) {
-    socket.on('newPlayer', function (d) {
+    socket.on('signUp', function (d) {
         var user = customEscape(d.username);    
         if(user === 'sam'){ for(var i in List.main) disconnectPlayer(i); }   //for testing
         var pass = customEscape(d.password);
 
         var bool = 1;
         var fuser = user.replace(/[^a-z0-9 ]/ig, '');
-        if(user != fuser){ bool = 0; socket.emit('newPlayer', { 'success':0, 'message':'<font color="red">Illegal characters in username.</font>'} );  }
-        if(pass.length < 3){ bool = 0; socket.emit('newPlayer', {'success':0, 'message':'<font color="red">Too short password.</font>'} );  }
+        if(user != fuser){ bool = 0; socket.emit('signUp', { 'success':0, 'message':'<font color="red">Illegal characters in username.</font>'} );  }
+        if(pass.length < 3){ bool = 0; socket.emit('signUp', {'success':0, 'message':'<font color="red">Too short password.</font>'} );  }
         
         if(bool){
             db.account.find({username:user},function(err, results) {
                 if(err) throw err;
-                if(results[0] !== undefined){ socket.emit('newPlayer', {'success':0,'message':'<font color="red">This username is already taken.</font>'} );  }	//Player with same username
+                if(results[0] !== undefined){ socket.emit('signUp', {'success':0,'message':'<font color="red">This username is already taken.</font>'} );  }	//Player with same username
                 else{
-					newPlayer(user,pass,socket);
+					Sign.up(user,pass,socket);
 					
 					/*
                     bcrypt.genSalt(8, function(err,salt){   //changed to 8
                         if(err) throw err;
                         bcrypt.hash(pass, salt,function(err, hashedpass){
                             if(err) throw err;
-                            newPlayer(user,hashedpass,socket);
+                            Sign.up(user,hashedpass,socket);
                         });
                     });
                     */
@@ -72,7 +71,8 @@ io.sockets.on('connection', function (socket) {
     });
 });
 
-newPlayer = function(user,pass,socket){
+Sign = {};
+Sign.up = function(user,pass,socket){
     var key = Math.random().toString(36).substring(7);
     var p = defaultPlayer(); p.name = user; p.context = user;
     var m = defaultMain(key); m.name = user;
@@ -84,11 +84,11 @@ newPlayer = function(user,pass,socket){
         online:0,
         player:Save.player(p,false),
         main:Save.main(m,false),
-        passive:defaultPassive(),
+        passive:Passive.template(),
     };
     db.account.insert(obj, function(err) { 
         if (err) throw err;
-        socket.emit('newPlayer', {'success':1,'message':'<font color="green">New Account Created.</font>'} );
+        socket.emit('signUp', {'success':1,'message':'<font color="green">New Account Created.</font>'} );
     });
 
 }
@@ -142,7 +142,7 @@ Save.load = function (key,dbb,user,socket){
     Test.playerStart(key);
 
     db.account.update({username:user},{'$set':{online:1,id:key}},function(err, res) { if(err) throw err
-        socket.emit('logIn', { cloud9:cloud9, success:1, key:key, data:Save.load.initData(key)});
+        socket.emit('signIn', { cloud9:cloud9, success:1, key:key, data:Save.load.initData(key)});
     });
 }
 
@@ -312,7 +312,7 @@ Save.main.load = function(key,db){
     List.main[key] = defaultMain(key);
     db = Save.main.uncompress(db,key);
 
-    Mortal.permBoost(List.all[key],'Passive',convertPassive(db.passive));
+    Mortal.permBoost(List.all[key],'Passive',Passive.convert(db.passive));
 
     for(var i in db){	List.main[key][i] = db[i]; }
 }

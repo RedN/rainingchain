@@ -147,9 +147,8 @@ Input.event.mouse.wheel = function(side){
 }
 
 Input.event.mouse.move = function (evt){
-	mouse.x = evt.x - canvasX;
-	mouse.y = evt.y - canvasY;
-	//if(gameStarted) player.angle = atan2(mouse.x - WIDTH/2,mouse.y - HEIGHT/2);    //kept so updates faster aka feel more responsive
+	mouse.x = evt.x;
+	mouse.y = evt.y;
 }
 
 Input.event.mouse.drag = function(){

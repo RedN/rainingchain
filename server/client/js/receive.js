@@ -1,10 +1,7 @@
 //Receive
 Change = {};
-Receive = Change.receive = {};
 
-Receive.showData = false;
-
-socket.on('change', function (data) {
+Receive = Change.receive = function(data){
 try {
 	if(Receive.showData) permConsoleLog(JSON.stringify(data));  //for testing
 	data = Receive.parse(data);
@@ -57,8 +54,10 @@ try {
 	}
 	
 } catch (err){ logError(err) }
-});
+}
 
+socket.on('change', Receive);
+Receive.showData = false;
 
 Receive.parse = function(data){
 	if(data.u){ 
