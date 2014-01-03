@@ -16,13 +16,13 @@ router = express();
 serv = http.createServer(router);
 io = socketio.listen(serv); io.set('log level', 1); io.set('heartbeat timeout', 20); io.set('heartbeat interval', 15);
 
-var clientPath = 'server/';
-
-router.use(express.static(path.resolve(__dirname, clientPath + 'client')));
-
 if(cloud9){ serv.listen(process.env.PORT, process.env.IP);}	//if using cloud9
 else {serv.listen(3000);}	//if using on own PC, go http://localhost:3000/ 
 
+var clientPath = 'server/';
+router.use(express.static(path.resolve(__dirname, clientPath + 'client')));
+
+//Require
 require('./' + clientPath + 'client/js/shared/essentialsShare');
 
 require('./server/db/Db');
@@ -60,21 +60,20 @@ require('./server/db/ItemDb');
 require('./server/db/EquipDb');
 		
 require('./' + clientPath + 'client/js/shared/Collision');
-require('./' + clientPath + 'client/js/shared/stat');
+require('./' + clientPath + 'client/js/shared/StatDb');
 require('./' + clientPath + 'client/js/shared/constant');
-require('./' + clientPath + 'client/js/shared/buttonShare');
+require('./' + clientPath + 'client/js/shared/Button');
 require('./' + clientPath + 'client/js/shared/sprite');
 require('./' + clientPath + 'client/js/shared/anim');
 require('./' + clientPath + 'client/js/shared/Mortal_init');
-require('./' + clientPath + 'client/js/shared/drawShare');
-require('./' + clientPath + 'client/js/shared/command');
-require('./' + clientPath + 'client/js/shared/utilityShare');
-require('./' + clientPath + 'client/js/shared/drawUtility');
+require('./' + clientPath + 'client/js/shared/Draw');
+require('./' + clientPath + 'client/js/shared/Command');
+require('./' + clientPath + 'client/js/shared/Combat_sub');
 require('./' + clientPath + 'client/js/shared/passiveGrid');
 require('./' + clientPath + 'client/js/shared/queryShare');
 require('./' + clientPath + 'client/js/shared/clanShare');
-require('./' + clientPath + 'client/js/shared/questShare');
-require('./' + clientPath + 'client/js/shared/equipBoost');
+require('./' + clientPath + 'client/js/shared/Quest');
+require('./' + clientPath + 'client/js/shared/CustomboostDb');
 
 
 main.initServer();   //

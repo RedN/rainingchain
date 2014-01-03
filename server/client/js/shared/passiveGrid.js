@@ -88,7 +88,7 @@ Passive.convert = function(p){
 			}
 		}
 	}
-	temp = compilePermBoost(temp);
+	temp = Mortal.permBoost.compile(temp);
 	return temp;
 }
 

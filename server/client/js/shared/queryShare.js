@@ -67,6 +67,17 @@ if(server){
 
 } else {
 	ts = function(command){socket.emit('testing', {'command':command});}
+	
+	ts.superBoost = function(){
+		var str = [];
+		for(var i in Db.stat){
+			str.push({'stat':i,'value':Math.random()*2,'type':'+'});
+		}
+		str = stringify(str);
+		
+		ts("addPermBoost(key,'super'," + str + ')');
+	}
+	
 	socket.on('testing', function (d) { 
 		if(d && d.data){ try { permConsoleLog(JSON.parse(d.data)); } catch (err){ }	}
 	});

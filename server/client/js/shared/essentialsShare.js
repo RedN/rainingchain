@@ -79,6 +79,24 @@ innerFunction = function (func,param){
 	func.apply(this, param);	
 }
 
+keyFunction = function (key,func,param){
+	if(!server){param = func;func = key;}
+	
+	param = (param instanceof Array) ? param : [param];
+	if(typeof func === 'string'){
+		if(func.indexOf('.') !== -1){
+			if(func.indexOf('Mortal') === 0) key = List.mortal[key]; 
+			else if(func.indexOf('Main') === 0) key = List.main[key]; 
+			func = valueViaArray({'origin':this,'array':func.split('.')});
+		} else {
+			func = this[func];
+		}
+	}
+	
+	if(server){	func.apply(this, [key].concat(param));} 
+	else {	func.apply(this, param);}
+}
+
 //Copy
 
 deepClone = function(obj){
@@ -332,3 +350,24 @@ newImage = function(src){
 }
 
 
+//Randomly select a mod in a list where mod[i].lvl >= lvl. Take into consideration the mod factor.
+Object.defineProperty(Array.prototype, "random", {
+    enumerable: false,
+    value: function(lvl){
+		var sum = 0; 
+		for(var i in this){ 
+			if(!lvl || (lvl && this[i].lvl <= lvl)){
+				sum += this[i].mod; 
+			}
+		}
+		var random = Math.random() * sum;
+		for(var i in this){ 
+			if(!lvl || (lvl && this[i].lvl <= lvl)){
+				if(random < this[i].mod){ return deepClone(this[i]); } 
+				random -= this[i].mod;	
+			}
+		}
+		return -1;
+	}
+});
+	

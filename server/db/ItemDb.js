@@ -127,7 +127,6 @@ Init.db.item = function (cb){
 
 
 Item.creation = function(item){
-	
 	db.item.update( {'id':item.id}, item, { upsert: true }, function(err) { if(err) throw err });
 	
 	item = useTemplate(Item.template(),item);

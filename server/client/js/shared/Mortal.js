@@ -23,18 +23,12 @@ selectInv = function(key,obj){
 //Mortal
 Mortal = typeof Mortal !== 'undefined' ? Mortal : {};
 
-//Mortal.remove 
 Mortal.remove = function(mort){
 	ActiveList.remove(mort);
 	
 	delete List.mortal[mort.id];
 	delete List.all[mort.id]
 }
-
-
-
-
-
 
 Mortal.updateEquip = function(mort){
 	//only update armor atm
@@ -63,23 +57,13 @@ Mortal.switchEquip = function(mort,name){
 	}
 }
 
-
-
-//Equip a weapon already present in the weaponList
 Mortal.swapWeapon = function(mort,piece){
+	//Equip a weapon already present in the weaponList
 	mort.weapon = mort.equip.piece[piece];
 	
 	Sprite.change(mort,mort.weapon.sprite);
 	Mortal.permBoost(mort,'weapon',mort.weapon.boost);
 }
-
-
-
-
-
-
-
-
 
 Mortal.changeHp = function(mort,amount){
     Mortal.changeResource(mort,{hp:amount});
@@ -92,19 +76,15 @@ Mortal.changeResource = function(mort,heal){
 	}
 }
 
-
-//Teleport player. if no map specified, stay in same map.
 Mortal.teleport = function(mort,x,y,map){
+	//Teleport player. if no map specified, stay in same map.
 	mort.x = x;
 	mort.y = y;
 	if(map){ mort.map = map; }
 	ActiveList.remove(mort);	//need to con sider if needed or not
 }
 
-//updatePermBoost in utilityShare
-
 Mortal.update = {};
-
 Mortal.update.mastery = function(player){
 	for(var i in player.mastery){
 		for(var j in player.mastery[i]){
@@ -174,16 +154,16 @@ Mortal.update.boost = function(player,stat){
 	}
 }
 
-//Add a boost to a mortal
-
-//list[i]: i = stat
-//toUpdate[i]: i = stat
-//fast[i]: i = stat@source
-
-// {stat:'dmgMain',value:1000,type:'*',time:10000,name:'quest'}
-
-//format: boost { 'stat':'dmgMain','value':1,'type':'*','time':100,'name':'weapon'}
 Mortal.boost = function(player, boost){
+	//Add a boost to a mortal
+
+	//list[i]: i = stat
+	//toUpdate[i]: i = stat
+	//fast[i]: i = stat@source
+
+	// {stat:'dmgMain',value:1000,type:'*',time:10000,name:'quest'}
+
+	//format: boost { 'stat':'dmgMain','value':1,'type':'*','time':100,'name':'weapon'}
 	boost = arrayfy(boost);
 	for(var i in boost){ 
 		var b = boost[i];
@@ -214,6 +194,22 @@ Mortal.permBoost = function(mort,source,boost){
 	Mortal.update.permBoost(mort);
 	Mortal.update.mastery(mort);
 	Mortal.update.def(mort);
+}
+
+Mortal.permBoost.compile = function(b){
+	var tmp = {};	var temp = [];
+	
+	for(var i in b){
+		if(b[i].stat){
+			var name = b[i].type + '--' + b[i].stat;
+			if(tmp[name] === undefined){tmp[name] = {'type':b[i].type,'stat':b[i].stat,'value':0};}
+			tmp[name].value += b[i].value;
+		} else {
+			tmp[b[i].value] = b[i];
+		}
+	}
+	for(var i in tmp){temp.push(tmp[i]);}
+	return temp;
 }
 
 Mortal.talk = function(mort,enemyId){
@@ -257,8 +253,8 @@ Mortal.learnAbility = function(mort,name){
 	mort.abilityList[ab.id] = ab;
 }
 
-//when palyer wants to add a passive
 Mortal.selectPassive = function(mort,ii,jj){
+	//when player wants to add a passive
 	var key = mort.id;
 	var main = List.main[key];
 	if(main.passivePt === 0){ Chat.add(key,"You don't have any Passive Points to use."); return;}
@@ -270,9 +266,6 @@ Mortal.selectPassive = function(mort,ii,jj){
 	Mortal.permBoost(List.all[key],'Passive',Passive.convert(main.passive));
 }
 
-
-
-//Death
 Mortal.death = function(mort){	//only for enemy atm
 	mort.dead = 1;
 	

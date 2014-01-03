@@ -7,7 +7,7 @@ Chat.send = function(){
 	
 	if(text[0] === '$'){  Chat.send.command(text); }
 	else { Chat.send.message(text); }
-	addInput(''); 
+	Input.add(''); 
 	return
 	
 }
@@ -99,7 +99,7 @@ Chat.send.message.parse = function(txt){
 
 Chat.send.message.reply = function(){
 	if(Chat.send.message.reply.history.length){
-		addInput('@' + Chat.send.message.reply.history[0].from + ',');
+		Input.add('@' + Chat.send.message.reply.history[0].from + ',');
 	}
 }
 Chat.send.message.reply.history = [];
@@ -117,7 +117,7 @@ Chat.receive = function(pack){
 		html.chat.text.innerHTML += "<br> <span style='color:" + '#800080' + "'>" + '[' + pack.from[0] + '] ' + pack.from[1] + ': ' + pack.text + "</span>"; 
 	}
 	if(pack.type === 'input'){
-		addInput(pack.text,1);
+		Input.add(pack.text,1);
 	}
 	if(pack.type === 'pm'){
 		var color = 'cyan';
@@ -160,7 +160,7 @@ rightClickChat = function(name){
 			
 	option.option[2] = {
 	'name':'Send Message',
-	'func':(function(name){ addInput('@' + name + ','); }),
+	'func':(function(name){ Input.add('@' + name + ','); }),
 	'param':[name],	
 	};
 	
@@ -180,7 +180,7 @@ rightClickChat = function(name){
 }
 		
 leftClickFriend = function(evt,str){
-	if(event.which === 1) addInput(str);
+	if(event.which === 1) Input.add(str);
 
 }
 		

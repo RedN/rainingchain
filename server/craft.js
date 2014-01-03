@@ -361,7 +361,7 @@ Craft.boost = function(seed,where,amount){
 }
 
 Craft.boost.generate = function(seed){
-	var boost = randomViaMod(Db.boost[seed.piece],seed.lvl);
+	var boost = Db.boost[seed.piece].random(seed.lvl);
 	var value = Craft.boost.generate.roll(boost.value,seed.quality);
 	
 	return {'stat':boost.stat,

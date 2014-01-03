@@ -216,6 +216,7 @@ Draw.tab.skill = function(){ ctxrestore();
 	}
 }	
 
+
 Draw.tab.friend = function(){ ctxrestore();
 	var s = Draw.tab.main();	
 	ctx = ctxList.stage;
@@ -256,8 +257,8 @@ Draw.tab.friend = function(){ ctxrestore();
 			'<br><span ' + 
 			'class="shadow" ' + 
 			'style="color:' + color + '" ' +
-			'onclick="addInput(\'' + str2 + '\')' + '" ' + 
-			'oncontextmenu="rightClickFriend(\'' + i + '\')' + '" ' + 
+			'onclick="Input.add(\'' + str2 + '\')' + '" ' + 
+			'oncontextmenu="Draw.tab.friend.rightClick(\'' + i + '\')' + '" ' + 
 			'onmouseover="main.permContext.text = \'' + str + '\';' + '" ' + 
 			'onmouseout="main.permContext.text = null;' + '" ' + 
 			'>' + i + 
@@ -285,7 +286,7 @@ Draw.tab.friend = function(){ ctxrestore();
 		Draw.icon(array[i][2],[numX,numY],20);
 		Button.creation(0,{
 			"rect":[numX,numX+20,numY,numY+20],
-			'left':{'func':addInput, 'param':[array[i][1]]},
+			'left':{'func':Input.add, 'param':[array[i][1]]},
 			"text":array[i][0]
 		});	
 	}
@@ -293,6 +294,56 @@ Draw.tab.friend = function(){ ctxrestore();
 
 
 }
+
+
+
+Draw.tab.friend.rightClick = function(name){
+	var option = {'name':name,'option':[],'count':1};
+	
+	
+	if(main.social.list.friend[name].online){
+		option.option[0] = {
+			'name':'Send Message',
+			'func':Input.add,
+			'param':['@' + name + ','],	
+		};
+	} else {
+		option.option[0] = {
+			'name':'Offline Message',
+			'func':Input.add,
+			'param':['$fl,offlinepm,' + name + ','],	
+		};
+	}
+	
+	
+	option.option[1] = {
+		'name':'Change Nickname',
+		'func':Input.add,
+		'param':['$fl,nick,' + name + ','],	
+	};
+	
+	option.option[2] = {
+		'name':'Change Comment',
+		'func':Input.add,
+		'param':['$fl,comment,' + name + ','],	
+	};
+	
+	option.option[3] = {
+		'name':'Change PM Color',
+		'func':Input.add,
+		'param':['$fl,color,' + name + ','],	
+	};
+	
+	option.option[4] = {
+		'name':'Remove Friend',
+		'func':Chat.send.command,
+		'param':['$fl,remove,' + name],	
+	};
+	
+	
+	Button.optionList(option);
+}
+
 
 Draw.tab.quest = function(key){ ctxrestore();
 	var s = Draw.tab.main(key);	

@@ -101,7 +101,7 @@ Draw.window.bank = function (){ ctxrestore();
 	ctx.fillText(string,numX,numY);
 	Button.creation(0,{
 		"rect":[numX,numX+ctx.measureText(string).width,numY,numY+25],
-		"left":{"func":addInput,"param":['$pref,bankTransferAmount,']},
+		"left":{"func":Input.add,"param":['$pref,bankTransferAmount,']},
 		"text":'Change X-Amount.'
 		});	
 	
@@ -502,7 +502,7 @@ Draw.window.ability.generalInfo.upgrade = function(){
 		{'name':'Use 1 Orb','func':Chat.send.command,'param':['$win,ability,upgrade,' + name + ',1']},
 		{'name':'Use 10 Orbs','func':Chat.send.command,'param':['$win,ability,upgrade,' + name + ',10']},
 		{'name':'Use 100 Orbs','func':Chat.send.command,'param':['$win,ability,upgrade,' + name + ',100']},
-		{'name':'Use X Orbs','func':addInput,'param':['$win,ability,upgrade,' + name + ',']},
+		{'name':'Use X Orbs','func':Input.add,'param':['$win,ability,upgrade,' + name + ',']},
 	]};
 	Button.optionList(option);
 }
@@ -513,7 +513,7 @@ Draw.window.ability.generalInfo.upMod = function(mod){
 		{'name':'Use 1 Orb','func':Chat.send.command,'param':['$win,ability,upMod,' + name + ',' + mod + ',1']},
 		{'name':'Use 10 Orbs','func':Chat.send.command,'param':['$win,ability,upMod,' + name + ',' + mod + ',10']},
 		{'name':'Use 100 Orbs','func':Chat.send.command,'param':['$win,ability,upMod,' + name + ',' + mod + ',100']},
-		{'name':'Use X Orbs','func':addInput,'param':['$win,ability,upMod,' + name + ',' + mod + ',']},
+		{'name':'Use X Orbs','func':Input.add,'param':['$win,ability,upMod,' + name + ',' + mod + ',']},
 	]};
 	
 	Button.optionList(option);
@@ -545,7 +545,7 @@ Draw.window.ability.action.attack = function(diffX,diffY){  ctxrestore();
 	var str = 'Damage: ' + dmg + ' x ';
 	
 	var dist = ctx.length(str);
-	drawElementBar(s.zx+dist,s.zy,300,25,atk.dmgRatio);
+	Draw.element(s.zx+dist,s.zy,300,25,atk.dmgRatio);
 	ctx.fillText(str,s.zx,s.zy);
 	str = 'x' + atk.amount + ' Bullet' + (atk.amount > 1 ? 's' : '') + ' @ ' + atk.angle + '°';
 	ctx.fillText(str,s.zx,s.zy+25);

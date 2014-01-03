@@ -273,7 +273,7 @@ Mortal.loop.activeList = function(mort){
 }
 
 Mortal.loop.target = function(enemy){
-    var targetList = {}; 
+    var targetList = []; 
 	for (var i in enemy.activeList){
 		var tar = List.all[i];
 		var hIf = typeof enemy.targetIf == 'function' ? enemy.targetIf : Combat.hitIf.list[enemy.targetIf];
@@ -284,13 +284,13 @@ Mortal.loop.target = function(enemy){
 			var diff = Math.sqrt(diffX*diffX+diffY*diffY);
 			if(diff <= enemy.moveRange.aggressive){
 				var diffModded = 1/(diff+enemy.targetMod.rangeMod);
-				targetList[i] = {'mod':diffModded,'id':i};
+				targetList.push({'mod':diffModded,'id':i});
 			}
 		}
 	}
 	
-	if(Object.keys(targetList).length){
-		enemy.target = randomViaMod(targetList).id;	
+	if(targetList.length){
+		enemy.target = targetList.random().id;	
 	}else {enemy.target = null;}	
 }
 

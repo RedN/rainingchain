@@ -440,7 +440,7 @@ Ability.template.attack.element = function(seed){
 		]
 	}
 	
-	return randomViaMod(possible[seed.type]);
+	return possible[seed.type].random();
 	
 }
 

@@ -32,7 +32,7 @@ Input.init = function(setup){
 		
 		Input.key.custom = [
 			{'keyCode':[9],'func':(function(){ Chat.send.message.reply(); })},
-			{'keyCode':[27],'func':(function(){ addInput('',false); })},
+			{'keyCode':[27],'func':(function(){ Input.add('',false); })},
 			{'keyCode':[38],'func':(function(){ $('#gameDiv')[0].scrollIntoView(true); })},
 		];
 		
@@ -49,6 +49,13 @@ Input.init(0);
 
 
 //### End Customization###
+
+Input.add = function(text,focus,add){
+	if(add) {html.chat.input.value += text;}
+	else {html.chat.input.value = text;}
+	
+	if(focus !== false){ html.chat.input.focus(); }
+}
 
 Input.event = {}
 Input.event.key = function(code,dir,event){
