@@ -292,7 +292,7 @@ Craft.orb = function(key,orb,amount,wId,mod){
 	var func; var equip; var type;
 	if(Db.equip[wId]){	func = initWeapon;	equip = deepClone(Db.equip[wId]); type = 'equip';}
 	if(Db.equip[wId]){	func = Armor.creation;	equip = deepClone(Db.equip[wId]); type = 'equip';}
-	if(Db.ability[wId]){	func = initAbility;	equip = deepClone(Db.ability[wId]); type = 'ability';}
+	if(Db.ability[wId]){	func = Ability.creation;	equip = deepClone(Db.ability[wId]); type = 'ability';}
 	if(!equip){	Chat.add(key,"You can't use this orb on this item.");return; }
 	
 	if(orb === 'boost'){

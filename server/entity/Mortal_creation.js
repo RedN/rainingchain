@@ -91,8 +91,8 @@ Mortal.creation.db = function(e,d){
 	
 	if(e.boss){	
 		var id = e.boss;
-		e.boss = bossDb[id]();
-		for(var i in bossDb[id]){e.boss[i] = bossDb[id][i];}
+		e.boss = Db.boss[id]();
+		for(var i in Db.boss[id]){e.boss[i] = Db.boss[id][i];}
 		e.boss.parent = e; 
 	}
 	for(var i in e.ability){ 

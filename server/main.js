@@ -24,10 +24,10 @@ List = {
 	map:{},		//all animation
 	main:{},	//all List.main of player. (player id) List.main[id].something on server => window.something on client
 	map:{},		//all maps including instance 
-	socket:{},	//all socket (player id)
+	socket:{},	//all socket (player id),
+	nameToKey:{},	//used to convert a player name into the player key
 };
 
-nameToKey = {}; //use to convert a player name into the player key
 shopList = {}; //all shop
 
 //Sync DB and Server when Server starts
@@ -50,7 +50,7 @@ exports.initServer = function (){
 			Init.db.customBoost();
 			Init.mortal();
 			Init.db.enemy();
-			initBossDb();
+			Init.db.boss();
 								
 			Init.db.quest();
 			initLoadMap();

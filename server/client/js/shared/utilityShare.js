@@ -37,55 +37,9 @@ defaultMain = function(key){
 }
 
 
-defaultPlayer = function(){
-	var p = Mortal.template('player');
-	
-	p.id = Math.randomId();
-	p.publicId = Math.random().toString(36).substring(13);
-	
-	//below is not useless but could be improved
-	p.type = 'player';
-	p.hitIf = 'player';
-	p.targetIf = 'player';
-	p.privateChange = {};
-	p.privateOld = {};
-	p.context = 'player0000';
-	p.name = 'player0000';
-	p.active = 1;
-	p.loginLocation = null;
-	Sprite.creation(p,p.sprite);
-	p.activeList = {};
-	p.ability = [{id:'bulletMulti'}];
-	p.abilityList = {
-		'bulletMulti':{id:'bulletMulti'},
-		'bulletSingle':{id:'bulletSingle'},
-		'strikeSingle':{id:'strikeSingle'},
-		'dodgeRegular':{id:'dodgeRegular'},
-		'stumble':{id:'stumble'},
-		'summonDragon':{id:'summonDragon'},
-	};
-	
-	return p;
-}
 
 
 
-
-
-gradientRG = function(n){
-	n = Math.min(1,Math.max(0,n));
-	if(n<0.5){
-		var R = 0+(n*(255/0.5));
-		var G = 255;
-		var B = 0;
-	} else {
-		var n = n-0.5;
-		var R = 255;
-		var G = 255-(n*(255/0.5));
-		var B = 0;
-	} 
-	return 'rgb(' + Math.round(R) + ',' + Math.round(G) + ',' + Math.round(B) + ')';
-}
 
 //Testing
 if(server){

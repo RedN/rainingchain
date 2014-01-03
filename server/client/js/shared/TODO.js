@@ -6,10 +6,9 @@ abilitymod
 combat.mod
 Init.db.customBoost
 
-
-
-
-send item name
+status mods together mortal_init.js
+inventory/bank + send item name
+optionlist client only
 
 clear permContext bs
 

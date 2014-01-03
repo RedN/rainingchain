@@ -890,7 +890,7 @@ Draw.window.passive.grid = function(key){ ctxrestore();
 			//Border
 			ctx.globalAlpha = 0.5;
 			if(pref.passiveView === 'normal'){ ctx.fillStyle =	+passive[i][j] ? 'green' : (Passive.test(passive,i,j) ? '#FFFF00': 'red');}
-			if(pref.passiveView === 'heat'){var n = (passiveGrid[i][j].count-passiveGrid.min) / (passiveGrid.max-passiveGrid.min);	ctx.fillStyle =	gradientRG(n);}
+			if(pref.passiveView === 'heat'){var n = (passiveGrid[i][j].count-passiveGrid.min) / (passiveGrid.max-passiveGrid.min);	ctx.fillStyle =	Draw.gradientRG(n);}
 			ctx.fillRect(numX,numY,ic,ic);
 		
 			//Icon

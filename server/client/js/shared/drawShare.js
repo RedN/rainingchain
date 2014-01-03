@@ -447,7 +447,7 @@ Draw.map = function (layer){ ctxrestore();
 
 
 
-//{Popup
+//Popup
 Draw.popup = function(){
 	if(popupList.equip){Draw.popup.equip();}
 }
@@ -536,7 +536,6 @@ openPopup = function(key,name,id){
 		List.main[key].popupList.equip = {'x':player.mouseX,'y':player.mouseY,'id':id};
 	}	
 }
-//}
 
 //Option
 Draw.optionList = function(key){ ctxrestore();
@@ -647,13 +646,24 @@ parseOptionName = function(data){
 }
 
 //Chat
-
 Draw.chat = function(key){ ctxrestore();
-	if(server) return;
-	
 	ctx = ctxList.stage;
+	Draw.chat.main();
 	
-	var s = Draw.chat.main();
+	if(dialogue){
+		Draw.chat.dialogue();
+	} else {
+		var s = Draw.chat.constant();
+		html.chat.div.style.visibility = "visible";
+		ctx.beginPath();
+		ctx.moveTo(s.x,s.y+s.h-s.personalChatY-3);
+		ctx.lineTo(s.w,s.y+s.h-s.personalChatY-3);
+		ctx.stroke();	
+	}
+}
+
+Draw.chat.main = function(){
+	var s = Draw.chat.constant();
 	
 	//PM
 	html.pm.div.style.visibility = 'visible';
@@ -704,58 +714,46 @@ Draw.chat = function(key){ ctxrestore();
 	ctx.strokeStyle="black";
 	ctx.strokeRect(s.x,s.y,s.w,s.h);
 	ctx.fillStyle="black";
+
+}
+
+Draw.chat.dialogue = function(){
+	var s = Draw.chat.constant();
 	
-	
-	//DialogueBox
-	if(dialogue){
-		if(dialogue.face){	s.numX += s.faceX;} 
-		if(dialogue.option){ var nY = s.y+s.h-10-dialogue.option.length*20; }	
-				
-		html.dialogue.div.style.visibility = "visible";
-		html.dialogue.text.style.width = s.w - 2*s.textBorder + 'px';
-		html.dialogue.text.innerHTML = dialogue.text;		
-		
-		if(dialogue.face){
-			html.dialogue.text.style.width = s.w - 2*s.textBorder-s.faceX + 'px';
-			html.dialogue.div.style.left = (s.x + s.divX + s.textBorder + s.faceX) + 'px';
-			ctx.drawImage(Img.face,0,0,96,96,s.facesX,s.y+s.facesY,96,96);
-			ctx.font="20px Fixedsys";
-			ctx.textAlign = 'center';
-			ctx.fillText(dialogue.face.name,s.facesX+96/2,s.y+s.facesY+96+5);
-			ctx.textAlign = 'left';
-		} 
-		
-		//Options
-		if(dialogue.option){
-			ctx.font = s.optionY + 'px Fixedsys';
-			for(var i in dialogue.option){
-				ctx.fillText('-' + dialogue.option[i].text,s.numX,nY+i*s.optionY);
-				
-				Button.creation(0,{
-					"rect":[s.numX,s.numX+s.h,nY+i*s.optionY,nY+s.optionY+i*s.optionY],
-					"left":{"func":Chat.send.command,"param":['$dia,option,' + i]},
-					"text":dialogue.option[i].text
-				});	
-				
-			}
-		}
-	}
-	
-					
-	
+	if(dialogue.face){	s.numX += s.faceX;} 
+	if(dialogue.option){ var nY = s.y+s.h-10-dialogue.option.length*20; }	
 			
-	//ChatBox
-	if(!dialogue){
-		html.chat.div.style.visibility = "visible";
-		ctx.beginPath();
-		ctx.moveTo(s.x,s.y+s.h-s.personalChatY-3);
-		ctx.lineTo(s.w,s.y+s.h-s.personalChatY-3);
-		ctx.stroke();	
+	html.dialogue.div.style.visibility = "visible";
+	html.dialogue.text.style.width = s.w - 2*s.textBorder + 'px';
+	html.dialogue.text.innerHTML = dialogue.text;		
+	
+	if(dialogue.face){
+		html.dialogue.text.style.width = s.w - 2*s.textBorder-s.faceX + 'px';
+		html.dialogue.div.style.left = (s.x + s.divX + s.textBorder + s.faceX) + 'px';
+		ctx.drawImage(Img.face,0,0,96,96,s.facesX,s.y+s.facesY,96,96);
+		ctx.font="20px Fixedsys";
+		ctx.textAlign = 'center';
+		ctx.fillText(dialogue.face.name,s.facesX+96/2,s.y+s.facesY+96+5);
+		ctx.textAlign = 'left';
+	} 
+	
+	//Options
+	if(dialogue.option){
+		ctx.font = s.optionY + 'px Fixedsys';
+		for(var i in dialogue.option){
+			ctx.fillText('-' + dialogue.option[i].text,s.numX,nY+i*s.optionY);
+			
+			Button.creation(0,{
+				"rect":[s.numX,s.numX+s.h,nY+i*s.optionY,nY+s.optionY+i*s.optionY],
+				"left":{"func":Chat.send.command,"param":['$dia,option,' + i]},
+				"text":dialogue.option[i].text
+			});	
+			
+		}
 	}
 }
 
-
-Draw.chat.main = function(){
+Draw.chat.constant = function(){
 	return  {
 		w:600,
 		h:200,

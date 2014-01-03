@@ -116,8 +116,8 @@ Chat.send.pm.clan = function(key,text,to,type,from,data){
     if(!clan){ Chat.add(key,'This clan doesn\'t exist. Strange...'); return; }
     
     for(var i in clan.memberList){	
-    	if(clan.memberList[i].active && nameToKey[i]){
-    		Chat.add(nameToKey[i],'clan',text,{'from':[clan.nick,from]});
+    	if(clan.memberList[i].active && List.nameToKey[i]){
+    		Chat.add(List.nameToKey[i],'clan',text,{'from':[clan.nick,from]});
     	}
     }
     return;

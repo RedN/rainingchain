@@ -1,7 +1,4 @@
 //Map
-
-var Map = {};
-
 Init.db.map = function(){
     //[amount of sub-map in X, amount of sub-maps in Y]
     
@@ -16,6 +13,7 @@ Init.db.map = function(){
 	}
 }
 
+Map = {};
 Map.creation = function(name,info){
 	var m = {};
 	

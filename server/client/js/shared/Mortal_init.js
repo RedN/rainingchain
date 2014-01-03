@@ -190,6 +190,27 @@ Init.mortal = function(){
 				'exp':{'melee':100000,'range':100000,'magic':100000,'metalwork':100000,'woodwork':100000,'leatherwork':100000,'geology':100000,'metallurgy':100000,'trapping':100000},
 				'lvl':{'melee':0,'range':0,'magic':0,'metalwork':0,'woodwork':0,'leatherwork':0,'geology':0,'metallurgy':0,'trapping':0},
 			} 
+			
+			mort.type = 'player';
+			mort.hitIf = 'player';
+			mort.targetIf = 'player';
+			mort.privateChange = {};
+			mort.privateOld = {};
+			mort.context = 'player0000';
+			mort.name = 'player0000';
+			mort.active = 1;
+			mort.loginLocation = null;
+			Sprite.creation(mort,mort.sprite);
+			mort.activeList = {};
+			mort.ability = [{id:'bulletMulti'}];
+			mort.abilityList = {
+				'bulletMulti':{id:'bulletMulti'},
+				'bulletSingle':{id:'bulletSingle'},
+				'strikeSingle':{id:'strikeSingle'},
+				'dodgeRegular':{id:'dodgeRegular'},
+				'stumble':{id:'stumble'},
+				'summonDragon':{id:'summonDragon'},
+			};
 		}
 		
 		for(var i in mort.boost.list){  //init default Db.stat value

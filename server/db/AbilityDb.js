@@ -144,13 +144,13 @@ Init.db.ability = function(cb){
 	*/
 	for(var i in a){
 		a[i].id = i;
-		initAbility(a[i]);
+		Ability.creation(a[i]);
 	}	
 	cb();});		
 	
 }
 
-initAbility = function(a){
+Ability.creation = function(a){
 	
 	//Setting Ability
 	db.ability.update( {'id':a.id}, a, { upsert: true }, function(err) { if(err) throw err });	
@@ -290,7 +290,7 @@ createNewAbility = function(seed){
 
 	var a = useAbiCons(seed);
 	
-	initAbility(a);
+	Ability.creation(a);
 	
 	return a.id;	
 
@@ -339,7 +339,7 @@ addAbilityMod = function(key,abid,mod){
 	ab.modList[mod] = 0;
 	Mortal.removeAbility(List.all[key],abid);
 	ab.id = Math.randomId();
-	initAbility(ab);
+	Ability.creation(ab);
 	Mortal.learnAbility(List.all[key],ab.id);
 	Chat.add(key,'Mod Added.');
 	List.main[key].invList.remove('mod-'+ mod);	

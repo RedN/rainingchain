@@ -184,6 +184,21 @@ openWindow = function(key,name,param){
 
 
 
+Draw.gradientRG = function(n){
+	n = Math.min(1,Math.max(0,n));
+	if(n<0.5){
+		var R = 0+(n*(255/0.5));
+		var G = 255;
+		var B = 0;
+	} else {
+		var n = n-0.5;
+		var R = 255;
+		var G = 255-(n*(255/0.5));
+		var B = 0;
+	} 
+	return 'rgb(' + Math.round(R) + ',' + Math.round(G) + ',' + Math.round(B) + ')';
+}
+
 
 
 

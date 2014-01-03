@@ -74,7 +74,12 @@ io.sockets.on('connection', function (socket) {
 Sign = {};
 Sign.up = function(user,pass,socket){
     var key = Math.random().toString(36).substring(7);
-    var p = defaultPlayer(); p.name = user; p.context = user;
+    var p = Mortal.template('player'); 
+	p.name = user; 
+	p.context = user;
+	p.id = Math.randomId();
+	p.publicId = Math.random().toString(36).substring(13);
+	
     var m = defaultMain(key); m.name = user;
 
     var obj = {
@@ -103,7 +108,7 @@ disconnectPlayer = function(key,message){
         Save(key);
         ActiveList.remove(List.all[key]);
         List.socket[key].disconnect();
-        delete nameToKey[List.all[key].name];
+        delete List.nameToKey[List.all[key].name];
         delete List.mortal[key];
         delete List.socket[key];
         delete List.main[key];
@@ -237,7 +242,7 @@ Save.player.uncompress = function(player){
 }
 
 Save.player.load = function(key,db){
-    var player = defaultPlayer();   //set default player
+    var player = Mortal.template('player');   //set default player
     db = Save.player.uncompress(db);      //use info from the db
 
     for (var i in db) { player[i] = db[i]; }
@@ -246,7 +251,7 @@ Save.player.load = function(key,db){
     player.publicId = player.name;
     List.mortal[key] = player;
     List.all[key] = player;
-    nameToKey[player.name] = key;
+    List.nameToKey[player.name] = key;
     player = Mortal.creation.optionList(player);
 
 

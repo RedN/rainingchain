@@ -9,7 +9,6 @@ if(server){
 				case 'equip': source = Db.equip; 	break;
 				case 'ability': source = Db.ability;	break;		
 			}
-			console.log(source[d.id]);
 			if(source && source[d.id]){
 				socket.emit('queryDb',{db:d.db,id:d.id,info:source[d.id]}); 
 			} else {
@@ -28,7 +27,6 @@ if(server){
 	}
 
 	socket.on('queryDb', function (d) {
-		console.log(d);
 		if(!d.failure){
 			Db[d.db][d.id] = d.info;
 		}		

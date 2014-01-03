@@ -1,9 +1,9 @@
 //boss
-initBossDb = function(){
-	bossDb = {};
+Init.db.boss = function(){
+	Db.boss = {};
 	
-	bossDb['fireTroll'] = function(){
-		var boss = defaultBoss();
+	Db.boss['fireTroll'] = function(){
+		var boss = Boss.template();
 		
 		//Attributes
 		boss.hole = Math.floor(Math.random()*6) + 2;
@@ -30,7 +30,7 @@ initBossDb = function(){
 			var mort = boss.parent;
 			boss.frame++;
 			
-			updateBossTarget(boss);
+			Boss.target(boss);
 		
 
 			if(boss.frame % 1 == 0){
@@ -68,9 +68,9 @@ initBossDb = function(){
 		return boss;
 	}
 
-	bossDb['iceTroll'] = function(){
+	Db.boss['iceTroll'] = function(){
 		
-		var boss = defaultBoss();
+		var boss = Boss.template();
 	
 		boss.attack['fastSpear'] = 
 		{type:"bullet",'angle':0,'amount':1, 'aim': 0,
@@ -107,7 +107,7 @@ initBossDb = function(){
 		}
 				
 		boss.loop = function(){
-			var boss = this;	var mort = boss.parent;		boss.frame++;	updateBossTarget(boss);
+			var boss = this;	var mort = boss.parent;		boss.frame++;	Boss.target(boss);
 						
 			if(boss.phase === 0){	//if boss on phase 0
 				boss.opening = 30;
@@ -150,7 +150,9 @@ initBossDb = function(){
 	
 }
 
-defaultBoss = function(){
+Boss = {};
+
+Boss.template = function(){
 	return {
 		'phase':0,
 		'frame':0,
@@ -164,7 +166,7 @@ defaultBoss = function(){
 }
 
 //Update Boss Target. can have multiple targets unlike regular enemy
-updateBossTarget = function(boss){
+Boss.target = function(boss){
 	var mort = boss.parent;
 	boss.target = {};
 	for(var key in mort.activeList){ 
