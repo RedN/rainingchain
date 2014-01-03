@@ -1,7 +1,7 @@
 //Mort
 if(typeof Mortal === 'undefined') Mortal = {};
 if(!Mortal.creation) Mortal.creation = {};
-if(!Mortal.creation.template) Mortal.creation.template = {};	
+if(!Mortal.template) Mortal.template = {};	
 
 Init.mortal = function(){
 	var defaultPreMortal = function(type){
@@ -17,7 +17,7 @@ Init.mortal = function(){
 			'slow':{},
 			'toUpdate':{},
 			'custom':{},
-			'list':Mortal.creation.template.boost(type),
+			'list':Mortal.template.boost(type),
 		};
 		
 		//General
@@ -63,7 +63,7 @@ Init.mortal = function(){
 		
 		
 		//Bonus applies on top of weapon attack. If effect not on weapon, do nothing.
-		mort.bonus = Mortal.creation.template.bonus();
+		mort.bonus = Mortal.template.bonus();
 		mort.mastery = {	
 			'def':{'melee':{'+':0,'*':0,'x':0,'^':0,'sum':1,'mod':1},'range':{'+':0,'*':0,'x':0,'^':0,'sum':1,'mod':1},'magic':{'+':0,'*':0,'x':0,'^':0,'sum':1,'mod':1},'fire':{'+':0,'*':0,'x':0,'^':0,'sum':1,'mod':1},'cold':{'+':0,'*':0,'x':0,'^':0,'sum':1,'mod':1},'lightning':{'+':0,'*':0,'x':0,'^':0,'sum':1,'mod':1}},
 			'dmg':{'melee':{'+':0,'*':0,'x':0,'^':0,'sum':1,'mod':1},'range':{'+':0,'*':0,'x':0,'^':0,'sum':1,'mod':1},'magic':{'+':0,'*':0,'x':0,'^':0,'sum':1,'mod':1},'fire':{'+':0,'*':0,'x':0,'^':0,'sum':1,'mod':1},'cold':{'+':0,'*':0,'x':0,'^':0,'sum':1,'mod':1},'lightning':{'+':0,'*':0,'x':0,'^':0,'sum':1,'mod':1}},
@@ -202,9 +202,9 @@ Init.mortal = function(){
 	var p = defaultPreMortal('player');
 	var e = defaultPreMortal('enemy');
 	
-	var temp = Mortal.creation.template;
-	Mortal.creation.template = new Function('type', 'return type === "player" ? ' + stringify(p) + ' : ' + stringify(e));
-	for(var i in temp) Mortal.creation.template[i] = temp[i];
+	var temp = Mortal.template;
+	Mortal.template = new Function('type', 'return type === "player" ? ' + stringify(p) + ' : ' + stringify(e));
+	for(var i in temp) Mortal.template[i] = temp[i];
 }
 
 

@@ -32,14 +32,13 @@ Img.frame.postit = newImage('img/img/interface/postit.png');
 
 //Icon
 Img.icon = newImage("img/img/iconSheet.png");
-var iconIndex = {};
 (function(){
 	var equip = 10;
 	var ability = equip + 12;
-
+	Img.icon.index = {};
 	var iconPreIndex = {
 	'system':{'y':0,'x':['square','close','arrow','heart','gold']},
-	'tab':{'y':1,'x':['equip','inventory','quest','skill','friend','pref']},
+	'tab':{'y':1,'x':['equip','inventory','quest','skill','friend','setting']},
 	'element':{'y':2,'x':['melee','range','magic','fire','cold','lightning']},
 	'resist':{'y':3,'x':['bleed','knock','drain','burn','chill','confused']},
 	'resource':{'y':4,'x':['hp','mana','fury','dodge']},
@@ -76,11 +75,11 @@ var iconIndex = {};
 	};
 
 	for(var i in iconPreIndex){
-		iconIndex[i.toUpperCase()] = iconPreIndex[i].y * ICON;
+		Img.icon.index[i.toUpperCase()] = iconPreIndex[i].y * ICON;
 		for(var j = 0 ; j < iconPreIndex[i].x.length; j++){
 			var x = j * ICON;
 			var y = iconPreIndex[i].y * ICON;
-			iconIndex[i + '.' + iconPreIndex[i].x[j]] = {'x':x,'y':y};
+			Img.icon.index[i + '.' + iconPreIndex[i].x[j]] = {'x':x,'y':y};
 		}
 	}
 })();

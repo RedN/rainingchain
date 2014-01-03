@@ -3,19 +3,15 @@
 if(server){
 	io.sockets.on('connection', function (socket) {
 		socket.on('queryDb', function (d) {
-			var key = socket.key;
-			var db = d.db;
-			var id = d.id;
 			var source;
 			
-			switch(db){
-				case 'Db.equip': source = Db.equip; 	break;		
-				case 'Db.equip': source = Db.equip;	break;	
-				case 'Db.ability': source = Db.ability;	break;		
+			switch(d.db){
+				case 'equip': source = Db.equip; 	break;
+				case 'ability': source = Db.ability;	break;		
 			}
-			
-			if(source && source[id]){
-				socket.emit('queryDb',{db:db,id:id,info:source[id]}); 
+			console.log(source[d.id]);
+			if(source && source[d.id]){
+				socket.emit('queryDb',{db:d.db,id:d.id,info:source[d.id]}); 
 			} else {
 				socket.emit('queryDb',{'failure':1}); 
 			}
@@ -25,15 +21,16 @@ if(server){
 	});
 } else {
 	queryDb = function(db,id){
-		if(window[db][id] === undefined){
-			window[db][id] = 0;
+		if(Db[db][id] === undefined){
+			Db[db][id] = 0;
 			socket.emit('queryDb', {db:db,id:id});
 		}
 	}
 
 	socket.on('queryDb', function (d) {
+		console.log(d);
 		if(!d.failure){
-			window[d.db][d.id] = d.info;
+			Db[d.db][d.id] = d.info;
 		}		
 	});
 }

@@ -4,7 +4,7 @@ defaultMain = function(key){
 		'change':[],
 		"currentTab":"inventory",
 		"windowList":{'bank':0,'trade':0,'offensive':0,'defensive':0,'shop':0,'ability':0,'passive':0,'quest':0},
-		"popupList":{'weapon':0,'armor':0,},
+		"popupList":{'equip':0},
 		"optionList":null,
 		'context':'',
 		'bankList':[],
@@ -38,7 +38,7 @@ defaultMain = function(key){
 
 
 defaultPlayer = function(){
-	var p = Mortal.creation.template('player');
+	var p = Mortal.template('player');
 	
 	p.id = Math.randomId();
 	p.publicId = Math.random().toString(36).substring(13);
@@ -243,37 +243,6 @@ drawElementBar = function(x,y,w,h,data,noover){
 	ctx.restore();
 }
 
-drawItem = function(info,xy,size){
-	size = size || 32;
-	
-	var name = typeof info === 'string' ? info : info[0];
-	var amount = typeof info === 'string' ? 1 : Math.floor(info[1]);
-	var slot = Img.item.index[name];
-	ctx.drawImage(Img.item,slot.x,slot.y,ITEM,ITEM,xy[0],xy[1],size,size);
-	
-	if(amount > 1){
-		if(amount >= 100000){
-			amount = Math.floor(amount/1000);
-			if(amount >= 10000){
-				amount = Math.floor(amount/1000);
-				amount = amount + "M";} 
-			else { amount = amount + "K";}
-		}
-			
-		ctx.globalAlpha = 0.4;
-		ctx.fillStyle = "black";
-		ctx.strokeStyle = "white";
-		ctx.roundRect(xy[0]-2,xy[1]+size-9,size+4,15);
-		ctx.globalAlpha = 1;
-		
-				
-		ctx.fillStyle = "yellow";
-		ctx.font= size/32*13 + "px Monaco";
-		ctx.fillText(amount,xy[0],xy[1]+size-9);
-	}
-	
-}
-
 normalizeRatio = function(info){
 	var total = 0; for(var i in info){ total += info[i]; }
 	for(var i in info){ 
@@ -354,7 +323,7 @@ Combat.action.attack.mod = function(player,atk){
 }
 
 Combat.action.attack.mod.bonus = function(bon,atk){
-	var bon = useTemplate(Mortal.creation.template.bonus(),bon,0);
+	var bon = useTemplate(Mortal.template.bonus(),bon,0);
 	
 	//Status Effect
 	var list = ['time','magn','chance'];

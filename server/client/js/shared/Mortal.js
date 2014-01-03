@@ -3,7 +3,7 @@
 
 if(!server){
 	initPlayer = function(data){    //use data sent from server and default to create the player
-		player = Mortal.creation.template('player');
+		player = Mortal.template('player');
 		for(var i in data.player){ player[i] = data.player[i]; }
 		$("#chatUserName")[0].innerHTML = player.name + ': '; 
 	}
@@ -372,3 +372,23 @@ Mortal.rightClickDrop = function(mort,rect){
 	}	
 }
 	
+Mortal.dropInv = function(mort, iii){
+	var key = mort.id;
+	var item = Db.item[iii];
+	var player = List.all[key];
+	var amount = 1;
+	if(item.stack){ amount = List.main[key].invList.have(iii,'amount'); }
+	
+	Drop.creation({'x':player.x,'y':player.y,'map':player.map,'item':iii,'amount':amount,'timer':25*30});
+	List.main[key].invList.remove(iii,amount);
+}
+
+
+
+
+
+
+
+
+
+

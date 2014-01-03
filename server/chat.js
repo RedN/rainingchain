@@ -17,8 +17,8 @@ Chat.parse = function(data){
 						if(item.type == 'armor' || item.type == 'weapon'){
 							var str = '<span ' + 
 							'style="color:' + 'green' + '" ' +
-							'onclick="popupList.' + item.type + ' = \'' + item.id + '\';' + '" ' + 
-							'onmouseout="popupList.' + item.type + ' = null;' + '" ' + 
+							'onclick="popupList.equip = \'' + item.id + '\';' + '" ' + 
+							'onmouseout="popupList.equip = null;' + '" ' + 
 							'>[[' + item.name + 
 							']]</span>';
 							

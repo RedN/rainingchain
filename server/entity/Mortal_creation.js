@@ -19,7 +19,7 @@ Mortal.creation.group(
 		
 
 Mortal.creation = function(data){
-	var e = Mortal.creation.template('enemy');
+	var e = Mortal.template('enemy');
 	e = Mortal.creation.db(e,data);
 	e = Mortal.creation.info(e,data);
 	e = useTemplate(e,e.extra,2);	//deep clone of function

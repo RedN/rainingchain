@@ -257,6 +257,13 @@ Command.list['cc,leave'] = function(key,name){
 
 
 
+Command.list['dia,option'] = function(key,slot){
+	var main = List.main[key];
+	if(main.dialogue && main.dialogue.option[slot]){
+		Dialogue.option(key,main.dialogue.option[slot]);
+	}	
+}
+
 
 Command.pref = {};
 Command.pref.list = {

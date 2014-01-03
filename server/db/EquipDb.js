@@ -270,6 +270,6 @@ if self found => all boost become *1.1
 
 
 Equip.examine = function(key, id){
-	//openPopup(key,'equip',Db.equip[id]);
+	openPopup(key,'equip',id);
 }
 

@@ -99,15 +99,17 @@ Button.optionList = function(key,option){
 //called when player clicks. used to remove popup
 Button.reset = function(key){
 	if(server){
-		List.main[key].optionList = null;
-		List.main[key].popupList.weapon = 0;
-		List.main[key].popupList.armor = 0;
+		var main = List.main[key];
+		main.optionList = null;
+		for(var i in main.popupList){
+			main.popupList[i] = 0;
+		}
 		
-		for(var i in List.main[key].temp.reset){
-			List.main[key].temp.reset[i]--;
-			if(List.main[key].temp.reset[i] < 0){
-				delete List.main[key].temp[i];
-				delete List.main[key].temp.reset[i];
+		for(var i in main.temp.reset){
+			main.temp.reset[i]--;
+			if(main.temp.reset[i] < 0){
+				delete main.temp[i];
+				delete main.temp.reset[i];
 			}
 		}
 	}

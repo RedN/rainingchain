@@ -117,8 +117,7 @@ Change.update.init = function(){
 				{'array':['dialogue']},	
 				
 				
-				{'array':['popupList','weapon']},
-				{'array':['popupList','armor']},
+				{'array':['popupList','equip']},
 				
 				{'array':['windowList','bank']},
 				{'array':['windowList','offensive']},

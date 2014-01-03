@@ -103,7 +103,7 @@ Init.db.enemy = function(){ ePreDb = {};
 	for(var i in ePreDb){ Db.enemy[i] = {}; 
 		for(var j in ePreDb[i]){
 			
-			var temp = Mortal.creation.template('enemy');
+			var temp = Mortal.template('enemy');
 			var e = ePreDb[i][j];
 			e = useTemplate(temp,e);
 			

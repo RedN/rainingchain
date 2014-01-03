@@ -913,7 +913,7 @@ Init.db.stat.bonus = function(){
 			}
 		}
 	}
-	Mortal.creation.template.bonus = new Function('return ' + stringify(info));
+	Mortal.template.bonus = new Function('return ' + stringify(info));
 }
 
 
@@ -928,6 +928,6 @@ Init.db.stat.boost = function(){
 		}
 	}
 
-	Mortal.creation.template.boost = new Function('type', 'return type === "player" ? ' + stringify(p) + ' : ' + stringify(e));
+	Mortal.template.boost = new Function('type', 'return type === "player" ? ' + stringify(p) + ' : ' + stringify(e));
 }
 
