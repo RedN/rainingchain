@@ -16,7 +16,7 @@ Chat.send = function(){
 Chat.send.command = function(text){
 	if(typeof text === 'string'){ text = Chat.send.command.parse(text); }
 	if(text){ socket.emit('Chat.send.command',text); }
-	else { social.message.chat.push({'type':'client','text':'Invalid Command Entry.'}); } //only work if no message from server same frame
+	else { main.social.message.chat.push({'type':'client','text':'Invalid Command Entry.'}); } //only work if no message from server same frame
 }
 
 
@@ -50,7 +50,7 @@ Chat.send.message = function(text){
 	if(typeof text === 'string'){ text = Chat.send.message.parse(text); }
 	
 	if(text){ socket.emit('sendChat',text);  }
-	else { social.message.chat.push({'type':'client','text':'Invalid Chat Entry.'}); } //only work if no message from server same frame
+	else { main.social.message.chat.push({'type':'client','text':'Invalid Chat Entry.'}); } //only work if no message from server same frame
 }		
 
 Chat.send.message.parse = function(txt){
@@ -83,8 +83,8 @@ Chat.send.message.parse = function(txt){
 		var to = nick;
 		var text = txt.slice(txt.indexOf(',') + 1);
 		
-		for(var i in social.list.friend){
-			if(nick === social.list.friend[i].nick){
+		for(var i in main.social.list.friend){
+			if(nick === main.social.list.friend[i].nick){
 				to = i;
 			}
 		}
@@ -105,7 +105,7 @@ Chat.send.message.reply = function(){
 Chat.send.message.reply.history = [];
 
 Chat.receive = function(pack){
-	if(pack.from){ for(var i in social.list.mute){ if(i == pack.from){ return; }}}
+	if(pack.from){ for(var i in main.social.list.mute){ if(i == pack.from){ return; }}}
 	
 	if(pack.type === 'game'){
 		html.chat.text.innerHTML += '<br>' + pack.text; 
@@ -122,10 +122,10 @@ Chat.receive = function(pack){
 	if(pack.type === 'pm'){
 		var color = 'cyan';
 		if(pack.from === player.name){	//AKA you just sent a pm to someone
-			if(social.list.friend[pack.to]){color = social.list.friend[pack.to].color;}
+			if(main.social.list.friend[pack.to]){color = main.social.list.friend[pack.to].color;}
 			html.pm.text.innerHTML += "<br> <span style='color:" + color + "'>" + 'To ' + pack.to + ': ' +  pack.text + "</span>"; 
 		} else {
-			if(social.list.friend[pack.from]){color = social.list.friend[pack.from].color;}
+			if(main.social.list.friend[pack.from]){color = main.social.list.friend[pack.from].color;}
 			html.pm.text.innerHTML += "<br> <span style='color:" + color + "'>" + 'From ' + pack.from + ': ' +  pack.text + "</span>"; 
 			Chat.send.message.reply.history.unshift(pack);
 		}

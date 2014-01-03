@@ -140,7 +140,7 @@ Input.event.mouse.click = function(code,dir){
 }
 
 Input.event.mouse.wheel = function(side){
-	if(windowList.passive){
+	if(main.windowList.passive){
 		Draw.window.passive.grid.info.size += 3*side;
 	}
 }

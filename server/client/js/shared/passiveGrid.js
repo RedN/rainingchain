@@ -59,8 +59,8 @@ Init.db.passive = function(){
 				}
 			}
 		}
-		Passive.init();
-		Passive.init.value();
+		passiveGrid = Passive.init(passiveGrid);
+		passiveGrid = Passive.init.value(passiveGrid);
 	});
 
 
@@ -96,30 +96,32 @@ Passive.convert = function(p){
 
 
 
-Passive.init = function(){
-	passiveGrid.min = findMin(passiveGrid,function(a){ return findMin(a,function(b){ return b.count || 1/0; })});  
-	passiveGrid.max = findMax(passiveGrid,function(a){ return findMax(a,function(b){ return b.count || -1/0; })});  
-	passiveGrid.sum = 0;
-	passiveGrid.option = 0;
-	for(var i = 0 ; i < passiveGrid.length ; i++){
-		for(var j = 0 ; j < passiveGrid[i].length ; j++){
-			if(typeof passiveGrid[i][j] === 'object'){
-				passiveGrid.sum += passiveGrid[i][j].count;
-				passiveGrid.option++;
+Passive.init = function(pg){
+	pg.min = findMin(pg,function(a){ return findMin(a,function(b){ return b.count || 1/0; })});  
+	pg.max = findMax(pg,function(a){ return findMax(a,function(b){ return b.count || -1/0; })});  
+	pg.sum = 0;
+	pg.option = 0;
+	for(var i = 0 ; i < pg.length ; i++){
+		for(var j = 0 ; j < pg[i].length ; j++){
+			if(typeof pg[i][j] === 'object'){
+				pg.sum += pg[i][j].count;
+				pg.option++;
 			}	
 		}
 	}
-	passiveGrid.average = passiveGrid.sum / passiveGrid.option;
+	pg.average = pg.sum / pg.option;
+	return pg;
 }
 
-Passive.init.value = function(){
-	for(var i = 0 ; i < passiveGrid.length ; i++){
-		for(var j = 0 ; j < passiveGrid[i].length ; j++){
-			if(passiveGrid[i][j].stat){
-				passiveGrid[i][j].value *= passiveGrid.average / passiveGrid[i][j].count;
+Passive.init.value = function(pg){
+	for(var i = 0 ; i < pg.length ; i++){
+		for(var j = 0 ; j < pg[i].length ; j++){
+			if(pg[i][j].stat){
+				pg[i][j].value *= pg.average / pg[i][j].count;
 			}
 		}
 	}
+	return pg;
 }
 
 Passive.init.randomStat = function(){

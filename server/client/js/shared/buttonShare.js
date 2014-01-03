@@ -67,12 +67,12 @@ Button.context = function (key){
 	for(var i = 0 ; i < list.length ; i++){
 		if(Collision.PtRect({"x":x,'y':y},list[i].rect)){
 			if(server){ List.main[key].context = {'server':server,'text':list[i].text}; }
-			if(!server){ clientContext = {'server':server,'text':list[i].text}; }
+			if(!server){ main.clientContext = {'server':server,'text':list[i].text}; }
 			return;
 		}	
 	}
 	if(server){ List.main[key].context = {'server':server,'text':''}; }
-	if(!server){ clientContext = {'server':server,'text':''}; }
+	if(!server){ main.clientContext = {'server':server,'text':''}; }
 }
 
 Button.optionList = function(key,option){
@@ -84,11 +84,12 @@ Button.optionList = function(key,option){
 		List.main[key].optionList = option;
 	}
 	if(!server){
-		key.x = mouse.x;
-		key.y = mouse.y;
-		key.client = 1;
-		key.count = 2;
-		optionList = key;
+		option = key;
+		option.x = mouse.x;
+		option.y = mouse.y;
+		option.client = 1;
+		option.count = 2;
+		main.optionList = option;
 	}
 }
 
@@ -96,23 +97,23 @@ Button.optionList = function(key,option){
 //called when player clicks. used to remove popup
 Button.reset = function(key){
 	if(server){
-		var main = List.main[key];
-		main.optionList = null;
-		for(var i in main.popupList){
-			main.popupList[i] = 0;
+		var m = List.main[key];
+		m.optionList = null;
+		for(var i in m.popupList){
+			m.popupList[i] = 0;
 		}
 		
-		for(var i in main.temp.reset){
-			main.temp.reset[i]--;
-			if(main.temp.reset[i] < 0){
-				delete main.temp[i];
-				delete main.temp.reset[i];
+		for(var i in m.temp.reset){
+			m.temp.reset[i]--;
+			if(m.temp.reset[i] < 0){
+				delete m.temp[i];
+				delete m.temp.reset[i];
 			}
 		}
 	}
 	if(!server){
-		if(!optionList || !optionList.count || optionList.count <= 0){ optionList = null; return }
-		optionList.count--;
+		if(!main.optionList || !main.optionList.count || main.optionList.count <= 0){ main.optionList = null; return }
+		main.optionList.count--;
 	}
 }
 

@@ -15,9 +15,8 @@ jqueryui (login, progress bar, dialogue option)
 quest in nutshell
 patch skill
 utilityshare
-main.social
 have main in client inside of using window
-
+drop not working
 
 #Priority 1:
 -Implement Sound System

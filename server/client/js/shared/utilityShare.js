@@ -21,7 +21,7 @@ rightClickFriend = function(name){
 	var option = {'name':name,'option':[],'count':1};
 	
 	
-	if(social.list.friend[name].online){
+	if(main.social.list.friend[name].online){
 		option.option[0] = {
 			'name':'Send Message',
 			'func':addInput,
@@ -72,7 +72,7 @@ addInput = function(text,focus,add){
 }
 
 setClientContext = function(text){
-	clientContext = text;
+	main.clientContext = text;
 }
 
 
@@ -130,7 +130,7 @@ normalizeRatio = function(info){
 
 
 updateHelp = function(elID){
-	help = '';
+	main.help = '';
 	var el = document.getElementById('HELP' + elID);
 	if(el) el.scrollIntoView(true);
 	document.getElementById('gameDiv').scrollIntoView(true);		

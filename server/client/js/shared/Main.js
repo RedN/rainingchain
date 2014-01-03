@@ -3,13 +3,11 @@ Main = {};
 
 Main.template = function(key){
 	var main = {
-		'change':[],
 		'temp':{'reset':{}},
 		"optionList":null,
 		'context':'',
 		'chatInput':'',
 		'pref':Main.template.pref(),
-		
 		
 		"currentTab":"inventory",
 		"windowList":{'bank':0,'trade':0,'offensive':0,'defensive':0,'shop':0,'ability':0,'passive':0,'quest':0},
@@ -19,12 +17,11 @@ Main.template = function(key){
 		'bankList':[],
 		'tradeList':[],
 		'dialogue':0,
-		'dialogueLoc':{'x':0,'y':0},
 		'name':'player000',		
 		
 		'help':'',
 		'passivePt':0,
-		
+		'passive':Passive.template(),
 		
 		'social':{
 			'message':{
@@ -43,13 +40,18 @@ Main.template = function(key){
 		
 	};
 	if(server){
+		main['change'] = [];
 		main['quest'] = Main.template.quest();
-		main['passive'] = Passive.template();
 		main['invList'] = new Inventory(key);
 		main['bankList'] = new Bank(key);
 		main['old'] = {};
 		main['id'] = key;
-	} 
+		main['dialogueLoc'] = {'x':0,'y':0};
+	} else {
+		main['context'] = {'text':''};
+		main['clientContext'] = {'text':''};
+		main['permContext'] = {'text':''};
+	}
 	return main;
 }
 

@@ -267,14 +267,14 @@ Draw.minimap = function (){ ctxrestore();
 	var pY = player.y-mapY*2048;
 	
 	
-	var sx = WIDTH - WIDTH/pref.mapRatio;
+	var sx = WIDTH - WIDTH/main.pref.mapRatio;
 	var sy = 0;
-	var w = WIDTH/pref.mapRatio;
-	var h = HEIGHT/pref.mapRatio;
+	var w = WIDTH/main.pref.mapRatio;
+	var h = HEIGHT/main.pref.mapRatio;
 	
-	var mapZoomFact = pref.mapZoom/100;
+	var mapZoomFact = main.pref.mapZoom/100;
 	
-	var mapCst = pref.mapRatio*mapZoomFact;
+	var mapCst = main.pref.mapRatio*mapZoomFact;
 	
 	var numX = (pX - WIDTH/2 * mapZoomFact)/2;
 	var numY = (pY - HEIGHT/2 * mapZoomFact)/2;
@@ -291,14 +291,14 @@ Draw.minimap = function (){ ctxrestore();
 	
 	//Box
 	ctx.fillStyle = "black";
-	ctx.fillRect(sx,sy,WIDTH/pref.mapRatio,HEIGHT/pref.mapRatio);
+	ctx.fillRect(sx,sy,WIDTH/main.pref.mapRatio,HEIGHT/main.pref.mapRatio);
 	
 	ctx.drawImage(mapXY, startX,startY,tailleX,tailleY,sx+(startX-numX)/mapCst*2,sy + (startY-numY)/mapCst*2,tailleX/mapCst*2,tailleY/mapCst*2);
 	
-	Draw.icon('system.square',[sx + WIDTH/pref.mapRatio/2-2,sy + HEIGHT/pref.mapRatio/2-2],4);
+	Draw.icon('system.square',[sx + WIDTH/main.pref.mapRatio/2-2,sy + HEIGHT/main.pref.mapRatio/2-2],4);
 	
 	
-	ctx.strokeRect(sx,sy,WIDTH/pref.mapRatio,HEIGHT/pref.mapRatio);
+	ctx.strokeRect(sx,sy,WIDTH/main.pref.mapRatio,HEIGHT/main.pref.mapRatio);
 	
 	var disX = 50;
 	var disY = 22;
@@ -306,7 +306,7 @@ Draw.minimap = function (){ ctxrestore();
 	var numY = sy+h-disY;
 	ctx.fillRect(numX,numY,disX,disY);
 	ctx.fillStyle = "white";
-	ctx.fillText(pref.mapZoom + '%',numX,numY);
+	ctx.fillText(main.pref.mapZoom + '%',numX,numY);
 	
 	//client button
 	Button.creation(0,{
@@ -318,13 +318,13 @@ Draw.minimap = function (){ ctxrestore();
 }
 
 Draw.minimap.icon = function(){
-	var zoom = pref.mapZoom/100;
-	var ratio = pref.mapRatio;
+	var zoom = main.pref.mapZoom/100;
+	var ratio = main.pref.mapRatio;
 	
-	var sx = WIDTH - WIDTH/pref.mapRatio;
+	var sx = WIDTH - WIDTH/main.pref.mapRatio;
 	var sy = 0;
-	var w = WIDTH/pref.mapRatio;
-	var h = HEIGHT/pref.mapRatio;
+	var w = WIDTH/main.pref.mapRatio;
+	var h = HEIGHT/main.pref.mapRatio;
 	
 	
 	for(var i in List.mortal){
@@ -346,7 +346,7 @@ Draw.resource = function (){ ctxrestore();
 	
 	var h = 30; 
 	var sx = WIDTH-WIDTH/4;
-	var sy = HEIGHT/pref.mapRatio;
+	var sy = HEIGHT/main.pref.mapRatio;
 	var w = WIDTH/4;
 	
 	ctx.fillStyle = 'grey';
@@ -397,7 +397,7 @@ Draw.context = function (){ ctxrestore();
 	var numX = 0;
 	var numY = 0;
 	
-	var cont = context.text || clientContext.text || permContext.text;
+	var cont = main.context.text || main.clientContext.text || main.permContext.text;
 	
 	if(cont){
 		ctx.font="25px Fixedsys";
@@ -449,7 +449,7 @@ Draw.map = function (layer){ ctxrestore();
 
 //Popup
 Draw.popup = function(){
-	if(popupList.equip){Draw.popup.equip();}
+	if(main.popupList.equip){Draw.popup.equip();}
 }
 
 Draw.popup.equip = function(){ ctxrestore();
@@ -457,15 +457,15 @@ Draw.popup.equip = function(){ ctxrestore();
 	
 	var w = 250;
 	var h = 250;
-	
+	var pop = main.popupList.equip;
 	ctx = ctxList.win;
 	
-	if(typeof popupList.equip === 'object'){
-		var id = popupList.equip.id;
-		var posx = popupList.equip.x;
-		var posy = popupList.equip.y;
+	if(typeof pop === 'object'){
+		var id = pop.id;
+		var posx = pop.x;
+		var posy = pop.y;
 	} else {
-		var id = popupList.equip;
+		var id = pop;
 		var posx = mouse.x;
 		var posy = mouse.y;
 	}
@@ -540,7 +540,7 @@ openPopup = function(key,name,id){
 //Option
 Draw.optionList = function(key){ ctxrestore();
 	if(server){ var opt = List.main[key].optionList; } 
-		else { var opt = optionList; }
+		else { var opt = main.optionList; }
 	if(!opt) return;
 	ctx = ctxList.pop;
 	
@@ -611,7 +611,7 @@ Draw.optionList = function(key){ ctxrestore();
 			var name = parseOptionName(option[i].name);
 			ctx.fillText(name,sx+optionX,sy+optionY*(i+1));
 			
-			if(optionList.client){ 
+			if(main.optionList.client){ 
 				Button.creation(0,{
 					'rect':[sx,sx+w,sy+nameY+optionY*i,sy+nameY+optionY*(i+1)],
 					"left":option[i],
@@ -650,7 +650,7 @@ Draw.chat = function(key){ ctxrestore();
 	ctx = ctxList.stage;
 	Draw.chat.main();
 	
-	if(dialogue){
+	if(main.dialogue){
 		Draw.chat.dialogue();
 	} else {
 		var s = Draw.chat.constant();
@@ -678,7 +678,7 @@ Draw.chat.main = function(){
 	
 	//Clan
 	var str = 'Clan: ';
-	for(var i in social.list.clan){ str += social.list.clan[i] + '  '; }
+	for(var i in main.social.list.clan){ str += main.social.list.clan[i] + '  '; }
 	ctx.font = '15px Monaco';
 	ctx.fillStyle = 'white';
 	ctx.fillText(str,(s.x + s.divX),(s.y - s.disPmY));
@@ -719,34 +719,35 @@ Draw.chat.main = function(){
 
 Draw.chat.dialogue = function(){
 	var s = Draw.chat.constant();
+	var dia = main.dialogue;
 	
-	if(dialogue.face){	s.numX += s.faceX;} 
-	if(dialogue.option){ var nY = s.y+s.h-10-dialogue.option.length*20; }	
+	if(dia.face){	s.numX += s.faceX;} 
+	if(dia.option){ var nY = s.y+s.h-10-dia.option.length*20; }	
 			
 	html.dialogue.div.style.visibility = "visible";
 	html.dialogue.text.style.width = s.w - 2*s.textBorder + 'px';
-	html.dialogue.text.innerHTML = dialogue.text;		
+	html.dialogue.text.innerHTML = dia.text;		
 	
-	if(dialogue.face){
+	if(dia.face){
 		html.dialogue.text.style.width = s.w - 2*s.textBorder-s.faceX + 'px';
 		html.dialogue.div.style.left = (s.x + s.divX + s.textBorder + s.faceX) + 'px';
 		ctx.drawImage(Img.face,0,0,96,96,s.facesX,s.y+s.facesY,96,96);
 		ctx.font="20px Fixedsys";
 		ctx.textAlign = 'center';
-		ctx.fillText(dialogue.face.name,s.facesX+96/2,s.y+s.facesY+96+5);
+		ctx.fillText(dia.face.name,s.facesX+96/2,s.y+s.facesY+96+5);
 		ctx.textAlign = 'left';
 	} 
 	
 	//Options
-	if(dialogue.option){
+	if(dia.option){
 		ctx.font = s.optionY + 'px Fixedsys';
-		for(var i in dialogue.option){
-			ctx.fillText('-' + dialogue.option[i].text,s.numX,nY+i*s.optionY);
+		for(var i in dia.option){
+			ctx.fillText('-' + dia.option[i].text,s.numX,nY+i*s.optionY);
 			
 			Button.creation(0,{
 				"rect":[s.numX,s.numX+s.h,nY+i*s.optionY,nY+s.optionY+i*s.optionY],
 				"left":{"func":Chat.send.command,"param":['$dia,option,' + i]},
-				"text":dialogue.option[i].text
+				"text":dia.option[i].text
 			});	
 			
 		}

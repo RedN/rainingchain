@@ -38,7 +38,7 @@ try {
     
     	//Update Main List
     	for(var i in data.u.m){
-    		changeViaArray({'array':i.split(','),'value':data.u.m[i]});	
+    		changeViaArray({'origin':main,'array':i.split(','),'value':data.u.m[i]});	
     	}
 	}
 	

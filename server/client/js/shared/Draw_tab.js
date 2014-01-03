@@ -1,5 +1,5 @@
 Draw.tab = function(key){ ctxrestore();
-	Draw.tab[currentTab]();
+	Draw.tab[main.currentTab]();
 }
 
 Draw.tab.main = function (){ ctxrestore();
@@ -34,7 +34,7 @@ Draw.tab.main = function (){ ctxrestore();
 		});	
 		
 		Draw.icon('tab.' + Cst.tab.list[i],[numX,numY],24);
-		if(currentTab === Cst.tab.list[i]){ctx.strokeRect(numX-1,numY-1,24+1,24+1);}
+		if(main.currentTab === Cst.tab.list[i]){ctx.strokeRect(numX-1,numY-1,24+1,24+1);}
 		
 	}
 	ctxrestore();
@@ -65,14 +65,14 @@ Draw.tab.inventory = function (){ ctxrestore();
 	ctx = ctxList.stage;
 	
 	//Draw Items
-	for (i = 0 ; i < invList.length ; i++){
-		if(invList[i]){
+	for (i = 0 ; i < main.invList.length ; i++){
+		if(main.invList[i]){
 			var amountX = 4;
 			var numX = s.x + 20 + 42*(i%amountX);
 			var numY = s.y + 15 + 41 * Math.floor(i/amountX);
 			
-			var text = 'Use ' + invList[i][2];
-			// !(temp.selectInv && temp.reset && temp.reset.selectInv) ? 'Use ' + invList[i][0] : temp.selectInv.name + ' on ' + invList[i][0];
+			var text = 'Use ' + main.invList[i][2];
+			// !(temp.selectInv && temp.reset && temp.reset.selectInv) ? 'Use ' + main.invList[i][0] : temp.selectInv.name + ' on ' + invList[i][0];
 			
 			Button.creation(key,{
 				"rect":[numX,numX+32,numY,numY+32],
@@ -82,7 +82,7 @@ Draw.tab.inventory = function (){ ctxrestore();
 				"text":text
 			});	
 			
-			Draw.item(invList[i],[numX,numY]);
+			Draw.item(main.invList[i],[numX,numY]);
 		}
 	}		
 }
@@ -92,7 +92,7 @@ Draw.tab.equip = function (){ ctxrestore();
 	ctx = ctxList.stage;
 	
 	//Weapon
-	if(!server && typeof popupList.equip !== 'object') popupList.equip = 0;
+	if(!server && typeof main.popupList.equip !== 'object') main.popupList.equip = 0;
 	for (var i = 0 ; i < Cst.equip.weapon.piece.length ; i++){
 		var numX = s.x + 10;
 		var numY = s.y + 7 + 5 + 45 * i;
@@ -104,7 +104,7 @@ Draw.tab.equip = function (){ ctxrestore();
 		ctx.globalAlpha = 1;
 		
 		if(Collision.PtRect(Collision.getMouse(),[numX,numX+40,numY,numY+40])){
-			popupList.equip = player.equip.piece[Cst.equip.weapon.piece[i]].id;
+			main.popupList.equip = player.equip.piece[Cst.equip.weapon.piece[i]].id;
 		}
 		
 		Button.creation(key,{
@@ -124,7 +124,7 @@ Draw.tab.equip = function (){ ctxrestore();
 		Draw.icon(piece.visual,[numX+10,numY],40);
 		
 		if(Collision.PtRect(Collision.getMouse(key),[numX,numX+40,numY,numY+40])){
-			popupList.equip = piece.id;
+			main.popupList.equip = piece.id;
 		}		
 	}
 	
@@ -220,7 +220,7 @@ Draw.tab.friend = function(){ ctxrestore();
 	var s = Draw.tab.main();	
 	ctx = ctxList.stage;
 	
-	var list = social.list.friend;
+	var list = main.social.list.friend;
 	var count = 0;
 	var hf = html.friendTab;
 	
@@ -258,8 +258,8 @@ Draw.tab.friend = function(){ ctxrestore();
 			'style="color:' + color + '" ' +
 			'onclick="addInput(\'' + str2 + '\')' + '" ' + 
 			'oncontextmenu="rightClickFriend(\'' + i + '\')' + '" ' + 
-			'onmouseover="permContext.text = \'' + str + '\';' + '" ' + 
-			'onmouseout="permContext.text = null;' + '" ' + 
+			'onmouseover="main.permContext.text = \'' + str + '\';' + '" ' + 
+			'onmouseout="main.permContext.text = null;' + '" ' + 
 			'>' + i + 
 			'</span>';
 			
@@ -332,8 +332,8 @@ Draw.tab.quest = function(key){ ctxrestore();
 			'class="shadow" ' + 
 			'style="color:' + color + '" ' +
 			'onclick="Chat.send.command(\'' + '$win,open,quest,' + i + '\')' + '" ' + 
-			'onmouseover="permContext.text = \'' + qdb.name + '\';' + '" ' + 
-			'onmouseout="permContext.text = null;' + '" ' + 
+			'onmouseover="main.permContext.text = \'' + qdb.name + '\';' + '" ' + 
+			'onmouseout="main.permContext.text = null;' + '" ' + 
 			'>' + qdb.name + 
 			'</span>';
 			

@@ -1,6 +1,6 @@
 Draw.window = function(){ ctxrestore();
-	for(var i in windowList){
-		if(windowList[i]){
+	for(var i in main.windowList){
+		if(main.windowList[i]){
 			Draw.window[i]();
 			break;
 		}
@@ -38,8 +38,8 @@ Draw.window.main = function(title){ ctxrestore();
 			'<span ' + 
 			'style="text-decoration:' + (title[i] ? 'underline' : 'none') + '" ' +
 			'onclick="Chat.send.command(\'' + '$win,open,' + i + '\')' + '" ' + 
-			'onmouseover="permContext.text = \'' + 'Open ' + i.capitalize() + ' Window' + '\';' + '" ' + 
-			'onmouseout="permContext.text = null;' + '" ' + 
+			'onmouseover="main.permContext.text = \'' + 'Open ' + i.capitalize() + ' Window' + '\';' + '" ' + 
+			'onmouseout="main.permContext.text = null;' + '" ' + 
 			'>' + i.capitalize() + 
 			'</span>';
 			str += ' - '
@@ -91,10 +91,10 @@ Draw.window.bank = function (){ ctxrestore();
 
 	//change amount:
 		
-	var numX = mx+200;
-	var numY = sy+15;
+	var numX = s.mx+200;
+	var numY = s.y+15;
 	
-	var prefAmount = pref.bankTransferAmount;
+	var prefAmount = main.pref.bankTransferAmount;
 	var string = 'X-Amount: ' + prefAmount;
 	
 	ctx.font = '25px Fixedsys';
@@ -106,8 +106,8 @@ Draw.window.bank = function (){ ctxrestore();
 		});	
 	
 	//Draw Items
-	for (var i = 0 ; i < bankList.length ; i++){
-		if(!bankList[i].length) continue;
+	for (var i = 0 ; i < main.bankList.length ; i++){
+		if(!main.bankList[i].length) continue;
 		var amountX = Math.floor(s.w/40)-1;
 		var numX = s.x + 40 + 40*(i%amountX);
 		var numY = s.y + 70 + 40*Math.floor(i/amountX);
@@ -116,9 +116,9 @@ Draw.window.bank = function (){ ctxrestore();
 			"rect":[numX,numX+32,numY,numY+32],
 			"left":{"func":Chat.send.command,"param":['$win,bank,click,left,' + i]},
 			"right":{"func":Chat.send.command,"param":['$win,bank,click,right,' + i]},
-			'text':'Withdraw ' + bankList[i][0]
+			'text':'Withdraw ' + main.bankList[i][0]
 		});	
-		Draw.item(bankList[i],[numX,numY]);
+		Draw.item(main.bankList[i],[numX,numY]);
 	}
 	
 	
@@ -355,8 +355,8 @@ Draw.window.ability.abilityList = function(diffX){ ctxrestore();
 		'<span ' + 
 		'style="text-decoration:' + (j === ats ? 'underline' : 'none') + '" ' +
 		'onclick="old.abilityTypeShowed = \'' + j +  '\';' + '" ' + 
-		'onmouseover="permContext.text = \'' + j.capitalize() + '\';' + '" ' + 
-		'onmouseout="permContext.text = null;' + '" ' + 
+		'onmouseover="main.permContext.text = \'' + j.capitalize() + '\';' + '" ' + 
+		'onmouseout="main.permContext.text = null;' + '" ' + 
 		'>' + j.capitalize().slice(0,1) + 
 		'</span>';
 		str += ' - '
@@ -566,7 +566,7 @@ Draw.window.ability.action.attack = function(diffX,diffY){  ctxrestore();
 				var tmp = atk[i];
 				
 				//Status
-				if(Cst.status.list.indexOf(i) !== -1){ tmp.chance = Math.pow(pref.abilityDmgCent,1.5)*atk[i].chance*atk.dmgRatio[Cst.status.toElement[i]];}
+				if(Cst.status.list.indexOf(i) !== -1){ tmp.chance = Math.pow(main.pref.abilityDmgCent,1.5)*atk[i].chance*atk.dmgRatio[Cst.status.toElement[i]];}
 				
 				if(tmp.chance !== undefined && tmp.chance <= 0.001){ continue;}
 				ctx.fillText('=> ' + Draw.convert.attackMod[i](tmp),s.zx+30,s.zy+25+30);
@@ -741,9 +741,9 @@ Draw.window.quest = function (key){ ctxrestore();
 	ctx = ctxList.win;
 	if(server){ return; }
 	
-	var q = Db.quest[windowList.quest];
+	var q = Db.quest[main.windowList.quest];
 	var hq = html.questWin;
-	var mq = quest[windowList.quest];
+	var mq = quest[main.windowList.quest];
 	
 	var charY = 22;
 	var icon = charY*4;
@@ -851,8 +851,8 @@ Draw.window.quest = function (key){ ctxrestore();
 			'class="shadow" ' + 
 			'style="color:' + color + '" ' +
 			'onclick="Chat.send.command(\'' + '$win,quest,toggleBonus,' + q.id + ',' + i + '\')' + '" ' + 
-			'onmouseover=\"permContext.text = \'Toggle Bonus\'\" ' +
-			'onmouseout="permContext.text = null;' + '" ' + 
+			'onmouseover=\"main.permContext.text = \'Toggle Bonus\'\" ' +
+			'onmouseout="main.permContext.text = null;' + '" ' + 
 			'>' + b.info + ' - (x' + b.bonus + ')' +
 			'</span><br>';
 	}
@@ -891,7 +891,7 @@ Draw.window.passive = function (key){ ctxrestore();
 	hp.text.style.height = 'auto';
 	hp.text.style.backgroundColor = 'white';
 	
-	var str = 'Points: ' + passivePt + '<br>';
+	var str = 'Points: ' + main.passivePt + '<br>';
 	
 	str += 
 	'<span ' + 
@@ -941,13 +941,13 @@ Draw.window.passive.grid = function(key){ ctxrestore();
 			
 			//Border
 			ctx.globalAlpha = 0.5;
-			if(pref.passiveView === 'normal'){ ctx.fillStyle =	+passive[i][j] ? 'green' : (Passive.test(passive,i,j) ? '#FFFF00': 'red');}
-			if(pref.passiveView === 'heat'){var n = (passiveGrid[i][j].count-passiveGrid.min) / (passiveGrid.max-passiveGrid.min);	ctx.fillStyle =	Draw.gradientRG(n);}
+			if(main.pref.passiveView === 'normal'){ ctx.fillStyle =	+main.passive[i][j] ? 'green' : (Passive.test(main.passive,i,j) ? '#FFFF00': 'red');}
+			if(main.pref.passiveView === 'heat'){var n = (passiveGrid[i][j].count-passiveGrid.min) / (passiveGrid.max-passiveGrid.min);	ctx.fillStyle =	Draw.gradientRG(n);}
 			ctx.fillRect(numX,numY,ic,ic);
 		
 			//Icon
 			ctx.globalAlpha = 0.5;
-			if(+passive[i][j]){ ctx.globalAlpha = 1; }
+			if(+main.passive[i][j]){ ctx.globalAlpha = 1; }
 			var name = passiveGrid[i][j].stat ? Db.stat[passiveGrid[i][j].stat].icon : Db.customBoost[passiveGrid[i][j].value].icon;
 			Draw.icon(name,[numX+border2,numY+border2],icon);
 			

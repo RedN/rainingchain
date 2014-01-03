@@ -1,8 +1,6 @@
 //############################################
 
 var gameStarted = false;
-var context = {'text':''}, clientContext = {'text':''}, permContext = {'text':''};
-var help = '';
 
 var btnList = [];   //all buttons
 var ctxList = {};   //list of canvas (window,popup,stage)
@@ -33,8 +31,9 @@ Db = {	//local compilation of information so server doesnt send many times the s
 
 //Set the init values from Main.template.
 (function(){ 
-	var main = Main.template();
-	for(var i in main) window[i] = main[i];
+	main = {};
+	var m = Main.template();
+	for(var i in m) main[i] = m[i];
 })();
 
 
@@ -76,9 +75,9 @@ Init.game = function (data) {
 	$("#signDiv")[0].style.display = "none"; 	//remove enter user and psw
 	$("#gameDiv")[0].style.display = "inline";  //show game
 	
-	for(var i in data.main){ window[i] = data.main[i]; }    //set init values sent by server
+	for(var i in data.main){ main[i] = data.main[i]; }    //set init values sent by server
 	
-	Passive.init();  //init Passive Grid
+	passiveGrid = Passive.init(main.passiveGrid);  //init Passive Grid
 	
 	//Add Canvas. param2 = z-index
 	canvasDiv = $("#canvasDiv")[0];   
@@ -90,7 +89,7 @@ Init.game = function (data) {
 	html.chat.text.innerHTML = 'Welcome!';
 	html.pm.text.innerHTML = '<br>'
 	
-	for(var i in social.message.chat){Chat.receive(social.message.chat[i]);}	social.message.chat = [];   //for offline pm
+	for(var i in main.social.message.chat){Chat.receive(main.social.message.chat[i]);}	main.social.message.chat = [];   //for offline pm
 	
 	
 	Init.db.stat();
