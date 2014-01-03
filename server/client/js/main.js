@@ -1,7 +1,7 @@
 //############################################
 
 var gameStarted = false;
-
+var key = 0;
 var btnList = [];   //all buttons
 var ctxList = {};   //list of canvas (window,popup,stage)
 
@@ -182,14 +182,6 @@ Init.help = function(data){
 		}
 	}
 	return data;
-}
-
-
-updateHelp = function(elID){
-	main.help = '';
-	var el = document.getElementById('HELP' + elID);
-	if(el) el.scrollIntoView(true);
-	document.getElementById('gameDiv').scrollIntoView(true);		
 }
 
 

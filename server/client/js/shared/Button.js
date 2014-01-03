@@ -4,28 +4,26 @@ Button = {};
 Button.creation = function (key,data){
 	if(server){ var list = List.main[key].btnList; } 
 		else { var list = btnList;	}
+	data.key = key;
+	list.push(useTemplate(Button.template(),data));
+}
 
-	var button = {}
-	
-	button.left = null;
-	button.shiftLeft = null;
-	button.ctrlLeft = null;
-	
-	button.right = null;
-	button.shiftRight = null;
-	button.ctrlRight = null;
-	
-	button.rect = [0,0,0,0];
-	button.cursor = "pointer";
-	button.priority = 0;
-	button.highlight = false;
-	button.key = key
-	button.text = '';
-	button.help = '';
-	
-	for (var i in data) { button[i] = data[i]; }	
-	list.push(button);
-	
+Button.template = function(){
+	return {
+		left:null,
+		shiftLeft:null,
+		ctrlLeft:null,
+		right:null,
+		shiftRight:null,
+		ctrlRight:null,
+		rect:[0,0,0,0],
+		cursor:"pointer",
+		priority:0,
+		highlight:false,
+		key:0,
+		text:'',
+		help:'',	
+	};
 }
 
 //called everytime the player clicks. check the list of buttons at that frame and test for collision
@@ -81,6 +79,7 @@ Button.optionList = function(key,option){
 		option.x = player.mouseX;
 		option.y = player.mouseY,
 		option.server = server;
+		option.count = 2;
 		List.main[key].optionList = option;
 	}
 	if(!server){
@@ -98,7 +97,12 @@ Button.optionList = function(key,option){
 Button.reset = function(key){
 	if(server){
 		var m = List.main[key];
-		m.optionList = null;
+		
+		if(m.optionList){
+			if(m.optionList.count <= 0){ optionList = null; } 
+			else {	m.optionList.count--; }
+		}
+		
 		for(var i in m.popupList){
 			m.popupList[i] = 0;
 		}
@@ -112,8 +116,8 @@ Button.reset = function(key){
 		}
 	}
 	if(!server){
-		if(!main.optionList || !main.optionList.count || main.optionList.count <= 0){ main.optionList = null; return }
-		main.optionList.count--;
+		if(!main.optionList || !main.optionList.count || main.optionList.count <= 0){ main.optionList = null;}
+		else {	main.optionList.count--; }
 	}
 }
 

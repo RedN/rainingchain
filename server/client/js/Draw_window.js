@@ -287,10 +287,10 @@ Draw.window.ability = function (){ ctxrestore();
 	Draw.window.ability.upgrade(diffX+500,diffY+35);
 	
 	//Combat.action.attack
-	old.abilityShowed = player.abilityList[old.abilityShowed] ? old.abilityShowed : Object.keys(player.abilityList)[0];
-	if(!old.abilityShowed) return;
+	Draw.old.abilityShowed = player.abilityList[Draw.old.abilityShowed] ? Draw.old.abilityShowed : Object.keys(player.abilityList)[0];
+	if(!Draw.old.abilityShowed) return;
 	
-	if(player.abilityList[old.abilityShowed].action){
+	if(player.abilityList[Draw.old.abilityShowed].action){
 		Draw.window.ability.action(diffX,diffY + 120);
 	}
 	
@@ -298,8 +298,8 @@ Draw.window.ability = function (){ ctxrestore();
 
 Draw.window.ability.leftSide = function(){ ctxrestore();
 	var s = Draw.window.main.constant(); 
-	old.abilityShowed = player.abilityList[old.abilityShowed] ? old.abilityShowed : Object.keys(player.abilityList)[0];
-	if(!old.abilityShowed) return;
+	Draw.old.abilityShowed = player.abilityList[Draw.old.abilityShowed] ? Draw.old.abilityShowed : Object.keys(player.abilityList)[0];
+	if(!Draw.old.abilityShowed) return;
 	
 	for(var i = 0 ; i < Input.ability.length ; i++){
 		var numX = s.x + 15;
@@ -320,8 +320,8 @@ Draw.window.ability.leftSide = function(){ ctxrestore();
 		
 		Button.creation(0,{
 			"rect":[numX, numX+45 + 32, numY, numY + 32 ],
-			"left":{"func":Chat.send.command,"param":['$win,ability,swap,' + i + ',' + old.abilityShowed]},
-			'text':text + ' => ' + player.abilityList[old.abilityShowed].name
+			"left":{"func":Chat.send.command,"param":['$win,ability,swap,' + i + ',' + Draw.old.abilityShowed]},
+			'text':text + ' => ' + player.abilityList[Draw.old.abilityShowed].name
 			});	
 	}
 }
@@ -332,7 +332,7 @@ Draw.window.ability.abilityList = function(diffX){ ctxrestore();
 	
 	var ha = html.abilityWin;
 	var charY = 22;
-	var ats = old.abilityTypeShowed;
+	var ats = Draw.old.abilityTypeShowed;
 	
 	//Subtitle
 	ha.subtitle.style.left = diffX + 'px'; 
@@ -354,7 +354,7 @@ Draw.window.ability.abilityList = function(diffX){ ctxrestore();
 		str += 
 		'<span ' + 
 		'style="text-decoration:' + (j === ats ? 'underline' : 'none') + '" ' +
-		'onclick="old.abilityTypeShowed = \'' + j +  '\';' + '" ' + 
+		'onclick="Draw.old.abilityTypeShowed = \'' + j +  '\';' + '" ' + 
 		'onmouseover="main.permContext.text = \'' + j.capitalize() + '\';' + '" ' + 
 		'onmouseout="main.permContext.text = null;' + '" ' + 
 		'>' + j.capitalize().slice(0,1) + 
@@ -363,8 +363,8 @@ Draw.window.ability.abilityList = function(diffX){ ctxrestore();
 	}	
 	str = str.slice(0,-3);
 	
-	if(old.abilitySub !== str){	
-		old.abilitySub = str;
+	if(Draw.old.abilitySub !== str){	
+		Draw.old.abilitySub = str;
 		ha.subtitle.innerHTML = str;
 	}
 		
@@ -380,7 +380,7 @@ Draw.window.ability.abilityList = function(diffX){ ctxrestore();
 			if(player.abilityList[i].id === obj[ats][j].id){
 				Button.creation(0,{
 					"rect":[numX, numX + 20, numY, numY + 20 ],
-					"left":{"func":(function(a){ old.abilityShowed = a; }),"param":[obj[ats][j].id]},
+					"left":{"func":(function(a){ Draw.old.abilityShowed = a; }),"param":[obj[ats][j].id]},
 					'text':'Select Ability: ' + obj[ats][j].name
 				});	
 			}
@@ -399,7 +399,7 @@ Draw.window.ability.generalInfo = function(diffX,diffY){ ctxrestore();
 	ctx.fillRect(s.zx-10,s.zy-10,s.dw-200,1);
 	
 	//Icon
-	var ab = player.abilityList[old.abilityShowed];
+	var ab = player.abilityList[Draw.old.abilityShowed];
 	var icon = 100;
 	Draw.icon(ab.icon,[s.zx,s.zy],icon);
 	
@@ -489,7 +489,7 @@ Draw.window.ability.upgrade = function(diffX,diffY){
 
 Draw.window.ability.generalInfo.mod = function(){
 	if(html.chat.input.value.indexOf('$win,ability,mod,') !== -1){
-		Chat.send.command(html.chat.input.value + old.abilityShowed);
+		Chat.send.command(html.chat.input.value + Draw.old.abilityShowed);
 		html.chat.input.value = '';
 	} else {
 		Chat.add('Select an ability mod in your inventory first.');
@@ -497,7 +497,7 @@ Draw.window.ability.generalInfo.mod = function(){
 }
 
 Draw.window.ability.generalInfo.upgrade = function(){
-	var name = old.abilityShowed;
+	var name = Draw.old.abilityShowed;
 	var option = {'name':'Upgrade ' + name,'count':1,'option':[
 		{'name':'Use 1 Orb','func':Chat.send.command,'param':['$win,ability,upgrade,' + name + ',1']},
 		{'name':'Use 10 Orbs','func':Chat.send.command,'param':['$win,ability,upgrade,' + name + ',10']},
@@ -508,7 +508,7 @@ Draw.window.ability.generalInfo.upgrade = function(){
 }
 
 Draw.window.ability.generalInfo.upMod = function(mod){
-	var name = old.abilityShowed;
+	var name = Draw.old.abilityShowed;
 	var option = {'name':'Upgrade Mod ' + abilityModDb[mod].name + ' of ' + name,'count':1,'option':[
 		{'name':'Use 1 Orb','func':Chat.send.command,'param':['$win,ability,upMod,' + name + ',' + mod + ',1']},
 		{'name':'Use 10 Orbs','func':Chat.send.command,'param':['$win,ability,upMod,' + name + ',' + mod + ',10']},
@@ -520,7 +520,7 @@ Draw.window.ability.generalInfo.upMod = function(mod){
 }
 
 Draw.window.ability.action = function(diffX,diffY){ ctxrestore();
-	var ab = player.abilityList[old.abilityShowed];
+	var ab = player.abilityList[Draw.old.abilityShowed];
 	if(ab.action[0].func === 'Combat.action.attack'){ Draw.window.ability.action.attack(diffX,diffY);}
 	if(ab.action[0].func === 'Mortal.boost'){ Draw.window.ability.action.boost(diffX,diffY);}
 	if(ab.action[0].func === 'Combat.action.summon'){ Draw.window.ability.action.summon(diffX,diffY);}
@@ -534,7 +534,7 @@ Draw.window.ability.action.attack = function(diffX,diffY){  ctxrestore();
 	s.zx += diffX;
 	s.zy += diffY;
 	
-	var ab = player.abilityList[old.abilityShowed];
+	var ab = player.abilityList[Draw.old.abilityShowed];
 	var atk = deepClone(ab.action[0].param.attack[0]);
 	atk = Combat.action.attack.mod(player,atk);
 	
@@ -583,7 +583,7 @@ Draw.window.ability.action.boost = function(diffX,diffY){  ctxrestore();
 	s.y += diffY;
 	s.zx += diffX;
 	s.zy += diffY;
-	var ab = player.abilityList[old.abilityShowed];
+	var ab = player.abilityList[Draw.old.abilityShowed];
 	var boost = ab.action[0].param[0];
 	
 	for(var i in boost){
@@ -601,7 +601,7 @@ Draw.window.ability.action.summon = function(diffX,diffY){  ctxrestore();
 	s.y += diffY;
 	s.zx += diffX;
 	s.zy += diffY;
-	var ab = player.abilityList[old.abilityShowed];
+	var ab = player.abilityList[Draw.old.abilityShowed];
 	var info = ab.action[0].param;
 	ctx.font = '30px Fixedsys';
 	
@@ -739,11 +739,10 @@ Draw.window.shop = function (){ ctxrestore();
 Draw.window.quest = function (key){ ctxrestore();
 	var s = Draw.window.main(key,'Quest');	
 	ctx = ctxList.win;
-	if(server){ return; }
 	
 	var q = Db.quest[main.windowList.quest];
 	var hq = html.questWin;
-	var mq = quest[main.windowList.quest];
+	var mq = main.quest[main.windowList.quest];
 	
 	var charY = 22;
 	var icon = charY*4;

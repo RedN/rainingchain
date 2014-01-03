@@ -1,4 +1,4 @@
-Draw.tab = function(key){ ctxrestore();
+Draw.tab = function(){ ctxrestore();
 	Draw.tab[main.currentTab]();
 }
 
@@ -26,7 +26,7 @@ Draw.tab.main = function (){ ctxrestore();
 		var numX = s.x + 15 + vx * (i%100)  
 		var numY = s.oy + 8  + vy * Math.floor(i/100)
 		
-		Button.creation(key,{
+		Button.creation(0,{
 			"rect":[numX,numX+24,numY,numY+24],
 			"left":{"func":Chat.send.command,"param":['$tab,open,' + Cst.tab.list[i]]},
 			'text':Cst.tab.list[i].capitalize(),
@@ -74,7 +74,7 @@ Draw.tab.inventory = function (){ ctxrestore();
 			var text = 'Use ' + main.invList[i][2];
 			// !(temp.selectInv && temp.reset && temp.reset.selectInv) ? 'Use ' + main.invList[i][0] : temp.selectInv.name + ' on ' + invList[i][0];
 			
-			Button.creation(key,{
+			Button.creation(0,{
 				"rect":[numX,numX+32,numY,numY+32],
 				"left":{"func":Chat.send.command,"param":['$tab,inv,click,left,' + i]},
 				"right":{"func":Chat.send.command,"param":['$tab,inv,click,right,' + i]},
@@ -107,7 +107,7 @@ Draw.tab.equip = function (){ ctxrestore();
 			main.popupList.equip = player.equip.piece[Cst.equip.weapon.piece[i]].id;
 		}
 		
-		Button.creation(key,{
+		Button.creation(0,{
 			"rect":[numX,numX+40,numY,numY+40],
 			"left":{"func":Chat.send.command,"param":['$tab,swapWeapon,' + Cst.equip.weapon.piece[i]]},
 			"text":'Swap Weapon'
@@ -123,7 +123,7 @@ Draw.tab.equip = function (){ ctxrestore();
 		
 		Draw.icon(piece.visual,[numX+10,numY],40);
 		
-		if(Collision.PtRect(Collision.getMouse(key),[numX,numX+40,numY,numY+40])){
+		if(Collision.PtRect(Collision.getMouse(0),[numX,numX+40,numY,numY+40])){
 			main.popupList.equip = piece.id;
 		}		
 	}
@@ -150,7 +150,7 @@ Draw.tab.equip = function (){ ctxrestore();
 		
 		Draw.icon(array[i][1],[numX,numY],20);
 		ctx.fillText(capname,numX+vy,numY);
-		Button.creation(key,{
+		Button.creation(0,{
 			"rect":[numX,numX+80+vy,numY,numY+20],
 			"left":{"func":Chat.send.command,"param":['$win,open,' + name]},
 			"text":'Open ' + capname + ' Window'
@@ -177,7 +177,7 @@ Draw.tab.skill = function(){ ctxrestore();
 		Draw.icon('skill.' + Cst.skill.list[i],[numX,numY],20);
 		ctx.fillText(player.skill.lvl[Cst.skill.list[i]],numX+30,numY);
 		
-		if(Collision.PtRect(Collision.getMouse(key),[numX,numX+vx,numY,numY+vy])){
+		if(Collision.PtRect(Collision.getMouse(0),[numX,numX+vx,numY,numY+vy])){
 			var mouseover = Cst.skill.list[i];
 		}
 			
@@ -241,8 +241,8 @@ Draw.tab.friend = function(){ ctxrestore();
 	hf.text.style.width = (s.w - 2*divX) + 'px'
 	hf.text.style.height = (s.h - iconY- 2*divY) + 'px'
 	
-	if(stringify(old.fc) != stringify(list)){
-		old.fc = list;
+	if(stringify(Draw.old.fc) != stringify(list)){
+		Draw.old.fc = list;
 		
 		hf.text.innerHTML = '<span style="color:white">' + '----Friend List----' + '</span>';
 		
@@ -345,8 +345,8 @@ Draw.tab.friend.rightClick = function(name){
 }
 
 
-Draw.tab.quest = function(key){ ctxrestore();
-	var s = Draw.tab.main(key);	
+Draw.tab.quest = function(){ ctxrestore();
+	var s = Draw.tab.main(0);	
 	ctx = ctxList.stage;
 		
 	var count = 0;
@@ -366,8 +366,8 @@ Draw.tab.quest = function(key){ ctxrestore();
 	html.questTab.text.style.width = (s.w - 2*divX) + 'px'
 	html.questTab.text.style.height = (s.h - iconY- 2*divX) + 'px'
 	
-	if(old.quest !== stringify(quest)){
-		old.quest = stringify(quest);
+	if(Draw.old.quest !== stringify(quest)){
+		Draw.old.quest = stringify(quest);
 		
 		html.questTab.text.innerHTML = '<span style="color:white">' + '----Quest List----' + '</span>';
 		
@@ -392,6 +392,6 @@ Draw.tab.quest = function(key){ ctxrestore();
 	}
 }
 
-Draw.tab.setting = function(key){ 
+Draw.tab.setting = function(){ 
 
 }

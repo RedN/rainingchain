@@ -267,6 +267,14 @@ Command.list['dia,option'] = function(key,slot){
 	}	
 }
 
+Command.list['option'] = function(key,slot){
+	var main = List.main[key];
+	console.log(slot);
+	if(main.optionList && main.optionList.option[slot]){
+		console.log(main.optionList.option[slot]);
+	}	
+}
+
 
 Command.pref = {};
 Command.pref.list = {

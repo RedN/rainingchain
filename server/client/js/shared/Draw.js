@@ -1,18 +1,5 @@
-var old = {'fl':'','quest':'','abilityShowed':'bulletMulti','abilityTypeShowed':'attack','abilitySub':''};
-var key = 1;
-
-Draw = {
-	'window':{},
-	'anim':{},
-	'entity':{},
-	'map':{},
-	'minimap':{},
-	'popup':{},
-	'loop':{},
-	'context':{},
-	'tab':{},
-};
-
+Draw = {};
+Draw.old = {'fl':'','quest':'','abilityShowed':'bulletMulti','abilityTypeShowed':'attack','abilitySub':''};
 
 //Drawing Loop
 Draw.loop = function (key){
@@ -24,9 +11,6 @@ Draw.loop = function (key){
 		Draw.entity.drop(key);
 		Draw.entity.mortal(key);
 		
-		if(List.main[key].dialogue && List.main[key].dialogue.option){ Draw.chat(key); }
-		
-		Draw.optionList(key);
 		
 		Button.context(key);
 	}
@@ -95,6 +79,7 @@ Draw.anim = function (layer){
 
 
 //{Draw Entity
+Draw.entity = {};
 Draw.entity.mortal = function (key){
 	if(server){
 		for(var i in List.all[key].activeList){
@@ -538,17 +523,15 @@ openPopup = function(key,name,id){
 }
 
 //Option
-Draw.optionList = function(key){ ctxrestore();
-	if(server){ var opt = List.main[key].optionList; } 
-		else { var opt = main.optionList; }
-	if(!opt) return;
+Draw.optionList = function(){ ctxrestore();
+	if(!main.optionList) return;
 	ctx = ctxList.pop;
 	
 	//Draw Item Options
-	var option = opt.option;
-	var name = opt.name;
-	var sx = opt.x-60;
-	var sy = opt.y;
+	var option = main.optionList.option;
+	var name = main.optionList.name;
+	var sx = main.optionList.x-60;
+	var sy = main.optionList.y;
 	
 	var nameX = 5;
 	var nameY = 20;
@@ -564,65 +547,58 @@ Draw.optionList = function(key){ ctxrestore();
 	sy = Math.max(sy,0);
 	
 	
-	if(server){
-		for(var i = 0 ; i < option.length ; i++){
-			//var name = parseOptionName(option[i].name); //bug cuz would need to use List.main[key].pref
-			name = option[i].name;
-			
-			Button.creation(key,{
-				"rect":[sx,sx+w,sy+nameY+optionY*i,sy+nameY+optionY*(i+1)],
+
+	ctx.textAlign = 'left';
+	
+	//Name Frame;
+	ctx.fillStyle = "#333333";
+	ctx.fillRect(sx,sy,w,nameY);
+	
+	ctx.strokeStyle="black";
+	ctx.strokeRect(sx,sy,w,nameY);
+	
+	ctx.font="15px Fixedsys";
+	ctx.fillStyle = "white";
+	ctx.fillText(name,sx+nameX,sy);
+		
+		
+	//Option Frame
+	ctx.globalAlpha = 0.9;
+	ctx.fillStyle = "#696969";
+	ctx.fillRect(sx,sy+nameY,w,optionY*option.length);
+	ctx.globalAlpha = 1;
+	
+	ctx.strokeStyle="black";
+	ctx.strokeRect(sx,sy+nameY,w,optionY*option.length);
+
+
+	//Text + Button
+	ctx.font="14px Fixedsys";
+	ctx.fillStyle = "yellow";
+		
+	for(var i = 0 ; i < option.length ; i++){
+	
+		var name = Draw.optionList.parse(option[i].name);
+		ctx.fillText(name,sx+optionX,sy+optionY*(i+1));
+		
+		if(main.optionList.client){ 
+			Button.creation(0,{
+				'rect':[sx,sx+w,sy+nameY+optionY*i,sy+nameY+optionY*(i+1)],
 				"left":option[i],
-				"text":name,			
-			});
+				'text':name,
+				});			
+		}else {
+			Button.creation(0,{
+				'rect':[sx,sx+w,sy+nameY+optionY*i,sy+nameY+optionY*(i+1)],
+				"left":{'func':Chat.send.command,'param':['$option,' + i]},
+				'text':name,
+				});			
 		}
 	}
 	
-	if(!server){
-		ctx.textAlign = 'left';
-		
-		//Name Frame;
-		ctx.fillStyle = "#333333";
-		ctx.fillRect(sx,sy,w,nameY);
-		
-		ctx.strokeStyle="black";
-		ctx.strokeRect(sx,sy,w,nameY);
-		
-		ctx.font="15px Fixedsys";
-		ctx.fillStyle = "white";
-		ctx.fillText(name,sx+nameX,sy);
-			
-			
-		//Option Frame
-		ctx.globalAlpha = 0.9;
-		ctx.fillStyle = "#696969";
-		ctx.fillRect(sx,sy+nameY,w,optionY*option.length);
-		ctx.globalAlpha = 1;
-		
-		ctx.strokeStyle="black";
-		ctx.strokeRect(sx,sy+nameY,w,optionY*option.length);
-
-
-		//Text + Button
-		ctx.font="14px Fixedsys";
-		ctx.fillStyle = "yellow";
-			
-		for(var i = 0 ; i < option.length ; i++){
-		
-			var name = parseOptionName(option[i].name);
-			ctx.fillText(name,sx+optionX,sy+optionY*(i+1));
-			
-			if(main.optionList.client){ 
-				Button.creation(0,{
-					'rect':[sx,sx+w,sy+nameY+optionY*i,sy+nameY+optionY*(i+1)],
-					"left":option[i],
-					'text':name,
-					});			
-			}			
-		}
-	}
 }
 
-parseOptionName = function(data){
+Draw.optionList.parse = function(data){
 	if(data.indexOf('\{') == -1) return data; 
 	for(var i = 0 ; i < data.length ; i++){
 		if(data[i] == '{' && data[i+1] == '{'){
@@ -646,7 +622,7 @@ parseOptionName = function(data){
 }
 
 //Chat
-Draw.chat = function(key){ ctxrestore();
+Draw.chat = function(){ ctxrestore();
 	ctx = ctxList.stage;
 	Draw.chat.main();
 	
@@ -874,8 +850,8 @@ Draw.element = function(x,y,w,h,data,noover){
 
 Draw.convert = {};
 
-//Convert a boost object into a string.
 Draw.convert.boost = function(boost){
+	//Convert a boost object into a string.
 	if(boost.type === 'custom'){ return Db.customBoost[boost.value].name; }
 
 	var name = Db.stat[boost.stat].name;
@@ -910,8 +886,9 @@ Draw.convert.boost = function(boost){
 	*/
 }
 
-//Convert attack mod into a string
+
 Draw.convert.attackMod = {
+	//Convert attack mod into a string
 	'bleed':(function(a){ return round(a.chance*100,2) + '% to Bleed for ' + round(a.magn*100*a.time,2) + '% Initial Dmg over ' + round(a.time/25,2) + 's.'; }),
 	'knock':(function(a){ return round(a.chance*100,2) + '% to Knockback by ' + round(a.magn*a.time,2) + ' pixel over ' + round(a.time/25,2) + 's.'; }),	
 	'drain':(function(a){ return round(a.chance*100,2) + '% to Drain ' + round(a.magn*100,2) + '% Mana.'; }),
