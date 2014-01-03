@@ -90,7 +90,7 @@ Init.game = function (data) {
 	html.chat.text.innerHTML = 'Welcome!';
 	html.pm.text.innerHTML = '<br>'
 	
-	for(var i in chatBox){Chat.receive(chatBox[i]);}	chatBox = [];   //for offline pm
+	for(var i in social.message.chat){Chat.receive(social.message.chat[i]);}	social.message.chat = [];   //for offline pm
 	
 	
 	Init.db.stat();

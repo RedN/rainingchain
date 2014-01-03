@@ -220,7 +220,7 @@ Draw.tab.friend = function(){ ctxrestore();
 	var s = Draw.tab.main();	
 	ctx = ctxList.stage;
 	
-	var list = friendList;
+	var list = social.list.friend;
 	var count = 0;
 	var hf = html.friendTab;
 	

@@ -1,40 +1,4 @@
 
-//Testing
-if(server){
-	io.sockets.on('connection', function (socket) {
-		socket.on('testing', function (d) {
-			try {
-				var key = socket.key;
-				var p = List.all[key];
-				var m = List.main[key];
-				var q = m.quest;
-				
-				for(var i in List.all){
-					if(List.all[i].type === 'enemy'){var e = List.all[i];}
-					if(List.all[i].type === 'bullet'){var b = List.all[i];}
-				}				
-				
-				if(List.all[key].name == 'sam'){
-					var info = eval(d.command);
-					data = JSON.stringify(info);
-					permConsoleLog(info);
-					socket.emit('testing', {'data':data} );				
-				}
-			} catch (err){
-				logError(err);
-				socket.emit('testing', 'failure');
-			}			
-			
-		});
-	});
-
-} else {
-	ts = function(command){socket.emit('testing', {'command':command});}
-	socket.on('testing', function (d) { 
-		if(d && d.data){ try { permConsoleLog(JSON.parse(d.data)); } catch (err){ }	}
-	});
-}
-
 keyFunction = function (key,func,param){
 	if(!server){param = func;func = key;}
 	
@@ -57,44 +21,43 @@ rightClickFriend = function(name){
 	var option = {'name':name,'option':[],'count':1};
 	
 	
-	if(friendList[name].online){
+	if(social.list.friend[name].online){
 		option.option[0] = {
-		'name':'Send Message',
-		'func':(function(name){ addInput('@' + name + ','); }),
-		'param':[name],	
+			'name':'Send Message',
+			'func':addInput,
+			'param':['@' + name + ','],	
 		};
-	}
-	if(!friendList[name].online){
+	} else {
 		option.option[0] = {
-		'name':'Offline Message',
-		'func':(function(name){ addInput('$fl,offlinepm,' + name + ','); }),
-		'param':[name],	
+			'name':'Offline Message',
+			'func':addInput,
+			'param':['$fl,offlinepm,' + name + ','],	
 		};
 	}
 	
 	
 	option.option[1] = {
-	'name':'Change Nickname',
-	'func':(function(name){ addInput('$fl,nick,' + name + ','); }),
-	'param':[name],	
+		'name':'Change Nickname',
+		'func':addInput,
+		'param':['$fl,nick,' + name + ','],	
 	};
 	
 	option.option[2] = {
-	'name':'Change Comment',
-	'func':(function(name){ addInput('$fl,comment,' + name + ','); }),
-	'param':[name],	
+		'name':'Change Comment',
+		'func':addInput,
+		'param':['$fl,comment,' + name + ','],	
 	};
 	
 	option.option[3] = {
-	'name':'Change PM Color',
-	'func':(function(name){ addInput('$fl,color,' + name + ','); }),
-	'param':[name],	
+		'name':'Change PM Color',
+		'func':addInput,
+		'param':['$fl,color,' + name + ','],	
 	};
 	
 	option.option[4] = {
-	'name':'Remove Friend',
-	'func':(function(name){ Chat.send.command('$fl,remove,' + name); }),
-	'param':[name],	
+		'name':'Remove Friend',
+		'func':Chat.send.command,
+		'param':['$fl,remove,' + name],	
 	};
 	
 	

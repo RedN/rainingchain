@@ -33,10 +33,10 @@ Clan.enter = function(key,name){
 	if(!Db.clan[name]){
 		Chat.add(key,'This clan doesn\'t exist.');	return;
 	}
-	if(main.clanList.indexOf(name) !== -1){
+	if(main.social.list.clan.indexOf(name) !== -1){
 		Chat.add(key,'You are already in this clan chat.');	return;
 	}
-	main.clanList.push(name);
+	main.social.list.clan.push(name);
 	
 	if(Db.clan[name].memberList[pn]){
 		Db.clan[name].memberList[pn].active = 1;
@@ -44,7 +44,7 @@ Clan.enter = function(key,name){
 		Db.clan[name].memberList[pn] = {'rank':0,'active':1}
 	}
 	
-	str = ''; for(var i = 0 ; i < main.clanList.length ; i++){ str += '/'; }
+	str = ''; for(var i = 0 ; i < main.social.list.clan.length ; i++){ str += '/'; }
 	
 	Chat.add(key,'You are now in clan chat: ' + name + '. Type \"' + str + '\" to talk in it.');	
 
@@ -54,19 +54,19 @@ Clan.leave = function(key,name){
 	var pn = List.all[key].name;
 	var main = List.main[key];
 	
-	for(var i in main.clanList){
+	for(var i in main.social.list.clan){
 		if(name == 'ALL' || i == 'name'){
-			Db.clan[main.clanList[i]].memberList[pn].active = 0;
-			if(!Db.clan[main.clanList[i]].memberList[pn].rank){
-				delete Db.clan[main.clanList[i]].memberList[pn];
+			Db.clan[main.social.list.clan[i]].memberList[pn].active = 0;
+			if(!Db.clan[main.social.list.clan[i]].memberList[pn].rank){
+				delete Db.clan[main.social.list.clan[i]].memberList[pn];
 			}
 		}
 	}
 	
 	if(name == 'ALL'){	
-		main.clanList = [];
+		main.social.list.clan = [];
 	} else {
-		main.clanList.splice(main.clanList.indexOf(name),1);
+		main.social.list.clan.splice(main.social.list.clan.indexOf(name),1);
 	}
 	
 }

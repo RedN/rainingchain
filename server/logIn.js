@@ -171,9 +171,7 @@ Save.load.initData = function(key){
         'main':{
             'passiveGrid':(function(){ return passiveGrid; }),
             'passive':0,
-            'friendList':0,
-            'muteList':0,
-            'chatBox':0,
+            'social':0,
             'pref':0,
             'quest':0,    
         }
@@ -286,7 +284,7 @@ Save.main = function(key,dbb){
 
     var save = {};
 
-    var toSave = ['invList','bankList','quest','tradeList','friendList','name','chatBox','pref','passive','passivePt',];
+    var toSave = ['invList','bankList','quest','tradeList','name','social','pref','passive','passivePt',];
     for(var i in toSave){ save[toSave[i]] = main[toSave[i]]; }
 
     //save = stringify(save);

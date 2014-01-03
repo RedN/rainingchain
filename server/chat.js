@@ -38,23 +38,23 @@ Chat.parse = function(data){
 
 //add text to chat of player.
 Chat.add = function(key,type,text,extra){
-	List.main[key].chatBox = List.main[key].chatBox || [];
+	List.main[key].social.message.chat = List.main[key].social.message.chat || [];
     extra = extra || {};
 	if(text === undefined){ text = type; type = 'game';}
 	
 	extra.text = text;
 	extra.type = type;
 	
-	List.main[key].chatBox.push(extra);	
+	List.main[key].social.message.chat.push(extra);	
 }
 
 //when a player wants to send a text
 Chat.send = function(data){
-	var key = data.key;
+	var key = data.key;									//source (key)
+	var from = List.all[key].name;                      //source (name)
+	var to = customEscape(data.to);                     //destination (name)
 	var text = Chat.parse(customEscape(data.text));      //text
-	var to = customEscape(data.to);                     //destination
 	var type = customEscape(data.type);                 //clan || pm || public
-	var from = List.all[key].name;                      //source
 			
 	if(!type || !text || !to || !from){ return; }
 	if(to === from){ Chat.add(key,"Ever heard of thinking in your head?"); return; }
@@ -74,9 +74,9 @@ Chat.send.public = function(key,text,to,type,from,data){
 }
 
 Chat.send.pm = function(key,text,to,type,from,data){
-    Chat.send.pm.test(from,to,(function(res){
+    Chat.send.pm.test(from,to,(function(res,from,to){
 		if(res){
-			Chat.add(tokey,'pm',text,{'from':from,'to':to});
+			Chat.add(List.nameToKey[to],'pm',text,{'from':from,'to':to});
 			Chat.add(key,'pm',text,{'from':from,'to':to});
 		}
 		if(res === false){
@@ -95,21 +95,20 @@ Chat.send.pm.test = function(from,to,cb){
 		
 		if(r[0]){	//aka exist
 			var bool = r[0].id;
-			
-			if(!List.main[r[0].id]){ bool = false; } else {
-				if(List.main[r[0].id].pm == 'off'){ bool = false; }
-				if(List.main[r[0].id].pm == 'friend'){ 
-					if(!List.main[r[0].id].friendList[from]){ bool = false; }				
+			var main = List.main[r[0].id];
+			if(!main){ bool = false; } else {
+				if(main.social.status === 'off'){ bool = false; }
+				if(main.social.status === 'friend'){ 
+					if(!main.social.list.friend[from]){ bool = false; }				
 				}
 			}
 			cb(bool,from,to);
-		}
-		if(!r[0]){ cb('');  }
+		} else { cb('');  }
 	});	
 }
 
 Chat.send.pm.clan = function(key,text,to,type,from,data){
-    var clanName = List.main[key].clanList[+to];
+    var clanName = List.main[key].social.list.clan[+to];
     		
     if(!clanName){ Chat.add(key,'You typed too many \"/\".'); return; }
     var clan = Db.clan[clanName];

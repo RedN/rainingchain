@@ -139,18 +139,16 @@ Change.update.init = function(){
 			],
 			'slow':[
 				{'array':['pref']},	
-				{'array':['friendList']},	
-				{'array':['muteList']},
+				{'array':['social','list']},	
 				
 				{'array':['quest']},
 				
 				{'array':['passivePt']},
-				{'array':['passive']},
-				{'array':['clanList']},						
+				{'array':['passive']},				
 			]
 			},	
 		'exist':{'reg':[
-				{'array':['chatBox'],'reset':[]},
+				{'array':['social','message','chat'],'reset':[]},
 				{'array':['chatInput'],'reset':''}
 			]}
 	};

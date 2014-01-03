@@ -393,14 +393,12 @@ Mortal.loop.dialogue = function(mort){
 
 Mortal.loop.friendList = function(mort){
 	var key = mort.id;
-	var fl = List.main[key].friendList;
+	var fl = List.main[key].social.list.friend;
     
-    var test = function(res){
-		fl[to].online = res;
-	};
-		
 	for(var i in fl){
-		testSendPm(List.all[key].name,i,test);			
+		Chat.send.pm.test(List.all[key].name,i,function(status,from,to){
+			fl[to].online = status;
+		});			
 	}
 }
 

@@ -34,14 +34,14 @@ Command.list['fl,add'] = function(key,user,nick,comment,color){
 	if(!color){ color = 'cyan'; }
 	if(user == List.all[key].name){ Chat.add(key,"You are either bored or very lonely for trying this."); return }
 	
-	if(List.main[key].friendList[user]){	Chat.add(key,"This player is already in your Friend List."); }
-	if(List.main[key].muteList[user]){	Chat.add(key,"This player is in your Mute List."); }
+	if(List.main[key].social.list.friend[user]){	Chat.add(key,"This player is already in your Friend List."); }
+	if(List.main[key].social.list.mute[user]){	Chat.add(key,"This player is in your Mute List."); }
 	
 	
-	if(!List.main[key].muteList[user] && !List.main[key].friendList[user]){
+	if(!List.main[key].social.list.mute[user] && !List.main[key].social.list.friend[user]){
 		db.account.find({username:user},function(err, results) {
 			if(results[0]){
-				List.main[key].friendList[user] = {'nick':nick,'comment':comment, 'color':color};
+				List.main[key].social.list.friend[user] = {'nick':nick,'comment':comment, 'color':color};
 				Chat.add(key,"Friend added.");
 			}
 			if(!results[0]){Chat.add(key,"This player doesn't exist.");}
@@ -50,8 +50,8 @@ Command.list['fl,add'] = function(key,user,nick,comment,color){
 }
 
 Command.list['fl,remove'] = function(key,user){
-	if(List.main[key].friendList[user]){
-		delete List.main[key].friendList[user]
+	if(List.main[key].social.list.friend[user]){
+		delete List.main[key].social.list.friend[user]
 		Chat.add(key, 'Friend deleted.');
 	} else {
 		Chat.add(key, 'This player is not in your Friend List.');
@@ -60,8 +60,8 @@ Command.list['fl,remove'] = function(key,user){
 }
 
 Command.list['fl,comment'] = function(key,user,comment){
-	if(List.main[key].friendList[user]){
-		List.main[key].friendList[user].comment = comment;
+	if(List.main[key].social.list.friend[user]){
+		List.main[key].social.list.friend[user].comment = comment;
 		Chat.add(key, 'Friend Comment changed.');
 	} else {
 		Chat.add(key, 'This player is not in your Friend List.');
@@ -69,8 +69,8 @@ Command.list['fl,comment'] = function(key,user,comment){
 }
 
 Command.list['fl,nick'] = function(key,user,nick){
-	if(List.main[key].friendList[user]){
-		List.main[key].friendList[user].nick = nick;
+	if(List.main[key].social.list.friend[user]){
+		List.main[key].social.list.friend[user].nick = nick;
 		Chat.add(key, 'Friend Nick changed.');
 	} else {
 		Chat.add(key, 'This player is not in your Friend List.');
@@ -78,8 +78,8 @@ Command.list['fl,nick'] = function(key,user,nick){
 }
 
 Command.list['fl,color'] = function(key,user,color){
-	if(List.main[key].friendList[user]){
-		List.main[key].friendList[user].color = color;
+	if(List.main[key].social.list.friend[user]){
+		List.main[key].social.list.friend[user].color = color;
 		Chat.add(key, 'Friend Color changed.');
 	} else {
 		Chat.add(key, 'This player is not in your Friend List.');
@@ -89,7 +89,7 @@ Command.list['fl,color'] = function(key,user,color){
 Command.list['fl,pm'] = function(key,setting){
 	var possible = ['on','off','friend'];
 	if(possible.indexOf(setting) != -1){
-		List.main[key].pm = setting;
+		List.main[key].social.status = setting;
 		Chat.add(key, "Private Setting changed to " + setting + '.');
 	} else {
 		Chat.add(key, "Wrong Private Setting. Use one of the following: " + possible.toString());
@@ -97,6 +97,9 @@ Command.list['fl,pm'] = function(key,setting){
 }
 
 Command.list['fl,offlinepm'] = function(key,to,text){
+	return;
+
+
 	var from = List.all[key].name;
 	
 	text = customEscape(text);
@@ -108,16 +111,16 @@ Command.list['fl,offlinepm'] = function(key,to,text){
 	
 	db.account.find({username:to},function(err, results) {
 		if(results[0]){
-			var main = uncompressMain(results[0].main);
+			var main = Save.main.uncompress(results[0].main);
 			
-			if(main.friendList[from]){ 
-				if(!main.chatBox){ main.chatBox = []; }
-				main.chatBox.push({'type':'offlinepm','from':from,'text':text,'time':Date.now()});
+			if(main.social.list.friend[from]){ 
+				if(!main.social.message.chat){ main.social.message.chat = []; }
+				main.social.message.chat.push({'type':'offlinepm','from':from,'text':text,'time':Date.now()});
 				Chat.add(key,"Offline PM sent.");
 				saveMain(main);
 			}
 			
-			if(!main.friendList[from]){ Chat.add(key,"You can't send an offline PM to that player.");}
+			if(!main.social.list.friend[from]){ Chat.add(key,"You can't send an offline PM to that player.");}
 		
 		}
 		
@@ -133,13 +136,13 @@ Command.list['fl,offlinepm'] = function(key,to,text){
 Command.list['mute'] = function(key,user){
 	if(user == List.all[key].name){ Chat.add(key,"-.- Seriously?"); return }
 	
-	if(List.main[key].friendList[user]){	Chat.add(key,"This player is in your Friend List."); }
-	if(List.main[key].muteList[user]){ Chat.add(key,"This player is alraedy in your Mute List."); }
+	if(List.main[key].social.list.friend[user]){	Chat.add(key,"This player is in your Friend List."); }
+	if(List.main[key].social.list.mute[user]){ Chat.add(key,"This player is alraedy in your Mute List."); }
 		
-	if(!List.main[key].friendList[user] && !List.main[key].muteList[user]){
+	if(!List.main[key].social.list.friend[user] && !List.main[key].social.list.mute[user]){
 		db.account.find({username:user},function(err, results) {
 			if(results[0]){
-				List.main[key].muteList[user] = {};
+				List.main[key].social.list.mute[user] = {};
 				Chat.add(key,"Player muted.");
 			}
 			if(!results[0]){Chat.add(key,"This player doesn't exist.");}

@@ -33,7 +33,7 @@ Input.init = function(setup){
 		Input.key.custom = [
 			{'keyCode':[9],'func':(function(){ Chat.send.message.reply(); })},
 			{'keyCode':[27],'func':(function(){ addInput('',false); })},
-			{'keyCode':[38],'func':(function(){ document.getElementById('gameDiv').scrollIntoView(true); })},
+			{'keyCode':[38],'func':(function(){ $('#gameDiv')[0].scrollIntoView(true); })},
 		];
 		
 	}
@@ -117,7 +117,6 @@ Input.event.mouse.click = function(code,dir){
 		for(var j = start ; j < Input.key.ability[i].length; j++){
 			if(code === Input.key.ability[i][j]){
 				Input.press.ability[i] = num;
-				if(gameStarted) event.preventDefault();
 			}
 		}
 	}
@@ -157,7 +156,6 @@ Input.event.mouse.drag = function(){
 	mouse.drag.sy = mouse.y;
 	mouse.drag.vx = 0;
 	mouse.drag.vy = 0;
-	//mouse.left = 1;
 }
 
 Input.event.mouse.drag.update  = function(){
@@ -189,8 +187,8 @@ $(window).keydown(function(e) { if(e.ctrlKey) { e.preventDefault();}});	//Disabl
 //Send
 Input.send = function(){
 	if($("#chatBoxInput").is(":focus") && Input.press.move.toString() !== "0,0,0,0"){ 
-		mouse.x = WIDTH2 + 10*input.move[0] - 10*Input.press.move[2];
-		mouse.y = HEIGHT2 + 10*input.move[1] - 10*Input.press.move[3];		
+		mouse.x = WIDTH2 + 10*Input.press.move[0] - 10*Input.press.move[2];
+		mouse.y = HEIGHT2 + 10*Input.press.move[1] - 10*Input.press.move[3];		
 	}
 
 	var d = {};

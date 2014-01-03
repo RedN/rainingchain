@@ -25,13 +25,6 @@ Main.template = function(key){
 		'help':'',
 		'passivePt':0,
 		
-		'chatBox':[],
-		'pmBox':[],
-		'friendList':{},
-		'muteList':{},
-		'pm':'on',
-		'clanList':[],
-		
 		
 		'social':{
 			'message':{

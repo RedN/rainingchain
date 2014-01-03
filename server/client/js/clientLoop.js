@@ -25,9 +25,9 @@ Loop.update = function(){
 	if(Db.equip[player.weapon.id]){ player.weapon = Db.equip[player.weapon.id]; }
 	
 	//Add to ChatBox which was added by main
-	for(var i in chatBox) Chat.receive(chatBox[i]);		
+	for(var i in social.message.chat) Chat.receive(social.message.chat[i]);		
 	if(chatInput){	innerFunction(addInput,chatInput);}
-	chatBox = [];
+	social.message.chat = [];
 	chatInput = '';
 	if(help) updateHelp(help);	
 	

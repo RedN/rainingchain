@@ -16,7 +16,7 @@ Chat.send = function(){
 Chat.send.command = function(text){
 	if(typeof text === 'string'){ text = Chat.send.command.parse(text); }
 	if(text){ socket.emit('Chat.send.command',text); }
-	else { chatBox.push({'type':'client','text':'Invalid Command Entry.'}); } //only work if no message from server same frame
+	else { social.message.chat.push({'type':'client','text':'Invalid Command Entry.'}); } //only work if no message from server same frame
 }
 
 
@@ -50,7 +50,7 @@ Chat.send.message = function(text){
 	if(typeof text === 'string'){ text = Chat.send.message.parse(text); }
 	
 	if(text){ socket.emit('sendChat',text);  }
-	else { chatBox.push({'type':'client','text':'Invalid Chat Entry.'}); } //only work if no message from server same frame
+	else { social.message.chat.push({'type':'client','text':'Invalid Chat Entry.'}); } //only work if no message from server same frame
 }		
 
 Chat.send.message.parse = function(txt){
@@ -83,8 +83,8 @@ Chat.send.message.parse = function(txt){
 		var to = nick;
 		var text = txt.slice(txt.indexOf(',') + 1);
 		
-		for(var i in friendList){
-			if(nick == friendList[i].nick){
+		for(var i in social.list.friend){
+			if(nick === social.list.friend[i].nick){
 				to = i;
 			}
 		}
@@ -99,33 +99,33 @@ Chat.send.message.parse = function(txt){
 
 Chat.send.message.reply = function(){
 	if(Chat.send.message.reply.history.length){
-		addInput('@' + pmHistory[0].from + ',');
+		addInput('@' + Chat.send.message.reply.history[0].from + ',');
 	}
 }
 Chat.send.message.reply.history = [];
 
 Chat.receive = function(pack){
-	if(pack.from){ for(var i in muteList){ if(i == pack.from){ return; }}}
+	if(pack.from){ for(var i in social.list.mute){ if(i == pack.from){ return; }}}
 	
-	if(pack.type == 'game'){
+	if(pack.type === 'game'){
 		html.chat.text.innerHTML += '<br>' + pack.text; 
 	}
-	if(pack.type == 'client'){
+	if(pack.type === 'client'){
 		html.chat.text.innerHTML += '<br>' + pack.text; 
 	}
-	if(pack.type == 'clan'){
+	if(pack.type === 'clan'){
 		html.chat.text.innerHTML += "<br> <span style='color:" + '#800080' + "'>" + '[' + pack.from[0] + '] ' + pack.from[1] + ': ' + pack.text + "</span>"; 
 	}
-	if(pack.type == 'input'){
+	if(pack.type === 'input'){
 		addInput(pack.text,1);
 	}
-	if(pack.type == 'pm'){
+	if(pack.type === 'pm'){
 		var color = 'cyan';
-		if(pack.from == player.name){	//AKA you just sent a pm to someone
-			if(friendList[pack.to]){color = friendList[pack.to].color;}
+		if(pack.from === player.name){	//AKA you just sent a pm to someone
+			if(social.list.friend[pack.to]){color = social.list.friend[pack.to].color;}
 			html.pm.text.innerHTML += "<br> <span style='color:" + color + "'>" + 'To ' + pack.to + ': ' +  pack.text + "</span>"; 
 		} else {
-			if(friendList[pack.from]){color = friendList[pack.from].color;}
+			if(social.list.friend[pack.from]){color = social.list.friend[pack.from].color;}
 			html.pm.text.innerHTML += "<br> <span style='color:" + color + "'>" + 'From ' + pack.from + ': ' +  pack.text + "</span>"; 
 			Chat.send.message.reply.history.unshift(pack);
 		}

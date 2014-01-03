@@ -164,7 +164,7 @@ Draw.entity.mortal.chatHead = function(mort){
 	ctx.fillText(mort.chatHead.text,numX,numY);
 	ctx.textAlign = 'left';
 	ctx.fillStyle="black";
-	updateChatHead(mort);	
+	Loop.update.chatHead(mort);	
 }		
 
 Draw.entity.mortal.hpBar = function(mort){
@@ -678,7 +678,7 @@ Draw.chat.main = function(){
 	
 	//Clan
 	var str = 'Clan: ';
-	for(var i in clanList){ str += clanList[i] + '  '; }
+	for(var i in social.list.clan){ str += social.list.clan[i] + '  '; }
 	ctx.font = '15px Monaco';
 	ctx.fillStyle = 'white';
 	ctx.fillText(str,(s.x + s.divX),(s.y - s.disPmY));
