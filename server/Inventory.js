@@ -153,6 +153,7 @@ ItemList.prototype.toClient = function(){
             ret[i] = [];
             ret[i][0] = Db.item[this.data[i][0]].visual;
 			ret[i][1] = this.data[i][1];
+			ret[i][2] = Db.item[this.data[i][0]].name;
 		}
 	}
 	

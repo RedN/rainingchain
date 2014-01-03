@@ -80,7 +80,7 @@ Sign.up = function(user,pass,socket){
 	p.id = Math.randomId();
 	p.publicId = Math.random().toString(36).substring(13);
 	
-    var m = defaultMain(key); m.name = user;
+    var m = Main.template(key); m.name = user;
 
     var obj = {
         username:user,
@@ -311,7 +311,7 @@ Save.main.uncompress = function(main,key){
 }
 
 Save.main.load = function(key,db){
-    List.main[key] = defaultMain(key);
+    List.main[key] = Main.template(key);
     db = Save.main.uncompress(db,key);
 
     Mortal.permBoost(List.all[key],'Passive',Passive.convert(db.passive));

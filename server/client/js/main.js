@@ -5,7 +5,6 @@ var context = {'text':''}, clientContext = {'text':''}, permContext = {'text':''
 var help = '';
 
 var btnList = [];   //all buttons
-var pref = Command.pref.default();   //preference (see commandShare.js)
 var ctxList = {};   //list of canvas (window,popup,stage)
 
 List = {
@@ -32,9 +31,9 @@ Db = {	//local compilation of information so server doesnt send many times the s
 
 //############################################
 
-//Set the init values from defaultMain.
+//Set the init values from Main.template.
 (function(){ 
-	var main = defaultMain();
+	var main = Main.template();
 	for(var i in main) window[i] = main[i];
 })();
 

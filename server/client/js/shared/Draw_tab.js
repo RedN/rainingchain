@@ -71,7 +71,8 @@ Draw.tab.inventory = function (){ ctxrestore();
 			var numX = s.x + 20 + 42*(i%amountX);
 			var numY = s.y + 15 + 41 * Math.floor(i/amountX);
 			
-			var text = !(temp.selectInv && temp.reset && temp.reset.selectInv) ? 'Use ' + invList[i][0] : temp.selectInv.name + ' on ' + invList[i][0];
+			var text = 'Use ' + invList[i][2];
+			// !(temp.selectInv && temp.reset && temp.reset.selectInv) ? 'Use ' + invList[i][0] : temp.selectInv.name + ' on ' + invList[i][0];
 			
 			Button.creation(key,{
 				"rect":[numX,numX+32,numY,numY+32],

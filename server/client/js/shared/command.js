@@ -165,7 +165,7 @@ Command.list['pref'] = function(key,name,value){
 
 //Window
 Command.list['win,close'] = function(key){
-	closeAllWindow(key); 
+	Main.closeAllWindow(List.main[key]); 
 }
 
 Command.list['win,open'] = function(key,win,param0){
@@ -173,7 +173,7 @@ Command.list['win,open'] = function(key,win,param0){
 	if(win === 'bank'){ Chat.add(key,'Access denied.'); return;}
 	if(win === 'quest' && Db.quest[param0] === undefined){ Chat.add(key,'Wrong Input'); return; }
 	
-	openWindow(key,win,param0);
+	Main.openWindow(List.main[key],win,param0);
 }
 
 Command.list['win,bank,click'] = function(key,side,id){
@@ -274,7 +274,7 @@ Command.pref.list = {
 	'passiveView':{'default':'normal','type':'string','option':['normal','heat']},
 	'abilityDmgCent':{'default':0.10,'type':'number','min':0,'max':1,'round':3},
 }
-Command.pref.default = function(){
+Command.pref.default = Main.template.pref = function(){
 	var a = {};
 	for(var i in Command.pref.list){a[i] = Command.pref.list[i].default;}
 	return a;

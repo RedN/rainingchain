@@ -162,7 +162,7 @@ Mortal.creation.mod.list = {
 Mortal.creation.optionList = function(e){
 	var ol = {'name':e.name,'option':[]};
 	
-	if(e.type === 'player') ol.option.push({'name':'Trade',"func":'openWindow',"param":['trade',e.id]});
+	if(e.type === 'player') ol.option.push({'name':'Trade',"func":'Main.openWindow',"param":['trade',e.id]});
 	if(e.dialogue)	ol.option.push({'name':'Talk To',"func":'Mortal.talk',"param":[e.id]});
 	
 	e.optionList = ol;

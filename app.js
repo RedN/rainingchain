@@ -30,6 +30,7 @@ main = require('./server/main');
 
 
 require('./' + clientPath + 'client/js/shared/Mortal');
+require('./' + clientPath + 'client/js/shared/Main');
 require('./server/entity/Mortal_creation');
 require('./server/entity/Attack');
 require('./server/entity/Mortal_loop');
@@ -52,8 +53,6 @@ require('./server/Shop');
 require('./server/trade');
 require('./server/Skill');
 require('./server/Test');
-require('./server/utility');
-require('./server/Bank');
 
 require('./server/db/EnemyDb');
 require('./server/db/AbilityDb');

@@ -11,15 +11,15 @@ a['testing']    //testing is the item id
 		            
 					{'name':'Craft Weapon','func':'Craft.plan','param':[{'category':'weapon'},{'item':[]}]},
 					{'name':'Tele','func':'Mortal.teleport','param':[1230,1230,'ryve']},
-					{'name':'Open Bank','func':'openWindow','param':['bank']},
-					{'name':'Open Shop','func':'openWindow','param':['shop','lol']},
+					{'name':'Open Bank','func':'Main.openWindow','param':['bank']},
+					{'name':'Open Shop','func':'Main.openWindow','param':['shop','lol']},
 			
 			]};
 */
 
 Item = {};
 
-//Similar format than Weapon and Armor
+//Similar format than Equip
 Init.db.item = function (cb){
 	Db.item = {}; itemPreDb = {}; a = itemPreDb;
 	
@@ -38,7 +38,7 @@ Init.db.item = function (cb){
 	
 	
 	
-	//Crafting
+	//{Crafting
 	a['shard-white'] = {'name':'White Shard','visual':'system.gold','stack':1}
 	a['shard-blue'] = {'name':'Blue Shard','visual':'system.gold','stack':1}
 	a['shard-yellow'] = {'name':'Yellow Shard','visual':'system.gold','stack':1}
@@ -48,8 +48,8 @@ Init.db.item = function (cb){
 		'option':[	{'name':'Craft Armor','func':'Craft.plan','param':[{'category':'armor'},{'item':[]}]},
 						{'name':'Craft Weapon','func':'Craft.plan','param':[{'category':'weapon'},{'item':[]}]},
 						{'name':'Tele','func':'Mortal.teleport','param':[1230,1230,'ryve']},
-						{'name':'Open Bank','func':'openWindow','param':['bank']},
-						{'name':'Open Shop','func':'openWindow','param':['shop','lol']},
+						{'name':'Open Bank','func':'Main.openWindow','param':['bank']},
+						{'name':'Open Shop','func':'Main.openWindow','param':['shop','lol']},
 			
 			]};
 	
@@ -62,7 +62,7 @@ Init.db.item = function (cb){
 	a['logs'] = {'name':'logs','visual':'craft.logs'};	
 	//}
 	
-	//Testing
+	//{Testing
 	a['test'] = {'name':'Test','visual':'system.shield','stack':1,
 			'option':[	
 			    
@@ -70,7 +70,7 @@ Init.db.item = function (cb){
 	
 	a['ironSword'] = {'name':'Sword','visual':'system.ironSword',
 			'option':[	{'name':'Tele Ice','func':'Mortal.teleport','param':[500,500,'ice']},
-						{'name':'Open Bank','func':'openWindow','param':['bank']},
+						{'name':'Open Bank','func':'Main.openWindow','param':['bank']},
 			]};
 	a['shield'] = {'name':'Shield','visual':'system.shield',
 			'option':[	{'name':'Teleport','func':'Mortal.teleport','param':[500,500,'fire']},

@@ -175,7 +175,7 @@ Ability.creation = function(a){
 		a.action[j].param.anim = a.action[j].param.anim || 'Attack';
 		for(var k in a.action[j].param.attack){
 			if(a.action[j].param.attack[k]){
-				a.action[j].param.attack[k].dmg = setDmgViaRatio(a.action[j].param.attack[k]);
+				a.action[j].param.attack[k].dmg = Craft.setDmgViaRatio(a.action[j].param.attack[k]);
 			}
 		}
 	}	

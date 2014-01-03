@@ -1,7 +1,7 @@
-//List of functions used by Draw.
+
 Draw.convert = {};
+
 //Convert a boost object into a string.
-//note: prototype.toString() would be better.
 Draw.convert.boost = function(boost){
 	if(boost.type === 'custom'){ return Db.customBoost[boost.value].name; }
 
@@ -57,68 +57,7 @@ Draw.convert.attackMod = {
 }
 
 
-statListOperationInit = (function(){
 
-defListOperation = [
-	{'name':'Melee','icon':'offensive.melee','stat':[{'name':'x','stat':'def-melee-x'},{'name':'*','stat':'def-melee-*'},{'name':'^','stat':'def-melee-^'},{'name':'+','stat':'def-melee-+'}],'string':(function(){ return Draw.convert.elementMod('def','melee')})},
-	{'name':'Range','icon':'offensive.range','stat':[{'name':'x','stat':'def-range-x'},{'name':'*','stat':'def-range-*'},{'name':'^','stat':'def-range-^'},{'name':'+','stat':'def-range-+'}],'string':(function(){ return Draw.convert.elementMod('def','range')})},
-	{'name':'Magic','icon':'offensive.magic','stat':[{'name':'x','stat':'def-magic-x'},{'name':'*','stat':'def-magic-*'},{'name':'^','stat':'def-magic-^'},{'name':'+','stat':'def-magic-+'}],'string':(function(){ return Draw.convert.elementMod('def','magic')})},
-	{'name':'Fire','icon':'offensive.fire','stat':[{'name':'x','stat':'def-fire-x'},{'name':'*','stat':'def-fire-*'},{'name':'^','stat':'def-fire-^'},{'name':'+','stat':'def-fire-+'}],'string':(function(){ return Draw.convert.elementMod('def','fire')})},
-	{'name':'Cold','icon':'offensive.cold','stat':[{'name':'x','stat':'def-cold-x'},{'name':'*','stat':'def-cold-*'},{'name':'^','stat':'def-cold-^'},{'name':'+','stat':'def-cold-+'}],'string':(function(){ return Draw.convert.elementMod('def','cold')})},
-	{'name':'Lightning','icon':'offensive.lightning','stat':[{'name':'x','stat':'def-lightning-x'},{'name':'*','stat':'def-lightning-*'},{'name':'^','stat':'def-lightning-^'},{'name':'+','stat':'def-lightning-+'}],'string':(function(){ return Draw.convert.elementMod('def','lightning')})},
-		
-	{'name':'Burn','icon':'defensive.burn','stat':[{'name':'Resist','stat':'resist-burn'},{'name':'Max','stat':'resistMax-burn'}],'string':(function(){ return Draw.convert.statusMod('def','burn')})},
-	{'name':'Chill','icon':'defensive.chill','stat':[{'name':'Resist','stat':'resist-chill'},{'name':'Max','stat':'resistMax-chill'}],'string':(function(){ return Draw.convert.statusMod('def','chill')})},
-	{'name':'Confuse','icon':'defensive.confuse','stat':[{'name':'Resist','stat':'resist-confuse'},{'name':'Max','stat':'resistMax-confuse'}],'string':(function(){ return Draw.convert.statusMod('def','confuse')})},
-	{'name':'Knockback','icon':'defensive.knock','stat':[{'name':'Resist','stat':'resist-knock'},{'name':'Max','stat':'resistMax-knock'}],'string':(function(){ return Draw.convert.statusMod('def','knock')})},
-	{'name':'Bleed','icon':'defensive.bleed','stat':[{'name':'Resist','stat':'resist-bleed'},{'name':'Max','stat':'resistMax-bleed'}],'string':(function(){ return Draw.convert.statusMod('def','bleed')})},
-	{'name':'Drain','icon':'defensive.drain','stat':[{'name':'Resist','stat':'resist-drain'},{'name':'Max','stat':'resistMax-drain'}],'string':(function(){ return Draw.convert.statusMod('def','drain')})},
-	
-	{'name':'Speed','icon':'defensive.speed','stat':[{'name':'Max','stat':'maxSpd'},{'name':'Acc.','stat':'acc'},{'name':'Fric.','stat':'friction'}],'string':(function(){ return 'Max: ' + round(player.boost.list['maxSpd'].base,2,1) + ', Acc.: ' + round(player.boost.list['acc'].base,2,1)+ ', Fric.: ' + round(player.boost.list['friction'].base,2,1)})},
-	{'name':'Pick Radius','icon':'defensive.pickup','stat':[{'name':'Pick Radius','stat':'pickRadius'}],'string':(function(){ return round(player.boost.list['pickRadius'].base,2,1)})},
-	{'name':'Item Finding','icon':'defensive.item','stat':[{'name':'Quality','stat':'item-quality'},{'name':'Quantity','stat':'item-quantity'},{'name':'Rarity','stat':'item-rarity'}],'string':(function(){ return 'Qual.: ' + round(player.boost.list['item-quality'].base,2,1) + ', Quant.: ' + round(player.boost.list['item-quantity'].base,2,1)+ ', Rarity: ' + round(player.boost.list['item-rarity'].base,2,1)})},
-
-
-	{'name':'Life','icon':'resource.hp','stat':[{'name':'Max','stat':'hp-max'},{'name':'Regen','stat':'hp-regen'}],'string':(function(){ return 'Max: ' + round(player.boost.list['hp-max'].base,0,1) + ', Regen: ' + round(player.boost.list['hp-regen'].base,2,1)})},
-	{'name':'Mana','icon':'resource.mana','stat':[{'name':'Max','stat':'mana-max'},{'name':'Regen','stat':'mana-regen'}],'string':(function(){ return 'Max: ' + round(player.boost.list['mana-max'].base,0,1) + ', Regen: ' + round(player.boost.list['mana-regen'].base,2,1)})},
-	{'name':'Fury','icon':'resource.fury','stat':[{'name':'Max','stat':'fury-max'},{'name':'Regen','stat':'fury-regen'}],'string':(function(){ return 'Max: ' + round(player.boost.list['fury-max'].base,0,1) + ', Regen: ' + round(player.boost.list['fury-regen'].base,2,1)})},
-	{'name':'Dodge','icon':'resource.dodge','stat':[{'name':'Max','stat':'dodge-max'},{'name':'Regen','stat':'dodge-regen'}],'string':(function(){ return 'Max: ' + round(player.boost.list['dodge-max'].base,0,1) + ', Regen: ' + round(player.boost.list['dodge-regen'].base,2,1)})},
-	
-
-];
-
-
-offListOperation = [
-	{'name':'Melee','icon':'offensive.melee','stat':[{'name':'x','stat':'dmg-melee-x'},{'name':'*','stat':'dmg-melee-*'},{'name':'^','stat':'dmg-melee-^'},{'name':'+','stat':'dmg-melee-+'}],'string':(function(){ return Draw.convert.elementMod('dmg','melee')})},
-	{'name':'Range','icon':'offensive.range','stat':[{'name':'x','stat':'dmg-range-x'},{'name':'*','stat':'dmg-range-*'},{'name':'^','stat':'dmg-range-^'},{'name':'+','stat':'dmg-range-+'}],'string':(function(){ return Draw.convert.elementMod('dmg','range')})},
-	{'name':'Magic','icon':'offensive.magic','stat':[{'name':'x','stat':'dmg-magic-x'},{'name':'*','stat':'dmg-magic-*'},{'name':'^','stat':'dmg-magic-^'},{'name':'+','stat':'dmg-magic-+'}],'string':(function(){ return Draw.convert.elementMod('dmg','magic')})},
-	{'name':'Fire','icon':'offensive.fire','stat':[{'name':'x','stat':'dmg-fire-x'},{'name':'*','stat':'dmg-fire-*'},{'name':'^','stat':'dmg-fire-^'},{'name':'+','stat':'dmg-fire-+'}],'string':(function(){ return Draw.convert.elementMod('dmg','fire')})},
-	{'name':'Cold','icon':'offensive.cold','stat':[{'name':'x','stat':'dmg-cold-x'},{'name':'*','stat':'dmg-cold-*'},{'name':'^','stat':'dmg-cold-^'},{'name':'+','stat':'dmg-cold-+'}],'string':(function(){ return Draw.convert.elementMod('dmg','cold')})},
-	{'name':'Lightning','icon':'offensive.lightning','stat':[{'name':'x','stat':'dmg-lightning-x'},{'name':'*','stat':'dmg-lightning-*'},{'name':'^','stat':'dmg-lightning-^'},{'name':'+','stat':'dmg-lightning-+'}],'string':(function(){ return Draw.convert.elementMod('dmg','lightning')})},
-	
-	{'name':'Weapon','icon':'offensive.melee','stat':[{'name':'Mace','stat':'weapon-mace'},{'name':'Spear','stat':'weapon-spear'},{'name':'Sword','stat':'weapon-sword'}],'string':(function(){ return 'Mace: ' + round(player.boost.list['weapon-mace'].base,2,1) + ', Spear: ' + round(player.boost.list['weapon-spear'].base,2,1) + ', Sword: ' + round(player.boost.list['weapon-sword'].base,2,1)						})},
-	{'name':'Weapon','icon':'offensive.range','stat':[{'name':'Bow','stat':'weapon-bow'},{'name':'Boomerang','stat':'weapon-boomerang'},{'name':'Crossbow','stat':'weapon-crossbow'}],'string':(function(){ return 'Bow: ' + round(player.boost.list['weapon-bow'].base,2,1) + ', Boom.: ' + round(player.boost.list['weapon-boomerang'].base,2,1) + ', CBow: ' + round(player.boost.list['weapon-crossbow'].base,2,1)						})},
-	{'name':'Weapon','icon':'offensive.magic','stat':[{'name':'Wand','stat':'weapon-wand'},{'name':'Staff','stat':'weapon-staff'},{'name':'Orb','stat':'weapon-orb'}],'string':(function(){ return 'Wand: ' + round(player.boost.list['weapon-wand'].base,2,1) + ', Staff: ' + round(player.boost.list['weapon-staff'].base,2,1) + ', Orb: ' + round(player.boost.list['weapon-orb'].base,2,1)						})},
-	
-	{'name':'Burn','icon':'offensive.burn','stat':[{'name':'Chance','stat':'burn-chance'},{'name':'Magn','stat':'burn-magn'},{'name':'Time','stat':'burn-time'}],'string':(function(){ return Draw.convert.statusMod('off','burn')})},
-	{'name':'Chill','icon':'offensive.chill','stat':[{'name':'Chance','stat':'chill-chance'},{'name':'Magn','stat':'chill-magn'},{'name':'Time','stat':'chill-time'}],'string':(function(){ return Draw.convert.statusMod('off','chill')})},
-	{'name':'Confuse','icon':'offensive.confuse','stat':[{'name':'Chance','stat':'confuse-chance'},{'name':'Magn','stat':'confuse-magn'},{'name':'Time','stat':'confuse-time'}],'string':(function(){ return Draw.convert.statusMod('off','confuse')})},
-	{'name':'Knockback','icon':'offensive.knock','stat':[{'name':'Chance','stat':'knock-chance'},{'name':'Magn','stat':'knock-magn'},{'name':'Time','stat':'knock-time'}],'string':(function(){ return Draw.convert.statusMod('off','knock')})},
-	{'name':'Bleed','icon':'offensive.bleed','stat':[{'name':'Chance','stat':'bleed-chance'},{'name':'Magn','stat':'bleed-magn'},{'name':'Time','stat':'bleed-time'}],'string':(function(){ return Draw.convert.statusMod('off','bleed')})},
-	{'name':'Drain','icon':'offensive.drain','stat':[{'name':'Chance','stat':'drain-chance'},{'name':'Magn','stat':'drain-magn'},{'name':'Time','stat':'drain-time'}],'string':(function(){ return Draw.convert.statusMod('off','drain')})},
-	{'name':'Leech Hp','icon':'resource.hp','stat':[{'name':'Chance','stat':'leech-chance'},{'name':'Magn','stat':'leech-magn'},{'name':'Time','stat':'leech-time'}],'string':(function(){ return Draw.convert.statusMod('off','leech'); })},
-	
-	{'name':'Pierce','icon':'offensive.pierce','stat':[{'name':'Chance','stat':'pierce-chance'},{'name':'Dmg Mod','stat':'pierce-dmgReduc'}],'string':(function(){ return 'Chance: ' + round(player.boost.list['pierce-chance'].base,2,1) + ', Dmg Mod: ' + round(player.boost.list['pierce-dmgReduc'].base,2,1); })},
-	{'name':'Bullet','icon':'offensive.bullet','stat':[{'name':'Amount','stat':'bullet-amount'},{'name':'Aim','stat':'aim'}],'string':(function(){ return 'Amount: ' + round(player.boost.list['bullet-amount'].base,2,1) + ' , Aim: ' + round(player.boost.list['aim'].base,2,1); })},
-	{'name':'Strike','icon':'offensive.bullet','stat':[{'name':'AoE','stat':'bullet-amount'},{'name':'Range','stat':'aim'},{'name':'Max','stat':'aim'}],'string':(function(){ return 'AoE: ' + round(player.boost.list['strike-size'].base,2,1) + ', Range: ' + round(player.boost.list['strike-range'].base,2,1) + ', Max: ' + round(player.boost.list['strike-maxHit'].base,2,1); })},
-	{'name':'Summon','icon':'summon.wolf','stat':[{'name':'Amount','stat':'summon-amount'},{'name':'Time','stat':'summon-time'},{'name':'Attack','stat':'summon-atk'},{'name':'Defence','stat':'summon-def'}],'string':(function(){ return '#:' + round(player.boost.list['summon-amount'].base,2,1) + ', Time:' + round(player.boost.list['summon-time'].base,2,1) + ', A:' + round(player.boost.list['summon-atk'].base,2,1)+ ', D:' + round(player.boost.list['summon-def'].base,2,1); })},
-
-	{'name':'Atk Spd','icon':'offensive.atkSpd','stat':[{'name':'Main','stat':'atkSpd-main'},{'name':'Support','stat':'atkSpd-support'}],'string':(function(){ return 'Main:' + round(player.boost.list['atkSpd-main'].base,2,1) + ', Support:' + round(player.boost.list['atkSpd-support'].base,2,1); })},
-
-	
-	
-];
-})();
 
 
 Draw.convert.elementMod = function(type,name){
@@ -151,36 +90,6 @@ Draw.convert.statusMod = function(type,name){
 }
 
 
-
-closeAllWindow = function(key){
-	if(List.main[key].windowList.trade.trader){ List.main[List.main[key].windowList.trade.trader].windowList.trade = 0; }
-	
-	for(var i in List.main[key].windowList){
-		List.main[key].windowList[i] = 0;
-	}
-}
-
-openWindow = function(key,name,param){
-	closeAllWindow(key);
-	List.main[key].windowList[name] = 1;
-	
-	
-	if(name === 'shop'){
-		List.main[key].windowList.shop = shopList[param];
-	}
-	if(name === 'quest'){
-		List.main[key].windowList.quest = param;
-		Quest.req.update(key,param);
-		Quest.hint.update(key,param);
-	}
-	if(name === 'trade'){
-		if(!List.main[param].windowList.trade){
-			closeAllWindow(key);
-			List.main[key].windowList.trade = {'trader':param,'tradeList':List.main[param].tradeList,'confirm':{'self':0,'other':0}};
-			List.main[param].windowList.trade = {'trader':key,'tradeList':List.main[key].tradeList,'confirm':{'self':0,'other':0}};
-		} else { Chat.add(key,'This player is busy.');}
-	}
-}
 
 
 

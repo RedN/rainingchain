@@ -144,7 +144,7 @@ Init.db.quest = function(){
 	}
 	var quest = {};
 	for(var i in Db.quest){ quest[i] = deepClone(Db.quest[i].variable);}
-	eval('defaultQuestVariable = function(){ return ' + stringify(quest) + '}');
+	eval('Main.template.quest = function(){ return ' + stringify(quest) + '}');
 	
 	
 }

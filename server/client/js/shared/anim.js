@@ -1,5 +1,4 @@
 
-
 Init.db.anim = function(){
 	Db.anim ={
 			"slash":{'frame':8},

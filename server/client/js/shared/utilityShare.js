@@ -1,46 +1,4 @@
 
-defaultMain = function(key){
-	var main = {
-		'change':[],
-		"currentTab":"inventory",
-		"windowList":{'bank':0,'trade':0,'offensive':0,'defensive':0,'shop':0,'ability':0,'passive':0,'quest':0},
-		"popupList":{'equip':0},
-		"optionList":null,
-		'context':'',
-		'bankList':[],
-		'tradeList':[],
-		'btnList':[],
-		'dialogue':0,
-		'dialogueLoc':{'x':0,'y':0},
-		'name':'player000',		
-		'chatBox':[],
-		'pmBox':[],
-		'friendList':{},
-		'muteList':{},
-		'pm':'on',
-		'help':'',
-		'temp':{'reset':{}},
-		'passivePt':0,
-		'chatInput':'',
-		'clanList':[],
-		'invList': ['','','','','','','','','','','','','','','','','','','','','','','',''],
-	};
-	if(server){
-		main['quest'] = defaultQuestVariable();
-		main['pref'] = Command.pref.default();
-		main['passive'] = Passive.template();
-		main['invList'] = new Inventory(key);
-		main['bankList'] = new Bank(key);
-		main['old'] = {};
-	} 
-	return main;
-}
-
-
-
-
-
-
 //Testing
 if(server){
 	io.sockets.on('connection', function (socket) {
@@ -84,6 +42,7 @@ keyFunction = function (key,func,param){
 	if(typeof func === 'string'){
 		if(func.indexOf('.') !== -1){
 			if(func.indexOf('Mortal') === 0) key = List.mortal[key]; 
+			else if(func.indexOf('Main') === 0) key = List.main[key]; 
 			func = valueViaArray({'origin':this,'array':func.split('.')});
 		} else {
 			func = this[func];
