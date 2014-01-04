@@ -1,10 +1,11 @@
 
 
+passive grid naming
+ability naming
+trade fix
+test bank
 
 
-clear permContext bs
-quest in nutshell
-patch skill
 
 #Priority 1:
 -Implement Sound System

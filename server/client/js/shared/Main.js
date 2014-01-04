@@ -97,6 +97,10 @@ Main.examineEquip = function(main, id){
 	Main.openPopup(main,'equip',id);
 }
 
+Main.selectInv = function(main,obj){
+	main.temp.selectInv = obj;
+	main.temp.reset.selectInv = 1;
+}
 
 
 

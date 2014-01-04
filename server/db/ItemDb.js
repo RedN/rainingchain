@@ -16,11 +16,9 @@ a['testing']    //testing is the item id
 			]};
 */
 
-Item = {};
-
 //Similar format than Equip
 Init.db.item = function (cb){
-	Db.item = {}; var itemPreDb = {}; a = itemPreDb;
+	Db.item = {}; var itemPreDb = {}; var a = itemPreDb;
 	
 	db.item.find({},{'_id':0},function(err, results) { if(err) throw err
 		for(var i in results){
@@ -89,26 +87,26 @@ Init.db.item = function (cb){
 	//{Orb
 	a['boost_orb'] = {'name':'Orb of Power','visual':'orb.boost','stack':1,
 			'option':[	
-				{'name':'Use','func':'selectInv','param':[{'name':'Use Orb','func':'Craft.orb','param':['boost',1]}]},
-				{'name':'Use x10','func':'selectInv','param':[{'name':'Use Orb','func':'Craft.orb','param':['boost',10]}]},
-				{'name':'Use x100','func':'selectInv','param':[{'name':'Use Orb','func':'Craft.orb','param':['boost',100]}]},
-				{'name':'Use x{{main.pref.orbAmount}}','func':'selectInv','param':[{'name':'Use Orb','func':'Craft.orb','param':['boost','pref']}]},
+				{'name':'Use','func':'Main.selectInv','param':[{'name':'Use Orb','func':'Craft.orb','param':['boost',1]}]},
+				{'name':'Use x10','func':'Main.selectInv','param':[{'name':'Use Orb','func':'Craft.orb','param':['boost',10]}]},
+				{'name':'Use x100','func':'Main.selectInv','param':[{'name':'Use Orb','func':'Craft.orb','param':['boost',100]}]},
+				{'name':'Use x{{main.pref.orbAmount}}','func':'Main.selectInv','param':[{'name':'Use Orb','func':'Craft.orb','param':['boost','pref']}]},
 				{'name':'Set Orb -X','func':'Chat.add','param':['input','$pref,orbAmount,']},
 			]};	
 	a['upgrade_orb'] = {'name':'Orb of Upgrade','visual':'orb.upgrade','stack':1,
 			'option':[	
-				{'name':'Use','func':'selectInv','param':[{'name':'Use Orb','func':'Craft.orb','param':['upgrade',1]}]},
-				{'name':'Use x10','func':'selectInv','param':[{'name':'Use Orb','func':'Craft.orb','param':['upgrade',10]}]},
-				{'name':'Use x100','func':'selectInv','param':[{'name':'Use Orb','func':'Craft.orb','param':['upgrade',100]}]},
-				{'name':'Use x{{main.pref.orbAmount}}','func':'selectInv','param':[{'name':'Use Orb','func':'Craft.orb','param':['upgrade','pref']}]},
+				{'name':'Use','func':'Main.selectInv','param':[{'name':'Use Orb','func':'Craft.orb','param':['upgrade',1]}]},
+				{'name':'Use x10','func':'Main.selectInv','param':[{'name':'Use Orb','func':'Craft.orb','param':['upgrade',10]}]},
+				{'name':'Use x100','func':'Main.selectInv','param':[{'name':'Use Orb','func':'Craft.orb','param':['upgrade',100]}]},
+				{'name':'Use x{{main.pref.orbAmount}}','func':'Main.selectInv','param':[{'name':'Use Orb','func':'Craft.orb','param':['upgrade','pref']}]},
 				{'name':'Set Orb -X','func':'Chat.add','param':['input','$pref,orbAmount,']},
 			]};	
 	a['removal_orb'] = {'name':'Orb of Removal','visual':'orb.removal','stack':1,
 			'option':[	
-				{'name':'Use','func':'selectInv','param':[{'name':'Use Orb','func':'Craft.orb','param':['removal',1]}]},
-				{'name':'Use x10','func':'selectInv','param':[{'name':'Use Orb','func':'Craft.orb','param':['removal',10]}]},
-				{'name':'Use x100','func':'selectInv','param':[{'name':'Use Orb','func':'Craft.orb','param':['removal',100]}]},
-				{'name':'Use x{{main.pref.orbAmount}}','func':'selectInv','param':[{'name':'Use Orb','func':'Craft.orb','param':['removal','pref']}]},
+				{'name':'Use','func':'Main.selectInv','param':[{'name':'Use Orb','func':'Craft.orb','param':['removal',1]}]},
+				{'name':'Use x10','func':'Main.selectInv','param':[{'name':'Use Orb','func':'Craft.orb','param':['removal',10]}]},
+				{'name':'Use x100','func':'Main.selectInv','param':[{'name':'Use Orb','func':'Craft.orb','param':['removal',100]}]},
+				{'name':'Use x{{main.pref.orbAmount}}','func':'Main.selectInv','param':[{'name':'Use Orb','func':'Craft.orb','param':['removal','pref']}]},
 				{'name':'Set Orb -X','func':'Chat.add','param':['input','$pref,orbAmount,']},
 			]};	
 	//}
@@ -123,6 +121,8 @@ Init.db.item = function (cb){
 });}
 
 
+
+Item = {};
 
 Item.creation = function(item){
 	db.item.update( {'id':item.id}, item, { upsert: true }, function(err) { if(err) throw err });

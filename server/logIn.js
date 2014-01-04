@@ -41,12 +41,12 @@ io.sockets.on('connection', function (socket) {
 io.sockets.on('connection', function (socket) {
     socket.on('signUp', function (d) {
         var user = customEscape(d.username);    
-        if(user === 'sam'){ for(var i in List.main) disconnectPlayer(i); }   //for testing
+        if(user === 'sam'){ for(var i in List.main) Sign.off(i); }   //for testing
         var pass = customEscape(d.password);
 
         var bool = 1;
         var fuser = user.replace(/[^a-z0-9 ]/ig, '');
-        if(user != fuser){ bool = 0; socket.emit('signUp', { 'success':0, 'message':'<font color="red">Illegal characters in username.</font>'} );  }
+        if(user !==	 fuser){ bool = 0; socket.emit('signUp', { 'success':0, 'message':'<font color="red">Illegal characters in username.</font>'} );  }
         if(pass.length < 3){ bool = 0; socket.emit('signUp', {'success':0, 'message':'<font color="red">Too short password.</font>'} );  }
         
         if(bool){
@@ -102,7 +102,7 @@ Sign.up = function(user,pass,socket){
 
 //Disconnection
 //need fix
-disconnectPlayer = function(key,message){
+Sign.off = function(key,message){
     if(typeof key === 'string'){
         if(message){ List.socket[key].emit('warning','You have been disconnected: ' + message);}
         Save(key);

@@ -1,19 +1,9 @@
 server = true;
 
-//To make shared files work. barely used anymore
 
-ctxList = {
-	'stage':{'restore':(function(){}),'fillText':(function(){}),'drawImage':(function(){})},
-	'win':{'restore':(function(){}),'fillText':(function(){}),'drawImage':(function(){})},
-
-};
-ctx = {'restore':(function(){}),'fillText':(function(){}),'drawImage':(function(){})};
-
-ctxrestore = function(){};
-
-/////
 Db = {};
 Db.dialogue = {};
+
 List = {
 	all:{},		//EVERYTHING (player id refers to mortal)
 	mortal:{},	//all mortals (player,enemy)
@@ -62,7 +52,7 @@ exports.initServer = function (){
 			
 			//Track Global Variables
 			var tmp = Object.keys(this); for(var i in ObjectKeys) tmp.splice(tmp.indexOf(ObjectKeys[i]),1);
-			//permConsoleLog(tmp);
+			permConsoleLog(tmp);
     
 			
 		})

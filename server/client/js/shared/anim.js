@@ -107,7 +107,7 @@ Anim.update = function (){
 //Add animation to the game. target can be a string to specific an actor, or an obj x:1,y:1
 Anim.creation = function(anim,target,sizeMod){
 	sizeMod = sizeMod || 1;
-	List.anim[a.id] = {'sizeMod':sizeMod,'name':anim,'target':target,'id':'a'+Math.randomId(5)};
+	List.anim[anim.id] = {'sizeMod':sizeMod,'name':anim,'target':target,'id':'a'+Math.randomId(5)};
 }
 
 

@@ -79,7 +79,7 @@ Loop.EnemyGroup = function(){
 Loop.logOut = function(){
 	for(var key in List.socket){
 		if(List.socket[key].toRemove){
-			disconnectPlayer(key,'Disconnected due to inactivity.');
+			Sign.off(key,'Disconnected due to inactivity.');
 		}
 	}
 }

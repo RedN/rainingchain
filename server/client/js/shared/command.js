@@ -179,9 +179,10 @@ Command.list['win,open'] = function(key,win,param0){
 	Main.openWindow(List.main[key],win,param0);
 }
 
-Command.list['win,bank,click'] = function(key,side,id){
-	if(!List.main[key].windowList.bank){ Chat.add(key,'Access denied.'); return;}
-	List.main[key].bankList.click(id,side);
+Command.list['win,bank,click'] = function(key,side,slot){
+	var m = List.main[key];
+	if(!m.windowList.bank){ Chat.add(key,'Access denied.'); return;}
+	Itemlist.click.bank(m.bankList,side,+slot);
 }
 
 Command.list['win,quest,toggleBonus'] = function(key,id,bonus){
@@ -270,7 +271,13 @@ Command.list['dia,option'] = function(key,slot){
 Command.list['option'] = function(key,slot){
 	var main = List.main[key];
 	if(main.optionList && main.optionList.option[slot]){
-		applyFunc.key(key,main.optionList.option[slot].func,main.optionList.option[slot].param);	
+		if(!main.optionList.option[slot].nokey){
+			applyFunc.key(key,main.optionList.option[slot].func,main.optionList.option[slot].param);	
+		} else {
+			applyFunc(main.optionList.option[slot].func,main.optionList.option[slot].param);	
+		}
+	
+		
 	}	
 }
 

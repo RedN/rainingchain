@@ -12,10 +12,6 @@ if(!server){
 
 
 
-selectInv = function(key,obj){
-	List.main[key].temp.selectInv = obj;
-	List.main[key].temp.reset.selectInv = 1;
-}
 
 
 

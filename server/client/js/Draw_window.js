@@ -116,7 +116,7 @@ Draw.window.bank = function (){ ctxrestore();
 			"rect":[numX,numX+32,numY,numY+32],
 			"left":{"func":Chat.send.command,"param":['$win,bank,click,left,' + i]},
 			"right":{"func":Chat.send.command,"param":['$win,bank,click,right,' + i]},
-			'text':'Withdraw ' + main.bankList[i][0]
+			'text':'Withdraw ' + main.bankList[i][2]
 		});	
 		Draw.item(main.bankList[i],[numX,numY]);
 	}

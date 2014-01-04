@@ -14,7 +14,7 @@ io.sockets.on('connection', function (socket) {
 				Button.reset(key);
 				
 			}
-		} catch(err){ logError(err); disconnectPlayer(socket,'Reload the page'); } 
+		} catch(err){ logError(err); Sign.off(socket,'Reload the page'); } 
 	});
 	
 	socket.on('input', function (d) {	
@@ -37,7 +37,7 @@ io.sockets.on('connection', function (socket) {
 			}
 			player.angle = atan2(player.mouseY - Cst.HEIGHT/2,player.mouseX - Cst.WIDTH/2);	
 				
-		} catch(err){ logError(err); disconnectPlayer(socket,'Reload the page'); } 
+		} catch(err){ logError(err); Sign.off(socket,'Reload the page'); } 
 	
 	});
 });

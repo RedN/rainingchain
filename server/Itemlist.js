@@ -1,4 +1,5 @@
 //First param is invlist AKA requires nokey:true
+//ts('Main.openWindow(m,"bank")')
 
 Itemlist = {};
 
@@ -44,7 +45,7 @@ Itemlist.test = function (inv,array_items){
 			spaceNeeded++;
 		}	
 	}
-	return spaceNeeded <= inv.empty()
+	return spaceNeeded <= Itemlist.empty(inv);
 }
 
 //Return first position of first empty slot
@@ -164,7 +165,8 @@ Itemlist.toString = function(inv){
 
 Itemlist.transfer = function(inv,other,id,amount){
 	amount = amount || 1;
-	amount = Math.min(amount,inv.have(id,0,'amount'));
+	console.log(id);
+	amount = Math.min(amount,Itemlist.have(inv,id,0,'amount'));
 	if(!Itemlist.test(other,[[id,amount]]) || amount === 0){
 		return false;
 	} 
@@ -219,14 +221,14 @@ Itemlist.click.inventory = function(inv,side,slot){
 	var m = List.main[key];
 	var mw = m.windowList;
 	if(!inv.data[slot].length) return;
-	
+	var id = inv.data[slot][0];
 			
 	//If Bank Window
 	if(mw.bank){
-		if(side === 'left'){ Itemlist.transfer(inv,List.main[inv.key].bankList,inv.data[slot][0],1); }
+		if(side === 'left'){ Itemlist.transfer(inv,m.bankList,id,1); }
 		
 		if(side === 'right'){ 
-			var id = inv.data[slot][0];
+			
 			
 			Button.optionList(key,{
 				'name':Db.item[id].name,
@@ -273,23 +275,25 @@ Itemlist.click.inventory = function(inv,side,slot){
 
 
 
-Itemlist.click.bank = function(bank,slot,side){
-	if(!bank.data[slot].length){ return; }
+Itemlist.click.bank = function(bank,side,slot){
+	if(!bank.data[slot] || !bank.data[slot].length){ return; }
+	var inv = List.main[bank.key].invList;
+	var id = bank.data[slot][0];
+	var key = bank.key;
+		
 	if(side === 'left'){
-		var inv = List.main[bank.key].invList;
-		Itemlist.transfer(bank,inv.data[slot][0],1);
+		Itemlist.transfer(bank,inv,id,1);
 		return;
 	}
 	if(side === 'right'){
-		var id = bank.data[slot][0];
 		Button.optionList(key,{
 			'name':Db.item[id].name,
 			'option':[
-				{'name':'Withdraw 5','func':Itemlist.transfer,'param':[bank,inv.data[slot][0],5]},
-				{'name':'Withdraw 25','func':Itemlist.transfer,'param':[bank,inv.data[slot][0],25]},
-				{'name':'Withdraw 100','func':Itemlist.transfer,'param':[bank,inv.data[slot][0],100]},
-				{'name':'Withdraw 1000','func':Itemlist.transfer,'param':[bank,inv.data[slot][0],1000]},
-				{'name':'Withdraw ' + List.main[key].pref.bankTransferAmount,'func':Itemlist.transfer,'param':[bank,inv.data[slot][0],List.main[key].pref.bankTransferAmount]},
+				{'name':'Withdraw 5','func':Itemlist.transfer,'param':[bank,inv,id,5],'nokey':true},
+				{'name':'Withdraw 25','func':Itemlist.transfer,'param':[bank,inv,id,25],'nokey':true},
+				{'name':'Withdraw 100','func':Itemlist.transfer,'param':[bank,inv,id,100],'nokey':true},
+				{'name':'Withdraw 1000','func':Itemlist.transfer,'param':[bank,inv,id,1000],'nokey':true},
+				{'name':'Withdraw ' + List.main[key].pref.bankTransferAmount,'func':Itemlist.transfer,'param':[bank,inv,id,List.main[key].pref.bankTransferAmount],'nokey':true},
 			]
 		});
 	}
