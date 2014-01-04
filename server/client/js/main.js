@@ -75,9 +75,8 @@ Init.game = function (data) {
 	$("#signDiv")[0].style.display = "none"; 	//remove enter user and psw
 	$("#gameDiv")[0].style.display = "inline";  //show game
 	
-	for(var i in data.main){ main[i] = data.main[i]; }    //set init values sent by server
-	
-	passiveGrid = Passive.init(main.passiveGrid);  //init Passive Grid
+	Init.game.main(data);
+	Init.game.other(data);
 	
 	//Add Canvas. param2 = z-index
 	canvasDiv = $("#canvasDiv")[0];   
@@ -102,7 +101,7 @@ Init.game = function (data) {
 	Init.db.customBoost();
 	//initAbilityModDb();   //need fixing
 	Img.preload(Img.preloader,function(){   //load images
-		initPlayer(data);
+		Init.game.player(data);
 		gameStarted = true;
 		setInterval(Loop,40);
 		socket.emit('clientReady',1); 
@@ -110,6 +109,19 @@ Init.game = function (data) {
 	});
 }
 
+Init.game.main = function(data){
+	for(var i in data.main){ main[i] = data.main[i]; }    //set init values sent by server
+}
+Init.game.player = function(data){    //use data sent from server and default to create the player
+	player = Mortal.template('player');
+	for(var i in data.player){ player[i] = data.player[i]; }
+	$("#chatUserName")[0].innerHTML = player.name + ': '; 
+}
+Init.game.other = function(data){    //use data sent from server and default to create the player
+	Db.passive = data.other.passive.db;
+	delete data.other.passive.db;
+	for(var i in data.other.passive) Db.passive[i] = data.other.passive[i];	
+}
 //To add a canvas to the game
 addCanvas = function(name,id,z){
 	var cv = document.createElement("canvas");

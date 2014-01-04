@@ -1,21 +1,6 @@
 //Player
 //Check client/shared/mortalShare for player attributes information
 
-if(!server){
-	initPlayer = function(data){    //use data sent from server and default to create the player
-		player = Mortal.template('player');
-		for(var i in data.player){ player[i] = data.player[i]; }
-		$("#chatUserName")[0].innerHTML = player.name + ': '; 
-	}
-}
-
-
-
-
-
-
-
-
 //Mortal
 Mortal = typeof Mortal !== 'undefined' ? Mortal : {};
 
@@ -247,19 +232,6 @@ Mortal.learnAbility = function(mort,name){
 	var ab = Ability.uncompress(deepClone(Db.ability[name]));
 		
 	mort.abilityList[ab.id] = ab;
-}
-
-Mortal.selectPassive = function(mort,ii,jj){
-	//when player wants to add a passive
-	var key = mort.id;
-	var main = List.main[key];
-	if(main.passivePt === 0){ Chat.add(key,"You don't have any Passive Points to use."); return;}
-	if(main.passive[ii][jj] === '1'){ Chat.add(key,"You already have this passive.");	return;}
-	if(!Passive.test(main.passive,ii,jj)){Chat.add(key,"You can't choose this passive yet.");	return;}
-	
-	main.passivePt--;
-	main.passive[ii] = main.passive[ii].slice(0,jj) + '1' + main.passive[ii].slice(jj+1);
-	Mortal.permBoost(List.all[key],'Passive',Passive.convert(main.passive));
 }
 
 Mortal.death = function(mort){	//only for enemy atm

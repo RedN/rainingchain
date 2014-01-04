@@ -9,7 +9,7 @@
 */
 
 Init.db.passive = function(){	
-	passiveGrid = [
+	Db.passive = [
 		[['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1]],
 		[['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1]],
 		[['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1]],
@@ -35,12 +35,12 @@ Init.db.passive = function(){
 	];
 	
 	//by default, each stat has a 100 count.
-	for(var i = 0 ; i < passiveGrid.length ; i++){
-		for(var j = 0 ; j < passiveGrid[i].length ; j++){
-			var pg = passiveGrid[i][j];
+	for(var i = 0 ; i < Db.passive.length ; i++){
+		for(var j = 0 ; j < Db.passive[i].length ; j++){
+			var pg = Db.passive[i][j];
 			if(typeof pg === 'object'){
 				//stat random atm
-				passiveGrid[i][j] = {'stat':Passive.init.randomStat(),'value':pg[1],'count':100};
+				Db.passive[i][j] = {'stat':Passive.init.randomStat(),'value':pg[1],'count':100};
 			}
 			if(typeof pg === 'string'){
 				pg = {'type':'custom','value':pg,'count':100};
@@ -54,13 +54,13 @@ Init.db.passive = function(){
 			for(var j = 0 ; j < info[i].passive.length ; j++){
 				for(var k = 0 ; k < info[i].passive[j].length ; k++){
 					if(info[i].passive[j][k] == '1'){
-						passiveGrid[j][k].count++;
+						Db.passive[j][k].count++;
 					}
 				}
 			}
 		}
-		passiveGrid = Passive.init(passiveGrid);
-		passiveGrid = Passive.init.value(passiveGrid);
+		Db.passive = Passive.init(Db.passive);
+		Db.passive = Passive.init.value(Db.passive);
 	});
 
 
@@ -76,14 +76,14 @@ Passive = {};
 //convert the list of passive owned by player into actual boost.
 Passive.convert = function(p){
 	var temp = [];
-	for(var i = 0 ; i < passiveGrid.length ; i++){
-		for(var j = 0 ; j < passiveGrid[i].length ; j++){
-			if(p[i][j] == '1' && typeof passiveGrid[i][j] === 'object'){
-				if(passiveGrid[i][j].stat){
-					temp.push({'type':'base','value':passiveGrid[i][j].value,'stat':passiveGrid[i][j].stat});
+	for(var i = 0 ; i < Db.passive.length ; i++){
+		for(var j = 0 ; j < Db.passive[i].length ; j++){
+			if(p[i][j] == '1' && typeof Db.passive[i][j] === 'object'){
+				if(Db.passive[i][j].stat){
+					temp.push({'type':'base','value':Db.passive[i][j].value,'stat':Db.passive[i][j].stat});
 				}
-				if(passiveGrid[i][j].type === 'custom'){
-					temp.push({'type':'custom','value':passiveGrid[i][j].value});
+				if(Db.passive[i][j].type === 'custom'){
+					temp.push({'type':'custom','value':Db.passive[i][j].value});
 				}
 			}
 		}
@@ -97,10 +97,11 @@ Passive.convert = function(p){
 
 
 Passive.init = function(pg){
+	//probably here cuz attribute to array are lost
 	pg.min = findMin(pg,function(a){ return findMin(a,function(b){ return b.count || 1/0; })});  
 	pg.max = findMax(pg,function(a){ return findMax(a,function(b){ return b.count || -1/0; })});  
-	pg.sum = 0;
-	pg.option = 0;
+	pg.sum = 0;		//total amount of passive pts spent
+	pg.option = 0;	//amount of different options
 	for(var i = 0 ; i < pg.length ; i++){
 		for(var j = 0 ; j < pg[i].length ; j++){
 			if(typeof pg[i][j] === 'object'){
@@ -160,9 +161,9 @@ Passive.template = function(){
 //test if player can choose a certain passive
 Passive.test = function(passive,i,j){
 	var n = [Math.max(0,i-1),j];
-	var s = [Math.min(passiveGrid.length-1,i+1),j];
+	var s = [Math.min(Db.passive.length-1,i+1),j];
 	var w = [i,Math.max(0,j-1)];
-	var e = [i,Math.min(passiveGrid[i].length-1,j+1)];
+	var e = [i,Math.min(Db.passive[i].length-1,j+1)];
 	var pos = [n,s,w,e];
 	
 	for(var i in pos){

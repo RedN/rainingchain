@@ -212,11 +212,11 @@ Command.list['win,quest,toggleBonus'] = function(key,id,bonus){
 
 Command.list['win,passive,select'] = function(key,i,j){
 	i = Math.floor(+i); j = Math.floor(+j);
-	if(!passiveGrid[i] || !passiveGrid[i][j]){ return; }
+	if(!Db.passive[i] || !Db.passive[i][j]){ return; }
 	
 	if(typeof i !== 'number' || typeof j !== 'number'){ return; }
 	
-	Mortal.selectPassive(key,i,j);
+	Main.selectPassive(List.main[key],i,j);
 }
 
 Command.list['win,ability,swap'] = function(key,input,ab){

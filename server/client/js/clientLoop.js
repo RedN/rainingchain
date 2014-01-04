@@ -31,7 +31,7 @@ Loop.update = function(){
 	main.chatInput = '';
 	if(main.help) updateHelp(main.help);	
 	
-	
+	Mortal.update.permBoost(player);
 	
 	
 }

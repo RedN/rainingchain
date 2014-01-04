@@ -935,26 +935,26 @@ Draw.window.passive.grid = function(key){ ctxrestore();
 			//Border
 			ctx.globalAlpha = 0.5;
 			if(main.pref.passiveView === 'normal'){ ctx.fillStyle =	+main.passive[i][j] ? 'green' : (Passive.test(main.passive,i,j) ? '#FFFF00': 'red');}
-			if(main.pref.passiveView === 'heat'){var n = (passiveGrid[i][j].count-passiveGrid.min) / (passiveGrid.max-passiveGrid.min);	ctx.fillStyle =	Draw.gradientRG(n);}
+			if(main.pref.passiveView === 'heat'){var n = (Db.passive[i][j].count-Db.passive.min) / (Db.passive.max-Db.passive.min);	ctx.fillStyle =	Draw.gradientRG(n);}
 			ctx.fillRect(numX,numY,ic,ic);
 		
 			//Icon
 			ctx.globalAlpha = 0.5;
 			if(+main.passive[i][j]){ ctx.globalAlpha = 1; }
-			var name = passiveGrid[i][j].stat ? Db.stat[passiveGrid[i][j].stat].icon : Db.customBoost[passiveGrid[i][j].value].icon;
+			var name = Db.passive[i][j].stat ? Db.stat[Db.passive[i][j].stat].icon : Db.customBoost[Db.passive[i][j].value].icon;
 			Draw.icon(name,[numX+border2,numY+border2],icon);
 			
 			//Hover
 			if(!mouse.drag.active && Collision.PtRect(Collision.getMouse(key),[numX,numX+ic,numY,numY+ic])){
-				var hover = passiveGrid[i][j];
+				var hover = Db.passive[i][j];
 			}
 			
 			//Button
-			if(typeof passiveGrid[i][j] === 'object'){
+			if(typeof Db.passive[i][j] === 'object'){
 				Button.creation(0,{
 				"rect":[numX,numX+ic,numY,numY+ic],
 				"right":{"func":Chat.send.command,"param":['$win,passive,select,' + i + ',' + j]},
-				'text':'Choose ' + (passiveGrid[i][j].stat ? Db.stat[passiveGrid[i][j].stat].name : Db.customBoost[passiveGrid[i][j].value].name) ,
+				'text':'Choose ' + (Db.passive[i][j].stat ? Db.stat[Db.passive[i][j].stat].name : Db.customBoost[Db.passive[i][j].value].name) ,
 				});	
 			}
 			
@@ -1005,7 +1005,7 @@ Draw.window.passive.hover = function(over){ ctxrestore();
 	
 	if(over.stat){
 		var pop = 'Popularity: ';
-		pop += round(100*over.count/passiveGrid.average,1) + '%';
+		pop += round(100*over.count/Db.passive.average,1) + '%';
 		ctx.fillText(pop,ssx + 5,ssy+1+25*1);
 		var value = 'Value: +' + round(over.value,5);
 		ctx.fillText(value,ssx + 5,ssy+1+25*2);

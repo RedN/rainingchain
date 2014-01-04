@@ -153,7 +153,7 @@ Save.load = function (key,dbb,user,socket){
 
 //Value sent to client when starting game
 Save.load.initData = function(key){
-    var data = {'player':{},'main':{}};
+    var data = {'player':{},'main':{},'other':{}};
     var obj = {'player':List.all[key], 'main':List.main[key]}
 
     var array = {
@@ -169,7 +169,6 @@ Save.load.initData = function(key){
             'abilityList':Change.send.convert.abilityList
         },
         'main':{
-            'passiveGrid':(function(){ return passiveGrid; }),
             'passive':0,
             'social':0,
             'pref':0,
@@ -186,7 +185,7 @@ Save.load.initData = function(key){
             data[i][j] = obj[i][j];
         }
     }
-
+	data.other.passive = {'db':Db.passive,'min':Db.passive.min,'max':Db.passive.max,'sum':Db.passive.sum,'option':Db.passive.option,'average':Db.passive.average};
     return data;//
 }
 
