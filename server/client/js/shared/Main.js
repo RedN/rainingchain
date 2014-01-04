@@ -68,7 +68,6 @@ Main.selectPassive = function(main,i,j){
 	Mortal.permBoost(List.all[key],'Passive',Passive.convert(main.passive));
 }
 
-
 Main.closeAllWindow = function(main){
 	if(main.windowList.trade.trader){ List.main[main.windowList.trade.trader].windowList.trade = 0; }
 	
@@ -98,7 +97,6 @@ Main.openWindow = function(main,name,param){
 	}
 }
 
-
 Main.openPopup = function(main,name,id){
 	var player = List.all[main.id];
 	if(name === 'equip'){
@@ -115,9 +113,15 @@ Main.selectInv = function(main,obj){
 	main.temp.reset.selectInv = 1;
 }
 
-
-
-
+Main.abilityModClick = function(main,id){
+	if(!main.windowList.ability){
+		Chat.add(main.id,'The Ability Window needs to be opened to use this mod. It will have the following effect: <br>' + abilityModDb[id].info);
+		return;
+	} else {
+		main.chatInput = ['$win,ability,mod,' + id + ',',0];
+	}
+	
+}
 
 
 

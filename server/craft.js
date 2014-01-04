@@ -166,85 +166,8 @@ Init.db.boost = function(){
 
 Craft = {};
 
-Craft.create = function(seed){
-	seed = Craft.seed(seed);
-	if(seed.category === 'armor' || seed.category === 'weapon'){ return Craft.create.equip(seed); }
-}
-
-Craft.create.equip = function(seed){
-	var equip = Equip.template();
-	equip.piece = seed.piece;
-	equip.type = seed.type;
-	equip.visual = seed.piece + '.' + seed.type;
-	equip.name = seed.type;
-	equip.lvl = seed.lvl;
-	equip.seed = seed;
-	
-	equip.boost = Craft.boost(seed,equip.boost,seed.amount);
-	equip.id = Math.randomId();
-	
-	
-	for(var k in Cst.element.list){
-		var i = Cst.element.list[k];
-		equip.defRatio[i] = Math.random()*0.5+0.5;
-		equip.dmgRatio[i] = Math.random()*0.5+0.5;
-	}
-	var mod = 0.9 + Math.pow(Math.random(),1/(seed.quality+1))*0.2;
-	equip.defMain = Math.pow(seed.lvl+10,1.5)/30 * mod;	
-	equip.dmgMain = Math.pow(seed.lvl+10,1.5)/30 * mod;	
-	
-	Equip.creation(equip);
-	
-	return equip.id;
-}
-
-
-
-
-Craft.create.equip.color = function(w){
-	if(w.boost.length === 0) return 'white'; 
-	if(w.boost.length <= 2) return 'blue';  
-	return 'yellow';  
-}
-
-
-
-//Init
-Craft.plan = function(key,sed,req){
-	var seed = sed;
-	var bool = true;
-	var inv = List.main[key].invList;
-	var string = 'To craft ' + seed.piece + ': <br>';
-	
-	//verify if has skill lvl
-	for(var i in req.skill){
-		var color = 'green';
-		if(List.main[key].skill[i] < req.skill[i]){ bool = false; color = 'red';}
-		string += "<span style='color:" + color + "'> Level" + req.item[i].lvl + " " + Db.item[req.item[i].item].name + "</span>, ";
-	}
-	
-	//verify if has item
-	for(var i in req.item){
-		var color = 'green';
-		if(!Itemlist.have(inv,req.item[i].item,req.item[i].amount)){	bool = false; color = 'red';}
-		string += "<span style='color:" + color + "'> x" + req.item[i].amount + " " + Db.item[req.item[i].item].name + "</span>, ";
-	}
-	
-	if(bool){ 
-		for(var i in req.item){	Itemlist.remove(inv,req.item[i].item,req.item[i].amount);}
-		var id = Craft.create(seed);
-		Itemlist.add(inv,id);
-	}
-	else { Chat.add(key,string); }
-	
-	
-}
-
-
-
-//set the default seed. take into consideration if weapon or armor
 Craft.seed = function(seed){ //need to fix for ability too
-	seed = seed ? deepClone(seed) : {}; 
+	//set the default seed. take into consideration if weapon or armorseed = seed ? deepClone(seed) : {}; 
 	
 	seed.category = seed.category || 'armor'; 
 	if(seed.category === 'weapon'){ 
@@ -284,8 +207,112 @@ Craft.seed.template = function(obj){
 	return seed;
 }
 
+Craft.plan = function(key,sed,req){
+	var seed = sed;
+	var bool = true;
+	var inv = List.main[key].invList;
+	var string = 'To craft ' + seed.piece + ': <br>';
+	
+	//verify if has skill lvl
+	for(var i in req.skill){
+		var color = 'green';
+		if(List.main[key].skill[i] < req.skill[i]){ bool = false; color = 'red';}
+		string += "<span style='color:" + color + "'> Level" + req.item[i].lvl + " " + Db.item[req.item[i].item].name + "</span>, ";
+	}
+	
+	//verify if has item
+	for(var i in req.item){
+		var color = 'green';
+		if(!Itemlist.have(inv,req.item[i].item,req.item[i].amount)){	bool = false; color = 'red';}
+		string += "<span style='color:" + color + "'> x" + req.item[i].amount + " " + Db.item[req.item[i].item].name + "</span>, ";
+	}
+	
+	if(bool){ 
+		for(var i in req.item){	Itemlist.remove(inv,req.item[i].item,req.item[i].amount);}
+		var id = Craft.create(seed);
+		Itemlist.add(inv,id);
+	}
+	else { Chat.add(key,string); }
+	
+	
+}
 
-//Orb
+Craft.create = function(seed){
+	seed = Craft.seed(seed);
+	if(seed.category === 'armor' || seed.category === 'weapon'){ return Craft.equip(seed); }
+}
+
+Craft.equip = function(seed){
+	var equip = Equip.template();
+	equip.piece = seed.piece;
+	equip.type = seed.type;
+	equip.visual = seed.piece + '.' + seed.type;
+	equip.name = seed.type;
+	equip.lvl = seed.lvl;
+	equip.seed = seed;
+	
+	equip.boost = Craft.boost(seed,equip.boost,seed.amount);
+	equip.id = Math.randomId();
+	
+	
+	for(var k in Cst.element.list){
+		var i = Cst.element.list[k];
+		equip.defRatio[i] = Math.random()*0.5+0.5;
+		equip.dmgRatio[i] = Math.random()*0.5+0.5;
+	}
+	var mod = 0.9 + Math.pow(Math.random(),1/(seed.quality+1))*0.2;
+	equip.defMain = Math.pow(seed.lvl+10,1.5)/30 * mod;	
+	equip.dmgMain = Math.pow(seed.lvl+10,1.5)/30 * mod;	
+	
+	Equip.creation(equip);
+	
+	return equip.id;
+}
+
+Craft.equip.color = function(w){
+	if(w.boost.length === 0) return 'white'; 
+	if(w.boost.length <= 2) return 'blue';  
+	return 'yellow';  
+}
+
+//{Boost
+Craft.boost = function(seed,where,amount){
+	//add a boost to a weapon/armor/other using a seed
+	for(var i = 0 ; i < amount && i > -1; i++){
+		var boost = Craft.boost.generate(seed);
+		for(var j in where){
+			if(where[j].stat === boost.stat){ 
+				i -= 0.99;
+				continue;
+			} 
+		}
+		where.push(boost);		
+	}
+	return where;
+}
+
+Craft.boost.generate = function(seed){
+	var boost = Db.boost[seed.piece].random(seed.lvl);
+	var value = Craft.boost.generate.roll(boost.value,seed.quality);
+	
+	return {'stat':boost.stat,
+			'type':boost.type || 'base',
+			'value':value,
+			'tier':Craft.boost.generate.tier(boost.value,value)
+	};
+}
+
+Craft.boost.generate.roll = function(mm,qual){
+	qual = qual || 0;
+	return mm[0] + (mm[1]-mm[0])*( Math.pow(Math.random(),1/(qual+1)));
+}
+
+Craft.boost.generate.tier = function(mm,value){
+	return (value-mm[0])/(mm[1]-mm[0])
+}
+//}
+
+//should be under Main.useOrb??
 Craft.orb = function(key,orb,amount,wId,mod){
 	var inv = List.main[key].invList;
 
@@ -304,7 +331,7 @@ Craft.orb = function(key,orb,amount,wId,mod){
 	if(orb === 'upgrade'){
 		if(!mod){
 			equip.orb.upgrade.amount += amount;
-			equip.orb.upgrade.bonus = orbFormula(equip.orb.upgrade.amount);
+			equip.orb.upgrade.bonus = Craft.orb.formula(equip.orb.upgrade.amount);
 		} else if(equip.modList && equip.modList[mod] !== undefined){
 			equip.modList[mod]++;
 		}
@@ -331,11 +358,14 @@ Craft.orb = function(key,orb,amount,wId,mod){
 	}
 }
 
+Craft.orb.formula = function(x){
+	return 0.9+0.1*Math.log10(10+x);
+}
 
 
-//transform equip into shard
+
 Craft.salvage = function(key,id){
-	var inv = List.main[key].invList;
+	//transform equip into shardvar inv = List.main[key].invList;
 	if(Itemlist.have(inv,id)){
 		var type = Db.item[id].type;
 		if(type === 'weapon'){ var equip = Db.equip[id]; }
@@ -346,52 +376,132 @@ Craft.salvage = function(key,id){
 	}
 }
 
-
-
-//add a boost to a weapon/armor/other using a seed
-Craft.boost = function(seed,where,amount){
-	for(var i = 0 ; i < amount && i > -1; i++){
-		var boost = Craft.boost.generate(seed);
-		for(var j in where){
-			if(where[j].stat === boost.stat){ 
-				i -= 0.99;
-				continue;
-			} 
-		}
-		where.push(boost);		
-	}
-	return where;
-}
-
-Craft.boost.generate = function(seed){
-	var boost = Db.boost[seed.piece].random(seed.lvl);
-	var value = Craft.boost.generate.roll(boost.value,seed.quality);
-	
-	return {'stat':boost.stat,
-			'type':boost.type || 'base',
-			'value':value,
-			'tier':Craft.boost.generate.tier(boost.value,value)
-	};
-}
-
-
-
-Craft.boost.generate.roll = function(mm,qual){
-	qual = qual || 0;
-	return mm[0] + (mm[1]-mm[0])*( Math.pow(Math.random(),1/(qual+1)));
-}
-
-Craft.boost.generate.tier = function(mm,value){
-	return (value-mm[0])/(mm[1]-mm[0])
-}
-
-
-//Make it so dmg ratio is always 0<x<1
 Craft.setDmgViaRatio = function(info){
+	
+	//Make it so dmg ratio is always 0<x<1
 	var dmg = {};
 	var sum = 0;
 	for(var i in info.dmgRatio){sum += info.dmgRatio[i];}
 	for(var i in info.dmgRatio){info.dmgRatio[i] = info.dmgRatio[i] / sum;}
 	for(var i in info.dmgRatio){ dmg[i] = info.dmgRatio[i] * info.dmgMain; }
 }
+
+
+
+//{Ability BROKEN
+Craft.ability = function(seed){
+	//seed only needs ab id and qual
+
+	var a = Craft.ability.template(seed);
+	
+	Ability.creation(a);
+	
+	return a.id;	
+
+}
+
+Craft.ability.template = function(seed){
+	var qua = seed.quality || 1;
+	var an = seed.name || 'fireball';
+	//assume that action atk arent arrays
+
+	var ab = deepClone(abiConsDb[an]);
+	
+	if(typeof ab.period === 'object'){ ab.period = Craft.boost.generate.roll(ab.period,qua); }
+	
+	if(ab.action && ab.action.func === 'Combat.action.attack'){
+		var atk = ab.action.param.attack;
+		
+		//All
+		if(typeof atk.angle === 'object'){ atk.angle = Craft.boost.generate.roll(atk.angle,qua); }
+		if(typeof atk.amount === 'object'){ atk.amount = Craft.boost.generate.roll(atk.amount,qua); }
+		if(typeof atk.dmgMain === 'object'){ atk.dmgMain = Craft.boost.generate.roll(atk.dmgMain,qua); }
+		for(var i in atk.dmgRatio){
+			if(typeof atk.dmgRatio[i] === 'object'){ atk.dmgRatio[i] = Craft.boost.generate.roll(atk.dmgRatio[i],qua); }
+		}
+		
+		//Status
+		for(var st in Cst.status.list){
+			var i = Cst.status.list[st];
+			if(typeof atk[i] === 'object'){ 
+				if(typeof atk[i].chance === 'object'){ atk[i].chance = Craft.boost.generate.roll(atk[i].chance,qua); }
+				if(typeof atk[i].magn === 'object'){ atk[i].magn = Craft.boost.generate.roll(atk[i].magn,qua); }
+				if(typeof atk[i].time === 'object'){ atk[i].time = Craft.boost.generate.roll(atk[i].time,qua); }
+			}
+		}
+		if(atk.leech){
+			if(typeof atk.leech.chance === 'object'){ atk.leech.chance = Craft.boost.generate.roll(atk.leech.chance,qua); }
+			if(typeof atk.leech.magn === 'object'){ atk.leech.magn = Craft.boost.generate.roll(atk.leech.magn,qua); }
+			if(typeof atk.leech.time === 'object'){ atk.leech.time = Craft.boost.generate.roll(atk.leech.time,qua); }
+		}
+		if(atk.pierce){
+			if(typeof atk.pierce.chance === 'object'){ atk.pierce.chance = Craft.boost.generate.roll(atk.pierce.chance,qua); }
+			if(typeof atk.pierce.dmgReduc === 'object'){ atk.pierce.dmgReduc = Craft.boost.generate.roll(atk.pierce.dmgReduc,qua); }
+		}
+		
+		//need to add curse etc...
+		
+	}
+	ab.id = Math.randomId();
+	
+	return ab;
+}
+
+Craft.ability.mod = function(key,abid,mod){
+	//abid: Ability Id, mod: mod Id
+	
+	//Verify
+	var ab = deepClone(Db.ability[abid]);
+	if(ab.modList[mod] !== undefined){ Chat.add(key,'This ability already has this mod.'); return; }
+	if(Object.keys(ab.modList).length > 5){ Chat.add(key,'This ability already has the maximal amount of mods.'); return; }
+	
+	//Add
+	ab.modList[mod] = 0;
+	Mortal.removeAbility(List.all[key],abid);
+	ab.id = Math.randomId();
+	Ability.creation(ab);
+	Mortal.learnAbility(List.all[key],ab.id);
+	Chat.add(key,'Mod Added.');
+	Itemlist.remove(List.main[key].invList,'mod-'+ mod);	
+}
+
+Craft.ability.attack = function(seed){
+	var possible = {
+		's':[
+			{'mod':1,'hit':'attack3','dmgRatio':{'melee':100,'range':0,'magic':0,'fire':5*Math.random(),'cold':5*Math.random(),'lightning':5*Math.random()}},
+			{'mod':1,'hit':'fire2','dmgRatio':{'melee':100,'range':0,'magic':0,'fire':25,'cold':5*Math.random(),'lightning':5*Math.random()}},
+			{'mod':1,'hit':'ice2','dmgRatio':{'melee':100,'range':0,'magic':0,'fire':5*Math.random(),'cold':25,'lightning':5*Math.random()}},
+			{'mod':1,'hit':'thunder2','dmgRatio':{'melee':100,'range':0,'magic':0,'fire':5*Math.random(),'cold':5*Math.random(),'lightning':25}},
+			{'mod':1,'hit':'darkness1','dmgRatio':{'melee':100,'range':0,'magic':0,'fire':25,'cold':25,'lightning':25}},
+			],
+
+		
+		'b':[
+			{'mod':1,'image':'arrow','hit':'attack3','dmgRatio':{'melee':0,'range':100,'magic':0,'fire':5*Math.random(),'cold':5*Math.random(),'lightning':5*Math.random()}},
+			{'mod':1,'image':'arrow','hit':'fire2','dmgRatio':{'melee':0,'range':100,'magic':0,'fire':25,'cold':5*Math.random(),'lightning':5*Math.random()}},
+			{'mod':1,'image':'arrow','hit':'ice2','dmgRatio':{'melee':0,'range':100,'magic':0,'fire':5*Math.random(),'cold':25,'lightning':5*Math.random()}},
+			{'mod':1,'image':'arrow','hit':'thunder2','dmgRatio':{'melee':0,'range':100,'magic':0,'fire':5*Math.random(),'cold':5*Math.random(),'lightning':25}},
+			{'mod':1,'image':'arrow','hit':'darkness1','dmgRatio':{'melee':0,'range':100,'magic':0,'fire':25,'cold':25,'lightning':25}},
+			
+			{'mod':1,'image':'fireball','hit':'fire2','dmgRatio':{'melee':0,'range':0,'magic':100,'fire':100,'cold':5*Math.random(),'lightning':5*Math.random()}},
+			{'mod':1,'image':'fireball','hit':'fire2','dmgRatio':{'melee':0,'range':0,'magic':50,'fire':150,'cold':5*Math.random(),'lightning':5*Math.random()}},
+			{'mod':1,'image':'fireball','hit':'fire2','dmgRatio':{'melee':0,'range':0,'magic':150,'fire':50,'cold':5*Math.random(),'lightning':5*Math.random()}},
+			
+			{'mod':1,'image':'iceshard','hit':'ice2','dmgRatio':{'melee':0,'range':0,'magic':100,'fire':5*Math.random(),'cold':100,'lightning':5*Math.random()}},
+			{'mod':1,'image':'iceshard','hit':'ice2','dmgRatio':{'melee':0,'range':0,'magic':50,'fire':5*Math.random(),'cold':150,'lightning':5*Math.random()}},
+			{'mod':1,'image':'iceshard','hit':'ice2','dmgRatio':{'melee':0,'range':0,'magic':150,'fire':5*Math.random(),'cold':50,'lightning':5*Math.random()}},
+		
+			{'mod':1,'image':'lightningball','hit':'thunder2','dmgRatio':{'melee':0,'range':0,'magic':100,'fire':5*Math.random(),'cold':5*Math.random(),'lightning':100}},
+			{'mod':1,'image':'lightningball','hit':'thunder2','dmgRatio':{'melee':0,'range':0,'magic':50,'fire':5*Math.random(),'cold':5*Math.random(),'lightning':150}},
+			{'mod':1,'image':'lightningball','hit':'thunder2','dmgRatio':{'melee':0,'range':0,'magic':150,'fire':5*Math.random(),'cold':5*Math.random(),'lightning':50}},
+		]
+	}
+	
+	return possible[seed.type].random();
+	
+}
+
+//}
+
+
 

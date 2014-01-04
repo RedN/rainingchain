@@ -234,6 +234,8 @@ Mortal.learnAbility = function(mort,name){
 	mort.abilityList[ab.id] = ab;
 }
 
+Mortal.examineAbility = function(mort){}
+
 Mortal.death = function(mort){	//only for enemy atm
 	mort.dead = 1;
 	

@@ -228,7 +228,7 @@ Command.list['win,ability,swap'] = function(key,input,ab){
 
 Command.list['win,ability,mod'] = function(key,modid,abid){
 	if(!List.all[key].abilityList[abid] || !abilityModDb[modid] || !Itemlist.have(List.main[key].invList,'mod-'+modid)){ Chat.add(key,'bad'); }
-	addAbilityMod(key,abid,modid);
+	Craft.ability.mod(key,abid,modid);
 }
 
 Command.list['win,ability,upgrade'] = function(key,abid,amount){

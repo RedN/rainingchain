@@ -207,7 +207,7 @@ Equip.creation = function(equip){
 		equip.def[j] = equip.defRatio[j] * equip.defMain; 
 		equip.dmg[j] = equip.dmgRatio[j] * equip.dmgMain;
 	}
-	equip.color = Craft.create.equip.color(equip);
+	equip.color = Craft.equip.color(equip);
 	equip.category = Cst.equip.weapon.piece.indexOf(equip.piece) !== -1 ? 'weapon' : 'armor';
 	Db.equip[equip.id] = equip;
 	

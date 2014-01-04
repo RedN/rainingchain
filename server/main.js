@@ -27,7 +27,7 @@ exports.initServer = function (){
 			Init.db.stat();
 			
 			
-			initAbilityModDb();
+			//initAbilityModDb();
 			
 			Init.db.sprite();
 			Init.db.map();
@@ -46,13 +46,13 @@ exports.initServer = function (){
 			
 			Init.db.passive();
 			Init.db.clan();
-			initAbiConsDb();
+			//initAbiConsDb();
 			Test.serverStart();
 			setInterval(Loop,40);
 			
 			//Track Global Variables
 			var tmp = Object.keys(this); for(var i in ObjectKeys) tmp.splice(tmp.indexOf(ObjectKeys[i]),1);
-			//permConsoleLog(tmp);
+			permConsoleLog(tmp);
     
 			
 		})
@@ -60,9 +60,5 @@ exports.initServer = function (){
 	
 	db.account.update({},{'$set':{online:0}},{multi:true},function(err, results) { if(err) throw err });   //set all players offline
 }
-
-
-
-
 
 

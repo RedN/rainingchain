@@ -1,7 +1,3 @@
-//to be improved
-
-
-
 /*
 a['bulletMulti'] = {
     'type':'attack',                    //attack, buff, curse, summon
@@ -18,15 +14,10 @@ a['bulletMulti'] = {
 			'leech':{'chance':1,'magn':1,'time':1}
 	}}}};
 */	
-	
-	
-Ability = {};
-	
-//default ability are inside logIn.js defaultPlayer
 
 Init.db.ability = function(cb){
 	Db.ability = {}; var abilityPreDb = {}; var a = abilityPreDb;
-	//note: defaultplayer depends on at least 1 ability
+	
 	db.ability.find({},{'_id':0},function(err, results) { if(err) throw err
 		for(var i in results){
 			a[results[i].id] = results[i];
@@ -146,10 +137,81 @@ Init.db.ability = function(cb){
 		a[i].id = i;
 		Ability.creation(a[i]);
 	}	
-	cb();});		
+	cb();});
+	
+	if(server){
+		Init.db.ability.orb();
+		Init.db.ability.mod();
+		Init.db.ability.template();	
+	}
+}
+
+Init.db.ability.template = function(){
+	Db.ability.template = {}; var a = Db.ability.template;
+	
+	a['fireball'] = {'type':'attack','name':'Fireball','icon':'attackMagic.fireball','orbMod':'dmg',
+		'spd':{'main':0.8,'support':0.2},'period':[15,20],'action':{'func':'Combat.action.attack','param':{'anim':'Attack',
+		'attack':{type:"bullet",
+			'angle':0,'amount':1, 'aim': 0,'objImg':{'name':"arrow",'sizeMod':1},'hitImg':{'name':"fire_explosion",'sizeMod':0.5},
+			'dmgMain':[1,1.2],'dmgRatio':{'melee':0,'range':0,'magic':[25,50],'fire':[25,50],'cold':0,'lightning':0},
+			'burn':{'chance':[1.5,2],'magn':[1,1.2],'time':1}
+		}}},
+	};
+	
+	
+	//need to add arrayfy
+	
+	for(var i in a){
+		if(Db.ability.orb[a[i].orbMod]){a[i].orb = {'upgrade':{'amount':0,'bonus':a[i].orbMod}};} 
+		else { Db.ability.orb[a[i].id] = a[i].orbMod; a[i].orbMod = a[i].id; }
+	}
 	
 }
 
+Init.db.ability.mod = function(){	//needed by client
+	Db.ability.mod = {
+		'x2b':{
+			'name':'x2 Bullets',
+			'info':'Your ability shoots x2 more bullets. Main damage is reduced by 50%.',
+			'func':(function(ab,orb,log){
+				try {
+					var atk = ab.action[0].param.attack[0];
+					atk.amount *= 2;
+					atk.dmgMain /= 1.5;
+					return ab;
+				} catch(err){ return ab; }
+			})},	
+		
+	}
+	
+	
+	for(var i in Db.ability.mod){
+		var item = {};
+		item.name = Db.ability.mod[i].name;
+		item.visual = 'plan.planA';
+		item.option = [	{'name':'Select Mod','func':'Main.abilityModClick','param':[i]} ];
+		item.type = 'mod';
+		item.id = 'mod-'+i;
+		Item.creation(item);
+	
+	}
+	
+	
+}
+
+Init.db.ability.orb = function(){
+	Db.ability.orb = {
+		'dmg':(function(ab,lvl){
+			return ab;
+		}),
+		'none':(function(ab,lvl){
+			return ab;
+		}),
+	}
+}
+
+
+Ability = {};
 Ability.creation = function(a){
 	
 	//Setting Ability
@@ -185,7 +247,7 @@ Ability.creation = function(a){
 	var item = {};
 	item.name = a.name;
 	item.visual = 'plan.planA';
-	item.option = [	{'name':'Examine Ability','func':'Ability.examine','param':[a.id]},
+	item.option = [	{'name':'Examine Ability','func':'Mortal.examineAbility','param':[a.id]},
 					{'name':'Learn Ability','func':'Mortal.learnAbility','param':[a.id]},
 	];
 	item.type = 'ability';
@@ -195,165 +257,13 @@ Ability.creation = function(a){
 	return a.id;
 }
 
-Ability.examine = function(){}
-
-initAbiConsDb = function(){
-	abiConsDb = {}; var a = abiConsDb;
-	
-	a['fireball'] = {'type':'attack','name':'Fireball','icon':'attackMagic.fireball','orbMod':'dmg',
-		'spd':{'main':0.8,'support':0.2},'period':[15,20],'action':{'func':'Combat.action.attack','param':{'anim':'Attack',
-		'attack':{type:"bullet",
-			'angle':0,'amount':1, 'aim': 0,'objImg':{'name':"arrow",'sizeMod':1},'hitImg':{'name':"fire_explosion",'sizeMod':0.5},
-			'dmgMain':[1,1.2],'dmgRatio':{'melee':0,'range':0,'magic':[25,50],'fire':[25,50],'cold':0,'lightning':0},
-			'burn':{'chance':[1.5,2],'magn':[1,1.2],'time':1}
-		}}},
-	};
-	
-	
-	//need to add arrayfy
-	
-	for(var i in a){
-		if(abilityOrbModDb[a[i].orbMod]){a[i].orb = {'upgrade':{'amount':0,'bonus':a[i].orbMod}};} 
-		else { abilityOrbModDb[a[i].id] = a[i].orbMod; a[i].orbMod = a[i].id; }
-	}
-	
-}
-
-abilityOrbModDb = {
-	'dmg':(function(ab,lvl){
-		return ab;
-	}),
-	'none':(function(ab,lvl){
-		return ab;
-	}),
-
-}
-
-
-/*
-ts("useAbiCons({'quality':1,'name':'fireball','lvl':10})")
-
-ts('Mortal.learnAbility(p,"t90ctbj4i")')
-
-ts("addAbilityMod(key,'bulletMulti','x2b')")
-*/
-
-useAbiCons = function(seed){
-	var qua = seed.quality || 1;
-	var an = seed.name || 'fireball';
-	//assume that action atk arent arrays
-
-	var ab = deepClone(abiConsDb[an]);
-	
-	if(typeof ab.period === 'object'){ ab.period = Craft.boost.generate.roll(ab.period,qua); }
-	
-	if(ab.action && ab.action.func === 'Combat.action.attack'){
-		var atk = ab.action.param.attack;
-		
-		//All
-		if(typeof atk.angle === 'object'){ atk.angle = Craft.boost.generate.roll(atk.angle,qua); }
-		if(typeof atk.amount === 'object'){ atk.amount = Craft.boost.generate.roll(atk.amount,qua); }
-		if(typeof atk.dmgMain === 'object'){ atk.dmgMain = Craft.boost.generate.roll(atk.dmgMain,qua); }
-		for(var i in atk.dmgRatio){
-			if(typeof atk.dmgRatio[i] === 'object'){ atk.dmgRatio[i] = Craft.boost.generate.roll(atk.dmgRatio[i],qua); }
-		}
-		
-		//Status
-		for(var st in Cst.status.list){
-			var i = Cst.status.list[st];
-			if(typeof atk[i] === 'object'){ 
-				if(typeof atk[i].chance === 'object'){ atk[i].chance = Craft.boost.generate.roll(atk[i].chance,qua); }
-				if(typeof atk[i].magn === 'object'){ atk[i].magn = Craft.boost.generate.roll(atk[i].magn,qua); }
-				if(typeof atk[i].time === 'object'){ atk[i].time = Craft.boost.generate.roll(atk[i].time,qua); }
-			}
-		}
-		if(atk.leech){
-			if(typeof atk.leech.chance === 'object'){ atk.leech.chance = Craft.boost.generate.roll(atk.leech.chance,qua); }
-			if(typeof atk.leech.magn === 'object'){ atk.leech.magn = Craft.boost.generate.roll(atk.leech.magn,qua); }
-			if(typeof atk.leech.time === 'object'){ atk.leech.time = Craft.boost.generate.roll(atk.leech.time,qua); }
-		}
-		if(atk.pierce){
-			if(typeof atk.pierce.chance === 'object'){ atk.pierce.chance = Craft.boost.generate.roll(atk.pierce.chance,qua); }
-			if(typeof atk.pierce.dmgReduc === 'object'){ atk.pierce.dmgReduc = Craft.boost.generate.roll(atk.pierce.dmgReduc,qua); }
-		}
-		
-		//need to add curse etc...
-		
-	}
-	ab.id = Math.randomId();
-	
-	return ab;
-}
-
-createNewAbility = function(seed){
-	//seed only needs ab id and qual
-
-	var a = useAbiCons(seed);
-	
-	Ability.creation(a);
-	
-	return a.id;	
-
-}
-
-
-initAbilityModDb = function(){
-	abilityModDb = {
-		'x2b':{
-			'name':'x2 Bullets',
-			'info':'Your ability shoots x2 more bullets. Main damage is reduced by 50%.',
-			'func':(function(ab,orb,log){
-				try {
-					var atk = ab.action[0].param.attack[0];
-					atk.amount *= 2;
-					atk.dmgMain /= 1.5;
-					return ab;
-				} catch(err){ return ab; }
-			})},	
-		
-	}
-	if(!server){ return;}
-	
-	
-	for(var i in abilityModDb){
-		var item = {};
-		item.name = abilityModDb[i].name;
-		item.visual = 'plan.planA';
-		item.option = [	{'name':'Select Mod','func':'abilityModClick','param':[i]} ];
-		item.type = 'mod';
-		item.id = 'mod-'+i;
-		Item.creation(item);
-	
-	}
-	
-	
-}
-//abid: Ability Id, mod: mod Id
-addAbilityMod = function(key,abid,mod){
-	//Verify
-	var ab = deepClone(Db.ability[abid]);
-	if(ab.modList[mod] !== undefined){ Chat.add(key,'This ability already has this mod.'); return; }
-	if(Object.keys(ab.modList).length > 5){ Chat.add(key,'This ability already has the maximal amount of mods.'); return; }
-	
-	//Add
-	ab.modList[mod] = 0;
-	Mortal.removeAbility(List.all[key],abid);
-	ab.id = Math.randomId();
-	Ability.creation(ab);
-	Mortal.learnAbility(List.all[key],ab.id);
-	Chat.add(key,'Mod Added.');
-	Itemlist.remove(List.main[key].invList,'mod-'+ mod);	
-}
-
-//##############################################################
-
 Ability.uncompress = function(abi){	
 	var ab = typeof abi === 'object' ? abi : deepClone(Db.ability[abi]);
 	
 	for(var i in ab.modList){
-		ab = abilityModDb[i].func(ab,ab.modList[i],orbFormula(ab.modList[i]));
+		ab = abilityModDb[i].func(ab,ab.modList[i],Craft.orb.formula(ab.modList[i]));
 	}
-	ab = abilityOrbModDb[ab.orb.upgrade.bonus](ab,ab.orb.upgrade.amount);
+	ab = Db.ability.orb[ab.orb.upgrade.bonus](ab,ab.orb.upgrade.amount);
 	
 	if(ab.action && ab.action[0].func === 'Combat.action.attack'){
 		var at = ab.action[0].param.attack[0];
@@ -363,22 +273,8 @@ Ability.uncompress = function(abi){
 	return ab;
 }
 
-//###############################################################
-
-abilityModClick = function(key,id){
-	if(!List.main[key].windowList.ability){
-		Chat.add(key,'The Ability Window needs to be opened to use this mod. It will have the following effect: <br>' + abilityModDb[id].info);
-		return;
-	} else {
-		List.main[key].chatInput = ['$win,ability,mod,' + id + ',',0];
-	}
-	
-}
-		
-//Default
 Ability.template = function(){
-	var ab = 
-	{'name':'Fire','tag':[],'icon':'melee.mace',
+	return {'name':'Fire','tag':[],'icon':'melee.mace',
 		'cost':{"dodge":0},'reset':{'attack':0,'tag':{}},
 		'spd':{'main':0.8,'support':0.2},'period':25,
 			'action':[
@@ -393,8 +289,6 @@ Ability.template = function(){
 				}}
 			]
 	};
-	return ab;
-
 }
 
 Ability.template.attack = function(){
@@ -407,42 +301,6 @@ Ability.template.attack = function(){
 	};
 }
 
-//Random
-Ability.template.attack.element = function(seed){
-	var possible = {
-		's':[
-			{'mod':1,'hit':'attack3','dmgRatio':{'melee':100,'range':0,'magic':0,'fire':5*Math.random(),'cold':5*Math.random(),'lightning':5*Math.random()}},
-			{'mod':1,'hit':'fire2','dmgRatio':{'melee':100,'range':0,'magic':0,'fire':25,'cold':5*Math.random(),'lightning':5*Math.random()}},
-			{'mod':1,'hit':'ice2','dmgRatio':{'melee':100,'range':0,'magic':0,'fire':5*Math.random(),'cold':25,'lightning':5*Math.random()}},
-			{'mod':1,'hit':'thunder2','dmgRatio':{'melee':100,'range':0,'magic':0,'fire':5*Math.random(),'cold':5*Math.random(),'lightning':25}},
-			{'mod':1,'hit':'darkness1','dmgRatio':{'melee':100,'range':0,'magic':0,'fire':25,'cold':25,'lightning':25}},
-			],
-
-		
-		'b':[
-			{'mod':1,'image':'arrow','hit':'attack3','dmgRatio':{'melee':0,'range':100,'magic':0,'fire':5*Math.random(),'cold':5*Math.random(),'lightning':5*Math.random()}},
-			{'mod':1,'image':'arrow','hit':'fire2','dmgRatio':{'melee':0,'range':100,'magic':0,'fire':25,'cold':5*Math.random(),'lightning':5*Math.random()}},
-			{'mod':1,'image':'arrow','hit':'ice2','dmgRatio':{'melee':0,'range':100,'magic':0,'fire':5*Math.random(),'cold':25,'lightning':5*Math.random()}},
-			{'mod':1,'image':'arrow','hit':'thunder2','dmgRatio':{'melee':0,'range':100,'magic':0,'fire':5*Math.random(),'cold':5*Math.random(),'lightning':25}},
-			{'mod':1,'image':'arrow','hit':'darkness1','dmgRatio':{'melee':0,'range':100,'magic':0,'fire':25,'cold':25,'lightning':25}},
-			
-			{'mod':1,'image':'fireball','hit':'fire2','dmgRatio':{'melee':0,'range':0,'magic':100,'fire':100,'cold':5*Math.random(),'lightning':5*Math.random()}},
-			{'mod':1,'image':'fireball','hit':'fire2','dmgRatio':{'melee':0,'range':0,'magic':50,'fire':150,'cold':5*Math.random(),'lightning':5*Math.random()}},
-			{'mod':1,'image':'fireball','hit':'fire2','dmgRatio':{'melee':0,'range':0,'magic':150,'fire':50,'cold':5*Math.random(),'lightning':5*Math.random()}},
-			
-			{'mod':1,'image':'iceshard','hit':'ice2','dmgRatio':{'melee':0,'range':0,'magic':100,'fire':5*Math.random(),'cold':100,'lightning':5*Math.random()}},
-			{'mod':1,'image':'iceshard','hit':'ice2','dmgRatio':{'melee':0,'range':0,'magic':50,'fire':5*Math.random(),'cold':150,'lightning':5*Math.random()}},
-			{'mod':1,'image':'iceshard','hit':'ice2','dmgRatio':{'melee':0,'range':0,'magic':150,'fire':5*Math.random(),'cold':50,'lightning':5*Math.random()}},
-		
-			{'mod':1,'image':'lightningball','hit':'thunder2','dmgRatio':{'melee':0,'range':0,'magic':100,'fire':5*Math.random(),'cold':5*Math.random(),'lightning':100}},
-			{'mod':1,'image':'lightningball','hit':'thunder2','dmgRatio':{'melee':0,'range':0,'magic':50,'fire':5*Math.random(),'cold':5*Math.random(),'lightning':150}},
-			{'mod':1,'image':'lightningball','hit':'thunder2','dmgRatio':{'melee':0,'range':0,'magic':150,'fire':5*Math.random(),'cold':5*Math.random(),'lightning':50}},
-		]
-	}
-	
-	return possible[seed.type].random();
-	
-}
 
 	
 
