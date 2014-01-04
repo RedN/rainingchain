@@ -184,12 +184,8 @@ Change.send.convert.itemlist = function(inv){
 
 Change.send.convert.tradeWindow = function(data){
 	var draw = deepClone(data);
-	for(var i in draw.tradeList){
-		draw.tradeList[i] = [];
-		draw.tradeList[i][0] = Db.item[data.tradeList[i][0]].visual;
-		draw.tradeList[i][1] = data.tradeList[i][1];
-	}
-	draw.trader = List.all[draw.trader].name;
+	draw.tradeList = Change.send.convert.itemlist(draw.tradeList);
+	draw.trader = List.all[draw.trader].publicId;
 	return draw;
 }
 

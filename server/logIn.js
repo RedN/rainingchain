@@ -176,6 +176,7 @@ Save.load.initData = function(key){
             'quest':0,    
 			'invList':Change.send.convert.itemlist,
 			'bankList':Change.send.convert.itemlist,
+			'tradeList':Change.send.convert.itemlist,
 			
         }
     }
@@ -265,7 +266,7 @@ Save.main = function(key,dbb){
 
     var save = {};
 
-    var toSave = ['invList','bankList','quest','tradeList','name','social','pref','passive','passivePt',];
+    var toSave = ['invList','bankList','tradeList','quest','name','social','pref','passive','passivePt',];
     for(var i in toSave){ save[toSave[i]] = main[toSave[i]]; }
 
     //save = stringify(save);
@@ -284,6 +285,7 @@ Save.main.compress = function(main){
 Save.main.uncompress = function(main,key){
     main.invList.key = key;
     main.bankList.key = key;
+    main.tradeList.key = key;
     return main;
 }
 

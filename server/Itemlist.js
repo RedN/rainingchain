@@ -164,9 +164,7 @@ Itemlist.toString = function(inv){
 }
 
 Itemlist.transfer = function(inv,other,id,amount){
-	amount = amount || 1;
-	console.log(id);
-	amount = Math.min(amount,Itemlist.have(inv,id,0,'amount'));
+	amount = Math.min(amount || 1,Itemlist.have(inv,id,0,'amount'));
 	if(!Itemlist.test(other,[[id,amount]]) || amount === 0){
 		return false;
 	} 
@@ -224,20 +222,21 @@ Itemlist.click.inventory = function(inv,side,slot){
 	var id = inv.data[slot][0];
 			
 	//If Bank Window
-	if(mw.bank){
-		if(side === 'left'){ Itemlist.transfer(inv,m.bankList,id,1); }
+	if(mw.bank || mw.trade){
+		if(mw.bank) list = m.bankList;
+		if(mw.trade){ list = m.tradeList; Itemlist.trade.reset(inv); }
+		
+		if(side === 'left'){ Itemlist.transfer(inv,list,id,1); }
 		
 		if(side === 'right'){ 
-			
-			
 			Button.optionList(key,{
 				'name':Db.item[id].name,
 				'option':[
-					{'name':'Deposit 5','func':Itemlist.transfer,'param':[inv,m.bankList,id,5],'nokey':true},
-					{'name':'Deposit 25','func':Itemlist.transfer,'param':[inv,m.bankList,id,25],'nokey':true},
-					{'name':'Deposit 100','func':Itemlist.transfer,'param':[inv,m.bankList,id,100],'nokey':true},
-					{'name':'Deposit 1000','func':Itemlist.transfer,'param':[inv,m.bankList,id,1000],'nokey':true},
-					{'name':'Deposit ' + m.pref.bankTransferAmount,'func':Itemlist.transfer,'param':[inv,m.bankList,id,m.pref.bankTransferAmount],'nokey':true},
+					{'name':'Deposit 5','func':Itemlist.transfer,'param':[inv,list,id,5],'nokey':true},
+					{'name':'Deposit 25','func':Itemlist.transfer,'param':[inv,list,id,25],'nokey':true},
+					{'name':'Deposit 100','func':Itemlist.transfer,'param':[inv,list,id,100],'nokey':true},
+					{'name':'Deposit 1000','func':Itemlist.transfer,'param':[inv,list,id,1000],'nokey':true},
+					{'name':'Deposit ' + m.pref.bankTransferAmount,'func':Itemlist.transfer,'param':[inv,list,id,m.pref.bankTransferAmount],'nokey':true},
 				]
 			});
 		}
@@ -299,6 +298,34 @@ Itemlist.click.bank = function(bank,side,slot){
 	}
 }
 
+
+Itemlist.click.trade = function(trade,side,slot){
+	Itemlist.click.bank(trade,side,slot);
+	Itemlist.trade.reset(trade);
+}
+
+
+//Actual trade function is Command.list['win,trade,toggle']
+
+
+Itemlist.trade = function(trade,other){
+	var temp = deepClone(trade.data);
+	var temp2 = deepClone(other.data);
+	other.data = temp;
+	trade.data = temp2;
+	Chat.add(trade.key,'Trade Accepted.');
+	Chat.add(other.key,'Trade Accepted.');
+	Itemlist.trade.reset(trade);
+}
+
+
+
+
+Itemlist.trade.reset = function(trade){
+	var other = List.main[trade.key].windowList.trade.trader;
+	List.main[trade.key].windowList.trade.confirm = {'self':0,'other':0};
+	List.main[other].windowList.trade.confirm = {'self':0,'other':0};
+}
 
 
 

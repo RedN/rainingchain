@@ -15,7 +15,7 @@ Main.template = function(key){
 		
 		'invList': ['','','','','','','','','','','','','','','','','','','','','','','',''],
 		'bankList':[],
-		'tradeList':[],
+		'tradeList':['','','','','','','','','','','','','','','','','','','','','','','',''],
 		'dialogue':0,
 		'name':'player000',		
 		
@@ -44,6 +44,7 @@ Main.template = function(key){
 		main['quest'] = Main.template.quest();
 		main['invList'] = Itemlist.template('inventory');
 		main['bankList'] = Itemlist.template('bank');
+		main['tradeList'] = Itemlist.template('inventory');
 		main['old'] = {};
 		main['id'] = key;
 		main['dialogueLoc'] = {'x':0,'y':0};
@@ -77,10 +78,11 @@ Main.openWindow = function(main,name,param){
 		Quest.hint.update(key,param);
 	}
 	if(name === 'trade'){
-		if(!List.main[param].windowList.trade){
-			Main.closeAllWindow(main);
-			main.windowList.trade = {'trader':param,'tradeList':List.main[param].tradeList,'confirm':{'self':0,'other':0}};
-			List.main[param].windowList.trade = {'trader':key,'tradeList':main.tradeList,'confirm':{'self':0,'other':0}};
+		tradermain = List.main[param];
+		if(!tradermain.windowList.trade){
+			Main.closeAllWindow(tradermain);
+			main.windowList.trade = {'trader':param,'tradeList':tradermain.tradeList,'confirm':{'self':0,'other':0}};
+			tradermain.windowList.trade = {'trader':key,'tradeList':main.tradeList,'confirm':{'self':0,'other':0}};
 		} else { Chat.add(key,'This player is busy.');}
 	}
 }

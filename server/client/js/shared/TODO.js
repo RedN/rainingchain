@@ -2,8 +2,6 @@
 
 passive grid naming
 ability naming
-trade fix
-test bank
 
 
 
@@ -28,7 +26,7 @@ test bank
 -Add Mod to Quest Reward
 -Option show strike points
 -Auto-picker
--Impove boostDb
+-Improve boostDb
 -Enemy AI for ability
 -Icon minimap
 -Ability Creation & Mod

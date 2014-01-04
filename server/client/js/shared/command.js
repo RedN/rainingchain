@@ -185,6 +185,22 @@ Command.list['win,bank,click'] = function(key,side,slot){
 	Itemlist.click.bank(m.bankList,side,+slot);
 }
 
+Command.list['win,trade,click'] = function(key,side,slot){
+	var m = List.main[key];
+	if(!m.windowList.trade){ Chat.add(key,'Access denied.'); return;}
+	Itemlist.click.trade(m.tradeList,side,+slot);
+}
+Command.list['win,trade,toggle'] = function(key){
+	var m = List.main[key];
+	if(!m.windowList.trade || !m.windowList.trade.confirm){ Chat.add(key,'Access denied.'); return;}
+	m.windowList.trade.confirm.self = !m.windowList.trade.confirm.self;
+	var other = m.windowList.trade.trader;
+	List.main[other].windowList.trade.confirm.other = m.windowList.trade.confirm.self;
+	
+	if(m.windowList.trade.confirm.self && m.windowList.trade.confirm.other){
+		Itemlist.trade(m.tradeList,List.main[other].tradeList);
+	}
+}
 Command.list['win,quest,toggleBonus'] = function(key,id,bonus){
 	var mq = List.main[key].quest[id];
 	if(!mq){ Chat.add(key,'Wrong Input.'); return; }	

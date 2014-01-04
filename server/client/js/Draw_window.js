@@ -633,49 +633,66 @@ Draw.window.ability.action.summon = function(diffX,diffY){  ctxrestore();
 //}
 
 Draw.window.trade = function (){ ctxrestore();
-	return; //broken
+	var s = Draw.window.main('Bank');	
+	ctx = ctxList.win;
+
+	//change amount:
+		
+	var numX = s.mx+200;
+	var numY = s.y+15;
+	
+	var prefAmount = main.pref.bankTransferAmount;
+	var string = 'X-Amount: ' + prefAmount;
+	
+	ctx.font = '25px Fixedsys';
+	ctx.fillText(string,numX,numY);
+
+	
+	
+	
+	//##################################
+	
+	
+	
+	
+	var trade = main.windowList.trade;
+	var myList = main.tradeList;
+	var hisList = trade.tradeList;
 	
 	var s = Draw.window.main('Trading ' + trade.trader);	
 	ctx = ctxList.win;
 	
 	
 	//Draw Own Items
-	for (var i = 0 ; i < tList.length ; i++){
+	for (var i = 0 ; i < myList.length ; i++){
+		if(!myList[i].length) continue;
 		var numX = s.x + 160 + 65*(i%4);
 		var numY = s.y + 70 + 65*Math.floor(i/4);
 		
-		if(server){
-			Button.creation(0,{
+		Button.creation(0,{
 			"rect":[numX,numX+56,numY,numY+56],
-			"left":{"func":tradeLeftClick,"param":[i]},
-			"right":{"func":tradeRightClick,"param":[i]},
-			'text':'Withdraw ' + Db.item[tList[i][0]].name
-			});	
-		}
+			"left":{"func":Chat.send.command,"param":['$win,trade,click,left,' + i]},
+			"right":{"func":Chat.send.command,"param":['$win,trade,click,right,' + i]},
+			'text':'Withdraw ' + main.bankList[i][2]
+		});	
 		
-		if(!server){
-			Draw.item(tList[i],[numX,numY],56);
-		}
+		
+		Draw.item(myList[i],[numX,numY],56);
+		
 	}	
 	
-
-	
-	
 	//Draw Other Items
-	for (var i = 0 ; i < trade.tradeList.length ; i++){
+	for (var i = 0 ; i < hisList.length ; i++){
+		if(!hisList[i].length) continue;
 		var numX = s.x + 570 + 65*(i%4);
 		var numY = s.y +  70 + 65*Math.floor(i/4);
 			
-		if(server){
-			Button.creation(0,{
+		Button.creation(0,{
 			"rect":[numX,numX+56,numY,numY+56],
-			'text':'Withdraw ' + Db.item[trade.tradeList[i][0]].name
-			});	
-		}
+			'text':hisList[i][2]
+		});	
 		
-		if(!server){
-			Draw.item(trade.tradeList[i],[numX,numY],56);
-		}
+		Draw.item(hisList[i],[numX,numY],56);
 	}	
 	
 	//Accept
@@ -684,40 +701,31 @@ Draw.window.trade = function (){ ctxrestore();
 	var wi = 250; 
 	var he = 35;
 	
-	if(server){
-		if(!trade.confirm.self){
-			Button.creation(0,{
-			"rect":[numX,numX+wi,numY,numY+he],
-			'text':'Click to Accept Trade',
-			'left':{'func':(function(){ trade.confirm.self = 1; }),'param':[]}
-			});	
-		} else {
-			Button.creation(0,{
-			"rect":[numX,numX+wi,numY,numY+he],
-			'text':'Click to Refuse Trade',
-			'left':{'func':(function(){ trade.confirm.self = 0; }),'param':[]}
-			});	
-		}
-	}
+	//My button
+	Button.creation(0,{
+		"rect":[numX,numX+wi,numY,numY+he],
+		'text':trade.confirm.self ? 'Click to Refuse Trade' : 'Click to Accept Trade',
+		"left":{"func":Chat.send.command,"param":['$win,trade,toggle,']},
+	});
 	
-	if(!server){
-		ctx.textAlign="center";
-		ctx.font="25px Fixedsys";
-		ctx.fillStyle = "yellow";
-		ctx.strokeStyle = 'yellow';
+	
+	ctx.textAlign = "center";
+	ctx.font = "25px Fixedsys";
+	ctx.fillStyle = "yellow";
+	ctx.strokeStyle = 'yellow';
+	
+	ctx.fillText('Trade State ',numX+wi/2,numY+3);
+	ctx.strokeRect(numX,numY,wi,he);
 		
-		ctx.fillText('Trade State ',numX+wi/2,numY+3);
-		ctx.strokeRect(numX,numY,wi,he);
-		if(trade.confirm.self){ Draw.icon('system.heart',[numX+7,numY+7],20);}
-		else { Draw.icon('system.close',[numX+7,numY+7],20); }
-		
-		
-		var numX = s.x+570; var numY = s.h-50; var wi = 250; var he = 35;
-		ctx.fillText('Trade State ',numX+wi/2,numY+3);
-		ctx.strokeRect(numX,numY,wi,he);
-		if(trade.confirm.other){ Draw.icon('system.heart',[numX+7,numY+7],20);}
-		else { Draw.icon('system.close',[numX+7,numY+7],20); }
-	}
+	Draw.icon(trade.confirm.self ? 'system.heart' : 'system.close',[numX+7,numY+7],20);
+
+	var numX = s.x+570; var numY = s.h-50; var wi = 250; var he = 35;
+	ctx.fillText('Trade State ',numX+wi/2,numY+3);
+	ctx.strokeRect(numX,numY,wi,he);
+	
+	
+	Draw.icon(trade.confirm.other ? 'system.heart' : 'system.close',[numX+7,numY+7],20);
+	
 	
 }
 
@@ -909,15 +917,15 @@ Draw.window.passive.grid = function(key){ ctxrestore();
 	var ic = icon + border;
 	
 	//Draw Stat	
-	for(var i = 0 ; i < passiveGrid.length ; i++){
-		for(var j = 0 ; j < passiveGrid[i].length ; j++){
+	for(var i = 0 ; i < Db.passive.length ; i++){
+		for(var j = 0 ; j < Db.passive[i].length ; j++){
 			var numX = s.x + 300 + ic * j + dx;	
 			var numY = s.y + 60 + ic * i + dy;
 			
 			ctx.globalAlpha = 1;
 			
 			//Freebies
-			if(typeof passiveGrid[i][j] !== 'object'){
+			if(typeof Db.passive[i][j] !== 'object'){
 				ctx.globalAlpha = 0.5;
 				ctx.fillStyle = 'green';
 				ctx.fillRect(numX,numY,ic,ic);
