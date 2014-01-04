@@ -20,9 +20,8 @@ db.filterDb = function(){
 		for(var i in account){
 			var a = account[i];
 			var list = [];
-			for(var j in a.main.invList){list.push(a.main.invList[i][0]);}
-			for(var j in a.main.bankList){list.push(a.main.bankList[i][0]);}
-			for(var j in a.player.equip.piece){list.push(a.player.equip.piece[j].id);}
+			for(var j in a.main.invList.data){list.push(a.main.invList.data[i][0]);}
+			for(var j in a.main.bankList.data){list.push(a.main.bankList.data[i][0]);}
 			for(var j in a.player.equip.piece){list.push(a.player.equip.piece[j].id);}
 			for(var j in list){	bigList[list[j]] = true;}
 		}

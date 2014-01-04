@@ -210,7 +210,7 @@ Command.list['win,ability,swap'] = function(key,input,ab){
 }
 
 Command.list['win,ability,mod'] = function(key,modid,abid){
-	if(!List.all[key].abilityList[abid] || !abilityModDb[modid] || !List.main[key].invList.have('mod-'+modid)){ Chat.add(key,'bad'); }
+	if(!List.all[key].abilityList[abid] || !abilityModDb[modid] || !Itemlist.have(List.main[key].invList,'mod-'+modid)){ Chat.add(key,'bad'); }
 	addAbilityMod(key,abid,modid);
 }
 
@@ -233,9 +233,9 @@ Command.list['tab,open'] = function(key,tab){
 	List.main[key].currentTab = tab;
 }
 
-Command.list['tab,inv,click'] = function(key,side,id){
+Command.list['tab,inv,click'] = function(key,side,slot){
 	if(List.main[key].currentTab !== 'inventory'){ Chat.add(key,'Access denied.'); return;}
-	List.main[key].invList.click(id,side);
+	Itemlist.click.inventory(List.main[key].invList,side,slot);
 }
 
 Command.list['tab,swapWeapon'] = function(key,type){
@@ -269,9 +269,8 @@ Command.list['dia,option'] = function(key,slot){
 
 Command.list['option'] = function(key,slot){
 	var main = List.main[key];
-	console.log(slot);
 	if(main.optionList && main.optionList.option[slot]){
-		console.log(main.optionList.option[slot]);
+		applyFunc.key(key,main.optionList.option[slot].func,main.optionList.option[slot].param);	
 	}	
 }
 

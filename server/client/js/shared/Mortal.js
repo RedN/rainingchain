@@ -49,8 +49,8 @@ Mortal.switchEquip = function(mort,name){
 	
 	Mortal.permBoost(mort,equip.piece,mort.equip.piece[equip.piece].boost);
 	Mortal.updateEquip(mort);
-	List.main[mort.id].invList.remove(name);
-	List.main[mort.id].invList.add(old.id);
+	Itemlist.remove(List.main[mort.id].invList,name);
+	Itemlist.add(List.main[mort.id].invList,old.id);
 	
 	if(Cst.equip.weapon.piece.indexOf(equip.piece) !== -1){
 		Mortal.swapWeapon(mort,equip.piece);
@@ -343,8 +343,8 @@ Mortal.pickDrop = function (mort,id){
 	var drop = List.drop[id];
 		
 	if(drop){
-		if(distancePtPt(mort,drop) <= mort.pickRadius && main.invList.test([[List.drop[id].item,List.drop[id].amount]])){
-			main.invList.add(drop.item,drop.amount);
+		if(distancePtPt(mort,drop) <= mort.pickRadius && Itemlist.test(main.invList,[[List.drop[id].item,List.drop[id].amount]])){
+			Itemlist.add(main.invList,drop.item,drop.amount);
 			Drop.remove(drop);		
 		}
 	}
@@ -365,15 +365,15 @@ Mortal.rightClickDrop = function(mort,rect){
 	}	
 }
 	
-Mortal.dropInv = function(mort, iii){
+Mortal.dropInv = function(mort, id){
 	var key = mort.id;
-	var item = Db.item[iii];
+	var item = Db.item[id];
 	var player = List.all[key];
 	var amount = 1;
-	if(item.stack){ amount = List.main[key].invList.have(iii,'amount'); }
+	if(item.stack){ amount = Itemlist.have(List.main[key].invList,id,'amount'); }
 	
-	Drop.creation({'x':player.x,'y':player.y,'map':player.map,'item':iii,'amount':amount,'timer':25*30});
-	List.main[key].invList.remove(iii,amount);
+	Drop.creation({'x':player.x,'y':player.y,'map':player.map,'item':id,'amount':amount,'timer':25*30});
+	Itemlist.remove(List.main[key].invList,id,amount);
 }
 
 

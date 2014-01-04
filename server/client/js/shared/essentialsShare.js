@@ -75,27 +75,28 @@ Object.defineProperty(Number.prototype, "mm", {
 });	
 	
 //Function
-innerFunction = function (func,param){
-	func.apply(this, param);	
-}
-
-keyFunction = function (key,func,param){
-	if(!server){param = func;func = key;}
-	
-	param = (param instanceof Array) ? param : [param];
+applyFunc = function(func,param){
 	if(typeof func === 'string'){
 		if(func.indexOf('.') !== -1){
-			if(func.indexOf('Mortal') === 0) key = List.mortal[key]; 
-			else if(func.indexOf('Main') === 0) key = List.main[key]; 
+			if(func.indexOf('Mortal') === 0) param[0] = List.mortal[param[0]]; 
+			else if(func.indexOf('Main') === 0) param[0] = List.main[param[0]];
+			
 			func = valueViaArray({'origin':this,'array':func.split('.')});
 		} else {
 			func = this[func];
 		}
 	}
 	
-	if(server){	func.apply(this, [key].concat(param));} 
-	else {	func.apply(this, param);}
+	func.apply(this, param);
 }
+
+applyFunc.key = function(key,func,param){
+	applyFunc(func,[key].concat(param));
+}
+
+
+
+
 
 //Copy
 

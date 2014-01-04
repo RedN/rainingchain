@@ -116,7 +116,6 @@ Change.update.init = function(){
 				{'array':['context']},
 				{'array':['dialogue']},	
 				
-				
 				{'array':['popupList','equip']},
 				
 				{'array':['windowList','bank']},
@@ -128,9 +127,9 @@ Change.update.init = function(){
 				{'array':['windowList','passive']},
 				{'array':['windowList','quest']},
 				
-				{'array':['invList'],'filter':'toClient'},
-				{'array':['bankList'],'filter':'toClient'},
-				{'array':['tradeList'],'filter':Change.send.convert.invList},
+				{'array':['invList'],'filter':Change.send.convert.itemlist},
+				{'array':['bankList'],'filter':Change.send.convert.itemlist},
+				{'array':['tradeList'],'filter':Change.send.convert.itemlist},
 				{'array':['optionList'],'filter':Change.send.convert.optionList},
 				
 				{'array':['temp']},

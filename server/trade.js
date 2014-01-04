@@ -1,7 +1,7 @@
 //trade
 
 //to be converted to Inventory
-
+//broken
 
 tradeItem = function(key,other){
 	var i1 = List.main[key].tradeList;

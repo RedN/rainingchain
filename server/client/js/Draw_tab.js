@@ -366,13 +366,13 @@ Draw.tab.quest = function(){ ctxrestore();
 	html.questTab.text.style.width = (s.w - 2*divX) + 'px'
 	html.questTab.text.style.height = (s.h - iconY- 2*divX) + 'px'
 	
-	if(Draw.old.quest !== stringify(quest)){
-		Draw.old.quest = stringify(quest);
+	if(Draw.old.quest !== stringify(main.quest)){
+		Draw.old.quest = stringify(main.quest);
 		
 		html.questTab.text.innerHTML = '<span style="color:white">' + '----Quest List----' + '</span>';
 		
-		for(var i in quest){
-			var q = quest[i];
+		for(var i in main.quest){
+			var q = main.quest[i];
 			var qdb = Db.quest[i];
 			
 			var color = q.complete ? 'green' : (q.started ? 'yellow' : 'red');

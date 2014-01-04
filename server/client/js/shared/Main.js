@@ -42,8 +42,8 @@ Main.template = function(key){
 	if(server){
 		main['change'] = [];
 		main['quest'] = Main.template.quest();
-		main['invList'] = new Inventory(key);
-		main['bankList'] = new Bank(key);
+		main['invList'] = Itemlist.template('inventory');
+		main['bankList'] = Itemlist.template('bank');
 		main['old'] = {};
 		main['id'] = key;
 		main['dialogueLoc'] = {'x':0,'y':0};

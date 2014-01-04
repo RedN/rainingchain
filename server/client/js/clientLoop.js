@@ -26,7 +26,7 @@ Loop.update = function(){
 	
 	//Add to ChatBox which was added by main
 	for(var i in main.social.message.chat) Chat.receive(main.social.message.chat[i]);		
-	if(main.chatInput){	innerFunction(Input.add,main.chatInput);}
+	if(main.chatInput){	applyFunc(Input.add,main.chatInput);}
 	main.social.message.chat = [];
 	main.chatInput = '';
 	if(main.help) updateHelp(main.help);	

@@ -26,8 +26,8 @@ Button.template = function(){
 	};
 }
 
-//called everytime the player clicks. check the list of buttons at that frame and test for collision
 Button.test = function (key,x,y,side){
+	//called everytime the player clicks. check the list of buttons at that frame and test for collision
 	if(server){ var list = List.main[key].btnList; } 
 		else { var list = btnList;}
 		
@@ -35,11 +35,14 @@ Button.test = function (key,x,y,side){
 		if(list[i][side]){
 			if(Collision.PtRect({"x":x,'y':y},list[i].rect)){
 				if(server) {
-					keyFunction(key,list[i][side].func,list[i][side].param);
+					if(!list[i].nokey){
+						applyFunc.key(key,list[i][side].func,list[i][side].param);
+					} else {
+						applyFunc(list[i][side].func,list[i][side].param);
+					}
 					if(list[i].help) List.main[key].help = list[i].help;
-				}
-				if(!server) {
-					innerFunction(list[i][side].func,list[i][side].param);
+				} else {
+					applyFunc(list[i][side].func,list[i][side].param);
 					if(list[i].help) updateHelp(list[i].help);
 				}
 				
@@ -49,9 +52,9 @@ Button.test = function (key,x,y,side){
 	}
 	
 }
-//ts('m.windowList.bank = 1')
-//check every frame if mouse is over something with a context (aka top left text)
+
 Button.context = function (key){
+	//check every frame if mouse is over something with a context (aka top left text)
 	if(server){ 
 		var list = List.main[key].btnList; 
 		var x = List.all[key].mouseX;

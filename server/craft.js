@@ -213,7 +213,7 @@ Craft.create.equip.color = function(w){
 Craft.plan = function(key,sed,req){
 	var seed = sed;
 	var bool = true;
-		
+	var inv = List.main[key].invList;
 	var string = 'To craft ' + seed.piece + ': <br>';
 	
 	//verify if has skill lvl
@@ -226,14 +226,14 @@ Craft.plan = function(key,sed,req){
 	//verify if has item
 	for(var i in req.item){
 		var color = 'green';
-		if(!List.main[key].invList.have(req.item[i].item,req.item[i].amount)){	bool = false; color = 'red';}
+		if(!Itemlist.have(inv,req.item[i].item,req.item[i].amount)){	bool = false; color = 'red';}
 		string += "<span style='color:" + color + "'> x" + req.item[i].amount + " " + Db.item[req.item[i].item].name + "</span>, ";
 	}
 	
 	if(bool){ 
-		for(var i in req.item){	List.main[key].invList.remove(req.item[i].item,req.item[i].amount);}
+		for(var i in req.item){	Itemlist.remove(inv,req.item[i].item,req.item[i].amount);}
 		var id = Craft.create(seed);
-		List.main[key].invList.add(id);
+		Itemlist.add(inv,id);
 	}
 	else { Chat.add(key,string); }
 	
@@ -287,8 +287,10 @@ Craft.seed.template = function(obj){
 
 //Orb
 Craft.orb = function(key,orb,amount,wId,mod){
+	var inv = List.main[key].invList;
+
 	amount = amount === 'pref' ? List.main[key].pref.orbAmount : amount;
-	amount = Math.min(amount,List.main[key].invList.have(orb + '_orb',0,'amount'));
+	amount = Math.min(amount,Itemlist.have(inv,orb + '_orb',0,'amount'));
 	var func; var equip; var type;
 	if(Db.equip[wId]){	func = initWeapon;	equip = deepClone(Db.equip[wId]); type = 'equip';}
 	if(Db.equip[wId]){	func = Armor.creation;	equip = deepClone(Db.equip[wId]); type = 'equip';}
@@ -316,11 +318,11 @@ Craft.orb = function(key,orb,amount,wId,mod){
 	Item.remove(equip.id);
 	equip.id = Math.randomId();
 	func(equip);
-	List.main[key].invList.remove(orb + '_orb',amount);
+	Itemlist.remove(inv,orb + '_orb',amount);
 	
 	if(type === 'equip'){
-		List.main[key].invList.remove(wId);
-		List.main[key].invList.add(equip.id);
+		Itemlist.remove(inv,wId);
+		Itemlist.add(inv,equip.id);
 	}
 	if(type === 'ability'){
 		Mortal.removeAbility(List.all[key],wId);
@@ -333,13 +335,14 @@ Craft.orb = function(key,orb,amount,wId,mod){
 
 //transform equip into shard
 Craft.salvage = function(key,id){
-	if(List.main[key].invList.have(id)){
+	var inv = List.main[key].invList;
+	if(Itemlist.have(inv,id)){
 		var type = Db.item[id].type;
 		if(type === 'weapon'){ var equip = Db.equip[id]; }
 		else if(type === 'armor'){ var equip = Db.equip[id]; }
 		else {return;}
-		List.main[key].invList.remove(id);
-		List.main[key].invList.add('shard-'+equip.color);
+		Itemlist.remove(inv,id);
+		Itemlist.add(inv,'shard-'+equip.color);
 	}
 }
 

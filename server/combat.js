@@ -33,7 +33,7 @@ Combat.action = function(id,action){
     if(action.anim)	changeSprite(player,{'anim':action.anim});
 	
 	if(action.func && action.param){
-		keyFunction(id,action.func,action.param);
+		applyFunc.key(id,action.func,action.param);
 	}
     
 }
@@ -52,7 +52,7 @@ Combat.action.attack.perform = function(player,attack,extra){   //extra used for
 	
 	//At this point, player.bonus/mastery must be already applied
 	if(attack.func && attack.func.chance >= Math.random()){
-		keyFunction(player.id,attack.func.func,attack.func.param);
+		applyFunc.key(player.id,attack.func.func,attack.func.param);
 	}
 
 	var atkList = [attack];

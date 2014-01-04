@@ -98,7 +98,7 @@ Init.db.quest = function(){
 		
 		//{ Functions
 		q.giveDevice = function(key){
-		    List.main[key].invList.add('quest-teleport');
+		    Itemlist.add(List.main[key].invList,'quest-teleport');
 		    List.main[key].quest['questId'].receivedDevice = true;
 		};
 		

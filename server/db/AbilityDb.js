@@ -342,7 +342,7 @@ addAbilityMod = function(key,abid,mod){
 	Ability.creation(ab);
 	Mortal.learnAbility(List.all[key],ab.id);
 	Chat.add(key,'Mod Added.');
-	List.main[key].invList.remove('mod-'+ mod);	
+	Itemlist.remove(List.main[key].invList,'mod-'+ mod);	
 }
 
 //##############################################################

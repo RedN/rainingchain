@@ -174,6 +174,9 @@ Save.load.initData = function(key){
             'social':0,
             'pref':0,
             'quest':0,    
+			'invList':Change.send.convert.itemlist,
+			'bankList':Change.send.convert.itemlist,
+			
         }
     }
     for(var i in array){
@@ -183,9 +186,7 @@ Save.load.initData = function(key){
         }
     }
 
-	data.main.invList = obj.main.invList.toClient();
-	data.main.bankList = obj.main.bankList.toClient();
-    return data;
+    return data;//
 }
 
 Save.player = function(key,updateDb){
@@ -252,26 +253,6 @@ Save.player.load = function(key,db){
     List.nameToKey[player.name] = key;
     player = Mortal.creation.optionList(player);
 
-
-    //wtf
-    /*
-     if(player.loginLocation){
-     if(!List.map[player.loginLocation.map]){
-     var old = player.loginLocation.map.slice(0,player.loginLocation.map.indexOf('~'));
-     var version = player.loginLocation.map.replace(old + '~','');
-     cloneMap(old,version);
-     }
-     Mortal.teleport(player,player.loginLocation.x,player.loginLocation.y,player.loginLocation.map);
-     } else {
-     if(!List.map[player.map]){
-     var old = player.map.slice(0,player.map.indexOf('~'))
-     var version = player.map.replace(old + '~','');
-     cloneMap(old,version);
-     }
-     }
-     */
-    //wtf
-
 }
 
 
@@ -296,25 +277,19 @@ Save.main = function(key,dbb){
 }
 
 Save.main.compress = function(main){
-    
-    main.invList = main.invList.toDb();
-    main.bankList = main.bankList.toDb();
+	//could compress invlist and banklist
     return main;
 }
 
 Save.main.uncompress = function(main,key){
-    main.invList = new Inventory(key,main.invList);
-    main.bankList = new Bank(key,main.bankList);
+    main.invList.key = key;
+    main.bankList.key = key;
     return main;
 }
 
 Save.main.load = function(key,db){
-    List.main[key] = Main.template(key);
-    db = Save.main.uncompress(db,key);
-
-    Mortal.permBoost(List.all[key],'Passive',Passive.convert(db.passive));
-
-    for(var i in db){	List.main[key][i] = db[i]; }
+    List.main[key] = useTemplate(Main.template(key),Save.main.uncompress(db,key));
+	Mortal.permBoost(List.all[key],'Passive',Passive.convert(db.passive));
 }
 
 

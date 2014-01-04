@@ -7,7 +7,7 @@ Dialogue.start = function(key,d){
 	List.main[key].dialogueLoc = {'x':List.all[key].x,'y':List.all[key].y};
 	
 	if(List.main[key].dialogue.func){
-		keyFunction(key,List.main[key].dialogue.func,List.main[key].dialogue.param);
+		applyFunc.key(key,List.main[key].dialogue.func,List.main[key].dialogue.param);
 	}
 	
 }
@@ -17,7 +17,7 @@ Dialogue.end = function(key){
 }
 
 Dialogue.option = function(key,option){
-	if(option.func)	keyFunction(key,option.func,option.param);
+	if(option.func)	applyFunc.key(key,option.func,option.param);
 	
 	if(option.next){
 		Dialogue.start(key,option.next);

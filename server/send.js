@@ -182,16 +182,17 @@ Change.send.convert.shopWindow = function(shop){
 
 }
 
-Change.send.convert.invList = function(data){
+Change.send.convert.itemlist = function(inv){
 	var draw = [];
 	
 	
-	for(var i in data){
+	for(var i in inv.data){
 		draw[i] = '';
-		if(data[i][0]){
+		if(inv.data[i][0]){
 			draw[i] = [];
-			draw[i][0] = Db.item[data[i][0]].visual;
-			draw[i][1] = data[i][1];
+			draw[i][0] = Db.item[inv.data[i][0]].visual;
+			draw[i][1] = inv.data[i][1];
+			draw[i][2] = Db.item[inv.data[i][0]].name;
 		}
 	}
 	return draw;

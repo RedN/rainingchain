@@ -1,38 +1,36 @@
-ItemList = function(size){
-	size = size || 24;
-	this.alwaysStack = false;
-	this.data = Array(size);	
-    for(var i = 0 ; i < this.data.length ; i++) this.data[i] = [];
-    return this;
-}
+//First param is invlist AKA requires nokey:true
+
+Itemlist = {};
 
 //Add item in inventory
-ItemList.prototype.add = function (id,amount){
+Itemlist.add = function (inv,id,amount){
 	amount = amount || 1;
-	if(Db.item[id].stack || this.alwaysStack){
-		if(this.have(id)){
-			this.data[this.have(id,1,"position")][1] += amount;
-		} else if(this.empty(1)){
-			this.data[this.firstEmpty()] = [id,amount];
+	if(Db.item[id].stack || inv.alwaysStack){
+		if(Itemlist.have(inv,id)){
+			inv.data[Itemlist.have(inv,id,1,"position")][1] += amount;
+		} else if(Itemlist.empty(inv,1)){
+			inv.data[Itemlist.firstEmpty(inv)] = [id,amount];
 		}
 	} else {
-		amount = Math.min(amount,this.empty());
+		amount = Math.min(amount,Itemlist.empty(inv));
 		for(var i = 0 ; i < amount ; i++){
-			this.data[this.firstEmpty()] = [id,1];
+			inv.data[Itemlist.firstEmpty(inv)] = [id,1];
 		}
 	}
 }
 
-ItemList.prototype.add.bulk = function (array_items){
+//Itemlist.have(inv,
+
+Itemlist.add.bulk = function (inv,array_items){
 	for(var i in array_items){
-		this.add(array_items[0],array_items[1] || 1);
+		Itemlist.add(inv,array_items[0],array_items[1] || 1);
 	}	
 }
 
 //Test if theres enough place for all the items (array of items)
-ItemList.prototype.test = function (array_items){
+Itemlist.test = function (inv,array_items){
 	//Fast Test this
-	if(array_items.length <= this.empty()){
+	if(array_items.length <= Itemlist.empty(inv)){
 		return true;
 	} 
 	var spaceNeeded = 0;
@@ -41,18 +39,18 @@ ItemList.prototype.test = function (array_items){
 		if(typeof item[0] !== 'string'){ item[0] = item[0].id; }	//Case put obj instead of id
 		if(!item[1]){ item[1] = 1; }
 		
-		if( (!Db.item[item[0]].stack && (!this.bank || this.bank && !this.have(item[0]))) ||
-		        (Db.item[item[0]].stack && !this.have(item[0]))  ){
+		if( (!Db.item[item[0]].stack && (!inv.bank || inv.bank && !Itemlist.have(inv,item[0]))) ||
+		        (Db.item[item[0]].stack && !Itemlist.have(inv,item[0]))  ){
 			spaceNeeded++;
 		}	
 	}
-	return spaceNeeded <= this.empty()
+	return spaceNeeded <= inv.empty()
 }
 
 //Return first position of first empty slot
-ItemList.prototype.firstEmpty = function(){
-    for(var i = 0; i < this.data.length; i++){
-	    if(this.data[i].length === 0){ 
+Itemlist.firstEmpty = function(inv){
+    for(var i = 0; i < inv.data.length; i++){
+	    if(inv.data[i].length === 0){ 
 		    return i;	
 		}
 	}
@@ -60,22 +58,22 @@ ItemList.prototype.firstEmpty = function(){
 }
 
 //Remove item in inventory
-ItemList.prototype.remove = function (id,amount){
+Itemlist.remove = function (inv,id,amount){
 	amount = amount || 1;
-	if(Db.item[id].stack || this.alwaysStack){
-		for(var i = 0 ; i < this.data.length ; i ++){
-			if(this.data[i][0] === id){
-				this.data[i][1] -= amount;
-				if(this.data[i][1] <= 0){
-					this.data[i] = '';
+	if(Db.item[id].stack || inv.alwaysStack){
+		for(var i = 0 ; i < inv.data.length ; i ++){
+			if(inv.data[i][0] === id){
+				inv.data[i][1] -= amount;
+				if(inv.data[i][1] <= 0){
+					inv.data[i] = '';
 					break;
 				}
 			}
 		}
 	} else {
-		for(var i = 0 ; i < this.data.length && amount > 0 ; i ++){
-			if(this.data[i][0] === id){
-				this.data[i] = '';
+		for(var i = 0 ; i < inv.data.length && amount > 0 ; i ++){
+			if(inv.data[i][0] === id){
+				inv.data[i] = '';
 				amount--;
 				i--;
 			}
@@ -84,40 +82,40 @@ ItemList.prototype.remove = function (id,amount){
 	
 }
 
-ItemList.prototype.remove.bulk = function (array_items){
+Itemlist.remove.bulk = function (inv,array_items){
 	for(var i in array_items){
-		this.remove(array_items[0],array_items[1] || 1);
+		Itemlist.remove(inv,array_items[0],array_items[1] || 1);
 	}	
 }
 
 //Return amount of empty slots. (If amount is speficied, return if empty
-ItemList.prototype.empty = function (amount){
+Itemlist.empty = function (inv,amount){
 	var empty = 0;
-	for(var i in this.data){
-		if(this.data[i].length === 0){ empty++; }
+	for(var i in inv.data){
+		if(inv.data[i].length === 0){ empty++; }
 	}
 
 	if(!amount){return empty} 
 	else {return (empty >= amount)}	
 }
 
-ItemList.prototype.have = function (id,amount,info){
+Itemlist.have = function (inv,id,amount,info){
 	amount = amount || 1;
 	info = info || "bool";
 	
-	if(Db.item[id].stack || this.alwaysStack){	
-		for(var i = 0 ; i < this.data.length ; i++){
-			if(this.data[i][0] === id){
-				if(info == "bool"){	return (this.data[i][1] >= amount)} 
-				if(info == "amount"){return this.data[i][1]}
+	if(Db.item[id].stack || inv.alwaysStack){	
+		for(var i = 0 ; i < inv.data.length ; i++){
+			if(inv.data[i][0] === id){
+				if(info == "bool"){	return (inv.data[i][1] >= amount)} 
+				if(info == "amount"){return inv.data[i][1]}
 				if(info == "position"){	return i}
 				break;
 			}
 		}
 	} else {
 		var num = 0;
-		for(var i = 0 ; i < this.data.length ; i++){
-			if(this.data[i][0] === id){
+		for(var i = 0 ; i < inv.data.length ; i++){
+			if(inv.data[i][0] === id){
 				num += 1;
 			}
 		}
@@ -132,61 +130,61 @@ ItemList.prototype.have = function (id,amount,info){
 
 }
 
-ItemList.prototype.have.bulk = function (array_items){
+Itemlist.have.bulk = function (inv,array_items){
 	for(var i in array_items){
-		if(!this.have(array_items[0],array_items[1] || 1)) return false;
+		if(!Itemlist.have(inv,array_items[0],array_items[1] || 1)) return false;
 	}	
 	return true;
 }
 //return what info should be in db
-ItemList.prototype.toDb = function(){
-    return this.data;
+Itemlist.toDb = function(){
+    return inv.data;
 }
 
 //return what to send to client 
-ItemList.prototype.toClient = function(){
+Itemlist.toClient = function(){
     var ret = [];
 	
-	for(var i in this.data){
+	for(var i in inv.data){
 		ret[i] = '';
-		if(this.data[i][0]){
+		if(inv.data[i][0]){
             ret[i] = [];
-            ret[i][0] = Db.item[this.data[i][0]].visual;
-			ret[i][1] = this.data[i][1];
-			ret[i][2] = Db.item[this.data[i][0]].name;
+            ret[i][0] = Db.item[inv.data[i][0]].visual;
+			ret[i][1] = inv.data[i][1];
+			ret[i][2] = Db.item[inv.data[i][0]].name;
 		}
 	}
 	
 	return ret;
 }
 
-ItemList.prototype.toString = function(){
-    return this.data.toString();
+Itemlist.toString = function(inv){
+    return inv.data.toString();
 }
 
-ItemList.prototype.transfer = function(other,id,amount){
+Itemlist.transfer = function(inv,other,id,amount){
 	amount = amount || 1;
-	amount = Math.min(amount,this.have(id,0,'amount'));
-	if(!other.test([[id,amount]]) || amount === 0){
+	amount = Math.min(amount,inv.have(id,0,'amount'));
+	if(!Itemlist.test(other,[[id,amount]]) || amount === 0){
 		return false;
 	} 
-	this.remove(id,amount);
-	other.add(id,amount);	
+	Itemlist.remove(inv,id,amount);
+	Itemlist.add(other,id,amount);	
 	return true;
 }
 
-ItemList.prototype.transfer.bulk = function(other,array_items,allornothing){
+Itemlist.transfer.bulk = function(inv,other,array_items,allornothing){
 	allornothing = allornothing || true;
 	if(allornothing){
-		if((!other.test.transfer(array_items) || !this.have.bulk(array_items)))		return false;
+		if((!Itemlist.test.transfer(other,array_items) || !Itemlist.have.bulk(inv,array_items)))		return false;
 	} else {
 		array_items = deepClone(array_items);
 		for(var i in array_items){
-			array_items[i][1] = Math.min((array_items[i][1] || 1),this.have(array_items[i][0],0,'amount'));
+			array_items[i][1] = Math.min((array_items[i][1] || 1),Itemlist.have(inv,array_items[i][0],0,'amount'));
 		}
 	}
-	this.remove.bulk(array_items);
-	other.add.bulk(array_items);
+	Itemlist.remove.bulk(inv,array_items);
+	Itemlist.add.bulk(other,array_items);
 	return true;	
 }
 
@@ -194,39 +192,50 @@ ItemList.prototype.transfer.bulk = function(other,array_items,allornothing){
 
 
 //Inventory
-Inventory = function(key,data){
-	ItemList.apply( this, [24] );
-	this.alwaysStack = false;
-	this.type = 'inventory';
-	this.key = key;
-	this.data = data || this.data;
-	return this;
+Itemlist.template = function(type){
+	var tmp = {};
+	tmp.type = type;
+	tmp.key = 'not_set';
+	if(type === 'inventory'){
+		tmp.alwaysStack = false;
+		var size = 24;	
+	}
+	if(type === 'bank'){
+		tmp.alwaysStack = true;
+		var size = 40;	
+	}
+	tmp.data = Array(size);	
+    for(var i = 0 ; i < tmp.data.length ; i++) tmp.data[i] = [];
+	
+    return tmp;
 }
 
-Inventory.prototype = new ItemList();
 
-Inventory.prototype.click = function(slot,side){
-	var key = this.key;
+
+Itemlist.click = {};
+
+Itemlist.click.inventory = function(inv,side,slot){
+	var key = inv.key;
 	var m = List.main[key];
 	var mw = m.windowList;
-	if(!this.data[slot].length) return;
+	if(!inv.data[slot].length) return;
 	
-	
+			
 	//If Bank Window
 	if(mw.bank){
-		if(side === 'left'){ this.transfer(List.main[this.key].bankList,this.data[slot][0],1); }
+		if(side === 'left'){ Itemlist.transfer(inv,List.main[inv.key].bankList,inv.data[slot][0],1); }
 		
 		if(side === 'right'){ 
-			var id = this.data[slot][0];
+			var id = inv.data[slot][0];
 			
 			Button.optionList(key,{
 				'name':Db.item[id].name,
 				'option':[
-					{'name':'Deposit 5','func':this.transfer,'param':[m.bankList,id,5],'nokey':true},
-					{'name':'Deposit 25','func':this.transfer,'param':[m.bankList,id,25],'nokey':true},
-					{'name':'Deposit 100','func':this.transfer,'param':[m.bankList,id,100],'nokey':true},
-					{'name':'Deposit 1000','func':this.transfer,'param':[m.bankList,id,1000],'nokey':true},
-					{'name':'Deposit ' + m.pref.bankTransferAmount,'func':this.transfer,'param':[m.bankList,id,m.pref.bankTransferAmount],'nokey':true},
+					{'name':'Deposit 5','func':Itemlist.transfer,'param':[inv,m.bankList,id,5],'nokey':true},
+					{'name':'Deposit 25','func':Itemlist.transfer,'param':[inv,m.bankList,id,25],'nokey':true},
+					{'name':'Deposit 100','func':Itemlist.transfer,'param':[inv,m.bankList,id,100],'nokey':true},
+					{'name':'Deposit 1000','func':Itemlist.transfer,'param':[inv,m.bankList,id,1000],'nokey':true},
+					{'name':'Deposit ' + m.pref.bankTransferAmount,'func':Itemlist.transfer,'param':[inv,m.bankList,id,m.pref.bankTransferAmount],'nokey':true},
 				]
 			});
 		}
@@ -234,20 +243,20 @@ Inventory.prototype.click = function(slot,side){
 	}
 	
 	//No Window
-	var item = Db.item[this.data[slot][0]];
+	var item = Db.item[inv.data[slot][0]];
 	if(side === 'left'){	
 		if(m.temp.selectInv){
-			var array = [this.data[slot][0]];
+			var array = [inv.data[slot][0]];
 			for(var i = List.main[key].temp.selectInv.param.length-1 ; i >= 0 ; i--){
 				array.unshift(List.main[key].temp.selectInv.param[i]); }
 				
-			keyFunction(key,List.main[key].temp.selectInv.func,array);
+			applyFunc.key(key,List.main[key].temp.selectInv.func,array);
 			return;
 		}
 		
 		if(item.option[0] && item.option[0].name !== 'Drop' && item.option[0].func){
-			keyFunction(key,item.option[0].func,item.option[0].param); 
-			if(item.remove){ this.remove(key,item.id); }
+			applyFunc.key(key,item.option[0].func,item.option[0].param); 
+			if(item.remove){ Itemlist.remove(inv,key,item.id); }
 		}	
 	}
 
@@ -264,41 +273,26 @@ Inventory.prototype.click = function(slot,side){
 
 
 
-Bank = function(key,data){
-	ItemList.apply( this, [40] );
-	this.alwaysStack = true;
-	this.type = 'bank';
-	this.key = key;
-	this.data = data || this.data;
-}
-
-Bank.prototype = new Inventory();
-
-Bank.prototype.click = function(slot,side){
-	if(!this.data[slot].length){ return; }
+Itemlist.click.bank = function(bank,slot,side){
+	if(!bank.data[slot].length){ return; }
 	if(side === 'left'){
-		var inv = List.main[this.key].invList;
-		this.transfer(inv,this.data[slot][0],1);
+		var inv = List.main[bank.key].invList;
+		Itemlist.transfer(bank,inv.data[slot][0],1);
 		return;
 	}
 	if(side === 'right'){
-		var id = this.data[slot][0];
+		var id = bank.data[slot][0];
 		Button.optionList(key,{
 			'name':Db.item[id].name,
 			'option':[
-				{'name':'Withdraw 5','func':'transferBankInv','param':[id,5]},
-				{'name':'Withdraw 25','func':'transferBankInv','param':[id,25]},
-				{'name':'Withdraw 100','func':'transferBankInv','param':[id,100]},
-				{'name':'Withdraw 1000','func':'transferBankInv','param':[id,1000]},
-				{'name':'Withdraw ' + List.main[key].pref.bankTransferAmount,'func':'transferBankInv','param':[id,List.main[key].pref.bankTransferAmount]},
+				{'name':'Withdraw 5','func':Itemlist.transfer,'param':[bank,inv.data[slot][0],5]},
+				{'name':'Withdraw 25','func':Itemlist.transfer,'param':[bank,inv.data[slot][0],25]},
+				{'name':'Withdraw 100','func':Itemlist.transfer,'param':[bank,inv.data[slot][0],100]},
+				{'name':'Withdraw 1000','func':Itemlist.transfer,'param':[bank,inv.data[slot][0],1000]},
+				{'name':'Withdraw ' + List.main[key].pref.bankTransferAmount,'func':Itemlist.transfer,'param':[bank,inv.data[slot][0],List.main[key].pref.bankTransferAmount]},
 			]
 		});
 	}
-}
-transferBankInv = function(key,id,amount){
-	var bank = List.main[key].bankList;
-	var inv = List.main[key].invList;
-	bank.transfer(inv,id,amount);
 }
 
 

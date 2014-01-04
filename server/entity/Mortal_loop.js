@@ -84,7 +84,7 @@ Mortal.loop.ability = function(m){
 			
 			//Do Ability Action (ex: Combat.action.attack)
 			for(var j in s.action){
-				keyFunction(m.id,s.action[j].func,s.action[j].param);
+				applyFunc.key(m.id,s.action[j].func,s.action[j].param);
 			}
 			break;	//1 ability per frame max
 		}
