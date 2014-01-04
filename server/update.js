@@ -12,7 +12,7 @@ Change.update = function(){
 		if(!mort.dead && mort.active !== false){
 		    for(var m in Change.update.list[mort.type]){         //m = watch or exist
     		    for (var k in Change.update.list[mort.type][m]){     //k = priority , reg , slow
-    		        if(frameCount % TIMER[k] === 0){
+    		        if(Loop.frameCount % TIMER[k] === 0){
 		            	for(var j in Change.update.list[mort.type][m][k])
 		            	    Change.update[m](mort,Change.update.list[mort.type][m][k][j]);	
     }}}}}
@@ -21,7 +21,7 @@ Change.update = function(){
 		var mort = List.main[i];
 		for(var m in Change.update.list.main){
     		for (var k in Change.update.list.main[m]){
-    	        if(frameCount % TIMER[k] === 0){
+    	        if(Loop.frameCount % TIMER[k] === 0){
 	            	for(var j in Change.update.list.main[m][k])
 			            Change.update[m](mort,Change.update.list.main[m][k][j]);	
     }}}}
@@ -30,7 +30,7 @@ Change.update = function(){
 		var mort = List.all[i];
     	for(var m in Change.update.list.priv){		
     	    for (var k in Change.update.list.priv[m]){
-    	        if(frameCount % TIMER[k] === 0){
+    	        if(Loop.frameCount % TIMER[k] === 0){
 	            	for(var j in Change.update.list.priv[m][k])
 			            Change.update[m](mort,Change.update.list.priv[m][k][j],true);	
     }}}}
@@ -122,7 +122,6 @@ Change.update.init = function(){
 				{'array':['windowList','offensive']},
 				{'array':['windowList','defensive']},
 				{'array':['windowList','trade'],'filter':Change.send.convert.tradeWindow},
-				{'array':['windowList','shop'],'filter':Change.send.convert.shopWindow},
 				{'array':['windowList','ability']},
 				{'array':['windowList','passive']},
 				{'array':['windowList','quest']},
@@ -213,7 +212,6 @@ Change.update.init = function(){
 	};
 	Change.update.list['strike'] = null;
 	Change.update.list['drop'] = null;
-	Change.update.list['shop'] = null;
 	
 	for(var i in Change.update.list){
 		if(!Change.update.list[i]){ Change.update.list[i] = {'watch':{'priority':[],'reg':[],'slow':[]},'exist':{'priority':[],'reg':[],'slow':[]}}; }

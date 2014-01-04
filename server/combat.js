@@ -180,39 +180,51 @@ Combat.collision.status = function(dmg,b,target){
 	
 Combat.collision.status.burn = function(mort,b){	
 	var info = b.burn;
-	mort.burned.time = info.time*(1-mort.resist.burn); 
-	mort.burned.magn = info.magn*(1-mort.resist.burn); 
-	mort.burned.type = info.type || 'hp'; 
+	var burn = mort.status.burn;
+	burn.active.time = info.time*(1-burn.resist); 
+	burn.active.magn = info.magn*(1-burn.resist); 
+	burn.active.type = info.type || 'hp'; 
 }
 
 Combat.collision.status.confuse = function(mort,b){
 	var info = b.confuse;
-	mort.confused.time = info.time*(1-mort.resist.confuse);
-	mort.confused.magn = info.magn*(1-mort.resist.confuse);
+	var confuse = mort.status.confuse;
+	
+	confuse.active.time = info.time*(1-confuse.resist);
+	confuse.active.magn = info.magn*(1-confuse.resist);
 	var left = Math.floor(Math.random()*4);
-	mort.confused.input = [left%4,(left+3)%4,(left+2)%4,(left+1)%4];
-	Mortal.boost(mort,{'stat':'aim','type':"+",'value':mort.confused.magn,'time':mort.confused.time,'name':'confuse'});
+	confuse.active.input = [left%4,(left+3)%4,(left+2)%4,(left+1)%4];
+	Mortal.boost(mort,{'stat':'aim','type':"+",'value':confuse.active.magn,'time':confuse.active.time,'name':'confuse'});
 }
 
 Combat.collision.status.bleed = function(mort,b,dmg){
 	var info = b.bleed;
-	mort.bleeded.push({'time':info.time,'magn':dmg.melee * info.magn/info.time *(1-mort.resist.bleed)});
+	var bleed = mort.status.bleed;
+	
+	bleed.active.push({'time':info.time,'magn':dmg.melee * info.magn/info.time *(1-bleed.resist)});
 }
 
 Combat.collision.status.chill = function(mort,b){
 	var info = b.chill;
-	Mortal.boost(mort,{'stat':'maxSpd','type':"*",'value':b.chill.magn*(1-mort.resist.chill),'time':b.chill.time*(1-mort.resist.chill),'name':'chill'}); 
+	var chill = mort.status.chill;
+	
+	Mortal.boost(mort,{'stat':'maxSpd','type':"*",'value':b.chill.magn*(1-chill.resist),'time':b.chill.time*(1-chill.resist),'name':'chill'}); 
 	//if(b.chill.atk){ addBoost(mort,{'stat':'atkSpd-0','type':"*",'value':b.chill.magn*(1-mort.resist.chill),'time':b.chill.time*(1-mort.resist.chill),'name':'chill'}); }}
 }
 
 Combat.collision.status.knock = function(mort,b){
 	var info = b.knock;
-	mort.knocked.time = info.time*(1-mort.resist.knock); 
-	mort.knocked.magn = info.magn*(1-mort.resist.knock);	
-	mort.knocked.angle = b.moveAngle;
+	var knock = mort.status.knock;
+	
+	knock.active.time = info.time*(1-knock.resist); 
+	knock.active.magn = info.magn*(1-knock.resist);	
+	knock.active.angle = b.moveAngle;
 }
 
 Combat.collision.status.drain = function(mort,b){
+	return;
+	//BROKEN
+	
 	var info = b.drain;
 	
 	var player = List.all[b.parent]; if(!player) return;
@@ -239,8 +251,8 @@ Combat.collision.pierce = function(b){
 	b.dmgMain *= b.pierce.dmgReduc;
 }
 
-Combat.collision.leech = function(mort,b){
-	var info = b.drain;
+Combat.collision.leech = function(mort,b,element){
+	var info = b.leech;
 	
 	var player = List.all[b.parent]; if(!player) return;
 	

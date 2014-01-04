@@ -93,7 +93,7 @@ Init.db.sprite = function(){
     	"anim": {
     		"Walk":{"startY":0,"frame":9,"sizeX":128,"sizeY":128,"dir":4,"spd":0.25,"next":"Walk"},
     		"Attack":{"startY":0,"frame":9,"sizeX":128,"sizeY":128,"dir":4,"spd":0.25,"next":"Walk"},
-    		"Death":{"startY":WIDTH2,"frame":9,"sizeX":128,"sizeY":128,"dir":1,"spd":0.25,"next":"Walk"},
+    		"Death":{"startY":Cst.WIDTH2,"frame":9,"sizeX":128,"sizeY":128,"dir":1,"spd":0.25,"next":"Walk"},
     		
     	}},
     	

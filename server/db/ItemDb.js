@@ -12,7 +12,6 @@ a['testing']    //testing is the item id
 					{'name':'Craft Weapon','func':'Craft.plan','param':[{'category':'weapon'},{'item':[]}]},
 					{'name':'Tele','func':'Mortal.teleport','param':[1230,1230,'ryve']},
 					{'name':'Open Bank','func':'Main.openWindow','param':['bank']},
-					{'name':'Open Shop','func':'Main.openWindow','param':['shop','lol']},
 			
 			]};
 */
@@ -21,7 +20,7 @@ Item = {};
 
 //Similar format than Equip
 Init.db.item = function (cb){
-	Db.item = {}; itemPreDb = {}; a = itemPreDb;
+	Db.item = {}; var itemPreDb = {}; a = itemPreDb;
 	
 	db.item.find({},{'_id':0},function(err, results) { if(err) throw err
 		for(var i in results){
@@ -49,7 +48,6 @@ Init.db.item = function (cb){
 						{'name':'Craft Weapon','func':'Craft.plan','param':[{'category':'weapon'},{'item':[]}]},
 						{'name':'Tele','func':'Mortal.teleport','param':[1230,1230,'ryve']},
 						{'name':'Open Bank','func':'Main.openWindow','param':['bank']},
-						{'name':'Open Shop','func':'Main.openWindow','param':['shop','lol']},
 			
 			]};
 	
@@ -94,7 +92,7 @@ Init.db.item = function (cb){
 				{'name':'Use','func':'selectInv','param':[{'name':'Use Orb','func':'Craft.orb','param':['boost',1]}]},
 				{'name':'Use x10','func':'selectInv','param':[{'name':'Use Orb','func':'Craft.orb','param':['boost',10]}]},
 				{'name':'Use x100','func':'selectInv','param':[{'name':'Use Orb','func':'Craft.orb','param':['boost',100]}]},
-				{'name':'Use x{{pref.orbAmount}}','func':'selectInv','param':[{'name':'Use Orb','func':'Craft.orb','param':['boost','pref']}]},
+				{'name':'Use x{{main.pref.orbAmount}}','func':'selectInv','param':[{'name':'Use Orb','func':'Craft.orb','param':['boost','pref']}]},
 				{'name':'Set Orb -X','func':'Chat.add','param':['input','$pref,orbAmount,']},
 			]};	
 	a['upgrade_orb'] = {'name':'Orb of Upgrade','visual':'orb.upgrade','stack':1,
@@ -102,7 +100,7 @@ Init.db.item = function (cb){
 				{'name':'Use','func':'selectInv','param':[{'name':'Use Orb','func':'Craft.orb','param':['upgrade',1]}]},
 				{'name':'Use x10','func':'selectInv','param':[{'name':'Use Orb','func':'Craft.orb','param':['upgrade',10]}]},
 				{'name':'Use x100','func':'selectInv','param':[{'name':'Use Orb','func':'Craft.orb','param':['upgrade',100]}]},
-				{'name':'Use x{{pref.orbAmount}}','func':'selectInv','param':[{'name':'Use Orb','func':'Craft.orb','param':['upgrade','pref']}]},
+				{'name':'Use x{{main.pref.orbAmount}}','func':'selectInv','param':[{'name':'Use Orb','func':'Craft.orb','param':['upgrade','pref']}]},
 				{'name':'Set Orb -X','func':'Chat.add','param':['input','$pref,orbAmount,']},
 			]};	
 	a['removal_orb'] = {'name':'Orb of Removal','visual':'orb.removal','stack':1,
@@ -110,7 +108,7 @@ Init.db.item = function (cb){
 				{'name':'Use','func':'selectInv','param':[{'name':'Use Orb','func':'Craft.orb','param':['removal',1]}]},
 				{'name':'Use x10','func':'selectInv','param':[{'name':'Use Orb','func':'Craft.orb','param':['removal',10]}]},
 				{'name':'Use x100','func':'selectInv','param':[{'name':'Use Orb','func':'Craft.orb','param':['removal',100]}]},
-				{'name':'Use x{{pref.orbAmount}}','func':'selectInv','param':[{'name':'Use Orb','func':'Craft.orb','param':['removal','pref']}]},
+				{'name':'Use x{{main.pref.orbAmount}}','func':'selectInv','param':[{'name':'Use Orb','func':'Craft.orb','param':['removal','pref']}]},
 				{'name':'Set Orb -X','func':'Chat.add','param':['input','$pref,orbAmount,']},
 			]};	
 	//}
@@ -131,7 +129,7 @@ Item.creation = function(item){
 	
 	item = useTemplate(Item.template(),item);
 	
-	if(item.drop){	item.option.push({'name':'Drop','func':'dropInv','param':[item.id]})}
+	if(item.drop){	item.option.push({'name':'Drop','func':'Mortal.dropInv','param':[item.id]})}
 
 	Db.item[item.id] = item;
 }

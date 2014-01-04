@@ -217,7 +217,7 @@ Equip.creation = function(equip){
 		'type':'equip',
 		'id':equip.id,
 		'option':[	
-			{'name':'Examine Equip','func':'Equip.examine','param':[equip.id]},
+			{'name':'Examine Equip','func':'Main.examineEquip','param':[equip.id]},
 			{'name':'Change Equip','func':'Mortal.switchEquip','param':[equip.id]},
 			{'name':'Salvage','func':'Craft.salvage','param':[equip.id]},
 		],
@@ -268,8 +268,4 @@ if self found => all boost become *1.1
 */
 	
 
-
-Equip.examine = function(key, id){
-	openPopup(key,'equip',id);
-}
 

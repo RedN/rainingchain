@@ -48,3 +48,9 @@ db.filterDb = function(){
 
 Init = {};
 Init.db = {};
+
+(function(){
+	 ObjectKeys = Object.keys(this);
+})();
+
+

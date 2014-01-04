@@ -16,7 +16,7 @@ Draw.loop = function (key){
 	}
 	if(!server){
 		//Clear
-		for(var i in ctxList){ctxList[i].clearRect(0, 0, WIDTH, HEIGHT);}
+		for(var i in ctxList){ctxList[i].clearRect(0, 0, Cst.WIDTH, Cst.HEIGHT);}
 		for(var i = 0 ; i < drawHtmlDiv.length; i++){ drawHtmlDiv[i].style.visibility = 'hidden';}
 		btnList = [];
 		Input.event.mouse.drag.update();
@@ -69,7 +69,7 @@ Draw.anim = function (layer){
 			ctx.drawImage(image,
 				sizeX*slotX,sizeY*slotY+startY,
 				sizeX,sizeY,
-				WIDTH2+anim.x-player.x-sizeX/2*size,HEIGHT2+anim.y-player.y-sizeY/2*size,
+				Cst.WIDTH2+anim.x-player.x-sizeX/2*size,Cst.HEIGHT2+anim.y-player.y-sizeY/2*size,
 				sizeX*size,sizeY*size
 				);
 		}
@@ -87,8 +87,8 @@ Draw.entity.mortal = function (key){
 			if(mort && !mort.dead && i !== key && mort.hitBox){
 				var player = List.mortal[key];
 				
-				var x = WIDTH2 + mort.x - player.x;
-				var y = HEIGHT2 + mort.y - player.y;
+				var x = Cst.WIDTH2 + mort.x - player.x;
+				var y = Cst.HEIGHT2 + mort.y - player.y;
 				
 				var info = {
 					"rect":Collision.getHitBox({x:x,y:y,hitBox:mort.hitBox}),
@@ -141,8 +141,8 @@ Draw.entity.mortal.chatHead = function(mort){
 	var spriteFromDb = Db.sprite[spriteServer.name];
 	var sizeMod = spriteFromDb.size* spriteServer.sizeMod;
 	
-	var numX = WIDTH2+mort.x-player.x;
-	var numY = HEIGHT2+mort.y-player.y - 35 + spriteFromDb.hpBar*sizeMod;;
+	var numX = Cst.WIDTH2+mort.x-player.x;
+	var numY = Cst.HEIGHT2+mort.y-player.y - 35 + spriteFromDb.hpBar*sizeMod;;
 	
 	ctx.fillStyle="yellow";
 	ctx.textAlign = 'center';
@@ -160,8 +160,8 @@ Draw.entity.mortal.hpBar = function(mort){
 	var animFromDb = spriteFromDb.anim[spriteServer.anim];
 
 	var sizeMod = spriteFromDb.size* spriteServer.sizeMod;
-	var numX = WIDTH2+mort.x-player.x-50;
-	var numY = HEIGHT2+mort.y-player.y + spriteFromDb.hpBar*sizeMod;
+	var numX = Cst.WIDTH2+mort.x-player.x-50;
+	var numY = Cst.HEIGHT2+mort.y-player.y + spriteFromDb.hpBar*sizeMod;
 
 	if(mort.type == 'enemy'){ ctx.fillStyle="red"; }
 	if(mort.type == 'player'){ ctx.fillStyle="green"; }
@@ -201,8 +201,8 @@ Draw.entity.sprite = function (mort){
 		startY,
 		animFromDb.sizeX,
 		animFromDb.sizeY,
-		WIDTH2-animFromDb.sizeX/2*sizeMod + mort.x-player.x,
-		HEIGHT2-animFromDb.sizeY/2*sizeMod + mort.y-player.y,
+		Cst.WIDTH2-animFromDb.sizeX/2*sizeMod + mort.x-player.x,
+		Cst.HEIGHT2-animFromDb.sizeY/2*sizeMod + mort.y-player.y,
 		animFromDb.sizeX * sizeMod,
 		animFromDb.sizeY * sizeMod);
 	
@@ -212,8 +212,8 @@ Draw.entity.drop = function(key){
 	if(server){
 		for(var i in List.drop){
 			var drop = List.drop[i];
-			var numX = WIDTH2 + drop.x - List.mortal[key].x;
-			var numY = HEIGHT2 + drop.y - List.mortal[key].y;
+			var numX = Cst.WIDTH2 + drop.x - List.mortal[key].x;
+			var numY = Cst.HEIGHT2 + drop.y - List.mortal[key].y;
 			
 			Button.creation(key,{
 			"rect":[numX,numX+32,numY,numY+32],
@@ -231,8 +231,8 @@ Draw.entity.drop = function(key){
 		for(var i in List.drop){
 			var drop = List.drop[i];
 					
-			var numX = WIDTH2 + drop.x - player.x;
-			var numY = HEIGHT2 + drop.y - player.y;
+			var numX = Cst.WIDTH2 + drop.x - player.x;
+			var numY = Cst.HEIGHT2 + drop.y - player.y;
 			
 			Draw.item(drop.item,[numX,numY]);
 		}
@@ -244,7 +244,7 @@ Draw.entity.drop = function(key){
 //{Upper Interface
 Draw.minimap = function (){ ctxrestore();
 	ctx = ctxList.stage;
-	var map = List.map[player.map];
+	var map = Db.map[player.map];
 	var mapX = Math.min(map.img.b.length-1,Math.max(0,Math.floor((player.x-1024)/2048)));
 	var mapY = Math.min(map.img.b[mapX].length-1,Math.max(0,Math.floor((player.y-1024)/2048)));
 	var mapXY = map.img.b[mapX][mapY];
@@ -252,19 +252,19 @@ Draw.minimap = function (){ ctxrestore();
 	var pY = player.y-mapY*2048;
 	
 	
-	var sx = WIDTH - WIDTH/main.pref.mapRatio;
+	var sx = Cst.WIDTH - Cst.WIDTH/main.pref.mapRatio;
 	var sy = 0;
-	var w = WIDTH/main.pref.mapRatio;
-	var h = HEIGHT/main.pref.mapRatio;
+	var w = Cst.WIDTH/main.pref.mapRatio;
+	var h = Cst.HEIGHT/main.pref.mapRatio;
 	
 	var mapZoomFact = main.pref.mapZoom/100;
 	
 	var mapCst = main.pref.mapRatio*mapZoomFact;
 	
-	var numX = (pX - WIDTH/2 * mapZoomFact)/2;
-	var numY = (pY - HEIGHT/2 * mapZoomFact)/2;
-	var longueur = WIDTH* mapZoomFact/2;
-	var hauteur = HEIGHT* mapZoomFact/2;
+	var numX = (pX - Cst.WIDTH/2 * mapZoomFact)/2;
+	var numY = (pY - Cst.HEIGHT/2 * mapZoomFact)/2;
+	var longueur = Cst.WIDTH* mapZoomFact/2;
+	var hauteur = Cst.HEIGHT* mapZoomFact/2;
 	var diffX = numX + longueur - mapXY.width;
 	var diffY = numY + hauteur - mapXY.height;
 	var startX = Math.max(numX,0);
@@ -276,14 +276,14 @@ Draw.minimap = function (){ ctxrestore();
 	
 	//Box
 	ctx.fillStyle = "black";
-	ctx.fillRect(sx,sy,WIDTH/main.pref.mapRatio,HEIGHT/main.pref.mapRatio);
+	ctx.fillRect(sx,sy,Cst.WIDTH/main.pref.mapRatio,Cst.HEIGHT/main.pref.mapRatio);
 	
 	ctx.drawImage(mapXY, startX,startY,tailleX,tailleY,sx+(startX-numX)/mapCst*2,sy + (startY-numY)/mapCst*2,tailleX/mapCst*2,tailleY/mapCst*2);
 	
-	Draw.icon('system.square',[sx + WIDTH/main.pref.mapRatio/2-2,sy + HEIGHT/main.pref.mapRatio/2-2],4);
+	Draw.icon('system.square',[sx + Cst.WIDTH/main.pref.mapRatio/2-2,sy + Cst.HEIGHT/main.pref.mapRatio/2-2],4);
 	
 	
-	ctx.strokeRect(sx,sy,WIDTH/main.pref.mapRatio,HEIGHT/main.pref.mapRatio);
+	ctx.strokeRect(sx,sy,Cst.WIDTH/main.pref.mapRatio,Cst.HEIGHT/main.pref.mapRatio);
 	
 	var disX = 50;
 	var disY = 22;
@@ -306,10 +306,10 @@ Draw.minimap.icon = function(){
 	var zoom = main.pref.mapZoom/100;
 	var ratio = main.pref.mapRatio;
 	
-	var sx = WIDTH - WIDTH/main.pref.mapRatio;
+	var sx = Cst.WIDTH - Cst.WIDTH/main.pref.mapRatio;
 	var sy = 0;
-	var w = WIDTH/main.pref.mapRatio;
-	var h = HEIGHT/main.pref.mapRatio;
+	var w = Cst.WIDTH/main.pref.mapRatio;
+	var h = Cst.HEIGHT/main.pref.mapRatio;
 	
 	
 	for(var i in List.mortal){
@@ -318,8 +318,8 @@ Draw.minimap.icon = function(){
 			var vx = m.x - player.x;
 			var vy = m.y - player.y;
 			
-			var cx = sx + WIDTH/ratio/2; //center
-			var cy = sy + HEIGHT/ratio/2;
+			var cx = sx + Cst.WIDTH/ratio/2; //center
+			var cy = sy + Cst.HEIGHT/ratio/2;
 			Draw.icon(m.minimapIcon,[cx+vx/zoom/ratio-9,cy+vy/zoom/ratio-9],18);
 		}
 	}
@@ -330,9 +330,9 @@ Draw.resource = function (){ ctxrestore();
 	ctx = ctxList.stage;
 	
 	var h = 30; 
-	var sx = WIDTH-WIDTH/4;
-	var sy = HEIGHT/main.pref.mapRatio;
-	var w = WIDTH/4;
+	var sx = Cst.WIDTH-Cst.WIDTH/4;
+	var sy = Cst.HEIGHT/main.pref.mapRatio;
+	var w = Cst.WIDTH/4;
 	
 	ctx.fillStyle = 'grey';
 	ctx.globalAlpha = 0.5;
@@ -404,17 +404,17 @@ Draw.context = function (){ ctxrestore();
 //Map
 Draw.map = function (layer){ ctxrestore();
 	ctx = ctxList.stage;
-	var map = List.map[player.map];
+	var map = Db.map[player.map];
 	var mapX = Math.min(map.img[layer].length-1,Math.max(0,Math.floor((player.x-1024)/2048)));
 	var mapY = Math.min(map.img[layer][mapX].length-1,Math.max(0,Math.floor((player.y-1024)/2048)));
 	var mapXY = map.img[layer][mapX][mapY];
 	var pX = player.x-mapX*2048;
 	var pY = player.y-mapY*2048;
 	
-	var numX = (pX - WIDTH/2)/2 ;
-	var numY = (pY - HEIGHT/2) /2 ;
-	var longueur = WIDTH/2;
-	var hauteur = HEIGHT/2;
+	var numX = (pX - Cst.WIDTH/2)/2 ;
+	var numY = (pY - Cst.HEIGHT/2) /2 ;
+	var longueur = Cst.WIDTH/2;
+	var hauteur = Cst.HEIGHT/2;
 	var diffX = numX + longueur - mapXY.width;
 	var diffY = numY + hauteur - mapXY.height;
 	var startX = Math.max(numX,0);
@@ -438,8 +438,6 @@ Draw.popup = function(){
 }
 
 Draw.popup.equip = function(){ ctxrestore();
-	if(server) return;
-	
 	var w = 250;
 	var h = 250;
 	var pop = main.popupList.equip;
@@ -459,8 +457,8 @@ Draw.popup.equip = function(){ ctxrestore();
 	if(equip === undefined){queryDb('equip',id); return; }
 	if(equip === 0){return;} //waiting for query answer
 	
-	var sx = Math.max(0,Math.min(posx-w,WIDTH-w));
-	var sy = Math.max(0,Math.min(posy-h,HEIGHT - h));	
+	var sx = Math.max(0,Math.min(posx-w,Cst.WIDTH-w));
+	var sy = Math.max(0,Math.min(posy-h,Cst.HEIGHT - h));	
 	
 	//Frame
 	ctx.globalAlpha = 0.9;
@@ -515,12 +513,6 @@ Draw.popup.equip = function(){ ctxrestore();
 	}
 }
 
-openPopup = function(key,name,id){
-	var player = List.all[key];
-	if(name === 'equip'){
-		List.main[key].popupList.equip = {'x':player.mouseX,'y':player.mouseY,'id':id};
-	}	
-}
 
 //Option
 Draw.optionList = function(){ ctxrestore();
@@ -541,9 +533,9 @@ Draw.optionList = function(){ ctxrestore();
 	var w = 120;
 	var h = nameY + optionY*option.length
 	
-	sx = Math.min(sx,WIDTH - w);
+	sx = Math.min(sx,Cst.WIDTH - w);
 	sx = Math.max(sx,0);
-	sy = Math.min(sy,HEIGHT - h);
+	sy = Math.min(sy,Cst.HEIGHT - h);
 	sy = Math.max(sy,0);
 	
 	
@@ -735,7 +727,7 @@ Draw.chat.constant = function(){
 		w:600,
 		h:200,
 		x:0,
-		y:HEIGHT-200,
+		y:Cst.HEIGHT-200,
 		numX:5,			//border for text
 		faceX:96 + 5,	//push dia text by that if has face
 		facesX:8,		//border for face	
@@ -765,7 +757,7 @@ Draw.chat.constant = function(){
 Draw.icon = function(info,xy,size){
 	size = size || 32;
 	var slot = Img.icon.index[info];
-	ctx.drawImage(Img.icon,slot.x,slot.y,ICON,ICON,xy[0],xy[1],size,size);
+	ctx.drawImage(Img.icon,slot.x,slot.y,Cst.ICON,Cst.ICON,xy[0],xy[1],size,size);
 }
 
 Draw.item = function(info,xy,size){
@@ -774,7 +766,7 @@ Draw.item = function(info,xy,size){
 	var name = typeof info === 'string' ? info : info[0];
 	var amount = typeof info === 'string' ? 1 : Math.floor(info[1]);
 	var slot = Img.item.index[name];
-	ctx.drawImage(Img.item,slot.x,slot.y,ITEM,ITEM,xy[0],xy[1],size,size);
+	ctx.drawImage(Img.item,slot.x,slot.y,Cst.ITEM,Cst.ITEM,xy[0],xy[1],size,size);
 	
 	if(amount > 1){
 		if(amount >= 100000){
@@ -810,8 +802,8 @@ Draw.element = function(x,y,w,h,data,noover){
 	ctx.strokeRect(x,y,w,h);
 	var total = 0; for(var i in data){	total += data[i]; }
 	
-	var mx = Math.min(mouse.x,WIDTH-150);
-	var my = Math.min(mouse.y,HEIGHT-25);
+	var mx = Math.min(mouse.x,Cst.WIDTH-150);
+	var my = Math.min(mouse.y,Cst.HEIGHT-25);
 	
 	for(var i in data){
 		var length = w*data[i]/total;

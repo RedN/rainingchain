@@ -21,7 +21,7 @@ Loop.update = function(){
 	
 	Anim.update();
 	// BROKEN Mortal.update.permBoost(player);    //check if server send new boost info
-	map = List.map[player.map];
+	map = Db.map[player.map];
 	if(Db.equip[player.weapon.id]){ player.weapon = Db.equip[player.weapon.id]; }
 	
 	//Add to ChatBox which was added by main

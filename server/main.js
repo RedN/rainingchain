@@ -13,6 +13,7 @@ ctxrestore = function(){};
 
 /////
 Db = {};
+Db.dialogue = {};
 List = {
 	all:{},		//EVERYTHING (player id refers to mortal)
 	mortal:{},	//all mortals (player,enemy)
@@ -28,7 +29,6 @@ List = {
 	nameToKey:{},	//used to convert a player name into the player key
 };
 
-shopList = {}; //all shop
 
 //Sync DB and Server when Server starts
 exports.initServer = function (){
@@ -40,8 +40,6 @@ exports.initServer = function (){
 			initAbilityModDb();
 			
 			Init.db.sprite();
-			initShopDb();
-			Init.db.dialogue();
 			Init.db.map();
 			
 			Init.db.drop();
@@ -53,13 +51,20 @@ exports.initServer = function (){
 			Init.db.boss();
 								
 			Init.db.quest();
-			initLoadMap();
+			Init.db.dialogue();
+			Map.load();	//all maps
 			
 			Init.db.passive();
 			Init.db.clan();
 			initAbiConsDb();
 			Test.serverStart();
 			setInterval(Loop,40);
+			
+			//Track Global Variables
+			var tmp = Object.keys(this); for(var i in ObjectKeys) tmp.splice(tmp.indexOf(ObjectKeys[i]),1);
+			//permConsoleLog(tmp);
+    
+			
 		})
 	]);
 	

@@ -7,8 +7,8 @@ io.sockets.on('connection', function (socket) {
 			var key = socket.key;
 			if(List.main[key]){
 				
-				d[1] = d[1].mm(0,WIDTH);
-				d[2] = d[2].mm(0,HEIGHT);
+				d[1] = d[1].mm(0,Cst.WIDTH);
+				d[2] = d[2].mm(0,Cst.HEIGHT);
 				
 				Button.test(key,d[1],d[2],d[0]);
 				Button.reset(key);
@@ -32,10 +32,10 @@ io.sockets.on('connection', function (socket) {
 			}
 
 			if(d.m){
-				player.mouseX = Math.min(Math.max(d.m[0],0),WIDTH);
-				player.mouseY = Math.min(Math.max(d.m[1],0),HEIGHT);
+				player.mouseX = Math.min(Math.max(d.m[0],0),Cst.WIDTH);
+				player.mouseY = Math.min(Math.max(d.m[1],0),Cst.HEIGHT);
 			}
-			player.angle = atan2(player.mouseY - HEIGHT/2,player.mouseX - WIDTH/2);	
+			player.angle = atan2(player.mouseY - Cst.HEIGHT/2,player.mouseX - Cst.WIDTH/2);	
 				
 		} catch(err){ logError(err); disconnectPlayer(socket,'Reload the page'); } 
 	

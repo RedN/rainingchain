@@ -34,7 +34,9 @@ try {
     		if(List.all[i]) List.all[i].toRemove = 0; 	
     	}
     	
-    
+		for(var i in data.u.r){
+			remove(i);
+		}
     
     	//Update Main List
     	for(var i in data.u.m){
@@ -47,7 +49,7 @@ try {
 		var mort = List.all[i];
 		if(mort){	
 			mort.toRemove++;
-			if(mort.toRemove > 1){ //&& (!mort.sprite || (mort.sprite && mort.sprite.anim && !mort.sprite.anim.remove))){
+			if(mort.toRemove > 40){ //&& (!mort.sprite || (mort.sprite && mort.sprite.anim && !mort.sprite.anim.remove))){
 				remove(i);
 			}
 		}

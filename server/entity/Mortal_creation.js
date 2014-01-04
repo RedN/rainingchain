@@ -140,7 +140,7 @@ Mortal.creation.mod.list = {
 	'immuneRange': (function(e){ e.equip.def.range = 1/0;  return e; }),
 	'immuneMagic': (function(e){ e.equip.def.magic = 1/0;  return e; }),
 
-	'immuneStatus': (function(e){ for(var i in e.resist){ e.resist[i] = 100; }  return e; }),
+	'immuneStatus': (function(e){ for(var i in e.status){ e.status[i].resist = 100; }  return e; }),
 
 	//'BAx2': (function(e){ e.bonus.bullet.amount *= 2; return e; }),
 
@@ -210,14 +210,7 @@ Mortal.creation.nevercombat = function(mort){
 	delete mort.reflect;
 	
 	//Resist
-	delete mort.knocked;
-	delete mort.burned;
-	delete mort.chilled;
-	delete mort.confused;	
-	delete mort.bleeded;
-	delete mort.drained;
-	delete mort.resist;
-	delete mort.resistMax;
+	delete mort.status;
 	
 	//Atk
 	delete mort.dmg;

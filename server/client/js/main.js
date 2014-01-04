@@ -13,7 +13,7 @@ List = {
 	strike:{},	//all strike
 	group:{},	//all enemy group
 	drop:{},	//all drop
-	map:{},		//all animation
+	anim:{},	//all animation
 	main:{},	//all List.main of player. (player id) List.main[id].something on server => window.something on client
 	map:{},		//all maps including instance 
 	socket:{},	//all socket (player id)
@@ -114,8 +114,8 @@ Init.game = function (data) {
 addCanvas = function(name,id,z){
 	var cv = document.createElement("canvas");
 	cv.id = id;
-	cv.width = WIDTH;
-	cv.height = HEIGHT;
+	cv.width = Cst.WIDTH;
+	cv.height = Cst.HEIGHT;
 	cv.style.border = '1px solid #000000';
 	cv.style.position = 'absolute';
 	cv.style.left = '0px';

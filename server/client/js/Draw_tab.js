@@ -44,8 +44,8 @@ Draw.tab.main = function (){ ctxrestore();
 Draw.tab.main.constant = function(){
 	var sizeX = 200;
 	var sizeY = 300;
-	var startX = WIDTH-sizeX;
-	var startY = HEIGHT-sizeY;
+	var startX = Cst.WIDTH-sizeX;
+	var startY = Cst.HEIGHT-sizeY;
 	
 	var dy = 40;
 	return {

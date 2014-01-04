@@ -6,7 +6,7 @@ Change.send = function(){
 		var sa = {};
 	
 		sa.i = {'f':{},'p':{},'m':{}};  //init (first time seen by player)
-		sa.u = {'f':{},'p':{},'m':{}};  //update (already init-ed)
+		sa.u = {'f':{},'p':{},'m':{},'r':{}};  //update (already init-ed)
 		sa.a = [];  //animation
 		
 		//Update Private Player
@@ -38,6 +38,7 @@ Change.send = function(){
 			}
 			
 		}
+		sa.u.r = player.removeList;
 		
 		//Main
 		sa.u.m = List.main[key].change;
@@ -64,6 +65,7 @@ Change.send = function(){
 		if(typeof sa.u.f === 'object' && Object.keys(sa.u.f).length === 0){ delete sa.u.f }
 		if(typeof sa.u.p === 'object' && Object.keys(sa.u.p).length === 0){ delete sa.u.p }
 		if(typeof sa.u.m === 'object' && Object.keys(sa.u.m).length === 0){ delete sa.u.m }
+		if(typeof sa.u.r === 'object' && Object.keys(sa.u.r).length === 0){ delete sa.u.r }
 		
 		if(sa.a.length === 0){ delete sa.a }
 		if(Object.keys(sa.u).length === 0){ delete sa.u }
@@ -99,8 +101,8 @@ Change.send.compressXYA = function(info){
 
 Change.send.reset = function(){
 	List.anim = {};
-	for(var i in List.all){ List.all[i].change = {};}
-	for(var i in List.main){ List.main[i].change = {}; List.all[i].privateChange = {};}
+	for(var i in List.all){ List.all[i].change = {}; }
+	for(var i in List.main){ List.main[i].change = {}; List.all[i].privateChange = {}; List.all[i].removeList = {};}
 }
 
 
@@ -164,28 +166,8 @@ Change.send.convert.optionList = function(option){
 	return draw;
 }
 
-Change.send.convert.shopWindow = function(shop){
-	var draw = {};
-	draw.name = shop.name;
-	draw.stock = {'player':[],'default':[]};
-	for(var i in shop.stock.player){
-		draw.stock.player[i] = [];
-		draw.stock.player[i][0] = Db.item[shop.stock.player[i][0]].visual;
-		draw.stock.player[i][1] = shop.stock.player[i][1];
-	}
-	for(var i in shop.stock.default){
-		draw.stock.default[i] = [];
-		draw.stock.default[i][0] = Db.item[shop.stock.default[i][0]].visual;
-		draw.stock.default[i][1] = shop.stock.default[i][1];
-	}
-	return draw;
-
-}
-
 Change.send.convert.itemlist = function(inv){
 	var draw = [];
-	
-	
 	for(var i in inv.data){
 		draw[i] = '';
 		if(inv.data[i][0]){
@@ -196,7 +178,6 @@ Change.send.convert.itemlist = function(inv){
 		}
 	}
 	return draw;
-
 }
 
 
@@ -225,7 +206,7 @@ Change.send.convert.abilityList = function(list){
 
 //used for instanced. client doesnt need to know its instanced
 Change.send.convert.map = function(name){
-	return convertMapId[name];
+	return Map.convertId[name];
 }
 
 

@@ -1,8 +1,9 @@
 //Map
 Init.db.map = function(){
     //[amount of sub-map in X, amount of sub-maps in Y]
-    
-	mapDb = {
+    Db.map = {};
+	
+	var mapDb = {
 		'test':[1,1],
 		'ryve':[3,1],
 	}
@@ -15,8 +16,8 @@ Init.db.map = function(){
 
 Map = {};
 Map.creation = function(name,info){
-	var m = {};
 	
+	var m = {};
 	m.name = name;
 	m.img = {'a':[],'b':[]};	//a: above, b:below
 
@@ -31,7 +32,7 @@ Map.creation = function(name,info){
 			}
 		}
 	}
-	List.map[name] = m;
+	Db.map[name] = m;
 	
 }
 

@@ -1,7 +1,7 @@
 //####Update Mortal####
 Mortal.loop = function(mort){	
 	Test.loop.mortal(i);
-	if(frameCount % 25 === 0){ Mortal.loop.activeList(mort); }
+	if(Loop.frameCount % 25 === 0){ Mortal.loop.activeList(mort); }
 	if(!mort.active || mort.dead) return;
 		
 	if(mort.combat){
@@ -25,8 +25,8 @@ Mortal.loop = function(mort){
 	}
 	if(mort.type === 'player'){
 		var i = mort.id;
-		if(frameCount % 2 == 0){ Draw.loop(i); }    //draw everything and add button
-		if(frameCount % 25 == 0){ Mortal.loop.friendList(mort); }    //check if any change in friend list
+		if(Loop.frameCount % 2 == 0){ Draw.loop(i); }    //draw everything and add button
+		if(Loop.frameCount % 25 == 0){ Mortal.loop.friendList(mort); }    //check if any change in friend list
 		if(List.main[i].windowList.trade){ Mortal.loop.trade(mort); };    
 		if(List.main[i].dialogue){ Mortal.loop.dialogue(mort); }
 		
@@ -100,32 +100,36 @@ Mortal.loop.status = function(mort){
 }
 
 Mortal.loop.status.knock = function(mort){
-	if(mort.knocked.time > 0){ 
-		mort.spdX = cos(mort.knocked.angle)*mort.knocked.magn;
-		mort.spdY = sin(mort.knocked.angle)*mort.knocked.magn;
-		mort.knocked.time--;
+	var status = mort.status.knock.active;
+	if(status.time > 0){ 
+		mort.spdX = cos(status.angle)*status.magn;
+		mort.spdY = sin(status.angle)*status.magn;
+		status.time--;
 	}
 }
 
 Mortal.loop.status.confuse = function(mort){
-	if(mort.confused.time > 0){
-		mort.confused.time--;
+	var status = mort.status.confuse.active;
+	if(status.time > 0){
+		status.time--;
 	} 
 }
 
 Mortal.loop.status.burn = function(mort){
-	if(mort.burned.time > 0){
-		if(!mort.burned.type || mort.burned.type == 'hp'){ mort.hp *= (1-mort.burned.magn);}
-		if(mort.burned.type == 'maxHp'){ mort.hp -= mort.resource.hp.max*mort.burned.magn;}
-		mort.burned.time--;
+	var status = mort.status.burn.active;
+	if(status.time> 0){
+		if(!status.type || status.type == 'hp'){ mort.hp *= (1-status.magn);}
+		if(status.type == 'maxHp'){ mort.hp -= mort.resource.hp.max*status.magn;}
+		status.time--;
 	}
 }
 
 Mortal.loop.status.bleed = function(mort){
-	for(var i in mort.bleeded){
-		mort.hp -= mort.bleeded[i].magn;
-		mort.bleeded[i].time--;
-		if(mort.bleeded[i].time <= 0){ mort.bleeded.splice(i,1); }
+	var status = mort.status.confuse.active;
+	for(var i in status){
+		mort.hp -= status[i].magn;
+		status[i].time--;
+		if(status[i].time <= 0){ status.splice(i,1); }
 	}
 }
 
@@ -145,7 +149,7 @@ Mortal.loop.summon = function(mort){
 	}
 	
 	//(assume player is child)
-    if(mort.summoned && frameCount % 5 == 0){
+    if(mort.summoned && Loop.frameCount % 5 == 0){
 		if(!mort.summoned.father || !List.all[mort.summoned.father]){ Mortal.remove(mort); return; }
 	    
 	    //if too far, teleport near master
@@ -165,9 +169,9 @@ Mortal.loop.summon = function(mort){
 //test collision with map
 Mortal.loop.bumper = function(mort){
 	mort.x = Math.max(mort.x,50);
-	mort.x = Math.min(mort.x,List.map[mort.map].grid[0].length*32-50);
+	mort.x = Math.min(mort.x,Db.map[mort.map].grid[0].length*32-50);
 	mort.y = Math.max(mort.y,50);
-	mort.y = Math.min(mort.y,List.map[mort.map].grid.length*32-50);
+	mort.y = Math.min(mort.y,Db.map[mort.map].grid.length*32-50);
 	
 	var bumperBox = mort.bumperBox;
 		
@@ -178,7 +182,7 @@ Mortal.loop.bumper = function(mort){
 
 //update movement. depends on spd.
 Mortal.loop.move = function(mort){
-	if(mort.confused && mort.confused.time > 0){ var bind = mort.confused.input;} else { var bind = [0,1,2,3]; }
+	if(mort.status && mort.status.confuse.active.time > 0){ var bind = mort.status.confuse.active.input;} else { var bind = [0,1,2,3]; }
 	if(mort.bumper[0]){mort.spdX = -Math.abs(mort.spdX*0.5) - 1;} 
 	if(mort.bumper[1]){mort.spdY = -Math.abs(mort.spdY*0.5) - 1;}
 	if(mort.bumper[2]){mort.spdX = Math.abs(mort.spdX*0.5) + 1;} 
@@ -223,7 +227,7 @@ Mortal.loop.aim = function (mort){
 Mortal.loop.boost = function(mort,full){
 	var array = {'fast':1,'reg':5,'slow':25};
 	for(var j in array){
-		if(frameCount % array[j] === 0){
+		if(Loop.frameCount % array[j] === 0){
 			for(var i in mort.boost[j]){
 				if(mort.boost[j][i].timer < 0){ 
 					var stat = mort.boost[j][i].stat;
@@ -340,15 +344,15 @@ Mortal.loop.input = function(mort){
 		}	
 		//Out of Zone
 		if(diff  >= mort.moveRange.farthest){
-			if(!mort.knocked.time){mort.active = 0;}	//Otherwise knock stops weird
+			if(!mort.status.knock.active.time){mort.active = 0;}	//Otherwise knock stops weird
 			mort.moveInput = [0,0,0,0];
 		}
 		
 		for(var i in mort.moveInput){	if(Math.random()< 0.02){ mort.moveInput[i] = 0;} }	//Prevent Piling
 		mort.abilityChange.press = '111111111111111';
 		
-		mort.mouseX = WIDTH2+diffX; 
-		mort.mouseY = HEIGHT2+diffY;
+		mort.mouseX = Cst.WIDTH2+diffX; 
+		mort.mouseY = Cst.HEIGHT2+diffY;
 		
 	}
 	

@@ -4,6 +4,7 @@
 
 //MAIN LOOP//
 Loop = function(){
+	Loop.frameCount++;	
     Test.loop();
     
 	Loop.Bullet();
@@ -11,7 +12,6 @@ Loop = function(){
 	Loop.EnemyGroup();
 	Loop.Mortal();
 	Loop.Drop();
-	Loop.Shop();
 	
 	Change.update();
 	Change.send();
@@ -19,6 +19,7 @@ Loop = function(){
 	Loop.logOut();
 	
 }
+Loop.frameCount = 0; 
 
 Loop.Mortal = function(){
 	for (var i in List.mortal ){     
@@ -110,7 +111,8 @@ ActiveList.add = function(bullet){
 }
 
 ActiveList.remove = function(b){
-	for(var i in b.viewedBy){	
+	for(var i in b.viewedBy){
+		if(b.viewedBy[i].removeList) b.viewedBy[i].removeList[b.publicId || b.id] = true;
         delete b.viewedBy[i].activeList[b.id];
 	}
 }

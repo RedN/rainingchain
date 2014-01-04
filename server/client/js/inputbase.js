@@ -194,8 +194,8 @@ $(window).keydown(function(e) { if(e.ctrlKey) { e.preventDefault();}});	//Disabl
 //Send
 Input.send = function(){
 	if($("#chatBoxInput").is(":focus") && Input.press.move.toString() !== "0,0,0,0"){ 
-		mouse.x = WIDTH2 + 10*Input.press.move[0] - 10*Input.press.move[2];
-		mouse.y = HEIGHT2 + 10*Input.press.move[1] - 10*Input.press.move[3];		
+		mouse.x = Cst.WIDTH2 + 10*Input.press.move[0] - 10*Input.press.move[2];
+		mouse.y = Cst.HEIGHT2 + 10*Input.press.move[1] - 10*Input.press.move[3];		
 	}
 
 	var d = {};

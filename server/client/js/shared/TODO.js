@@ -1,22 +1,10 @@
 
 
-send info
-	questHint and much more...
-	abilitymod
-	combat.mod
-	Init.db.customBoost
 
-status mods together mortal_init.js
-inventory/bank + send item name
-optionlist client only
+
 clear permContext bs
-new system for removed entity client side
-jqueryui (login, progress bar, dialogue option)
 quest in nutshell
 patch skill
-utilityshare
-have main in client inside of using window
-drop not working
 
 #Priority 1:
 -Implement Sound System
@@ -29,6 +17,8 @@ drop not working
 -Crafting Ability
 -Advanced Enemy Mods
 -Revamp Drop
+
+
 
 #Priority 3:
 -See Cooldown for ability
@@ -44,6 +34,7 @@ drop not working
 -Crafting System with White
 -Advanced Dialogue (Morrowind)
 -Offlinepm fix
+jqueryui (login, progress bar, dialogue option)
 
 
 TUTORIAL:

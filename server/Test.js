@@ -1,11 +1,11 @@
 Test = {};
 
-frameCount = 0; 
+
 
 
 //Main Test Loop
 Test.loop = function(){
-	frameCount++;
+	
 	Test.performance();
 	Test.bandwidth.display();
 	
@@ -14,7 +14,7 @@ Test.loop = function(){
 		
 //Performance
 Test.performance = function(){
-    if(Test.performance.active && frameCount % Test.performance.frequence === 0){
+    if(Test.performance.active && Loop.frameCount % Test.performance.frequence === 0){
         var d = Date.now();	
         permConsoleLog('Performance: ' + Math.round(40*Test.performance.frequence/(d - Test.performance.oldtime)*100) + '%');	
         Test.performance.oldtime = d;
@@ -38,7 +38,7 @@ Test.bandwidth.getSize = function(obj){
     return stringify(obj).length * 2;   //in bytes
 }  
 Test.bandwidth.display = function(){
-    if(frameCount % Test.bandwidth.frequence === 0){
+    if(Loop.frameCount % Test.bandwidth.frequence === 0){
         if(Test.bandwidth.upload.active) permConsoleLog('Upload: ' + Math.round(Test.bandwidth.upload.size/1000) + ' K bytes');
         if(Test.bandwidth.download.active) permConsoleLog('Download: ' + Math.round(Test.bandwidth.download.size/1000) + ' K bytes');
     }
@@ -46,8 +46,6 @@ Test.bandwidth.display = function(){
 
 
 Test.serverStart = function(){
-    
-    
     
 }
 

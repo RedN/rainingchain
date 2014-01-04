@@ -339,12 +339,12 @@ Mortal.dropItem = function(mort,killer){
 }
 
 Mortal.pickDrop = function (mort,id){
-	var main = List.main[mort.id];
+	var inv = List.main[mort.id].invList;
 	var drop = List.drop[id];
 		
 	if(drop){
-		if(distancePtPt(mort,drop) <= mort.pickRadius && Itemlist.test(main.invList,[[List.drop[id].item,List.drop[id].amount]])){
-			Itemlist.add(main.invList,drop.item,drop.amount);
+		if(distancePtPt(mort,drop) <= mort.pickRadius && Itemlist.test(inv,[[List.drop[id].item,List.drop[id].amount]])){
+			Itemlist.add(inv,drop.item,drop.amount);
 			Drop.remove(drop);		
 		}
 	}
@@ -356,7 +356,7 @@ Mortal.rightClickDrop = function(mort,rect){
 	for(var i in List.drop){
 		var d = List.drop[i];
 		if(d.map == List.all[key].map && Collision.RectRect(rect,[d.x,d.x+32,d.y,d.y+32]) ){
-			ol.option.push({'name':'Pick ' + Db.item[List.drop[i].item].name,'func':'pickDrop','param':[i]});
+			ol.option.push({'name':'Pick ' + Db.item[List.drop[i].item].name,'func':'Mortal.pickDrop','param':[i]});
 		}
 	}
 	
@@ -365,15 +365,14 @@ Mortal.rightClickDrop = function(mort,rect){
 	}	
 }
 	
-Mortal.dropInv = function(mort, id){
-	var key = mort.id;
-	var item = Db.item[id];
-	var player = List.all[key];
-	var amount = 1;
-	if(item.stack){ amount = Itemlist.have(List.main[key].invList,id,'amount'); }
+Mortal.dropInv = function(mort,id){
+	var inv = List.main[mort.id].invList;
+	var amount = Math.min(1,Itemlist.have(inv,id,0,'amount'));
 	
-	Drop.creation({'x':player.x,'y':player.y,'map':player.map,'item':id,'amount':amount,'timer':25*30});
-	Itemlist.remove(List.main[key].invList,id,amount);
+	if(!amount) return;
+	
+	Drop.creation({'x':mort.x,'y':mort.y,'map':mort.map,'item':id,'amount':amount,'timer':25*30});
+	Itemlist.remove(inv,id,amount);
 }
 
 

@@ -10,7 +10,7 @@ Main.template = function(key){
 		'pref':Main.template.pref(),
 		
 		"currentTab":"inventory",
-		"windowList":{'bank':0,'trade':0,'offensive':0,'defensive':0,'shop':0,'ability':0,'passive':0,'quest':0},
+		"windowList":{'bank':0,'trade':0,'offensive':0,'defensive':0,'ability':0,'passive':0,'quest':0},
 		"popupList":{'equip':0},
 		
 		'invList': ['','','','','','','','','','','','','','','','','','','','','','','',''],
@@ -71,9 +71,6 @@ Main.openWindow = function(main,name,param){
 	
 	var key = main.id;
 	
-	if(name === 'shop'){
-		main.windowList.shop = shopList[param];
-	}
 	if(name === 'quest'){
 		main.windowList.quest = param;
 		Quest.req.update(key,param);
@@ -89,8 +86,16 @@ Main.openWindow = function(main,name,param){
 }
 
 
+Main.openPopup = function(main,name,id){
+	var player = List.all[main.id];
+	if(name === 'equip'){
+		main.popupList.equip = {'x':player.mouseX,'y':player.mouseY,'id':id};
+	}	
+}
 
-
+Main.examineEquip = function(main, id){
+	Main.openPopup(main,'equip',id);
+}
 
 
 

@@ -119,15 +119,39 @@ Init.mortal = function(){
 		
 		
 		//Resist
-		mort.knocked = {"time":0,"magn":0,"angle":0};
-		mort.burned = {"time":0,"magn":0};
-		mort.chilled = {"time":0,"magn":0,"atk":0};
-		mort.confused = {"time":0,"magn":0,"input":[0,1,2,3]};	
-		mort.bleeded = [];
+		mort.status = {
+			'knock':{
+				'active':{"time":0,"magn":0,"angle":0},
+				'resist':0,
+				'resistMax':0,	
+			},
+			'burn':{
+				'active':{"time":0,"magn":0},
+				'resist':0,
+				'resistMax':0,	
+			},
+			'chill':{
+				'active':{"time":0,"magn":0,"atk":0},
+				'resist':0,
+				'resistMax':0,		
+			},
+			'confuse':{
+				'active':{"time":0,"magn":0,"input":[0,1,2,3]},
+				'resist':0,
+				'resistMax':0,	
+			},
+			'bleed':{
+				'active':[],
+				'resist':0,
+				'resistMax':0,	
+			},
+			'drain':{
+				'active':{"time":0,"magn":0},
+				'resist':0,
+				'resistMax':0,	
+			},
+		}
 		
-		
-		mort.resist = {"burn":0,"chill":0,"confuse":0,"knock":0,"bleed":0,'drain':0};
-		mort.resistMax = {"burn":75,"chill":75,"confuse":75,"knock":25,"bleed":25,"drain":25};
 		
 		//Atk
 		mort.dmgMain = 1;   //global modifier
@@ -159,7 +183,7 @@ Init.mortal = function(){
 		mort.map = 'test';	
 		
 		if(server){
-			mort.mapMod = deepClone(defaultMapMod); //mapmod: each map has a collision grid. it has as player-bound collision. ex: completing a quest opens a path
+			mort.mapMod = deepClone(Map.mapMod); //mapmod: each map has a collision grid. it has as player-bound collision. ex: completing a quest opens a path
 			
 			mort.mapMod["test"]["42-47"] = 1;
 			mort.mapMod["test"]["43-47"] = 1;
@@ -190,7 +214,7 @@ Init.mortal = function(){
 				'exp':{'melee':100000,'range':100000,'magic':100000,'metalwork':100000,'woodwork':100000,'leatherwork':100000,'geology':100000,'metallurgy':100000,'trapping':100000},
 				'lvl':{'melee':0,'range':0,'magic':0,'metalwork':0,'woodwork':0,'leatherwork':0,'geology':0,'metallurgy':0,'trapping':0},
 			} 
-			
+			mort.removeList = {};	//for things that got removed from activeList
 			mort.type = 'player';
 			mort.hitIf = 'player';
 			mort.targetIf = 'player';

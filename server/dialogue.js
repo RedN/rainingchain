@@ -29,58 +29,25 @@ Dialogue.option = function(key,option){
 
 
 Init.db.dialogue = function(){
-	Db.dialogue = {}
-	Db.dialogue['Jenny'] = {};
-	Db.dialogue['Jenny']['quest'] = {
-		'intro':{
-			'text':'Do you want to help me out?',
-			'face':'Jenny',
-			'option':[
-				{'text':"Sure.",
-					'next':{'node':'yes'},
-					'func':(function(key){  Db.quest['questId'].giveDevice(key); }),'param':[]
-				},
-				{'text':"No. I got other things to do.",
-					'next':{'node':'no'}},
-				
-			]},
-		'yes':{
-			'text':"Thank you so much! Take this magical shield and teleport to the Fire Monster Lair. Kill him and give me the key he will drop.",
-			},
-		'no':{
-			'text':"What a jerk!",
-			},
-			
-		'intro2':{
-			'text':"What are you waiting for? Go kill the boss!",
-			},	
-				
-		'gratz':{
-			'text':'Thanks you so much for your help. I can now unlock the barrier.',
-			'func':(function(key){  Db.quest['questId'].giveReward(key); }),'param':[],
-			},
-		'gratz2':{
-			'text':'Thanks again.',
-			},
-	}
-	
-	
+		
 	//Face Db
 	Db.dialogue.face = {
-	'Jenny':{'x':0,'y':0,'name':'Jenny'}
+		'Jenny':{'x':0,'y':0,'name':'Jenny'}
 	}
 	
-	for(var i in Db.dialogue){	
-		var npc = Db.dialogue[i];
-		if(npc.face === undefined){ npc.face = Db.dialogue.face[i] }		
-		
-		for(var j in Db.dialogue[i]){	
-			var convo = Db.dialogue[i][j];
-			for(var k in convo){	
-				var node = convo[k];
+	for(var i in Db.dialogue){
+		var name = Db.dialogue[i];					
+		for(var j in name){			
+			if(j === 'face') continue;
+			var convo = name[j];
+			
+			for(var k in convo){				
+				var node = convo[k];		
 				
-				if(node.face === undefined){ node.face = npc.face;}
-				else if(node.face){	node.face = Db.dialogue.face[node.face];}
+				if(node.face) node.face = Db.dialogue.face[node.face];
+				if(node.face === undefined && (convo.face || name.face)) 
+					node.face = Db.dialogue.face[convo.face || name.face];
+				if(node.face === 'none') delete node.face;
 				
 				for(var m in node.option){
 					var next = node.option[m].next;

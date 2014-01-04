@@ -45,8 +45,8 @@ Draw.window.main = function(title){ ctxrestore();
 			str += ' - '
 		}
 		str = str.slice(0,-3);
-		if(old.winTitle !== str){
-			old.winTitle = str
+		if(Draw.old.winTitle !== str){
+			Draw.old.winTitle = str
 			t.innerHTML = str;
 		}
 	}
@@ -301,12 +301,12 @@ Draw.window.ability.leftSide = function(){ ctxrestore();
 	Draw.old.abilityShowed = player.abilityList[Draw.old.abilityShowed] ? Draw.old.abilityShowed : Object.keys(player.abilityList)[0];
 	if(!Draw.old.abilityShowed) return;
 	
-	for(var i = 0 ; i < Input.ability.length ; i++){
+	for(var i = 0 ; i < Input.key.ability.length ; i++){
 		var numX = s.x + 15;
 		var numY = s.y + 60 + 30 * i;
 		
 		ctx.font = '25px Fixedsys';
-		ctx.fillText(Input.ability[i][0].toString().keyCodeToName(),numX,numY);
+		ctx.fillText(Input.key.ability[i][0].toString().keyCodeToName(),numX,numY);
 		
 		if(player.ability[i]){
 			Draw.icon(player.ability[i].icon,[numX+45,numY],20);
@@ -447,8 +447,8 @@ Draw.window.ability.generalInfo = function(diffX,diffY){ ctxrestore();
 	}
 	str += '</table>';
 	
-	if(old.abilityMod !== str){
-		old.abilityMod = str;
+	if(Draw.old.abilityMod !== str){
+		Draw.old.abilityMod = str;
 		gi.innerHTML = str;
 	}
 }
@@ -481,9 +481,9 @@ Draw.window.ability.upgrade = function(diffX,diffY){
 	'>' + 'Upgrade' + 
 	'</span>';
 	
-	if(old.abilityUpgrade !== str){
+	if(Draw.old.abilityUpgrade !== str){
 		hu.innerHTML = str;
-		old.abilityUpgrade = str;
+		Draw.old.abilityUpgrade = str;
 	}
 }	
 
@@ -562,7 +562,7 @@ Draw.window.ability.action.attack = function(diffX,diffY){  ctxrestore();
 	for(var i in atk){
 		if(atk[i]){
 			if(Draw.convert.attackMod[i]){
-				//Draw.icon(modToIcon[i],[numX,numY],20);
+				//Draw.icon(Draw.window.ability.action.attack.modToIcon[i],[numX,numY],20);
 				var tmp = atk[i];
 				
 				//Status
@@ -576,6 +576,27 @@ Draw.window.ability.action.attack = function(diffX,diffY){  ctxrestore();
 		}
 	}
 }
+
+
+Draw.window.ability.action.attack.modToIcon = {
+	'burn':'offensive.burn',
+	'chill':'offensive.chill',
+	'confuse':'offensive.confuse',
+	'bleed':'offensive.bleed',
+	'knock':'offensive.knock',
+	'drain':'offensive.drain',
+	'leech':'offensive.leech',
+	
+	'sin':'offensive.bullet',
+	'parabole':'offensive.bullet',
+	'nova':'offensive.bullet',
+	'boomerang':'offensive.bullet',
+	'onHit':'offensive.bullet',
+	'curse':'curse.skull',
+	'hitIfMod':'system.heart',
+	'heal':'system.heart',
+}
+
 
 Draw.window.ability.action.boost = function(diffX,diffY){  ctxrestore();
 	var s = Draw.window.main.constant(); 
@@ -700,43 +721,8 @@ Draw.window.trade = function (){ ctxrestore();
 	
 }
 
-Draw.window.shop = function (){ ctxrestore();
-	return; //broken
-		
-	var s = Draw.window.main(shop.name);	
-	ctx = ctxList.win;
-	
-	//Draw Items
-	for(var m = 0; m < ['default','player'].length; m++){
-		var stock = ['default','player'][m];
-		for (var i = 0 ; i < shop.stock[stock].length ; i++){
-			
-			var amountX = 12;
-			var numX = s.x + 40 + 55*(i%amountX);
-			var numY = s.y + 70 + s.m * 225 + 55 * Math.floor(i/amountX);
-	
-	
-			if(server){
-				Button.creation(0,{
-				"rect":[numX,numX+48,numY,numY+48],
-				"left":{"func":shopLeftClick,"param":[stock,i]},
-				"right":{"func":shopRightClick,"param":[stock,i]},
-				'text':'Price of ' + Db.item[shop.stock[stock][i][0]].name
-				});
-			}
-			
-			if(!server){
-				Draw.item(shop.stock[stock][i],[numX,numY],48);	
-			}
-			
-		}
-	}
-	
-}
 
-
-
-Draw.window.quest = function (key){ ctxrestore();
+Draw.window.quest = function (){ ctxrestore();
 	var s = Draw.window.main(key,'Quest');	
 	ctx = ctxList.win;
 	
@@ -856,8 +842,8 @@ Draw.window.quest = function (key){ ctxrestore();
 			'</span><br>';
 	}
 	str = str.slice(0,-4);
-	if(old.questWin !== str){	
-		old.questWin = str;
+	if(Draw.old.questWin !== str){	
+		Draw.old.questWin = str;
 		hq.bonus.innerHTML = str;
 	}
 	
@@ -868,8 +854,8 @@ Draw.window.quest = function (key){ ctxrestore();
 
 	
 //{ Passive
-Draw.window.passive = function (key){ ctxrestore();
-	var s = Draw.window.main(key,{'offensive':0,'defensive':0,'ability':0,'passive':1});	
+Draw.window.passive = function (){ ctxrestore();
+	var s = Draw.window.main({'offensive':0,'defensive':0,'ability':0,'passive':1});	
 	ctx = ctxList.win;
 	if(server){ return; }
 	
@@ -898,8 +884,8 @@ Draw.window.passive = function (key){ ctxrestore();
 	'>' + 'Reset View' + 
 	'</span>';
 	
-	if(old.passiveText !== str){
-		old.passiveText = str
+	if(Draw.old.passiveText !== str){
+		Draw.old.passiveText = str
 		hp.text.innerHTML = str;
 	}
 	

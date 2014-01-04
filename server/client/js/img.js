@@ -7,8 +7,8 @@ Img.preload = function(arr,cb){
 	var	loadedimages = 0;
 	var arr = (typeof arr !== "object") ? [arr] : arr
     function imageloadpost(){
-        ctxList.stage.clearRect(0,0,WIDTH,HEIGHT);
-		ctxList.stage.fillText('Loading... ' + loadedimages + '/' + arr.length,WIDTH2,HEIGHT2);
+        ctxList.stage.clearRect(0,0,Cst.WIDTH,Cst.HEIGHT);
+		ctxList.stage.fillText('Loading... ' + loadedimages + '/' + arr.length,Cst.WIDTH2,Cst.HEIGHT2);
 		
 		loadedimages++;
         if (loadedimages === arr.length) cb(newimages);
@@ -40,7 +40,7 @@ Img.icon = newImage("img/img/iconSheet.png");
 	'system':{'y':0,'x':['square','close','arrow','heart','gold']},
 	'tab':{'y':1,'x':['equip','inventory','quest','skill','friend','setting']},
 	'element':{'y':2,'x':['melee','range','magic','fire','cold','lightning']},
-	'resist':{'y':3,'x':['bleed','knock','drain','burn','chill','confused']},
+	'resist':{'y':3,'x':['bleed','knock','drain','burn','chill','confuse']},
 	'resource':{'y':4,'x':['hp','mana','fury','dodge']},
 	'skill':{'y':5,'x':['melee','range','magic','metalwork','woodwork','leatherwork','geology','metallurgy','trapping']},
 	'friend':{'y':6,'x':['friend','mute','add','remove']},
@@ -75,10 +75,10 @@ Img.icon = newImage("img/img/iconSheet.png");
 	};
 
 	for(var i in iconPreIndex){
-		Img.icon.index[i.toUpperCase()] = iconPreIndex[i].y * ICON;
+		Img.icon.index[i.toUpperCase()] = iconPreIndex[i].y * Cst.ICON;
 		for(var j = 0 ; j < iconPreIndex[i].x.length; j++){
-			var x = j * ICON;
-			var y = iconPreIndex[i].y * ICON;
+			var x = j * Cst.ICON;
+			var y = iconPreIndex[i].y * Cst.ICON;
 			Img.icon.index[i + '.' + iconPreIndex[i].x[j]] = {'x':x,'y':y};
 		}
 	}
@@ -109,10 +109,10 @@ Img.item = newImage("img/img/itemSheet.png");
 	};
 
 	for(var i in itemPreIndex){
-		Img.item.index[i.toUpperCase()] = itemPreIndex[i].y * ITEM;
+		Img.item.index[i.toUpperCase()] = itemPreIndex[i].y * Cst.ITEM;
 		for(var j = 0 ; j < itemPreIndex[i].x.length; j++){
-			var x = j * ITEM;
-			var y = itemPreIndex[i].y * ITEM;
+			var x = j * Cst.ITEM;
+			var y = itemPreIndex[i].y * Cst.ITEM;
 			Img.item.index[i + '.' + itemPreIndex[i].x[j]] = {'x':x,'y':y};
 		}
 	}

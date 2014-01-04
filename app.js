@@ -38,7 +38,7 @@ require('./server/entity/Attack_loop');
 require('./server/entity/boss');
 require('./server/Loop');
 
-require('./server/Inventory');
+require('./server/Itemlist');
 require('./server/send');
 require('./server/update');
 require('./server/logIn');
@@ -49,7 +49,6 @@ require('./server/chat');
 require('./server/dialogue');
 require('./server/craft');
 require('./server/drop');
-require('./server/Shop');
 require('./server/trade');
 require('./server/Skill');
 require('./server/Test');

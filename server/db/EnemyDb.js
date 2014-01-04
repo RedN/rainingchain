@@ -1,6 +1,6 @@
 //Enemy
 
-Init.db.enemy = function(){ ePreDb = {};
+Init.db.enemy = function(){ var ePreDb = {};
 
 	ePreDb["eSlime"] = {}; //{
 	ePreDb["eSlime"]["Big"] = { //{

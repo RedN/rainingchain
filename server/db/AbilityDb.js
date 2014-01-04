@@ -25,7 +25,7 @@ Ability = {};
 //default ability are inside logIn.js defaultPlayer
 
 Init.db.ability = function(cb){
-	Db.ability = {}; abilityPreDb = {}; var a = abilityPreDb;
+	Db.ability = {}; var abilityPreDb = {}; var a = abilityPreDb;
 	//note: defaultplayer depends on at least 1 ability
 	db.ability.find({},{'_id':0},function(err, results) { if(err) throw err
 		for(var i in results){

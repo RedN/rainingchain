@@ -102,7 +102,7 @@ Attack.creation.info = function(player,bullet){
 
 Attack.creation.bullet = function(player,b){
 	if(b.parabole){
-		var diffX = player.mouseX - WIDTH2;	var diffY = player.mouseY - HEIGHT2;
+		var diffX = player.mouseX - Cst.WIDTH2;	var diffY = player.mouseY - Cst.HEIGHT2;
 		var diff = Math.sqrt(diffX*diffX+diffY*diffY);
 		b.parabole.dist = Math.min(Math.max(diff,b.parabole.min),b.parabole.max);
 		b.parabole.maxTimer *= b.parabole.dist/b.parabole.max;
@@ -122,8 +122,8 @@ Attack.creation.bullet = function(player,b){
 Attack.creation.strike = function(player,s){
 			
 	//Position
-	s.preMiddleX = player.mouseX-WIDTH2; 
-	s.preMiddleY = player.mouseY-HEIGHT2;
+	s.preMiddleX = player.mouseX-Cst.WIDTH2; 
+	s.preMiddleY = player.mouseY-Cst.HEIGHT2;
 	
 	var dist = Math.sqrt( s.preMiddleX*s.preMiddleX + s.preMiddleY*s.preMiddleY );
 	var angle = s.angle;

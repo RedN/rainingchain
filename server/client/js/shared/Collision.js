@@ -19,9 +19,9 @@ Collision.PtMap = function(pt,map,player){
 		return player.mapMod[map][gridX + '-' + gridY];
 	}
 	
-	if(List.map[map].grid[gridY] === undefined){ return  1;	} 
-	else if(List.map[map].grid[gridY][gridX] === undefined){return  1;} 
-	else {return Number(List.map[map].grid[gridY][gridX]);}
+	if(Db.map[map].grid[gridY] === undefined){ return  1;	} 
+	else if(Db.map[map].grid[gridY][gridX] === undefined){return  1;} 
+	else {return Number(Db.map[map].grid[gridY][gridX]);}
 	return 1;
 }
 

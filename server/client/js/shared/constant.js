@@ -1,14 +1,15 @@
 //List of constant shared by client and server
 
-HEIGHT = 720;
-HEIGHT2 = HEIGHT/2;
-WIDTH = 1280;
-WIDTH2 = WIDTH/2;
-ICON = 48;
-ITEM = 48;
-
-
 Cst = {};
+
+Cst.HEIGHT = 720;
+Cst.HEIGHT2 = Cst.HEIGHT/2;
+Cst.WIDTH = 1280;
+Cst.WIDTH2 = Cst.WIDTH/2;
+Cst.ICON = 48;
+Cst.ITEM = 48;
+
+
 
 Cst.tab = {
 	'list':['equip','inventory','quest','skill','friend','setting'],
@@ -69,22 +70,4 @@ Cst.exp = {
 
 
 
-modToIcon = {
-	'burn':'offensive.burn',
-	'chill':'offensive.chill',
-	'confuse':'offensive.confuse',
-	'bleed':'offensive.bleed',
-	'knock':'offensive.knock',
-	'drain':'offensive.drain',
-	'leech':'offensive.leech',
-	
-	'sin':'offensive.bullet',
-	'parabole':'offensive.bullet',
-	'nova':'offensive.bullet',
-	'boomerang':'offensive.bullet',
-	'onHit':'offensive.bullet',
-	'curse':'curse.skull',
-	'hitIfMod':'system.heart',
-	'heal':'system.heart',
-}
 
