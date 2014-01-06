@@ -15,7 +15,8 @@ Mortal.loop = function(mort){
 		Mortal.loop.regen(mort);    
 		Mortal.loop.status(mort);	
 		Mortal.loop.boost(mort);
-		Mortal.loop.summon(mort);				
+		Mortal.loop.summon(mort);
+		if(Loop.frameCount % 25 === 0){ Mortal.loop.attackReceived(mort); }
 	}
 	
 	if(mort.move){
@@ -25,8 +26,8 @@ Mortal.loop = function(mort){
 	}
 	if(mort.type === 'player'){
 		var i = mort.id;
-		if(Loop.frameCount % 2 == 0){ Draw.loop(i); }    //draw everything and add button
-		if(Loop.frameCount % 25 == 0){ Mortal.loop.friendList(mort); }    //check if any change in friend list
+		if(Loop.frameCount % 2 === 0){ Draw.loop(i); }    //draw everything and add button
+		if(Loop.frameCount % 25 === 0){ Mortal.loop.friendList(mort); }    //check if any change in friend list
 		if(List.main[i].windowList.trade){ Mortal.loop.trade(mort); };    
 		if(List.main[i].dialogue){ Mortal.loop.dialogue(mort); }
 		
@@ -118,16 +119,16 @@ Mortal.loop.status.confuse = function(mort){
 Mortal.loop.status.burn = function(mort){
 	var status = mort.status.burn.active;
 	if(status.time> 0){
-		if(!status.type || status.type == 'hp'){ mort.hp *= (1-status.magn);}
-		if(status.type == 'maxHp'){ mort.hp -= mort.resource.hp.max*status.magn;}
+		if(!status.type || status.type === 'hp'){ Mortal.changeHp(mort, (1-status.magn) + '%'); }
+		if(status.type === 'maxHp'){ Mortal.changeHp(mort,-mort.resource.hp.max*status.magn);}
 		status.time--;
 	}
 }
 
 Mortal.loop.status.bleed = function(mort){
-	var status = mort.status.confuse.active;
+	var status = mort.status.bleed.active;
 	for(var i in status){
-		mort.hp -= status[i].magn;
+		Mortal.changeHp(mort,-status[i].magn);
 		status[i].time--;
 		if(status[i].time <= 0){ status.splice(i,1); }
 	}
@@ -149,7 +150,7 @@ Mortal.loop.summon = function(mort){
 	}
 	
 	//(assume player is child)
-    if(mort.summoned && Loop.frameCount % 5 == 0){
+    if(mort.summoned && Loop.frameCount % 5 === 0){
 		if(!mort.summoned.father || !List.all[mort.summoned.father]){ Mortal.remove(mort); return; }
 	    
 	    //if too far, teleport near master
@@ -208,7 +209,7 @@ Mortal.loop.move = function(mort){
 		for(var i = 0 ; i < amount && !mort.bumper[0] && !mort.bumper[1] && !mort.bumper[2] && !mort.bumper[3]  ; i++){
 			mort.x += mort.spdX/amount;
 			mort.y += mort.spdY/amount;
-			updateBumper(mort);
+			Sprite.updateBumper(mort);
 		} 
 	} else {
 		mort.x += mort.spdX;
@@ -268,7 +269,7 @@ Mortal.loop.activeList = function(mort){
 	for(var j in List.all){
 		if(ActiveList.test(mort,List.all[j]) && List.all[j].id != mort.id){
 			mort.activeList[j] = List.all[j].id;
-			if(mort.type !== 'player'){ List.all[j].viewedBy[mort.id] = mort;}
+			if(mort.type !== 'player'){ List.all[j].viewedBy[mort.id] = mort.id;}
 		}
 	}
 	
@@ -406,7 +407,14 @@ Mortal.loop.friendList = function(mort){
 	}
 }
 
-
+Mortal.loop.attackReceived = function(mort){
+	for(var i in mort.attackReceived){
+		mort.attackReceived[i] -= 25;
+		if(mort.attackReceived[i] <= 0){
+			delete mort.attackReceived[i];
+		}
+	}
+}
 
 
 

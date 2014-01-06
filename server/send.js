@@ -23,13 +23,13 @@ Change.send = function(){
 			
 			if(!obj){ delete player.activeList[i]; continue; }
 			
-			for(var j in obj.viewedBy){	if(obj.viewedBy[j].id === player.id){bool = false;}}
+			for(var j in obj.viewedBy){	if(j === player.id){bool = false;}}
 				
 			if(bool){		//Need to Init
 				var id = obj.id;
 				if(obj.publicId){ id = obj.publicId;}
 				sa.i.f[id] = Change.send.init(obj);
-				obj.viewedBy[key] = player;		//Add so the next time it will update instead of init
+				obj.viewedBy[key] = player.id;		//Add so the next time it will update instead of init
 			} else {			//Only Update
 				var id = obj.id;
 				if(obj.publicId){ id = obj.publicId;}

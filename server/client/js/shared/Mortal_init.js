@@ -226,7 +226,7 @@ Init.mortal = function(){
 			mort.context = 'player0000';
 			mort.name = 'player0000';
 			mort.active = 1;
-			mort.loginLocation = null;
+			
 			Sprite.creation(mort,mort.sprite);
 			mort.activeList = {};
 			mort.ability = [{id:'bulletMulti'}];

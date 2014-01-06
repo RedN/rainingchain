@@ -49,7 +49,7 @@ Loop.Drop = function(){
 }
 
 Loop.Map = function(){
-	if(Loop.frameCount % (60*1000/40)){		//each min
+	if(Loop.frameCount % (60*1000/40) === 0){		//each min
 		for(var i in List.map){
 			if(Map.instance.player(i).length === 0){
 				List.map[i].timer--;
@@ -124,15 +124,15 @@ ActiveList.add = function(bullet){
 	for(var i in List.mortal){
 		if(ActiveList.test(List.mortal[i],bullet)){ 
 			List.mortal[i].activeList[bullet.id] = bullet.id;
-			if(List.mortal[i].type != 'player' || bullet.type == 'strike'){ bullet.viewedBy[List.mortal[i].id] = List.mortal[i]; }
+			if(List.mortal[i].type != 'player' || bullet.type == 'strike'){ bullet.viewedBy[List.mortal[i].id] = List.mortal[i].id; }
 		}
 	}
 }
 
 ActiveList.remove = function(b){
 	for(var i in b.viewedBy){
-		if(b.viewedBy[i].removeList) b.viewedBy[i].removeList[b.publicId || b.id] = true;
-        delete b.viewedBy[i].activeList[b.id];
+		if(List.all[i].removeList) List.all[i].removeList[b.publicId || b.id] = true;
+        delete List.all[i].activeList[b.id];
 	}
 }
 

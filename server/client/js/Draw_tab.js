@@ -395,3 +395,6 @@ Draw.tab.quest = function(){ ctxrestore();
 Draw.tab.setting = function(){ 
 
 }
+
+
+

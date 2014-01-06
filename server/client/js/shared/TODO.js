@@ -1,8 +1,9 @@
 
+#Priority 1:
+simplify ability
+
 
 #Priority 2:
--Passive Grid Zoom
--Bank HTML5
 -Crafting Ability
 -Advanced Enemy Mods
 -Revamp Drop
@@ -15,7 +16,6 @@
 -Multiplayer Quest
 -Add Mod to Quest Reward
 -Option show strike points
--Auto-picker
 -Improve boostDb
 -Enemy AI for ability
 -Icon minimap
@@ -25,6 +25,7 @@
 -Offlinepm fix
 jqueryui (login, progress bar, dialogue option)
 -Implement Sound System
+-revamp animation, (including death)
 
 TUTORIAL:
 

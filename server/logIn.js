@@ -193,7 +193,7 @@ Save.player = function(key,updateDb){
 
     var save = {};
 
-    var toSave = ['x','y','map','name','context','weapon','equip','loginLocation','mapMod','exp','lvl','ability','abilityList'];
+    var toSave = ['x','y','map','name','context','weapon','equip','mapMod','lvl','ability','abilityList'];
     for(var i in toSave){	save[toSave[i]] = player[toSave[i]]; }
 
     if(updateDb !== false){

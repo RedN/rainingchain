@@ -133,7 +133,7 @@ leech chance: unrelated to dmg. abilityMod [1] * playerMod [0]
 //COLLISION//
 Combat.collision = function(b,mort){
 	if(mort.attackReceived[b.hitId]) return;    //for pierce
-    mort.attackReceived[b.hitId] = true;
+    mort.attackReceived[b.hitId] = 250;	//last for 10 sec
 	
 	if(b.hitImg){Anim.creation(b.hitImg.name,mort.id,b.hitImg.sizeMod || 1);}
 	if(b.healing){ Mortal.changeResource(mort,b.healing); return; }
@@ -257,9 +257,7 @@ Combat.collision.leech = function(mort,b,element){
 	var player = List.all[b.parent]; if(!player) return;
 	
 	var amount = (player.resource.hp.max-player.hp) * 0.01 * info.magn;
-
-	player.hp += amount;
-	player.hp = player.hp.mm(-1000,player.resource.hp.max);
+	Mortal.changeResource(player,{hp:amount});
 	
 }
 
@@ -282,6 +280,7 @@ Combat.collision.crit = function(b){
 Combat.collision.damage = function(bullet,player){
 	var dmgInfo = Combat.collision.damage.calculate(bullet.dmg,player.def)
 	var dmg = dmgInfo.sum;
+	
 	Mortal.changeHp(player,-dmg/player.defMain);
 	
 	if(player.damagedBy[bullet.parent] === undefined) { player.damagedBy[bullet.parent] = 0; }

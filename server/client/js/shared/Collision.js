@@ -80,7 +80,7 @@ Collision.getMouse = function(key){
 //Attack Coll
 Collision.BulletMortal = function(atk){
 	for(var i in atk.viewedBy){ 
-		var player = atk.viewedBy[i];
+		var player = List.all[i];
 		if(Combat.hitIf.global(atk,player)){
 			var hIf = typeof atk.hitIf == 'function' ? atk.hitIf : Combat.hitIf.list[atk.hitIf];
 			if(!player || !List.all[atk.parent]){ return; }
@@ -106,7 +106,7 @@ Collision.BulletMap = function(bullet){
 
 Collision.StrikeMortal = function(atk){
 	for(var j in atk.viewedBy){
-		var player = atk.viewedBy[j];
+		var player = List.all[j];
 		
 		if(Combat.hitIf.global(atk,player)){
 		

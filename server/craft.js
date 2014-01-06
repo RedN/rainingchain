@@ -1,13 +1,29 @@
 /*
-category	//armor or weapon
+category	//armor or weapon or ability
 piece //where its equipped, melee, range, magic, helm, ammy
-type //chain,ruby,...
+type //chain,ruby,...	OR for ability, the ability template used
+
+
 quality = higher chance to be near top bracket
 rarity = affect amount of mods
 amount = amount of mods
 lvl = lvl used for boosts
 
 0.9+0.1*Math.log10(10+x);
+
+
+ABILITY
+
+ability has a template
+each ability has orbMod (ex: dmg)	ability.orb.upgrade = {'amount':10,'bonus':'dmg'}
+adding orb to ability improves it depending on orbMod
+each ability has mods (ex: x2b)		ability.modList.x2b = 10
+adding orb to ability mods improves the mod depending on Db.ability.mod function
+
+
+
+
+
 
 */
 
@@ -315,46 +331,68 @@ Craft.boost.generate.tier = function(mm,value){
 //should be under Main.useOrb??
 Craft.orb = function(key,orb,amount,wId,mod){
 	var inv = List.main[key].invList;
-
+	var mort = List.all[key];
+	
+	//Set amount of orbs used
 	amount = amount === 'pref' ? List.main[key].pref.orbAmount : amount;
 	amount = Math.min(amount,Itemlist.have(inv,orb + '_orb',0,'amount'));
-	var func; var equip; var type;
-	if(Db.equip[wId]){	func = initWeapon;	equip = deepClone(Db.equip[wId]); type = 'equip';}
-	if(Db.equip[wId]){	func = Armor.creation;	equip = deepClone(Db.equip[wId]); type = 'equip';}
-	if(Db.ability[wId]){	func = Ability.creation;	equip = deepClone(Db.ability[wId]); type = 'ability';}
-	if(!equip){	Chat.add(key,"You can't use this orb on this item.");return; }
+	if(!amount) return;
 	
+	//Know if ability or equip
+	var equip; var category;
+	if(Db.equip[wId]){		equip = deepClone(Db.equip[wId]); category = 'equip';}
+	if(Db.ability[wId]){	equip = deepClone(Db.ability[wId]); category = 'ability';}
+	if(!equip || (category === 'ability' && orb !== 'upgrade')){	//ability can only be modded by upgrade
+		Chat.add(key,"You can't use this orb on this item.");
+		return; 
+	} 
+	
+	
+	//Use Orb
 	if(orb === 'boost'){
+		//need to change so amount makes impact
+		amount = 1;
 		equip.boost = Craft.boost(equip.seed,equip.boost,1);
 		equip.orb.boost.history.push([Date.now(),equip.boost[equip.boost.length-1]]);
 	}
+	if(orb === 'removal'){
+		//need to change so amount makes impact
+		amount = 1;
+		if(!equip.boost.length){ Chat.add(key,"This piece of equipment doesn't have any boost to remove."); return; }
+		var remove = Math.floor(Math.random()*equip.boost.length);
+		equip.boost.splice(remove,1);
+	}
+	
 	if(orb === 'upgrade'){
-		if(!mod){
+		if(mod){	//aka want to upgrade a mod on an ability
+			if(equip.modList && equip.modList[mod] !== undefined){
+				equip.modList[mod] += amount;
+			} else { Chat.add(key,"This ability doesn't have this mod."); return; }
+		} 
+		if(!mod){	//aka want to upgrade equip or ability has a whole
 			equip.orb.upgrade.amount += amount;
-			equip.orb.upgrade.bonus = Craft.orb.formula(equip.orb.upgrade.amount);
-		} else if(equip.modList && equip.modList[mod] !== undefined){
-			equip.modList[mod]++;
+			equip.orb.upgrade.bonus = Craft.orb.formula(equip.orb.upgrade.amount);	//so-so useful for ability
 		}
 	}
-	if(orb === 'removal'){
-		if(!equip.boost){ Chat.add(key,"This piece of equipment doesn't have any boost ro remove."); return; }
-		var rev = Math.floor(Math.random()*equip.boost.length);
-		equip.boost.splice(rev,1);
-	}
 	
+	
+	
+	//Save the changes
 	Item.remove(equip.id);
-	equip.id = Math.randomId();
-	func(equip);
 	Itemlist.remove(inv,orb + '_orb',amount);
+	Chat.add(key,amount + ' Orbs used on ' + equip.name);
+	equip.id = Math.randomId();
 	
-	if(type === 'equip'){
+	
+	if(category === 'equip'){
+		Equip.creation(equip);
 		Itemlist.remove(inv,wId);
 		Itemlist.add(inv,equip.id);
 	}
-	if(type === 'ability'){
-		Mortal.removeAbility(List.all[key],wId);
-		Mortal.learnAbility(List.all[key],equip.id);
-		Chat.add(key,'Ability Mod Upgraded.');
+	if(category === 'ability'){
+		Ability.creation(equip);
+		Mortal.removeAbility(mort,wId);
+		Mortal.learnAbility(mort,equip.id);
 	}
 }
 
@@ -390,57 +428,59 @@ Craft.setDmgViaRatio = function(info){
 
 //{Ability BROKEN
 Craft.ability = function(seed){
-	//seed only needs ab id and qual
-
 	var a = Craft.ability.template(seed);
-	
 	Ability.creation(a);
-	
 	return a.id;	
-
 }
 
 Craft.ability.template = function(seed){
 	var qua = seed.quality || 1;
-	var an = seed.name || 'fireball';
-	//assume that action atk arent arrays
+	var an = seed.type || 'fireball';
 
-	var ab = deepClone(abiConsDb[an]);
+	var ab = deepClone(Db.ability.template[an]);
 	
 	if(typeof ab.period === 'object'){ ab.period = Craft.boost.generate.roll(ab.period,qua); }
 	
-	if(ab.action && ab.action.func === 'Combat.action.attack'){
-		var atk = ab.action.param.attack;
-		
-		//All
-		if(typeof atk.angle === 'object'){ atk.angle = Craft.boost.generate.roll(atk.angle,qua); }
-		if(typeof atk.amount === 'object'){ atk.amount = Craft.boost.generate.roll(atk.amount,qua); }
-		if(typeof atk.dmgMain === 'object'){ atk.dmgMain = Craft.boost.generate.roll(atk.dmgMain,qua); }
-		for(var i in atk.dmgRatio){
-			if(typeof atk.dmgRatio[i] === 'object'){ atk.dmgRatio[i] = Craft.boost.generate.roll(atk.dmgRatio[i],qua); }
+	for(var m in ab.action){
+		if(ab.action[m].func === 'Combat.action.attack'){
+			for(var n in ab.action[m].param.attack){
+				var atk = ab.action[m].param.attack[n];
+				
+				//All
+				if(typeof atk.angle === 'object'){ atk.angle = Craft.boost.generate.roll(atk.angle,qua); }
+				if(typeof atk.amount === 'object'){ atk.amount = Craft.boost.generate.roll(atk.amount,qua); }
+				if(typeof atk.dmgMain === 'object'){ atk.dmgMain = Craft.boost.generate.roll(atk.dmgMain,qua); }
+				for(var i in atk.dmgRatio){
+					if(typeof atk.dmgRatio[i] === 'object'){ atk.dmgRatio[i] = Craft.boost.generate.roll(atk.dmgRatio[i],qua); }
+				}
+				
+				//Status
+				for(var st in Cst.status.list){
+					var i = Cst.status.list[st];
+					if(typeof atk[i] === 'object'){ 
+						if(typeof atk[i].chance === 'object'){ atk[i].chance = Craft.boost.generate.roll(atk[i].chance,qua); }
+						if(typeof atk[i].magn === 'object'){ atk[i].magn = Craft.boost.generate.roll(atk[i].magn,qua); }
+						if(typeof atk[i].time === 'object'){ atk[i].time = Craft.boost.generate.roll(atk[i].time,qua); }
+					}
+				}
+				if(atk.leech){
+					if(typeof atk.leech.chance === 'object'){ atk.leech.chance = Craft.boost.generate.roll(atk.leech.chance,qua); }
+					if(typeof atk.leech.magn === 'object'){ atk.leech.magn = Craft.boost.generate.roll(atk.leech.magn,qua); }
+					if(typeof atk.leech.time === 'object'){ atk.leech.time = Craft.boost.generate.roll(atk.leech.time,qua); }
+				}
+				if(atk.pierce){
+					if(typeof atk.pierce.chance === 'object'){ atk.pierce.chance = Craft.boost.generate.roll(atk.pierce.chance,qua); }
+					if(typeof atk.pierce.dmgReduc === 'object'){ atk.pierce.dmgReduc = Craft.boost.generate.roll(atk.pierce.dmgReduc,qua); }
+				}
+				//need to add curse etc...
+			}	
 		}
+		if(ab.action[m].func === 'Combat.action.summon'){
 		
-		//Status
-		for(var st in Cst.status.list){
-			var i = Cst.status.list[st];
-			if(typeof atk[i] === 'object'){ 
-				if(typeof atk[i].chance === 'object'){ atk[i].chance = Craft.boost.generate.roll(atk[i].chance,qua); }
-				if(typeof atk[i].magn === 'object'){ atk[i].magn = Craft.boost.generate.roll(atk[i].magn,qua); }
-				if(typeof atk[i].time === 'object'){ atk[i].time = Craft.boost.generate.roll(atk[i].time,qua); }
-			}
 		}
-		if(atk.leech){
-			if(typeof atk.leech.chance === 'object'){ atk.leech.chance = Craft.boost.generate.roll(atk.leech.chance,qua); }
-			if(typeof atk.leech.magn === 'object'){ atk.leech.magn = Craft.boost.generate.roll(atk.leech.magn,qua); }
-			if(typeof atk.leech.time === 'object'){ atk.leech.time = Craft.boost.generate.roll(atk.leech.time,qua); }
-		}
-		if(atk.pierce){
-			if(typeof atk.pierce.chance === 'object'){ atk.pierce.chance = Craft.boost.generate.roll(atk.pierce.chance,qua); }
-			if(typeof atk.pierce.dmgReduc === 'object'){ atk.pierce.dmgReduc = Craft.boost.generate.roll(atk.pierce.dmgReduc,qua); }
-		}
+		if(ab.action[m].func === 'Combat.action.boost'){
 		
-		//need to add curse etc...
-		
+		}
 	}
 	ab.id = Math.randomId();
 	
@@ -466,8 +506,9 @@ Craft.ability.mod = function(key,abid,mod){
 }
 
 Craft.ability.attack = function(seed){
+	//not really used anymore cuz of template
 	var possible = {
-		's':[
+		'strike':[
 			{'mod':1,'hit':'attack3','dmgRatio':{'melee':100,'range':0,'magic':0,'fire':5*Math.random(),'cold':5*Math.random(),'lightning':5*Math.random()}},
 			{'mod':1,'hit':'fire2','dmgRatio':{'melee':100,'range':0,'magic':0,'fire':25,'cold':5*Math.random(),'lightning':5*Math.random()}},
 			{'mod':1,'hit':'ice2','dmgRatio':{'melee':100,'range':0,'magic':0,'fire':5*Math.random(),'cold':25,'lightning':5*Math.random()}},
@@ -476,7 +517,7 @@ Craft.ability.attack = function(seed){
 			],
 
 		
-		'b':[
+		'bullet':[
 			{'mod':1,'image':'arrow','hit':'attack3','dmgRatio':{'melee':0,'range':100,'magic':0,'fire':5*Math.random(),'cold':5*Math.random(),'lightning':5*Math.random()}},
 			{'mod':1,'image':'arrow','hit':'fire2','dmgRatio':{'melee':0,'range':100,'magic':0,'fire':25,'cold':5*Math.random(),'lightning':5*Math.random()}},
 			{'mod':1,'image':'arrow','hit':'ice2','dmgRatio':{'melee':0,'range':100,'magic':0,'fire':5*Math.random(),'cold':25,'lightning':5*Math.random()}},

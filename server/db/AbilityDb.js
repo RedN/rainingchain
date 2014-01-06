@@ -149,7 +149,7 @@ Init.db.ability = function(cb){
 Init.db.ability.template = function(){
 	Db.ability.template = {}; var a = Db.ability.template;
 	
-	a['fireball'] = {'type':'attack','name':'Fireball','icon':'attackMagic.fireball','orbMod':'dmg',
+	a['fireball'] = {'type':'attack','name':'Fireball','icon':'attackMagic.fireball','orb':'dmg',
 		'spd':{'main':0.8,'support':0.2},'period':[15,20],'action':{'func':'Combat.action.attack','param':{'anim':'Attack',
 		'attack':{type:"bullet",
 			'angle':0,'amount':1, 'aim': 0,'objImg':{'name':"arrow",'sizeMod':1},'hitImg':{'name':"fire_explosion",'sizeMod':0.5},
@@ -157,13 +157,12 @@ Init.db.ability.template = function(){
 			'burn':{'chance':[1.5,2],'magn':[1,1.2],'time':1}
 		}}},
 	};
-	
-	
-	//need to add arrayfy
-	
+		
 	for(var i in a){
-		if(Db.ability.orb[a[i].orbMod]){a[i].orb = {'upgrade':{'amount':0,'bonus':a[i].orbMod}};} 
-		else { Db.ability.orb[a[i].id] = a[i].orbMod; a[i].orbMod = a[i].id; }
+		if(Db.ability.orb[a[i].orb]){	a[i].orb = {'upgrade':{'amount':0,'bonus':a[i].orb}};	} 
+		else { 	Db.ability.orb[a[i].id] = a[i].orb; a[i].orb = a[i].id; }	//custom orbMod (need to be func)
+		
+		Ability.creation.arrayfy(a[i]);
 	}
 	
 }
@@ -174,37 +173,36 @@ Init.db.ability.mod = function(){	//needed by client
 			'name':'x2 Bullets',
 			'info':'Your ability shoots x2 more bullets. Main damage is reduced by 50%.',
 			'func':(function(ab,orb,log){
-				try {
-					var atk = ab.action[0].param.attack[0];
-					atk.amount *= 2;
-					atk.dmgMain /= 1.5;
-					return ab;
-				} catch(err){ return ab; }
+				var atk = ab.action[0].param.attack[0];
+				atk.amount *= 2;
+				atk.dmgMain /= 1.5;
+				return ab;
 			})},	
-		
 	}
 	
 	
 	for(var i in Db.ability.mod){
-		var item = {};
-		item.name = Db.ability.mod[i].name;
-		item.visual = 'plan.planA';
-		item.option = [	{'name':'Select Mod','func':'Main.abilityModClick','param':[i]} ];
-		item.type = 'mod';
-		item.id = 'mod-'+i;
-		Item.creation(item);
-	
+		Item.creation({
+			name:Db.ability.mod[i].name,
+			visual:'plan.planA',
+			option:[	{'name':'Select Mod','func':'Main.abilityModClick','param':[i]} ],
+			type:'mod',
+			id:'mod-'+i,
+		});
 	}
 	
 	
 }
 
 Init.db.ability.orb = function(){
+	//defined here or directly inside Db.ability.template if unique
 	Db.ability.orb = {
-		'dmg':(function(ab,lvl){
+		'dmg':(function(ab,orb,log){
+			var atk = ab.action[0].param.attack[0];
+			atk.amount *= log;	//bad
 			return ab;
 		}),
-		'none':(function(ab,lvl){
+		'none':(function(ab,orb){
 			return ab;
 		}),
 	}
@@ -231,6 +229,23 @@ Ability.creation = function(a){
 	a.orb = {'upgrade':{'amount':0,'bonus':'none'}};
 	
 	a.action = a.action || [];
+	Ability.creation.arrayfy(a);
+	
+	//Setting Item Part
+	Item.creation({
+		name:a.name,
+		visual:'plan.planA',
+		option:[	{'name':'Examine Ability','func':'Mortal.examineAbility','param':[a.id]},
+					{'name':'Learn Ability','func':'Mortal.learnAbility','param':[a.id]},
+		],
+		type:'ability',
+		id:a.id,
+	});
+	
+	return a.id;
+}
+
+Ability.creation.arrayfy = function(a){
 	a.action = arrayfy(a.action);
 	for(var j in a.action){ 
 		if(a.action[j].param.attack){ a.action[j].param.attack = arrayfy(a.action[j].param.attack); }
@@ -240,21 +255,8 @@ Ability.creation = function(a){
 				a.action[j].param.attack[k].dmg = Craft.setDmgViaRatio(a.action[j].param.attack[k]);
 			}
 		}
-	}	
-	
-	//Setting Item Part
-	var id = a.id;
-	var item = {};
-	item.name = a.name;
-	item.visual = 'plan.planA';
-	item.option = [	{'name':'Examine Ability','func':'Mortal.examineAbility','param':[a.id]},
-					{'name':'Learn Ability','func':'Mortal.learnAbility','param':[a.id]},
-	];
-	item.type = 'ability';
-	item.id = id;
-	Item.creation(item);
-	
-	return a.id;
+	}
+	return a;	
 }
 
 Ability.uncompress = function(abi){	

@@ -614,7 +614,7 @@ Draw.window.ability.action.boost = function(diffX,diffY){  ctxrestore();
 	for(var i in boost){
 		Draw.icon(Db.stat[boost[i].stat].icon,[s.zx,s.zy],20);
 		var str = boost[i].type + round(boost[i].value,2) + ' ' + Db.stat[boost[i].stat].name + ' for ' + round(boost[i].time/25,2) + 's.';
-		ctx.fillText(str,zx+30,zy);
+		ctx.fillText(str,s.zx+30,s.zy);
 		s.zy += 30;
 	}
 	
