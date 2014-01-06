@@ -17,6 +17,7 @@ List = {
 	map:{},		//all maps including instance 
 	socket:{},	//all socket (player id),
 	nameToKey:{},	//used to convert a player name into the player key
+	btn:{},		//all buttons
 };
 
 
@@ -52,7 +53,7 @@ exports.initServer = function (){
 			
 			//Track Global Variables
 			var tmp = Object.keys(this); for(var i in ObjectKeys) tmp.splice(tmp.indexOf(ObjectKeys[i]),1);
-			permConsoleLog(tmp);
+			//permConsoleLog(tmp);
     
 			
 		})

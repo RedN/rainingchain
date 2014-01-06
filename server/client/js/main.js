@@ -2,7 +2,6 @@
 
 var gameStarted = false;
 var key = 0;
-var btnList = [];   //all buttons
 var ctxList = {};   //list of canvas (window,popup,stage)
 
 List = {
@@ -17,6 +16,7 @@ List = {
 	main:{},	//all List.main of player. (player id) List.main[id].something on server => window.something on client
 	map:{},		//all maps including instance 
 	socket:{},	//all socket (player id)
+	btn:{},		//all buttons
 };
 
 Db = {	//local compilation of information so server doesnt send many times the same info
@@ -106,6 +106,11 @@ Init.game = function (data) {
 		setInterval(Loop,40);
 		socket.emit('clientReady',1); 
 		if(cloud9) { Chat.add('Warning, you are running under cloud9 servers. You may experience intense lagging. Downloading the project and running it locally is recommended.');}
+		
+		//Tracking Global Variables
+		var tmp = Object.keys(this); for(var i in ObjectKeys) tmp.splice(tmp.indexOf(ObjectKeys[i]),1);
+		permConsoleLog(tmp);
+	
 	});
 }
 
@@ -170,7 +175,7 @@ Init.help = function(data){
 					var tag = data.slice(start+2,j);
 					data = data.replaceAll(
 					'\\[\\[' + tag + '\\]\\]',
-					'<helpLink onclick="updateHelp(\'' + tag + '\')" >' + tag + '</helpLink>'
+					'<helpLink onclick="Help.update(\'' + tag + '\')" >' + tag + '</helpLink>'
 					);
 					break;
 				}

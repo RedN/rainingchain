@@ -1,19 +1,16 @@
 //Chat
 Chat = {};
 
-//Send message to server.
 Chat.send = function(){
-	var text = html.chat.input.value;
-	
+	//Send message to server.var text = html.chat.input.value;
 	if(text[0] === '$'){  Chat.send.command(text); }
 	else { Chat.send.message(text); }
 	Input.add(''); 
-	return
-	
 }
 
-//Send command to server. check /shared/commandShare for list of commands.
+
 Chat.send.command = function(text){
+	//Send command to server. check /shared/commandShare for list of commands.
 	if(typeof text === 'string'){ text = Chat.send.command.parse(text); }
 	if(text){ socket.emit('Chat.send.command',text); }
 	else { main.social.message.chat.push({'type':'client','text':'Invalid Command Entry.'}); } //only work if no message from server same frame
@@ -45,8 +42,8 @@ Chat.send.command.parse = function(txt){
 	return false;
 }
 
-//Send Chat to other players
 Chat.send.message = function(text){
+	//Send Chat to other players
 	if(typeof text === 'string'){ text = Chat.send.message.parse(text); }
 	
 	if(text){ socket.emit('sendChat',text);  }
@@ -139,7 +136,7 @@ Chat.receive = function(pack){
 	
 	if(pack.type == 'public'){	
 		var id = Math.random();
-		var text = '<span id="' + id + '" oncontextmenu="rightClickChat(\'' + pack.from + '\')">' + pack.from + "</span>" + ': ' + '<span style="color:blue">' + pack.text + "</span>";
+		var text = '<span id="' + id + '" oncontextmenu="Chat.click.name(\'' + pack.from + '\')">' + pack.from + "</span>" + ': ' + '<span style="color:blue">' + pack.text + "</span>";
 		html.chat.text.innerHTML += '<br>' + text; 
 	
 	}
@@ -150,12 +147,9 @@ Chat.receive = function(pack){
 	
 }
 
-Chat.add = function(text){
-	html.chat.text.innerHTML += '<br>' + text; 	
-}
 
-
-rightClickChat = function(name){
+Chat.click = {};
+Chat.click.name = function(name){
 	var option = {'name':name,'option':[],'count':1};
 			
 	option.option[2] = {
@@ -178,12 +172,13 @@ rightClickChat = function(name){
 		
 	Button.optionList(option);
 }
-		
-leftClickFriend = function(evt,str){
-	if(event.which === 1) Input.add(str);
 
+Chat.add = function(text){
+	html.chat.text.innerHTML += '<br>' + text; 	
 }
-		
+
+
+
 		
 		
 		

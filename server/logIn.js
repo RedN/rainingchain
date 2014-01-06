@@ -10,12 +10,7 @@ io.sockets.on('connection', function (socket) {
             if(err) throw err;
             
              if(results[0] !== undefined){
-                // Check if the passwords match
-				/*
-                bcrypt.compare(pass, results[0].password,function(err,goodpassword){
-                    if(err) throw err;
-                    if(goodpassword){
-				*/
+              
 					if(pass === results[0].password){
                         // Check if the user is online
                         if(results[0].online) {
@@ -25,7 +20,7 @@ io.sockets.on('connection', function (socket) {
                             Save.load(key,results[0],user,socket);
                         }
                     } else { socket.emit('signIn', { 'success':0,'message':'<font color="red">Wrong Password or Username.</font>' }); }
-                //});
+                
             } else { socket.emit('signIn', { 'success':0,'message':'<font color="red">Wrong Password or Username.</font>' }); }
         });
     });
@@ -113,6 +108,7 @@ Sign.off = function(key,message){
         delete List.socket[key];
         delete List.main[key];
         delete List.all[key];
+        delete List.btn[key];
     } else {
         if(message){ key.emit('warning','You have been disconnected: ' + message);}
         key.disconnect();
@@ -290,6 +286,7 @@ Save.main.uncompress = function(main,key){
 
 Save.main.load = function(key,db){
     List.main[key] = useTemplate(Main.template(key),Save.main.uncompress(db,key));
+	List.btn[key] = [];
 	Mortal.permBoost(List.all[key],'Passive',Passive.convert(db.passive));
 }
 

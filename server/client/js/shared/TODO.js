@@ -1,10 +1,4 @@
 
-
-passive grid naming
-ability naming
-
-
-
 #Priority 1:
 -Implement Sound System
 

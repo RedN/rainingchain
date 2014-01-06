@@ -29,7 +29,7 @@ Loop.update = function(){
 	if(main.chatInput){	applyFunc(Input.add,main.chatInput);}
 	main.social.message.chat = [];
 	main.chatInput = '';
-	if(main.help) updateHelp(main.help);	
+	if(main.help) Help.update(main.help);	
 	
 	Mortal.update.permBoost(player);
 	
@@ -54,7 +54,8 @@ remove = function(i){
 
 }
 
-updateHelp = function(elID){
+Help = {};
+Help.update = function(elID){
 	main.help = '';
 	var el = document.getElementById('HELP' + elID);
 	if(el) el.scrollIntoView(true);

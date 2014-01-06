@@ -5,7 +5,7 @@ Draw.old = {'fl':'','quest':'','abilityShowed':'bulletMulti','abilityTypeShowed'
 Draw.loop = function (key){
 	if(server){
 		//Clear
-		List.main[key].btnList = [];
+		List.btn[key] = [];
 		
 		//Draw	
 		Draw.entity.drop(key);
@@ -18,7 +18,7 @@ Draw.loop = function (key){
 		//Clear
 		for(var i in ctxList){ctxList[i].clearRect(0, 0, Cst.WIDTH, Cst.HEIGHT);}
 		for(var i = 0 ; i < drawHtmlDiv.length; i++){ drawHtmlDiv[i].style.visibility = 'hidden';}
-		btnList = [];
+		List.btn = [];
 		Input.event.mouse.drag.update();
 		
 		//Draw
