@@ -441,46 +441,42 @@ Craft.ability.template = function(seed){
 	
 	if(typeof ab.period === 'object'){ ab.period = Craft.boost.generate.roll(ab.period,qua); }
 	
-	for(var m in ab.action){
-		if(ab.action[m].func === 'Combat.action.attack'){
-			for(var n in ab.action[m].param.attack){
-				var atk = ab.action[m].param.attack[n];
-				
-				//All
-				if(typeof atk.angle === 'object'){ atk.angle = Craft.boost.generate.roll(atk.angle,qua); }
-				if(typeof atk.amount === 'object'){ atk.amount = Craft.boost.generate.roll(atk.amount,qua); }
-				if(typeof atk.dmgMain === 'object'){ atk.dmgMain = Craft.boost.generate.roll(atk.dmgMain,qua); }
-				for(var i in atk.dmgRatio){
-					if(typeof atk.dmgRatio[i] === 'object'){ atk.dmgRatio[i] = Craft.boost.generate.roll(atk.dmgRatio[i],qua); }
-				}
-				
-				//Status
-				for(var st in Cst.status.list){
-					var i = Cst.status.list[st];
-					if(typeof atk[i] === 'object'){ 
-						if(typeof atk[i].chance === 'object'){ atk[i].chance = Craft.boost.generate.roll(atk[i].chance,qua); }
-						if(typeof atk[i].magn === 'object'){ atk[i].magn = Craft.boost.generate.roll(atk[i].magn,qua); }
-						if(typeof atk[i].time === 'object'){ atk[i].time = Craft.boost.generate.roll(atk[i].time,qua); }
-					}
-				}
-				if(atk.leech){
-					if(typeof atk.leech.chance === 'object'){ atk.leech.chance = Craft.boost.generate.roll(atk.leech.chance,qua); }
-					if(typeof atk.leech.magn === 'object'){ atk.leech.magn = Craft.boost.generate.roll(atk.leech.magn,qua); }
-					if(typeof atk.leech.time === 'object'){ atk.leech.time = Craft.boost.generate.roll(atk.leech.time,qua); }
-				}
-				if(atk.pierce){
-					if(typeof atk.pierce.chance === 'object'){ atk.pierce.chance = Craft.boost.generate.roll(atk.pierce.chance,qua); }
-					if(typeof atk.pierce.dmgReduc === 'object'){ atk.pierce.dmgReduc = Craft.boost.generate.roll(atk.pierce.dmgReduc,qua); }
-				}
-				//need to add curse etc...
-			}	
-		}
-		if(ab.action[m].func === 'Combat.action.summon'){
+	if(ab.action.func === 'Combat.action.attack'){
+		var atk = ab.action.param.attack;
 		
+		//All
+		if(typeof atk.angle === 'object'){ atk.angle = Craft.boost.generate.roll(atk.angle,qua); }
+		if(typeof atk.amount === 'object'){ atk.amount = Craft.boost.generate.roll(atk.amount,qua); }
+		if(typeof atk.dmgMain === 'object'){ atk.dmgMain = Craft.boost.generate.roll(atk.dmgMain,qua); }
+		for(var i in atk.dmgRatio){
+			if(typeof atk.dmgRatio[i] === 'object'){ atk.dmgRatio[i] = Craft.boost.generate.roll(atk.dmgRatio[i],qua); }
 		}
-		if(ab.action[m].func === 'Combat.action.boost'){
 		
+		//Status
+		for(var st in Cst.status.list){
+			var i = Cst.status.list[st];
+			if(typeof atk[i] === 'object'){ 
+				if(typeof atk[i].chance === 'object'){ atk[i].chance = Craft.boost.generate.roll(atk[i].chance,qua); }
+				if(typeof atk[i].magn === 'object'){ atk[i].magn = Craft.boost.generate.roll(atk[i].magn,qua); }
+				if(typeof atk[i].time === 'object'){ atk[i].time = Craft.boost.generate.roll(atk[i].time,qua); }
+			}
 		}
+		if(atk.leech){
+			if(typeof atk.leech.chance === 'object'){ atk.leech.chance = Craft.boost.generate.roll(atk.leech.chance,qua); }
+			if(typeof atk.leech.magn === 'object'){ atk.leech.magn = Craft.boost.generate.roll(atk.leech.magn,qua); }
+			if(typeof atk.leech.time === 'object'){ atk.leech.time = Craft.boost.generate.roll(atk.leech.time,qua); }
+		}
+		if(atk.pierce){
+			if(typeof atk.pierce.chance === 'object'){ atk.pierce.chance = Craft.boost.generate.roll(atk.pierce.chance,qua); }
+			if(typeof atk.pierce.dmgReduc === 'object'){ atk.pierce.dmgReduc = Craft.boost.generate.roll(atk.pierce.dmgReduc,qua); }
+		}
+		//need to add curse etc...
+	}
+	if(ab.action.func === 'Combat.action.summon'){
+	
+	}
+	if(ab.action.func === 'Combat.action.boost'){
+	
 	}
 	ab.id = Math.randomId();
 	

@@ -193,8 +193,8 @@ Change.send.convert.abilityList = function(list){
 	var copy = deepClone(list);
 	for(var i in copy){
 		var ab = copy[i];
-		if(ab && ab.action && ab.action[0].func == 'Combat.action.attack'){
-			ab.action[0].param.attack[0] = list[i].action[0].param.attack[0]();
+		if(ab && ab.action && ab.action.func == 'Combat.action.attack'){
+			ab.action.param.attack = list[i].action.param.attack();
 		}
 	}
 	return copy;

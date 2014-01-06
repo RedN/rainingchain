@@ -39,12 +39,11 @@ Combat.action = function(id,action){
 }
 Combat.action.attack = function(id,action){   
 	var player = typeof id === 'string' ? List.all[id] : id;
-	for(var i = 0 ; i < action.attack.length ; i ++){
-		//Add Bonus and mastery
-		var atk = typeof action.attack[i] === 'function' ? action.attack[i]() : deepClone(action.attack[i]); 
-		atk = Combat.action.attack.mod(player,atk);
-		Combat.action.attack.perform(player,atk);
-	}
+	
+	//Add Bonus and mastery
+	var atk = typeof action.attack === 'function' ? action.attack() : deepClone(action.attack[i]); 
+	atk = Combat.action.attack.mod(player,atk);
+	Combat.action.attack.perform(player,atk);
 }
 
 Combat.action.attack.perform = function(player,attack,extra){   //extra used for stuff like boss loop

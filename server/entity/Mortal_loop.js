@@ -54,7 +54,7 @@ Mortal.loop.ability = function(m){
 		
 		if(press && charge[s.id] >= s.period){
 			//Mana
-			//for(var j in s.cost){if(s.cost[j] > m.mana[j]){ return;}}
+			//for(var j in s.cost){if(s.cost[j] > m.mana[j]){ continue;}}
 			//for(var j in s.cost){m.mana[j] -= s.cost[j];}
 			
 			//Charge
@@ -84,9 +84,7 @@ Mortal.loop.ability = function(m){
 			
 			
 			//Do Ability Action (ex: Combat.action.attack)
-			for(var j in s.action){
-				applyFunc.key(m.id,s.action[j].func,s.action[j].param);
-			}
+			applyFunc.key(m.id,s.action.func,s.action.param);
 			break;	//1 ability per frame max
 		}
 	}

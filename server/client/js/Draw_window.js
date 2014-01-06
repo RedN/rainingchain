@@ -525,9 +525,9 @@ Draw.window.ability.generalInfo.upMod = function(mod){
 
 Draw.window.ability.action = function(diffX,diffY){ ctxrestore();
 	var ab = player.abilityList[Draw.old.abilityShowed];
-	if(ab.action[0].func === 'Combat.action.attack'){ Draw.window.ability.action.attack(diffX,diffY);}
-	if(ab.action[0].func === 'Mortal.boost'){ Draw.window.ability.action.boost(diffX,diffY);}
-	if(ab.action[0].func === 'Combat.action.summon'){ Draw.window.ability.action.summon(diffX,diffY);}
+	if(ab.action.func === 'Combat.action.attack'){ Draw.window.ability.action.attack(diffX,diffY);}
+	if(ab.action.func === 'Mortal.boost'){ Draw.window.ability.action.boost(diffX,diffY);}
+	if(ab.action.func === 'Combat.action.summon'){ Draw.window.ability.action.summon(diffX,diffY);}
 
 }
 
@@ -539,7 +539,7 @@ Draw.window.ability.action.attack = function(diffX,diffY){  ctxrestore();
 	s.zy += diffY;
 	
 	var ab = player.abilityList[Draw.old.abilityShowed];
-	var atk = deepClone(ab.action[0].param.attack[0]);
+	var atk = deepClone(ab.action.param.attack);
 	atk = Combat.action.attack.mod(player,atk);
 	
 	
@@ -565,15 +565,15 @@ Draw.window.ability.action.attack = function(diffX,diffY){  ctxrestore();
 	//Mods
 	for(var i in atk){
 		if(atk[i]){
-			if(Draw.convert.attackMod[i]){
-				//Draw.icon(Draw.window.ability.action.attack.modToIcon[i],[numX,numY],20);
+			if(Draw.window.ability.action.attack.modTo[i]){
+				Draw.icon(Draw.window.ability.action.attack.modTo[i].icon,[s.zx,s.zy+25+30],20);
 				var tmp = atk[i];
 				
 				//Status
-				if(Cst.status.list.have(i)){ tmp.chance = Math.pow(main.pref.abilityDmgCent,1.5)*atk[i].chance*atk.dmgRatio[Cst.status.toElement[i]];}
+				if(Cst.status.list.have(i)){ tmp.chance = Math.pow(main.pref.abilityDmgStatusTrigger,1.5)*atk[i].chance*atk.dmgRatio[Cst.status.toElement[i]];}
 				
 				if(tmp.chance !== undefined && tmp.chance <= 0.001){ continue;}
-				ctx.fillText('=> ' + Draw.convert.attackMod[i](tmp),s.zx+30,s.zy+25+30);
+				ctx.fillText('=> ' + Draw.window.ability.action.attack.modTo[i].text(tmp),s.zx+30,s.zy+25+30);
 				s.zy += 25;
 				
 			}
@@ -582,23 +582,40 @@ Draw.window.ability.action.attack = function(diffX,diffY){  ctxrestore();
 }
 
 
-Draw.window.ability.action.attack.modToIcon = {
-	'burn':'offensive.burn',
-	'chill':'offensive.chill',
-	'confuse':'offensive.confuse',
-	'bleed':'offensive.bleed',
-	'knock':'offensive.knock',
-	'drain':'offensive.drain',
-	'leech':'offensive.leech',
-	
-	'sin':'offensive.bullet',
-	'parabole':'offensive.bullet',
-	'nova':'offensive.bullet',
-	'boomerang':'offensive.bullet',
-	'onHit':'offensive.bullet',
-	'curse':'curse.skull',
-	'hitIfMod':'system.heart',
-	'heal':'system.heart',
+Draw.window.ability.action.attack.modTo = {
+	'burn':{icon:'offensive.burn',
+			text:(function(a){ return round(a.chance*100,2) + '% to Burn for ' + round(a.magn*100*a.time,2) + '% Hp of Monster\'s Remaining Hp over ' + round(a.time/25,2) + 's.'; }),},
+	'chill':{icon:'offensive.chill',
+			text:(function(a){ return round(a.chance*100,2) + '% to Chill, reducing Speed by -' + round(a.magn*100,2) + '% for ' + round(a.time/25,2) + 's.'; })},
+	'confuse':{icon:'offensive.confuse',
+			text:(function(a){ return round(a.chance*100,2) + '% to Confuse for ' + round(a.time/25,2) + 's.'; })},
+	'bleed':{icon:'offensive.bleed',
+			text:(function(a){ return round(a.chance*100,2) + '% to Bleed for ' + round(a.magn*100*a.time,2) + '% Initial Dmg over ' + round(a.time/25,2) + 's.'; })},
+	'knock':{icon:'offensive.knock',
+			text:(function(a){ return round(a.chance*100,2) + '% to Knockback by ' + round(a.magn*a.time,2) + ' pixel over ' + round(a.time/25,2) + 's.'; })},	
+	'drain':{icon:'offensive.drain',
+			text:(function(a){ return round(a.chance*100,2) + '% to Drain ' + round(a.magn*100,2) + '% Mana.'; })},
+	'leech':{icon:'offensive.leech',
+			text:(function(a){ return round(a.chance*100,2) + '% to Life Leech ' + round(a.magn*100,2) + '% Hp'; })},
+	'pierce':{icon:'offensive.leech',
+			text:(function(a){ return round(a.chance*100,2) + '% to Pierce, reducing this attack damage by ' + round(100-a.dmgReduc*100,2) + '% Dmg.'; })},	
+			
+	'curse':{icon:'curse.skull',
+			text:(function(a){ return round(a.chance*100,2) + '% to Lower ' + Db.stat[a.boost[0].stat].name + ' by ' + round(100-a.boost[0].value*100,2) + '% for ' + round(a.boost[0].time/25,2) + 's.'; })},
+	'sin':{icon:'offensive.bullet',
+			text:(function(a){ return 'Sin Bullet'; })},
+	'parabole':{icon:'offensive.bullet',
+			text:(function(a){ return 'Parabole Bullet'; })},
+	'nova':{icon:'offensive.bullet',
+			text:(function(a){ return 'Nova'; })},
+	'boomerang':{icon:'offensive.bullet',
+			text:(function(a){ return 'Boomerang'; })},
+	'onHit':{icon:'offensive.bullet',
+			text:(function(a){ return 'Explosive'; })},
+	'hitIfMod':{icon:'system.heart',
+			text:(function(a){ return 'Affect Allies'; })},
+	'heal':{icon:'system.heart',
+			text:(function(a){ return 'HEAL NEED TO BE DONE'; })},
 }
 
 
@@ -609,7 +626,7 @@ Draw.window.ability.action.boost = function(diffX,diffY){  ctxrestore();
 	s.zx += diffX;
 	s.zy += diffY;
 	var ab = player.abilityList[Draw.old.abilityShowed];
-	var boost = ab.action[0].param[0];
+	var boost = ab.action.param;
 	
 	for(var i in boost){
 		Draw.icon(Db.stat[boost[i].stat].icon,[s.zx,s.zy],20);
@@ -627,7 +644,7 @@ Draw.window.ability.action.summon = function(diffX,diffY){  ctxrestore();
 	s.zx += diffX;
 	s.zy += diffY;
 	var ab = player.abilityList[Draw.old.abilityShowed];
-	var info = ab.action[0].param;
+	var info = ab.action.param;
 	ctx.font = '30px Fixedsys';
 	
 	var str = 'Summon a ' + info[1].variant + ' ' + info[1].category + ' Level ' + info[1].lvl + ' for ' + round(info[0].time/25,2) + 's. (Up to ' + info[0].maxChild + ')';

@@ -162,7 +162,6 @@ Init.db.ability.template = function(){
 		if(Db.ability.orb[a[i].orb]){	a[i].orb = {'upgrade':{'amount':0,'bonus':a[i].orb}};	} 
 		else { 	Db.ability.orb[a[i].id] = a[i].orb; a[i].orb = a[i].id; }	//custom orbMod (need to be func)
 		
-		Ability.creation.arrayfy(a[i]);
 	}
 	
 }
@@ -173,7 +172,7 @@ Init.db.ability.mod = function(){	//needed by client
 			'name':'x2 Bullets',
 			'info':'Your ability shoots x2 more bullets. Main damage is reduced by 50%.',
 			'func':(function(ab,orb,log){
-				var atk = ab.action[0].param.attack[0];
+				var atk = ab.action.param.attack;
 				atk.amount *= 2;
 				atk.dmgMain /= 1.5;
 				return ab;
@@ -198,7 +197,7 @@ Init.db.ability.orb = function(){
 	//defined here or directly inside Db.ability.template if unique
 	Db.ability.orb = {
 		'dmg':(function(ab,orb,log){
-			var atk = ab.action[0].param.attack[0];
+			var atk = ab.action.param.attack;
 			atk.amount *= log;	//bad
 			return ab;
 		}),
@@ -229,7 +228,6 @@ Ability.creation = function(a){
 	a.orb = {'upgrade':{'amount':0,'bonus':'none'}};
 	
 	a.action = a.action || [];
-	Ability.creation.arrayfy(a);
 	
 	//Setting Item Part
 	Item.creation({
@@ -245,19 +243,6 @@ Ability.creation = function(a){
 	return a.id;
 }
 
-Ability.creation.arrayfy = function(a){
-	a.action = arrayfy(a.action);
-	for(var j in a.action){ 
-		if(a.action[j].param.attack){ a.action[j].param.attack = arrayfy(a.action[j].param.attack); }
-		a.action[j].param.anim = a.action[j].param.anim || 'Attack';
-		for(var k in a.action[j].param.attack){
-			if(a.action[j].param.attack[k]){
-				a.action[j].param.attack[k].dmg = Craft.setDmgViaRatio(a.action[j].param.attack[k]);
-			}
-		}
-	}
-	return a;	
-}
 
 Ability.uncompress = function(abi){	
 	var ab = typeof abi === 'object' ? abi : deepClone(Db.ability[abi]);
@@ -267,10 +252,10 @@ Ability.uncompress = function(abi){
 	}
 	ab = Db.ability.orb[ab.orb.upgrade.bonus](ab,ab.orb.upgrade.amount);
 	
-	if(ab.action && ab.action[0].func === 'Combat.action.attack'){
-		var at = ab.action[0].param.attack[0];
+	if(ab.action && ab.action.func === 'Combat.action.attack'){
+		var at = ab.action.param.attack;
 		at = useTemplate(Attack.template(),at);
-		ab.action[0].param.attack[0] = new Function('return ' + stringify(at));
+		ab.action.param.attack = new Function('return ' + stringify(at));
 	}
 	return ab;
 }
@@ -279,17 +264,17 @@ Ability.template = function(){
 	return {'name':'Fire','tag':[],'icon':'melee.mace',
 		'cost':{"dodge":0},'reset':{'attack':0,'tag':{}},
 		'spd':{'main':0.8,'support':0.2},'period':25,
-			'action':[
+			'action':
 				{'func':'Combat.action.attack','param':{
-					'attack':[
+					'attack':
 						{type:"bullet",'angle':5,'amount':1, 'aim': 0,'objImg':{'name':"fireball",'sizeMod':1},'hitImg':{'name':"fire2",'sizeMod':0.5},
 						'dmgMain':1000,'dmgRatio':{'melee':0.10,'range':0.10,'magic':0.10,'fire':0.10,'cold':0.10,'lightning':0.5},
 						'dmg':{'melee':1000,'range':1000,'magic':1000,'fire':1000,'cold':1000,'lightning':1000},
 						'mods':	{}
-						}],
+						},
 					'anim':'Attack',
 				}}
-			]
+			
 	};
 }
 
