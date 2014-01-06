@@ -17,7 +17,7 @@ Draw.window.main = function(title){ ctxrestore();
 	hw.div.style.visibility = 'visible';
 	hw.div.style.left = s.x + 'px'; 
 	hw.div.style.top = s.y + 'px'; 
-
+	
 	//Frame
 	ctx.globalAlpha = 0.95;
 	ctx.drawImage(Img.frame.window,0,0,Img.frame.window.width,Img.frame.window.height,s.x-30,s.y-25,s.w+75,s.h+25);
@@ -869,7 +869,6 @@ Draw.window.quest = function (){ ctxrestore();
 Draw.window.passive = function (){ ctxrestore();
 	var s = Draw.window.main({'offensive':0,'defensive':0,'ability':0,'passive':1});	
 	ctx = List.ctx.win;
-	if(server){ return; }
 	
 	ctx.font = '25px Fixedsys';
 	ctx.fillStyle = 'black';
@@ -888,13 +887,18 @@ Draw.window.passive = function (){ ctxrestore();
 	hp.text.style.height = 'auto';
 	hp.text.style.backgroundColor = 'white';
 	
-	var str = 'Points: ' + main.passivePt + '<br>';
-	
+	var str = '<span ' + 
+	'onclick="Draw.window.passive.grid.info.toggleFullscreen();' + '" ' + 
+	'>' + 'Fullscreen' + 
+	'</span>';
+	str += '<br>'
 	str += 
 	'<span ' + 
 	'onclick="Draw.window.passive.grid.info.reset();' + '" ' + 
 	'>' + 'Reset View' + 
 	'</span>';
+	str += '<br>'
+	str += 'Points: ' + main.passivePt + '<br>';
 	
 	if(Draw.old.passiveText !== str){
 		Draw.old.passiveText = str
@@ -908,8 +912,17 @@ Draw.window.passive.grid = function(key){ ctxrestore();
 	var s = Draw.window.main.constant();	
 	ctx = List.ctx.passiveGrid;
 	
-	//Update Drag
 	var info = Draw.window.passive.grid.info;
+	
+	//Hide Background
+	if(info.fullscreen){
+		ctx.fillStyle = 'white';
+		ctx.fillRect(0,0,Cst.WIDTH,Cst.HEIGHT);
+		html.win.div.style.visibility = 'hidden';
+		ctx.fillStyle = 'black';	
+	}
+	
+	//Update Drag
 	info.x += Input.mouse.drag.vx; var dx = info.x;
 	info.y += Input.mouse.drag.vy; var dy = info.y;
 	
@@ -956,9 +969,9 @@ Draw.window.passive.grid = function(key){ ctxrestore();
 			//Button
 			if(typeof Db.passive[i][j] === 'object'){
 				Button.creation(0,{
-				"rect":[numX,numX+ic,numY,numY+ic],
-				"right":{"func":Chat.send.command,"param":['$win,passive,select,' + i + ',' + j]},
-				'text':'Choose ' + (Db.passive[i][j].stat ? Db.stat[Db.passive[i][j].stat].name : Db.customBoost[Db.passive[i][j].value].name) ,
+					"rect":[numX,numX+ic,numY,numY+ic],
+					"right":{"func":Chat.send.command,"param":['$win,passive,select,' + i + ',' + j]},
+					'text':'Choose ' + (Db.passive[i][j].stat ? Db.stat[Db.passive[i][j].stat].name : Db.customBoost[Db.passive[i][j].value].name),
 				});	
 			}
 			
@@ -966,7 +979,8 @@ Draw.window.passive.grid = function(key){ ctxrestore();
 	}
 	
 	if(hover){ Draw.window.passive.hover(hover); }
-
+	
+	//Dragging
 	Button.creation(0,{
 		"rect":[s.x,s.x+s.w,s.y+50,s.y+50+s.h],	//+50 or close doesnt work
 		"left":{"func":Input.event.mouse.drag,"param":[]},
@@ -978,10 +992,14 @@ Draw.window.passive.grid.info = {
 	size:20,
 	x:0,
 	y:0,
+	fullscreen:false,
 	reset:(function(){
 		Draw.window.passive.grid.info.x = 0;
 		Draw.window.passive.grid.info.y = 0;
 		Draw.window.passive.grid.info.size = 20;
+	}),
+	toggleFullscreen:(function(){
+		Draw.window.passive.grid.info.fullscreen = !Draw.window.passive.grid.info.fullscreen;
 	}),
 }
 
