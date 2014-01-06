@@ -200,6 +200,10 @@ Draw.window.stat.list = {
 	{'name':'Mana','icon':'resource.mana','stat':[{'name':'Max','stat':'mana-max'},{'name':'Regen','stat':'mana-regen'}],'string':(function(){ return 'Max: ' + round(player.boost.list['mana-max'].base,0,1) + ', Regen: ' + round(player.boost.list['mana-regen'].base,2,1)})},
 	{'name':'Fury','icon':'resource.fury','stat':[{'name':'Max','stat':'fury-max'},{'name':'Regen','stat':'fury-regen'}],'string':(function(){ return 'Max: ' + round(player.boost.list['fury-max'].base,0,1) + ', Regen: ' + round(player.boost.list['fury-regen'].base,2,1)})},
 	{'name':'Dodge','icon':'resource.dodge','stat':[{'name':'Max','stat':'dodge-max'},{'name':'Regen','stat':'dodge-regen'}],'string':(function(){ return 'Max: ' + round(player.boost.list['dodge-max'].base,0,1) + ', Regen: ' + round(player.boost.list['dodge-regen'].base,2,1)})},
+	{'name':'Heal','icon':'resource.heal','stat':[{'name':'Max','stat':'heal-max'},{'name':'Regen','stat':'heal-regen'}],'string':(function(){ return 'Max: ' + round(player.boost.list['heal-max'].base,0,1) + ', Regen: ' + round(player.boost.list['heal-regen'].base,2,1)})},
+
+	
+	
 ],
 
 'offensive':[

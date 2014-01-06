@@ -52,7 +52,8 @@ Mortal.changeHp = function(mort,amount){
 
 Mortal.changeResource = function(mort,heal){
 	for(var i in heal){
-		mort[i] += heal[i];
+		if(typeof heal[i] === 'string'){ mort[i] += heal[i].numberOnly()/100*mort.resource[i].max;	}			
+		else {	mort[i] += heal[i];	}
 		mort[i] = Math.min(mort[i],mort.resource[i].max);
 	}
 }
@@ -212,8 +213,8 @@ Mortal.swapAbility = function(mort,abPos,abListPost){
 	var abl = mort.abilityList[abListPost];
 	
 	if(mort.type === 'player'){
-		if(abPos === 4 && mort.abilityList[abListPost].type !== 'healing'){Chat.add(key,'This ability slot can only support Healing abilities.'); return;}	
-		if(abPos === 5 && mort.abilityList[abListPost].type !== 'dodge'){Chat.add(key,'This ability slot can only support Dodge abilities.'); return;}	
+		if(abPos === 4 && mort.abilityList[abListPost].type !== 'heal'){Chat.add(mort.id,'This ability slot can only support Healing abilities.'); return;}	
+		if(abPos === 5 && mort.abilityList[abListPost].type !== 'dodge'){Chat.add(mort.id,'This ability slot can only support Dodge abilities.'); return;}	
 	}
 	
 	mort.ability[abPos] = mort.abilityList[abListPost];

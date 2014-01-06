@@ -107,12 +107,13 @@ Init.mortal = function(){
 		mort.mana = 100;	
 		mort.dodge = 100;	
 		mort.fury = 100;	
-		
+		mort.heal = 100;
 		mort.resource = {
 			'hp':{'max':1000,'regen':1},
 			'mana':{'max':100,'regen':0.1},
 			'dodge':{'max':100,'regen':0.1},
 			'fury':{'max':100,'regen':0.1},
+			'heal':{'max':100,'regen':0.1},
 		};
 		
 		

@@ -166,6 +166,7 @@ Change.update.init = function(){
 				{'array':['mana'],'filter':Math.round},
 				{'array':['dodge'],'filter':Math.round},
 				{'array':['fury'],'filter':Math.round},
+				{'array':['heal'],'filter':Math.round},
 				{'array':['sprite','name']},
 				{'array':['sprite','sizeMod']},
 				

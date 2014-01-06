@@ -57,8 +57,8 @@ Cst.status = {
 }
 
 Cst.resource = {
-	'list':['hp','mana','fury','dodge'],
-	'toColor':{'hp':'#FF3333','mana':'#0066FF','fury':'#666699','dodge':'#FF9900'},
+	'list':['hp','mana','fury','dodge','heal'],
+	'toColor':{'hp':'#FF3333','mana':'#0066FF','fury':'#666699','dodge':'#FF9900','heal':'#F0F8FF'},
 }
 
 Cst.exp = {

@@ -55,6 +55,13 @@ Init.db.stat = function(){
 		'boost':{'base':1,'stat':['resource','fury','regen'],},
 		'playerOnly':1,
 		},
+	'heal-regen':{
+		'icon':'resource.heal',
+		'name':'Regen Heal',
+		'boost':{'base':1,'stat':['resource','heal','regen'],},
+		'playerOnly':1,
+		},
+
 		
 	'dodge-max':{
 		'icon':'resource.dodge',
@@ -79,6 +86,13 @@ Init.db.stat = function(){
 		'name':'Max Fury',
 		'boost':{'base':100,'stat':['resource','fury','max'],},
 		'playerOnly':1,},
+	'heal-max':{
+		'icon':'resource.heal',
+		'name':'Max Heal',
+		'boost':{'base':100,'stat':['resource','heal','max'],},
+		'playerOnly':1,},
+	
+	
 	
 	'leech-magn':{
 		'icon':'resource.hp',

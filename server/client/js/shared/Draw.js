@@ -336,24 +336,34 @@ Draw.resource = function (){ ctxrestore();
 	
 	ctx.fillStyle = 'grey';
 	ctx.globalAlpha = 0.5;
-	ctx.roundRect(sx,sy,w,h*4.4,1,1,5);
+	ctx.roundRect(sx,sy,w,h*4.6,1,1,5);
 	ctx.globalAlpha = 1;
 		
-	var array = ['hp','mana','fury'];
+	var array = [
+		{'name':'hp','height':30,'width':w},
+		{'name':'heal','height':10,'width':w},
+		{'name':'mana','height':25,'width':w},
+		{'name':'fury','height':25,'width':w},
+	];
+	
 	for(var i in array){
-		Draw.resource.bar(sx,sy,w,h,array[i]);
-		sy += h + 3;
+		var res = array[i];
+		Draw.resource.bar(sx,sy,res.width,res.height,res.name);
+		sy += res.height + 3;
 	}
+	
 	
 	Draw.resource.ability(sx,sy,w,h);
 }
 
 Draw.resource.bar = function(numX,numY,w,h,name){	ctxrestore();
 	ctx = List.ctx.stage;
-	ctx.fillStyle = 'white';
-	ctx.font = '25px Fixedsys';
-	ctx.fillText(name.capitalize(),numX+10,numY);
-	ctx.fillStyle = 'black';
+	if(h >= 20){
+		ctx.fillStyle = 'white';
+		ctx.font = h*0.9 + 'px Fixedsys';
+		ctx.fillText(name.capitalize(),numX+10,numY);
+		ctx.fillStyle = 'black';
+	}
 	numX += 75;
 	var ratio = Math.min(Math.max(player[name]/player.resource[name].max,0),1);
 	w -= 75 + 10;
@@ -449,8 +459,8 @@ Draw.popup.equip = function(){ ctxrestore();
 		var posy = pop.y;
 	} else {
 		var id = pop;
-		var posx = mouse.x;
-		var posy = mouse.y;
+		var posx = Input.mouse.x;
+		var posy = Input.mouse.y;
 	}
 	
 	var equip = Db.equip[id];

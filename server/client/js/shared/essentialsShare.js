@@ -300,8 +300,10 @@ String.prototype.capitalize = function() {
     return this.charAt(0).toUpperCase() + this.slice(1);
 }
 String.prototype.numberOnly = function(num){
+	var sign = this[0] === '-';
 	var a = this.replace(/[^\d.]/g, "");
-	if(num){ return +a; }
+	if(sign) a = '-' + a;
+	if(num){ a = +a; }
 	return a;
 }
 

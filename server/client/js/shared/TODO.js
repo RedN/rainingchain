@@ -1,9 +1,6 @@
 
-#Priority 1:
--Implement Sound System
 
 #Priority 2:
--Buffer Life
 -Polish Instanced World
 -Passive Grid Zoom
 -Bank HTML5
@@ -28,7 +25,7 @@
 -Advanced Dialogue (Morrowind)
 -Offlinepm fix
 jqueryui (login, progress bar, dialogue option)
-
+-Implement Sound System
 
 TUTORIAL:
 
