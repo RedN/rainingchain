@@ -2,7 +2,6 @@
 
 var gameStarted = false;
 var key = 0;
-var ctxList = {};   //list of canvas (window,popup,stage)
 
 List = {
 	all:{},		//EVERYTHING (player id refers to mortal)
@@ -17,6 +16,7 @@ List = {
 	map:{},		//all maps including instance 
 	socket:{},	//all socket (player id)
 	btn:{},		//all buttons
+	ctx:{},		//list of canvas (window,popup,stage)
 };
 
 Db = {	//local compilation of information so server doesnt send many times the same info
@@ -79,7 +79,6 @@ Init.game = function (data) {
 	Init.game.other(data);
 	
 	//Add Canvas. param2 = z-index
-	canvasDiv = $("#canvasDiv")[0];   
 	addCanvas('stage','stage',-10);
 	addCanvas('win','windowCanvas',10);
 	addCanvas('passiveGrid','passiveGridCanvas',11);
@@ -105,12 +104,7 @@ Init.game = function (data) {
 		gameStarted = true;
 		setInterval(Loop,40);
 		socket.emit('clientReady',1); 
-		if(cloud9) { Chat.add('Warning, you are running under cloud9 servers. You may experience intense lagging. Downloading the project and running it locally is recommended.');}
-		
-		//Tracking Global Variables
-		var tmp = Object.keys(this); for(var i in ObjectKeys) tmp.splice(tmp.indexOf(ObjectKeys[i]),1);
-		permConsoleLog(tmp);
-	
+		if(cloud9) { Chat.add('Warning, you are running under cloud9 servers. You may experience intense lagging. Downloading the project and running it locally is recommended.');}	
 	});
 }
 
@@ -142,14 +136,14 @@ addCanvas = function(name,id,z){
 	
 	cv.draggable = false;
 	cv.onmousedown = function(e) {e.preventDefault();	return false; };
-	canvasDiv.appendChild(cv);
+	$("#canvasDiv")[0].appendChild(cv);
 	
-	ctxList[name] = cv.getContext("2d");
-	ctxList[name].font = '20px Fixedsys';
-	ctxList[name].fillStyle = 'black';
-	ctxList[name].textAlign = 'left';
-	ctxList[name].textBaseline = 'top';
-	ctxList[name].save();
+	List.ctx[name] = cv.getContext("2d");
+	List.ctx[name].font = '20px Fixedsys';
+	List.ctx[name].fillStyle = 'black';
+	List.ctx[name].textAlign = 'left';
+	List.ctx[name].textBaseline = 'top';
+	List.ctx[name].save();
 }
 
 

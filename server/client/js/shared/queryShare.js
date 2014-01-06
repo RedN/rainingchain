@@ -19,7 +19,7 @@ if(server){
 		});
 	});
 } else {
-	queryDb = function(db,id){
+	Db.query = function(db,id){
 		if(Db[db][id] === undefined){
 			Db[db][id] = 0;
 			socket.emit('queryDb', {db:db,id:id});

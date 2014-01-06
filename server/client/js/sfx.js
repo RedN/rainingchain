@@ -1,5 +1,5 @@
 Init.db.sfx = function(){
-	sfxDb = {
+	Db.sfx = {
 		'fire1':{},
         
 
@@ -17,18 +17,18 @@ Init.db.sfx = function(){
 	}
 
 
-	for(var i in sfxDb){
+	for(var i in Db.sfx){
 		var tmp = [];
 		for(var j = 0 ; j < 3 ; j++){
 			var s = new Audio();
-			s.src = sfxDb[i].src ? 'snd/sfx/' + sfxDb[i].src : 'snd/sfx/' + i + '.wav';
-			s.volume = sfxDb[i].volume || 1;
-			s.delay = sfxDb[i].delay || 0;
+			s.src = Db.sfx[i].src ? 'snd/sfx/' + Db.sfx[i].src : 'snd/sfx/' + i + '.wav';
+			s.volume = Db.sfx[i].volume || 1;
+			s.delay = Db.sfx[i].delay || 0;
 			tmp.push(s);
 		}
 		
 		
-		sfxDb[i] = tmp;
+		Db.sfx[i] = tmp;
 	}
 
 }
@@ -37,13 +37,13 @@ Init.db.sfx = function(){
 Sfx = {};
 Sfx.play = function(id){
 	var i = 0;
-	while(sfxDb[id][i]){
-		if(sfxDb[id][i].ended || !sfxDb[id][i].currentTime){
-			return sfxDb[id][i];
+	while(Db.sfx[id][i]){
+		if(Db.sfx[id][i].ended || !Db.sfx[id][i].currentTime){
+			return Db.sfx[id][i];
 		}
 		i++;
 	}
-	return sfxDb[id][0];
+	return Db.sfx[id][0];
 }
 
 

@@ -3,26 +3,61 @@ Command = {};
 Command.list = {};
 
 
-//Receive command from client
-//format: data:{cmd:command_Name,param:[param1,param2]}
+
 if(server){
-    io.sockets.on('connection', function (socket) {
-    	socket.on('Chat.send.command', function (data) {
-    		var key = socket.key;
-    		var cmd = data.cmd;
-    		var param = data.param;
-    		param.unshift(key);
-    		
-    		cmd = customEscape(cmd);
-    		for(var i in param){ param[i] = customEscape(param[i]); }
-    		
-    		
-    		if(Command.list[cmd]){
-    			Command.list[cmd].apply(this,param);
-    		}
-    		
-    	});
-    });
+	//Receive command from client
+	//format: data:{cmd:command_Name,param:[param1,param2]} io.sockets.on('connection', function (socket) {
+	socket.on('Chat.send.command', function (data) {
+		var key = socket.key;
+		var cmd = data.cmd;
+		var param = data.param;
+		param.unshift(key);
+		
+		cmd = customEscape(cmd);
+		for(var i in param){ param[i] = customEscape(param[i]); }
+		
+		
+		if(Command.list[cmd]){
+			Command.list[cmd].apply(this,param);
+		}
+		
+	});
+}
+
+
+//The client can make a query to the server database.
+//used when the client wants to draw a weapon but doesnt have info about it
+if(server){
+	io.sockets.on('connection', function (socket) {
+		socket.on('queryDb', function (d) {
+			var source;
+			
+			switch(d.db){
+				case 'equip': source = Db.equip; 	break;
+				case 'ability': source = Db.ability;	break;		
+			}
+			if(source && source[d.id]){
+				socket.emit('queryDb',{db:d.db,id:d.id,info:source[d.id]}); 
+			} else {
+				socket.emit('queryDb',{'failure':1}); 
+			}
+
+		
+		});
+	});
+} else {
+	queryDb = function(db,id){
+		if(Db[db][id] === undefined){
+			Db[db][id] = 0;
+			socket.emit('queryDb', {db:db,id:id});
+		}
+	}
+
+	socket.on('queryDb', function (d) {
+		if(!d.failure){
+			Db[d.db][d.id] = d.info;
+		}		
+	});
 }
 
 

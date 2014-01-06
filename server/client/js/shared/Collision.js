@@ -72,7 +72,7 @@ Collision.PtRRect = function(pt,rotRect){
 
 Collision.getMouse = function(key){
 	if(server){ return {x:List.all[key].mouseX,y:List.all[key].mouseY}  }
-	else{ return {x:mouse.x,y:mouse.y} }
+	else{ return {x:Input.mouse.x,y:Input.mouse.y} }
 }
 
 

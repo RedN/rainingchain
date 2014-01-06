@@ -4,7 +4,7 @@ Draw.tab = function(){ ctxrestore();
 
 Draw.tab.main = function (){ ctxrestore();
 	var s = Draw.tab.main.constant(); 
-	ctx = ctxList.stage;
+	ctx = List.ctx.stage;
 	
 	//Main Frame
 	ctx.globalAlpha = 0.8;
@@ -62,7 +62,7 @@ Draw.tab.main.constant = function(){
 		
 Draw.tab.inventory = function (){ ctxrestore();
 	var s = Draw.tab.main();	
-	ctx = ctxList.stage;
+	ctx = List.ctx.stage;
 	
 	//Draw Items
 	for (i = 0 ; i < main.invList.length ; i++){
@@ -89,7 +89,7 @@ Draw.tab.inventory = function (){ ctxrestore();
 
 Draw.tab.equip = function (){ ctxrestore();
 	var s = Draw.tab.main();	
-	ctx = ctxList.stage;
+	ctx = List.ctx.stage;
 	
 	//Weapon
 	if(!server && typeof main.popupList.equip !== 'object') main.popupList.equip = 0;
@@ -163,7 +163,7 @@ Draw.tab.equip = function (){ ctxrestore();
 Draw.tab.skill = function(){ ctxrestore();
 	var s = Draw.tab.main();	
 	
-	ctx = ctxList.stage;
+	ctx = List.ctx.stage;
 	
 	for (var i = 0 ; i < Cst.skill.list.length ; i++){
 		var vx = 100;
@@ -188,8 +188,8 @@ Draw.tab.skill = function(){ ctxrestore();
 			
 		var vvx = 200;
 		var vvy = 100;
-		var ssx = mouse.x - vvx;
-		var ssy = mouse.y - vvy;
+		var ssx = Input.mouse.x - vvx;
+		var ssy = Input.mouse.y - vvy;
 		
 		//Frame
 		ctx.fillStyle = 'grey';
@@ -219,7 +219,7 @@ Draw.tab.skill = function(){ ctxrestore();
 
 Draw.tab.friend = function(){ ctxrestore();
 	var s = Draw.tab.main();	
-	ctx = ctxList.stage;
+	ctx = List.ctx.stage;
 	
 	var list = main.social.list.friend;
 	var count = 0;
@@ -347,7 +347,7 @@ Draw.tab.friend.rightClick = function(name){
 
 Draw.tab.quest = function(){ ctxrestore();
 	var s = Draw.tab.main(0);	
-	ctx = ctxList.stage;
+	ctx = List.ctx.stage;
 		
 	var count = 0;
 	

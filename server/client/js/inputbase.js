@@ -1,8 +1,7 @@
 //### Start Customization###
 
-var mouse = {x:0,y:0,drag:{active:0,sx:0,sy:0,vx:0,vy:0},left:0,right:0};
-
 Input = {};
+Input.mouse = {x:0,y:0,drag:{active:0,sx:0,sy:0,vx:0,vy:0},left:0,right:0};
 
 Input.init = function(setup){
 	if(setup === 0){
@@ -115,8 +114,8 @@ Input.event.mouse = {};
 Input.event.mouse.click = function(code,dir){
 	var start = +$("#chatBoxInput").is(":focus");
 	var num = dir === 'down' ? 1 : 0;
-	if(code === 1) mouse.left = num; 
-	if(code === 3) mouse.right = num; 
+	if(code === 1) Input.mouse.left = num; 
+	if(code === 3) Input.mouse.right = num; 
 	code += Input.event.combo();
 	
 	//Update Input
@@ -140,9 +139,9 @@ Input.event.mouse.click = function(code,dir){
 			case 10003: side = 'ctrlRight'; break;
 		}
 		
-		socket.emit('click', [side,mouse.x,mouse.y]);
+		socket.emit('click', [side,Input.mouse.x,Input.mouse.y]);
 		Button.reset();
-		Button.test(0,mouse.x,mouse.y,side);
+		Button.test(0,Input.mouse.x,Input.mouse.y,side);
 	}
 }
 
@@ -153,28 +152,28 @@ Input.event.mouse.wheel = function(side){
 }
 
 Input.event.mouse.move = function (evt){
-	mouse.x = evt.x;
-	mouse.y = evt.y;
+	Input.mouse.x = evt.x;
+	Input.mouse.y = evt.y;
 }
 
 Input.event.mouse.drag = function(){
-	mouse.drag.active = 1;
-	mouse.drag.sx = mouse.x;
-	mouse.drag.sy = mouse.y;
-	mouse.drag.vx = 0;
-	mouse.drag.vy = 0;
+	Input.mouse.drag.active = 1;
+	Input.mouse.drag.sx = Input.mouse.x;
+	Input.mouse.drag.sy = Input.mouse.y;
+	Input.mouse.drag.vx = 0;
+	Input.mouse.drag.vy = 0;
 }
 
 Input.event.mouse.drag.update  = function(){
-	if(mouse.drag.active && mouse.left){
-		mouse.drag.vx = mouse.x - mouse.drag.sx; 
-		mouse.drag.vy = mouse.y - mouse.drag.sy; 
-		mouse.drag.sx = mouse.x;
-		mouse.drag.sy = mouse.y;
+	if(Input.mouse.drag.active && Input.mouse.left){
+		Input.mouse.drag.vx = Input.mouse.x - Input.mouse.drag.sx; 
+		Input.mouse.drag.vy = Input.mouse.y - Input.mouse.drag.sy; 
+		Input.mouse.drag.sx = Input.mouse.x;
+		Input.mouse.drag.sy = Input.mouse.y;
 	} else {
-		mouse.drag.active = 0;
-		mouse.drag.vx = 0;
-		mouse.drag.vy = 0;
+		Input.mouse.drag.active = 0;
+		Input.mouse.drag.vx = 0;
+		Input.mouse.drag.vy = 0;
 	}
 }	
 
@@ -194,13 +193,13 @@ $(window).keydown(function(e) { if(e.ctrlKey) { e.preventDefault();}});	//Disabl
 //Send
 Input.send = function(){
 	if($("#chatBoxInput").is(":focus") && Input.press.move.toString() !== "0,0,0,0"){ 
-		mouse.x = Cst.WIDTH2 + 10*Input.press.move[0] - 10*Input.press.move[2];
-		mouse.y = Cst.HEIGHT2 + 10*Input.press.move[1] - 10*Input.press.move[3];		
+		Input.mouse.x = Cst.WIDTH2 + 10*Input.press.move[0] - 10*Input.press.move[2];
+		Input.mouse.y = Cst.HEIGHT2 + 10*Input.press.move[1] - 10*Input.press.move[3];		
 	}
 
 	var d = {};
 	var newKey = Input.press.move.join('') + Input.press.ability.join('');
-	var newMouse = [Math.round(mouse.x),Math.round(mouse.y)];
+	var newMouse = [Math.round(Input.mouse.x),Math.round(Input.mouse.y)];
 
 	if(Input.send.old.key !== newKey){ d.i = newKey; }
 	if(Input.send.old.mouse.toString() !== newMouse.toString()){ d.m = newMouse; }

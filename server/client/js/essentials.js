@@ -33,17 +33,17 @@ $(function(){
 
 
 ctxrestore = function(){
-	for(var i in ctxList){
-		ctxList[i].font = '20px Fixedsys';
-		ctxList[i].fillStyle = 'black';
-		ctxList[i].strokeStyle = 'black';
-		ctxList[i].globalAlpha = 1; 
-		ctxList[i].textAlign = 'left';
-		ctxList[i].textBaseline = 'top';
-		ctxList[i].shadowColor = 'black';
-		ctxList[i].shadowBlur = 0;
-		ctxList[i].shadowOffsetX = 0;
-		ctxList[i].shadowOffsetY = 0;
+	for(var i in List.ctx){
+		List.ctx[i].font = '20px Fixedsys';
+		List.ctx[i].fillStyle = 'black';
+		List.ctx[i].strokeStyle = 'black';
+		List.ctx[i].globalAlpha = 1; 
+		List.ctx[i].textAlign = 'left';
+		List.ctx[i].textBaseline = 'top';
+		List.ctx[i].shadowColor = 'black';
+		List.ctx[i].shadowBlur = 0;
+		List.ctx[i].shadowOffsetX = 0;
+		List.ctx[i].shadowOffsetY = 0;
 	}
 }
 

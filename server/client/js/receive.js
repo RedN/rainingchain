@@ -120,7 +120,7 @@ Receive.init.anim = function(a){
 		List.anim[a.id] = a;
 	}
 	
-	if(sfxDb[Db.anim[a.name].sfx]){
+	if(Db.sfx[Db.anim[a.name].sfx]){
 		var sfx = Sfx.play(Db.anim[a.name].sfx);
 		sfx.volume = Math.max(0.1,1 - 0.2*Math.floor(distancePtPt(player,a)/50));	
 		sfx.play();

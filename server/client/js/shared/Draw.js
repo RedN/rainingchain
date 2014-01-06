@@ -16,8 +16,8 @@ Draw.loop = function (key){
 	}
 	if(!server){
 		//Clear
-		for(var i in ctxList){ctxList[i].clearRect(0, 0, Cst.WIDTH, Cst.HEIGHT);}
-		for(var i = 0 ; i < drawHtmlDiv.length; i++){ drawHtmlDiv[i].style.visibility = 'hidden';}
+		for(var i in List.ctx){List.ctx[i].clearRect(0, 0, Cst.WIDTH, Cst.HEIGHT);}
+		for(var i in html){ html[i].div.style.visibility = 'hidden';}
 		List.btn = [];
 		Input.event.mouse.drag.update();
 		
@@ -49,7 +49,7 @@ Draw.loop = function (key){
 
 //Draw Animation
 Draw.anim = function (layer){
-	ctx = ctxList.stage;
+	ctx = List.ctx.stage;
 	
 	for(var i in List.anim){
 		if(Db.anim[List.anim[i].name].layer === layer){
@@ -135,7 +135,7 @@ Draw.entity.mortal.sort = function(){
 }
 
 Draw.entity.mortal.chatHead = function(mort){
-	ctx = ctxList.stage;
+	ctx = List.ctx.stage;
 	
 	var spriteServer = mort.sprite;
 	var spriteFromDb = Db.sprite[spriteServer.name];
@@ -153,7 +153,7 @@ Draw.entity.mortal.chatHead = function(mort){
 }		
 
 Draw.entity.mortal.hpBar = function(mort){
-	ctx = ctxList.stage;
+	ctx = List.ctx.stage;
 	
 	var spriteServer = mort.sprite;
 	var spriteFromDb = Db.sprite[spriteServer.name];
@@ -180,7 +180,7 @@ Draw.entity.bullet = function(){
 }
 
 Draw.entity.sprite = function (mort){
-	ctx = ctxList.stage;
+	ctx = List.ctx.stage;
 	
 	var spriteServer = mort.sprite;
 	var spriteFromDb = Db.sprite[spriteServer.name];
@@ -226,7 +226,7 @@ Draw.entity.drop = function(key){
 	}
 	
 	if(!server){
-		ctx = ctxList.stage;
+		ctx = List.ctx.stage;
 		
 		for(var i in List.drop){
 			var drop = List.drop[i];
@@ -243,7 +243,7 @@ Draw.entity.drop = function(key){
 
 //{Upper Interface
 Draw.minimap = function (){ ctxrestore();
-	ctx = ctxList.stage;
+	ctx = List.ctx.stage;
 	var map = Db.map[player.map];
 	var mapX = Math.min(map.img.b.length-1,Math.max(0,Math.floor((player.x-1024)/2048)));
 	var mapY = Math.min(map.img.b[mapX].length-1,Math.max(0,Math.floor((player.y-1024)/2048)));
@@ -327,7 +327,7 @@ Draw.minimap.icon = function(){
 }
 
 Draw.resource = function (){ ctxrestore();
-	ctx = ctxList.stage;
+	ctx = List.ctx.stage;
 	
 	var h = 30; 
 	var sx = Cst.WIDTH-Cst.WIDTH/4;
@@ -349,7 +349,7 @@ Draw.resource = function (){ ctxrestore();
 }
 
 Draw.resource.bar = function(numX,numY,w,h,name){	ctxrestore();
-	ctx = ctxList.stage;
+	ctx = List.ctx.stage;
 	ctx.fillStyle = 'white';
 	ctx.font = '25px Fixedsys';
 	ctx.fillText(name.capitalize(),numX+10,numY);
@@ -367,7 +367,7 @@ Draw.resource.bar = function(numX,numY,w,h,name){	ctxrestore();
 }
 
 Draw.resource.ability = function(sx,sy,w,h){ ctxrestore();
-	ctx = ctxList.stage;
+	ctx = List.ctx.stage;
 	for(var i in player.ability){
 		if(!player.ability[i]) continue;
 		var numX = sx + 25 + (+i * (h + 10));
@@ -377,7 +377,7 @@ Draw.resource.ability = function(sx,sy,w,h){ ctxrestore();
 }
 
 Draw.context = function (){ ctxrestore();
-	ctx = ctxList.stage;
+	ctx = List.ctx.stage;
 	
 	var numX = 0;
 	var numY = 0;
@@ -403,7 +403,7 @@ Draw.context = function (){ ctxrestore();
 
 //Map
 Draw.map = function (layer){ ctxrestore();
-	ctx = ctxList.stage;
+	ctx = List.ctx.stage;
 	var map = Db.map[player.map];
 	var mapX = Math.min(map.img[layer].length-1,Math.max(0,Math.floor((player.x-1024)/2048)));
 	var mapY = Math.min(map.img[layer][mapX].length-1,Math.max(0,Math.floor((player.y-1024)/2048)));
@@ -441,7 +441,7 @@ Draw.popup.equip = function(){ ctxrestore();
 	var w = 250;
 	var h = 250;
 	var pop = main.popupList.equip;
-	ctx = ctxList.win;
+	ctx = List.ctx.win;
 	
 	if(typeof pop === 'object'){
 		var id = pop.id;
@@ -454,7 +454,7 @@ Draw.popup.equip = function(){ ctxrestore();
 	}
 	
 	var equip = Db.equip[id];
-	if(equip === undefined){queryDb('equip',id); return; }
+	if(equip === undefined){Db.query('equip',id); return; }
 	if(equip === 0){return;} //waiting for query answer
 	
 	var sx = Math.max(0,Math.min(posx-w,Cst.WIDTH-w));
@@ -517,7 +517,7 @@ Draw.popup.equip = function(){ ctxrestore();
 //Option
 Draw.optionList = function(){ ctxrestore();
 	if(!main.optionList) return;
-	ctx = ctxList.pop;
+	ctx = List.ctx.pop;
 	
 	//Draw Item Options
 	var option = main.optionList.option;
@@ -615,7 +615,7 @@ Draw.optionList.parse = function(data){
 
 //Chat
 Draw.chat = function(){ ctxrestore();
-	ctx = ctxList.stage;
+	ctx = List.ctx.stage;
 	Draw.chat.main();
 	
 	if(main.dialogue){
@@ -802,8 +802,8 @@ Draw.element = function(x,y,w,h,data,noover){
 	ctx.strokeRect(x,y,w,h);
 	var total = 0; for(var i in data){	total += data[i]; }
 	
-	var mx = Math.min(mouse.x,Cst.WIDTH-150);
-	var my = Math.min(mouse.y,Cst.HEIGHT-25);
+	var mx = Math.min(Input.mouse.x,Cst.WIDTH-150);
+	var my = Math.min(Input.mouse.y,Cst.HEIGHT-25);
 	
 	for(var i in data){
 		var length = w*data[i]/total;

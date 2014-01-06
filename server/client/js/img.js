@@ -7,8 +7,8 @@ Img.preload = function(arr,cb){
 	var	loadedimages = 0;
 	var arr = (typeof arr !== "object") ? [arr] : arr
     function imageloadpost(){
-        ctxList.stage.clearRect(0,0,Cst.WIDTH,Cst.HEIGHT);
-		ctxList.stage.fillText('Loading... ' + loadedimages + '/' + arr.length,Cst.WIDTH2,Cst.HEIGHT2);
+        List.ctx.stage.clearRect(0,0,Cst.WIDTH,Cst.HEIGHT);
+		List.ctx.stage.fillText('Loading... ' + loadedimages + '/' + arr.length,Cst.WIDTH2,Cst.HEIGHT2);
 		
 		loadedimages++;
         if (loadedimages === arr.length) cb(newimages);

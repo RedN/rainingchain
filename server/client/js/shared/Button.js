@@ -61,8 +61,8 @@ Button.context = function (key){
 		var y = List.all[key].mouseY;
 	} else { 
 		var list = List.btn;	
-		var x = mouse.x;
-		var y = mouse.y;
+		var x = Input.mouse.x;
+		var y = Input.mouse.y;
 	}
 		
 	for(var i = 0 ; i < list.length ; i++){

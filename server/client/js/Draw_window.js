@@ -9,7 +9,7 @@ Draw.window = function(){ ctxrestore();
 
 Draw.window.main = function(title){ ctxrestore();	
 	var s = Draw.window.main.constant(); 	
-	ctx = ctxList.win;
+	ctx = List.ctx.win;
 	
 	var hw = html.win;
 	var t = hw.title;
@@ -87,7 +87,7 @@ Draw.window.main.constant = function(){
 
 Draw.window.bank = function (){ ctxrestore();
 	var s = Draw.window.main('Bank');	
-	ctx = ctxList.win;
+	ctx = List.ctx.win;
 
 	//change amount:
 		
@@ -135,7 +135,7 @@ Draw.window.defensive = function (){ ctxrestore();
 Draw.window.stat = function(type){ ctxrestore();
 	var obj = {'offensive':0,'defensive':0,'ability':0,'passive':0}; obj[type] = 1;
 	var s = Draw.window.main(obj);	
-	ctx = ctxList.win;
+	ctx = List.ctx.win;
 	if(server){ return; }
 	
 	ctx.font = '22px Monaco';
@@ -236,7 +236,7 @@ Draw.window.stat.hover = function(hover,type){ ctxrestore();
 	var numY = s.y + 70;
 
 	//Frame
-	var ctx = ctxList.pop;
+	var ctx = List.ctx.pop;
 	ctx.drawImage(Img.frame.postit,0,0,Img.frame.postit.width,Img.frame.postit.height,numX,numY-15,400,500);
 	
 	var info = Draw.window.stat.list[type][hover];  
@@ -272,7 +272,7 @@ Draw.window.stat.hover = function(hover,type){ ctxrestore();
 Draw.window.ability = function (){ ctxrestore();
 	var s = Draw.window.main({'offensive':0,'defensive':0,'ability':1,'passive':0});
 	if(server){ return; }  
-	ctx = ctxList.win;
+	ctx = List.ctx.win;
 	
 	var ha = html.abilityWin;
 	ha.div.style.visibility = 'visible';
@@ -634,7 +634,7 @@ Draw.window.ability.action.summon = function(diffX,diffY){  ctxrestore();
 
 Draw.window.trade = function (){ ctxrestore();
 	var s = Draw.window.main('Bank');	
-	ctx = ctxList.win;
+	ctx = List.ctx.win;
 
 	//change amount:
 		
@@ -660,7 +660,7 @@ Draw.window.trade = function (){ ctxrestore();
 	var hisList = trade.tradeList;
 	
 	var s = Draw.window.main('Trading ' + trade.trader);	
-	ctx = ctxList.win;
+	ctx = List.ctx.win;
 	
 	
 	//Draw Own Items
@@ -732,7 +732,7 @@ Draw.window.trade = function (){ ctxrestore();
 
 Draw.window.quest = function (){ ctxrestore();
 	var s = Draw.window.main(key,'Quest');	
-	ctx = ctxList.win;
+	ctx = List.ctx.win;
 	
 	var q = Db.quest[main.windowList.quest];
 	var hq = html.questWin;
@@ -864,7 +864,7 @@ Draw.window.quest = function (){ ctxrestore();
 //{ Passive
 Draw.window.passive = function (){ ctxrestore();
 	var s = Draw.window.main({'offensive':0,'defensive':0,'ability':0,'passive':1});	
-	ctx = ctxList.win;
+	ctx = List.ctx.win;
 	if(server){ return; }
 	
 	ctx.font = '25px Fixedsys';
@@ -902,12 +902,12 @@ Draw.window.passive = function (){ ctxrestore();
 
 Draw.window.passive.grid = function(key){ ctxrestore();
 	var s = Draw.window.main.constant();	
-	ctx = ctxList.passiveGrid;
+	ctx = List.ctx.passiveGrid;
 	
 	//Update Drag
 	var info = Draw.window.passive.grid.info;
-	info.x += mouse.drag.vx; var dx = info.x;
-	info.y += mouse.drag.vy; var dy = info.y;
+	info.x += Input.mouse.drag.vx; var dx = info.x;
+	info.y += Input.mouse.drag.vy; var dy = info.y;
 	
 	info.size = Math.max(0.1,info.size);
 	info.size = Math.min(200,info.size);
@@ -945,7 +945,7 @@ Draw.window.passive.grid = function(key){ ctxrestore();
 			Draw.icon(name,[numX+border2,numY+border2],icon);
 			
 			//Hover
-			if(!mouse.drag.active && Collision.PtRect(Collision.getMouse(key),[numX,numX+ic,numY,numY+ic])){
+			if(!Input.mouse.drag.active && Collision.PtRect(Collision.getMouse(key),[numX,numX+ic,numY,numY+ic])){
 				var hover = Db.passive[i][j];
 			}
 			
@@ -983,14 +983,14 @@ Draw.window.passive.grid.info = {
 
 Draw.window.passive.hover = function(over){ ctxrestore();
 	var s = Draw.window.main.constant(); 
-	var ctx = ctxList.pop;
+	var ctx = List.ctx.pop;
 	
 	var st = over.stat ? Db.stat[over.stat] : Db.customBoost[over.value];
 	
 	var vvx = 300;
 	var vvy = 100;
-	var ssx = Math.max(0,mouse.x - vvx);
-	var ssy = Math.max(0,mouse.y - vvy);
+	var ssx = Math.max(0,Input.mouse.x - vvx);
+	var ssy = Math.max(0,Input.mouse.y - vvy);
 	
 	//Frame
 	ctx.fillStyle = 'grey';
