@@ -325,7 +325,7 @@ Command.pref.verify = function(name,value){
 			return value;
 		}
 		if(req.type === 'string'){
-			if(req.option.indexOf(value) !== -1){
+			if(req.option.have(value)){
 				return value;
 			}
 		}

@@ -1,7 +1,6 @@
 
 
 #Priority 2:
--Polish Instanced World
 -Passive Grid Zoom
 -Bank HTML5
 -Crafting Ability

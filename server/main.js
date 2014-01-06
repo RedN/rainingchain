@@ -18,6 +18,7 @@ List = {
 	socket:{},	//all socket (player id),
 	nameToKey:{},	//used to convert a player name into the player key
 	btn:{},		//all buttons
+	map:{},		//all maps
 };
 
 
@@ -43,7 +44,7 @@ exports.initServer = function (){
 								
 			Init.db.quest();
 			Init.db.dialogue();
-			Map.load();	//all maps
+			Map.load.all();
 			
 			Init.db.passive();
 			Init.db.clan();

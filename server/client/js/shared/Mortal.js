@@ -33,7 +33,7 @@ Mortal.switchEquip = function(mort,name){
 	Itemlist.remove(List.main[mort.id].invList,name);
 	Itemlist.add(List.main[mort.id].invList,old.id);
 	
-	if(Cst.equip.weapon.piece.indexOf(equip.piece) !== -1){
+	if(Cst.equip.weapon.piece.have(equip.piece)){
 		Mortal.swapWeapon(mort,equip.piece);
 	}
 }
@@ -58,13 +58,46 @@ Mortal.changeResource = function(mort,heal){
 	}
 }
 
-Mortal.teleport = function(mort,x,y,map){
+Mortal.teleport = function(mort,x,y,map,signin){
 	//Teleport player. if no map specified, stay in same map.
 	mort.x = x;
 	mort.y = y;
-	if(map){ mort.map = map; }
+	if(map && mort.map !== map){ 
+		if(map.have("@")) Mortal.teleport.instance(mort,x,y,map,signin);
+		else mort.map = map;
+	}
 	ActiveList.remove(mort);	//need to con sider if needed or not
 }
+
+Mortal.teleport.instance = function(mort,x,y,map,signin){
+	if(!map){ Mortal.teleport(mort,x,y);  return; }		//regular teleport
+	if(!mort.mapSignIn && !signin){ 
+		permConsoleLog('cant teleport cuz no mapSignIn'); 
+		Chat.add(mort.id,"Report error: No mapSign"); 
+		return false; 
+	}
+	if(typeof signin !== 'object' && !mort.map.have("@"))  singin = {map:mort.map,x:mort.x,y:mort.y};	//default signin
+	
+	mort.mapSignIn = signin ? deepClone(signin) : mort.mapSignIn;	//set signin
+	
+	if(!map.slice(map.indexOf('@')+1)) map += mort.name;	//set default version name
+	
+	//test if need to create instance
+	if(!List.map[map]){
+		var model = map.slice(0,map.indexOf('@'));
+		var version = map.slice(map.indexOf('@')+1);
+		Map.clone(model,version); 
+	}
+	mort.x = x;
+	mort.y = y;
+	mort.map = map;
+	
+	ActiveList.remove(mort);	//need to con sider if needed or not
+}
+
+
+
+
 
 Mortal.update = {};
 Mortal.update.mastery = function(player){

@@ -2,6 +2,7 @@
 
 //working on Send (aka send.js)
 
+
 //MAIN LOOP//
 Loop = function(){
 	Loop.frameCount++;	
@@ -12,6 +13,7 @@ Loop = function(){
 	Loop.EnemyGroup();
 	Loop.Mortal();
 	Loop.Drop();
+	Loop.Map();
 	
 	Change.update();
 	Change.send();
@@ -45,6 +47,23 @@ Loop.Drop = function(){
 		if(drop.timer <= 0){ Drop.remove(drop); }
 	}
 }
+
+Loop.Map = function(){
+	if(Loop.frameCount % (60*1000/40)){		//each min
+		for(var i in List.map){
+			if(Map.instance.player(i).length === 0){
+				List.map[i].timer--;
+				if(List.map[i].timer <= 0){
+					Map.remove(List.map[i]);
+				}
+			}	
+		}
+	}
+}
+
+
+
+
 
 Loop.EnemyGroup = function(){
 	for(var i in List.group){
@@ -119,7 +138,15 @@ ActiveList.remove = function(b){
 
 
 
-
+remove = function(mort){
+	if(!mort) return;
+	if(mort.type === 'bullet') Bullet.remove(mort);
+	else if(mort.type === 'enemy') Mortal.remove(mort);
+	else if(mort.type === 'player') Sign.off(mort.id);
+	else if(mort.type === 'drop') Drop.remove(mort);
+	else if(mort.type === 'strike') Strike.remove(mort);
+	else if(mort.type === 'strike') Strike.remove(mort);
+}
 
 
 

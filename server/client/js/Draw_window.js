@@ -570,7 +570,7 @@ Draw.window.ability.action.attack = function(diffX,diffY){  ctxrestore();
 				var tmp = atk[i];
 				
 				//Status
-				if(Cst.status.list.indexOf(i) !== -1){ tmp.chance = Math.pow(main.pref.abilityDmgCent,1.5)*atk[i].chance*atk.dmgRatio[Cst.status.toElement[i]];}
+				if(Cst.status.list.have(i)){ tmp.chance = Math.pow(main.pref.abilityDmgCent,1.5)*atk[i].chance*atk.dmgRatio[Cst.status.toElement[i]];}
 				
 				if(tmp.chance !== undefined && tmp.chance <= 0.001){ continue;}
 				ctx.fillText('=> ' + Draw.convert.attackMod[i](tmp),s.zx+30,s.zy+25+30);

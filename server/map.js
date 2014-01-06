@@ -45,26 +45,35 @@ Init.db.map = function (){
 	for(var i in Db.map){	
 		var m = Db.map[i]();
 		m.id = i;
+		m.model = i;
 		m.name = m.name || i.capitalize();
-		Db.map[i] = m;
+		m.timer = 1/0;
 		
 		Map.mapMod[i] = {};
-		Map.convertId[i] = i;
+		Map.convertId[i] = i;		
+		
+		Db.map[i] = m;
+		List.map[i] = m;
 	}
 	
 }
 Map = {};
 
-Map.clone = function(model,version){
-	//create a copy of a default map. used for isntanced map. version is usually player namevar newname = model + '~' + version;
-	Db.map[newname] = {};
-	Db.map[newname].name = Db.map[model].name;
-	Db.map[newname].grid = Db.map[model].grid;
-	Db.map[newname].model = model;
+Map.clone = function(namemodel,version){
+	//create a copy of a default map. used for instanced map. version is usually the player name
+	version = version || Math.randomId();
+	var newname = namemodel + '@' + version;
+	var model = Db.map[namemodel];
+	List.map[newname] = {
+		name:model.name,
+		grid:model.grid,
+		model:model,
+		timer:5		//in minutes
+	};
 	Map.mapMod[newname] = {};
-	Map.convertId[newname] = model;  
+	Map.convertId[newname] = model.id;  
 	
-	Db.map[model].load(newname);
+	Map.load(namemodel,newname);
 	return newname;
 }
 
@@ -73,23 +82,51 @@ Map.mapMod = {};
 Map.convertId = {}; 
 	
 	
-Map.load = function(){
-	for(var i in Db.map){
-		for(var j in Db.map[i].load){
-			Db.map[i].load[j](i,j);
+Map.load = function(name,version){
+	for(var i in Db.map[name].load){
+		Db.map[name].load[i](version || name,i);
+	}
+}
+Map.load.all = function(){
+	for(var i in List.map){
+		Map.load(i);
+	}
+}
+
+Map.instance = {};
+Map.instance.list = function(name){
+	var list = [];
+	for(var i in List.map){
+		if(List.map[i].model === name){
+			list.push(List.map[i].id);
 		}
 	}
+	return list;
+}
+
+Map.instance.player = function(name){
+	var list = [];
+	for(var i in List.main){
+		if(Map.convertId[List.all[i].map] === name){
+			list.push(List.all[i].name);
+		}
+	}
+	return list;
 }
 
 
 
 
-
-
-
-
-
-
+Map.remove = function(map){
+	if(map.id === map.model) return; //cant delete main maps
+	var id = map.id;
+	for(var i in List.all){
+		if(List.all[i].map === id){
+			remove(List.all[i]);
+		}
+	}
+	delete List.map[id];
+}
 
 
 

@@ -45,9 +45,11 @@ if(server){
 				var p = List.all[key];
 				var m = List.main[key];
 				var q = m.quest;
-				
+				var e = [];
+				var pl = [];
 				for(var i in List.all){
-					if(List.all[i].type === 'enemy'){var e = List.all[i];}
+					if(List.all[i].type === 'enemy'){e.push(List.all[i]);}
+					if(List.all[i].type === 'player'){pl.push(List.all[i]);}
 					if(List.all[i].type === 'bullet'){var b = List.all[i];}
 				}				
 				

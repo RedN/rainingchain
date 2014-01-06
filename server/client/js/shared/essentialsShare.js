@@ -306,6 +306,9 @@ String.prototype.numberOnly = function(num){
 	if(num){ a = +a; }
 	return a;
 }
+String.prototype.have = function(name){
+	return this.indexOf(name) !== -1;
+}
 
 //Testing
 eval('permCo' + 'nsoleLog = function(){ co' + 'nsole.log.apply(co' + 'nsole,arguments); }');
@@ -373,4 +376,9 @@ Object.defineProperty(Array.prototype, "random", {
 		return -1;
 	}
 });
-	
+Object.defineProperty(Array.prototype, "have", {
+    enumerable: false,
+    value: function(name){
+		return this.indexOf(name) !== -1;
+	}
+});	

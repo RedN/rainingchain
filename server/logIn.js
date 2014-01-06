@@ -213,6 +213,13 @@ Save.player.compress = function(player){
     }
     for(var i in player.abilityList){ player.abilityList[i] = {"id":player.abilityList[i].id}; }
 
+	
+	if(player.map.indexOf("@") !== -1){
+		player.x = player.mapLogIn.x || 0;
+		player.y = player.mapLogIn.y || 0;
+		player.map = player.mapLogIn.map || 'test';		
+	}
+	
     return player;
 }
 
@@ -274,6 +281,9 @@ Save.main = function(key,dbb){
 
 Save.main.compress = function(main){
 	//could compress invlist and banklist
+	
+	
+	
     return main;
 }
 

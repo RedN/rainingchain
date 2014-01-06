@@ -33,7 +33,7 @@ Clan.enter = function(key,name){
 	if(!Db.clan[name]){
 		Chat.add(key,'This clan doesn\'t exist.');	return;
 	}
-	if(main.social.list.clan.indexOf(name) !== -1){
+	if(main.social.list.clan.have(name)){
 		Chat.add(key,'You are already in this clan chat.');	return;
 	}
 	main.social.list.clan.push(name);

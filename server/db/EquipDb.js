@@ -208,7 +208,7 @@ Equip.creation = function(equip){
 		equip.dmg[j] = equip.dmgRatio[j] * equip.dmgMain;
 	}
 	equip.color = Craft.equip.color(equip);
-	equip.category = Cst.equip.weapon.piece.indexOf(equip.piece) !== -1 ? 'weapon' : 'armor';
+	equip.category = Cst.equip.weapon.piece.have(equip.piece) ? 'weapon' : 'armor';
 	Db.equip[equip.id] = equip;
 	
 	var item = {
