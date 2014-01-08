@@ -288,16 +288,18 @@ Combat.collision.crit = function(b){
 }
 
 Combat.collision.damage = function(bullet,player){
-	var dmgInfo = Combat.collision.damage.calculate(bullet.dmg,player.def)
+	var dmgInfo = Combat.collision.damage.calculate(bullet.dmg,Mortal.getDef(player))
 	var dmg = dmgInfo.sum;
 	
-	Mortal.changeHp(player,-dmg/player.defMain);
+	Mortal.changeHp(player,-dmg);
 	
 	if(player.damagedBy[bullet.parent] === undefined) { player.damagedBy[bullet.parent] = 0; }
 	player.damagedBy[bullet.parent] += dmg;
 	
 	return dmgInfo;
 }
+	
+
 
 Combat.collision.damage.calculate =function(a,d){
 	var info = {};

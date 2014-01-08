@@ -15,13 +15,15 @@
 -Advanced Dialogue (Morrowind)
 -Icon minimap
 
+-Enemy AI for ability (Mortal.creation.db)
+-Draw.popup.equip  in multiple functions
+
 
 #Priority 2:
 -Crafting Ability
 -Revamp Drop
 -Portal to Friends
 -Multiplayer Quest
--Enemy AI for ability
 -Ability Creation & Mod
 -Crafting System with White
 -Offlinepm fix

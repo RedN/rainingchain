@@ -203,10 +203,6 @@ Equip = {};
 Equip.creation = function(equip){
 	equip = useTemplate(Equip.template(),equip);
 	
-	for(var j in equip.defRatio){ 
-		equip.def[j] = equip.defRatio[j] * equip.defMain; 
-		equip.dmg[j] = equip.dmgRatio[j] * equip.dmgMain;
-	}
 	equip.color = Craft.equip.color(equip);
 	equip.category = Cst.equip.weapon.piece.have(equip.piece) ? 'weapon' : 'armor';
 	Db.equip[equip.id] = equip;
@@ -244,12 +240,10 @@ Equip.template = function(){
 		
 		'defMain':10, 
 		'defRatio':{'melee':1,'range':1,'magic':1,'fire':1,'cold':1,'lightning':1},
-		'def':{'melee':1,'range':1,'magic':1,'fire':1,'cold':1,'lightning':1},
 		
 		'dmgMain':10, 
 		'dmgRatio':{'melee':1,'range':1,'magic':1,'fire':1,'cold':1,'lightning':1},
-		'dmg':{'melee':1,'range':1,'magic':1,'fire':1,'cold':1,'lightning':1},
-		
+			
 		'boost':[],
 		'orb':{'upgrade':{'amount':0,'bonus':1},'boost':{'amount':0,'bonus':0,'history':[]}},
 		'selfFound':1,

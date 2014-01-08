@@ -84,10 +84,12 @@ Mortal.creation.db = function(e,d){
 		for(var i in Db.boss[id]){e.boss[i] = Db.boss[id][i];}
 		e.boss.parent = e; 
 	}
+	var count = 0;
 	for(var i in e.ability){ 
-		var name = e.ability[i];
-		Mortal.learnAbility(e,name);
-		Mortal.swapAbility(e,+i,name);
+		var chanceMod = e.ability[i];	//need to fix so chanceMod do something
+		Mortal.learnAbility(e,i);
+		Mortal.swapAbility(e,count,i);
+		count++;
 	}
 	
 	Sprite.creation(e,e.sprite);		//To set hitbox and bumper
@@ -194,7 +196,6 @@ Mortal.creation.nevercombat = function(mort){
 	delete mort.fury;
 	delete mort.resource;
 	
-	delete mort.def;
 	delete mort.defMain;	
 	delete mort.reflect;
 	

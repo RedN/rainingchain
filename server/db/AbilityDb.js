@@ -246,7 +246,6 @@ Ability.creation = function(a){
 	return a.id;
 }
 
-
 Ability.uncompress = function(abi){	
 	var ab = typeof abi === 'object' ? abi : deepClone(Db.ability[abi]);
 	
@@ -261,13 +260,13 @@ Ability.uncompress = function(abi){
 }
 
 Ability.uncompress.mod = function(ab){	
+	console.log(ab);
 	for(var i in ab.modList){
 		ab = abilityModDb[i].func(ab,ab.modList[i],Craft.orb.formula(ab.modList[i]));
 	}
 	ab = Db.ability.orb[ab.orb.upgrade.bonus](ab,ab.orb.upgrade.amount);
 	return ab;
 }
-
 
 Ability.template = function(){
 	return {'name':'Fire','tag':[],'icon':'melee.mace',

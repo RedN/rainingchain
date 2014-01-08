@@ -516,7 +516,7 @@ Draw.popup.equip = function(){ ctxrestore();
 	
 	//Draw Def/Dmg
 	var num = equip.dmgMain; var bar = 'dmgRatio';
-	if(equip.category === 'armor'){ var num = equip.defMain; var bar = 'def';}
+	if(equip.category === 'armor'){ var num = equip.defMain; var bar = Draw.popup.equip.getDef(equip);}
 	ctx.font="25px Fixedsys";
 	ctx.textAlign = 'center';
 	ctx.fillText(round(num,0),sx+25,sy+50);
@@ -542,6 +542,16 @@ Draw.popup.equip = function(){ ctxrestore();
 		sum++;
 		
 	}
+}
+
+
+Draw.popup.equip.getDef = function(equip){
+	var tmp = {};
+	for(var j in Cst.element.list){
+		var i = Cst.element.list[i];
+		tmp[i] = equip.defMain * equip.defRatio[i] * equip.orb.upgrade.bonus;
+	}
+	return tmp;
 }
 
 

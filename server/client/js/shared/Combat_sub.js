@@ -23,11 +23,11 @@ Combat.action.attack.mod.bonus = function(bon,atk){
 	atk.crit.magn *= bon.crit.magn; atk.crit.chance *= bon.crit.chance;
 	
 	
-	if(atk.type == 'b' || atk.type == 'bullet'){
+	if(atk.type === 'b' || atk.type === 'bullet'){
 		atk.amount *= bon.bullet.amount; if(Math.random() <= atk.amount%1){atk.amount += 1; } atk.amount = Math.floor(atk.amount);
 		atk.pierce.chance *= bon.pierce.chance; atk.pierce.dmgReduc *= bon.pierce.dmgReduc;
 	}
-	if(atk.type == 's' || atk.type == 'strike'){
+	if(atk.type === 's' || atk.type === 'strike'){
 		atk.width *= bon.strike.size; 
 		atk.height *= bon.strike.size; 
 		atk.maxHit *= bon.strike.maxHit; if(Math.random() <= atk.maxHit%1){atk.maxHit += 1; } atk.maxHit = Math.floor(atk.maxHit);

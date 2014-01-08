@@ -70,7 +70,6 @@ Init.mortal = function(){
 
 		
 		//Def = DefMain * defArmor * mort.mastery.def
-		mort.def =  {"melee":1,"range":1,"magic":1,"fire":1,"cold":1,"lightning":1} ;
 		mort.defMain = 1;
 		mort.weapon = {"id":"mace"};
 		mort.equip = {
@@ -113,9 +112,6 @@ Init.mortal = function(){
 			'fury':{'max':100,'regen':0.1},
 			'heal':{'max':100,'regen':0.1},
 		};
-		
-		
-		
 		
 		//Resist
 		mort.status = {

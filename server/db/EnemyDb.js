@@ -110,7 +110,6 @@ Init.db.enemy = function(){ var ePreDb = {};
 			e.context = e.name; 
 			if(e.combat && !e.nevercombat){ e.context += ' | Lvl: ' + e.lvl;}
 			e.hp = e.resource.hp.max;
-			e.def = e.equip.def;
 			
 			Db.enemy[i][j] = new Function('return ' + stringify(e));	//not used atm. currently creating from scratch everytime
 		}

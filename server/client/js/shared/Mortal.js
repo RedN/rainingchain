@@ -17,11 +17,13 @@ Mortal.updateEquip = function(mort){
 		var i = Cst.element.list[k];
 		var sum = 0;
 		for(var j in mort.equip.piece){	//Each Piece
-			sum += mort.equip.piece[j].def[i] * mort.equip.piece[j].orb.upgrade.bonus;
+			sum += mort.equip.piece[j].defMain * mort.equip.piece[j].defRatio[i] * mort.equip.piece[j].orb.upgrade.bonus;
 		}
 		mort.equip.def[i] = sum;
 	}
 }
+
+
 
 Mortal.switchEquip = function(mort,name){
 	var old = mort.equip.piece[Db.equip[name].piece];
@@ -107,11 +109,6 @@ Mortal.update.mastery = function(player){
 			player.mastery[i][j].sum = Math.pow(player.mastery[i][j]['x'] * player.mastery[i][j]['*'],player.mastery[i][j]['^']) + player.mastery[i][j]['+'];
 		}
 	}
-}
-
-Mortal.update.def = function(player){
-	for(var i in player.def)
-		player.def[i] = player.equip.def[i] * player.mastery.def[i].sum;
 }
 
 Mortal.update.permBoost = function(player){
@@ -203,14 +200,13 @@ Mortal.boost = function(player, boost){
 }
 
 Mortal.permBoost = function(mort,source,boost){
-	if(boost){	
-		boost = (boost instanceof Array) ? boost : [boost];
-		mort.permBoost[source] = boost;
+	//remove permBoost with boost undefined
+	if(boost){
+		mort.permBoost[source] = arrayfy(boost);
 	} else { delete mort.permBoost[source]; }
 	
 	Mortal.update.permBoost(mort);
 	Mortal.update.mastery(mort);
-	Mortal.update.def(mort);
 }
 
 Mortal.permBoost.compile = function(b){
@@ -354,6 +350,13 @@ Mortal.death.revive = function(mort){
 	//addEnemy(mort.data,mort.extra)
 }
 
+
+Mortal.getDef = function(mort){
+	var def = deepClone(mort.equip.def);
+	for(var i in def){
+		def[i] *= mort.mastery.def[i].mod * mort.defMain * mort.mastery.def[i].sum;
+	}
+}
 
 
 Mortal.pickDrop = function (mort,id){
