@@ -22,7 +22,8 @@ Button.template = function(){
 		highlight:false,
 		key:0,
 		text:'',
-		help:'',	
+		help:'',
+		sfx:null
 	};
 }
 

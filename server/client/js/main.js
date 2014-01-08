@@ -16,7 +16,8 @@ List = {
 	map:{},		//all maps including instance 
 	socket:{},	//all socket (player id)
 	btn:{},		//all buttons
-	ctx:{},		//list of canvas (window,popup,stage)
+	ctx:{},		//all of canvas (window,popup,stage)
+	sfx:{}, 	//all sfx
 };
 
 Db = {	//local compilation of information so server doesnt send many times the same info

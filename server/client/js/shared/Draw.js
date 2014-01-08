@@ -8,8 +8,8 @@ Draw.loop = function (key){
 		List.btn[key] = [];
 		
 		//Draw	
-		Draw.entity.drop(key);
-		Draw.entity.mortal(key);
+		Draw.drop(key);
+		Draw.mortal(key);
 		
 		
 		Button.context(key);
@@ -24,9 +24,9 @@ Draw.loop = function (key){
 		//Draw
 		Draw.map('b');   //below player
 		Draw.anim('b');  //below player
-		Draw.entity.drop();
-		Draw.entity.mortal();  		
-		Draw.entity.bullet();
+		Draw.drop();
+		Draw.mortal();  		
+		Draw.bullet();
 		Draw.anim('a');  //above player
 		Draw.map('a');   //above player
 				
@@ -79,8 +79,7 @@ Draw.anim = function (layer){
 
 
 //{Draw Entity
-Draw.entity = {};
-Draw.entity.mortal = function (key){
+Draw.mortal = function (key){
 	if(server){
 		for(var i in List.all[key].activeList){
 			var mort = List.mortal[i];
@@ -104,17 +103,17 @@ Draw.entity.mortal = function (key){
 		}
 	}	
 	if(!server){
-		var array = Draw.entity.mortal.sort();
+		var array = Draw.mortal.sort();
 		for(var i = 0 ; i < array.length ; i ++){
 			var mort = array[i];
-			Draw.entity.sprite(mort);
-			if(mort.combat) Draw.entity.mortal.hpBar(mort); 
-			if(mort.chatHead) Draw.entity.mortal.chatHead(mort); 
+			Draw.sprite(mort);
+			if(mort.combat) Draw.mortal.hpBar(mort); 
+			if(mort.chatHead) Draw.mortal.chatHead(mort); 
 		}
 	}
 }	
 	
-Draw.entity.mortal.sort = function(){
+Draw.mortal.sort = function(){
 	var drawSortList = [];
 	for(var i in List.mortal){
 		drawSortList.push(List.mortal[i]);
@@ -134,7 +133,7 @@ Draw.entity.mortal.sort = function(){
 	return drawSortList;	
 }
 
-Draw.entity.mortal.chatHead = function(mort){
+Draw.mortal.chatHead = function(mort){
 	ctx = List.ctx.stage;
 	
 	var spriteServer = mort.sprite;
@@ -152,7 +151,7 @@ Draw.entity.mortal.chatHead = function(mort){
 	Loop.update.chatHead(mort);	
 }		
 
-Draw.entity.mortal.hpBar = function(mort){
+Draw.mortal.hpBar = function(mort){
 	ctx = List.ctx.stage;
 	
 	var spriteServer = mort.sprite;
@@ -173,13 +172,13 @@ Draw.entity.mortal.hpBar = function(mort){
 	ctx.fillStyle="black";
 }
 
-Draw.entity.bullet = function(){
+Draw.bullet = function(){
 	for(var i in List.bullet){
-		Draw.entity.sprite(List.bullet[i]);
+		Draw.sprite(List.bullet[i]);
 	}
 }
 
-Draw.entity.sprite = function (mort){
+Draw.sprite = function (mort){
 	ctx = List.ctx.stage;
 	
 	var spriteServer = mort.sprite;
@@ -208,7 +207,7 @@ Draw.entity.sprite = function (mort){
 	
 }
 
-Draw.entity.drop = function(key){
+Draw.drop = function(key){
 	if(server){
 		for(var i in List.drop){
 			var drop = List.drop[i];
@@ -242,23 +241,33 @@ Draw.entity.drop = function(key){
 
 
 //{Upper Interface
-Draw.minimap = function (){ ctxrestore();
+Draw.minimap = function (layer){ ctxrestore();
 	ctx = List.ctx.stage;
+	var s = Draw.minimap.constant();
+	Draw.minimap.box(s);
+	Draw.minimap.map(s,'b');
+	Draw.minimap.icon(s);
+	Draw.minimap.button(s);
+}
+
+Draw.minimap.constant = function(){
+	return {
+		x:Cst.WIDTH - Cst.WIDTH/main.pref.mapRatio,
+		y:0,
+		w:Cst.WIDTH/main.pref.mapRatio,
+		h:Cst.HEIGHT/main.pref.mapRatio,
+	}
+}
+
+Draw.minimap.map = function(s,layer){
 	var map = Db.map[player.map];
-	var mapX = Math.min(map.img.b.length-1,Math.max(0,Math.floor((player.x-1024)/2048)));
-	var mapY = Math.min(map.img.b[mapX].length-1,Math.max(0,Math.floor((player.y-1024)/2048)));
-	var mapXY = map.img.b[mapX][mapY];
+	var mapX = Math.min(map.img[layer].length-1,Math.max(0,Math.floor((player.x-1024)/2048)));
+	var mapY = Math.min(map.img[layer][mapX].length-1,Math.max(0,Math.floor((player.y-1024)/2048)));
+	var mapXY = map.img[layer][mapX][mapY];
 	var pX = player.x-mapX*2048;
 	var pY = player.y-mapY*2048;
-	
-	
-	var sx = Cst.WIDTH - Cst.WIDTH/main.pref.mapRatio;
-	var sy = 0;
-	var w = Cst.WIDTH/main.pref.mapRatio;
-	var h = Cst.HEIGHT/main.pref.mapRatio;
-	
+		
 	var mapZoomFact = main.pref.mapZoom/100;
-	
 	var mapCst = main.pref.mapRatio*mapZoomFact;
 	
 	var numX = (pX - Cst.WIDTH/2 * mapZoomFact)/2;
@@ -274,21 +283,20 @@ Draw.minimap = function (){ ctxrestore();
 	var tailleX = Math.min(endX-startX,mapXY.width);
 	var tailleY = Math.min(endY-startY,mapXY.height);
 	
-	//Box
+	ctx.drawImage(mapXY, startX,startY,tailleX,tailleY,s.x+(startX-numX)/mapCst*2,s.y + (startY-numY)/mapCst*2,tailleX/mapCst*2,tailleY/mapCst*2);
+
+}
+
+Draw.minimap.box = function(s){
 	ctx.fillStyle = "black";
-	ctx.fillRect(sx,sy,Cst.WIDTH/main.pref.mapRatio,Cst.HEIGHT/main.pref.mapRatio);
-	
-	ctx.drawImage(mapXY, startX,startY,tailleX,tailleY,sx+(startX-numX)/mapCst*2,sy + (startY-numY)/mapCst*2,tailleX/mapCst*2,tailleY/mapCst*2);
-	
-	Draw.icon('system.square',[sx + Cst.WIDTH/main.pref.mapRatio/2-2,sy + Cst.HEIGHT/main.pref.mapRatio/2-2],4);
-	
-	
-	ctx.strokeRect(sx,sy,Cst.WIDTH/main.pref.mapRatio,Cst.HEIGHT/main.pref.mapRatio);
-	
+	ctx.fillRect(s.x,s.y,Cst.WIDTH/main.pref.mapRatio,Cst.HEIGHT/main.pref.mapRatio);
+	ctx.strokeRect(s.x,s.y,Cst.WIDTH/main.pref.mapRatio,Cst.HEIGHT/main.pref.mapRatio);
+}
+Draw.minimap.button = function(s){
 	var disX = 50;
 	var disY = 22;
-	var numX = sx+w-disX;
-	var numY = sy+h-disY;
+	var numX = s.x+s.w-disX;
+	var numY = s.y+s.h-disY;
 	ctx.fillRect(numX,numY,disX,disY);
 	ctx.fillStyle = "white";
 	ctx.fillText(main.pref.mapZoom + '%',numX,numY);
@@ -299,31 +307,26 @@ Draw.minimap = function (){ ctxrestore();
 		"left":{"func":(function(){ Input.add('$pref,mapZoom,'); }),"param":[]},
 		"text":'Change Map Zoom.'
 		});	
-	Draw.minimap.icon();
 }
 
-Draw.minimap.icon = function(){
+Draw.minimap.icon = function(s){
 	var zoom = main.pref.mapZoom/100;
 	var ratio = main.pref.mapRatio;
-	
-	var sx = Cst.WIDTH - Cst.WIDTH/main.pref.mapRatio;
-	var sy = 0;
-	var w = Cst.WIDTH/main.pref.mapRatio;
-	var h = Cst.HEIGHT/main.pref.mapRatio;
-	
-	
+
 	for(var i in List.mortal){
 		var m = List.mortal[i];
 		if(m.minimapIcon){
 			var vx = m.x - player.x;
 			var vy = m.y - player.y;
 			
-			var cx = sx + Cst.WIDTH/ratio/2; //center
-			var cy = sy + Cst.HEIGHT/ratio/2;
+			var cx = s.x + Cst.WIDTH/ratio/2; //center
+			var cy = s.y + Cst.HEIGHT/ratio/2;
 			Draw.icon(m.minimapIcon,[cx+vx/zoom/ratio-9,cy+vy/zoom/ratio-9],18);
 		}
 	}
-
+	Draw.icon('system.square',[s.x + Cst.WIDTH/main.pref.mapRatio/2-2,s.y + Cst.HEIGHT/main.pref.mapRatio/2-2],4);
+	
+	//if(main.pref.mapIcon) Draw.minimap.map(s,'i');
 }
 
 Draw.resource = function (){ ctxrestore();

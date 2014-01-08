@@ -46,8 +46,9 @@ Math.randomId = function(num){
 	return Math.random().toString(36).slice(2,num+2);
 }
 
-Math.randomML = function(){
-	return Math.random()*2-1
+Math.randomML = function(num){
+	num = num || 1;
+	return (Math.random()*2-1)*num
 }
 Math.probability = function(base,mod){
 	return 1 - Math.pow(1-base,mod);

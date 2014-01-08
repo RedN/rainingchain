@@ -129,9 +129,6 @@
 		}
 		
 		/*Warning*/
-		#warningDiv{
-			position:absolute;
-		}
 		#warningText{
 			text-align:justify;
 		}

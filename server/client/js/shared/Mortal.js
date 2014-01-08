@@ -101,6 +101,7 @@ Mortal.teleport.instance = function(mort,x,y,map,signin){
 
 Mortal.update = {};
 Mortal.update.mastery = function(player){
+	//Note: mod is applied in Combat.action.attack.mod.player
 	for(var i in player.mastery){
 		for(var j in player.mastery[i]){
 			player.mastery[i][j].sum = Math.pow(player.mastery[i][j]['x'] * player.mastery[i][j]['*'],player.mastery[i][j]['^']) + player.mastery[i][j]['+'];
@@ -109,7 +110,8 @@ Mortal.update.mastery = function(player){
 }
 
 Mortal.update.def = function(player){
-	for(var i in player.def){ player.def[i] = player.equip.def[i] * player.mastery.def[i].sum;}
+	for(var i in player.def)
+		player.def[i] = player.equip.def[i] * player.mastery.def[i].sum;
 }
 
 Mortal.update.permBoost = function(player){
@@ -233,6 +235,7 @@ Mortal.talk = function(mort,enemyId){
 	}
 }
 
+//Note: Mortal.ability is used to perform ability
 Mortal.removeAbility = function(mort,name){
 	delete mort.abilityList[name];
 	for(var i in mort.ability){
@@ -269,15 +272,17 @@ Mortal.learnAbility = function(mort,name){
 
 Mortal.examineAbility = function(mort){}
 
+
 Mortal.death = function(mort){	//only for enemy atm
 	mort.dead = 1;
 	
 	var killer = Mortal.death.killer(mort);
-	Mortal.dropItem(mort,List.all[killer]);
+	Mortal.death.drop(mort,List.all[killer]);
 	if(mort.death){ mort.death(killer); }	//custom death function (ex quest)
 	Mortal.death.ability(mort);				//custom death ability function
 	ActiveList.remove(mort);
 }
+
 
 Mortal.death.start = function(mort){
 	mort.killed = 1;
@@ -285,8 +290,8 @@ Mortal.death.start = function(mort){
 	mort.spdX = 0;
 	mort.spdY = 0;
 	Sprite.change(mort,{'anim':'Death'});
-	//death(enemy);
 }
+
 
 Mortal.death.ability = function(mort){
 	for(var i in mort.deathAbility){
@@ -304,13 +309,7 @@ Mortal.death.killer = function(mort){
 	return killer;
 }
 
-
-Mortal.revive = function(mort){
-	//mort.extra.id = mort.id
-	//addEnemy(mort.data,mort.extra)
-}
-
-Mortal.dropItem = function(mort,killer){
+Mortal.death.drop = function(mort,killer){
 	var drop = mort.drop;
 	
 	var quantity = drop.mod.quantity; 
@@ -323,7 +322,6 @@ Mortal.dropItem = function(mort,killer){
 	}
 	
 	
-	
 	for(var i in drop.category){
 	
 		if(drop.category[i] !== 'plan'){
@@ -331,27 +329,32 @@ Mortal.dropItem = function(mort,killer){
 			for(var j in list){
 				var item = list[j];
 				if(Math.pow(Math.random(),quantity+1) < item.chance){
-					var amount = Math.floor(item.min + (item.max-item.min)*( Math.pow(Math.random(),1/(quantity+1)))) ;	//player quantity
+					var amount = Math.floor(item.min + (item.max-item.min)*( Math.pow(Math.random(),1/(quantity+1))));	//player quantity
 					Drop.creation({'x':mort.x+(Math.random()-0.5)*50,'y':mort.y+(Math.random()-0.5)*50,'map':mort.map,'item':item.item,'amount':amount,'timer':Drop.timer});		
 				}	
 			}
 		} else {
 			if(Math.pow(Math.random(),(quantity+1)) < Db.drop.plan){
 				var itemId = 'planA' + Math.randomId();
-				var item = {'name':"Plan",'visual':'plan.planA',
-							'option':[	{'name':'Craft Item','func':'Craft.plan',
-										'param':[{'lvl':Math.max(0,Math.floor(mort.lvl*1+(Math.random()-0.5)*15)),'rarity':rarity,'quality':quality},{'item':[{'item':itemId,'amount':1}]}]}
-							]};
+				var lvl = Math.max(0,Math.floor(mort.lvl * (1 + Math.randomML()/10)));	//aka lvl += 10%
+					
+				Item.creation({'id':itemId,'name':"Plan",'visual':'plan.planA',
+					'option':[	{'name':'Craft Item','func':'Craft.plan',
+								'param':[{'lvl':lvl,'rarity':rarity,'quality':quality},{'item':[{'item':itemId,'amount':1}]}]}
+					]});
 				
-				
-				item.id = itemId;
-				Item.creation(item);
-				
-				Drop.creation({'x':mort.x+(Math.random()-0.5)*50,'y':mort.y+(Math.random()-0.5)*50,'map':mort.map,'item':itemId,'amount':1,'timer':Drop.timer});		
+				Drop.creation({'x':mort.x+Math.randomML(50),'y':mort.y+Math.randomML(50),'map':mort.map,'item':itemId,'amount':1});		
 			}
 		}
 	}
 }
+
+Mortal.death.revive = function(mort){
+	//mort.extra.id = mort.id
+	//addEnemy(mort.data,mort.extra)
+}
+
+
 
 Mortal.pickDrop = function (mort,id){
 	var inv = List.main[mort.id].invList;

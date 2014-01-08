@@ -238,6 +238,7 @@ Sprite.updateBumper = function(player){
 
 
 Sprite.update = function (mort){
+	if(!mort.sprite) return;
 	var spriteServer = mort.sprite;
 	var spriteFromDb = Db.sprite[spriteServer.name];
 	var image = spriteFromDb.img;

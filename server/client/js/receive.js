@@ -93,7 +93,6 @@ Receive.parse.chargeClient = function(info){	//could be used when needed instead
 			tmp[i] = charge[i] === 'R' ? 1 : parseInt(charge[i],36)/36;
 		}
 		info['abilityChange,chargeClient'] = tmp;
-		console.log(info['abilityChange,chargeClient']);
 	}
 	return info;
 }
@@ -132,18 +131,16 @@ Receive.init.anim = function(a){
 	if(a.target){  
 		a.x = a.target.x;
 		a.y = a.target.y;
-		a.slot = 0;
-			
+		a.slot = 0;			
 		List.anim[a.id] = a;
 	}
 	
-	if(Db.sfx[Db.anim[a.name].sfx]){
-		var sfx = Sfx.play(Db.anim[a.name].sfx);
-		sfx.volume = Math.max(0.1,1 - 0.2*Math.floor(distancePtPt(player,a)/50));	
-		sfx.play();
-	}
-	
-	
+	var sfx = a.sfx || Db.anim[a.name].sfx;
+	if(sfx && a.sfx !== false){	
+		sfx.volume = sfx.volume || 1;
+		sfx.volume *= Math.max(0.1,1 - 0.2*Math.floor(distancePtPt(player,a)/50));	
+		Sfx.creation(sfx);
+	}	
 }
 
 Receive.init.drop = function(drop){

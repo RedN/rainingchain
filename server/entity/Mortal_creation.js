@@ -1,24 +1,8 @@
 Mortal = typeof Mortal !== 'undefined' ? Mortal : {};
-//data: x  y  map category variant lvl modAmount extra
-
-
-/*
-Mortal.creation.group(
-    {'x':3000,
-    'y':1800,
-    'map':map,
-    'vx':10,
-    'vy':10,
-    'respawn':100}
-    ,
-    [
-        {'amount':1,"category":"eSlime","variant":"Big","lvl":0,'modAmount':1},
-		{'amount':10,"category":"troll","variant":"ice","lvl":0,'modAmount':1},
-		]);
-*/		
-		
 
 Mortal.creation = function(data){
+	//data: x  y  map category variant lvl modAmount extra
+
 	var e = Mortal.template('enemy');
 	e = Mortal.creation.db(e,data);
 	e = Mortal.creation.info(e,data);
@@ -40,7 +24,12 @@ Mortal.creation = function(data){
 }
 
 Mortal.creation.group = function(gr,el){
-   	var id = Math.randomId();
+   	/*
+	gr: x y map respawn
+    el: [  {'amount':1,"category":"eSlime","variant":"Big","lvl":0,'modAmount':1},
+		{'amount':10,"category":"troll","variant":"ice","lvl":0,'modAmount':1},	];
+	*/
+	var id = Math.randomId();
 	var enemyIdList = [];
 	
 	gr = useTemplate(Mortal.creation.group.template(),gr);	
@@ -158,6 +147,7 @@ Mortal.creation.mod.list = {
 	
 }
 
+
 Mortal.creation.optionList = function(e){
 	var ol = {'name':e.name,'option':[]};
 	
@@ -248,6 +238,35 @@ Mortal.creation.nevermove = function(mort){
 	mort.spdX = 0;
 	mort.spdY = 0;
 	mort.maxSpd = 1;
+}
+
+Mortal.creation.dialogue = function(mort){
+	if(mort.dialogue){
+		mort.dialogue = useTemplate(Mortal.template.dialogue,mort.dialogue);
+	}
+	Mortal.creation.dialogue.generic(mort);
+	return mort;	
+}
+
+Mortal.creation.dialogue.generic = function(mort){
+	var overwrite = mort.dialogue.option;
+	mort.dialogue.option = {};
+	Mortal.creation.dialogue.generic.recursive(mort.dialogue.tag,mort.dialogue.option,Dialogue.generic);
+	for(var i in overwrite){
+		mort.dialogue.option[i] = overwrite[i];
+	}
+	return mort;
+}
+
+Mortal.creation.dialogue.generic.recursive = function(tag,option,dialogue){
+	for(var j in dialogue.option){
+		option[j] = dialogue.option[j];
+	}
+	for(var j in dialogue){
+		if(j !== 'option' && tag.have(j)){
+			Mortal.creation.dialogue.generic.recursive(tag,option,dialogue[j]);
+		}
+	}
 }
 
 

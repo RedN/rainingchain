@@ -303,6 +303,7 @@ Command.pref.list = {
 	'orbAmount':{'default':1000,'type':'number','min':1,'max':999999999999,'round':0},
 	'passiveView':{'default':'normal','type':'string','option':['normal','heat']},
 	'abilityDmgStatusTrigger':{'default':0.10,'type':'number','min':0,'max':1,'round':3},	//% life of monster per attack (used to calc % chance to trigger status)
+	'mapIcon':{'default':0,'type':'number','min':0,'max':1,'round':1},
 }
 Command.pref.default = Main.template.pref = function(){
 	var a = {};

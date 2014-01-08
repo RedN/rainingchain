@@ -2,7 +2,8 @@
 Chat = {};
 
 Chat.send = function(){
-	//Send message to server.var text = html.chat.input.value;
+	//Send message to server.
+	var text = html.chat.input.value;
 	if(text[0] === '$'){  Chat.send.command(text); }
 	else { Chat.send.message(text); }
 	Input.add(''); 

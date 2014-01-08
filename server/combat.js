@@ -21,9 +21,23 @@ spawn bullet or strike
 
 
 */
+
+/*
+equip.def = sum of def of all piece || updated when player change armor, never udpated for enemy
+mastery sum = same than equip.def || updates when new permBoost
+
+defMain = main def mod. cant be boost by equip. only curse/time boost || never updated manually, use it in right before calculate
+mastery mod = same than defMain but for specific element
+
+
+
+
+
+*/
+
 Combat = {};
 
-//NOTE: Combat.action.attack.mods is inside utilityShare.js
+//NOTE: Combat.action.attack.mods is inside	Combat_sub.js
 
 //ACTION//
 Combat.action = function(id,action){

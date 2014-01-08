@@ -33,20 +33,50 @@ Init.db.sfx = function(){
 
 }
 
-
 Sfx = {};
-Sfx.play = function(id){
+Sfx.play = function(sfx){
 	var i = 0;
+	var id = sfx.name;
 	while(Db.sfx[id][i]){
 		if(Db.sfx[id][i].ended || !Db.sfx[id][i].currentTime){
-			return Db.sfx[id][i];
+			Db.sfx[id][i].play();
+			return;
 		}
 		i++;
 	}
-	return Db.sfx[id][0];
 }
 
 
+
+
+
+Sfx.creation = function(sfx){
+	var s = useTemplate(Sfx.template(),sfx);
+	s.id = Math.randomId();
+	s.volume *= Db.sfx[s.name].volume;
+	s.delay += Db.sfx[s.name].delay;
+	if(s.delay === 0){
+		Sfx.play(s); return;
+	}
+	List.sfx[s.id] = s;
+}
+
+Sfx.template = function(){
+	return {
+		'id':'fire1',
+		'delay':0,
+		'volume':1,	
+	};
+}
+
+
+
+
+
+Sfx.remove = function(sfx){
+	delete List.sfx[sfx.id];
+
+}
 
 
 

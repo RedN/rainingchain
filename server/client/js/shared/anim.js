@@ -88,20 +88,17 @@ Init.db.anim = function(){
 }
 
 Anim = {};
-Anim.update = function (){
-	for(var i in List.anim){
-		var anim = List.anim[i];
-		var animFromDb = Db.anim[anim.name];
-		anim.timer += animFromDb.spd * anim.spdMod;
-		
-		anim.x = anim.target.x;
-		anim.y = anim.target.y;
-		
-		anim.slot = Math.floor(anim.timer);
-		if(anim.slot > animFromDb.frame){
-			delete List.anim[anim.id];
-		}	
-	}
+Anim.loop = function (anim){
+	var animFromDb = Db.anim[anim.name];
+	anim.timer += animFromDb.spd * anim.spdMod;
+	
+	anim.x = anim.target.x;
+	anim.y = anim.target.y;
+	
+	anim.slot = Math.floor(anim.timer);
+	if(anim.slot > animFromDb.frame){
+		delete List.anim[anim.id];
+	}	
 }
 
 //Add animation to the game. target can be a string to specific an actor, or an obj x:1,y:1

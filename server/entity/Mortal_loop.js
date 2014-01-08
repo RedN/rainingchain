@@ -7,7 +7,8 @@ Mortal.loop = function(mort){
 	if(mort.combat){
 		if(mort.type == 'enemy'){
 			if(Math.random() < 1/mort.targetMod.period || !mort.target){ Mortal.loop.target(mort); }  //update Enemy Target
-			if(mort.hp <= 0){ Mortal.death(mort);}
+			if(mort.killed){ Mortal.death(mort);}
+			if(mort.hp <= 0){ Mortal.death.start(mort);}
 			if(mort.target && mort.boss){ mort.boss.loop();}    //custom boss loop
 		}
 		Mortal.loop.aim(mort); //impact max spd depending on aim
@@ -73,6 +74,7 @@ Mortal.ability = function(mort,ab,mana,reset){
 	//Do Ability Action (ex: Combat.action.attack)
 	applyFunc.key(mort.id,ab.action.func,ab.action.param);
 }
+
 Mortal.ability.charge = function(mort,ab){
 	var charge = mort.abilityChange.charge;
 	charge[ab.id] = Math.min(charge[ab.id] % ab.period,1);
@@ -98,8 +100,6 @@ Mortal.ability.charge = function(mort,ab){
 		}
 	}
 }
-
-
 
 Mortal.ability.resource = function(mort,cost){
 	for(var j in cost){

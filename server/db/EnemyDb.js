@@ -6,7 +6,7 @@ Init.db.enemy = function(){ var ePreDb = {};
 	ePreDb["eSlime"]["Big"] = { //{
 		"name":"eSlime",
 		"sprite":{'name':"eSlime",'sizeMod':0.7},
-		"ability":['bulletSingle'],
+		"ability":{'bulletSingle':0.5},
 		"weapon":{'dmgMain':1,'dmgRatio':{'melee':1,'range':1,'magic':1,'fire':1,'cold':1,'lightning':1}},
 		'resource':{'hp':{'max':12,'regen':0},'mana':{'max':123,'regen':12}},
 		'armorMain':1,
@@ -22,7 +22,7 @@ Init.db.enemy = function(){ var ePreDb = {};
 	ePreDb["troll"]["ice"] = {  //{
 		"name":"Boss",
 		"sprite":{'name':"eTroll",'sizeMod':1},
-		"ability":['bulletSingle'],
+		"ability":{'bulletSingle':0.5},
 		"weapon":{'dmgMain':1,'dmgRatio':{'melee':1,'range':1,'magic':1,'fire':1,'cold':1,'lightning':1}},
 		'resource':{'hp':{'max':12,'regen':0},'mana':{'max':123,'regen':12}},
 		'armorMain':1,
@@ -38,7 +38,7 @@ Init.db.enemy = function(){ var ePreDb = {};
 	ePreDb["boss"]["iceTroll"] = {  //{
 		"name":"Boss",
 		"sprite":{'name':"eTroll",'sizeMod':1},
-		"ability":[],
+		"ability":{},
 		"weapon":{'dmgMain':1,'dmgRatio':{'melee':1,'range':1,'magic':1,'fire':1,'cold':1,'lightning':1}},
 		'resource':{'hp':{'max':12,'regen':0},'mana':{'max':123,'regen':12}},
 		'armorMain':1,
@@ -59,7 +59,7 @@ Init.db.enemy = function(){ var ePreDb = {};
 	ePreDb["bossMinion"]["goddess"] = {  //{
 		"name":"Boss",
 		"sprite":{'name':"eSlime",'sizeMod':0.7},
-		"ability":['bullet360'],
+		"ability":{'bullet360':0.5},
 		"weapon":{'dmgMain':1,'dmgRatio':{'melee':1,'range':1,'magic':1,'fire':1,'cold':1,'lightning':1}},
 		'resource':{'hp':{'max':12,'regen':0},'mana':{'max':123,'regen':12}},
 		'armorMain':1,

@@ -1,8 +1,8 @@
 Change = {};
 
-//Send what has changed to the client.
 Change.send = function(){
-	for (var key in List.socket){
+	//Send what has changed to the client.for (var key in List.socket){
+	for(var key in List.socket){	
 		var sa = {};
 	
 		sa.i = {'f':{},'p':{},'m':{}};  //init (first time seen by player)
@@ -13,8 +13,6 @@ Change.send = function(){
 		var player = List.all[key];
 		sa.u.p = player.privateChange;
 		sa.u.p = Change.send.compressXYA(sa.u.p);
-		
-		
 		
 		//Update ActiveList AKA List.all
 		var array = [];
@@ -57,6 +55,8 @@ Change.send = function(){
 		
 		
 		//Delete things that are empty
+		if(sa.a.length === 0){ delete sa.a }
+		
 		if(Object.keys(sa.i.f).length === 0){ delete sa.i.f }
 		if(Object.keys(sa.i.p).length === 0){ delete sa.i.p }
 		if(Object.keys(sa.i.m).length === 0){ delete sa.i.m }
@@ -66,9 +66,8 @@ Change.send = function(){
 		if(typeof sa.u.p === 'object' && Object.keys(sa.u.p).length === 0){ delete sa.u.p }
 		if(typeof sa.u.m === 'object' && Object.keys(sa.u.m).length === 0){ delete sa.u.m }
 		if(typeof sa.u.r === 'object' && Object.keys(sa.u.r).length === 0){ delete sa.u.r }
-		
-		if(sa.a.length === 0){ delete sa.a }
 		if(Object.keys(sa.u).length === 0){ delete sa.u }
+		
 		if(Object.keys(sa).length === 0){ continue; }
 		//Send
 		List.socket[key].emit('change', sa );
@@ -80,8 +79,8 @@ Change.send = function(){
 
 }
 
-//if only change is x,y and angle, compress it into [x,y,angle]
 Change.send.compressXYA = function(info){
+	//if only change is x,y and angle, compress it into [x,y,angle]
 	if(info.x !== undefined && info.y !== undefined){ 
 		if(info.angle !== undefined){
 			if(Object.keys(info).length === 3){ info = [info.x,info.y,info.angle];}
@@ -107,9 +106,8 @@ Change.send.reset = function(){
 
 
 //####################################
-
-//convertInit: create object that has all needed information for the client to init the object. these information are only sent when init.
 Change.send.init = function(obj){
+	//convertInit: create object that has all needed information for the client to init the object. these information are only sent when init.
 	if(obj.type == 'bullet'){return Change.send.init.bullet(obj)}
 	if(obj.type == 'drop'){return Change.send.init.drop(obj)}
 	if(obj.type == 'enemy' || obj.type == 'player'){	return Change.send.init.mortal(obj)}

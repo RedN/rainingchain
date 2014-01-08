@@ -51,8 +51,6 @@
 		<script src="/js/shared/Quest.js"></script>
 		<script src="/js/shared/CustomboostDb.js"></script>
 		
-		
-		
 		<script src="/js/main.js"></script>
 		<script src="/js/Map.js"></script>
 		<script src="/js/shared/queryShare.js"></script>
@@ -123,14 +121,14 @@
 			</div>
 			
 			<!-- Pop -->
-			<div id="popDiv"	class="posAbs"> 
+			<div id="popDiv" class="posAbs"> 
 			</div>
 			
 		</div>
 		
 		
 		<div id="warningDiv">
-			<div id="warningText" class='onlyText container'
+			<div id="warningText" class='onlyText container posAbs'
 				>
 			</div>
 		</div>
@@ -156,7 +154,9 @@
 		$("#helpDiv")[0].style.width = '90%';
 		$("#helpText")[0].style.width = '90%';
 		$("#helpText")[0].style.height = '170px';
-		$("#warningDiv")[0].style.top = 5 + 'px';
+		$("#warningDiv")[0].style.top = Cst.HEIGHT + 5 + 170 + 'px';
+		$("#warningDiv")[0].style.background = 'white';
+		$("#warningDiv")[0].style.visibility = 'hidden';
 		
 		$.get('/js/help.html').success(function(data){
 			$('#helpText').html(Init.help(data));

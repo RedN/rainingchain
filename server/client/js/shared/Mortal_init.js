@@ -12,11 +12,8 @@ Init.mortal = function(){
 		//Boost
 		mort.permBoost = {};    //no timer
 		mort.boost = {          //timer aka needs to be updated every frame
-			'fast':{},
-			'reg':{},
-			'slow':{},
+			'fast':{},'reg':{},'slow':{},'custom':{},
 			'toUpdate':{},
-			'custom':{},
 			'list':Mortal.template.boost(type),
 		};
 		
@@ -122,36 +119,12 @@ Init.mortal = function(){
 		
 		//Resist
 		mort.status = {
-			'knock':{
-				'active':{"time":0,"magn":0,"angle":0},
-				'resist':0,
-				'resistMax':0,	
-			},
-			'burn':{
-				'active':{"time":0,"magn":0},
-				'resist':0,
-				'resistMax':0,	
-			},
-			'chill':{
-				'active':{"time":0,"magn":0,"atk":0},
-				'resist':0,
-				'resistMax':0,		
-			},
-			'confuse':{
-				'active':{"time":0,"magn":0,"input":[0,1,2,3]},
-				'resist':0,
-				'resistMax':0,	
-			},
-			'bleed':{
-				'active':[],
-				'resist':0,
-				'resistMax':0,	
-			},
-			'drain':{
-				'active':{"time":0,"magn":0},
-				'resist':0,
-				'resistMax':0,	
-			},
+			'knock':{'active':{"time":0,"magn":0,"angle":0},'resist':0,'resistMax':0,},
+			'burn':{'active':{"time":0,"magn":0},'resist':0,'resistMax':0},
+			'chill':{'active':{"time":0,"magn":0,"atk":0},'resist':0,'resistMax':0},
+			'confuse':{'active':{"time":0,"magn":0,"input":[0,1,2,3]},'resist':0,'resistMax':0},
+			'bleed':{'active':[],'resist':0,'resistMax':0,},
+			'drain':{'active':{"time":0,"magn":0},'resist':0,'resistMax':0},
 		}
 		
 		
@@ -261,7 +234,15 @@ Mortal.template.abilityChange = function(){
 	return {'press':'00000000000000','charge':{},'chargeClient':[0,0,0,0,0,0]};
 }
 
-
+Mortal.template.dialogue = function(){
+	return {
+		'talkIf':true,	//can be function
+		'location':{},
+		'tag':[],
+		'option':{},
+		'func':function(){},
+	}
+}
 
 
 
