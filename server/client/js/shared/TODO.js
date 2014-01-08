@@ -1,6 +1,7 @@
 
-#Priority 1:
-simplify ability
+
+
+
 
 
 #Priority 2:
@@ -11,12 +12,12 @@ simplify ability
 
 
 #Priority 3:
+-Death functions in an array
 -See Cooldown for ability
 -Portal to Friends
 -Multiplayer Quest
 -Add Mod to Quest Reward
 -Option show strike points
--Improve boostDb
 -Enemy AI for ability
 -Icon minimap
 -Ability Creation & Mod
@@ -26,6 +27,12 @@ simplify ability
 jqueryui (login, progress bar, dialogue option)
 -Implement Sound System
 -revamp animation, (including death)
+
+
+-Improve boostDb
+
+
+
 
 TUTORIAL:
 

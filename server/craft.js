@@ -415,8 +415,7 @@ Craft.salvage = function(key,id){
 }
 
 Craft.setDmgViaRatio = function(info){
-	
-	//Make it so dmg ratio is always 0<x<1
+	//use dmgratio to make dmg
 	var dmg = {};
 	var sum = 0;
 	for(var i in info.dmgRatio){sum += info.dmgRatio[i];}
@@ -424,6 +423,14 @@ Craft.setDmgViaRatio = function(info){
 	for(var i in info.dmgRatio){ dmg[i] = info.dmgRatio[i] * info.dmgMain; }
 }
 
+Craft.ratio = function(info){
+	//Make it so dmg ratio is always 0<x<1
+	var dmg = {};
+	var sum = 0;
+	for(var i in info){sum += info[i];}
+	for(var i in info){info[i] = info[i] / sum;}
+	return info;
+}
 
 
 //{Ability BROKEN

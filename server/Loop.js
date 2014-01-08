@@ -131,6 +131,7 @@ ActiveList.add = function(bullet){
 
 ActiveList.remove = function(b){
 	for(var i in b.viewedBy){
+		if(!List.all[i]) continue;	//quick fix
 		if(List.all[i].removeList) List.all[i].removeList[b.publicId || b.id] = true;
         delete List.all[i].activeList[b.id];
 	}

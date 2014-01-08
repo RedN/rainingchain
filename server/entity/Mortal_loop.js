@@ -39,6 +39,9 @@ Mortal.loop = function(mort){
 //Combat
 Mortal.loop.ability = function(m){
 	var alreadyBoosted = {};
+	m.abilityChange.chargeClient = [0,0,0,0,0,0];
+	
+	ability_loop: 
 	for(var i in m.ability){
 		var s = m.ability[i]; if(!s) continue;
 		
@@ -51,37 +54,36 @@ Mortal.loop.ability = function(m){
 			}
 			alreadyBoosted[s.id] = 1;
 		}
-		
+		m.abilityChange.chargeClient[+i] = charge[s.id] >= s.period ? 1 : charge[s.id] / s.period;
+				
 		if(press && charge[s.id] >= s.period){
 			//Mana
-			//for(var j in s.cost){if(s.cost[j] > m.mana[j]){ continue;}}
-			//for(var j in s.cost){m.mana[j] -= s.cost[j];}
+			for(var j in s.cost){if(s.cost[j] > m.mana[j]){ continue ability_loop;}}
+			for(var j in s.cost){m.mana[j] -= s.cost[j];}
 			
 			//Charge
 			charge[s.id] = Math.min(charge[s.id] % s.period,1);
 			
 			//Reset the ability and related abilities
-			for(var j in s.reset){
-				for(var k in m.ability){
-					if(!m.ability[k]) continue;
-					if(m.ability[k].type == j){
-						m.abilityChange.charge[k] = m.abilityChange.charge[k] * s.reset[j];
-					}
-				}
-				if(j == 'tag'){
+			for(var j in s.reset){	//{'attack':0,'support':0.5,'summon':1,'tag':{'fire':0.2}}
+				if(j === 'tag'){	
 					for(var p in s.reset.tag){
 						for(var n in m.ability){
 							if(!m.ability[n]) continue;
-							if(m.ability[n].tag && n != i && m.ability[n].tag.indexOf(p) != -1){
+							if(n !== i && m.ability[n].tag && m.ability[n].tag.have(p)){
 								m.abilityChange.charge[n] = m.abilityChange.charge[n] * s.reset.tag[p];
 							}
 						}
 					}
+				} else {
+					for(var k in m.ability){
+						if(!m.ability[k]) continue;
+						if(m.ability[k].type === j){
+							m.abilityChange.charge[k] = m.abilityChange.charge[k] * s.reset[j];
+						}
+					}
 				}
-				
 			}
-			
-			
 			
 			//Do Ability Action (ex: Combat.action.attack)
 			applyFunc.key(m.id,s.action.func,s.action.param);

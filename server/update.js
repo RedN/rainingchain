@@ -157,6 +157,7 @@ Change.update.init = function(){
 				{'array':['x'],'filter':Math.round},
 				{'array':['y'],'filter':Math.round},
 				{'array':['angle'],'filter':Math.round},
+				
 			],
 			'reg':[
 				{'array':['spdX'],'filter':Math.round},
@@ -169,6 +170,7 @@ Change.update.init = function(){
 				{'array':['heal'],'filter':Math.round},
 				{'array':['sprite','name']},
 				{'array':['sprite','sizeMod']},
+				{'array':['abilityChange','chargeClient'],'filter':Change.send.convert.abilityChangeClient},
 				
 				
 				{'array':['equip','piece','body','id'],'sendArray':['equip','piece','body'],'sendFilter':(function(w){ return {'visual':w.visual,id:w.id} }) },

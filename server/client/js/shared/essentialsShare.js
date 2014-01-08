@@ -49,7 +49,9 @@ Math.randomId = function(num){
 Math.randomML = function(){
 	return Math.random()*2-1
 }
-
+Math.probability = function(base,mod){
+	return 1 - Math.pow(1-base,mod);
+}
 findMin = function(list,func){
 	var min = func(list[0]);
 	for(var i = 1 ; i  < list.length ; i++){
@@ -57,6 +59,15 @@ findMin = function(list,func){
 	}
 	return min;
 }
+parseFloatInBase = function(n, radix) {
+	radix = radix || 10;
+    var nums = n.split(".");
+    var iPart = parseInt(nums[0], radix);
+	if(nums.length === 1) return iPart;
+    var fPart = parseInt(nums[1], radix) / Math.pow(radix, nums[1].length);
+	return iPart + fPart
+}
+
 findMax = function(list,func){
 	var max = func(list[0]);
 	for(var i = 1 ;i  < list.length ; i++){

@@ -164,7 +164,7 @@ Init.mortal = function(){
 		//Ability
 		mort.ability = [];
 		mort.abilityList = {};
-		mort.abilityChange = {'press':'00000000000000','charge':{}};
+		mort.abilityChange = Mortal.template.abilityChange();	
 		
 		//Spec
 		mort.invisible = 0;
@@ -256,7 +256,9 @@ Init.mortal = function(){
 }
 
 
-
+Mortal.template.abilityChange = function(){
+	return {'press':'00000000000000','charge':{},'chargeClient':[0,0,0,0,0,0]};
+}
 
 
 

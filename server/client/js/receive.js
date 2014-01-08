@@ -63,7 +63,10 @@ Receive.showData = false;
 
 Receive.parse = function(data){
 	if(data.u){ 
-	    if(data.u.p) data.u.p = Receive.parse.xya(data.u.p);
+	    if(data.u.p){
+			data.u.p = Receive.parse.xya(data.u.p); 
+			data.u.p = Receive.parse.chargeClient(data.u.p);
+		}
     	for(var i in data.u.f)	data.u.f[i] = Receive.parse.xya(data.u.f[i]);   
 	}
 	if(data.i){		
@@ -81,6 +84,20 @@ Receive.parse.xya = function(info){
 	else if(info.xy){ info.x = info.xy[0]; info.y = info.xy[1]; delete info.xy }
 	return info;
 }
+Receive.parse.chargeClient = function(info){	//could be used when needed instead of all the time
+	if(typeof info['abilityChange,chargeClient'] === 'string'){
+		console.log(info['abilityChange,chargeClient']);
+		var charge = info['abilityChange,chargeClient'];
+		var tmp = [0,0,0,0,0,0];
+		for(var i = 0 ; i < charge.length ; i++){ 
+			tmp[i] = charge[i] === 'R' ? 1 : parseInt(charge[i],36)/36;
+		}
+		info['abilityChange,chargeClient'] = tmp;
+		console.log(info['abilityChange,chargeClient']);
+	}
+	return info;
+}
+
 
 Receive.init = function(obj){
 	if(obj.type === 'enemy' || obj.type === 'player'){ Receive.init.mortal(obj); }	

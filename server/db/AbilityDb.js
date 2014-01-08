@@ -161,7 +161,6 @@ Init.db.ability.template = function(){
 	for(var i in a){
 		if(Db.ability.orb[a[i].orb]){	a[i].orb = {'upgrade':{'amount':0,'bonus':a[i].orb}};	} 
 		else { 	Db.ability.orb[a[i].id] = a[i].orb; a[i].orb = a[i].id; }	//custom orbMod (need to be func)
-		
 	}
 	
 }
@@ -226,8 +225,12 @@ Ability.creation = function(a){
 	a.period = a.period  || 25;
 	a.modList = a.modList || {};
 	a.orb = {'upgrade':{'amount':0,'bonus':'none'}};
-	
 	a.action = a.action || [];
+	
+	if(a.action && a.action.func === 'Combat.action.attack'){
+		var at = a.action.param.attack;
+		at.dmgRatio = Craft.ratio(at.dmgRatio);
+	}
 	
 	//Setting Item Part
 	Item.creation({
@@ -247,10 +250,7 @@ Ability.creation = function(a){
 Ability.uncompress = function(abi){	
 	var ab = typeof abi === 'object' ? abi : deepClone(Db.ability[abi]);
 	
-	for(var i in ab.modList){
-		ab = abilityModDb[i].func(ab,ab.modList[i],Craft.orb.formula(ab.modList[i]));
-	}
-	ab = Db.ability.orb[ab.orb.upgrade.bonus](ab,ab.orb.upgrade.amount);
+	ab = Ability.uncompress.mod(ab);
 	
 	if(ab.action && ab.action.func === 'Combat.action.attack'){
 		var at = ab.action.param.attack;
@@ -259,6 +259,15 @@ Ability.uncompress = function(abi){
 	}
 	return ab;
 }
+
+Ability.uncompress.mod = function(ab){	
+	for(var i in ab.modList){
+		ab = abilityModDb[i].func(ab,ab.modList[i],Craft.orb.formula(ab.modList[i]));
+	}
+	ab = Db.ability.orb[ab.orb.upgrade.bonus](ab,ab.orb.upgrade.amount);
+	return ab;
+}
+
 
 Ability.template = function(){
 	return {'name':'Fire','tag':[],'icon':'melee.mace',

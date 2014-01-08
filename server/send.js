@@ -200,6 +200,15 @@ Change.send.convert.abilityList = function(list){
 	return copy;
 }
 
+
+Change.send.convert.abilityChangeClient = function(info){
+	var tmp = '';
+	for(var i in info){
+		tmp += info[i] === 1 ? 'R' : Math.round(info[i]*35).toString(36).slice(0,1);
+	}
+	return tmp;	
+}
+
 //used for instanced. client doesnt need to know its instanced
 Change.send.convert.map = function(name){
 	return Map.convertId[name];

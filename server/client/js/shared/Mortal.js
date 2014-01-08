@@ -249,9 +249,8 @@ Mortal.swapAbility = function(mort,abPos,abListPost){
 		if(abPos === 4 && mort.abilityList[abListPost].type !== 'heal'){Chat.add(mort.id,'This ability slot can only support Healing abilities.'); return;}	
 		if(abPos === 5 && mort.abilityList[abListPost].type !== 'dodge'){Chat.add(mort.id,'This ability slot can only support Dodge abilities.'); return;}	
 	}
-	
 	mort.ability[abPos] = mort.abilityList[abListPost];
-	mort.abilityChange = {'press':'000000000000000','charge':{}}
+	mort.abilityChange = Mortal.template.abilityChange();
 	for(var i in mort.ability){ 
 		if(mort.ability[i]){
 			mort.abilityChange.charge[mort.ability[i].id] = 0;

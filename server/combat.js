@@ -166,15 +166,12 @@ Combat.collision.status = function(dmg,b,target){
 		'lightning':'confuse'
 	}
 	for(var i in ar){
-		var mod = b[ar[i]].chance;
-		
-		var minToRoll = 1-Math.pow(dmg[i] / target.resource.hp.max,1.5);
-		
-		if(minToRoll*mod >= 0.001 && Math.random()*mod >= minToRoll){ 
+		var maxToRoll = Math.probability(Math.pow(dmg[i] / target.resource.hp.max,1.5),b[ar[i]].chance);
+				
+		if(0.001 <= maxToRoll && Math.random() <= maxToRoll){ 
 			Combat.collision.status[ar[i]](target,b,dmg);
 		}
 	}	
-	
 }
 	
 Combat.collision.status.burn = function(mort,b){	
@@ -305,13 +302,19 @@ Combat.collision.damage.calculate =function(a,d){
 
 Combat.targetIf = {};
 Combat.hitIf = {};
-//List of commons Target if 
+
 Combat.targetIf.global = function(atk,def){
-	return atk.id != def.id && !def.dead && def.combat && (def.type == 'player' || def.type == 'enemy') && List.all[def.id];
+	//Used first in every target if test
+	return atk.id != def.id 
+	&& !def.dead 
+	&& def.combat 
+	&& (def.type == 'player' || def.type == 'enemy')
+	&& List.all[def.id];
 }
 
-//Used first in every target if test
+
 Combat.targetIf.list = {
+	//List of commons Target if 
 	'player':(function(tar,self){ 
 		try {
 			if(tar.summoned){
@@ -345,9 +348,15 @@ Combat.targetIf.list = {
 	}),
 };
 
-//Used first in every hit if test
+
 Combat.hitIf.global = function(atk,def){
-	return atk.id != def.id && atk.id != def.parent && !def.dead && def.combat && (def.type == 'player' || def.type == 'enemy') && List.all[def.id];
+	//Used first in every hit if test
+	return atk && def && atk.id !== def.id 
+	&& atk.id !== def.parent 	//only thing different from targetIf	and idk if useful
+	&& !def.dead
+	&& def.combat
+	&& (def.type == 'player' || def.type == 'enemy') 
+	&& List.all[def.id];
 };
 
 (function(){

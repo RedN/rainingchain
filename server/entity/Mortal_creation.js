@@ -97,7 +97,6 @@ Mortal.creation.db = function(e,d){
 	}
 	for(var i in e.ability){ 
 		var name = e.ability[i];
-		e.abilityChange.charge[name] = 0;
 		Mortal.learnAbility(e,name);
 		Mortal.swapAbility(e,+i,name);
 	}
