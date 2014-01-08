@@ -8,7 +8,7 @@ Init.db.quest = function(){
 		q.id = 'questId';
 		q.name = 'Default Quest';
 		q.icon = 'skill.melee';
-		q.reward = {'stat':'dmg-fire-+','value':[0.05,0.10]},
+		q.reward = {'stat':'dmg-fire-+','value':[0.05,0.10],'mod':0.5},
 		q.description = "Everything you level up, you get a passive point that can be attributed to one of the many passives in the passive grid.The bonus from each passive is dynamic and depends on the current popularity of the passive.Popular passives values, most often used in Overpowered builds, are decreased while unpopular ones are boosted. In other games, nerfs make OP builds become unviable builds brutally while my system allows a smooth transition and auto-balancement. But more importantly, it assures a true and fair character customization, encouraging people to play home-made builds."
 		
 		q.variable = {
@@ -167,9 +167,7 @@ Init.db.quest = function(){
 	var quest = {};
 	for(var i in Db.quest) Quest.creation(Db.quest[i]);
 	for(var i in Db.quest) quest[i] = deepClone(Db.quest[i].variable);
-	eval('Main.template.quest = function(){ return ' + stringify(quest) + '}');
-	
-	
+	Main.template.quest = new Function('return ' + stringify(quest));	
 }
 
 Quest = {};
@@ -190,14 +188,8 @@ Quest.creation = function(q){
 	
 	if(server){
 		Db.dialogue[q.id] = {};
-		for(var i in q.dialogue){
-			Db.dialogue[q.id][i] = q.dialogue[i];	
-		}
-		
-		for(var i in q.map){
-			Db.map[i].load[q.id] = q.map[i];
-		}
-		
+		for(var i in q.dialogue) Db.dialogue[q.id][i] = q.dialogue[i];			
+		for(var i in q.map)	Db.map[i].load[q.id] = q.map[i];		
 	}
 	return q;
 }
@@ -239,7 +231,7 @@ Quest.bonus.toggle = function(key,qid,bid){
 Quest.reward = function(key,id){
 	var qp = List.main[key].quest[id];
 	var q = Db.quest[id];
-	q.reward.quality = qp.bonusSum;	//change for all players
+	q.reward.quality = qp.bonusSum * q.reward.mod;	//change for all players cuz only 1 copy
 	
 	var boost = Craft.boost.generate(q.reward);
 	
@@ -263,8 +255,8 @@ Quest.hint.update = function(key,id){
 }
 
 Quest.req = {};
-//convert the quest req object into string
 Quest.req.convert = function(qvar,req){
+	//convert the quest req object into string
 	if(!req){ return 'None.'; }
 	
 	var returnStr = '';
@@ -281,13 +273,11 @@ Quest.req.convert = function(qvar,req){
 
 //update the test about hte quest req (strike if done)
 Quest.req.update = function(key,id){
-	var temp = '';
-	
+	var temp = '';	
 	var q = Db.quest[id];
 	
 	for(var i in q.requirement){
-		if(q.requirement[i].func(key)){	temp += '1';}
-		else {temp += '0';}
+		temp += q.requirement[i].func(key) ? '1' : '0';
 	}
 	List.main[key].quest[id].requirement = temp;
 }

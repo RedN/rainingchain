@@ -4,19 +4,18 @@
 
 
 
+
+
+
+
 #Priority 2:
 -Crafting Ability
--Advanced Enemy Mods
 -Revamp Drop
 
 
-
 #Priority 3:
--Death functions in an array
--See Cooldown for ability
 -Portal to Friends
 -Multiplayer Quest
--Add Mod to Quest Reward
 -Option show strike points
 -Enemy AI for ability
 -Icon minimap
@@ -30,6 +29,7 @@ jqueryui (login, progress bar, dialogue option)
 
 
 -Improve boostDb
+-Advanced Enemy Mods
 
 
 

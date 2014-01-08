@@ -37,6 +37,7 @@ Init.mortal = function(){
 		mort.item = {"quantity":0,"quality":0,"rarity":0};  //aka magic find
 		mort.minimapIcon = 'minimapIcon.enemy';     //icon used for minimap
 		
+		mort.deathAbility = [];
 		mort.dead = 0;          //dead = invisible
 		mort.killed = 0;        //killed = cant move, 0 hp but visible (aka death animation)
 		mort.pickRadius = 100;  //distance to pick items on ground

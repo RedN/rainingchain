@@ -272,15 +272,10 @@ Mortal.examineAbility = function(mort){}
 Mortal.death = function(mort){	//only for enemy atm
 	mort.dead = 1;
 	
-	var killer = null; var max = 0;
-	for(var i in mort.damagedBy){
-		if(mort.damagedBy[i] > max){
-			killer = i;
-		}
-	}
+	var killer = Mortal.death.killer(mort);
 	Mortal.dropItem(mort,List.all[killer]);
 	if(mort.death){ mort.death(killer); }	//custom death function (ex quest)
-	
+	Mortal.death.ability(mort);				//custom death ability function
 	ActiveList.remove(mort);
 }
 
@@ -292,6 +287,23 @@ Mortal.death.start = function(mort){
 	Sprite.change(mort,{'anim':'Death'});
 	//death(enemy);
 }
+
+Mortal.death.ability = function(mort){
+	for(var i in mort.deathAbility){
+		Mortal.ability(mort,mort.ability[mort.deathAbility[i]],false,false);
+	}
+}
+
+Mortal.death.killer = function(mort){
+	var killer = null; var max = 0;
+	for(var i in mort.damagedBy){
+		if(mort.damagedBy[i] > max){
+			killer = i;
+		}
+	}
+	return killer;
+}
+
 
 Mortal.revive = function(mort){
 	//mort.extra.id = mort.id

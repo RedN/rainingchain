@@ -41,7 +41,6 @@ Mortal.loop.ability = function(m){
 	var alreadyBoosted = {};
 	m.abilityChange.chargeClient = [0,0,0,0,0,0];
 	
-	ability_loop: 
 	for(var i in m.ability){
 		var s = m.ability[i]; if(!s) continue;
 		
@@ -57,41 +56,59 @@ Mortal.loop.ability = function(m){
 		m.abilityChange.chargeClient[+i] = charge[s.id] >= s.period ? 1 : charge[s.id] / s.period;
 				
 		if(press && charge[s.id] >= s.period){
-			//Mana
-			for(var j in s.cost){if(s.cost[j] > m.mana[j]){ continue ability_loop;}}
-			for(var j in s.cost){m.mana[j] -= s.cost[j];}
-			
-			//Charge
-			charge[s.id] = Math.min(charge[s.id] % s.period,1);
-			
-			//Reset the ability and related abilities
-			for(var j in s.reset){	//{'attack':0,'support':0.5,'summon':1,'tag':{'fire':0.2}}
-				if(j === 'tag'){	
-					for(var p in s.reset.tag){
-						for(var n in m.ability){
-							if(!m.ability[n]) continue;
-							if(n !== i && m.ability[n].tag && m.ability[n].tag.have(p)){
-								m.abilityChange.charge[n] = m.abilityChange.charge[n] * s.reset.tag[p];
-							}
-						}
-					}
-				} else {
-					for(var k in m.ability){
-						if(!m.ability[k]) continue;
-						if(m.ability[k].type === j){
-							m.abilityChange.charge[k] = m.abilityChange.charge[k] * s.reset[j];
-						}
-					}
-				}
-			}
-			
-			//Do Ability Action (ex: Combat.action.attack)
-			applyFunc.key(m.id,s.action.func,s.action.param);
+			Mortal.ability(m,s);
 			break;	//1 ability per frame max
 		}
 	}
 
 }
+
+Mortal.ability = function(mort,ab,mana,reset){
+	//Mana
+	if(mana !== false && !Mortal.ability.resource(mort,ab.cost)) return;
+	
+	//Charge
+	if(reset !== false) Mortal.ability.charge(mort,ab);
+		
+	//Do Ability Action (ex: Combat.action.attack)
+	applyFunc.key(mort.id,ab.action.func,ab.action.param);
+}
+Mortal.ability.charge = function(mort,ab){
+	var charge = mort.abilityChange.charge;
+	charge[ab.id] = Math.min(charge[ab.id] % ab.period,1);
+	
+	//Reset the ability and related abilities
+	for(var j in ab.reset){	//'attack':0,'support':0.5,'summon':1,'tag':'fire':0.2
+		if(j === 'tag'){	//custom tag
+			for(var p in ab.reset.tag){
+				for(var n in mort.ability){
+					if(!mort.ability[n]) continue;
+					if(n !== i && mort.ability[n].tag && mort.ability[n].tag.have(p)){
+						charge[n] = charge[n] * ab.reset.tag[p];
+					}
+				}
+			}
+		} else {	//type
+			for(var k in mort.ability){
+				if(!mort.ability[k]) continue;
+				if(mort.ability[k].type === j){
+					charge[k] = charge[k] * ab.reset[j];
+				}
+			}
+		}
+	}
+}
+
+
+
+Mortal.ability.resource = function(mort,cost){
+	for(var j in cost){
+		if(cost[j] > mort[j]){ return false;}
+	}
+	for(var j in cost){m[j] -= cost[j];}
+	return true;		
+}
+
 
 Mortal.loop.status = function(mort){
 	Mortal.loop.status.knock(mort);
