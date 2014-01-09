@@ -21,8 +21,8 @@
 			draggable:false;
 		}
 		p{
-			font-family:"Fixedsys";
-			font-size:20px;
+			/*font-family:"Fixedsys";
+			font-size:20px;*/
 		}
 		textarea{
 			resize: none; 
@@ -32,6 +32,7 @@
 		canvas{
 			z-index:-1;
 		}
+		
 		div{
 			draggable:false;
 			readonly:readonly;

@@ -1,22 +1,17 @@
 
-'ryve':{
-	'option':{
-		'greet':{'text':'Hey!','name':'ryve','convo':'greetings':'first'},
-		'fun':{'text':'yo','name':'ryve','convo':'place of interest':'first'},	
-	},
-	'child':{
-		'option':{
-			'fun':{'text':'yo','name':'ryve','convo':'place of interest':'child'},
-		},
-	},
-}
 
 
 -Advanced Dialogue (Morrowind)
 -Icon minimap
 
 -Enemy AI for ability (Mortal.creation.db)
--Draw.popup.equip  in multiple functions
+
+-Status effect in client
+-settings (aka pref)
+-description for pref
+-disconnect if 15 min afk
+
+
 
 
 #Priority 2:

@@ -140,7 +140,7 @@ addCanvas = function(name,id,z){
 	$("#canvasDiv")[0].appendChild(cv);
 	
 	List.ctx[name] = cv.getContext("2d");
-	List.ctx[name].font = '20px Fixedsys';
+	List.ctx[name].font = '20px Monaco';
 	List.ctx[name].fillStyle = 'black';
 	List.ctx[name].textAlign = 'left';
 	List.ctx[name].textBaseline = 'top';

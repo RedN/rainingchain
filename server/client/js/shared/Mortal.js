@@ -227,9 +227,9 @@ Mortal.permBoost.compile = function(b){
 
 Mortal.talk = function(mort,enemyId){
 	if(List.all[enemyId].dialogue){
-		List.all[enemyId].dialogue(mort.id);
+		List.all[enemyId].dialogue.func(mort.id);
 	}
-}
+}//
 
 //Note: Mortal.ability is used to perform ability
 Mortal.removeAbility = function(mort,name){
@@ -356,6 +356,7 @@ Mortal.getDef = function(mort){
 	for(var i in def){
 		def[i] *= mort.mastery.def[i].mod * mort.defMain * mort.mastery.def[i].sum;
 	}
+	return def;
 }
 
 

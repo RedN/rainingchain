@@ -45,6 +45,7 @@ Button.test = function (key,x,y,side){
 				} else {
 					applyFunc(list[i][side].func,list[i][side].param);
 					if(list[i].help) Help.update(list[i].help);
+					if(list[i].sfx) Sfx.play(list[i].sfx);
 				}
 				
 				break;

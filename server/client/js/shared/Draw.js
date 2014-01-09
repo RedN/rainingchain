@@ -148,7 +148,6 @@ Draw.mortal.chatHead = function(mort){
 	ctx.fillText(mort.chatHead.text,numX,numY);
 	ctx.textAlign = 'left';
 	ctx.fillStyle="black";
-	Loop.update.chatHead(mort);	
 }		
 
 Draw.mortal.hpBar = function(mort){
@@ -363,7 +362,7 @@ Draw.resource.bar = function(numX,numY,w,h,name){	ctxrestore();
 	ctx = List.ctx.stage;
 	if(h >= 20){
 		ctx.fillStyle = 'white';
-		ctx.font = h*0.9 + 'px Fixedsys';
+		ctx.font = h*0.9 + 'px Monaco';
 		ctx.fillText(name.capitalize(),numX+10,numY);
 		ctx.fillStyle = 'black';
 	}
@@ -416,7 +415,7 @@ Draw.context = function (){ ctxrestore();
 	var cont = main.context.text || main.clientContext.text || main.permContext.text;
 	
 	if(cont){
-		ctx.font="25px Fixedsys";
+		ctx.font="25px Monaco";
 		
 		ctx.fillStyle = 'black';
 		ctx.strokeStyle = 'white';
@@ -463,98 +462,6 @@ Draw.map = function (layer){ ctxrestore();
 
 
 
-//Popup
-Draw.popup = function(){
-	if(main.popupList.equip){Draw.popup.equip();}
-}
-
-Draw.popup.equip = function(){ ctxrestore();
-	var w = 250;
-	var h = 250;
-	var pop = main.popupList.equip;
-	ctx = List.ctx.win;
-	
-	if(typeof pop === 'object'){
-		var id = pop.id;
-		var posx = pop.x;
-		var posy = pop.y;
-	} else {
-		var id = pop;
-		var posx = Input.mouse.x;
-		var posy = Input.mouse.y;
-	}
-	
-	var equip = Db.equip[id];
-	if(equip === undefined){Db.query('equip',id); return; }
-	if(equip === 0){return;} //waiting for query answer
-	
-	var sx = Math.max(0,Math.min(posx-w,Cst.WIDTH-w));
-	var sy = Math.max(0,Math.min(posy-h,Cst.HEIGHT - h));	
-	
-	//Frame
-	ctx.globalAlpha = 0.9;
-	ctx.fillStyle = "#696969";
-	ctx.strokeStyle="black";
-	ctx.drawRect(sx,sy,w,h);
-	ctx.globalAlpha = 1;
-	
-	
-	//Draw icon
-	Draw.icon(equip.visual,[sx+2,sy+2],48);
-	
-	//Draw Name
-	ctx.font="25px Fixedsys";
-	ctx.fillStyle = equip.color;
-	ctx.textAlign = 'center';
-	ctx.fillTextU(equip.name,sx + 150,sy);
-	ctx.textAlign = 'left';
-	ctx.fillStyle = 'white';
-	
-	ctx.font="15px Fixedsys";
-	var string = 'Lv:' + equip.lvl + '  Orb: +' + round(equip.orb.upgrade.bonus*100-100,2) + '% | ' + equip.orb.upgrade.amount;
-	ctx.fillText(string,sx+50+5,sy+28);
-	
-	//Draw Def/Dmg
-	var num = equip.dmgMain; var bar = 'dmgRatio';
-	if(equip.category === 'armor'){ var num = equip.defMain; var bar = Draw.popup.equip.getDef(equip);}
-	ctx.font="25px Fixedsys";
-	ctx.textAlign = 'center';
-	ctx.fillText(round(num,0),sx+25,sy+50);
-	Draw.element(sx+52,sy+50,190,25,equip[bar]);
-	
-	
-	//Separation
-	ctx.beginPath();
-	ctx.moveTo(sx,sy+80);
-	ctx.lineTo(sx+w,sy+80);
-	ctx.stroke();
-	
-	//Boost
-	ctx.font="20px Fixedsys";
-	ctx.textAlign = 'left';
-	var numY = sy+80;
-	var sum = 0;
-	for(var i in equip.boost){
-		var boost = equip.boost[i];
-		var info = Draw.convert.boost(boost);
-		ctx.fillText('-' + info[0],sx+10,numY+sum*20);
-		ctx.fillText(info[1],sx+10+150,numY+sum*20);
-		sum++;
-		
-	}
-}
-
-
-Draw.popup.equip.getDef = function(equip){
-	var tmp = {};
-	for(var j in Cst.element.list){
-		var i = Cst.element.list[i];
-		tmp[i] = equip.defMain * equip.defRatio[i] * equip.orb.upgrade.bonus;
-	}
-	return tmp;
-}
-
-
 //Option
 Draw.optionList = function(){ ctxrestore();
 	if(!main.optionList) return;
@@ -590,7 +497,7 @@ Draw.optionList = function(){ ctxrestore();
 	ctx.strokeStyle="black";
 	ctx.strokeRect(sx,sy,w,nameY);
 	
-	ctx.font="15px Fixedsys";
+	ctx.font="15px Monaco";
 	ctx.fillStyle = "white";
 	ctx.fillText(name,sx+nameX,sy);
 		
@@ -606,7 +513,7 @@ Draw.optionList = function(){ ctxrestore();
 
 
 	//Text + Button
-	ctx.font="14px Fixedsys";
+	ctx.font="14px Monaco";
 	ctx.fillStyle = "yellow";
 		
 	for(var i = 0 ; i < option.length ; i++){
@@ -679,7 +586,7 @@ Draw.chat.main = function(){
 	html.pm.div.style.left = (s.x + s.divX) + 'px'; 
 	html.pm.div.style.top = (s.y + s.divY - s.pmY - s.pmDivY - s.disPmY) + 'px'; 
 	
-	html.pm.text.style.font = s.pmcharY + 'px Fixedsys';
+	html.pm.text.style.font = s.pmcharY + 'px Monaco';
 	html.pm.text.style.width = (s.w - 2*s.divX) + 'px';
 	html.pm.text.style.height = (s.pmY) + 'px'
 	html.pm.text.style.left = s.divX + 'px'; 
@@ -697,17 +604,17 @@ Draw.chat.main = function(){
 	html.chat.div.style.left = (s.x + s.divX) + 'px'; 
 	html.chat.div.style.top = (s.y + s.divY) + 'px'; 
 	
-	html.chat.text.style.font = s.chatcharY + 'px Fixedsys';
+	html.chat.text.style.font = s.chatcharY + 'px Monaco';
 	html.chat.text.style.width = (s.w - 2*s.divX) + 'px';
 	html.chat.text.style.height = (s.h - 2*s.divY - s.personalChatY) + 'px'
 	html.chat.text.style.left = s.divX + 'px'; 
 	html.chat.text.style.top = s.divY + 'px'; 
 	
-	chatUserName.style.font = s.personalChatY + 'px Fixedsys';
+	chatUserName.style.font = s.personalChatY + 'px Monaco';
 	
 	html.chat.input.size=(69-player.name.length).toString();
 	html.chat.input.maxlength="150";	
-	html.chat.input.style.font = s.personalChatY + 'px Fixedsys';
+	html.chat.input.style.font = s.personalChatY + 'px Monaco';
 	html.chat.input.style.height = s.personalChatY + 'px'
 		
 	html.dialogue.div.style.width = (s.w - 2*s.divX) + 'px';
@@ -741,7 +648,7 @@ Draw.chat.dialogue = function(){
 		html.dialogue.text.style.width = s.w - 2*s.textBorder-s.faceX + 'px';
 		html.dialogue.div.style.left = (s.x + s.divX + s.textBorder + s.faceX) + 'px';
 		ctx.drawImage(Img.face,0,0,96,96,s.facesX,s.y+s.facesY,96,96);
-		ctx.font="20px Fixedsys";
+		ctx.font="20px Monaco";
 		ctx.textAlign = 'center';
 		ctx.fillText(dia.face.name,s.facesX+96/2,s.y+s.facesY+96+5);
 		ctx.textAlign = 'left';
@@ -749,7 +656,7 @@ Draw.chat.dialogue = function(){
 	
 	//Options
 	if(dia.option){
-		ctx.font = s.optionY + 'px Fixedsys';
+		ctx.font = s.optionY + 'px Monaco';
 		for(var i in dia.option){
 			ctx.fillText('-' + dia.option[i].text,s.numX,nY+i*s.optionY);
 			
@@ -792,9 +699,6 @@ Draw.chat.constant = function(){
 	}
 }
 
-
-
-
 Draw.icon = function(info,xy,size){
 	size = size || 32;
 	var slot = Img.icon.index[info];
@@ -832,16 +736,14 @@ Draw.item = function(info,xy,size){
 	
 }
 
-
-
-
-
 Draw.element = function(x,y,w,h,data,noover){
 	var xx = x;
 	ctx.save();
 	ctx.textAlign = 'left';
 	ctx.strokeRect(x,y,w,h);
 	var total = 0; for(var i in data){	total += data[i]; }
+	
+	console.log(x,y,w,h,data);
 	
 	var mx = Math.min(Input.mouse.x,Cst.WIDTH-150);
 	var my = Math.min(Input.mouse.y,Cst.HEIGHT-25);
@@ -877,9 +779,6 @@ Draw.element = function(x,y,w,h,data,noover){
 	}
 	ctx.restore();
 }
-
-
-
 
 Draw.convert = {};
 
@@ -918,14 +817,6 @@ Draw.convert.boost = function(boost){
 	}
 	*/
 }
-
-
-
-
-
-
-
-
 
 Draw.gradientRG = function(n){
 	n = Math.min(1,Math.max(0,n));

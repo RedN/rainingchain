@@ -9,11 +9,6 @@ Init.db.sfx = function(){
 
 
 
-
-
-
-
-
 	}
 
 
@@ -25,8 +20,7 @@ Init.db.sfx = function(){
 			s.volume = Db.sfx[i].volume || 1;
 			s.delay = Db.sfx[i].delay || 0;
 			tmp.push(s);
-		}
-		
+		}		
 		
 		Db.sfx[i] = tmp;
 	}
@@ -36,19 +30,17 @@ Init.db.sfx = function(){
 Sfx = {};
 Sfx.play = function(sfx){
 	var i = 0;
-	var id = sfx.name;
+	var id = sfx.name || sfx;
 	while(Db.sfx[id][i]){
 		if(Db.sfx[id][i].ended || !Db.sfx[id][i].currentTime){
-			Db.sfx[id][i].play();
+			var s = Db.sfx[id][i];
+			s.volume = sfx.volume;
+			s.play();
 			return;
 		}
 		i++;
 	}
 }
-
-
-
-
 
 Sfx.creation = function(sfx){
 	var s = useTemplate(Sfx.template(),sfx);
@@ -69,13 +61,8 @@ Sfx.template = function(){
 	};
 }
 
-
-
-
-
 Sfx.remove = function(sfx){
 	delete List.sfx[sfx.id];
-
 }
 
 

@@ -1,15 +1,14 @@
 Dialogue = {};
 
-//start dialogue. also set start x and y to end dialogue if player walks away
 Dialogue.start = function(key,d){
+	//start dialogue. also set start x and y to end dialogue if player walks away
+
 	var dia = Db.dialogue[d.name][d.convo][d.node];
-	List.main[key].dialogue = dia;
-	List.main[key].dialogueLoc = {'x':List.all[key].x,'y':List.all[key].y};
+	var main = List.main[key];
+	main.dialogue = dia;
+	main.dialogueLoc = {'x':List.all[key].x,'y':List.all[key].y};
 	
-	if(List.main[key].dialogue.func){
-		applyFunc.key(key,List.main[key].dialogue.func,List.main[key].dialogue.param);
-	}
-	
+	if(dia.func) applyFunc.key(key,dia.func,dia.param);	
 }
 
 Dialogue.end = function(key){
@@ -26,7 +25,19 @@ Dialogue.option = function(key,option){
 	}
 }
 
-
+/*
+'ryve':{
+	'option':{
+		'greet':{'text':'Hey!','name':'ryve','convo':'greetings':'first'},
+		'fun':{'text':'yo','name':'ryve','convo':'place of interest':'first'},	
+	},
+	'elf':{
+		'option':{
+			'fun':{'text':'yo','name':'ryve','convo':'place of interest':'child'},
+		},
+	},
+}
+*/
 
 Init.db.dialogue = function(){
 		

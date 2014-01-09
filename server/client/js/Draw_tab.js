@@ -135,7 +135,7 @@ Draw.tab.equip = function (){ ctxrestore();
 	var vy = 25;
 		
 	ctx.fillStyle = 'white';
-	ctx.font = '18px Fixedsys';
+	ctx.font = '18px Monaco';
 	
 	var array = [
 		['offensive','offensive.melee'],
@@ -237,7 +237,7 @@ Draw.tab.friend = function(){ ctxrestore();
 	hf.div.style.top = numY + 'px'; 
 	
 	
-	hf.text.style.font = charY + 'px Fixedsys';
+	hf.text.style.font = charY + 'px Monaco';
 	hf.text.style.width = (s.w - 2*divX) + 'px'
 	hf.text.style.height = (s.h - iconY- 2*divY) + 'px'
 	
@@ -362,7 +362,7 @@ Draw.tab.quest = function(){ ctxrestore();
 	html.questTab.div.style.top = numY + 'px'; 
 	html.questTab.div.style.visibility = 'visible';
 	
-	html.questTab.text.style.font = charY + 'px Fixedsys';
+	html.questTab.text.style.font = charY + 'px Monaco';
 	html.questTab.text.style.width = (s.w - 2*divX) + 'px'
 	html.questTab.text.style.height = (s.h - iconY- 2*divX) + 'px'
 	

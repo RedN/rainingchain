@@ -28,7 +28,7 @@ Draw.window.main = function(title){ ctxrestore();
 	t.style.textDecoration = 'underline';
 	t.style.width = s.w + 'px';
 	t.style.height = titlesize + 'px';
-	t.style.font = titlesize + 'px Fixedsys';
+	t.style.font = titlesize + 'px Monaco';
 	
 	if(typeof title === 'string'){ t.innerHTML = title; } else {
 		t.style.textDecoration = 'none';
@@ -42,7 +42,7 @@ Draw.window.main = function(title){ ctxrestore();
 			'onmouseout="main.permContext.text = null;' + '" ' + 
 			'>' + i.capitalize() + 
 			'</span>';
-			str += ' - '
+			str += ' - ';
 		}
 		str = str.slice(0,-3);
 		if(Draw.old.winTitle !== str){
@@ -97,7 +97,7 @@ Draw.window.bank = function (){ ctxrestore();
 	var prefAmount = main.pref.bankTransferAmount;
 	var string = 'X-Amount: ' + prefAmount;
 	
-	ctx.font = '25px Fixedsys';
+	ctx.font = '25px Monaco';
 	ctx.fillText(string,numX,numY);
 	Button.creation(0,{
 		"rect":[numX,numX+ctx.measureText(string).width,numY,numY+25],
@@ -124,6 +124,7 @@ Draw.window.bank = function (){ ctxrestore();
 	
 }
 
+//{Stat
 Draw.window.offensive = function (){ ctxrestore();
 	Draw.window.stat('offensive');	
 }
@@ -167,7 +168,7 @@ Draw.window.stat = function(type){ ctxrestore();
 		str += Db.customBoost[i].name + ' - ';
 	}
 	str = str.slice(0,-3);
-	ctx.font = '30px Fixedsys';
+	ctx.font = '30px Monaco';
 	ctx.fillText(str,numX,numY);
 	
 	
@@ -275,10 +276,10 @@ Draw.window.stat.hover = function(hover,type){ ctxrestore();
 	var info = Draw.window.stat.list[type][hover];  
 	ctx.fillStyle = 'black';
 	ctx.textAlign = 'center';
-	ctx.font = '25px Fixedsys';
+	ctx.font = '25px Monaco';
 	ctx.fillText(info.name + ':',numX + 200,numY+10);
 	ctx.textAlign = 'left';
-	ctx.font = '25px Fixedsys';
+	ctx.font = '25px Monaco';
 	Draw.icon(info.icon,[numX+50,numY],48);	//not working ?
 	Draw.icon(info.icon,[numX+400-100,numY],48);
 	
@@ -300,6 +301,7 @@ Draw.window.stat.hover = function(hover,type){ ctxrestore();
 		}
 	}
 }
+//}
 
 //{ Ability
 Draw.window.ability = function (){ ctxrestore();
@@ -338,7 +340,7 @@ Draw.window.ability.leftSide = function(){ ctxrestore();
 		var numX = s.x + 15;
 		var numY = s.y + 60 + 30 * i;
 		
-		ctx.font = '25px Fixedsys';
+		ctx.font = '25px Monaco';
 		ctx.fillText(Input.key.ability[i][0].toString().keyCodeToName(),numX,numY);
 		
 		if(player.ability[i]){
@@ -370,7 +372,7 @@ Draw.window.ability.abilityList = function(diffX){ ctxrestore();
 	//Subtitle
 	ha.subtitle.style.left = diffX + 'px'; 
 	ha.subtitle.style.top = 0 + 'px'; 
-	ha.subtitle.style.font = charY + 'px Fixedsys';
+	ha.subtitle.style.font = charY + 'px Monaco';
 	ha.subtitle.style.width = 200 + 'px';
 	ha.subtitle.style.height = charY*1.2 + 'px';
 	
@@ -441,12 +443,12 @@ Draw.window.ability.generalInfo = function(diffX,diffY){ ctxrestore();
 	var charY = 20;
 	gi.style.left = diffX + icon + 10 + 'px'; 
 	gi.style.top = diffY + 'px'; 
-	gi.style.font = charY + 'px Fixedsys';
+	gi.style.font = charY + 'px Monaco';
 	gi.style.width = 500 + 'px';
 	gi.style.height = 100 + 'px';
 	
 	var	str = 
-	'<span style="font:30px Fixedsys">' + ab.name + '</span>' +	
+	'<span style="font:30px Monaco">' + ab.name + '</span>' +	
 	' - Level ' + (ab.lvl || 1) + ' - ( ' + round(25/ab.period,2) + ' Cast/S ';
 	if(ab.cost){
 		if(ab.cost.mana){ str += ' - ' + ab.cost.mana + ' Mana'; }
@@ -498,7 +500,7 @@ Draw.window.ability.upgrade = function(diffX,diffY){
 	hu.style.top = diffY + 'px'; 
 	hu.style.width = '400px';
 	hu.style.height = '400px';
-	hu.style.font = 30 + 'px Fixedsys';
+	hu.style.font = 30 + 'px Monaco';
 	
 	var str = 
 	'<span ' + 
@@ -573,7 +575,7 @@ Draw.window.ability.action.attack = function(diffX,diffY){  ctxrestore();
 	
 	
 	//General Info
-	ctx.font = '25px Fixedsys';
+	ctx.font = '25px Monaco';
 	var dmg = round(atk.dmgMain,2);
 	var str = 'Damage: ' + dmg + ' x ';
 	
@@ -677,7 +679,7 @@ Draw.window.ability.action.summon = function(diffX,diffY){  ctxrestore();
 	s.zy += diffY;
 	var ab = player.abilityList[Draw.old.abilityShowed];
 	var info = ab.action.param;
-	ctx.font = '30px Fixedsys';
+	ctx.font = '30px Monaco';
 	
 	var str = 'Summon a ' + info[1].variant + ' ' + info[1].category + ' Level ' + info[1].lvl + ' for ' + round(info[0].time/25,2) + 's. (Up to ' + info[0].maxChild + ')';
 	ctx.fillText(str,s.zx,s.zy);
@@ -697,7 +699,7 @@ Draw.window.trade = function (){ ctxrestore();
 	var prefAmount = main.pref.bankTransferAmount;
 	var string = 'X-Amount: ' + prefAmount;
 	
-	ctx.font = '25px Fixedsys';
+	ctx.font = '25px Monaco';
 	ctx.fillText(string,numX,numY);
 
 	
@@ -763,7 +765,7 @@ Draw.window.trade = function (){ ctxrestore();
 	
 	
 	ctx.textAlign = "center";
-	ctx.font = "25px Fixedsys";
+	ctx.font = "25px Monaco";
 	ctx.fillStyle = "yellow";
 	ctx.strokeStyle = 'yellow';
 	
@@ -805,7 +807,7 @@ Draw.window.quest = function (){ ctxrestore();
 	hq.info.style.left = icon + 5 + 'px'; 
 	hq.info.style.top = 0 + 'px'; 
 	
-	hq.info.style.font = charY + 'px Fixedsys';
+	hq.info.style.font = charY + 'px Monaco';
 	hq.info.style.width = s.dw/2 - icon - 5 + 'px';
 	hq.info.style.height = charY*4*1.2 + 'px';
 
@@ -827,14 +829,14 @@ Draw.window.quest = function (){ ctxrestore();
 	//Hint
 	var diffY = 10 + hq.info.style.top.numberOnly(1) + hq.info.style.height.numberOnly(1);
 	
-	ctx.font = charY-2 + 'px Fixedsys';
+	ctx.font = charY-2 + 'px Monaco';
 	ctx.fillStyle = 'black';
 	
 	ctx.fillTextU('Hint:',s.zx-2,s.zy+diffY);
 	hq.hint.style.left = 0 + 'px'; 
 	hq.hint.style.top = diffY + charY + 'px'; 
 	
-	hq.hint.style.font = charY + 'px Fixedsys';
+	hq.hint.style.font = charY + 'px Monaco';
 	hq.hint.style.width = s.dw/2 -10 + 'px'
 	hq.hint.style.height = charY*2*1.2 + 'px'
 	
@@ -843,14 +845,14 @@ Draw.window.quest = function (){ ctxrestore();
 	//Description
 	var diffY = 30 + hq.hint.style.top.numberOnly(1) + hq.hint.style.height.numberOnly(1);
 	
-	ctx.font = charY-2 + 'px Fixedsys';
+	ctx.font = charY-2 + 'px Monaco';
 	ctx.fillStyle = 'black';
 	
 	ctx.fillTextU('Description:',s.zx-2,s.zy+diffY);
 	hq.description.style.left = 0 + 'px'; 
 	hq.description.style.top = diffY + charY + 'px'; 
 	
-	hq.description.style.font = charY + 'px Fixedsys';
+	hq.description.style.font = charY + 'px Monaco';
 	hq.description.style.width = s.dw/2 -10 + 'px'
 	hq.description.style.height = charY*5*1.2 + 'px'
 	
@@ -858,14 +860,14 @@ Draw.window.quest = function (){ ctxrestore();
 	
 	
 	//Requirements	
-	ctx.font = charY-2 + 'px Fixedsys';
+	ctx.font = charY-2 + 'px Monaco';
 	ctx.fillStyle = 'black';
 	ctx.textAlign = 'left';
 	ctx.fillTextU('Requirements:',s.mcx,s.zy);
 	hq.requirement.style.left = s.mdx + 'px'; 
 	hq.requirement.style.top = charY + 'px'; 
 	
-	hq.requirement.style.font = charY + 'px Fixedsys';
+	hq.requirement.style.font = charY + 'px Monaco';
 	hq.requirement.style.width = s.dw/2 + 'px'
 	hq.requirement.style.height = charY*q.requirement.length*1.2 + 'px'
 	
@@ -875,14 +877,14 @@ Draw.window.quest = function (){ ctxrestore();
 	//Bonus	
 	var diffY = 30 + hq.requirement.style.top.numberOnly(1) + hq.requirement.style.height.numberOnly(1);
 	
-	ctx.font = charY-2 + 'px Fixedsys';
+	ctx.font = charY-2 + 'px Monaco';
 	ctx.fillStyle = 'black';
 	ctx.textAlign = 'left';
 	
 	hq.bonus.style.left = s.mdx + 'px'; 
 	hq.bonus.style.top = diffY + charY + 'px'; 
 	
-	hq.bonus.style.font = charY + 'px Fixedsys';
+	hq.bonus.style.font = charY + 'px Monaco';
 	hq.bonus.style.width = s.dw/2 + 'px'
 	hq.bonus.style.height = charY*Object.keys(q.bonus).length*1.2 + 'px'
 	
@@ -919,7 +921,7 @@ Draw.window.passive = function (){ ctxrestore();
 	var s = Draw.window.main({'offensive':0,'defensive':0,'ability':0,'passive':1});	
 	ctx = List.ctx.win;
 	
-	ctx.font = '25px Fixedsys';
+	ctx.font = '25px Monaco';
 	ctx.fillStyle = 'black';
 	
 	var hp = html.passiveWin;
@@ -931,7 +933,7 @@ Draw.window.passive = function (){ ctxrestore();
 	var charY = 25;
 	hp.text.style.left = 15 + 'px'; 
 	hp.text.style.top = 5 + 'px'; 
-	hp.text.style.font = 25 + 'px Fixedsys';
+	hp.text.style.font = 25 + 'px Monaco';
 	hp.text.style.width = '125px';
 	hp.text.style.height = 'auto';
 	hp.text.style.backgroundColor = 'white';
@@ -1081,7 +1083,7 @@ Draw.window.passive.hover = function(over){ ctxrestore();
 		var value = 'Value: +' + round(over.value,5);
 		ctx.fillText(value,ssx + 5,ssy+1+25*2);
 	} else {
-		ctx.font = '20px Fixedsys';
+		ctx.font = '20px Monaco';
 		ctx.fillText(st.description,ssx + 5,ssy+1+25*1);
 	}
 }

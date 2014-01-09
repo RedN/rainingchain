@@ -86,7 +86,6 @@ Receive.parse.xya = function(info){
 }
 Receive.parse.chargeClient = function(info){	//could be used when needed instead of all the time
 	if(typeof info['abilityChange,chargeClient'] === 'string'){
-		console.log(info['abilityChange,chargeClient']);
 		var charge = info['abilityChange,chargeClient'];
 		var tmp = [0,0,0,0,0,0];
 		for(var i = 0 ; i < charge.length ; i++){ 

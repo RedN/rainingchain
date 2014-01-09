@@ -9,7 +9,6 @@ Loop = function(){
 	Draw.loop();
 }
 
-
 Loop.send = function(){ 
 	Input.send(); 
 }

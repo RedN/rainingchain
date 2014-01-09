@@ -260,7 +260,6 @@ Ability.uncompress = function(abi){
 }
 
 Ability.uncompress.mod = function(ab){	
-	console.log(ab);
 	for(var i in ab.modList){
 		ab = abilityModDb[i].func(ab,ab.modList[i],Craft.orb.formula(ab.modList[i]));
 	}
