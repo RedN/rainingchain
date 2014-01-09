@@ -32,6 +32,7 @@ Mortal.loop = function(mort){
 		if(List.main[i].windowList.trade){ Mortal.loop.trade(mort); };    
 		if(List.main[i].dialogue){ Mortal.loop.dialogue(mort); }
 		
+		
 		Test.loop.player(i);	
 	}
 		
@@ -105,7 +106,7 @@ Mortal.ability.resource = function(mort,cost){
 	for(var j in cost){
 		if(cost[j] > mort[j]){ return false;}
 	}
-	for(var j in cost){m[j] -= cost[j];}
+	for(var j in cost){mort[j] -= cost[j];}
 	return true;		
 }
 
@@ -184,8 +185,8 @@ Mortal.loop.summon = function(mort){
 	}
 }
 
-//test collision with map
 Mortal.loop.bumper = function(mort){
+	//test collision with map
 	mort.x = Math.max(mort.x,50);
 	mort.x = Math.min(mort.x,Db.map[mort.map].grid[0].length*32-50);
 	mort.y = Math.max(mort.y,50);
@@ -331,8 +332,10 @@ Mortal.loop.repulsion = function(enemy){
 	}
 }
 
-//updat enemy input for movement.
+
 Mortal.loop.input = function(mort){
+	//update enemy input for movement.
+	
 	//Combat
 	if(mort.combat && mort.target && List.all[mort.target]){
 		var target = List.all[mort.target];
@@ -384,6 +387,18 @@ Mortal.loop.input = function(mort){
 			}		
 		}
 	}	
+}
+
+Mortal.loop.input.ability = function(mort){
+	var target = List.all[mort.target];
+	var diffX = target.x - mort.x;
+	var diffY = target.y - mort.y;
+	var diff = Math.sqrt(diffX*diffX+diffY*diffY);
+	
+	
+	
+	
+
 }
 
 //Non-Combat

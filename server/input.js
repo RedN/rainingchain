@@ -3,7 +3,7 @@ io.sockets.on('connection', function (socket) {
         //data format: [side,x,y]
 		try {
 			Test.bandwidth('download',d);
-			
+			socket.timer = 0;
 			var key = socket.key;
 			if(List.main[key]){
 				

@@ -71,7 +71,8 @@ Change.send = function(){
 		if(Object.keys(sa).length === 0){ continue; }
 		//Send
 		List.socket[key].emit('change', sa );
-	    
+		
+		
 	    Test.bandwidth('upload',sa);
 	}
 	

@@ -1,8 +1,7 @@
 //chat
 Chat = {};
-//Used to transform [[itemId]] into special mouseover info
 Chat.parse = function(data){
-	
+	//Used to transform [[itemId]] into special mouseover info
 	//Item [[item.id]]
 	for(var i = 0 ; i < data.length ; i++){
 		if(data[i] == '[' && data[i+1] == '['){
@@ -60,8 +59,8 @@ Chat.send = function(data){
 	if(to === from){ Chat.add(key,"Ever heard of thinking in your head?"); return; }
 	
 	if(type === 'public') Chat.send.public(key,text,to,type,from,data); 
-	if(type === 'pm') Chat.send.pm(key,text,to,type,from,data); 
-	if(type === 'clan') Chat.send.clan(key,text,to,type,from,data); 
+	else if(type === 'pm') Chat.send.pm(key,text,to,type,from,data); 
+	else if(type === 'clan') Chat.send.clan(key,text,to,type,from,data); 
 		
 };
 
@@ -89,8 +88,8 @@ Chat.send.pm = function(key,text,to,type,from,data){
 	return
 }
 
-//test if player can send pm to another. check for online but also mute list
 Chat.send.pm.test = function(from,to,cb){
+	//test if player can send pm to another. check for online but also mute list
 	db.account.find({username:to},function(err, r) {
 		
 		if(r[0]){	//aka exist
@@ -122,8 +121,8 @@ Chat.send.pm.clan = function(key,text,to,type,from,data){
     return;
 }    
 
-//server receives information from client that wishes to send a message
 io.sockets.on('connection', function (socket) {
+	//server receives information from client that wishes to send a message
 	socket.on('sendChat', function (data) {
 		data.key = socket.key;
 		Chat.send(data);

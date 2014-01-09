@@ -2,6 +2,8 @@
 
 Cst = {};
 
+Cst.FPS = 25;
+Cst.MSPF = 1000/Cst.FPS;
 Cst.HEIGHT = 720;
 Cst.HEIGHT2 = Cst.HEIGHT/2;
 Cst.WIDTH = 1280;

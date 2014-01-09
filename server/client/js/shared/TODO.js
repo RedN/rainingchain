@@ -10,8 +10,7 @@
 -settings (aka pref)
 -description for pref
 -disconnect if 15 min afk
-
-
+-if nothing new with enemy, dont send
 
 
 #Priority 2:
@@ -50,7 +49,9 @@ kill monster, go next room
 
 3 monster for each element
 first is first but cant kill
-kill lightning and cold to get new ability (requires bow) and a bow
+kill lightning and cold to get new ability 
+
+(requires bow) and a bow
 
 kill fire, open door
 

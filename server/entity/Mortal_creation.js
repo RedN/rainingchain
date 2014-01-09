@@ -72,11 +72,9 @@ Mortal.creation.boost = function(e){
 Mortal.creation.db = function(e,d){
 	e = Db.enemy[d.category][d.variant]();
 	for(var i in Db.enemy[d.category][d.variant]) e[i] = Db.enemy[d.category][d.variant][i];
-
 	
 	e.id = Math.randomId();
 	e.publicId = Math.random().toString(36).substring(13);
-	
 	
 	if(e.boss){	
 		var id = e.boss;

@@ -94,7 +94,7 @@ Mortal.teleport.instance = function(mort,x,y,map,signin){
 	mort.y = y;
 	mort.map = map;
 	
-	ActiveList.remove(mort);	//need to con sider if needed or not
+	//ActiveList.remove(mort);	//need to con sider if needed or not
 }
 
 

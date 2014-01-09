@@ -60,6 +60,13 @@ findMin = function(list,func){
 	}
 	return min;
 }
+findMax = function(list,func){
+	var max = func(list[0]);
+	for(var i = 1 ;i  < list.length ; i++){
+		max = Math.max(max,func(list[i]));
+	}
+	return max;
+}
 parseFloatInBase = function(n, radix) {
 	radix = radix || 10;
     var nums = n.split(".");
@@ -69,13 +76,6 @@ parseFloatInBase = function(n, radix) {
 	return iPart + fPart
 }
 
-findMax = function(list,func){
-	var max = func(list[0]);
-	for(var i = 1 ;i  < list.length ; i++){
-		max = Math.max(max,func(list[i]));
-	}
-	return max;
-}
 	
 Object.defineProperty(Number.prototype, "mm", {
     enumerable: false,
@@ -101,12 +101,9 @@ applyFunc = function(func,param){
 	
 	func.apply(this, param);
 }
-
 applyFunc.key = function(key,func,param){
 	applyFunc(func,[key].concat(param));
 }
-
-
 
 
 
@@ -394,3 +391,11 @@ Object.defineProperty(Array.prototype, "have", {
 		return this.indexOf(name) !== -1;
 	}
 });	
+Object.defineProperty(Array.prototype, "insert", {
+    enumerable: false,
+    value: function (index, item) {
+	  this.splice(index, 0, item);
+	}
+});
+
+

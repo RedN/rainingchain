@@ -94,19 +94,23 @@ Loop.EnemyGroup = function(){
 	}
 }
 
-//Check inactivity of players 
+
 Loop.logOut = function(){
+	//Check inactivity of players 
 	for(var key in List.socket){
-		if(List.socket[key].toRemove){
+		var socket = List.socket[key];
+		socket.timer += 40;		
+		if(socket.timer >= 0.1*60*1000 || socket.toRemove){
 			Sign.off(key,'Disconnected due to inactivity.');
+			//?
 		}
 	}
 }
 
 
-//Test used to know if obj should be in activeList of mort.
 ActiveList = {};
 ActiveList.test = function(mort,obj){
+	//Test used to know if obj should be in activeList of mort.
 	if(!obj){ return false; }
 	if(!obj.viewedIf){ return false; }
 	if(typeof obj.viewedIf === 'function' && !obj.viewedIf(mort)){ return false; }
