@@ -9,7 +9,6 @@
 -Status effect in client
 -settings (aka pref)
 -description for pref
--disconnect if 15 min afk
 -if nothing new with enemy, dont send
 
 

@@ -34,6 +34,7 @@ Loop.Bullet = function (){
 		Bullet.loop(List.bullet[i]);
 	}
 }
+
 Loop.Strike = function(){
 	for(var i in List.strike){
 		Strike.loop(List.strike[i]); 
@@ -60,10 +61,6 @@ Loop.Map = function(){
 		}
 	}
 }
-
-
-
-
 
 Loop.EnemyGroup = function(){
 	for(var i in List.group){
@@ -94,7 +91,6 @@ Loop.EnemyGroup = function(){
 	}
 }
 
-
 Loop.logOut = function(){
 	//Check inactivity of players 
 	for(var key in List.socket){
@@ -102,7 +98,6 @@ Loop.logOut = function(){
 		socket.timer += 40;		
 		if(socket.timer >= 0.1*60*1000 || socket.toRemove){
 			Sign.off(key,'Disconnected due to inactivity.');
-			//?
 		}
 	}
 }

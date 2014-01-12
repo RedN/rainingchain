@@ -20,7 +20,7 @@ io.sockets.on('connection', function (socket) {
 	socket.on('input', function (d) {	
 		try {
 		    Test.bandwidth('download',d);
-            
+            socket.timer = 0;
 			var player = List.all[socket.key];
 			
 			if(d.i){
