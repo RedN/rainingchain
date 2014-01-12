@@ -14,7 +14,6 @@ try {
 		for(var i in data.i.f){
 			Receive.init(data.i.f[i]);			
 		}
-        if(data.i.p) player = data.i.p;
 	}
 	
 	//Update Player Private
@@ -126,6 +125,7 @@ Receive.init.anim = function(a){
 	
 	a.id = Math.randomId();
 	a.timer = 0;
+	a.sizeMod = a.sizeMod || 1;
 	a.spdMod = a.spdMod || 1;
 	if(a.target){  
 		a.x = a.target.x;

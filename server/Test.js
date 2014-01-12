@@ -22,7 +22,7 @@ Test.performance = function(){
 };
 Test.performance.active = false;
 Test.performance.oldtime = Date.now();
-Test.performance.frequence = 10000/40;
+Test.performance.frequence = 10*1000/40;
 
 
 //Bandwidth
@@ -33,7 +33,7 @@ Test.bandwidth = function(type,data){
 }
 Test.bandwidth.upload = {'active':false,'size':0};
 Test.bandwidth.download = {'active':false,'size':0};
-Test.bandwidth.frequence = 10000/40;
+Test.bandwidth.frequence = 10*1000/40;
 Test.bandwidth.getSize = function(obj){
     return stringify(obj).length * 2;   //in bytes
 }  

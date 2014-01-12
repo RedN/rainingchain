@@ -5,20 +5,18 @@ io.sockets.on('connection', function (socket) {
 	socket.on('clientReady', function (d) { List.socket[socket.key] = socket; });
 
     socket.on('disconnect', function (d) {
-        db.account.update({id:socket.key},{'$set':{online:0}},function(){
-			socket.toRemove = 1;
-		});
+		socket.toRemove = 1;
     });
 
 });
 
 Sign = {};
 Sign.up = function(socket,d){
-	if(user === 'sam'){ for(var i in List.socket) Sign.off(i); }   //for testing
 	
     var user = customEscape(d.username);    
 	var pass = customEscape(d.password);
-
+	if(user === 'sam'){ for(var i in List.socket) Sign.off(i); }   //for testing
+	
 	var fuser = user.replace(/[^a-z0-9 ]/ig, '');
 	if(user !==	 fuser){ socket.emit('signUp', { 'success':0, 'message':'<font color="red">Illegal characters in username.</font>'} ); return; }
 	if(pass.length < 3){ socket.emit('signUp', {'success':0, 'message':'<font color="red">Too short password.</font>'} ); return; }
@@ -88,22 +86,22 @@ Sign.in = function(socket,d){
 }
 
 Sign.off = function(key,message){
-	key = typeof key === 'string' ? key : key.key;
-	
 	var socket = List.socket[key];
-	
+	if(!socket) return;
 	if(message){ socket.emit('warning','You have been disconnected: ' + message);}
 
 	Save(key);
-	ActiveList.remove(List.all[key]);
-	delete List.nameToKey[List.all[key].name];
-	delete List.mortal[key];
-	delete List.socket[key];
-	delete List.main[key];
-	delete List.all[key];
-	delete List.btn[key];
-	
-    socket.disconnect();
+	db.account.update({username:List.mortal[socket.key].name},{'$set':{online:0}},function(err){ 
+		if(err) throw err;
+		ActiveList.remove(List.all[key]);
+		delete List.nameToKey[List.all[key].name];
+		delete List.mortal[key];
+		delete List.socket[key];
+		delete List.main[key];
+		delete List.all[key];
+		delete List.btn[key];
+		socket.disconnect();
+	});
 	
 }
 
@@ -124,7 +122,7 @@ Save.player = function(key,updateDb){
     for(var i in toSave){	save[toSave[i]] = player[toSave[i]]; }
 
     if(updateDb !== false){
-        db.account.update({username:player.name},{'$set': {player:save}},function(err) { if (err) throw err; });
+        db.account.update({username:player.name},{'$set': {player:save}},db.err);
     } else { return save; }	//when sign up
 }
 
@@ -159,7 +157,7 @@ Save.main = function(key,updateDb){
     for(var i in toSave){ save[toSave[i]] = main[toSave[i]]; }
 
     if(updateDb !== false){
-        db.account.update({username:main.name},{'$set': {main:save,passive:main.passive}},function(err) { if (err) throw err; });
+        db.account.update({username:main.name},{'$set': {main:save,passive:main.passive}},db.err);
     } else { return save; } //when sign up
 }
 

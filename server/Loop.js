@@ -96,7 +96,7 @@ Loop.logOut = function(){
 	for(var key in List.socket){
 		var socket = List.socket[key];
 		socket.timer += 40;		
-		if(socket.timer >= 0.1*60*1000 || socket.toRemove){
+		if(socket.timer >= 10*60*1000 || socket.toRemove){
 			Sign.off(key,'Disconnected due to inactivity.');
 		}
 	}
@@ -131,7 +131,7 @@ ActiveList.add = function(bullet){
 ActiveList.remove = function(b){
 	for(var i in b.viewedBy){
 		if(!List.all[i]) continue;	//quick fix
-		if(List.all[i].removeList) List.all[i].removeList[b.publicId || b.id] = true;
+		if(List.all[i].removeList) List.all[i].removeList[b.publicId || b.id] = 1;
         delete List.all[i].activeList[b.id];
 	}
 }

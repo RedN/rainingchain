@@ -1,13 +1,12 @@
 Change = {};
 
+
+
 Change.send = function(){
 	//Send what has changed to the client.for (var key in List.socket){
 	for(var key in List.socket){	
-		var sa = {};
-	
-		sa.i = {'f':{},'p':{},'m':{}};  //init (first time seen by player)
-		sa.u = {'f':{},'p':{},'m':{},'r':{}};  //update (already init-ed)
-		sa.a = [];  //animation
+		
+		var sa = Change.send.template();
 		
 		//Update Private Player
 		var player = List.all[key];
@@ -17,11 +16,11 @@ Change.send = function(){
 		//Update ActiveList AKA List.all
 		var array = [];
 		for (var i in player.activeList){
-			var bool = true;	var obj = List.all[i];
-			
+			var bool = true;	
+			var obj = List.all[i];
 			if(!obj){ delete player.activeList[i]; continue; }
 			
-			for(var j in obj.viewedBy){	if(j === player.id){bool = false;}}
+			for(var j in obj.viewedBy){	if(j === player.id){bool = false;}}	//cant see himself
 				
 			if(bool){		//Need to Init
 				var id = obj.id;
@@ -36,6 +35,7 @@ Change.send = function(){
 			}
 			
 		}
+		//Remove List
 		sa.u.r = player.removeList;
 		
 		//Main
@@ -44,31 +44,25 @@ Change.send = function(){
 		//Anim
 		//note: remove map and viewedif from .target and slot?
 		for(var i in List.anim){
-			var testTarget = List.anim[i].target;
-			if(typeof testTarget !== 'object'){ testTarget = List.all[testTarget]; }
+			/*
+			var anim = List.anim[i];
+			var testTarget = anim.target;
+			if(typeof testTarget === 'string'){ testTarget = List.all[testTarget]; }	//aka target is an obj
+			//else target is already in form {x:1,y:1,map:1}
 			
 			if(testTarget && ActiveList.test(player,testTarget))	{
-				if(typeof List.anim[i].target !== 'object'){ List.anim[i].target = List.all[List.anim[i].target].publicId; }
-				sa.a.push(List.anim[i]); 
+				if(typeof anim.target === 'string'){ anim.target = testTarget.publicId; }
+				Change.send.init.anim(anim);
+				sa.a.push(anim); 
 			}	
+			*/
 		}
 		
 		
 		//Delete things that are empty
-		if(sa.a.length === 0){ delete sa.a }
-		
-		if(Object.keys(sa.i.f).length === 0){ delete sa.i.f }
-		if(Object.keys(sa.i.p).length === 0){ delete sa.i.p }
-		if(Object.keys(sa.i.m).length === 0){ delete sa.i.m }
-		if(Object.keys(sa.i).length === 0){ delete sa.i }
-		
-		if(typeof sa.u.f === 'object' && Object.keys(sa.u.f).length === 0){ delete sa.u.f }
-		if(typeof sa.u.p === 'object' && Object.keys(sa.u.p).length === 0){ delete sa.u.p }
-		if(typeof sa.u.m === 'object' && Object.keys(sa.u.m).length === 0){ delete sa.u.m }
-		if(typeof sa.u.r === 'object' && Object.keys(sa.u.r).length === 0){ delete sa.u.r }
-		if(Object.keys(sa.u).length === 0){ delete sa.u }
-		
+		sa = Change.send.clearEmpty(sa);
 		if(Object.keys(sa).length === 0){ continue; }
+		
 		//Send
 		List.socket[key].emit('change', sa );
 		
@@ -79,6 +73,39 @@ Change.send = function(){
 	Change.send.reset();
 
 }
+
+Change.send.template = function(){
+	return {
+		i : {'f':{},'p':{},'m':{}},  //init (first time seen by player)
+		u : {'f':{},'p':{},'m':{},'r':{}},  //update (already init-ed)
+		a : [],  //animation
+	}
+}
+
+
+Change.send.clearEmpty = function(sa){
+	if(sa.a.length === 0){ delete sa.a }
+	
+	
+	if(Object.keys(sa.i.f).length === 0){ delete sa.i.f }
+	if(Object.keys(sa.i.p).length === 0){ delete sa.i.p }
+	if(Object.keys(sa.i.m).length === 0){ delete sa.i.m }
+	if(Object.keys(sa.i).length === 0){ delete sa.i }
+	
+	if(Loop.frameCount % 10 !== 0 ){ //other, if nothing moves, client thinks enemy is removed
+		for(var i in sa.u.f) if(Object.keys(sa.u.f[i]).length === 0) delete sa.u.f[i] 
+	}
+	if(Object.keys(sa.u.f).length === 0){ delete sa.u.f }
+	if(Object.keys(sa.u.p).length === 0){ delete sa.u.p }
+	if(Object.keys(sa.u.m).length === 0){ delete sa.u.m }
+	if(Object.keys(sa.u.r).length === 0){ delete sa.u.r }
+	if(Object.keys(sa.u).length === 0){ delete sa.u }
+	
+	return sa;
+
+}
+
+
 
 Change.send.compressXYA = function(info){
 	//if only change is x,y and angle, compress it into [x,y,angle]
@@ -148,9 +175,18 @@ Change.send.init.drop = function(drop){
 	return draw;
 }
 
+Change.send.init.anim = function(anim){
+	if(anim.sizeMod === 1) delete anim.sizeMod;
+	delete anim.id;
+	return anim;
+};
+
 //########################################
 
 Change.send.convert = {};
+
+
+
 
 Change.send.convert.optionList = function(option){
 	var draw = {};

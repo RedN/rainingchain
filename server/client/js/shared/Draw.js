@@ -245,6 +245,7 @@ Draw.minimap = function (layer){ ctxrestore();
 	var s = Draw.minimap.constant();
 	Draw.minimap.box(s);
 	Draw.minimap.map(s,'b');
+	Draw.minimap.map(s,'i');
 	Draw.minimap.icon(s);
 	Draw.minimap.button(s);
 }
@@ -282,8 +283,9 @@ Draw.minimap.map = function(s,layer){
 	var tailleX = Math.min(endX-startX,mapXY.width);
 	var tailleY = Math.min(endY-startY,mapXY.height);
 	
+	if(layer === 'i') ctx.globalAlpha = main.pref.mapIconAlpha/100;
 	ctx.drawImage(mapXY, startX,startY,tailleX,tailleY,s.x+(startX-numX)/mapCst*2,s.y + (startY-numY)/mapCst*2,tailleX/mapCst*2,tailleY/mapCst*2);
-
+	ctx.globalAlpha = 1;
 }
 
 Draw.minimap.box = function(s){
@@ -324,8 +326,6 @@ Draw.minimap.icon = function(s){
 		}
 	}
 	Draw.icon('system.square',[s.x + Cst.WIDTH/main.pref.mapRatio/2-2,s.y + Cst.HEIGHT/main.pref.mapRatio/2-2],4);
-	
-	//if(main.pref.mapIcon) Draw.minimap.map(s,'i');
 }
 
 Draw.resource = function (){ ctxrestore();
@@ -742,8 +742,6 @@ Draw.element = function(x,y,w,h,data,noover){
 	ctx.textAlign = 'left';
 	ctx.strokeRect(x,y,w,h);
 	var total = 0; for(var i in data){	total += data[i]; }
-	
-	console.log(x,y,w,h,data);
 	
 	var mx = Math.min(Input.mouse.x,Cst.WIDTH-150);
 	var my = Math.min(Input.mouse.y,Cst.HEIGHT-25);
