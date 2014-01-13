@@ -6,9 +6,6 @@
 -Enemy AI for ability (Mortal.creation.db)
 
 -Status effect in client
--settings (aka pref)
--description for pref
--if nothing new with enemy, dont send
 -fix strike
 -fix warning
 

@@ -101,10 +101,11 @@ Anim.loop = function (anim){
 	}	
 }
 
-//Add animation to the game. target can be a string to specific an actor, or an obj x:1,y:1
-Anim.creation = function(anim,target,sizeMod){
+Anim.creation = function(name,target,sizeMod){
+	//Add animation to the game. target can be a string to specific an actor, or an obj x:1,y:1,map:1
 	sizeMod = sizeMod || 1;
-	List.anim[anim.id] = {'sizeMod':sizeMod,'name':anim,'target':target,'id':'a'+Math.randomId(5)};
+	var id = 'a'+Math.randomId(5);
+	List.anim[id] = {'sizeMod':sizeMod,'name':name,'target':target,'id':id};
 }
 
 

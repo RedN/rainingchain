@@ -1,3 +1,5 @@
+Draw.old.tab = {};
+
 Draw.tab = function(){ ctxrestore();
 	Draw.tab[main.currentTab]();
 }
@@ -216,7 +218,6 @@ Draw.tab.skill = function(){ ctxrestore();
 	}
 }	
 
-
 Draw.tab.friend = function(){ ctxrestore();
 	var s = Draw.tab.main();	
 	ctx = List.ctx.stage;
@@ -241,8 +242,8 @@ Draw.tab.friend = function(){ ctxrestore();
 	hf.text.style.width = (s.w - 2*divX) + 'px'
 	hf.text.style.height = (s.h - iconY- 2*divY) + 'px'
 	
-	if(stringify(Draw.old.fc) != stringify(list)){
-		Draw.old.fc = list;
+	if(stringify(Draw.old.tab.friend) != stringify(list)){
+		Draw.old.tab.friend = list;
 		
 		hf.text.innerHTML = '<span style="color:white">' + '----Friend List----' + '</span>';
 		
@@ -295,8 +296,6 @@ Draw.tab.friend = function(){ ctxrestore();
 
 }
 
-
-
 Draw.tab.friend.rightClick = function(name){
 	var option = {'name':name,'option':[],'count':1};
 	
@@ -344,7 +343,6 @@ Draw.tab.friend.rightClick = function(name){
 	Button.optionList(option);
 }
 
-
 Draw.tab.quest = function(){ ctxrestore();
 	var s = Draw.tab.main(0);	
 	ctx = List.ctx.stage;
@@ -366,8 +364,8 @@ Draw.tab.quest = function(){ ctxrestore();
 	html.questTab.text.style.width = (s.w - 2*divX) + 'px'
 	html.questTab.text.style.height = (s.h - iconY- 2*divX) + 'px'
 	
-	if(Draw.old.quest !== stringify(main.quest)){
-		Draw.old.quest = stringify(main.quest);
+	if(Draw.old.tab.quest !== stringify(main.quest)){
+		Draw.old.tab.quest = stringify(main.quest);
 		
 		html.questTab.text.innerHTML = '<span style="color:white">' + '----Quest List----' + '</span>';
 		
@@ -392,8 +390,66 @@ Draw.tab.quest = function(){ ctxrestore();
 	}
 }
 
-Draw.tab.setting = function(){ 
-
+Draw.tab.pref = function(){ 
+	var s = Draw.tab.main();	
+	ctx = List.ctx.stage;
+	
+	var list = Command.pref.list;
+	var count = 0;
+	var hf = html.prefTab;
+	
+	var divX = 5;
+	var divY = 5;
+	var numX = s.x + divX;
+	var numY = s.y + divY;
+	var charY = 22;
+	var iconY = 40;
+	
+	hf.div.style.visibility = 'visible';
+	hf.div.style.left = numX + 'px'; 
+	hf.div.style.top = numY + 'px'; 
+	
+	
+	hf.text.style.font = charY + 'px Monaco';
+	hf.text.style.width = (s.w - 2*divX) + 'px'
+	hf.text.style.height = (s.h - iconY- 2*divY) + 'px'
+	
+	if(Draw.old.tab.pref !== stringify(main.pref)){
+		Draw.old.tab.pref = stringify(main.pref);
+		
+		hf.text.innerHTML = '<span style="color:white">' + '----Preferences----' + '</span>';
+		
+		for(var i in list){
+			var pref = list[i];
+			
+			var name = pref.name;
+			var value = main.pref[i];
+			
+			var str2 = '$pref,' + i + ',';
+			var str = pref.description + ' (' + pref.min + '-' + pref.max + ')';
+			
+			//'mapZoom':{'default':200,'type':'number','min':1,'max':999,'round':1,'description':'Minimap Zoom'},
+			
+			hf.text.innerHTML += 
+			'<br><span ' + 
+			'class="shadow" ' + 
+			'style="color:' + 'white' + '" ' +
+			'onclick="Input.add(\'' + str2 + '\')' + '" ' + 
+			'onmouseover="main.permContext.text = \'' + str + '\';' + '" ' + 
+			'onmouseout="main.permContext.text = null;' + '" ' + 
+			'>' +
+			'<font size="3">' +			
+			name + ' : ' + value + 
+			'</font>' +
+			'</span>';
+			
+		}
+	}
+	
+	
+	
+	
+	
 }
 
 

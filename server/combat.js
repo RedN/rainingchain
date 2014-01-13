@@ -211,15 +211,17 @@ Combat.collision.status.bleed = function(mort,b,dmg){
 	var info = b.bleed;
 	var bleed = mort.status.bleed;
 	
-	bleed.active.push({'time':info.time,'magn':dmg.melee * info.magn/info.time *(1-bleed.resist)});
+	bleed.active.list.push({'time':info.time,'magn':dmg.melee * info.magn/info.time *(1-bleed.resist)});
+	bleed.active.time = bleed.active.list.length;
 }
 
 Combat.collision.status.chill = function(mort,b){
 	var info = b.chill;
 	var chill = mort.status.chill;
 	
-	Mortal.boost(mort,{'stat':'maxSpd','type':"*",'value':b.chill.magn*(1-chill.resist),'time':b.chill.time*(1-chill.resist),'name':'chill'}); 
+	Mortal.boost(mort,{'stat':'maxSpd','type':"*",'value':(1/b.chill.magn)*(1-chill.resist),'time':b.chill.time*(1-chill.resist),'name':'chill'}); 
 	//if(b.chill.atk){ addBoost(mort,{'stat':'atkSpd-0','type':"*",'value':b.chill.magn*(1-mort.resist.chill),'time':b.chill.time*(1-mort.resist.chill),'name':'chill'}); }}
+	chill.active.time = Math.max(chill.active.time,b.chill.time*(1-chill.resist));
 }
 
 Combat.collision.status.knock = function(mort,b){

@@ -144,12 +144,13 @@ Mortal.loop.status.burn = function(mort){
 }
 
 Mortal.loop.status.bleed = function(mort){
-	var status = mort.status.bleed.active;
-	for(var i in status){
-		Mortal.changeHp(mort,-status[i].magn);
-		status[i].time--;
-		if(status[i].time <= 0){ status.splice(i,1); }
+	var list = mort.status.bleed.active.list;
+	for(var i in list){
+		Mortal.changeHp(mort,-list[i].magn);
+		list[i].time--;
+		if(list[i].time <= 0){ list.splice(i,1); }
 	}
+	mort.status.bleed.active.time = list.length;
 }
 
 Mortal.loop.regen = function(mort){

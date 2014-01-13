@@ -1,7 +1,5 @@
 Change = {};
 
-
-
 Change.send = function(){
 	//Send what has changed to the client.for (var key in List.socket){
 	for(var key in List.socket){	
@@ -82,7 +80,6 @@ Change.send.template = function(){
 	}
 }
 
-
 Change.send.clearEmpty = function(sa){
 	if(sa.a.length === 0){ delete sa.a }
 	
@@ -105,8 +102,6 @@ Change.send.clearEmpty = function(sa){
 
 }
 
-
-
 Change.send.compressXYA = function(info){
 	//if only change is x,y and angle, compress it into [x,y,angle]
 	if(info.x !== undefined && info.y !== undefined){ 
@@ -125,13 +120,11 @@ Change.send.compressXYA = function(info){
 	return info;
 }
 
-
 Change.send.reset = function(){
 	List.anim = {};
 	for(var i in List.all){ List.all[i].change = {}; }
 	for(var i in List.main){ List.main[i].change = {}; List.all[i].privateChange = {}; List.all[i].removeList = {};}
 }
-
 
 //####################################
 Change.send.init = function(obj){
@@ -185,9 +178,6 @@ Change.send.init.anim = function(anim){
 
 Change.send.convert = {};
 
-
-
-
 Change.send.convert.optionList = function(option){
 	var draw = {};
 	draw.x = option.x;
@@ -215,7 +205,13 @@ Change.send.convert.itemlist = function(inv){
 	return draw;
 }
 
-
+Change.send.convert.status = function(info){
+	var str = '';
+	for(var i in Cst.status.list){
+		str += info[Cst.status.list[i]].active.time > 0 ? '1' : '0';
+	}
+	return str;
+}
 
 Change.send.convert.tradeWindow = function(data){
 	var draw = deepClone(data);
@@ -235,7 +231,6 @@ Change.send.convert.abilityList = function(list){
 	return copy;
 }
 
-
 Change.send.convert.abilityChangeClient = function(info){
 	var tmp = '';
 	for(var i in info){
@@ -244,8 +239,8 @@ Change.send.convert.abilityChangeClient = function(info){
 	return tmp;	
 }
 
-//used for instanced. client doesnt need to know its instanced
 Change.send.convert.map = function(name){
+	//used for instanced. client doesnt need to know its instanced
 	return Map.convertId[name];
 }
 
