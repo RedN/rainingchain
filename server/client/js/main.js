@@ -73,7 +73,6 @@ socket.on('signUp', function (data) {
 
 //Init
 Init.game = function (data) {
-	console.log('data',data);
 	$("#signDiv")[0].style.display = "none"; 	//remove enter user and psw
 	$("#gameDiv")[0].style.display = "inline";  //show game
 	
@@ -103,7 +102,6 @@ Init.game = function (data) {
 	//initAbilityModDb();   //need fixing
 	Img.preload(Img.preloader,function(){   //load images
 		Init.game.player(data);
-		console.log('player',player);
 		gameStarted = true;
 		setInterval(Loop,40);
 		socket.emit('clientReady',1); 
@@ -115,8 +113,8 @@ Init.game.main = function(data){
 	for(var i in data.main){ main[i] = data.main[i]; }    //set init values sent by server
 }
 Init.game.player = function(data){    //use data sent from server and default to create the player
-	player = Mortal.template('player');
-	for(var i in data.player){ player[i] = data.player[i]; }
+	player = useTemplate(Mortal.template('player'),data.player);	
+	player.status = '000000';
 	$("#chatUserName")[0].innerHTML = player.name + ': '; 
 }
 Init.game.other = function(data){    //use data sent from server and default to create the player

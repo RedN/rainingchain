@@ -52,6 +52,7 @@ require('./server/drop');
 require('./server/trade');
 require('./server/Skill');
 require('./server/Test');
+require('./server/Draw');
 
 require('./server/db/EnemyDb');
 require('./server/db/AbilityDb');
@@ -65,7 +66,6 @@ require('./' + clientPath + 'client/js/shared/Button');
 require('./' + clientPath + 'client/js/shared/sprite');
 require('./' + clientPath + 'client/js/shared/anim');
 require('./' + clientPath + 'client/js/shared/Mortal_init');
-require('./' + clientPath + 'client/js/shared/Draw');
 require('./' + clientPath + 'client/js/shared/Command');
 require('./' + clientPath + 'client/js/shared/Combat_sub');
 require('./' + clientPath + 'client/js/shared/passiveGrid');
