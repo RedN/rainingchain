@@ -173,6 +173,9 @@ Change.update.init = function(){
 				{'array':['abilityChange','chargeClient'],'filter':Change.send.convert.abilityChangeClient},
 				
 				
+				{'array':['status'],'filter':Change.send.convert.status},
+				
+				
 				{'array':['equip','piece','body','id'],'sendArray':['equip','piece','body'],'sendFilter':(function(w){ return {'visual':w.visual,id:w.id} }) },
 				{'array':['equip','piece','helm','id'],'sendArray':['equip','piece','helm'],'sendFilter':(function(w){ return {'visual':w.visual,id:w.id} }) },
 				{'array':['equip','piece','shield','id'],'sendArray':['equip','piece','shield'],'sendFilter':(function(w){ return {'visual':w.visual,id:w.id} }) },

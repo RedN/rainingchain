@@ -14,7 +14,7 @@ Cst.ITEM = 48;
 
 
 Cst.tab = {
-	'list':['equip','inventory','quest','skill','friend','setting'],
+	'list':['equip','inventory','quest','skill','friend','pref'],
 }
 
 Cst.equip = {

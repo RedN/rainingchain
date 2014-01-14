@@ -602,7 +602,7 @@ Draw.window.ability.action.attack = function(diffX,diffY){  ctxrestore();
 				//Status
 				if(Cst.status.list.have(i)){ 
 					var mod = tmp.chance * player.bonus[i].chance;
-					var base = Math.pow(main.pref.abilityDmgStatusTrigger*atk.dmgRatio[Cst.status.toElement[i]],1.5);
+					var base = Math.pow(main.pref.abilityDmgStatusTrigger/100*atk.dmgRatio[Cst.status.toElement[i]],1.5);
 					tmp.chance = Math.probability(base,mod);
 				}	
 				if(tmp.chance !== undefined && tmp.chance <= 0.01){ continue;}
@@ -786,7 +786,7 @@ Draw.window.trade = function (){ ctxrestore();
 
 
 Draw.window.quest = function (){ ctxrestore();
-	var s = Draw.window.main(key,'Quest');	
+	var s = Draw.window.main('Quest');	
 	ctx = List.ctx.win;
 	
 	var q = Db.quest[main.windowList.quest];
@@ -910,7 +910,7 @@ Draw.window.quest = function (){ ctxrestore();
 		hq.bonus.innerHTML = str;
 	}
 	
-	ctx.fillTextU('Bonus:  x' + round(mq.bonusSum,3),mcx,zy+diffY);
+	ctx.fillTextU('Bonus:  x' + round(mq.bonusSum,3),s.mcx,s.zy+diffY);
 	
 }
 
@@ -1002,8 +1002,8 @@ Draw.window.passive.grid = function(key){ ctxrestore();
 			
 			//Border
 			ctx.globalAlpha = 0.5;
-			if(main.pref.passiveView === 'normal'){ ctx.fillStyle =	+main.passive[i][j] ? 'green' : (Passive.test(main.passive,i,j) ? '#FFFF00': 'red');}
-			if(main.pref.passiveView === 'heat'){var n = (Db.passive[i][j].count-Db.passive.min) / (Db.passive.max-Db.passive.min);	ctx.fillStyle =	Draw.gradientRG(n);}
+			if(main.pref.passiveView === 0){ ctx.fillStyle =	+main.passive[i][j] ? 'green' : (Passive.test(main.passive,i,j) ? '#FFFF00': 'red');}
+			if(main.pref.passiveView === 1){ var n = (Db.passive[i][j].count-Db.passive.min) / (Db.passive.max-Db.passive.min);	ctx.fillStyle =	Draw.gradientRG(n);}
 			ctx.fillRect(numX,numY,ic,ic);
 		
 			//Icon

@@ -63,7 +63,6 @@ if(server){
 				logError(err);
 				socket.emit('testing', 'failure');
 			}			
-			
 		});
 	});
 

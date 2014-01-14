@@ -22,7 +22,6 @@ Main.template = function(key){
 		'help':'',
 		'passivePt':0,
 		'passive':Passive.template(),
-		
 		'social':{
 			'message':{
 				'chat':[],

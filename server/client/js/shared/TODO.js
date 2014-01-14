@@ -2,16 +2,12 @@
 
 
 -Advanced Dialogue (Morrowind)
--Icon minimap
 
 -Enemy AI for ability (Mortal.creation.db)
 
 -Status effect in client
--settings (aka pref)
--description for pref
--disconnect if 15 min afk
--if nothing new with enemy, dont send
-
+-fix strike
+-fix warning
 
 #Priority 2:
 -Crafting Ability

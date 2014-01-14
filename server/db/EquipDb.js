@@ -222,7 +222,7 @@ Equip.creation = function(equip){
 	Item.creation(item);
 		
 	
-	db.equip.update( {'id':equip.id}, equip, { upsert: true }, function(err) { if(err) throw err });
+	db.equip.update( {'id':equip.id}, equip, { upsert: true }, db.err);
 
 }
 //Add Default Weapon elements and init weapon

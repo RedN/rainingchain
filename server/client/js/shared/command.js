@@ -297,47 +297,40 @@ Command.list['option'] = function(key,slot){
 
 Command.pref = {};
 Command.pref.list = {
-	'mapZoom':{'default':200,'type':'number','min':1,'max':999,'round':1},
-	'mapRatio':{'default':4,'type':'number','min':2,'max':10},
-	'bankTransferAmount':{'default':1000,'type':'number','min':1,'max':999999999999,'round':0},
-	'orbAmount':{'default':1000,'type':'number','min':1,'max':999999999999,'round':0},
-	'passiveView':{'default':'normal','type':'string','option':['normal','heat']},
-	'abilityDmgStatusTrigger':{'default':0.10,'type':'number','min':0,'max':1,'round':3},	//% life of monster per attack (used to calc % chance to trigger status)
-	'mapIcon':{'default':0,'type':'number','min':0,'max':1,'round':1},
-}
-Command.pref.default = Main.template.pref = function(){
-	var a = {};
-	for(var i in Command.pref.list){a[i] = Command.pref.list[i].default;}
-	return a;
+	'mapZoom':{name:'Map Zoom',initValue:200,min:1,max:999,description:'Minimap Zoom'},
+	'mapRatio':{name:'Map Ratio',initValue:4,min:2,max:10,description:'Minimap Size'},
+	'bankTransferAmount':{name:'X- Bank',initValue:1000,min:1,max:9999999999,description:'Amount of items transfered with X- option'},
+	'orbAmount':{name:'X- Orb',initValue:1000,min:1,max:9999999999,description:'Amount of orbs used with X- option'},
+	'passiveView':{name:'Passive View',initValue:0,min:0,max:1,description:'Impact Passive Colors. 0:Access. 1:Popularity'},
+	'abilityDmgStatusTrigger':{name:'%Dmg Ability',initValue:10,min:0,max:100,description:'%Life Dealt per attack. Used to calculate chance to proc status.'}, //% life of monster per attack (used to calc % chance to trigger status)
+	'mapIconAlpha':{name:'Icon Alpha',initValue:100,min:0,max:100,description:'Minimap Icon Transparence.'},
 }
 Command.pref.verify = function(name,value){
 	var req = Command.pref.list[name];
-	
-	if(req){
-		if(req.type === 'number'){ 
-			value = Number(value); 
-			if(value.toString() == 'NaN'){ return 'Invalid value.'; }
-			
-			if(req.min){ value = Math.max(req.min,value); }
-			if(req.max){ value = Math.min(req.max,value); }
-			
-			if(req.round){ value = Math.round(value); }
-			
+
+	if(!req.type || req.type === 'number'){ 
+		value = Number(value); 
+		if(value.toString() === 'NaN'){ return 'Invalid value.'; }
+		
+		value = value.mm(req.min,req.max);			
+		if(req.round !== false){ value = Math.round(value); }
+		
+		return value;
+	}
+	if(req.type === 'string'){
+		if(req.option.have(value)){
 			return value;
 		}
-		if(req.type === 'string'){
-			if(req.option.have(value)){
-				return value;
-			}
-		}
-		
-		if(req.type && typeof value !== req.type) return 'Invalid value.'; 
 	}
 	
+	if(req.type && typeof value !== req.type) return 'Invalid value.'; 
 	
-	if(!req){ return value; }
 }
 
-
+Main.template.pref = function(){
+	var a = {};
+	for(var i in Command.pref.list){a[i] = Command.pref.list[i].initValue;}
+	return a;
+}
 
 

@@ -211,7 +211,7 @@ Ability = {};
 Ability.creation = function(a){
 	
 	//Setting Ability
-	db.ability.update( {'id':a.id}, a, { upsert: true }, function(err) { if(err) throw err });	
+	db.ability.update( {'id':a.id}, a, { upsert: true }, db.err);	
 	
 	Db.ability[a.id] = a;	
 	a.spd.main = a.spd.main / (a.spd.main + a.spd.support);

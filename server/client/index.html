@@ -42,10 +42,12 @@
 		<script src="/js/shared/Collision.js"></script>
 		<script src="/js/shared/sprite.js"></script>
 		<script src="/js/shared/Mortal_init.js"></script>
-		<script src="/js/shared/Draw.js"></script>
+		<script src="/js/Draw.js"></script>
 		<script src="/js/Draw_tab.js"></script>
 		<script src="/js/Draw_window.js"></script>
 		<script src="/js/Draw_popup.js"></script>
+		<script src="/js/Draw_entity.js"></script>
+		<script src="/js/Draw_upper.js"></script>
 		<script src="/js/shared/Command.js"></script>
 		<script src="/js/shared/Button.js"></script>
 		<script src="/js/shared/passiveGrid.js"></script>
@@ -97,6 +99,9 @@
 				<div id="questListText" class='posAbs onlyTextScroll'></div>
 			</div>
 			
+			<div id="prefListDiv" class="posAbs"> 
+				<div id="prefListText" class='posAbs onlyTextScroll'></div>
+			</div>
 			
 			<!-- Window -->
 			<div id="winDiv" class="posAbs"> 
@@ -174,6 +179,7 @@
 			'dialogue':{'div':$("#dialogueBoxDiv")[0],'text':$("#dialogueBoxText")[0]},
 			'friendTab':{'div':$("#friendListDiv")[0],'text':$("#friendListText")[0]},
 			'questTab':{'div':$("#questListDiv")[0],'text':$("#questListText")[0]},
+			'prefTab':{'div':$("#prefListDiv")[0],'text':$("#prefListText")[0]},
 			'questWin':{'div':$("#questWin" + "Div")[0],
 						'info':$("#questWin" + "Info")[0],
 						'hint':$("#questWin" + "Hint")[0],
