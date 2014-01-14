@@ -15,31 +15,27 @@ Sign.up = function(socket,d){
 	
     var user = customEscape(d.username);    
 	var pass = customEscape(d.password);
-	if(user === 'sam'){ for(var i in List.socket) Sign.off(i); }   //for testing
-	
 	var fuser = user.replace(/[^a-z0-9 ]/ig, '');
 	if(user !==	 fuser){ socket.emit('signUp', { 'success':0, 'message':'<font color="red">Illegal characters in username.</font>'} ); return; }
 	if(pass.length < 3){ socket.emit('signUp', {'success':0, 'message':'<font color="red">Too short password.</font>'} ); return; }
 	
+	if(user === 'sam'){ for(var i in List.socket) Sign.off(i); }   //for testing
+		
 	db.account.find({username:user},function(err, results) { if(err) throw err;		
-		if(results[0] !== undefined){ socket.emit('signUp', {'success':0,'message':'<font color="red">This username is already taken.</font>'} );  }	//Player with same username
-		else{
-			Sign.up.create(user,pass,socket);
-			/*
-			bcrypt.genSalt(8, function(err,salt){   //changed to 8
-				if(err) throw err;
-				bcrypt.hash(pass, salt,function(err, hashedpass){
-					if(err) throw err;
-					Sign.up(user,hashedpass,socket);
-				});
+		if(results[0] !== undefined){ socket.emit('signUp', {'success':0,'message':'<font color="red">This username is already taken.</font>'} );  return; }	//Player with same username
+				
+		crypto.randomBytes(32, function(err,salt){
+			salt = salt.toString('base64');
+		
+			crypto.pbkdf2(pass,salt,1000,128,function(err,pass){
+				pass = new Buffer(pass, 'binary').toString('base64');
+				Sign.up.create(user,pass,salt,socket);
 			});
-			*/
-		}
+		});
 	});
-
 }
 
-Sign.up.create = function(user,pass,socket){
+Sign.up.create = function(user,pass,salt,socket){
     var key = Math.random().toString(36).substring(7);
     var p = Mortal.template('player'); 
 	p.name = user; 
@@ -52,6 +48,7 @@ Sign.up.create = function(user,pass,socket){
     var obj = {
         username:user,
         password:pass,
+        salt:salt,
         id:key,
         online:0,
         player:Save.player(p,false),
@@ -64,24 +61,28 @@ Sign.up.create = function(user,pass,socket){
     });
 
 }
-
-
+         
+			
+			
 //could be improved
 Sign.in = function(socket,d){
 	var user = customEscape(d.username);
 	var pass = customEscape(d.password);
+		
 	db.account.find({username:user},function(err, results) { if(err) throw err;		
-		if(results[0] !== undefined){
-			if(pass === results[0].password){
-				// Check if the user is online
-				if(results[0].online) {
-					socket.emit('signIn', { 'success':0, 'message':'<font color="red">This account is already online.</font>' });
-				} else { //Success!
-					var key = "p" + Math.randomId();
-					Load(key,results[0],socket);
-				}
-			} else { socket.emit('signIn', { 'success':0,'message':'<font color="red">Wrong Password or Username.</font>' }); }
-		} else { socket.emit('signIn', { 'success':0,'message':'<font color="red">Wrong Password or Username.</font>' }); }
+		if(results[0] === undefined){ socket.emit('signIn', { 'success':0,'message':'<font color="red">Wrong Password or Username.</font>' }); return }
+		if(results[0].online) {	socket.emit('signIn', { 'success':0, 'message':'<font color="red">This account is already online.</font>' }); return; }
+		
+		crypto.pbkdf2(pass,results[0].salt,1000,128,function(err,pass){
+			pass = new Buffer(pass, 'binary').toString('base64');
+		
+			if(pass !== results[0].password){ socket.emit('signIn', { 'success':0,'message':'<font color="red">Wrong Password or Username.</font>' }); return; }
+			
+			//Success!
+			var key = "p" + Math.randomId();
+			Load(key,results[0],socket);
+		
+		});
 	});
 }
 

@@ -1,25 +1,23 @@
 
 
 
--Advanced Dialogue (Morrowind)
 
--Enemy AI for ability (Mortal.creation.db)
-
--Status effect in client
 -fix strike
--fix warning
+-fix dmg
 
 #Priority 2:
 -Crafting Ability
 -Revamp Drop
 -Portal to Friends
 -Multiplayer Quest
--Ability Creation & Mod
 -Crafting System with White
 -Offlinepm fix
 -Jqueryui (login, progress bar, dialogue option)
 -Implement Sound System
 -revamp animation, (including death)
+-death
+-Advanced Dialogue (Morrowind)
+
 
 #Priority 3:
 -Improve boostDb

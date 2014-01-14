@@ -59,9 +59,6 @@
 		<script src="/js/shared/queryShare.js"></script>
 		
 		
-		
-		
-		
 		<section id="signDiv">
 			Username: <input type="text" id="user" value="sam"> <br>
 			Password: <input type="password" id="pass" value="sam"><br>
@@ -73,6 +70,7 @@
 		<div id="gameDiv" style="display:none">
 			<div id="canvasDiv" onclick='document.activeElement.blur()'></div>
 			
+			<div id="contextDiv" class='posAbs gradientBoxesWithOuterShadows'></div>
 			<!-- Chat -->
 			<div id="chatBoxDiv" class="posAbs"> 
 				<div id="chatBoxText" class='taJust onlyTextScroll'></div>
@@ -133,17 +131,16 @@
 		</div>
 		
 		
-		<div id="warningDiv">
-			<div id="warningText" class='onlyText container posAbs'
-				>
-			</div>
+		<div id="warningDiv" class="posAbs">
+			<div id="warningText" class='onlyText container'></div>			
 		</div>
 		
-		<!-- Help -->
+		<!-- Help 
 		<div id="helpDiv" class='container posAbs'>
 			<div id="helpText" class='onlyTextScroll'></div>
 			<input type="button" value="Hide/Show" onclick="changeVisibility('helpText');">
 		</div>
+		-->
 		
 		<script>
 		/*Jquery 101:
@@ -155,18 +152,23 @@
 		$( "h1" ).not( ".bar" );           // h1 elements that don't have a class of bar
 		*/
 		
-		
+		/*
 		$("#helpDiv")[0].style.top = Cst.HEIGHT + 5 + 'px';
 		$("#helpDiv")[0].style.width = '90%';
 		$("#helpText")[0].style.width = '90%';
 		$("#helpText")[0].style.height = '170px';
-		$("#warningDiv")[0].style.top = Cst.HEIGHT + 5 + 170 + 'px';
-		$("#warningDiv")[0].style.background = 'white';
-		$("#warningDiv")[0].style.visibility = 'hidden';
 		
 		$.get('/js/help.html').success(function(data){
 			$('#helpText').html(Init.help(data));
 		});
+		*/
+		
+		$("#warningDiv")[0].style.top = Cst.HEIGHT + 5 + 'px';
+		$("#warningText")[0].style.color = 'red';
+		$("#warningText")[0].style.fontSize = '200%';
+		//$("#warningDiv")[0].style.visibility = 'hidden';
+		
+		
 		
 		$('#chatForm').submit(function(e) {
             e.preventDefault();
@@ -180,6 +182,8 @@
 			'friendTab':{'div':$("#friendListDiv")[0],'text':$("#friendListText")[0]},
 			'questTab':{'div':$("#questListDiv")[0],'text':$("#questListText")[0]},
 			'prefTab':{'div':$("#prefListDiv")[0],'text':$("#prefListText")[0]},
+			'warning':{'div':$("#warningDiv")[0],'text':$("#warningText")[0]},
+			'context':{'div':$("#context" + "Div")[0]},	
 			'questWin':{'div':$("#questWin" + "Div")[0],
 						'info':$("#questWin" + "Info")[0],
 						'hint':$("#questWin" + "Hint")[0],
@@ -192,8 +196,7 @@
 						'subtitle':$("#abilityWin" + "SubTitle")[0],
 						'generalinfo':$("#abilityWin" + "GeneralInfo")[0],
 						'upgrade':$("#abilityWin" + "Upgrade")[0],
-						},	
-			
+						},
 			'passiveWin':{'div':$("#passiveWin" + "Div")[0],'text':$("#passiveWin" + "Text")[0]}
 		};
 		

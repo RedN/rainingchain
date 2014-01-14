@@ -18,7 +18,7 @@ Init.db.quest = function(){
 		};
 		
 		q.requirement = [
-			{'text':'Level 11 Magic','func':(function(){ return true; })},
+			{'text':'Level 0 Magic','func':(function(key){ return List.all[key].skill.lvl.magic >= 0; })},
 		];
 		
 		q.hintGiver = function(key,mq){

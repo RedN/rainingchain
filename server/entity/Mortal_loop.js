@@ -335,6 +335,13 @@ Mortal.loop.repulsion = function(enemy){
 
 
 Mortal.loop.input = function(mort){
+	Mortal.loop.input.move(mort);
+	if(Loop.frameCount % 25 === 0){
+		Mortal.loop.input.ability(mort);
+	}
+}
+
+Mortal.loop.input.move = function(mort){
 	//update enemy input for movement.
 	
 	//Combat
@@ -371,7 +378,6 @@ Mortal.loop.input = function(mort){
 		}
 		
 		for(var i in mort.moveInput){	if(Math.random()< 0.02){ mort.moveInput[i] = 0;} }	//Prevent Piling
-		mort.abilityChange.press = '111111111111111';
 		
 		mort.mouseX = Cst.WIDTH2+diffX; 
 		mort.mouseY = Cst.HEIGHT2+diffY;
@@ -380,7 +386,6 @@ Mortal.loop.input = function(mort){
 	
 	//Not In Combat
 	if(!mort.combat || !mort.target){ 
-		mort.abilityChange.press = '000000000000000';
 		mort.angle = mort.moveAngle + 10;	//quick fix
 		if(Math.random() < 1/mort.changeDir){
 			for(var i in mort.moveInput){
@@ -391,15 +396,22 @@ Mortal.loop.input = function(mort){
 }
 
 Mortal.loop.input.ability = function(mort){
+	if(!mort.combat || !mort.target){
+		mort.abilityChange.press = '000000000000000';
+		return;
+	}
+	
+	/*
 	var target = List.all[mort.target];
 	var diffX = target.x - mort.x;
 	var diffY = target.y - mort.y;
 	var diff = Math.sqrt(diffX*diffX+diffY*diffY);
+	*/
 	
-	
-	
-	
-
+	mort.abilityChange.press = '';
+	for(var i in mort.ability){
+		mort.abilityChange.press += mort.ability[i].chance >= Math.random() ? '1' : '0';	
+	}
 }
 
 //Non-Combat

@@ -1,0 +1,96 @@
+Db.clan = {};
+
+Init.db.clan = function(){
+	db.clan.find({},{'_id':0},function(err,data){
+		for(var i = 0 ; i < data.length ; i++){
+			Db.clan[data[i].id] = data[i];
+			delete Db.clan[data[i].id]._id
+		}
+	});
+}
+
+Clan = {};
+
+Clan.creation = function(key,name){
+	if(Db.clan[name] !== undefined){
+		Chat.add(key,'This name is already taken.');	return;
+	}
+	var player = List.all[key];
+	Db.clan[name] = {'name':name,'nick':name,'id':name,'memberList':{}}
+	Db.clan[name].memberList[player.name] = {'admin':1,'rank':10,'kick':1};
+
+	Chat.add(key,'Clan created.');
+	Clan.enter(key,name);
+	
+	db.clan.save(Db.clan[name]);
+}
+
+
+Clan.enter = function(key,name){
+	var main = List.main[key];
+	var pn = List.all[key].name;
+	
+	if(!Db.clan[name]){
+		Chat.add(key,'This clan doesn\'t exist.');	return;
+	}
+	if(main.social.list.clan.have(name)){
+		Chat.add(key,'You are already in this clan chat.');	return;
+	}
+	main.social.list.clan.push(name);
+	
+	if(Db.clan[name].memberList[pn]){
+		Db.clan[name].memberList[pn].active = 1;
+	} else {
+		Db.clan[name].memberList[pn] = {'rank':0,'active':1}
+	}
+	
+	str = ''; for(var i = 0 ; i < main.social.list.clan.length ; i++){ str += '/'; }
+	
+	Chat.add(key,'You are now in clan chat: ' + name + '. Type \"' + str + '\" to talk in it.');	
+
+}
+
+Clan.leave = function(key,name){
+	var pn = List.all[key].name;
+	var main = List.main[key];
+	
+	for(var i in main.social.list.clan){
+		if(name == 'ALL' || i == 'name'){
+			Db.clan[main.social.list.clan[i]].memberList[pn].active = 0;
+			if(!Db.clan[main.social.list.clan[i]].memberList[pn].rank){
+				delete Db.clan[main.social.list.clan[i]].memberList[pn];
+			}
+		}
+	}
+	
+	if(name == 'ALL'){	
+		main.social.list.clan = [];
+	} else {
+		main.social.list.clan.splice(main.social.list.clan.indexOf(name),1);
+	}
+	
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

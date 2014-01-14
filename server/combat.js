@@ -35,6 +35,11 @@ mastery mod = same than defMain but for specific element
 
 */
 
+/*
+status chance: dmg/maxhp * abilityMod [1] * playerMod [1]
+leech chance: unrelated to dmg. abilityMod [1] * playerMod [0]
+*/
+
 Combat = {};
 
 //NOTE: Combat.action.attack.mods is inside	Combat_sub.js
@@ -51,6 +56,7 @@ Combat.action = function(id,action){
 	}
     
 }
+
 Combat.action.attack = function(id,action){   
 	var player = typeof id === 'string' ? List.all[id] : id;
 	
@@ -86,8 +92,6 @@ Combat.action.attack.perform = function(player,attack,extra){   //extra used for
 	}
 }	
 	
-
-//Other Weapon Function
 Combat.action.summon = function(key,info,enemy){
 	var name = info.name || Math.randomId();
 	info.maxChild = info.maxChild || 1;
@@ -137,11 +141,7 @@ Combat.action.boost = function(key,info){
     Mortal.boost.apply(this, info);
 }
 
-/*
-status chance: dmg/maxhp * abilityMod [1] * playerMod [1]
-leech chance: unrelated to dmg. abilityMod [1] * playerMod [0]
 
-*/
 
 //COLLISION//
 Combat.collision = function(b,mort){
@@ -171,7 +171,7 @@ Combat.collision = function(b,mort){
 
 //Apply Status
 Combat.collision.status = function(dmg,b,target){
-	var ar = {
+	var ar = {	//could use Cst instead
 		'melee':'bleed',
 		'range':'knock',
 		'magic':'drain',
@@ -289,8 +289,11 @@ Combat.collision.crit = function(b){
 	return b;
 }
 
+//Damage
 Combat.collision.damage = function(bullet,player){
+	
 	var dmgInfo = Combat.collision.damage.calculate(bullet.dmg,Mortal.getDef(player))
+	console.log(bullet.dmg,Mortal.getDef(player),dmgInfo);
 	var dmg = dmgInfo.sum;
 	
 	Mortal.changeHp(player,-dmg);
@@ -303,7 +306,7 @@ Combat.collision.damage = function(bullet,player){
 	
 
 
-Combat.collision.damage.calculate =function(a,d){
+Combat.collision.damage.calculate = function(a,d){
 	var info = {};
 	var dmg = 0;
 	for(var i in a){ 

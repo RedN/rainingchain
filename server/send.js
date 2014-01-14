@@ -42,18 +42,19 @@ Change.send = function(){
 		//Anim
 		//note: remove map and viewedif from .target and slot?
 		for(var i in List.anim){
-			/*
+			
 			var anim = List.anim[i];
 			var testTarget = anim.target;
 			if(typeof testTarget === 'string'){ testTarget = List.all[testTarget]; }	//aka target is an obj
 			//else target is already in form {x:1,y:1,map:1}
 			
-			if(testTarget && ActiveList.test(player,testTarget))	{
+			if(testTarget && ActiveList.test(player,testTarget)){
 				if(typeof anim.target === 'string'){ anim.target = testTarget.publicId; }
-				Change.send.init.anim(anim);
+				
+				anim = Change.send.init.anim(anim);
 				sa.a.push(anim); 
 			}	
-			*/
+		//ts("Anim.creation('fire2',{x:p.x,y:p.y,map:p.map})")	
 		}
 		
 		
@@ -171,6 +172,10 @@ Change.send.init.drop = function(drop){
 Change.send.init.anim = function(anim){
 	if(anim.sizeMod === 1) delete anim.sizeMod;
 	delete anim.id;
+	delete anim.target.map;
+	delete anim.target.viewedIf;
+	anim.target.x = Math.round(anim.target.x);
+	anim.target.y = Math.round(anim.target.y);
 	return anim;
 };
 

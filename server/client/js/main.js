@@ -80,10 +80,11 @@ Init.game = function (data) {
 	Init.game.other(data);
 	
 	//Add Canvas. param2 = z-index
-	addCanvas('stage','stage',-10);
-	addCanvas('win','windowCanvas',10);
-	addCanvas('passiveGrid','passiveGridCanvas',11);
-	addCanvas('pop','popCanvas',30);
+	Init.game.addCanvas('stage','stage',-10);
+	Init.game.addCanvas('win','windowCanvas',10);
+	Init.game.addCanvas('passiveGrid','passiveGridCanvas',11);
+	Init.game.addCanvas('pop','popCanvas',30);
+	Init.game.addCanvas('minimap','minimapCanvas',-9);
 	
 	html.chat.text.innerHTML = 'Welcome!';
 	html.pm.text.innerHTML = '<br>'
@@ -122,13 +123,13 @@ Init.game.other = function(data){    //use data sent from server and default to 
 	delete data.other.passive.db;
 	for(var i in data.other.passive) Db.passive[i] = data.other.passive[i];	
 }
-//To add a canvas to the game
-addCanvas = function(name,id,z){
+Init.game.addCanvas = function(name,id,z){
+	//To add a canvas to the game
 	var cv = document.createElement("canvas");
 	cv.id = id;
 	cv.width = Cst.WIDTH;
 	cv.height = Cst.HEIGHT;
-	cv.style.border = '1px solid #000000';
+	if(id === 'stage') cv.style.border = '1px solid #000000';
 	cv.style.position = 'absolute';
 	cv.style.left = '0px';
 	cv.style.top = '0px';
@@ -148,14 +149,8 @@ addCanvas = function(name,id,z){
 }
 
 
-
- 
- 
-
-
-
 socket.on('warning', function (message) {
-	warningText.innerHTML = '<font color="red">' + message + '</font>';
+	html.warning.text.innerHTML = '<font color="red">' + message + '</font>';
 });
 
 //Help aka documentation. Called once at start of game. wiki-like parser

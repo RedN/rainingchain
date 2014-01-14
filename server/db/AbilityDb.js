@@ -49,8 +49,8 @@ Init.db.ability = function(cb){
 	a['strikeSingle'] = {'type':'attack','name':'Slash','icon':'attackMelee.slash',
 		'spd':{'main':0.8,'support':0.2},'period':15,'action':{'func':'Combat.action.attack','param':{'anim':'Attack',
 		'attack':{'type':"strike",
-			'angle':0,'amount':1, 'aim':0, 'hitImg':{'name':"attack1",'sizeMod':0.5},
-			'delay':2,'maxHit':1,'width':1,'height':1,'minRange':50,'maxRange':5,
+			'angle':0,'amount':1, 'aim':0, 'hitImg':{'name':"attack1",'sizeMod':0.5},'objImg':{'name':"attack1",'sizeMod':0.5},
+			'delay':2,'maxHit':1,'width':1,'height':1,'minRange':5,'maxRange':50,
 			'dmgMain':1,'dmgRatio':{'melee':50,'range':0,'magic':0,'fire':50,'cold':0,'lightning':0},
 			'hitIfMod':0,'heal':{'hp':100}
 	}}}};
@@ -229,7 +229,8 @@ Ability.creation = function(a){
 	
 	if(a.action && a.action.func === 'Combat.action.attack'){
 		var at = a.action.param.attack;
-		at.dmgRatio = Craft.ratio(at.dmgRatio);
+		at = Craft.ratio.dmg(at);
+		
 	}
 	
 	//Setting Item Part

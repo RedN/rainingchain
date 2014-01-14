@@ -4,7 +4,10 @@ Draw.old = {'fl':'','quest':'','abilityShowed':'bulletMulti','abilityTypeShowed'
 Draw.loop = function (){
 	//Clear
 	for(var i in List.ctx){List.ctx[i].clearRect(0, 0, Cst.WIDTH, Cst.HEIGHT);}
-	for(var i in html){ html[i].div.style.visibility = 'hidden';}
+	for(var i in html){ 
+		if(i === 'warning') continue;
+		html[i].div.style.visibility = 'hidden';
+	}
 	List.btn = [];
 	Input.event.mouse.drag.update();
 	
@@ -23,8 +26,8 @@ Draw.loop = function (){
 	Draw.window();
 	Draw.popup();
 	
-	
-	Draw.upper();
+	Draw.minimap();
+	Draw.state();
 	
 	Draw.optionList();    //option when right-click
 	
@@ -430,26 +433,18 @@ Draw.gradientRG = function(n){
 
 
 Draw.context = function (){ ctxrestore();
-	ctx = List.ctx.stage;
-	
-	var numX = 0;
-	var numY = 0;
-	
 	var cont = main.context.text || main.clientContext.text || main.permContext.text;
+	var hc = html.context.div;
 	
-	if(cont){
-		ctx.font="25px Monaco";
-		
-		ctx.fillStyle = 'black';
-		ctx.strokeStyle = 'white';
-		ctx.globalAlpha = 0.7;
-		var length = Math.max(100,ctx.measureText(cont).width+30);
-		ctx.roundRect(0,0,length,30,1,1);
-		
-		ctx.globalAlpha = 1;
-		
-		ctx.fillStyle = "white";
-		ctx.fillText(cont,numX+10,numY);
+	if(!hc.innerHTML || hc.innerHTML !== cont){
+		hc.style.left = Input.mouse.x + 25 + 'px';
+		hc.style.top = Input.mouse.y + 25 + 'px';
+		hc.style.padding = '3px';
+		hc.style.zIndex = 100;
+	}
+	hc.innerHTML = cont;
+	if(hc.innerHTML){
+		hc.style.visibility = 'visible';
 	}
 }
 

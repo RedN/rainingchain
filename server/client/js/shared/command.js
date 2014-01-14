@@ -298,7 +298,7 @@ Command.list['option'] = function(key,slot){
 Command.pref = {};
 Command.pref.list = {
 	'mapZoom':{name:'Map Zoom',initValue:200,min:1,max:999,description:'Minimap Zoom'},
-	'mapRatio':{name:'Map Ratio',initValue:4,min:2,max:10,description:'Minimap Size'},
+	'mapRatio':{name:'Map Ratio',initValue:5,min:2,max:10,description:'Minimap Size'},
 	'bankTransferAmount':{name:'X- Bank',initValue:1000,min:1,max:9999999999,description:'Amount of items transfered with X- option'},
 	'orbAmount':{name:'X- Orb',initValue:1000,min:1,max:9999999999,description:'Amount of orbs used with X- option'},
 	'passiveView':{name:'Passive View',initValue:0,min:0,max:1,description:'Impact Passive Colors. 0:Access. 1:Popularity'},
