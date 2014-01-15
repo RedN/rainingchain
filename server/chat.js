@@ -73,7 +73,7 @@ Chat.send.public = function(key,text,to,type,from,data){
 }
 
 Chat.send.pm = function(key,text,to,type,from,data){
-    Chat.send.pm.test(from,to,(function(res,from,to){
+    Chat.send.pm.test(from,to,(function(from,to,res){
 		if(res){
 			Chat.add(List.nameToKey[to],'pm',text,{'from':from,'to':to});
 			Chat.add(key,'pm',text,{'from':from,'to':to});
@@ -91,17 +91,18 @@ Chat.send.pm = function(key,text,to,type,from,data){
 Chat.send.pm.test = function(from,to,cb){
 	//test if player can send pm to another. check for online but also mute list
 	db.account.find({username:to},function(err, r) {
-		
 		if(r[0]){	//aka exist
-			var bool = r[0].id;
-			var main = List.main[r[0].id];
-			if(!main){ bool = false; } else {
+			var bool = true;
+			var id = List.nameToKey[to];
+			var main = List.main[id];
+			if(!main){ bool = false; } 
+			else {
 				if(main.social.status === 'off'){ bool = false; }
 				if(main.social.status === 'friend'){ 
 					if(!main.social.list.friend[from]){ bool = false; }				
 				}
 			}
-			cb(bool,from,to);
+			cb(from,to,bool);
 		} else { cb('');  }
 	});	
 }

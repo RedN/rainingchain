@@ -94,39 +94,31 @@ Command.list['fl,pm'] = function(key,setting){
 }
 
 Command.list['fl,offlinepm'] = function(key,to,text){
-	return;
-
-
 	var from = List.all[key].name;
 	
 	text = customEscape(text);
 	to = customEscape(to);
 
-	if(!text || !to){ return; }
-			
-	if(to == from){ Chat.add(key,"Ever heard of thinking in your head?"); }
+	if(!text || !to || !from){ return; }	
+	if(to === from){ Chat.add(key,"Ever heard of thinking in your head?"); }
 	
-	db.account.find({username:to},function(err, results) {
-		if(results[0]){
-			var main = Save.main.uncompress(results[0].main);
+	db.account.find({username:to},function(err, res) { if(err) throw err;
+		if(res[0]){
+			var main = Load.main.uncompress(res[0].main);
 			
 			if(main.social.list.friend[from]){ 
 				if(!main.social.message.chat){ main.social.message.chat = []; }
 				main.social.message.chat.push({'type':'offlinepm','from':from,'text':text,'time':Date.now()});
 				Chat.add(key,"Offline PM sent.");
-				saveMain(main);
+				Save.main(main);
 			}
 			
 			if(!main.social.list.friend[from]){ Chat.add(key,"You can't send an offline PM to that player.");}
 		
 		}
 		
-		if(!results[0]){Chat.add(key,"This player doesn't exist.");}
+		if(!res[0]){Chat.add(key,"This player doesn't exist.");}
 	});
-	
-	
-	
-	
 }
 
 //Mute
@@ -320,6 +312,8 @@ Command.pref.verify = function(name,value){
 	if(req.type === 'string'){
 		if(req.option.have(value)){
 			return value;
+		} else {
+			return 'Invalid value.';
 		}
 	}
 	

@@ -10,7 +10,7 @@ http = require('http');
 path = require('path');
 socketio = require('socket.io');
 express = require('express');
-//bcrypt = require('bcrypt');
+crypto = require('crypto');
 
 router = express();
 serv = http.createServer(router);
@@ -52,27 +52,28 @@ require('./server/drop');
 require('./server/trade');
 require('./server/Skill');
 require('./server/Test');
+require('./server/Draw');
 
-require('./server/db/EnemyDb');
-require('./server/db/AbilityDb');
-require('./server/db/ItemDb');
-require('./server/db/EquipDb');
+require('./server/db/Db_enemy');
+require('./server/db/Db_ability');
+require('./server/db/Db_item');
+require('./server/db/Db_equip');
+require('./server/db/Db_craft');
 		
 require('./' + clientPath + 'client/js/shared/Collision');
-require('./' + clientPath + 'client/js/shared/StatDb');
+require('./' + clientPath + 'client/js/shared/Db_stat');
 require('./' + clientPath + 'client/js/shared/constant');
 require('./' + clientPath + 'client/js/shared/Button');
 require('./' + clientPath + 'client/js/shared/sprite');
 require('./' + clientPath + 'client/js/shared/anim');
 require('./' + clientPath + 'client/js/shared/Mortal_init');
-require('./' + clientPath + 'client/js/shared/Draw');
 require('./' + clientPath + 'client/js/shared/Command');
 require('./' + clientPath + 'client/js/shared/Combat_sub');
 require('./' + clientPath + 'client/js/shared/passiveGrid');
 require('./' + clientPath + 'client/js/shared/queryShare');
 require('./' + clientPath + 'client/js/shared/clanShare');
 require('./' + clientPath + 'client/js/shared/Quest');
-require('./' + clientPath + 'client/js/shared/CustomboostDb');
+require('./' + clientPath + 'client/js/shared/Db_customboost');
 
 
 main.initServer();   //

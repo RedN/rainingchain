@@ -89,6 +89,7 @@ Sign.in = function(socket,d){
 Sign.off = function(key,message){
 	var socket = List.socket[key];
 	if(!socket) return;
+	socket.beingRemoved = 1;
 	if(message){ socket.emit('warning','You have been disconnected: ' + message);}
 
 	Save(key);
@@ -180,6 +181,7 @@ Load = function (key,dbb,socket){
     socket.key = key;
     socket.toRemove = 0;
 	socket.timer = 0;
+	socket.beingRemoved = 0;
 
     Test.playerStart(key);
 

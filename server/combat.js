@@ -293,7 +293,6 @@ Combat.collision.crit = function(b){
 Combat.collision.damage = function(bullet,player){
 	
 	var dmgInfo = Combat.collision.damage.calculate(bullet.dmg,Mortal.getDef(player))
-	console.log(bullet.dmg,Mortal.getDef(player),dmgInfo);
 	var dmg = dmgInfo.sum;
 	
 	Mortal.changeHp(player,-dmg);

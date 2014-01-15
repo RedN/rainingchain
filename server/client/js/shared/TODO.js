@@ -11,7 +11,6 @@
 -Portal to Friends
 -Multiplayer Quest
 -Crafting System with White
--Offlinepm fix
 -Jqueryui (login, progress bar, dialogue option)
 -Implement Sound System
 -revamp animation, (including death)

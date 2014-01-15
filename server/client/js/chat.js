@@ -129,7 +129,7 @@ Chat.receive = function(pack){
 		}
 	}
 	
-	if(pack.type == 'offlinepm'){
+	if(pack.type === 'offlinepm'){
 		var d = new Date(pack.time);
 		d = d.toLocaleString();
 		html.pm.text.innerHTML += 	"<br> <span style='color:cyan'>" + d + ' - From ' + pack.from + ': ' +  pack.text + "</span>"; 
