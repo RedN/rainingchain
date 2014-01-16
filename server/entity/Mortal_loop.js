@@ -189,9 +189,9 @@ Mortal.loop.summon = function(mort){
 Mortal.loop.bumper = function(mort){
 	//test collision with map
 	mort.x = Math.max(mort.x,50);
-	mort.x = Math.min(mort.x,Db.map[mort.map].grid[0].length*32-50);
+	mort.x = Math.min(mort.x,Db.map[mort.map].grid.input[0].length*32-50);
 	mort.y = Math.max(mort.y,50);
-	mort.y = Math.min(mort.y,Db.map[mort.map].grid.length*32-50);
+	mort.y = Math.min(mort.y,Db.map[mort.map].grid.input.length*32-50);
 	
 	var bumperBox = mort.bumperBox;
 		
@@ -294,28 +294,6 @@ Mortal.loop.activeList = function(mort){
 	
 	mort.active = (Object.keys(mort.activeList).length !== 0 || mort.type == 'player')
 
-}
-
-Mortal.loop.target = function(enemy){
-    var targetList = []; 
-	for (var i in enemy.activeList){
-		var tar = List.all[i];
-		var hIf = typeof enemy.targetIf == 'function' ? enemy.targetIf : Combat.hitIf.list[enemy.targetIf];
-			
-		if(Combat.targetIf.global(enemy,tar) && hIf(tar,enemy)){
-			var diffX = enemy.x - tar.x;
-			var diffY = enemy.y - tar.y;
-			var diff = Math.sqrt(diffX*diffX+diffY*diffY);
-			if(diff <= enemy.moveRange.aggressive){
-				var diffModded = 1/(diff+enemy.targetMod.rangeMod);
-				targetList.push({'mod':diffModded,'id':i});
-			}
-		}
-	}
-	
-	if(targetList.length){
-		enemy.target = targetList.random().id;	
-	}else {enemy.target = null;}	
 }
 
 Mortal.loop.repulsion = function(enemy){
@@ -461,7 +439,62 @@ Mortal.loop.attackReceived = function(mort){
 	}
 }
 
+/*
+mort.target:{
+	real:{
+		list:
+		frequence:
+	},
+	artificial:{
+		list:
+		frequence:
+	}
+}
 
+
+Mortal.loop.target = 
+
+Mortal.loop.target.getNewTarget = {};
+Mortal.loop.target.getNewTarget.fake = function(mort){
+
+}
+*/
+//Mortal.loop.target.getNewTarget.main
+Mortal.loop.target = function(mort){
+    var targetList = []; 
+	for (var i in mort.activeList){
+		var tar = List.all[i];
+		var hIf = typeof mort.targetIf == 'function' ? mort.targetIf : Combat.hitIf.list[mort.targetIf];
+			
+		if(Combat.targetIf.global(mort,tar) && hIf(tar,mort)){
+			var diffX = mort.x - tar.x;
+			var diffY = mort.y - tar.y;
+			var diff = Math.sqrt(diffX*diffX+diffY*diffY);
+			if(diff <= mort.moveRange.aggressive){
+				var diffModded = 1/(diff+mort.targetMod.rangeMod);
+				targetList.push({'mod':diffModded,'id':i});
+			}
+		}
+	}
+	
+	if(targetList.length){
+		mort.target = targetList.random().id;	
+	}else {mort.target = null;}	
+}
+
+
+
+Mortal.getPath = function(mort,target){
+	if(mort.map !== target.map) return [];
+	var map = Db.map[mort.map].grid.nodes;
+	
+	var start = map[Math.floor(mort.y/32)][Math.floor(mort.x/32)];
+	var end = map[Math.floor(target.y/32)][Math.floor(target.x/32)];
+	
+	var a = astar.search(map,start,end);
+	return a;
+
+}
 
 
 

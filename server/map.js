@@ -57,6 +57,17 @@ Init.db.map = function (){
 		
 		Db.map[i] = m;
 		List.map[i] = m;
+		
+		
+		var grid = [];
+		for(var i = 0 ; i < m.grid.length; i++){	
+			grid[i] = [];
+			for(var j = 0 ; j < m.grid[i].length; j++){
+				grid[i][j] = +!+m.grid[i][j];
+			}
+		}
+		m.grid = new astar.Graph(grid);
+		
 	}
 	
 }
@@ -84,7 +95,6 @@ Map.clone = function(namemodel,version){
 Map.mapMod = {};
 Map.convertId = {}; 
 	
-	
 Map.load = function(name,version){
 	for(var i in Db.map[name].load){
 		Db.map[name].load[i](version || name,i);
@@ -108,6 +118,7 @@ Map.instance.list = function(name){
 }
 
 Map.instance.player = function(name){
+	//return list of players that are in a certain model of instance
 	var list = [];
 	for(var i in List.main){
 		if(Map.convertId[List.all[i].map] === name){
@@ -116,9 +127,6 @@ Map.instance.player = function(name){
 	}
 	return list;
 }
-
-
-
 
 Map.remove = function(map){
 	if(map.id === map.model) return; //cant delete main maps
@@ -130,7 +138,6 @@ Map.remove = function(map){
 	}
 	delete List.map[id];
 }
-
 
 
 

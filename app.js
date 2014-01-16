@@ -11,6 +11,8 @@ path = require('path');
 socketio = require('socket.io');
 express = require('express');
 crypto = require('crypto');
+astar = require('astar');
+
 
 router = express();
 serv = http.createServer(router);

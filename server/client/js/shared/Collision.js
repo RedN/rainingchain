@@ -1,27 +1,29 @@
 Collision = {};
 
-//Test Collision between rect and rect. format: rect1:[minx,maxx,miny,maxy],rect2:[minx,maxx,miny,maxy]
 Collision.RectRect = function(rect1,rect2){
+	//Test Collision between rect and rect. format: rect1:[minx,maxx,miny,maxy],rect2:[minx,maxx,miny,maxy]
 	return (rect1[0] <= rect2[1] &&	rect2[0] <= rect1[1] &&	rect1[2] <= rect2[3] &&	rect2[2] <= rect1[3]);
 }
 
-//Test Collision between point and rect. format: pt:{x:1,y:1},rect:[minx,maxx,miny,maxy]
 Collision.PtRect = function(pt,rect){
+	//Test Collision between point and rect. format: pt:{x:1,y:1},rect:[minx,maxx,miny,maxy]
 	return (pt.x >= rect[0] && pt.x <= rect[1] && pt.y >= rect[2] && pt.y <= rect[3])
 }
 
-//Test Collision between pt and map (can also test with player map mod)
 Collision.PtMap = function(pt,map,player){
+	//Test Collision between pt and map (can also test with player map mod)
 	var gridX = Math.floor(pt.x/32);
 	var gridY = Math.floor(pt.y/32);
 	
+	/*
 	if(player && player.mapMod && player.mapMod[map] && player.mapMod[map][gridX + '-' + gridY]){
 		return player.mapMod[map][gridX + '-' + gridY];
 	}
-	
-	if(Db.map[map].grid[gridY] === undefined){ return  1;	} 
-	else if(Db.map[map].grid[gridY][gridX] === undefined){return  1;} 
-	else {return Number(Db.map[map].grid[gridY][gridX]);}
+	*/
+	var map = Db.map[map].grid.input;
+	if(map[gridY] === undefined){ return  1;	} 
+	else if(map[gridY][gridX] === undefined){return  1;} 
+	else {return !map[gridY][gridX];}
 	return 1;
 }
 
@@ -33,8 +35,8 @@ Collision.getBumperBox = function(player){
 	return [player.x + player.bumperBox[2].x,player.x + player.bumperBox[0].x,player.y + player.bumperBox[3].y,player.y + player.bumperBox[1].y];
 }
 
-//Collision Pt and Rotated Rect
 Collision.PtRRect = function(pt,rotRect){	
+	//Collision Pt and Rotated Rect
 	var x = pt.x;
 	var y = pt.y;
 	var pt0 = rotRect[0];
@@ -68,16 +70,11 @@ Collision.PtRRect = function(pt,rotRect){
 
 }
 
-
-
 Collision.getMouse = function(key){
 	if(server){ return {x:List.all[key].mouseX,y:List.all[key].mouseY}  }
 	else{ return {x:Input.mouse.x,y:Input.mouse.y} }
 }
 
-
-
-//Attack Coll
 Collision.BulletMortal = function(atk){
 	for(var i in atk.viewedBy){ 
 		var player = List.all[i];
@@ -95,14 +92,11 @@ Collision.BulletMortal = function(atk){
 	}	
 }
 
-//Collision Bullet and Map
 Collision.BulletMap = function(bullet){
 	if(Collision.PtMap({x:bullet.x,y:bullet.y},bullet.map,bullet)){
 		bullet.toRemove = 1;
 	}
 }
-
-
 
 Collision.StrikeMortal = function(atk){
 	for(var j in atk.viewedBy){

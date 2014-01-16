@@ -5,6 +5,8 @@
 -fix strike
 -fix dmg
 
+-enemy ai
+
 #Priority 2:
 -Crafting Ability
 -Revamp Drop
