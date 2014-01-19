@@ -97,8 +97,8 @@ Draw.minimap = function (){ ctxrestore();
 	ctx = List.ctx.minimap;
 	var s = Draw.minimap.constant();
 	Draw.minimap.box(s);
-	//Draw.minimap.map(s,'b');
-	//Draw.minimap.map(s,'i');
+	Draw.minimap.map(s,'b');
+	//Draw.minimap.map(s,'i');	//require swapping...
 	Draw.minimap.icon(s);
 	Draw.minimap.button(s);
 }
