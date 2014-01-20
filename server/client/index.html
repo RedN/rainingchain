@@ -2,6 +2,7 @@
 <html>
 	<head>
 		<link rel="stylesheet" href="/css/css.css" type="text/css" media="screen, projection" />
+		<link href='http://fonts.googleapis.com/css?family=Oleo+Script' rel='stylesheet' type='text/css'>
 	
 		<title>Raining Chain</title>
 
@@ -22,9 +23,14 @@
 		
 		<script src="/js/modules/jquery.min.js"></script>
 		
+		<!--
 		<link href="/js/modules/jqueryui/css/ui-lightness/jquery-ui-1.10.4.custom.css" rel="stylesheet">
 		<script src="/js/modules/jqueryui/js/jquery-1.10.2.js"></script>
 		<script src="/js/modules/jqueryui/js/jquery-ui-1.10.4.custom.js"></script>
+		-->
+		
+		
+		
 		
 		<script src="/js/shared/constant.js"></script>
 		<script src="/js/shared/Db_stat.js"></script>
@@ -63,44 +69,35 @@
 		<script src="/js/shared/queryShare.js"></script>
 		
 		<div id="startDiv">
-			<div id="signDiv">
-				<h3>Sign In</h3>
-				<div id="signInDiv">
-					Username: <input type="text" id="userSignIn" value="sam"> <br>
-					Password: <input type="password" id="passSignIn" value="sam"><br>
-					<input type="submit" value="Sign In"  onclick="Sign.in()"><br>
+			<div class="lg-container">
+				<h1 id="lg-title">Raining Chain</h1>
+				<div id="lg-form" name="lg-form">
+					
+					<div>
+						<label for="username">Username:</label>
+						<input type="text" id="lg-username" placeholder="username"/>
+					</div>
+					
+					<div>
+						<label for="password">Password:</label>
+						<input type="password" id="lg-password" placeholder="password" />
+					</div>
+					
+					<div>				
+						<button onclick="Sign.in()">Sign In</button> <br>
+						<button onclick="Sign.up()">Sign Up</button>
+					</div>
+					
 				</div>
-				
-				<h3>Sign Up</h3>
-				<div id="signUpDiv">
-					Username: <input type="text" id="userSignUp" value="sam"> <br>
-					Password: <input type="password" id="passSignUp" value="sam"><br>
-					Confirm Password: <input type="password" id="confirmSignUp" value="sam"><br>
-					<input type="submit" value="Sign Up"  onclick="Sign.up()"><br>
-				</div>
-				<span id="logInfo"></span>
-				
+				<div id="lg-message"></div>
 			</div>
 		</div>	
-			
-			
-			<div id="accordion">
-				<h3>First</h3>
-				<div>Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet.</div>
-				<h3>Second</h3>
-				<div>Phasellus mattis tincidunt nibh.</div>
-				<h3>Third</h3>
-				<div>Nam dui erat, auctor a, dignissim quis.</div>
-			</div>
-
-
-
-			
-		$( "#accordion" ).accordion();
 		
-		
-		<div id="gameDiv" style="display:none">
-			<div id="canvasDiv" onclick='document.activeElement.blur()'></div>
+
+
+		<div id="outer">	
+		<div id="gameDiv" class='posAbs' style="display:none;">
+			<div id="canvasDiv" class='posAbs' onclick='document.activeElement.blur()'></div>
 			
 			<div id="contextDiv" class='posAbs gradientBoxesWithOuterShadows'></div>
 			<!-- Chat -->
@@ -157,11 +154,9 @@
 			</div>
 			
 			<!-- Pop -->
-			<div id="popDiv" class="posAbs"> 
-			</div>
-			
+			<div id="popDiv" class="posAbs"></div>
 		</div>
-		
+		</div>
 		
 		<div id="warningDiv" class="posAbs">
 			<div id="warningText" class='onlyText container'></div>			
