@@ -132,6 +132,8 @@ Init.db.quest = function(){
 		//{Map
 		q.map = {};
 		q.map['test'] = function(map){
+			
+			/*
 			Mortal.creation.group({'x':1060,'y':1900,'map':map},[
 				{"category":"neutral","variant":"julie",'extra':{
 					'dialogue':{'func':(function(key){
@@ -147,9 +149,18 @@ Init.db.quest = function(){
 								Dialogue.start(key,{'name':'questId','convo':'Jenny','node':'intro2'});
 							} else { Dialogue.start(key,{'name':'questId','convo':'Jenny','node':'intro'}); }
 						}
-					})}}
+					})},
+					'viaArray':[
+						{'array':['target','sub','period'],'value':{first:100,renew:100}},
+					]
+					
+					
+					}
 				},
 			]);
+			*/
+			
+			
 		}
 		//}
 		

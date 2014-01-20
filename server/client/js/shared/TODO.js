@@ -7,7 +7,7 @@
 
 -enemy ai
 
-#Priority 2:
+#Priority 2:+
 -Crafting Ability
 -Revamp Drop
 -Portal to Friends

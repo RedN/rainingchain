@@ -18,6 +18,7 @@ Init.mortal = function(){
 		};
 		
 		//General
+		mort.frameCount = 0;
 		mort.name = "Goblin";     //visible name
 		mort.viewedBy = {};     //list of actors that see this object
 		mort.viewedIf = 'true'; //condition to see. check viewedIfList
@@ -41,8 +42,14 @@ Init.mortal = function(){
 		mort.sprite = {"name":"pMace","anim":"Walk","sizeMod":1}			
 		
 		mort.targetIf = mort.type;  //condition used by monsters to find their target. check targetIfList
-		mort.targetMod = {"period":150,"rangeMod":100};
-		mort.target = null;
+		
+		mort.target = {
+			main:{list:[],period:{first:25,renew:150,stuck:250},confort:1},
+			sub:{list:[],period:{first:25,renew:150}},
+			path:{list:[],period:25},
+		};
+		
+		
 		
 		mort.category = "eSlime";   //for enemy
 		mort.variant = "Regular";   //for enemy
@@ -174,7 +181,6 @@ Init.mortal = function(){
 		mort.mouseY = 0;
 		mort.moveInput = [0,0,0,0];	    //right,down,left,up
 		mort.bumper = [0,0,0,0];        //1 if touchs map
-		mort.changeDir = 40;	        //frequent that enemy change direction
 		
 		mort.moveRange = {
 			'ideal':100,                //distance enemy wants to be from target
@@ -222,6 +228,7 @@ Init.mortal = function(){
 	var e = defaultPreMortal('enemy');
 	
 	var temp = Mortal.template;
+	
 	Mortal.template = new Function('type', 'return type === "player" ? ' + stringify(p) + ' : ' + stringify(e));
 	for(var i in temp) Mortal.template[i] = temp[i];
 }

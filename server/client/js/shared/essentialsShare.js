@@ -162,16 +162,14 @@ valueViaArray = function(d){
 changeViaArray = function(d){
 	try {
 		if(!d.origin){ d.origin = window;}
-		var origin = d.origin;
-		var array = d.array;
-		var value = d.value;
-		switch (array.length) {
-			case 1: origin[array[0]] = value; break;
-			case 2: origin[array[0]][array[1]] = value;break;
-			case 3: origin[array[0]][array[1]][array[2]] = value;break;
-			case 4: origin[array[0]][array[1]][array[2]][array[3]] = value;break;
-			case 5: origin[array[0]][array[1]][array[2]][array[3]][array[4]] = value;break;
-			case 6: origin[array[0]][array[1]][array[2]][array[3]][array[4]][array[5]] = value;break;
+		var a = d.array;
+		switch (a.length) {
+			case 1: d.origin[a[0]] = d.value; break;
+			case 2: d.origin[a[0]][a[1]] = d.value;break;
+			case 3: d.origin[a[0]][a[1]][a[2]] = d.value;break;
+			case 4: d.origin[a[0]][a[1]][a[2]][a[3]] = d.value;break;
+			case 5: d.origin[a[0]][a[1]][a[2]][a[3]][a[4]] = d.value;break;
+			case 6: d.origin[a[0]][a[1]][a[2]][a[3]][a[4]][a[5]] = d.value;break;
 			default: break;
 		}	
 	} catch (err) { logError(err); }
@@ -331,9 +329,6 @@ logError = function(err) {
 }
 
 //Misc
-distancePtPt = function(mort1,mort2){
-	return Math.sqrt((mort1.x - mort2.x)*(mort1.x - mort2.x) + (mort1.y - mort2.y)*(mort1.y - mort2.y));
-}
 customEscape = function(str){
 	if(typeof str !== 'string'){ return false }
 	

@@ -5,10 +5,8 @@ Test = {};
 
 //Main Test Loop
 Test.loop = function(){
-	
 	Test.performance();
 	Test.bandwidth.display();
-	
 }
 	
 		

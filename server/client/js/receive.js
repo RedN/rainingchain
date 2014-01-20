@@ -137,7 +137,7 @@ Receive.init.anim = function(a){
 	var sfx = a.sfx || Db.anim[a.name].sfx;
 	if(sfx && a.sfx !== false){	
 		sfx.volume = sfx.volume || 1;
-		sfx.volume *= Math.max(0.1,1 - 0.2*Math.floor(distancePtPt(player,a)/50));	
+		sfx.volume *= Math.max(0.1,1 - 0.2*Math.floor(Collision.distancePtPt(player,a)/50));	
 		Sfx.creation(sfx);
 	}	
 }

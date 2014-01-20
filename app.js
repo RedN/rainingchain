@@ -36,6 +36,7 @@ require('./' + clientPath + 'client/js/shared/Main');
 require('./server/entity/Mortal_creation');
 require('./server/entity/Attack');
 require('./server/entity/Mortal_loop');
+require('./server/entity/Mortal_loop_ai');
 require('./server/entity/Attack_loop');
 require('./server/entity/boss');
 require('./server/Loop');

@@ -6,9 +6,9 @@ Mortal.creation = function(data){
 	var e = Mortal.template('enemy');
 	e = Mortal.creation.db(e,data);
 	e = Mortal.creation.info(e,data);
-	e = useTemplate(e,e.extra,2);	//deep clone of function
+	e = Mortal.creation.extra(e,data);
 	e = Mortal.creation.optionList(e);
-	
+		
 	e.data = data;
 	List.mortal[e.id] = e;
 	List.all[e.id] = e;
@@ -20,7 +20,7 @@ Mortal.creation = function(data){
 	}
 	if(e.nevermove){ Mortal.creation.nevermove(e); }
 	
-	return e.id
+	return e.id;
 }
 
 Mortal.creation.group = function(gr,el){
@@ -75,6 +75,8 @@ Mortal.creation.db = function(e,d){
 	
 	e.id = Math.randomId();
 	e.publicId = Math.random().toString(36).substring(13);
+	e.frameCount = Math.floor(Math.random()*100);
+	
 	
 	if(e.boss){	
 		var id = e.boss;
@@ -99,6 +101,8 @@ Mortal.creation.info = function(e,cr){
     e.map = cr.map || 'test';
 	e.x = cr.x + Math.randomML() * (cr.v || 0); 
 	e.y = cr.y + Math.randomML() * (cr.v || 0); 
+	e.crX = cr.x;
+	e.crY = cr.y;
 	e.category = cr.category || 'eSlime'; 
 	e.variant = cr.variant || 'Regular'; 
 	e.lvl = cr.lvl || 0; 
@@ -147,6 +151,16 @@ Mortal.creation.mod.list = {
 	
 }
 
+Mortal.creation.extra = function(mort){
+	mort = useTemplate(mort,mort.extra,2);	//deep clone of function
+	for(var i in mort.viaArray){ 
+		mort.viaArray[i].origin = mort;
+		changeViaArray(mort.viaArray[i]);
+	} 
+	delete mort.extra;
+	delete mort.viaArray;
+	return mort;
+}
 
 Mortal.creation.optionList = function(e){
 	var ol = {'name':e.name,'option':[]};
@@ -162,7 +176,6 @@ Mortal.creation.nevercombat = function(mort){
 	mort.combat = 0;
 	
 	delete mort.killed;
-	delete mort.targetMod;
 	
 	
 	
@@ -173,7 +186,6 @@ Mortal.creation.nevercombat = function(mort){
 	delete mort.drop;
 	delete mort.item;
 	delete mort.pickRadius;
-	delete mort.target;
 	
 	//Combat
 	delete mort.attackReceived;	
@@ -230,7 +242,6 @@ Mortal.creation.nevermove = function(mort){
 	delete mort.spdY; 
 	delete mort.moveInput; 
 	delete mort.bumper; 
-	delete mort.changeDir; 
 	delete mort.moveRange;
 	
 	//For update:

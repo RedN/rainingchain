@@ -1,34 +1,36 @@
 //####Update Mortal####
 Mortal.loop = function(mort){	
 	Test.loop.mortal(i);
-	if(Loop.frameCount % 25 === 0){ Mortal.loop.activeList(mort); }
+	mort.frameCount++;
+	if(mort.frameCount % 25 === 0){ Mortal.loop.activeList(mort); }
 	if(!mort.active || mort.dead) return;
 		
 	if(mort.combat){
-		if(mort.type == 'enemy'){
-			if(Math.random() < 1/mort.targetMod.period || !mort.target){ Mortal.loop.target(mort); }  //update Enemy Target
-			if(mort.killed){ Mortal.death(mort);}
-			if(mort.hp <= 0){ Mortal.death.start(mort);}
-			if(mort.target && mort.boss){ mort.boss.loop();}    //custom boss loop
-		}
-		Mortal.loop.aim(mort); //impact max spd depending on aim
+		if(mort.killed) Mortal.death(mort);
+		if(mort.hp <= 0) Mortal.death.start(mort);
+		if(mort.boss) mort.boss.loop();    //custom boss loop
+		
 		Mortal.loop.ability(mort);
 		Mortal.loop.regen(mort);    
 		Mortal.loop.status(mort);	
 		Mortal.loop.boost(mort);
 		Mortal.loop.summon(mort);
-		if(Loop.frameCount % 25 === 0){ Mortal.loop.attackReceived(mort); }
+		if(mort.frameCount % 25 === 0){ Mortal.loop.attackReceived(mort); }
 	}
+	if(mort.combat || mort.move){
+		Mortal.loop.setTarget(mort);  //update Enemy Target
+		Mortal.loop.input(mort); //simulate enemy key press depending on target 
+	}
+	if(mort.combat && mort.move) Mortal.loop.move.aim(mort); //impact max spd depending on aim
 	
 	if(mort.move){
-		Mortal.loop.bumper(mort);     //test if collision with map    
-		if(mort.type !== 'player'){ Mortal.loop.input(mort); }    //simulate enemy key press depending on target
-		Mortal.loop.move(mort);   //move the actor
+		Mortal.loop.bumper(mort);   //test if collision with map    
+		Mortal.loop.move(mort);  	//move the actor
 	}
 	if(mort.type === 'player'){
 		var i = mort.id;
-		if(Loop.frameCount % 2 === 0){ Draw.loop(i); }    //draw everything and add button
-		if(Loop.frameCount % 25 === 0){ Mortal.loop.friendList(mort); }    //check if any change in friend list
+		if(mort.frameCount % 2 === 0){ Draw.loop(i); }    //draw everything and add button
+		if(mort.frameCount % 25 === 0){ Mortal.loop.friendList(mort); }    //check if any change in friend list
 		if(List.main[i].windowList.trade){ Mortal.loop.trade(mort); };    
 		if(List.main[i].dialogue){ Mortal.loop.dialogue(mort); }
 		
@@ -38,7 +40,7 @@ Mortal.loop = function(mort){
 		
 }
 
-//Combat
+//{Ability
 Mortal.loop.ability = function(m){
 	var alreadyBoosted = {};
 	m.abilityChange.chargeClient = [0,0,0,0,0,0];
@@ -58,25 +60,25 @@ Mortal.loop.ability = function(m){
 		m.abilityChange.chargeClient[+i] = charge[s.id] >= s.period ? 1 : charge[s.id] / s.period;
 				
 		if(press && charge[s.id] >= s.period){
-			Mortal.ability(m,s);
+			Mortal.performAbility(m,s);
 			break;	//1 ability per frame max
 		}
 	}
 
 }
 
-Mortal.ability = function(mort,ab,mana,reset){
+Mortal.performAbility = function(mort,ab,mana,reset){
 	//Mana
-	if(mana !== false && !Mortal.ability.resource(mort,ab.cost)) return;
+	if(mana !== false && !Mortal.performAbility.resource(mort,ab.cost)) return;
 	
 	//Charge
-	if(reset !== false) Mortal.ability.charge(mort,ab);
+	if(reset !== false) Mortal.performAbility.resetCharge(mort,ab);
 		
 	//Do Ability Action (ex: Combat.action.attack)
 	applyFunc.key(mort.id,ab.action.func,ab.action.param);
 }
 
-Mortal.ability.charge = function(mort,ab){
+Mortal.performAbility.resetCharge = function(mort,ab){
 	var charge = mort.abilityChange.charge;
 	charge[ab.id] = Math.min(charge[ab.id] % ab.period,1);
 	
@@ -102,7 +104,7 @@ Mortal.ability.charge = function(mort,ab){
 	}
 }
 
-Mortal.ability.resource = function(mort,cost){
+Mortal.performAbility.resource = function(mort,cost){
 	for(var j in cost){
 		if(cost[j] > mort[j]){ return false;}
 	}
@@ -110,7 +112,9 @@ Mortal.ability.resource = function(mort,cost){
 	return true;		
 }
 
+//}
 
+//{Stats
 Mortal.loop.status = function(mort){
 	Mortal.loop.status.knock(mort);
 	Mortal.loop.status.burn(mort);
@@ -160,6 +164,31 @@ Mortal.loop.regen = function(mort){
 	}
 }
 
+Mortal.loop.boost = function(mort,full){
+	var array = {'fast':1,'reg':5,'slow':25};
+	for(var j in array){
+		if(Loop.frameCount % array[j] === 0){
+			for(var i in mort.boost[j]){
+				if(mort.boost[j][i].timer < 0){ 
+					var stat = mort.boost[j][i].stat;
+					delete mort.boost.list[stat].name[mort.boost[j][i].name]
+					delete mort.boost[j][i]; 
+					Mortal.update.boost(mort,stat);
+				} else {
+					mort.boost[j][i].timer -= array[j];
+				}
+			}
+		}
+	}
+	
+	for(var i in mort.boost.toUpdate){
+		Mortal.update.boost(mort,i);
+		delete mort.boost.toUpdate[i];
+	}
+	
+	if(full){for(var i in mort.boost.list){Mortal.update.boost(mort,i);}}
+}
+
 Mortal.loop.summon = function(mort){
     //check if summon child still exist (assume player is the master)
 	for(var i in mort.summon){
@@ -169,11 +198,11 @@ Mortal.loop.summon = function(mort){
 	}
 	
 	//(assume player is child)
-    if(mort.summoned && Loop.frameCount % 5 === 0){
+    if(mort.summoned && mort.frameCount % 5 === 0){
 		if(!mort.summoned.father || !List.all[mort.summoned.father]){ Mortal.remove(mort); return; }
 	    
 	    //if too far, teleport near master
-		if(mort.map != List.all[mort.summoned.father].map || distancePtPt(mort,List.all[mort.summoned.father]) >= mort.summoned.distance){
+		if(mort.map != List.all[mort.summoned.father].map || Collision.distancePtPt(mort,List.all[mort.summoned.father]) >= mort.summoned.distance){
 			mort.x = List.all[mort.summoned.father].x + Math.random()*5-2;
 			mort.y = List.all[mort.summoned.father].y + Math.random()*5-2;
 			mort.map = List.all[mort.summoned.father].map;
@@ -186,6 +215,9 @@ Mortal.loop.summon = function(mort){
 	}
 }
 
+//}
+
+//{Move
 Mortal.loop.bumper = function(mort){
 	//test collision with map
 	mort.x = Math.max(mort.x,50);
@@ -200,7 +232,6 @@ Mortal.loop.bumper = function(mort){
 	}
 }
 
-//update movement. depends on spd.
 Mortal.loop.move = function(mort){
 	if(mort.status && mort.status.confuse.active.time > 0){ var bind = mort.status.confuse.active.input;} else { var bind = [0,1,2,3]; }
 	if(mort.bumper[0]){mort.spdX = -Math.abs(mort.spdX*0.5) - 1;} 
@@ -237,37 +268,14 @@ Mortal.loop.move = function(mort){
 	
 }
 
-//penalty if looking and moving in opposite direction
-Mortal.loop.aim = function (mort){	
+Mortal.loop.move.aim = function (mort){	
+	//penalty if looking and moving in opposite direction
 	var diffAim = Math.abs(mort.angle - mort.moveAngle);
 	if (diffAim > 180){ diffAim = 360 - diffAim;}
 	Mortal.boost(mort,{'stat':'maxSpd','type':"*",'value':Math.pow((360-diffAim)/360,1.5),'time':2,'name':'Aim'});
 }
+//}
 
-Mortal.loop.boost = function(mort,full){
-	var array = {'fast':1,'reg':5,'slow':25};
-	for(var j in array){
-		if(Loop.frameCount % array[j] === 0){
-			for(var i in mort.boost[j]){
-				if(mort.boost[j][i].timer < 0){ 
-					var stat = mort.boost[j][i].stat;
-					delete mort.boost.list[stat].name[mort.boost[j][i].name]
-					delete mort.boost[j][i]; 
-					Mortal.update.boost(mort,stat);
-				} else {
-					mort.boost[j][i].timer -= array[j];
-				}
-			}
-		}
-	}
-	
-	for(var i in mort.boost.toUpdate){
-		Mortal.update.boost(mort,i);
-		delete mort.boost.toUpdate[i];
-	}
-	
-	if(full){for(var i in mort.boost.list){Mortal.update.boost(mort,i);}}
-}
 
 Mortal.loop.activeList = function(mort){
 	//Note: Could mix that together
@@ -296,103 +304,6 @@ Mortal.loop.activeList = function(mort){
 
 }
 
-Mortal.loop.repulsion = function(enemy){
-	for(var i in List.mortal){
-		if(enemy != List.mortal[i]){
-			if(Collision.RectRect(Collision.getBumperBox(enemy),Collision.getBumperBox(List.mortal[i]))){
-				var diffX = enemy.x- List.mortal[i].x;
-				var diffY = enemy.y- List.mortal[i].y;
-				var angle = atan2(diffY,diffX);
-				
-				enemy.spdX += 15*cos(angle); enemy.spdY += 15*sin(angle);
-				List.mortal[i].spdX += -15*cos(angle); List.mortal[i].spdY += -15*sin(angle);
-			}		
-		}		
-	}
-}
-
-
-Mortal.loop.input = function(mort){
-	Mortal.loop.input.move(mort);
-	if(Loop.frameCount % 25 === 0){
-		Mortal.loop.input.ability(mort);
-	}
-}
-
-Mortal.loop.input.move = function(mort){
-	//update enemy input for movement.
-	
-	//Combat
-	if(mort.combat && mort.target && List.all[mort.target]){
-		var target = List.all[mort.target];
-		var diffX = target.x - mort.x;
-		var diffY = target.y - mort.y;
-		var diff = Math.sqrt(diffX*diffX+diffY*diffY);
-		
-		mort.angle = atan2(diffY,diffX);
-		
-		//OK
-		if(diff  >= mort.moveRange.ideal - mort.moveRange.confort && diff  <= mort.moveRange.ideal + mort.moveRange.confort){
-			mort.moveInput = [0,0,0,0];
-		}
-		//Too Far
-		else if(diff  >= mort.moveRange.ideal + mort.moveRange.confort){
-			mort.moveInput[0] = diffX > 0;
-			mort.moveInput[1] = diffY > 0;
-			mort.moveInput[2] = diffX < 0;
-			mort.moveInput[3] = diffY < 0;	
-		}	
-		//Too Close
-		else if(diff  <= mort.moveRange.ideal - mort.moveRange.confort){
-			mort.moveInput[0] = diffX < 0;
-			mort.moveInput[1] = diffY < 0;
-			mort.moveInput[2] = diffX > 0;
-			mort.moveInput[3] = diffY > 0;	
-		}	
-		//Out of Zone
-		if(diff  >= mort.moveRange.farthest){
-			if(!mort.status.knock.active.time){mort.active = 0;}	//Otherwise knock stops weird
-			mort.moveInput = [0,0,0,0];
-		}
-		
-		for(var i in mort.moveInput){	if(Math.random()< 0.02){ mort.moveInput[i] = 0;} }	//Prevent Piling
-		
-		mort.mouseX = Cst.WIDTH2+diffX; 
-		mort.mouseY = Cst.HEIGHT2+diffY;
-		
-	}
-	
-	//Not In Combat
-	if(!mort.combat || !mort.target){ 
-		mort.angle = mort.moveAngle + 10;	//quick fix
-		if(Math.random() < 1/mort.changeDir){
-			for(var i in mort.moveInput){
-				mort.moveInput[i] = Math.floor(Math.random()*1.5);
-			}		
-		}
-	}	
-}
-
-Mortal.loop.input.ability = function(mort){
-	if(!mort.combat || !mort.target){
-		mort.abilityChange.press = '000000000000000';
-		return;
-	}
-	
-	/*
-	var target = List.all[mort.target];
-	var diffX = target.x - mort.x;
-	var diffY = target.y - mort.y;
-	var diff = Math.sqrt(diffX*diffX+diffY*diffY);
-	*/
-	
-	mort.abilityChange.press = '';
-	for(var i in mort.ability){
-		mort.abilityChange.press += mort.ability[i].chance >= Math.random() ? '1' : '0';	
-	}
-}
-
-//Non-Combat
 Mortal.loop.trade = function(mort){
 	var key = mort.id;
 	if(List.main[List.main[key].windowList.trade.trader]){
@@ -407,8 +318,8 @@ Mortal.loop.trade = function(mort){
 	}
 }
 
-//test if player has move away to end dialogue
 Mortal.loop.dialogue = function(mort){
+	//test if player has move away to end dialogue	
 	var key = mort.id;
 	var dx = List.main[key].dialogueLoc.x;
 	var dy = List.main[key].dialogueLoc.y;
@@ -437,63 +348,6 @@ Mortal.loop.attackReceived = function(mort){
 			delete mort.attackReceived[i];
 		}
 	}
-}
-
-/*
-mort.target:{
-	real:{
-		list:
-		frequence:
-	},
-	artificial:{
-		list:
-		frequence:
-	}
-}
-
-
-Mortal.loop.target = 
-
-Mortal.loop.target.getNewTarget = {};
-Mortal.loop.target.getNewTarget.fake = function(mort){
-
-}
-*/
-//Mortal.loop.target.getNewTarget.main
-Mortal.loop.target = function(mort){
-    var targetList = []; 
-	for (var i in mort.activeList){
-		var tar = List.all[i];
-		var hIf = typeof mort.targetIf == 'function' ? mort.targetIf : Combat.hitIf.list[mort.targetIf];
-			
-		if(Combat.targetIf.global(mort,tar) && hIf(tar,mort)){
-			var diffX = mort.x - tar.x;
-			var diffY = mort.y - tar.y;
-			var diff = Math.sqrt(diffX*diffX+diffY*diffY);
-			if(diff <= mort.moveRange.aggressive){
-				var diffModded = 1/(diff+mort.targetMod.rangeMod);
-				targetList.push({'mod':diffModded,'id':i});
-			}
-		}
-	}
-	
-	if(targetList.length){
-		mort.target = targetList.random().id;	
-	}else {mort.target = null;}	
-}
-
-
-
-Mortal.getPath = function(mort,target){
-	if(mort.map !== target.map) return [];
-	var map = Db.map[mort.map].grid.nodes;
-	
-	var start = map[Math.floor(mort.y/32)][Math.floor(mort.x/32)];
-	var end = map[Math.floor(target.y/32)][Math.floor(target.x/32)];
-	
-	var a = astar.search(map,start,end);
-	return a;
-
 }
 
 

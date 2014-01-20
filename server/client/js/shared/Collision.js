@@ -1,5 +1,12 @@
 Collision = {};
 
+/*
+rect: [minx,maxx,miny, maxy]
+pt: {x:12.3,y:13.23}	//real position
+pos: {x:1,y:23}			//grid position
+*/
+
+
 Collision.RectRect = function(rect1,rect2){
 	//Test Collision between rect and rect. format: rect1:[minx,maxx,miny,maxy],rect2:[minx,maxx,miny,maxy]
 	return (rect1[0] <= rect2[1] &&	rect2[0] <= rect1[1] &&	rect1[2] <= rect2[3] &&	rect2[2] <= rect1[3]);
@@ -11,21 +18,23 @@ Collision.PtRect = function(pt,rect){
 }
 
 Collision.PtMap = function(pt,map,player){
+	return Collision.PosMap(Collision.getPos(pt),map,player);
+}
+
+Collision.PosMap = function(pos,map,player){
 	//Test Collision between pt and map (can also test with player map mod)
-	var gridX = Math.floor(pt.x/32);
-	var gridY = Math.floor(pt.y/32);
-	
 	/*
 	if(player && player.mapMod && player.mapMod[map] && player.mapMod[map][gridX + '-' + gridY]){
 		return player.mapMod[map][gridX + '-' + gridY];
 	}
 	*/
 	var map = Db.map[map].grid.input;
-	if(map[gridY] === undefined){ return  1;	} 
-	else if(map[gridY][gridX] === undefined){return  1;} 
-	else {return !map[gridY][gridX];}
+	if(map[pos.y] === undefined){ return  1;	} 
+	else if(map[pos.y][pos.x] === undefined){return  1;} 
+	else {return !map[pos.y][pos.x];}
 	return 1;
 }
+
 
 Collision.getHitBox = function(player){
 	return [player.x + player.hitBox[2].x,player.x + player.hitBox[0].x,player.y + player.hitBox[3].y,player.y + player.hitBox[1].y];
@@ -127,4 +136,36 @@ Collision.StrikeMortal = function(atk){
 		}}
 	}
 }
+
+Collision.distancePtPt = function(pt1,pt2){
+	return Math.sqrt(Math.pow(pt1.x - pt2.x,2) + Math.pow(pt1.y - pt2.y,2));
+}
+
+Collision.anglePtPt = function(pt1,pt2){
+	return atan2(pt2.y-pt1.y,pt2.x-pt1.x);
+}
+
+Collision.getPos = function(pt){
+	return {x:Math.floor(pt.x/32),y:Math.floor(pt.y/32)}
+}
+
+Collision.getPath = function(pos1,pos2){	//straight forward path (linear)
+	var array = [];
+	for(var i = 0 ; i < 1000 && (pos1.x !== pos2.x || pos1.y !== pos2.y); i++){
+		if(pos1.x < pos2.x) pos1.x++;
+		else if(pos1.x > pos2.x) pos1.x--;
+		
+		array.push({x:pos1.x,y:pos1.y});
+		
+		if(pos1.y < pos2.y) pos1.y++;
+		else if(pos1.y > pos2.y) pos1.y--;
+		
+		array.push({x:pos1.x,y:pos1.y});
+	}
+	return array;
+}
+
+
+
+
 

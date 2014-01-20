@@ -231,7 +231,7 @@ Mortal.talk = function(mort,enemyId){
 	}
 }//
 
-//Note: Mortal.ability is used to perform ability
+//Note: Mortal.performAbility is used to perform ability
 Mortal.removeAbility = function(mort,name){
 	delete mort.abilityList[name];
 	for(var i in mort.ability){
@@ -271,11 +271,13 @@ Mortal.learnAbility = function(mort,name,chance){
 
 Mortal.examineAbility = function(mort){}
 
-
+//death doesnt work...
 Mortal.death = function(mort){	//only for enemy atm
+	if(mort.type !== 'enemy') return;
+
 	mort.dead = 1;
 	
-	var killer = Mortal.death.killer(mort);
+	var killer = Mortal.death.getKiller(mort);
 	Mortal.death.drop(mort,List.all[killer]);
 	if(mort.death){ mort.death(killer); }	//custom death function (ex quest)
 	Mortal.death.ability(mort);				//custom death ability function
@@ -284,6 +286,8 @@ Mortal.death = function(mort){	//only for enemy atm
 
 
 Mortal.death.start = function(mort){
+	if(mort.type !== 'enemy') return;
+
 	mort.killed = 1;
 	mort.maxSpd = 0;
 	mort.spdX = 0;
@@ -294,11 +298,11 @@ Mortal.death.start = function(mort){
 
 Mortal.death.ability = function(mort){
 	for(var i in mort.deathAbility){
-		Mortal.ability(mort,mort.ability[mort.deathAbility[i]],false,false);
+		Mortal.performAbility(mort,mort.ability[mort.deathAbility[i]],false,false);
 	}
 }
 
-Mortal.death.killer = function(mort){
+Mortal.death.getKiller = function(mort){
 	var killer = null; var max = 0;
 	for(var i in mort.damagedBy){
 		if(mort.damagedBy[i] > max){
@@ -368,7 +372,7 @@ Mortal.pickDrop = function (mort,id){
 	var drop = List.drop[id];
 		
 	if(drop){
-		if(distancePtPt(mort,drop) <= mort.pickRadius && Itemlist.test(inv,[[List.drop[id].item,List.drop[id].amount]])){
+		if(Collision.distancePtPt(mort,drop) <= mort.pickRadius && Itemlist.test(inv,[[List.drop[id].item,List.drop[id].amount]])){
 			Itemlist.add(inv,drop.item,drop.amount);
 			Drop.remove(drop);		
 		}

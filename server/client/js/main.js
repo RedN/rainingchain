@@ -41,14 +41,16 @@ Db = {	//local compilation of information so server doesnt send many times the s
 //Log In
 Sign = {};
 Sign.in = function(){
-	var user = $("#user")[0].value;
-	var pass = $("#pass")[0].value;
+	var user = $("#userSignIn")[0].value;
+	var pass = $("#passSignIn")[0].value;
 	socket.emit('signIn', { 'username': user,'password': pass });
 }
 
 Sign.up = function (){
-	var user = $("#user")[0].value;
-	var pass = $("#pass")[0].value;
+	var user = $("#userSignUp")[0].value;
+	var pass = $("#passSignUp")[0].value;
+	var confirm = $("#confirmSignUp")[0].value;
+	if(pass !== confirm){ Sign.log('Passwords do not match.'); return;}
 	if(user && pass){ socket.emit('signUp', { 'username': user,'password': pass }); }
 }
 
