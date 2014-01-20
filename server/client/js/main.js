@@ -77,7 +77,7 @@ socket.on('signUp', function (data) {
 //Init
 Init.game = function (data) {
 	$("#startDiv")[0].style.display = "none"; 	//remove enter user and psw
-	$("#gameDiv")[0].style.display = "inline-block";  //show game
+	$("#gameDiv")[0].style.display = "inline";  //show game
 	
 	Init.game.main(data);
 	Init.game.other(data);

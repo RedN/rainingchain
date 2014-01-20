@@ -212,7 +212,7 @@ Draw.chat.main = function(){
 	
 	chatUserName.style.font = s.personalChatY + 'px Monaco';
 	
-	html.chat.input.size=(69-player.name.length).toString();
+	html.chat.input.size=(50-player.name.length).toString();
 	html.chat.input.maxlength="150";	
 	html.chat.input.style.font = s.personalChatY + 'px Monaco';
 	html.chat.input.style.height = s.personalChatY + 'px'
@@ -437,10 +437,8 @@ Draw.context = function (){ ctxrestore();
 	var hc = html.context.div;
 	
 	if(!hc.innerHTML || hc.innerHTML !== cont){
-		hc.style.left = Input.mouse.x + 25 + 'px';
-		hc.style.top = Input.mouse.y + 25 + 'px';
-		hc.style.padding = '3px';
-		hc.style.zIndex = 100;
+		hc.style.left = (Input.mouse.x + 25).mm(0,Cst.WIDTH-25) + 'px';
+		hc.style.top = (Input.mouse.y + 25).mm(0,Cst.HEIGHT-25) + 'px';
 	}
 	hc.innerHTML = cont;
 	if(hc.innerHTML){

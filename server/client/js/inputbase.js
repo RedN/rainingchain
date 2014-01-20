@@ -152,8 +152,9 @@ Input.event.mouse.wheel = function(side){
 }
 
 Input.event.mouse.move = function (evt){
-	Input.mouse.x = evt.x;
-	Input.mouse.y = evt.y;
+	var pos = $('#gameDiv').offset();
+	Input.mouse.x = evt.x - pos.left;
+	Input.mouse.y = evt.y - pos.top;
 }
 
 Input.event.mouse.drag = function(){

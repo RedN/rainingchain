@@ -1,15 +1,12 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<link rel="stylesheet" href="/css/css.css" type="text/css" media="screen, projection" />
 		<link href='http://fonts.googleapis.com/css?family=Oleo+Script' rel='stylesheet' type='text/css'>
-	
+		<link rel="stylesheet" href="/css/css.css" type="text/css" media="screen, projection" />
 		<title>Raining Chain</title>
-
 	</head>
 	<body>
 		<script src="/socket.io/socket.io.js"></script>
-		
 		
 		<script>
 		var server = false;
@@ -22,14 +19,6 @@
 		
 		
 		<script src="/js/modules/jquery.min.js"></script>
-		
-		<!--
-		<link href="/js/modules/jqueryui/css/ui-lightness/jquery-ui-1.10.4.custom.css" rel="stylesheet">
-		<script src="/js/modules/jqueryui/js/jquery-1.10.2.js"></script>
-		<script src="/js/modules/jqueryui/js/jquery-ui-1.10.4.custom.js"></script>
-		-->
-		
-		
 		
 		
 		<script src="/js/shared/constant.js"></script>
@@ -48,7 +37,6 @@
 		<script src="/js/shared/Mortal.js"></script>
 		<script src="/js/shared/Main.js"></script>
 		<script src="/js/shared/anim.js"></script>
-		<!-- <script src="/js/shared/ability.js"></script> -->
 		<script src="/js/shared/Collision.js"></script>
 		<script src="/js/shared/sprite.js"></script>
 		<script src="/js/shared/Mortal_init.js"></script>
@@ -93,19 +81,22 @@
 			</div>
 		</div>	
 		
+		<!--
+<div id="gameDiv" style="display:none;">	
+		<div class='posAbs' >
+	-->
 
-
-		<div id="outer">	
-		<div id="gameDiv" class='posAbs' style="display:none;">
+		<div id="mainDiv" style="width: 1280px;  height:720px; margin: 0px auto;">	
+		<div  id="gameDiv" class='posAbs' style="display:none;">
 			<div id="canvasDiv" class='posAbs' onclick='document.activeElement.blur()'></div>
 			
-			<div id="contextDiv" class='posAbs gradientBoxesWithOuterShadows'></div>
+			<div id="contextDiv" style="white-space: nowrap; width:auto; padding:3px; zIndex:100;" class='posAbs gradientBoxesWithOuterShadows'></div>
 			<!-- Chat -->
 			<div id="chatBoxDiv" class="posAbs"> 
 				<div id="chatBoxText" class='taJust onlyTextScroll'></div>
 				<form id='chatForm'>
-				<span id="chatUserName" class='onlyText '></span>
-				<input id="chatBoxInput" class='onlyText' type="text" >
+				<span id="chatUserName" class='onlyText'></span>
+				<input id="chatBoxInput" class='onlyText' type="text">
 				</form>
 			</div>		
 			
