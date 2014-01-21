@@ -3,40 +3,54 @@
 
 
 /*
-Db.drop = {
 
-	'regular':{
-		{lvl:0,chance:1,table:[
-			{name:'wood',amount:[1],chance:1/4},
-			{name:'logs',amount:[1,5],chance:1/4},
-		]},
-		{'lvl':10,'table':[
-			{name:'oak-wood',amount:[1],chance:1/4},
-			{name:'oak-logs',amount:[1,10],chance:1/4},
-		]},
-	},
-	
-	'fish':{
-		{'lvl':0,'table':[
-			{name:'shrimp',amount:[1],chance:1/4},
-		]},
-		{'lvl':10,'table':[
-			{name:'lobster',amount:[1],chance:1/4},
-		]},
-	},
-}
 */
+Drop.getCategoryList = function(drop,lvl,qu){
+	var list = [];
+	qu = qu || 1;
+	
+	for(var i in drop.category){
+		for(var j in Drop.db[i]){
+			var table = Drop.db[i][j];
+			var highest = {lvl:0};
+			if(lvl >= table.lvl && lvl >= highest.lvl){
+				highest = table;
+			}
+		}
+		for(var j in highest){
+			var tmp = deepClone(highest[j]);
+			tmp.chance *= drop.category[i].chance;
+			tmp.chance = Math.pow(tmp.chance,1/qu)
+			list.push(tmp);		
+		}
+	}
+	return tmp;
+}
 
 Init.db.drop = function(){
 	Db.drop = {
-		'regular':
-			[	{name:'gold',amount:[1,10],chance:1/4},
-				{name:'lobster',amount:[1],chance:1/4},
+		'regular':[
+			{lvl:0,chance:0.5,table:[
 				{name:'wood',amount:[1],chance:1/4},
-				{name:'logs',amount:[1],chance:1/4},
-			],
+				{name:'logs',amount:[1,5],chance:1/4},
+			]},
+			{'lvl':10,chance:0.5,'table':[
+				{name:'gold',amount:[1,10],chance:1/4},
+			]},
+		],
+		
+		'fish':[
+			{'lvl':0,chance:0.5,'table':[
+				{name:'gold',amount:[1,10],chance:1/4},
+			]},
+			{'lvl':10,chance:0.5,'table':[
+				{name:'gold',amount:[1,10],chance:1/4},
+			]},
+		],
 	}
-	
+
+
+
 	for(var i in Db.drop){
 		for(var j in Db.drop[i]){
 			var d = Db.drop[i][j];

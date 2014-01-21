@@ -316,44 +316,50 @@ Mortal.death.getKiller = function(mort){
 	return tmp.splice(tmp.indexOf(killer),1).unshift(killer);	//place main killer in [0]
 }
 
+
+
+
 Mortal.death.drop = function(mort,killer){
 	var drop = mort.drop;
 	
-	var quantity = 1 + drop.mod.quantity; 
+	var quantity = (1 + drop.mod.quantity).mm(0); 
 	var quality = drop.mod.quality;
 	var rarity = drop.mod.rarity;
-	if(killer[0]){ 
-		quantity += killer[0].item.quantity; 
-		quality += killer[0].item.quality; 
-		rarity += killer[0].item.rarity; 
+	if(killer[0] && List.all[killer[0]]){ 
+		quantity += List.all[killer[0]].item.quantity; 
+		quality += List.all[killer[0]].item.quality; 	//only for plan
+		rarity += List.all[killer[0]].item.rarity; 		//only for plan
 	}
 	
 	
-	for(var i in drop.category){
+	var list = Drop.getCategoryList(drop.category,mort.lvl,quantity);
 	
-		if(drop.category[i] !== 'plan'){
-			var list = Db.drop[drop.category[i]];
-			for(var j in list){
-				var item = list[j];
-				if(Math.pow(Math.random(),quantity) < item.chance){
-					var amount = Math.floor(item.min + (item.max-item.min)*( Math.pow(Math.random(),1/(quantity))));	//player quantity
-					Drop.creation({'x':mort.x+(Math.random()-0.5)*50,'y':mort.y+(Math.random()-0.5)*50,'map':mort.map,'item':item.item,'amount':amount,'timer':Drop.timer});		
-				}	
-			}
-		} else {
-			if(Math.pow(Math.random(),(quantity)) < Db.drop.plan){
-				var itemId = 'planA' + Math.randomId();
-				var lvl = Math.max(0,Math.floor(mort.lvl * (1 + Math.randomML()/10)));	//aka lvl += 10%
-					
-				Item.creation({'id':itemId,'name':"Plan",'visual':'plan.planA',
-					'option':[	{'name':'Craft Item','func':'Craft.plan',
-								'param':[{'lvl':lvl,'rarity':rarity,'quality':quality},{'item':[{'item':itemId,'amount':1}]}]}
-					]});
-				
-				Drop.creation({'x':mort.x+Math.randomML(50),'y':mort.y+Math.randomML(50),'map':mort.map,'item':itemId,'amount':1});		
-			}
+	for(var i in list){
+		var item = list[i];
+		if(Math.random() < item.chance){	//quantity applied in Drop.getList
+			var randomKiller = killer.random();
+			var amount = Math.round(item.min + Math.random()*(item.max-item.min));	
+			Drop.creation({'x':mort.x+Math.randomML(25),'y':mort.y+Math.randomML(25),'map':mort.map,'item':item.item,'amount':amount,'timer':Drop.timer
+							'viewedIf':function(key){ return key === randomKiller;});			//	problem here probably cuz randomKiller is same
 		}
 	}
+		
+	
+	
+	/*
+
+	if(Math.pow(Math.random(),(quantity)) < Db.drop.plan){
+		var itemId = 'planA' + Math.randomId();
+		var lvl = Math.max(0,Math.floor(mort.lvl * (1 + Math.randomML()/10)));	//aka lvl += 10%
+			
+		Item.creation({'id':itemId,'name':"Plan",'visual':'plan.planA',
+			'option':[	{'name':'Craft Item','func':'Craft.plan',
+						'param':[{'lvl':lvl,'rarity':rarity,'quality':quality},{'item':[{'item':itemId,'amount':1}]}]}
+			]});
+		
+		Drop.creation({'x':mort.x+Math.randomML(25),'y':mort.y+Math.randomML(25),'map':mort.map,'item':itemId,'amount':1});		
+	}
+	*/
 }
 
 Mortal.death.revive = function(mort){

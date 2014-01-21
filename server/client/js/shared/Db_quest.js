@@ -23,8 +23,8 @@ Init.db.quest = function(){
 		];
 		
 		q.hintGiver = function(key,mq){
-			if(false){
-				return 'something';
+			if(mq.receivedDevice){
+				return 'Vas tuer le boss';
 			} 
 			return 'You can start this quest by talking to God.';
 		};
@@ -126,7 +126,7 @@ Init.db.quest = function(){
 		
 		q.bossKilled = function(key){
 		    List.main[key].quest['questId'].bossKilled = true;
-		    Chat.add(key,"Congratz! You have slain the demon. Come back to town for reward.")
+		    Chat.add(key,"Congratz! You have slain the demon. Come back to town for reward.");
 		};	
 		//}
 		

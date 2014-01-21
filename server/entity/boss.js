@@ -119,8 +119,8 @@ Init.db.boss = function(){
 						
 						//random projectiles inside the V
 						if(Math.random() < 0.4){
-							Combat.action.attack.perform(mort,boss.attack['midSpear'],{'angle':boss.angle[i]+(Math.random()-0.5)*2*boss.opening});
-							Combat.action.attack.perform(mort,boss.attack['midSpear'],{'angle':boss.angle[i]+(Math.random()-0.5)*2*boss.opening});
+							Combat.action.attack.perform(mort,boss.attack['midSpear'],{'angle':boss.angle[i]+Math.randomML()*boss.opening});
+							Combat.action.attack.perform(mort,boss.attack['midSpear'],{'angle':boss.angle[i]+Math.randomML()*boss.opening});
 						}
 					}
 					break;
