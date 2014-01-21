@@ -132,11 +132,11 @@ Mortal.creation.mod.list = {
 	'immuneRange': (function(e){ e.equip.def.range = 1/0;  return e; }),
 	'immuneMagic': (function(e){ e.equip.def.magic = 1/0;  return e; }),
 
-	'immuneStatus': (function(e){ for(var i in e.status){ e.status[i].resist = 100; }  return e; }),
+	'immuneStatus': (function(e){ for(var i in e.status){ e.status[i].resist = 1; }  return e; }),
 
-	//'BAx2': (function(e){ e.bonus.bullet.amount *= 2; return e; }),
+	'BAx2': (function(e){ e.bonus.bullet.amount *= 2; return e; }),
 
-	//'BAx4': (function(e){ e.bonus.bullet.amount *= 4; e.dmgMain /= 2; return e; }),
+	'BAx4': (function(e){ e.bonus.bullet.amount *= 4; e.dmgMain /= 2; return e; }),
 	'regen': (function(e){ e.resource.hp.regen = e.resource.hp.max/250; return e; }),
 	'extraLife': (function(e){ e.resource.hp.max *= 2; e.hp *= 2; return e; }),
 	'leech': (function(e){ e.bonus.leech.chance = 0.5; e.bonus.leech.magn = 0.5; return e; }),

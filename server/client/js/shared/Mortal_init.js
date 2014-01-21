@@ -122,12 +122,12 @@ Init.mortal = function(){
 		
 		//Resist
 		mort.status = {
-			'knock':{'active':{"time":0,"magn":0,"angle":0},'resist':0,'resistMax':0,},
-			'burn':{'active':{"time":0,"magn":0},'resist':0,'resistMax':0},
-			'chill':{'active':{"time":0,"magn":0,"atk":0},'resist':0,'resistMax':0},
-			'confuse':{'active':{"time":0,"magn":0,"input":[0,1,2,3]},'resist':0,'resistMax':0},
-			'bleed':{'active':{"time":0,"list":[]},'resist':0,'resistMax':0,},
-			'drain':{'active':{"time":0,"magn":0},'resist':0,'resistMax':0},
+			'knock':{'active':{"time":0,"magn":0,"angle":0},'resist':0},
+			'burn':{'active':{"time":0,"magn":0},'resist':0},
+			'chill':{'active':{"time":0,"magn":0,"atk":0},'resist':0},
+			'confuse':{'active':{"time":0,"magn":0,"input":[0,1,2,3]},'resist':0},
+			'bleed':{'active':{"time":0,"list":[]},'resist':0,},
+			'drain':{'active':{"time":0,"magn":0},'resist':0},
 		}
 		
 		

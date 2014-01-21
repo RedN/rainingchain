@@ -373,7 +373,7 @@ Draw.tab.quest = function(){ ctxrestore();
 			var q = main.quest[i];
 			var qdb = Db.quest[i];
 			
-			var color = q.complete ? 'green' : (q.started ? 'yellow' : 'red');
+			var color = q.complete ? '#00FF00' : (q.started ? 'yellow' : 'red');
 			
 			
 			html.questTab.text.innerHTML += 

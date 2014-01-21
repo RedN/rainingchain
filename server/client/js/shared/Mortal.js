@@ -277,9 +277,9 @@ Mortal.death = function(mort){	//only for enemy atm
 
 	mort.dead = 1;
 	
-	var killer = Mortal.death.getKiller(mort);
-	Mortal.death.drop(mort,List.all[killer]);
-	if(mort.death){ mort.death(killer); }	//custom death function (ex quest)
+	var killers = Mortal.death.getKiller(mort);
+	Mortal.death.drop(mort,killers);
+	if(mort.death){ mort.death(killers); }	//custom death function (ex quest)
 	Mortal.death.ability(mort);				//custom death ability function
 	ActiveList.remove(mort);
 }
@@ -303,25 +303,29 @@ Mortal.death.ability = function(mort){
 }
 
 Mortal.death.getKiller = function(mort){
-	var killer = null; var max = 0;
+	var tmp = Object.keys(mort.damagedBy);
+	if(!tmp.length) return [];
+	if(tmp.length === 1) return tmp;
+	
+	var killer = null; var max = -1;
 	for(var i in mort.damagedBy){
 		if(mort.damagedBy[i] > max){
 			killer = i;
-		}
+		} 
 	}
-	return killer;
+	return tmp.splice(tmp.indexOf(killer),1).unshift(killer);	//place main killer in [0]
 }
 
 Mortal.death.drop = function(mort,killer){
 	var drop = mort.drop;
 	
-	var quantity = drop.mod.quantity; 
+	var quantity = 1 + drop.mod.quantity; 
 	var quality = drop.mod.quality;
 	var rarity = drop.mod.rarity;
-	if(killer){ 
-		quantity += killer.item.quantity; 
-		quality += killer.item.quality; 
-		rarity += killer.item.rarity; 
+	if(killer[0]){ 
+		quantity += killer[0].item.quantity; 
+		quality += killer[0].item.quality; 
+		rarity += killer[0].item.rarity; 
 	}
 	
 	
@@ -331,13 +335,13 @@ Mortal.death.drop = function(mort,killer){
 			var list = Db.drop[drop.category[i]];
 			for(var j in list){
 				var item = list[j];
-				if(Math.pow(Math.random(),quantity+1) < item.chance){
-					var amount = Math.floor(item.min + (item.max-item.min)*( Math.pow(Math.random(),1/(quantity+1))));	//player quantity
+				if(Math.pow(Math.random(),quantity) < item.chance){
+					var amount = Math.floor(item.min + (item.max-item.min)*( Math.pow(Math.random(),1/(quantity))));	//player quantity
 					Drop.creation({'x':mort.x+(Math.random()-0.5)*50,'y':mort.y+(Math.random()-0.5)*50,'map':mort.map,'item':item.item,'amount':amount,'timer':Drop.timer});		
 				}	
 			}
 		} else {
-			if(Math.pow(Math.random(),(quantity+1)) < Db.drop.plan){
+			if(Math.pow(Math.random(),(quantity)) < Db.drop.plan){
 				var itemId = 'planA' + Math.randomId();
 				var lvl = Math.max(0,Math.floor(mort.lvl * (1 + Math.randomML()/10)));	//aka lvl += 10%
 					

@@ -32,7 +32,13 @@ Draw.state.resource = function (s){ ctxrestore();
 	for(var i in array){
 		var res = array[i];
 		Draw.state.resource.bar(s.x+5,s.y+5,res.width,res.height,res.name);
+		
+		Button.creation(0,{
+				'rect':[s.x+5,s.x+5+res.width,s.y+5,s.y+5+res.height],
+				'text':res.name.capitalize() + ': ' + player[res.name] + '/' + player.resource[res.name].max,
+				});		
 		s.y += res.height + 3;
+						
 	}	
 }
 
@@ -177,7 +183,14 @@ Draw.minimap.icon = function(s){
 			
 			var cx = s.x + Cst.WIDTH/ratio/2; //center
 			var cy = s.y + Cst.HEIGHT/ratio/2;
-			Draw.icon(m.minimapIcon,[cx+vx/zoom/ratio-9,cy+vy/zoom/ratio-9],36/zoom);
+			var size = 36/zoom;
+			
+			var numX = cx+vx/zoom/ratio-size/2;
+			var numY = cy+vy/zoom/ratio-size/2;
+		
+			if(Collision.PtRect({x:numX+size/2,y:numY+size/2},[s.x,s.x+Cst.WIDTH/main.pref.mapRatio,s.y,s.y+Cst.HEIGHT/main.pref.mapRatio])){
+				Draw.icon(m.minimapIcon,[numX,numY],size);
+			}
 		}
 	}
 	Draw.icon('system.square',[s.x + Cst.WIDTH/main.pref.mapRatio/2-2,s.y + Cst.HEIGHT/main.pref.mapRatio/2-2],4);

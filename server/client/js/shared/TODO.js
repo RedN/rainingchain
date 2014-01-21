@@ -1,11 +1,17 @@
 
 
 
+loop in map: fire floor etc..
+clean mortral attributes
+mortal func verbs
+db map id list for activelist
+weapon compatibilities
+craft material convert
+easy mode
+death counter quest
+binding interface
+email confirm
 
--fix strike
--fix dmg
-
--enemy ai
 
 #Priority 2:+
 -Crafting Ability

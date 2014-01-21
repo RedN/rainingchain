@@ -360,26 +360,34 @@ newImage = function(src){
 }
 
 
-//Randomly select a mod in a list where mod[i].lvl >= lvl. Take into consideration the mod factor.
-Object.defineProperty(Array.prototype, "random", {
-    enumerable: false,
+Object.defineProperty(Array.prototype, "randomMod", {
+    //Randomly select a mod in a list where mod[i].lvl >= lvl. Take into consideration the mod factor.
+	enumerable: false,
     value: function(lvl){
 		var sum = 0; 
 		for(var i in this){ 
 			if(!lvl || (lvl && this[i].lvl <= lvl)){
-				sum += this[i].mod; 
+				sum += this[i].mod || 1; 
 			}
 		}
 		var random = Math.random() * sum;
 		for(var i in this){ 
 			if(!lvl || (lvl && this[i].lvl <= lvl)){
-				if(random < this[i].mod){ return deepClone(this[i]); } 
-				random -= this[i].mod;	
+				if(random < this[i].mod || 1){ return deepClone(this[i]); } 
+				random -= this[i].mod || 1;	
 			}
 		}
 		return -1;
 	}
 });
+Object.defineProperty(Array.prototype, "random", {
+    enumerable: false,
+    value: function(){
+		if(!this.length) return null;
+		return this[Math.floor(this.length*Math.random())];
+	}
+});
+
 Object.defineProperty(Array.prototype, "have", {
     enumerable: false,
     value: function(name){

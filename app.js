@@ -67,7 +67,7 @@ require('./' + clientPath + 'client/js/shared/Collision');
 require('./' + clientPath + 'client/js/shared/Db_stat');
 require('./' + clientPath + 'client/js/shared/constant');
 require('./' + clientPath + 'client/js/shared/Button');
-require('./' + clientPath + 'client/js/shared/sprite');
+require('./' + clientPath + 'client/js/shared/Db_sprite');
 require('./' + clientPath + 'client/js/shared/anim');
 require('./' + clientPath + 'client/js/shared/Mortal_init');
 require('./' + clientPath + 'client/js/shared/Command');
@@ -75,6 +75,7 @@ require('./' + clientPath + 'client/js/shared/Combat_sub');
 require('./' + clientPath + 'client/js/shared/passiveGrid');
 require('./' + clientPath + 'client/js/shared/queryShare');
 require('./' + clientPath + 'client/js/shared/clanShare');
+require('./' + clientPath + 'client/js/shared/Db_quest');
 require('./' + clientPath + 'client/js/shared/Quest');
 require('./' + clientPath + 'client/js/shared/Db_customboost');
 

@@ -320,67 +320,37 @@ Init.db.stat = function(){
 		'name':'Burn Resist',
 		'boost':{'stat':['status','burn','resist'],},
 		},	
-	'resistMax-burn':{
-		'icon':'offensive.burn',
-		'name':'Burn Max Resist',
-		'boost':{'base':0.75,'stat':['status','burn','resistMax'],},
-		'playerOnly':1,
-		},
+
 	'resist-chill':{
 		'icon':'offensive.chill',
 		'name':'Chill Resist',
 		'boost':{'stat':['status','chill','resist'],},
 		},	
-	'resistMax-chill':{
-		'icon':'offensive.chill',
-		'name':'Chill Max Resist',
-		'boost':{'base':0.75,'stat':['status','chill','resistMax'],},
-		'playerOnly':1,
-		},
+	
 	'resist-drain':{
 		'icon':'offensive.drain',
 		'name':'Chill Resist',
 		'boost':{'stat':['status','drain','resist'],},
 		},	
-	'resistMax-drain':{
-		'icon':'offensive.drain',
-		'name':'Chill Max Resist',
-		'boost':{'base':0.25,'stat':['status','drain','resistMax'],},
-		'playerOnly':1,
-		},
+	
 	'resist-confuse':{
 		'icon':'offensive.confuse',
 		'name':'Confuse Resist',
 		'boost':{'stat':['status','confuse','resist'],},
 		},	
-	'resistMax-confuse':{
-		'icon':'offensive.confuse',
-		'name':'Confuse Max Resist',
-		'boost':{'base':0.75,'stat':['status','confuse','resistMax'],},
-		'playerOnly':1,
-		},
+	
 	'resist-knock':{
 		'icon':'offensive.knock',
 		'name':'Knock Resist',
 		'boost':{'stat':['status','knock','resist'],},
 		},	
-	'resistMax-knock':{
-		'icon':'offensive.knock',
-		'name':'Knock Max Resist',
-		'boost':{'base':0.25,'stat':['status','knock','resistMax'],},
-		'playerOnly':1,
-		},	
+	
 	'resist-bleed':{
 		'icon':'offensive.bleed',
 		'name':'Bleed Resist',
 		'boost':{'stat':['status','bleed','resist'],},
 		},	
-	'resistMax-bleed':{
-		'icon':'offensive.bleed',
-		'name':'Bleed Max Resist',
-		'boost':{'base':0.25,'stat':['status','bleed','resistMax'],},
-		'playerOnly':1,
-		},
+	
 	//}	
 		
 	//{Skill

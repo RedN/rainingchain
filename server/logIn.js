@@ -264,7 +264,6 @@ Load.initData = function(key,player,main){
 			'invList':Change.send.convert.itemlist,
 			'bankList':Change.send.convert.itemlist,
 			'tradeList':Change.send.convert.itemlist,
-			
         }
     }
     for(var i in array){

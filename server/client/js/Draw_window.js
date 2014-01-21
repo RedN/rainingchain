@@ -185,12 +185,12 @@ Draw.window.stat.list = {
 	{'name':'Cold','icon':'offensive.cold','stat':[{'name':'x','stat':'def-cold-x'},{'name':'*','stat':'def-cold-*'},{'name':'^','stat':'def-cold-^'},{'name':'+','stat':'def-cold-+'}],'string':(function(){ return Draw.window.stat.list.element('def','cold')})},
 	{'name':'Lightning','icon':'offensive.lightning','stat':[{'name':'x','stat':'def-lightning-x'},{'name':'*','stat':'def-lightning-*'},{'name':'^','stat':'def-lightning-^'},{'name':'+','stat':'def-lightning-+'}],'string':(function(){ return Draw.window.stat.list.element('def','lightning')})},
 		
-	{'name':'Burn','icon':'defensive.burn','stat':[{'name':'Resist','stat':'resist-burn'},{'name':'Max','stat':'resistMax-burn'}],'string':(function(){ return Draw.window.stat.list.status('def','burn')})},
-	{'name':'Chill','icon':'defensive.chill','stat':[{'name':'Resist','stat':'resist-chill'},{'name':'Max','stat':'resistMax-chill'}],'string':(function(){ return Draw.window.stat.list.status('def','chill')})},
-	{'name':'Confuse','icon':'defensive.confuse','stat':[{'name':'Resist','stat':'resist-confuse'},{'name':'Max','stat':'resistMax-confuse'}],'string':(function(){ return Draw.window.stat.list.status('def','confuse')})},
-	{'name':'Knockback','icon':'defensive.knock','stat':[{'name':'Resist','stat':'resist-knock'},{'name':'Max','stat':'resistMax-knock'}],'string':(function(){ return Draw.window.stat.list.status('def','knock')})},
-	{'name':'Bleed','icon':'defensive.bleed','stat':[{'name':'Resist','stat':'resist-bleed'},{'name':'Max','stat':'resistMax-bleed'}],'string':(function(){ return Draw.window.stat.list.status('def','bleed')})},
-	{'name':'Drain','icon':'defensive.drain','stat':[{'name':'Resist','stat':'resist-drain'},{'name':'Max','stat':'resistMax-drain'}],'string':(function(){ return Draw.window.stat.list.status('def','drain')})},
+	{'name':'Burn','icon':'defensive.burn','stat':[{'name':'Resist','stat':'resist-burn'}],'string':(function(){ return Draw.window.stat.list.status('def','burn')})},
+	{'name':'Chill','icon':'defensive.chill','stat':[{'name':'Resist','stat':'resist-chill'}],'string':(function(){ return Draw.window.stat.list.status('def','chill')})},
+	{'name':'Confuse','icon':'defensive.confuse','stat':[{'name':'Resist','stat':'resist-confuse'}],'string':(function(){ return Draw.window.stat.list.status('def','confuse')})},
+	{'name':'Knockback','icon':'defensive.knock','stat':[{'name':'Resist','stat':'resist-knock'}],'string':(function(){ return Draw.window.stat.list.status('def','knock')})},
+	{'name':'Bleed','icon':'defensive.bleed','stat':[{'name':'Resist','stat':'resist-bleed'}],'string':(function(){ return Draw.window.stat.list.status('def','bleed')})},
+	{'name':'Drain','icon':'defensive.drain','stat':[{'name':'Resist','stat':'resist-drain'}],'string':(function(){ return Draw.window.stat.list.status('def','drain')})},
 	
 	{'name':'Speed','icon':'defensive.speed','stat':[{'name':'Max','stat':'maxSpd'},{'name':'Acc.','stat':'acc'},{'name':'Fric.','stat':'friction'}],'string':(function(){ return 'Max: ' + round(player.boost.list['maxSpd'].base,2,1) + ', Acc.: ' + round(player.boost.list['acc'].base,2,1)+ ', Fric.: ' + round(player.boost.list['friction'].base,2,1)})},
 	{'name':'Pick Radius','icon':'defensive.pickup','stat':[{'name':'Pick Radius','stat':'pickRadius'}],'string':(function(){ return round(player.boost.list['pickRadius'].base,2,1)})},
@@ -257,9 +257,8 @@ Draw.window.stat.list.status = function(type,name){
 	}
 	if(type === 'def'){
 		var b0 = round(player.boost.list['resist-' + name].base,2,1);
-		var b1 = round(player.boost.list['resistMax-' + name].base,2,1);
 		
-		var string = 'Resist: ' + b0 + ', Max: ' + b1;
+		var string = 'Resist: ' + b0 
 		return string
 	}
 }
@@ -814,7 +813,7 @@ Draw.window.quest = function (){ ctxrestore();
 	
 	var str = '';
 	str += 'Name: ' + q.name + '<br>';
-	var state = mq.complete ? 'Complete' : (mq.started ? 'Started' : 'Not Started');
+	var state = mq.complete ? 'Complete (x' + mq.complete + ')' : (mq.started ? 'Started' : 'Not Started');
 	str += 'State: ' + state + '<br>';
 	str += 'Reward: ' + round(q.reward.value[0],3,1) + ' - ' + round(q.reward.value[1],3,1) + ' in ' + Db.stat[q.reward.stat].name + '<br>';
 	if(mq.complete){
@@ -892,7 +891,7 @@ Draw.window.quest = function (){ ctxrestore();
 	for(var i in q.bonus){
 		var b = q.bonus[i];
 		
-		var color = mq.bonus[i] ? 'green' : 'red';
+		var color = mq.bonus[i] ? '#00FF00' : '#FF0000';
 		
 		str += 
 			'<span ' + 
@@ -910,7 +909,7 @@ Draw.window.quest = function (){ ctxrestore();
 		hq.bonus.innerHTML = str;
 	}
 	
-	ctx.fillTextU('Bonus:  x' + round(mq.bonusSum,3),s.mcx,s.zy+diffY);
+	ctx.fillTextU('Bonus:  x' + round(mq.bonusSum + 0.01*mq.complete,3),s.mcx,s.zy+diffY);
 	
 }
 

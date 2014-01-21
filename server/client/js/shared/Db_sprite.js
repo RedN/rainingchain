@@ -185,7 +185,6 @@ Init.db.sprite = function(){
 }
 
 
-
 Sprite = {};
 
 Sprite.creation = function(player,info){
@@ -220,8 +219,8 @@ Sprite.change = function(mort,info){
 	if(server && (info.name || info.sizeMod)) Sprite.updateBumper(mort);
 }
 
-//Set the Sprite Bumper Box to fit the sizeMod
-Sprite.updateBumper = function(player){
+Sprite.updateBumper = function(player){	
+	//Set the Sprite Bumper Box to fit the sizeMod
 	if(Db.sprite[player.sprite.name].hitBox){	//Attack Dont
 		player.hitBox = deepClone(Db.sprite[player.sprite.name].hitBox);
 		player.bumperBox = deepClone(Db.sprite[player.sprite.name].bumperBox);	
@@ -262,9 +261,6 @@ Sprite.update = function (mort){
 	}
 	
 }
-
-
-
 
 
 

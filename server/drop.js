@@ -1,20 +1,50 @@
 //Drop
 
 
+
+/*
+Db.drop = {
+
+	'regular':{
+		{lvl:0,chance:1,table:[
+			{name:'wood',amount:[1],chance:1/4},
+			{name:'logs',amount:[1,5],chance:1/4},
+		]},
+		{'lvl':10,'table':[
+			{name:'oak-wood',amount:[1],chance:1/4},
+			{name:'oak-logs',amount:[1,10],chance:1/4},
+		]},
+	},
+	
+	'fish':{
+		{'lvl':0,'table':[
+			{name:'shrimp',amount:[1],chance:1/4},
+		]},
+		{'lvl':10,'table':[
+			{name:'lobster',amount:[1],chance:1/4},
+		]},
+	},
+}
+*/
+
 Init.db.drop = function(){
 	Db.drop = {
 		'regular':
-			[	{'item':'gold','min':1,'max':10,'chance':1/4},
-				{'item':'lobster','min':1,'max':1,'chance':1/4},
-				{'item':'wood','min':1,'max':1,'chance':1/4},
-				{'item':'logs','min':2,'max':5,'chance':1/4}
-			],
-		'plan':
-			[	1
-			
-			
+			[	{name:'gold',amount:[1,10],chance:1/4},
+				{name:'lobster',amount:[1],chance:1/4},
+				{name:'wood',amount:[1],chance:1/4},
+				{name:'logs',amount:[1],chance:1/4},
 			],
 	}
+	
+	for(var i in Db.drop){
+		for(var j in Db.drop[i]){
+			var d = Db.drop[i][j];
+			if(!d.amount) d.amount = [1,1];
+			if(d.amount.length === 1) d.amount[1] = d.amount[0];
+		}
+	}
+	
 }
 
 

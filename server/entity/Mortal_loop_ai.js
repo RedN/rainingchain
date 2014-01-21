@@ -106,7 +106,7 @@ Mortal.loop.setTarget.main = function(mort){
 		}
 	}
 	
-	mort.target.main.list = targetList.length ? [targetList.random().id] : [] ;	//could be imrpoved...
+	mort.target.main.list = targetList.length ? [targetList.randomMod().id] : [] ;	//could be imrpoved...
 } 
 
 Mortal.loop.setTarget.sub = function(mort){
@@ -132,7 +132,6 @@ Mortal.loop.setTarget.stuck = function(mort){
 	if(!maintar) return;
 	
 	mort.target.sub.list = Mortal.getPath(mort,maintar);
-	console.log(mort.id,mort.target.sub.list);
 } 
 
 

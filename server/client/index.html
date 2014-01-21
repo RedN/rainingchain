@@ -38,7 +38,7 @@
 		<script src="/js/shared/Main.js"></script>
 		<script src="/js/shared/anim.js"></script>
 		<script src="/js/shared/Collision.js"></script>
-		<script src="/js/shared/sprite.js"></script>
+		<script src="/js/shared/Db_sprite.js"></script>
 		<script src="/js/shared/Mortal_init.js"></script>
 		<script src="/js/Draw.js"></script>
 		<script src="/js/Draw_tab.js"></script>
@@ -49,6 +49,7 @@
 		<script src="/js/shared/Command.js"></script>
 		<script src="/js/shared/Button.js"></script>
 		<script src="/js/shared/passiveGrid.js"></script>
+		<script src="/js/shared/Db_quest.js"></script>
 		<script src="/js/shared/Quest.js"></script>
 		<script src="/js/shared/Db_customboost.js"></script>
 		
@@ -81,16 +82,11 @@
 			</div>
 		</div>	
 		
-		<!--
-<div id="gameDiv" style="display:none;">	
-		<div class='posAbs' >
-	-->
-
 		<div id="mainDiv" style="width: 1280px;  height:720px; margin: 0px auto;">	
 		<div  id="gameDiv" class='posAbs' style="display:none;">
 			<div id="canvasDiv" class='posAbs' onclick='document.activeElement.blur()'></div>
 			
-			<div id="contextDiv" style="white-space: nowrap; width:auto; padding:3px; zIndex:100;" class='posAbs gradientBoxesWithOuterShadows'></div>
+			<div id="contextDiv" style="white-space: nowrap; width:auto; padding:3px; z-index:100;" class='posAbs gradientBoxesWithOuterShadows'></div>
 			<!-- Chat -->
 			<div id="chatBoxDiv" class="posAbs"> 
 				<div id="chatBoxText" class='taJust onlyTextScroll'></div>
