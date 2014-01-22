@@ -1,16 +1,19 @@
 
+bonus always the same
 
+player death
+variable to respawn when death + function
 
 loop in map: fire floor etc..
-clean mortral attributes
+clean mortal attributes
 mortal func verbs
 db map id list for activelist
-weapon compatibilities
 craft material convert
 easy mode
 death counter quest
 binding interface
 email confirm
+no need for item in db... 
 
 
 #Priority 2:+

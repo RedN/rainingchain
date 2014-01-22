@@ -16,6 +16,9 @@ atan2 = function (y,x){
 Math.log10 = function(num){
     return Math.log(num) / Math.log(10);
 }
+Math.logBase = function(base,num){
+    return Math.log(num) / Math.log(base);
+}
 Math.fact = function (num){
 	for(var start = 1; num > 1; num--){ start *= num;}
 	return start;

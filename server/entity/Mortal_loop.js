@@ -336,7 +336,7 @@ Mortal.loop.friendList = function(mort){
     
 	for(var i in fl){
 		Chat.send.pm.test(List.all[key].name,i,function(from,to,status){
-			fl[to].online = status;
+			if(from) fl[to].online = status;
 		});			
 	}
 }

@@ -30,7 +30,7 @@ Init.db.enemy = function(){ var ePreDb = {};
 		"acc":2,
 		"maxSpd":5,
 		"moveRange":{'ideal':200,"confort":50,"aggressive":400,"farthest":600},	
-		'drop':{'category':{'regular':1},
+		'drop':{'category':{'regular':1}},
 	}; //}
 	//}
 	
@@ -47,7 +47,7 @@ Init.db.enemy = function(){ var ePreDb = {};
 		"maxSpd":10,
 		'boss':'iceTroll',
 		"moveRange":{'ideal':400,"confort":100,"aggressive":300,"farthest":600},
-		'drop':{'category':{'regular':1},
+		'drop':{'category':{'regular':1}},
 	}; //}
 	//}
 	

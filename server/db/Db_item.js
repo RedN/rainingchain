@@ -42,8 +42,8 @@ Init.db.item = function (cb){
 	a['shard-gold'] = {'name':'Gold Shard','visual':'system.gold','stack':1}
 	
 	a['gold'] = {'name':'Gold','visual':'system.gold','stack':1,
-		'option':[	{'name':'Craft Armor','func':'Craft.plan.use','param':[{'category':'armor'},{'item':[]}]},
-						{'name':'Craft Weapon','func':'Craft.plan.use','param':[{'category':'weapon'},{'item':[]}]},
+		'option':[	{'name':'Craft Armor','func':'Craft.plan.use','param':[{'category':'equip'},{'item':[]}]},
+						{'name':'Craft Weapon','func':'Craft.plan.use','param':[{'category':'equip'},{'item':[]}]},
 						{'name':'Tele','func':'Mortal.teleport','param':[1230,1230,'ryve']},
 						{'name':'Open Bank','func':'Main.openWindow','param':['bank']},
 			
@@ -52,6 +52,7 @@ Init.db.item = function (cb){
 	
 
 	
+	a['bugged-drop'] = {'name':'I AM ERROR','visual':'craft.lobster'};
 	
 	a['lobster'] = {'name':'Lobster','visual':'craft.lobster'};
 	a['wood'] = {'name':'wood','visual':'craft.wood'};	

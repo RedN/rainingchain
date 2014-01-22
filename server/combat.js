@@ -42,7 +42,7 @@ leech chance: unrelated to dmg. abilityMod [1] * playerMod [0]
 
 Combat = {};
 
-//NOTE: Combat.action.attack.mods is inside	Combat_sub.js
+//NOTE: Combat.action.attack.mod is inside	Combat_sub.js
 
 //ACTION//
 Combat.action = function(id,action){

@@ -337,9 +337,12 @@ Mortal.death.drop = function(mort,killer){
 		var item = list[i];
 		if(Math.random() < item.chance){	//quantity applied in Drop.getList
 			var randomKiller = killer.random();
-			var amount = Math.round(item.min + Math.random()*(item.max-item.min));	
-			Drop.creation({'x':mort.x,'y':mort.y,'map':mort.map,'item':item.item,'amount':amount,'timer':Drop.timer,
-							'viewedIf':function(key){ return key === randomKiller;}});			//	problem here probably cuz randomKiller is same
+			console.log(randomKiller);
+			var amount = Math.round(item.amount[0] + Math.random()*(item.amount[1]-item.amount[0]));	
+			
+			Drop.creation({'x':mort.x,'y':mort.y,'map':mort.map,'item':item.name,'amount':amount,'timer':Drop.timer,
+							//'viewedIf':function(key){ return key === randomKiller;}
+							});			//	problem here probably cuz randomKiller is same
 								//(function(i){ return function(){ return i; }; })(i)
 		}
 	}

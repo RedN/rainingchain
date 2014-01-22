@@ -44,26 +44,14 @@ Combat.action.attack.mod.player = function(player,attack){
 }
 
 Combat.action.attack.mod.weapon = function(weapon,attack){
-	for (var i in attack.dmg){ 
-		attack.dmg[i] *= weapon.dmgMain * weapon.dmgRatio[i] 
-		attack.dmg[i] *= (1 - Math.abs(attack.dmgRatio[i] - weapon.dmgRatio[i]));
-	}
-	if(!server){ 
-		var maxDmg = Combat.action.attack.mod.weapon.compatibility(weapon,attack);
-		var sum = 0;
-		for (var i in attack.dmg){ sum += attack.dmg[i]; }
-		attack.weaponCompability = sum/maxDmg;
-	}
-	return	attack;
-}
-
-Combat.action.attack.mod.weapon.compatibility = function(weapon,atk){
-	var attack = deepClone(atk);
 	var sum = 0;
 	for (var i in attack.dmg){ 
-		attack.dmg[i] *= weapon.dmgMain * attack.dmgRatio[i];
-		sum += attack.dmg[i];
+		attack.dmg[i] *= weapon.dmgMain;
+		var val = Math.min(weapon.dmgRatio[i],attack.dmgRatio[i]);
+		attack.dmg[i] *= val;
+		sum += val;
 	}
-	return sum;
+	attack.weaponCompability = sum;
+	return	attack;
 }
 
