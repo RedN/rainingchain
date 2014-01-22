@@ -67,6 +67,9 @@ Drop.getCategoryList = function(drop,lvl,qu){
 }
 
 Drop.creation = function(drop){
+	drop.vx = typeof drop.vx !== 'undefined' ? drop.vx : 25;
+	drop.x += Math.randomML(drop.vx);
+	drop.y += Math.randomML(drop.vx);
 	drop.id = Math.randomId();
 	drop.publicId = Math.random().toString(36).substring(13);
 	drop.picked = 0;

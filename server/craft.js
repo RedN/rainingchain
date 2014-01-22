@@ -71,7 +71,7 @@ Craft.seed.template = function(obj){
 	return seed;
 }
 
-Craft.plan = function(key,sed,req){
+Craft.plan.use = function(key,sed,req){	
 	var seed = sed;
 	var bool = true;
 	var inv = List.main[key].invList;
@@ -87,18 +87,44 @@ Craft.plan = function(key,sed,req){
 	//verify if has item
 	for(var i in req.item){
 		var color = 'green';
-		if(!Itemlist.have(inv,req.item[i].item,req.item[i].amount)){	bool = false; color = 'red';}
+		if(!Itemlist.have(inv,req.item[i][0],req.item[i][1])){	bool = false; color = 'red';}
 		string += "<span style='color:" + color + "'> x" + req.item[i].amount + " " + Db.item[req.item[i].item].name + "</span>, ";
 	}
 	
 	if(bool){ 
-		for(var i in req.item){	Itemlist.remove(inv,req.item[i].item,req.item[i].amount);}
+		Itemlist.remove.bulk(inv,req.item);}
 		var id = Craft.create(seed);
 		Itemlist.add(inv,id);
 	}
 	else { Chat.add(key,string); }
 	
 	
+}
+
+Craft.plan.creation = function(d){
+	var itemId = 'planE-' + Math.randomId();
+	var lvl = Math.max(0,Math.floor(mort.lvl * (1 + Math.randomML()/10)));	//aka lvl += 10%
+	
+	
+	var req = {
+		'skill':{},
+		'item':[
+		
+		
+		
+		],
+	}
+	
+	
+	
+	Item.creation(
+		{'id':itemId,
+		'name':d.piece.capitalize() + "Plan",
+		'visual':'plan.'+d.piece,
+		'option':[	{'name':'Craft Item','func':'Craft.plan.use',
+					'param':[{'lvl':d.lvl,'rarity':d.rarity,'quality':d.quality},{'item':[{'item':itemId,'amount':1}]}]}
+		]});
+	return itemId;
 }
 
 Craft.create = function(seed){

@@ -14,7 +14,7 @@ Init.db.enemy = function(){ var ePreDb = {};
 		"acc":2,
 		"maxSpd":5,
 	    "moveRange":{'ideal':200,"confort":100,"aggressive":300,"farthest":600},	
-		'drop':{'category':{'regular':1,'plan':1}},
+		'drop':{'category':{'regular':1},'plan':{'melee':1/100}},
 	}; //}
 	//}
 	
@@ -30,7 +30,7 @@ Init.db.enemy = function(){ var ePreDb = {};
 		"acc":2,
 		"maxSpd":5,
 		"moveRange":{'ideal':200,"confort":50,"aggressive":400,"farthest":600},	
-		'drop':{'category':{'regular':1,'plan':1}},
+		'drop':{'category':{'regular':1},
 	}; //}
 	//}
 	
@@ -47,7 +47,7 @@ Init.db.enemy = function(){ var ePreDb = {};
 		"maxSpd":10,
 		'boss':'iceTroll',
 		"moveRange":{'ideal':400,"confort":100,"aggressive":300,"farthest":600},
-		'drop':{'category':{'regular':1,'plan':1}},
+		'drop':{'category':{'regular':1},
 	}; //}
 	//}
 	
@@ -92,7 +92,10 @@ Init.db.enemy = function(){ var ePreDb = {};
 			e.hp = e.resource.hp.max;
 			
 			if(e.drop){
-				e.drop.mod = e.drop.mod || {'quantity':1,'quality':1,'rarity':1};
+				e.drop.mod = e.drop.mod || {};
+				e.drop.quantity = e.drop.quantity || 1;
+				e.drop.quality = e.drop.quality || 1;
+				e.drop.rarity = e.drop.rarity || 1;
 			}
 			
 			Db.enemy[i][j] = new Function('return ' + stringify(e));	//not used atm. currently creating from scratch everytime

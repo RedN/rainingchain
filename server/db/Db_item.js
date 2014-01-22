@@ -9,7 +9,7 @@ a['testing']    //testing is the item id
 		            'func':'Mortal.teleport',        //function to call when clicked
 		            'param':[1230,1230,'ryve']},    //parameters used with function
 		            
-					{'name':'Craft Weapon','func':'Craft.plan','param':[{'category':'weapon'},{'item':[]}]},
+					{'name':'Craft Weapon','func':'Craft.plan.use','param':[{'category':'weapon'},{'item':[]}]},
 					{'name':'Tele','func':'Mortal.teleport','param':[1230,1230,'ryve']},
 					{'name':'Open Bank','func':'Main.openWindow','param':['bank']},
 			
@@ -42,8 +42,8 @@ Init.db.item = function (cb){
 	a['shard-gold'] = {'name':'Gold Shard','visual':'system.gold','stack':1}
 	
 	a['gold'] = {'name':'Gold','visual':'system.gold','stack':1,
-		'option':[	{'name':'Craft Armor','func':'Craft.plan','param':[{'category':'armor'},{'item':[]}]},
-						{'name':'Craft Weapon','func':'Craft.plan','param':[{'category':'weapon'},{'item':[]}]},
+		'option':[	{'name':'Craft Armor','func':'Craft.plan.use','param':[{'category':'armor'},{'item':[]}]},
+						{'name':'Craft Weapon','func':'Craft.plan.use','param':[{'category':'weapon'},{'item':[]}]},
 						{'name':'Tele','func':'Mortal.teleport','param':[1230,1230,'ryve']},
 						{'name':'Open Bank','func':'Main.openWindow','param':['bank']},
 			
@@ -79,7 +79,7 @@ Init.db.item = function (cb){
 	
 	
 	a['planA'] = {'name':'Plan','visual':'plan.planA',
-			'option':[	{'name':'Craft Item','func':'Craft.plan','param':[{},{'item':[]}]}
+			'option':[	{'name':'Craft Item','func':'Craft.plan.use','param':[{},{'item':[]}]}
 					]};
 	//}
 	

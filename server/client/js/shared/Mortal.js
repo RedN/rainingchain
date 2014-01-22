@@ -23,8 +23,6 @@ Mortal.updateEquip = function(mort){
 	}
 }
 
-
-
 Mortal.switchEquip = function(mort,name){
 	var old = mort.equip.piece[Db.equip[name].piece];
 	var equip = Db.equip[name];
@@ -332,6 +330,7 @@ Mortal.death.drop = function(mort,killer){
 	}
 	
 	
+	//Category
 	var list = Drop.getCategoryList(drop.category,mort.lvl,quantity);
 	
 	for(var i in list){
@@ -339,27 +338,32 @@ Mortal.death.drop = function(mort,killer){
 		if(Math.random() < item.chance){	//quantity applied in Drop.getList
 			var randomKiller = killer.random();
 			var amount = Math.round(item.min + Math.random()*(item.max-item.min));	
-			Drop.creation({'x':mort.x+Math.randomML(25),'y':mort.y+Math.randomML(25),'map':mort.map,'item':item.item,'amount':amount,'timer':Drop.timer,
+			Drop.creation({'x':mort.x,'y':mort.y,'map':mort.map,'item':item.item,'amount':amount,'timer':Drop.timer,
 							'viewedIf':function(key){ return key === randomKiller;}});			//	problem here probably cuz randomKiller is same
+								//(function(i){ return function(){ return i; }; })(i)
 		}
 	}
 		
 	
-	
-	/*
-
-	if(Math.pow(Math.random(),(quantity)) < Db.drop.plan){
-		var itemId = 'planA' + Math.randomId();
-		var lvl = Math.max(0,Math.floor(mort.lvl * (1 + Math.randomML()/10)));	//aka lvl += 10%
+	//Plan
+	for(var i in drop.plan){
+		if(Math.pow(Math.random(),quantity) < drop.plan[i]){
+			var randomKiller = killer.random();
 			
-		Item.creation({'id':itemId,'name':"Plan",'visual':'plan.planA',
-			'option':[	{'name':'Craft Item','func':'Craft.plan',
-						'param':[{'lvl':lvl,'rarity':rarity,'quality':quality},{'item':[{'item':itemId,'amount':1}]}]}
-			]});
-		
-		Drop.creation({'x':mort.x+Math.randomML(25),'y':mort.y+Math.randomML(25),'map':mort.map,'item':itemId,'amount':1});		
+			var plan = Craft.plan.creation({
+				'rarity':rarity,
+				'quality':quality,
+				'piece':i,
+				'lvl':mort.lvl,
+			});
+			
+			
+			Drop.creation({'x':mort.x,'y':mort.y,'map':mort.map,'item':plan.id,'amount':1});		
+
+			break;
+		}
 	}
-	*/
+
 }
 
 Mortal.death.revive = function(mort){
