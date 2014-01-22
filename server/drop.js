@@ -5,27 +5,6 @@
 /*
 
 */
-Drop.getCategoryList = function(drop,lvl,qu){
-	var list = [];
-	qu = qu || 1;
-	
-	for(var i in drop.category){
-		for(var j in Drop.db[i]){
-			var table = Drop.db[i][j];
-			var highest = {lvl:0};
-			if(lvl >= table.lvl && lvl >= highest.lvl){
-				highest = table;
-			}
-		}
-		for(var j in highest){
-			var tmp = deepClone(highest[j]);
-			tmp.chance *= drop.category[i].chance;
-			tmp.chance = Math.pow(tmp.chance,1/qu)
-			list.push(tmp);		
-		}
-	}
-	return tmp;
-}
 
 Init.db.drop = function(){
 	Db.drop = {
@@ -64,6 +43,28 @@ Init.db.drop = function(){
 
 Drop = {};	
 Drop.timer = 25*30;	
+
+Drop.getCategoryList = function(drop,lvl,qu){
+	var list = [];
+	qu = qu || 1;
+	
+	for(var i in drop.category){
+		for(var j in Drop.db[i]){
+			var table = Drop.db[i][j];
+			var highest = {lvl:0};
+			if(lvl >= table.lvl && lvl >= highest.lvl){
+				highest = table;
+			}
+		}
+		for(var j in highest){
+			var tmp = deepClone(highest[j]);
+			tmp.chance *= drop.category[i].chance;
+			tmp.chance = Math.pow(tmp.chance,1/qu)
+			list.push(tmp);		
+		}
+	}
+	return tmp;
+}
 
 Drop.creation = function(drop){
 	drop.id = Math.randomId();
