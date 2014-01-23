@@ -80,4 +80,4 @@ require('./' + clientPath + 'client/js/shared/Quest');
 require('./' + clientPath + 'client/js/shared/Db_customboost');
 
 
-main.initServer();   //
+main.initServer(); 

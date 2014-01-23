@@ -32,9 +32,11 @@ Init.db.drop = function(){
 
 	for(var i in Db.drop){
 		for(var j in Db.drop[i]){
-			var d = Db.drop[i][j];
-			if(!d.amount) d.amount = [1,1];
-			if(d.amount.length === 1) d.amount[1] = d.amount[0];
+			for(var k in Db.drop[i][j].table){
+				var d = Db.drop[i][j].table[k];				
+				if(!d.amount) d.amount = [1,1];
+				if(d.amount.length === 1) d.amount[1] = d.amount[0];
+			}
 		}
 	}
 	
@@ -74,7 +76,6 @@ Drop.creation = function(d){
 	
 	List.drop[drop.id] = drop;
 	List.all[drop.id] = drop;
-	console.log(drop);
 }
 
 

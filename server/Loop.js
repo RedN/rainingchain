@@ -102,9 +102,14 @@ ActiveList.test = function(mort,obj){
 	//Test used to know if obj should be in activeList of mort.
 	if(!obj){ return false; }
 	if(!obj.viewedIf){ return false; }
-	if(typeof obj.viewedIf === 'function' && !obj.viewedIf(mort)){ return false; }
-	if(mort.map != obj.map){ return false; }
+	if(typeof obj.viewedIf === 'function' && !obj.viewedIf(mort.id)){ return false; }
+	if(obj.viewedIf === 'false'){ return false; }
+	if(typeof obj.viewedIf === 'object' && obj.viewedIf.indexOf(mort.id) !== 1){ return false; }
+	if(mort.map !== obj.map){ return false; }
 	if(obj.dead){ return false; }
+	
+	
+	
 	
 	var pt = {'x':obj.x,'y':obj.y};
 	var rect = [mort.x-800,mort.x+800,mort.y-600,mort.y+600];

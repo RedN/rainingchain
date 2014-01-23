@@ -96,6 +96,44 @@ Mortal.teleport.instance = function(mort,x,y,map,signin){
 }
 
 
+Mortal.pickDrop = function (mort,id){
+	var inv = List.main[mort.id].invList;
+	var drop = List.drop[id];
+		
+	if(drop){
+		if(Collision.distancePtPt(mort,drop) <= mort.pickRadius && Itemlist.test(inv,[[List.drop[id].item,List.drop[id].amount]])){
+			Itemlist.add(inv,drop.item,drop.amount);
+			Drop.remove(drop);		
+		}
+	}
+}
+
+Mortal.rightClickDrop = function(mort,rect){
+	var key = mort.id;
+	var ol = {'name':'Pick Items','option':[]};
+	for(var i in List.drop){
+		var d = List.drop[i];
+		if(d.map == List.all[key].map && Collision.RectRect(rect,[d.x,d.x+32,d.y,d.y+32]) ){
+			ol.option.push({'name':'Pick ' + Db.item[List.drop[i].item].name,'func':'Mortal.pickDrop','param':[i]});
+		}
+	}
+	
+	if(ol.option){ 
+		Button.optionList(key,ol);  
+	}	
+}
+	
+Mortal.dropInv = function(mort,id){
+	var inv = List.main[mort.id].invList;
+	var amount = Math.min(1,Itemlist.have(inv,id,0,'amount'));
+	
+	if(!amount) return;
+	
+	Drop.creation({'x':mort.x,'y':mort.y,'map':mort.map,'item':id,'amount':amount,'timer':25*30});
+	Itemlist.remove(inv,id,amount);
+}
+
+
 
 
 
@@ -229,7 +267,15 @@ Mortal.talk = function(mort,enemyId){
 	}
 }//
 
-//Note: Mortal.performAbility is used to perform ability
+Mortal.getDef = function(mort){
+	var def = deepClone(mort.equip.def);
+	for(var i in def){
+		def[i] *= mort.mastery.def[i].mod * mort.defMain * mort.mastery.def[i].sum;
+	}
+	return def;
+}
+
+//Ability
 Mortal.removeAbility = function(mort,name){
 	delete mort.abilityList[name];
 	for(var i in mort.ability){
@@ -269,32 +315,51 @@ Mortal.learnAbility = function(mort,name,chance){
 
 Mortal.examineAbility = function(mort){}
 
-//death doesnt work...
-Mortal.death = function(mort){	//only for enemy atm
-	if(mort.type !== 'enemy') return;
+//Death
+Mortal.death = function(mort){	
+	if(mort.type === 'enemy') Mortal.death.enemy(mort);
+	if(mort.type === 'player') Mortal.death.player(mort);
+	
+}
 
+Mortal.death.player = function(mort){
+	var key = mort.id;
+	var main = List.main[key];
+	
+	//Quest
+	for(var i in main.quest[i]) if(main.quest[i].started) main.quest[i].deathCount++;	
+	
+	//Message
+	var string = 'You are dead... ';
+	var array = [
+		"Please don't ragequit.",
+		"You just got a free teleport to a safe place. Lucky you.",
+		"Try harder next time.",
+		"You're Feeling Giddy",
+		"This game is harder than it looks apparently.",
+		"If someone asks, just say you died on purpose.",	
+	];
+	string += array.random();
+	Chat.add(key,string);
+	
+	
+	
+	
+	
+	
+}
+
+Mortal.death.enemy = function(mort){
 	mort.dead = 1;
 	
 	var killers = Mortal.death.getKiller(mort);
 	Mortal.death.drop(mort,killers);
 	if(mort.death){ mort.death(killers); }	//custom death function (ex quest)
-	Mortal.death.ability(mort);				//custom death ability function
+	Mortal.death.performAbility(mort);				//custom death ability function
 	ActiveList.remove(mort);
 }
 
-
-Mortal.death.start = function(mort){
-	if(mort.type !== 'enemy') return;
-
-	mort.killed = 1;
-	mort.maxSpd = 0;
-	mort.spdX = 0;
-	mort.spdY = 0;
-	Sprite.change(mort,{'anim':'Death'});
-}
-
-
-Mortal.death.ability = function(mort){
+Mortal.death.performAbility = function(mort){
 	for(var i in mort.deathAbility){
 		Mortal.performAbility(mort,mort.ability[mort.deathAbility[i]],false,false);
 	}
@@ -314,36 +379,27 @@ Mortal.death.getKiller = function(mort){
 	return tmp.splice(tmp.indexOf(killer),1).unshift(killer);	//place main killer in [0]
 }
 
-
-
-
-Mortal.death.drop = function(mort,killer){
+Mortal.death.drop = function(mort,killers){
 	var drop = mort.drop;
 	
 	var quantity = (1 + drop.mod.quantity).mm(0); 
 	var quality = drop.mod.quality;
 	var rarity = drop.mod.rarity;
-	if(killer[0] && List.all[killer[0]]){ 
-		quantity += List.all[killer[0]].item.quantity; 
-		quality += List.all[killer[0]].item.quality; 	//only for plan
-		rarity += List.all[killer[0]].item.rarity; 		//only for plan
+	if(killers[0] && List.all[killers[0]]){ 
+		quantity += List.all[killers[0]].item.quantity; 
+		quality += List.all[killers[0]].item.quality; 	//only for plan
+		rarity += List.all[killers[0]].item.rarity; 		//only for plan
 	}
-	
-	
+
 	//Category
 	var list = Drop.getCategoryList(drop.category,mort.lvl,quantity);
 	
 	for(var i in list){
 		var item = list[i];
 		if(Math.random() < item.chance){	//quantity applied in Drop.getList
-			var randomKiller = killer.random();
-			console.log(randomKiller);
+			var killer = killers.random();
 			var amount = Math.round(item.amount[0] + Math.random()*(item.amount[1]-item.amount[0]));	
-			
-			Drop.creation({'x':mort.x,'y':mort.y,'map':mort.map,'item':item.name,'amount':amount,'timer':Drop.timer,
-							//'viewedIf':function(key){ return key === randomKiller;}
-							});			//	problem here probably cuz randomKiller is same
-								//(function(i){ return function(){ return i; }; })(i)
+			Drop.creation({'x':mort.x,'y':mort.y,'map':mort.map,'item':item.name,'amount':amount,'timer':Drop.timer,'viewedIf':[killer]});			
 		}
 	}
 		
@@ -369,57 +425,6 @@ Mortal.death.drop = function(mort,killer){
 
 }
 
-Mortal.death.revive = function(mort){
-	//mort.extra.id = mort.id
-	//addEnemy(mort.data,mort.extra)
-}
-
-
-Mortal.getDef = function(mort){
-	var def = deepClone(mort.equip.def);
-	for(var i in def){
-		def[i] *= mort.mastery.def[i].mod * mort.defMain * mort.mastery.def[i].sum;
-	}
-	return def;
-}
-
-
-Mortal.pickDrop = function (mort,id){
-	var inv = List.main[mort.id].invList;
-	var drop = List.drop[id];
-		
-	if(drop){
-		if(Collision.distancePtPt(mort,drop) <= mort.pickRadius && Itemlist.test(inv,[[List.drop[id].item,List.drop[id].amount]])){
-			Itemlist.add(inv,drop.item,drop.amount);
-			Drop.remove(drop);		
-		}
-	}
-}
-
-Mortal.rightClickDrop = function(mort,rect){
-	var key = mort.id;
-	var ol = {'name':'Pick Items','option':[]};
-	for(var i in List.drop){
-		var d = List.drop[i];
-		if(d.map == List.all[key].map && Collision.RectRect(rect,[d.x,d.x+32,d.y,d.y+32]) ){
-			ol.option.push({'name':'Pick ' + Db.item[List.drop[i].item].name,'func':'Mortal.pickDrop','param':[i]});
-		}
-	}
-	
-	if(ol.option){ 
-		Button.optionList(key,ol);  
-	}	
-}
-	
-Mortal.dropInv = function(mort,id){
-	var inv = List.main[mort.id].invList;
-	var amount = Math.min(1,Itemlist.have(inv,id,0,'amount'));
-	
-	if(!amount) return;
-	
-	Drop.creation({'x':mort.x,'y':mort.y,'map':mort.map,'item':id,'amount':amount,'timer':25*30});
-	Itemlist.remove(inv,id,amount);
-}
 
 
 

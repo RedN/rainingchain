@@ -7,7 +7,7 @@ Mortal.loop = function(mort){
 		
 	if(mort.combat){
 		if(mort.killed) Mortal.death(mort);
-		if(mort.hp <= 0) Mortal.death.start(mort);
+		if(mort.hp <= 0) Mortal.death(mort);
 		if(mort.boss) mort.boss.loop();    //custom boss loop
 		
 		Mortal.loop.ability(mort);
