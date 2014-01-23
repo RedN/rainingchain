@@ -1,5 +1,5 @@
 var databaseURI = 'mongodb://test:' + dbpsw + '@widmore.mongohq.com:10010/RainingChain_copy';  
-var collections = ["ability","equip","account","item","clan"];
+var collections = ["ability","equip","account","clan"];
 
 db = require("mongojs").connect(databaseURI, collections);
 

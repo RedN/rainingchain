@@ -76,9 +76,6 @@ socket.on('signUp', function (data) {
 
 //Init
 Init.game = function (data) {
-	$("#startDiv")[0].style.display = "none"; 	//remove enter user and psw
-	$("#gameDiv")[0].style.display = "inline";  //show game
-	
 	Init.game.main(data);
 	Init.game.other(data);
 	
@@ -94,22 +91,23 @@ Init.game = function (data) {
 	
 	for(var i in main.social.message.chat){Chat.receive(main.social.message.chat[i]);}	main.social.message.chat = [];   //for offline pm
 	
-	
+	//Note: a part of Init.db are directly in index.html
 	Init.db.stat();
-	Init.db.sprite();
-	Init.db.anim();
-	Init.db.sfx();
-	Init.db.map();
 	Init.mortal();
 	Init.db.quest();
 	Init.db.customBoost();
+	
 	//initAbilityModDb();   //need fixing
 	Img.preload(Img.preloader,function(){   //load images
+		$("#startDiv")[0].style.display = "none"; 	//remove enter user and psw
+		$("#gameDiv")[0].style.display = "inline";  //show game
+		
 		Init.game.player(data);
 		gameStarted = true;
 		setInterval(Loop,40);
 		socket.emit('clientReady',1); 
 		if(cloud9) { Chat.add('Warning, you are running under cloud9 servers. You may experience intense lagging. Downloading the project and running it locally is recommended.');}	
+		
 	});
 }
 

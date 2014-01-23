@@ -6,11 +6,19 @@ Img.preload = function(arr,cb){
 	var newimages = [];
 	var	loadedimages = 0;
 	var arr = (typeof arr !== "object") ? [arr] : arr
+	
+	$("#preloader")[0].max = arr.length;
+	
     function imageloadpost(){
-        List.ctx.stage.clearRect(0,0,Cst.WIDTH,Cst.HEIGHT);
+        /*
+		List.ctx.stage.clearRect(0,0,Cst.WIDTH,Cst.HEIGHT);
 		List.ctx.stage.fillText('Loading... ' + loadedimages + '/' + arr.length,Cst.WIDTH2,Cst.HEIGHT2);
-		
+		*/
 		loadedimages++;
+		var str = Math.round(loadedimages/arr.length*100) + '%';
+		$('.progress-value').html(str);
+		$("#preloader")[0].value = loadedimages;
+		
         if (loadedimages === arr.length) cb(newimages);
     }
     for (var i = 0; i < arr.length; i++){

@@ -10,19 +10,19 @@ mortal func verbs
 db map id list for activelist
 craft material convert
 easy mode
+cycle system
 death counter quest
 binding interface
 email confirm
-no need for item in db... 
+pref on client side only
+progress bar preloader
 
 
 #Priority 2:+
 -Crafting Ability
 -Revamp Drop
 -Portal to Friends
--Multiplayer Quest
 -Crafting System with White
--Jqueryui (login, progress bar, dialogue option)
 -Implement Sound System
 -revamp animation, (including death)
 -death

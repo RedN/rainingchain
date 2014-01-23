@@ -18,13 +18,7 @@ a['testing']    //testing is the item id
 
 //Similar format than Equip
 Init.db.item = function (cb){
-	Db.item = {}; var itemPreDb = {}; var a = itemPreDb;
-	
-	db.item.find({},{'_id':0},function(err, results) { if(err) throw err
-		for(var i in results){
-			itemPreDb[results[i].id] = results[i];
-		}
-	
+	Db.item = {}; var a = Db.item;
 	
 	a['quest-teleport'] = {'name':'Teleport','visual':'plan.planA',
 	'option':[		{'name':'Tele To Demon','func':'Mortal.teleport','param':[1230,1230,'ryve']},
@@ -112,26 +106,22 @@ Init.db.item = function (cb){
 			]};	
 	//}
 	
-	for(var i in itemPreDb){	
-		itemPreDb[i].id = i;
-		Item.creation(itemPreDb[i],i);
+	for(var i in Db.item){	
+		Db.item[i].id = i;
+		Item.creation(Db.item[i]);
 	}
 	
 	cb.call();
 	
-});}
+}
 
 
 
 Item = {};
 
-Item.creation = function(item){
-	db.item.update( {'id':item.id}, item, { upsert: true }, db.err);
-	
+Item.creation = function(item){	
 	item = useTemplate(Item.template(),item);
-	
 	if(item.drop){	item.option.push({'name':'Drop','func':'Mortal.dropInv','param':[item.id]})}
-
 	Db.item[item.id] = item;
 }
 
@@ -153,7 +143,6 @@ Item.template = function(){
 }
 
 Item.remove = function(id){
-	db.item.remove({id:id});
 	db.equip.remove({id:id});
 	db.equip.remove({id:id});
 	db.ability.remove({id:id});
