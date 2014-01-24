@@ -1,23 +1,14 @@
 
 
-player death
-variable to respawn when death + function
-
 loop in map: fire floor etc..
-clean actor attributes
-actor func verbs
-db map id list for activelist
 craft material convert
 
 binding interface
 email confirm
-pref on client side only
-progress bar preloader
 
 
-#Priority 2:+
+#Priority 2:
 -Crafting Ability
--Revamp Drop
 -Portal to Friends
 -Crafting System with White
 -Implement Sound System (animation + map)

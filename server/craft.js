@@ -236,7 +236,6 @@ Craft.orb = function(key,orb,amount,wId,mod){
 	var mort = List.all[key];
 	
 	//Set amount of orbs used
-	amount = amount === 'pref' ? List.main[key].pref.orbAmount : amount;
 	amount = Math.min(amount,Itemlist.have(inv,orb + '_orb',0,'amount'));
 	if(!amount) return;
 	

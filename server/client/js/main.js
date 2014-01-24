@@ -102,6 +102,8 @@ Init.game = function (data) {
 		$("#startDiv")[0].style.display = "none"; 	//remove enter user and psw
 		$("#gameDiv")[0].style.display = "inline";  //show game
 		
+		localStorage.setItem('username',$("#lg-username")[0].value);
+		
 		Init.game.player(data);
 		gameStarted = true;
 		setInterval(Loop,40);
@@ -113,6 +115,7 @@ Init.game = function (data) {
 
 Init.game.main = function(data){
 	for(var i in data.main){ main[i] = data.main[i]; }    //set init values sent by server
+	main.pref = JSON.parse(localStorage.getItem('pref')) || main.pref;
 }
 Init.game.player = function(data){    //use data sent from server and default to create the player
 	player = useTemplate(Actor.template('player'),data.player);	

@@ -139,21 +139,34 @@ Command.list['mute'] = function(key,user){
 	}
 }
 
-//Pref. many different preference values can be changed. check Command.pref.verify for more detail.
-Command.list['pref'] = function(key,name,value){
-	if(List.main[key].pref[name] === undefined){ Chat.add(key, 'Invalid name.'); return; }
-	
+//CLIENT SIDE: Pref. many different preference values can be changed. check Command.pref.verify for more detail.
+Command.list['pref'] = function(name,value){
+	if(server) return;
+	if(main.pref[name] === undefined){ Chat.add('Invalid name.'); return; }
 	value = Command.pref.verify(name,value);
+	if(value === 'Invalid value.'){ Chat.add('Invalid value.'); return; }
 	
-	if(value == 'Invalid value.'){ Chat.add(key, 'Invalid value.'); return; }
-	
-	List.main[key].pref[name] = value;
-	Chat.add(key, 'Preferences Changed.');
-	
+	main.pref[name] = value;
+	Chat.add('Preferences Changed.');
+	localStorage.setItem('pref',JSON.stringify(main.pref))
 }
 
+Command.list['binding'] = function(type,position,value){
+	if(server) return;
+	
+	value = Math.round(+value);
+	position = Math.round(+position);
+	if((type !== 'move' && type !== 'ability') || position + '' === 'NaN' || value + '' === 'NaN'){
+		Chat.add('Wrong');
+		return;
+	}
+	Input.key[type][position][0] = value;
+	
+	Chat.add('Bindings Changed.');
+	Input.save();
+}
 
-
+Command.client = ['pref','binding'];
 
 //Window
 Command.list['win,close'] = function(key){
@@ -168,10 +181,13 @@ Command.list['win,open'] = function(key,win,param0){
 	Main.openWindow(List.main[key],win,param0);
 }
 
-Command.list['win,bank,click'] = function(key,side,slot){
+Command.list['win,bank,click'] = function(key,side,slot,amount){
 	var m = List.main[key];
 	if(!m.windowList.bank){ Chat.add(key,'Access denied.'); return;}
-	Itemlist.click.bank(m.bankList,side,+slot);
+	amount = +amount || 1;
+	if(typeof amount !== 'number') amount = 1;
+	amount = Math.round(amount.mm(1));
+	Itemlist.click.bank(m.bankList,side,+slot,amount);
 }
 
 Command.list['win,trade,click'] = function(key,side,slot){
@@ -239,9 +255,12 @@ Command.list['tab,open'] = function(key,tab){
 	List.main[key].currentTab = tab;
 }
 
-Command.list['tab,inv,click'] = function(key,side,slot){
+Command.list['tab,inv,click'] = function(key,side,slot,amount){
 	if(List.main[key].currentTab !== 'inventory'){ Chat.add(key,'Access denied.'); return;}
-	Itemlist.click.inventory(List.main[key].invList,side,slot);
+	amount = +amount || 1;
+	if(typeof amount !== 'number') amount = 1;
+	amount = Math.round(amount.mm(1));
+	Itemlist.click.inventory(List.main[key].invList,side,slot,amount);
 }
 
 Command.list['tab,swapWeapon'] = function(key,type){
@@ -291,7 +310,7 @@ Command.pref = {};
 Command.pref.list = {
 	'mapZoom':{name:'Map Zoom',initValue:200,min:1,max:999,description:'Minimap Zoom'},
 	'mapRatio':{name:'Map Ratio',initValue:5,min:2,max:10,description:'Minimap Size'},
-	'bankTransferAmount':{name:'X- Bank',initValue:1000,min:1,max:9999999999,description:'Amount of items transfered with X- option'},
+	'bankTransferAmount':{name:'X- Bank',initValue:1000,min:1,max:9999999999,description:'Amount of items transfered with Shift + Left Click'},
 	'orbAmount':{name:'X- Orb',initValue:1000,min:1,max:9999999999,description:'Amount of orbs used with X- option'},
 	'passiveView':{name:'Passive View',initValue:0,min:0,max:1,description:'Impact Passive Colors. 0:Access. 1:Popularity'},
 	'abilityDmgStatusTrigger':{name:'%Dmg Ability',initValue:10,min:0,max:100,description:'%Life Dealt per attack. Used to calculate chance to proc status.'}, //% life of monster per attack (used to calc % chance to trigger status)

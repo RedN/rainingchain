@@ -2,9 +2,12 @@
 <html>
 	<head>
 		<link href='http://fonts.googleapis.com/css?family=Oleo+Script' rel='stylesheet' type='text/css'>
-		<link rel="stylesheet" href="/css/css.css" type="text/css" media="screen, projection" />
-		<link rel="stylesheet" href="/css/login.css" type="text/css" media="screen, projection" />
-		<link rel="stylesheet" href="/css/progress.css" type="text/css" media="screen, projection" />
+		<link rel="stylesheet" href="/css/css.css" type="text/css" />
+		<link rel="stylesheet" href="/css/login.css" type="text/css"/>
+		<link rel="stylesheet" href="/css/progress.css" type="text/css" />
+		<link rel="stylesheet" href="/css/CSSTableGenerator.css" type="text/css" />
+		
+		
 		<title>Raining Chain</title>
 	</head>
 	<body>
@@ -150,6 +153,18 @@
 					<div id="questWinRequirement" class='posAbs onlyTextScroll'></div>
 					<div id="questWinBonus" class='posAbs onlyTextScroll'></div>
 				</div>
+					
+				<div id="bindingWinDiv"	class="posAbs"> 	
+					<div id="bindingWinTable" class="CSSTableGenerator posAbs" style="width:500px"></div>
+					<div id="bindingWinLastInput" class="posAbs gradientBoxesWithOuterShadows" style="white-space: nowrap;"></div>
+					<div id="bindingWinTemplate" class="posAbs gradientBoxesWithOuterShadows" style="white-space: nowrap;"></div>
+					<div id="bindingWinNote" class="posAbs gradientBoxesWithOuterShadows" style="white-space: nowrap;"></div>
+					
+				</div>
+				
+				
+				
+				
 			</div>
 			
 			<!-- Pop -->
@@ -161,6 +176,8 @@
 			<div id="warningText" class='onlyText container'></div>			
 		</div>
 		
+	
+			
 		<!-- Help 
 		<div id="helpDiv" class='container posAbs'>
 			<div id="helpText" class='onlyTextScroll'></div>
@@ -216,6 +233,12 @@
 						'description':$("#questWin" + "Description")[0],
 						'requirement':$("#questWin" + "Requirement")[0],
 						'bonus':$("#questWin" + "Bonus")[0],
+						},	
+			'bindingWin':{'div':$("#bindingWin" + "Div")[0],
+						'lastInput':$("#bindingWin" + "LastInput")[0],
+						'table':$("#bindingWin" + "Table")[0],
+						'note':$("#bindingWin" + "Note")[0],
+						'template':$("#bindingWin" + "Template")[0],
 						},	
 			'win':{'div':$("#win" + "Div")[0],'title':$("#win" + "Title")[0]},	
 			'abilityWin':{'div':$("#abilityWin" + "Div")[0],
@@ -278,6 +301,7 @@
 		
 		*/
 		
+		$("#lg-username")[0].value = localStorage.getItem('username') || $("#lg-username")[0].value;
 		
 		Init.db.sprite();
 		Init.db.anim();

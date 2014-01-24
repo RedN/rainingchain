@@ -3,15 +3,12 @@
 Input = {};
 Input.mouse = {x:0,y:0,drag:{active:0,sx:0,sy:0,vx:0,vy:0},left:0,right:0};
 
-Input.init = function(setup){
-	if(setup === 0){
-		//first works only when not writing message
+Input.init = function(setup,save){
+	Input.key = {};
+		
+	if(setup === 0){	//default
+		//first key id works only when not writing message
 		//rest works all the time (dont use letters in rest)
-		Input.key = {};
-		Input.key.combo = [
-			{'key':16,'boost':1000,'symbol':'s'},	//shift
-			{'key':17,'boost':10000,'symbol':'c'}	//ctrl
-		];
 		
 		Input.key.move = [
 			[68,102], //d - right
@@ -19,7 +16,7 @@ Input.init = function(setup){
 			[65,100], //a - left
 			[87,104]  //w - up
 		];
-	
+		
 		Input.key.ability = [
 			[1,101],	//left click + num5
 			[3,96],		//right click + num+
@@ -29,25 +26,73 @@ Input.init = function(setup){
 			[32],		//space		//need to be dodge
 		];
 		
-		Input.key.custom = [
-			{'keyCode':[9],'func':(function(){ Chat.send.message.reply(); })},
-			{'keyCode':[27],'func':(function(){ Input.add('',false); })},
-			{'keyCode':[38],'func':(function(){ $('#gameDiv')[0].scrollIntoView(true); })},
+	}
+	
+	if(setup === 1){	//azerty
+		Input.key.move = [
+			[68,102], //d - right
+			[83,98], //s - down
+			[81,100], //q - left
+			[90,104]  //z - up
+		];
+		
+		Input.key.ability = [
+			[1,101],	//left click + num5
+			[3,96],		//right click + num+
+			[1001],		//(left click+shift)
+			[1003],		//(right click+shift)
+			[70],		//f			//need to be healing
+			[32],		//space		//need to be dodge
 		];
 		
 	}
 	
+	if(setup === 2){	//number
+		Input.key.move = [
+			[68,102], //d - right
+			[83,98], //s - down
+			[65,100], //a - left
+			[87,104]  //w - up
+		];
+		
+		Input.key.ability = [
+			[1,101],	//left click + num5
+			[49],		//1
+			[50],		//2
+			[51],		//3
+			[52],		//4
+			[53],		//5
+		];
+	}
 	
+	Input.key.combo = [
+		{'key':16,'boost':1000,'symbol':'s'},	//shift
+		{'key':17,'boost':10000,'symbol':'c'}	//ctrl
+	];
+	Input.key.custom = [
+		{'keyCode':[9],'func':(function(){ Chat.send.message.reply(); })},
+		{'keyCode':[27],'func':(function(){ Input.add('',false); })},
+		{'keyCode':[38],'func':(function(){ $('#gameDiv')[0].scrollIntoView(true); })},
+	];
 	
 	Input.press = {'move':[0,0,0,0],'ability':[],'combo':[]}; 
 	for(var i in Input.key.ability){ Input.press.ability.push(0);}
 	for(var i in Input.key.combo){ Input.press.combo.push(0);}
+	
+	if(save !== false) Input.save();
 }
-Input.init(0);
+Input.init(0,false);
+Input.key.move = JSON.parse(localStorage.getItem('bindingMove')) || Input.key.move;
+Input.key.ability = JSON.parse(localStorage.getItem('bindingAbility')) || Input.key.ability;
 //a	 65$$$b	 66$$$c	 67$$$d	 68$$$e	 69$$$f	 70$$$g	 71$$$h	 72$$$i	 73$$$j	 74$$$k	 75$$$l	 76$$$m	 77$$$n	 78$$$o	 79$$$p	 80$$$q	 81$$$r	 82$$$s	 83$$$t	 84$$$u	 85$$$v	 86$$$w	 87$$$x	 88$$$y	 89$$$z	 90$$$$$$backspace	 8$$$tab	 9$$$enter	 13$$$shift	 16$$$ctrl	 17$$$alt	 18$$$pause/break	 19$$$caps lock	 20$$$escape	 27$$$page up	 33$$$page down	 34$$$end	 35$$$home	 36$$$left arrow	 37$$$up arrow	 38$$$right arrow	 39$$$down arrow	 40$$$insert	 45$$$delete	 46$$$0	 48$$$1	 49$$$2	 50$$$3	 51$$$4	 52$$$5	 53$$$6	 54$$$7	 55$$$8	 56$$$9	 57$$$left window key	 91$$$right window key	 92$$$select key	 93$$$numpad 0	 96$$$numpad 1	 97$$$numpad 2	 98$$$numpad 3	 99$$$numpad 4	 100$$$numpad 5	 101$$$numpad 6	 102$$$numpad 7	 103$$$numpad 8	 104$$$numpad 9	 105$$$multiply	 106$$$add	 107$$$subtract	 109$$$decimal point	 110$$$divide	 111$$$f1	 112$$$f2	 113$$$f3	 114$$$f4	 115$$$f5	 116$$$f6	 117$$$f7	 118$$$f8	 119$$$f9	 120$$$f10	 121$$$f11	 122$$$f12	 123$$$num lock	 144$$$scroll lock	 145$$$semi-colon	 186$$$equal sign	 187$$$comma	 188$$$dash	 189$$$period	 190$$$forward slash	 191$$$grave accent	 192$$$open bracket	 219$$$back slash	 220$$$close braket	 221$$$single quote	 222$$$
 
 
 //### End Customization###
+
+Input.save = function(){
+	localStorage.setItem('bindingMove',JSON.stringify(Input.key.move));
+	localStorage.setItem('bindingAbility',JSON.stringify(Input.key.ability));
+}
 
 Input.add = function(text,focus,add){
 	if(add) {html.chat.input.value += text;}
@@ -74,7 +119,6 @@ Input.event.key = function(code,dir,event){
 	for(var i in Input.key.combo){
 		if(code === Input.key.combo[i].key){
 			Input.press.combo[i] = num;
-			//for(var j in abilityInput){ input.ability[j] = 0; }	//was if up
 		}
 	}
 	code += Input.event.combo();
@@ -98,6 +142,10 @@ Input.event.key = function(code,dir,event){
 			}
 		}
 	}
+	if(code !== 16 && code !== 1016 && code !== 10016 && code !== 11016
+		&& code !== 17 && code !== 1017 && code !== 10017 && code !== 11017)
+	html.bindingWin.lastInput.innerHTML = '<font size="6">Last Input Key Id : ' + code + '</font>';
+		
 }
 
 Input.event.combo = function(){
@@ -130,6 +178,7 @@ Input.event.mouse.click = function(code,dir){
 	//Emit Mouse Click
 	if(dir === 'down'){
 		var side = 'left';
+		html.bindingWin.lastInput.innerHTML = '<font size="6">Last Input Key Id : ' + code + '</font>';
 		switch(code){
 			case 1: side = 'left'; break;
 			case 3: side = 'right'; break;

@@ -125,6 +125,7 @@ Change.update.init = function(){
 				{'array':['windowList','ability']},
 				{'array':['windowList','passive']},
 				{'array':['windowList','quest']},
+				{'array':['windowList','binding']},
 				
 				{'array':['invList'],'filter':Change.send.convert.itemlist},
 				{'array':['bankList'],'filter':Change.send.convert.itemlist},

@@ -12,15 +12,17 @@ Chat.send = function(){
 
 Chat.send.command = function(text){
 	//Send command to server. check /shared/commandShare for list of commands.
-	if(typeof text === 'string'){ text = Chat.send.command.parse(text); }
+	text = Chat.send.command.parse(text);
+	
 	if(text){ socket.emit('Chat.send.command',text); }
-	else { main.social.message.chat.push({'type':'client','text':'Invalid Command Entry.'}); } //only work if no message from server same frame
+	if(text === false){ main.social.message.chat.push({'type':'client','text':'Invalid Command Entry.'}); } //only work if no message from server same frame
 }
 
 
 Chat.send.command.parse = function(txt){
+	if(typeof txt !== 'string') return;
 	txt = txt.slice(1); //remove $
-
+	
 	for(var i in Command.list){
 		if(txt.indexOf(i) === 0){	//valid cmd
 			
@@ -35,11 +37,15 @@ Chat.send.command.parse = function(txt){
 				preParam = preParam.slice(pos+1);
 			}
 			
+			if(Command.client.have(cmd)){ 
+				applyFunc(Command.list[cmd],param);
+				return null;
+			}
 			return {'cmd':cmd,'param':param}
 			
 		}		
 	}
-	
+
 	return false;
 }
 
@@ -174,8 +180,8 @@ Chat.click.name = function(name){
 	Button.optionList(option);
 }
 
-Chat.add = function(text){
-	html.chat.text.innerHTML += '<br>' + text; 	
+Chat.add = function(text,txt){
+	html.chat.text.innerHTML += '<br>' + (txt || text); 	//incase passing key as first param
 }
 
 

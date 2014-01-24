@@ -214,7 +214,7 @@ Itemlist.template = function(type){
 
 Itemlist.click = {};
 
-Itemlist.click.inventory = function(inv,side,slot){
+Itemlist.click.inventory = function(inv,side,slot,amount){
 	var key = inv.key;
 	var m = List.main[key];
 	var mw = m.windowList;
@@ -236,10 +236,11 @@ Itemlist.click.inventory = function(inv,side,slot){
 					{'name':'Deposit 25','func':Itemlist.transfer,'param':[inv,list,id,25],'nokey':true},
 					{'name':'Deposit 100','func':Itemlist.transfer,'param':[inv,list,id,100],'nokey':true},
 					{'name':'Deposit 1000','func':Itemlist.transfer,'param':[inv,list,id,1000],'nokey':true},
-					{'name':'Deposit ' + m.pref.bankTransferAmount,'func':Itemlist.transfer,'param':[inv,list,id,m.pref.bankTransferAmount],'nokey':true},
 				]
 			});
 		}
+		
+		if(side === 'shiftLeft'){ Itemlist.transfer(inv,list,id,amount);}				
 		return;		
 	}
 	
@@ -274,7 +275,7 @@ Itemlist.click.inventory = function(inv,side,slot){
 
 
 
-Itemlist.click.bank = function(bank,side,slot){
+Itemlist.click.bank = function(bank,side,slot,amount){
 	if(!bank.data[slot] || !bank.data[slot].length){ return; }
 	var inv = List.main[bank.key].invList;
 	var id = bank.data[slot][0];
@@ -292,10 +293,10 @@ Itemlist.click.bank = function(bank,side,slot){
 				{'name':'Withdraw 25','func':Itemlist.transfer,'param':[bank,inv,id,25],'nokey':true},
 				{'name':'Withdraw 100','func':Itemlist.transfer,'param':[bank,inv,id,100],'nokey':true},
 				{'name':'Withdraw 1000','func':Itemlist.transfer,'param':[bank,inv,id,1000],'nokey':true},
-				{'name':'Withdraw ' + List.main[key].pref.bankTransferAmount,'func':Itemlist.transfer,'param':[bank,inv,id,List.main[key].pref.bankTransferAmount],'nokey':true},
 			]
 		});
 	}
+	if(side === 'shiftLeft'){ Itemlist.transfer(bank,inv,id,amount);}		
 }
 
 

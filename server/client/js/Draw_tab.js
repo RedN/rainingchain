@@ -80,7 +80,7 @@ Draw.tab.inventory = function (){ ctxrestore();
 				"rect":[numX,numX+32,numY,numY+32],
 				"left":{"func":Chat.send.command,"param":['$tab,inv,click,left,' + i]},
 				"right":{"func":Chat.send.command,"param":['$tab,inv,click,right,' + i]},
-				"shiftLeft":{"func":Chat.send.command,"param":['$tab,inv,click,shiftLeft,' + i]},
+				"shiftLeft":{"func":Chat.send.command,"param":['$tab,inv,click,shiftLeft,' + i + ',' + main.pref.bankTransferAmount]},
 				"text":text
 			});	
 			
@@ -419,6 +419,21 @@ Draw.tab.pref = function(){
 		
 		hf.text.innerHTML = '<span style="color:white">' + '----Preferences----' + '</span>';
 		
+		//Key Binding
+		hf.text.innerHTML += 
+		'<br><span ' + 
+		'class="shadow" ' + 
+		'style="color:' + 'white' + '" ' +
+		'onclick="Chat.send.command(\'' + '$win,open,binding' + '\')' + '" ' + 
+		'onmouseover="main.permContext.text = \'' + 'Change Key Bindings' + '\';' + '" ' + 
+		'onmouseout="main.permContext.text = null;' + '" ' + 
+		'>' +
+		'<font size="4">' +			
+		'*Key Bindings*' +
+		'</font>' +
+		'</span>';
+		
+		//Regular Pref
 		for(var i in list){
 			var pref = list[i];
 			

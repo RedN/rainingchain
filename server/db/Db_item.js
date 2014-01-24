@@ -85,24 +85,21 @@ Init.db.item = function (cb){
 				{'name':'Use','func':'Main.selectInv','param':[{'name':'Use Orb','func':'Craft.orb','param':['boost',1]}]},
 				{'name':'Use x10','func':'Main.selectInv','param':[{'name':'Use Orb','func':'Craft.orb','param':['boost',10]}]},
 				{'name':'Use x100','func':'Main.selectInv','param':[{'name':'Use Orb','func':'Craft.orb','param':['boost',100]}]},
-				{'name':'Use x{{main.pref.orbAmount}}','func':'Main.selectInv','param':[{'name':'Use Orb','func':'Craft.orb','param':['boost','pref']}]},
-				{'name':'Set Orb -X','func':'Chat.add','param':['input','$pref,orbAmount,']},
+				{'name':'Use x1000','func':'Main.selectInv','param':[{'name':'Use Orb','func':'Craft.orb','param':['boost',1000]}]},
 			]};	
 	a['upgrade_orb'] = {'name':'Orb of Upgrade','visual':'orb.upgrade','stack':1,
 			'option':[	
 				{'name':'Use','func':'Main.selectInv','param':[{'name':'Use Orb','func':'Craft.orb','param':['upgrade',1]}]},
 				{'name':'Use x10','func':'Main.selectInv','param':[{'name':'Use Orb','func':'Craft.orb','param':['upgrade',10]}]},
 				{'name':'Use x100','func':'Main.selectInv','param':[{'name':'Use Orb','func':'Craft.orb','param':['upgrade',100]}]},
-				{'name':'Use x{{main.pref.orbAmount}}','func':'Main.selectInv','param':[{'name':'Use Orb','func':'Craft.orb','param':['upgrade','pref']}]},
-				{'name':'Set Orb -X','func':'Chat.add','param':['input','$pref,orbAmount,']},
+				{'name':'Use x1000','func':'Main.selectInv','param':[{'name':'Use Orb','func':'Craft.orb','param':['upgrade',1000]}]},
 			]};	
 	a['removal_orb'] = {'name':'Orb of Removal','visual':'orb.removal','stack':1,
 			'option':[	
 				{'name':'Use','func':'Main.selectInv','param':[{'name':'Use Orb','func':'Craft.orb','param':['removal',1]}]},
 				{'name':'Use x10','func':'Main.selectInv','param':[{'name':'Use Orb','func':'Craft.orb','param':['removal',10]}]},
 				{'name':'Use x100','func':'Main.selectInv','param':[{'name':'Use Orb','func':'Craft.orb','param':['removal',100]}]},
-				{'name':'Use x{{main.pref.orbAmount}}','func':'Main.selectInv','param':[{'name':'Use Orb','func':'Craft.orb','param':['removal','pref']}]},
-				{'name':'Set Orb -X','func':'Chat.add','param':['input','$pref,orbAmount,']},
+				{'name':'Use x1000','func':'Main.selectInv','param':[{'name':'Use Orb','func':'Craft.orb','param':['removal',1000]}]},
 			]};	
 	//}
 	

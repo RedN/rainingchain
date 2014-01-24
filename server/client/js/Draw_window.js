@@ -88,9 +88,7 @@ Draw.window.main.constant = function(){
 Draw.window.bank = function (){ ctxrestore();
 	var s = Draw.window.main('Bank');	
 	ctx = List.ctx.win;
-
-	//change amount:
-		
+	
 	var numX = s.mx+200;
 	var numY = s.y+15;
 	
@@ -115,6 +113,7 @@ Draw.window.bank = function (){ ctxrestore();
 		Button.creation(0,{
 			"rect":[numX,numX+32,numY,numY+32],
 			"left":{"func":Chat.send.command,"param":['$win,bank,click,left,' + i]},
+			"shiftLeft":{"func":Chat.send.command,"param":['$win,bank,click,shiftLeft,' + i+ ',' + main.pref.bankTransferAmount]},
 			"right":{"func":Chat.send.command,"param":['$win,bank,click,right,' + i]},
 			'text':'Withdraw ' + main.bankList[i][2]
 		});	
@@ -547,7 +546,7 @@ Draw.window.ability.generalInfo.upMod = function(mod){
 		{'name':'Use 1 Orb','func':Chat.send.command,'param':['$win,ability,upMod,' + name + ',' + mod + ',1']},
 		{'name':'Use 10 Orbs','func':Chat.send.command,'param':['$win,ability,upMod,' + name + ',' + mod + ',10']},
 		{'name':'Use 100 Orbs','func':Chat.send.command,'param':['$win,ability,upMod,' + name + ',' + mod + ',100']},
-		{'name':'Use X Orbs','func':Input.add,'param':['$win,ability,upMod,' + name + ',' + mod + ',']},
+		{'name':'Use ' +main.pref.orbAmount+ ' Orbs','func':Input.add,'param':['$win,ability,upMod,' + name + ',' + mod + ',' +main.pref.orbAmount]},
 	]};
 	
 	Button.optionList(option);
@@ -914,6 +913,97 @@ Draw.window.quest = function (){ ctxrestore();
 }
 
 
+Draw.window.binding = function (){ ctxrestore();
+	var s = Draw.window.main('Key Bindings');	
+	ctx = List.ctx.win;
+	
+	var hq = html.bindingWin;
+	hq.div.style.visibility = 'visible';
+	hq.div.style.left = s.mx + 'px'; 
+	hq.div.style.top = s.my + 'px'; 
+	
+
+	//Table
+	hq.table.style.left = 50 + 'px'; 
+	hq.table.style.top = 0 + 'px'; 
+	
+	var move = ['Right','Down','Left','Up'];
+	var str = '<table>';
+	
+	str += '<tr>';
+	str += '<td>Action</td>'
+	str += '<td>Key Id</td>'
+	str += '<td>Key Name</td>'
+	str += '</tr>';
+		
+	for(var i = 0; i < Input.key.move.length; i++){
+		str += '<tr ' +
+				'onclick="Input.add(\'' + '$binding,move,' + i + ',' + '\')' + '" ' + 
+				'>'
+		str += '<td>Move ' + move[i] + '</td>'
+		str += '<td>' + Input.key.move[i][0] + '</td>'
+		str += '<td>' + Input.key.move[i][0].toString().keyCodeToName() + '</td>'
+		str += '</tr>';
+	}
+	for(var i = 0; i < Input.key.ability.length; i++){
+		str += '<tr ' +
+				'onclick="Input.add(\'' + '$binding,ability,' + i + ',' + '\')' + '" ' + 
+				'>'
+		str += '<td>Ability ' + i + '</td>'
+		str += '<td>' + Input.key.ability[i][0] + '</td>'
+		str += '<td>' + Input.key.ability[i][0].toString().keyCodeToName() + '</td>'
+		str += '</tr>';
+	}
+	str += '</table>';
+	
+	if(Draw.old.binding !== str){
+		Draw.old.binding = str
+		hq.table.innerHTML = str;	
+	}
+	
+	//Last Input
+	hq.lastInput.style.left = 75 + 'px'; 
+	hq.lastInput.style.top = 420 + 'px'; 
+	
+	
+	//Template
+	var array = ['WERTY','AZERTY','NUMBER'];
+	var str = '<font size="6">Default Bindings</font>';
+	for(var i = 0; i < array.length; i++){
+		str  += '<div ' +
+				'onclick="Input.init(' + i + ');" ' +
+				'style="width=auto"' + 
+				'>' +
+				'<font size="4"> -' + array[i] + '</font>' +
+				'</div>';	
+	}
+	if(Draw.old.bindingInit !== str){
+		Draw.old.bindingInit = str
+		hq.template.innerHTML = str;	
+	}
+	
+	hq.template.style.left = 600 + 'px'; 
+	hq.template.style.top = 25 + 'px'; 
+	
+	//Note
+	var str =
+	'<font size="4">' +
+	'Holding Shift: +1000' + '<br>' +
+	'Do not use Ctrl. (Ctrl+W: Close Window)' + '<br><br>' +
+	'To change a binding:' + '<br>' +
+	'-Press the key you would like to use.' + '<br>' +
+	'-Last Input Key Id will show its id. Remember it.' + '<br>' +
+	'-Click on the row/action you want to change.' + '<br>' +
+	'-Enter the id.'  + '<br>' +
+	'-Press "ENTER"' +
+	'</font>'
+	hq.note.innerHTML = str;
+	
+	hq.note.style.left = 600 + 'px'; 
+	hq.note.style.top = 250 + 'px'; 	
+}
+
+	testtest = function(){ console.log(1); }
 	
 //{ Passive
 Draw.window.passive = function (){ ctxrestore();
