@@ -1,10 +1,11 @@
 
-loop in map: fire floor etc..
+
+
+create map variable
+
 craft material convert
 
 email confirm
-
-hitif boss?
 
 #Priority 2:
 -Crafting Ability

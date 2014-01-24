@@ -71,7 +71,7 @@ Attack.creation = function(player,attack,extra){
 	s.id = Math.randomId();
 	s.hitId = Math.randomId();
 	
-	attack = useTemplate(attack,extra); //need here so angle isnt player angle
+	attack = useTemplate(attack,extra); //need here so angle isnt always player angle
 	s.crAngle = s.angle; s.moveAngle = s.angle;
 
 	List.all[s.id] = s;
@@ -91,16 +91,17 @@ Attack.creation.info = function(player,bullet){
 	
 	bullet.map = player.map || 'test@MAIN';	
 	bullet.viewedIf = player.viewedIf || 'true';
-	bullet.hitIf = player.hitIf || 'true';
+	bullet.hitIf = player.hitIf || 'enemy';
 
 	bullet.angle = (player.angle || 0 +360)%360;
 	
-	bullet.bonus = player.bonus || (b.nova || b.onHit) ? Actor.template.bonus() : null ;	//bonus only useful if nova or onHit
+	bullet.bonus = player.bonus || (bullet.nova || bullet.onHit) ? Actor.template.bonus() : null ;	//bonus only useful if nova or onHit
 	if(player.parent){	bullet.parent = player.parent; }
 	else {bullet.parent = player.id || null;}
 	
 	return bullet;
 }; 
+
 
 
 Attack.creation.bullet = function(b){

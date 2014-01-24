@@ -19,7 +19,18 @@ Init.db.map = function (){
 			if(Loop.interval(10)){
 				var array = Map.collisionRect(map,[1000,1400,1000,1400],'player');
 				for(var i in array){
-					List.all[array[i]].hp -= 100;
+					var mort = List.all[array[i]];
+					mort.hp -= 100;
+					
+					var atk = {
+						'type':"bullet",'angle':15,'amount':1, 'aim': 0,'objImg':{'name':"iceshard",'sizeMod':1},'hitImg':{'name':"ice2",'sizeMod':0.5},
+						'dmgMain':1,'dmgRatio':{'melee':15,'range':5,'magic':5,'fire':2,'cold':27,'lightning':0},
+					};
+					
+					Attack.creation(
+						{x:mort.x,y:mort.y,map:map,hitIf:'enemy',angle:mort.angle},
+						useTemplate(Attack.template(),atk)
+					);
 				}
 			}
 		}
