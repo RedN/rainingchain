@@ -86,13 +86,13 @@ Init.db.boss = function(){
 			'type':"bullet",'angle':0,'amount':1, 'aim': 0,
 			'objImg':{'name':"iceshard",'sizeMod':1},
 			'dmg':{'melee':25,'range':25,'magic':25,'fire':10,'cold':10,'lightning':5},
-			'mods':	{'spd':40}
+			'spd':40
 		};			
 		boss.attack['slowSpear'] =	{
 			'type':"bullet",'angle':0,'amount':1, 'aim': 0,
 			'objImg':{'name':"iceshard",'sizeMod':1},
 			'dmg':{'melee':25,'range':25,'magic':25,'fire':10,'cold':10,'lightning':5},
-			'mods':	{'spd':5}
+			'spd':5
 		};
 		
 		boss.attack['tooFar'] = {
@@ -105,6 +105,7 @@ Init.db.boss = function(){
 		boss.attack['midSpear'] = {
 			'type':"bullet",'angle':15,'amount':1, 'aim': 0,'objImg':{'name':"iceshard",'sizeMod':1},'hitImg':{'name':"ice2",'sizeMod':0.5},
 			'dmgMain':1,'dmgRatio':{'melee':15,'range':5,'magic':5,'fire':2,'cold':27,'lightning':0},
+			'pierce':{'chance':0.6,'dmgReduc':0.1}
 		};
 		
 		

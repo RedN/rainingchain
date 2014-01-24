@@ -191,18 +191,6 @@ Init.db.stat = function(){
 		'boost':{'base':1,'stat':['bonus','strike','maxHit'],},
 		'playerOnly':1,
 		},
-	'pierce-chance':{
-		'icon':'offensive.pierce',
-		'name':'Pierce Chance',
-		'boost':{'stat':['bonus','pierce','chance'],},
-		'playerOnly':1,
-		},	
-	'pierce-dmgReduc':{
-		'icon':'offensive.pierce',
-		'name':'Pierce Dmg Fact',
-		'boost':{'base':0.8,'stat':['bonus','pierce','dmgReduc'],},
-		'playerOnly':1,
-		},
 	//}
 	
 	//{Status

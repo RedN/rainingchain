@@ -94,8 +94,6 @@ Init.db.boost = function(){
 	];
 	
 	boostPreDb['helm'] = [
-		{'stat':'pierce-chance','lvl':0,'mod':3,'value':[0.05,0.10]},
-		{'stat':'pierce-dmgReduc','lvl':0,'mod':3,'value':[0.05,0.10]},
 		{'stat':'pickRadius','lvl':0,'mod':1,'value':[1000,1000]},
 		{'stat':'item-quality','lvl':0,'mod':1,'value':[.3,.3]},
 		{'stat':['dmg'],'lvl':0,'mod':5,'value':[0.05,0.10]},
@@ -119,7 +117,6 @@ Init.db.boost = function(){
 	];
 	
 	boostPreDb['body'] = [
-		{'stat':'pierce-chance','lvl':0,'mod':3,'value':[0.05,0.10]},
 		{'stat':'item-quantity','lvl':0,'mod':1,'value':[.3,.3]},
 		{'stat':['dmg'],'lvl':0,'mod':5,'value':[0.05,0.10]},
 		{'stat':['def'],'lvl':0,'mod':5,'value':[0.05,0.10]},
@@ -134,7 +131,6 @@ Init.db.boost = function(){
 	];
 
 	boostPreDb['boots'] = [
-		{'stat':'pierce-dmgReduc','lvl':0,'mod':3,'value':[0.05,0.10]},
 		{'stat':'maxSpd','lvl':0,'mod':1,'value':[1,3]},
 		{'stat':'acc','lvl':0,'mod':1,'value':[0.2,0.4]},
 		{'stat':['dmg'],'lvl':0,'mod':5,'value':[0.05,0.10]},

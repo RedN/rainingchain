@@ -25,7 +25,6 @@ Combat.action.attack.mod.bonus = function(bon,atk){
 	
 	if(atk.type === 'b' || atk.type === 'bullet'){
 		atk.amount *= bon.bullet.amount; if(Math.random() <= atk.amount%1){atk.amount += 1; } atk.amount = Math.floor(atk.amount);
-		atk.pierce.chance *= bon.pierce.chance; atk.pierce.dmgReduc *= bon.pierce.dmgReduc;
 	}
 	if(atk.type === 's' || atk.type === 'strike'){
 		atk.width *= bon.strike.size; 

@@ -51,7 +51,7 @@ Attack.template = function(){
 	b.confuse = {'chance':1,'magn':1,'time':1};
 	
 	b.leech = {'chance':1,'magn':1,'time':1};
-	b.pierce = {'chance':1,'dmgReduc':1};
+	b.pierce = {'chance':0,'dmgReduc':0.5};
 	b.crit = {'chance':1,'magn':1};
 	b.curse = 0;
 	

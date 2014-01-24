@@ -142,7 +142,7 @@ Init.db.equip = function (cb){
 		'piece': 'range','type': 'boomerang','visual': 'range.boomerang',
 		'name':"Boomerang", 'sprite':{'name':"pBow",'sizeMod':1},
 		'dmgMain':100,'dmgRatio':{'melee':0.10,'range':0.10,'magic':0.10,'fire':0.10,'cold':10,'lightning':0.10},
-		'boost':[	{'stat':'pierce-chance','type':'base','value':1},
+		'boost':[	
 		
 		],
 
