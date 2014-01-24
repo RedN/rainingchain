@@ -4,6 +4,7 @@ craft material convert
 
 email confirm
 
+hitif boss?
 
 #Priority 2:
 -Crafting Ability

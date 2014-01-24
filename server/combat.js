@@ -166,7 +166,6 @@ Combat.collision = function(b,mort){
 	//Apply Status
 	Combat.collision.status(dmg,b,mort);
 	
-	
 }
 
 //Apply Status

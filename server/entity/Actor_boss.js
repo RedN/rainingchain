@@ -95,7 +95,6 @@ Init.db.boss = function(){
 			'mods':	{'spd':5}
 		};
 		
-		
 		boss.attack['tooFar'] = {
 			'type':"strike",'angle':0,'amount':1, 'aim': 0,'objImg':{'name':'iceshard','sizeMod':1.5},'hitImg':{'name':"ice1",'sizeMod':0.5},
 			'delay':20,'maxHit':3,'w':50,'h':50,'maxRange':10000,'minRange':0,

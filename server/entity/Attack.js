@@ -77,38 +77,41 @@ Attack.creation = function(player,attack,extra){
 	List.all[s.id] = s;
 	ActiveList.add(s);
 	
-	if(attack.type === 'strike'){ return Attack.creation.strike(player,attack);}
-	if(attack.type === 'bullet'){ return Attack.creation.bullet(player,attack);}
+	if(attack.type === 'strike'){ return Attack.creation.strike(attack);}
+	if(attack.type === 'bullet'){ return Attack.creation.bullet(attack);}
 }; 
 
 Attack.creation.info = function(player,bullet){
-	bullet.x = player.x;
-	bullet.y = player.y;
-	bullet.crX = player.x;
-	bullet.crY = player.y;
-	bullet.map = player.map;	
-	bullet.viewedIf = player.viewedIf;
+	bullet.x = player.x || 0;
+	bullet.y = player.y || 0;
+	bullet.crX = bullet.x;
+	bullet.crY = bullet.y;
+	bullet.mouseX = player.mouseX || 0;
+	bullet.mouseY = player.mouseY || 0;
+	
+	bullet.map = player.map || 'test@MAIN';	
+	bullet.viewedIf = player.viewedIf || 'true';
+	bullet.hitIf = player.hitIf || 'true';
 
-	bullet.angle = (player.angle+360)%360;
+	bullet.angle = (player.angle || 0 +360)%360;
 	
-	bullet.bonus = player.bonus;
+	bullet.bonus = player.bonus || (b.nova || b.onHit) ? Actor.template.bonus() : null ;	//bonus only useful if nova or onHit
 	if(player.parent){	bullet.parent = player.parent; }
-	else {bullet.parent = player.id;}
+	else {bullet.parent = player.id || null;}
 	
-	bullet.hitIf = player.hitIf;	
 	return bullet;
 }; 
 
 
-Attack.creation.bullet = function(player,b){
+Attack.creation.bullet = function(b){
 	if(b.parabole){
-		var diffX = player.mouseX - Cst.WIDTH2;	var diffY = player.mouseY - Cst.HEIGHT2;
+		var diffX = b.mouseX - Cst.WIDTH2;	var diffY = b.mouseY - Cst.HEIGHT2;
 		var diff = Math.sqrt(diffX*diffX+diffY*diffY);
 		b.parabole.dist = Math.min(Math.max(diff,b.parabole.min),b.parabole.max);
 		b.parabole.maxTimer *= b.parabole.dist/b.parabole.max;
 	}
 	if(b.nova){ b.angle = Math.random()*360;}
-	if(!b.nova && !b.onHit){ delete b.bonus; }
+	if(!b.nova && !b.onHit){ delete b.bonus; }	//
 	if(!b.sin && !b.parabole && !b.boomerang) { b.normal = 1; }
 	
 	Sprite.creation(b,{'name':b.objImg.name,'anim':"Travel",'sizeMod':b.objImg.sizeMod});
@@ -121,13 +124,10 @@ Attack.creation.bullet = function(player,b){
 
 
 //need to remove player.bonus to pre-atk
-Attack.creation.strike = function(player,s){
+Attack.creation.strike = function(s){
 			
 	//Position
-	s.preMiddleX = player.mouseX-Cst.WIDTH2; 
-	s.preMiddleY = player.mouseY-Cst.HEIGHT2;
-	
-	var dist = Math.sqrt( s.preMiddleX*s.preMiddleX + s.preMiddleY*s.preMiddleY );
+	var dist = Math.pyt( s.mouseX-Cst.WIDTH2, s.mouseY-Cst.HEIGHT2);
 	var angle = s.angle;
 	
 	if(s.middleX === undefined){ s.middleX = dist * cos(angle); }
