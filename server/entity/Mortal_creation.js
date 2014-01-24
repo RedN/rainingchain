@@ -59,7 +59,7 @@ Mortal.creation.group = function(gr,el){
 }
 
 Mortal.creation.group.template = function(){
-	return {'x':0,'y':0,'v':25,'map':'test','respawn':100}
+	return {'x':0,'y':0,'v':25,'map':'test@MAIN','respawn':100}
 }
 
 Mortal.creation.boost = function(e){
@@ -98,7 +98,7 @@ Mortal.creation.db = function(e,d){
 }
 
 Mortal.creation.info = function(e,cr){
-    e.map = cr.map || 'test';
+    e.map = cr.map || 'test@MAIN';
 	e.x = cr.x + Math.randomML() * (cr.v || 0); 
 	e.y = cr.y + Math.randomML() * (cr.v || 0); 
 	e.crX = cr.x;

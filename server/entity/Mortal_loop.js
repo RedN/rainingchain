@@ -221,14 +221,12 @@ Mortal.loop.summon = function(mort){
 Mortal.loop.bumper = function(mort){
 	//test collision with map
 	mort.x = Math.max(mort.x,50);
-	mort.x = Math.min(mort.x,Db.map[mort.map].grid.input[0].length*32-50);
+	mort.x = Math.min(mort.x,Db.map[Map.getModel(mort.map)].grid.input[0].length*32-50);
 	mort.y = Math.max(mort.y,50);
-	mort.y = Math.min(mort.y,Db.map[mort.map].grid.input.length*32-50);
+	mort.y = Math.min(mort.y,Db.map[Map.getModel(mort.map)].grid.input.length*32-50);
 	
-	var bumperBox = mort.bumperBox;
-		
 	for(var i = 0 ; i < 4 ; i ++){
-		mort.bumper[i] = Collision.PtMap({x:mort.x + bumperBox[i].x,y:mort.y + bumperBox[i].y},mort.map,mort);
+		mort.bumper[i] = Collision.PtMap({x:mort.x + mort.bumperBox[i].x,y:mort.y + mort.bumperBox[i].y},mort.map,mort);
 	}
 }
 

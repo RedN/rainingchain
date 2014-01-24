@@ -12,7 +12,7 @@ Init.db.map = function (){
 		
 			
 			Mortal.creation.group({'x':1060,'y':1900,'map':map,'respawn':100},[
-				{'amount':3,"category":"troll","variant":"ice",'lvl':0,'modAmount':1},
+				{'amount':1,"category":"troll","variant":"ice",'lvl':0,'modAmount':1},
 			]);
 			
 		}
@@ -47,66 +47,66 @@ Init.db.map = function (){
 	};
 
 	
-	for(var i in Db.map){	
-		var m = Db.map[i]();
-		m.id = i;
-		m.model = i;
-		m.name = m.name || i.capitalize();
-		m.timer = 1/0;
-		
-		Map.mapMod[i] = {};
-		Map.convertId[i] = i;		
-		
-		Db.map[i] = m;
-		List.map[i] = m;
-		
-		
+	for(var m in Db.map){	
+		Db.map[m] = Db.map[m]();
+		var map = Db.map[m];
+		map.id = m;
+
 		var grid = [];
-		for(var i = 0 ; i < m.grid.length; i++){	
+		for(var i = 0 ; i < map.grid.length; i++){	
 			grid[i] = [];
-			for(var j = 0 ; j < m.grid[i].length; j++){
-				grid[i][j] = +!+m.grid[i][j];
+			for(var j = 0 ; j < map.grid[i].length; j++){
+				grid[i][j] = +!+map.grid[i][j];
 			}
 		}
-		m.grid = new astar.Graph(grid);
+		map.grid = new astar.Graph(grid);
 		
+		Db.map[m] = map;
 	}
 	
 }
 Map = {};
 
-Map.clone = function(namemodel,version){
+Map.creation = function(namemodel,version){
 	//create a copy of a default map. used for instanced map. version is usually the player name
-	version = version || Math.randomId();
-	var newname = namemodel + '@' + version;
+	version = version || 'MAIN';
+	var newid = namemodel + '@' + version;
 	var model = Db.map[namemodel];
-	List.map[newname] = {
-		name:model.name,
-		grid:model.grid,
-		model:model,
-		timer:5		//in minutes
-	};
-	Map.mapMod[newname] = {};
-	Map.convertId[newname] = model.id;  
 	
-	Map.load(namemodel,newname);
-	return newname;
+	var map = {
+		id:newid,
+		name:model.name,
+		version:version,
+		grid:model.grid,
+		model:model.id,
+		timer:version === 'MAIN' ? 1/0 : 5*60*1000/25,
+	};
+	
+	List.map[newid] = map;
+	
+	Map.mapMod[newid] = {};
+	
+	Map.load(namemodel,newid);
+	return newid;
 }
-
+Map.creation.all = function(){
+	for(var i in Db.map){
+		Map.creation(i);
+	}
+}
 
 Map.mapMod = {};
-Map.convertId = {}; 
-	
-Map.load = function(name,version){
-	for(var i in Db.map[name].load){
-		Db.map[name].load[i](version || name,i);
+
+Map.getModel = function(name){
+	return List.map[name].model;
+}	
+Map.load = function(model,loadedmapid){
+	loadedmapid = loadedmapid || model + '@MAIN';
+	for(var i in Db.map[model].load){
+		Db.map[model].load[i](loadedmapid,i);
 	}
 }
-Map.load.all = function(){
-	for(var i in List.map){
-		Map.load(i);
-	}
-}
+
 
 Map.instance = {};
 Map.instance.list = function(name){
@@ -123,7 +123,7 @@ Map.instance.player = function(name){
 	//return list of players that are in a certain model of instance
 	var list = [];
 	for(var i in List.main){
-		if(Map.convertId[List.all[i].map] === name){
+		if(List.map[List.all[i].map].name === name){
 			list.push(List.all[i].name);
 		}
 	}

@@ -141,10 +141,10 @@ Save.player.compress = function(player){
     for(var i in player.abilityList){ player.abilityList[i] = {"id":player.abilityList[i].id}; }
 
 	
-	if(player.map.indexOf("@") !== -1){
-		player.x = player.mapLogIn.x || 0;
-		player.y = player.mapLogIn.y || 0;
-		player.map = player.mapLogIn.map || 'test';		
+	if(!player.map.have("@MAIN")){
+		player.x = player.mapSignIn.x || 0;
+		player.y = player.mapSignIn.y || 0;
+		player.map = player.mapSignIn.map || 'test@MAIN';		
 	}
 	
     return player;
@@ -249,7 +249,7 @@ Load.initData = function(key,player,main){
             'name':0,
             'x':0,
             'y':0,
-            'map':0,
+            'map':Map.getModel,
             'equip':0,
             'weapon':0,
             'skill':0,

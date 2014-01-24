@@ -246,7 +246,7 @@ Change.send.convert.abilityChangeClient = function(info){
 
 Change.send.convert.map = function(name){
 	//used for instanced. client doesnt need to know its instanced
-	return Map.convertId[name];
+	return List.map[name].model;
 }
 
 

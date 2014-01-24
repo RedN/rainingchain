@@ -1,5 +1,4 @@
 
-bonus always the same
 
 player death
 variable to respawn when death + function
@@ -9,9 +8,7 @@ clean mortal attributes
 mortal func verbs
 db map id list for activelist
 craft material convert
-easy mode
-cycle system
-death counter quest
+
 binding interface
 email confirm
 pref on client side only
@@ -23,7 +20,7 @@ progress bar preloader
 -Revamp Drop
 -Portal to Friends
 -Crafting System with White
--Implement Sound System
+-Implement Sound System (animation + map)
 -revamp animation, (including death)
 -death
 -Advanced Dialogue (Morrowind)
@@ -34,7 +31,8 @@ progress bar preloader
 -Advanced Enemy Mods
 -Option show strike points
 
-
+easy mode
+cycle system
 
 
 TUTORIAL:

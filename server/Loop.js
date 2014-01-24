@@ -47,7 +47,7 @@ Loop.Map = function(){
 	if(Loop.frameCount % (60*1000/40) === 0){		//each min
 		for(var i in List.map){
 			if(Map.instance.player(i).length === 0){
-				List.map[i].timer--;
+				List.map[i].timer -= 60*1000/25;
 				if(List.map[i].timer <= 0){
 					Map.remove(List.map[i]);
 				}
@@ -104,11 +104,9 @@ ActiveList.test = function(mort,obj){
 	if(!obj.viewedIf){ return false; }
 	if(typeof obj.viewedIf === 'function' && !obj.viewedIf(mort.id)){ return false; }
 	if(obj.viewedIf === 'false'){ return false; }
-	if(typeof obj.viewedIf === 'object' && obj.viewedIf.indexOf(mort.id) !== 1){ return false; }
+	if(typeof obj.viewedIf === 'object' && obj.viewedIf.indexOf(mort.id) === -1){ return false; }
 	if(mort.map !== obj.map){ return false; }
 	if(obj.dead){ return false; }
-	
-	
 	
 	
 	var pt = {'x':obj.x,'y':obj.y};

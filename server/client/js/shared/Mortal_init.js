@@ -158,8 +158,8 @@ Init.mortal = function(){
 		mort.acc = 3;
 		mort.x = 1050;	
 		mort.y = 550;	
-		mort.map = 'test';	
-		mort.mapSignIn = null;
+		mort.map = 'test@MAIN';	
+		mort.mapSignIn = {x:mort.x,y:mort.y,map:mort.map};
 		
 		/*
 		if(server){

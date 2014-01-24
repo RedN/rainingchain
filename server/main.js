@@ -44,7 +44,7 @@ exports.initServer = function (){
 								
 			Init.db.quest();
 			Init.db.dialogue();
-			Map.load.all();
+			Map.creation.all();
 			
 			Init.db.passive();
 			Init.db.clan();

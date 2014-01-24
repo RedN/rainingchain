@@ -62,37 +62,41 @@ Mortal.teleport = function(mort,x,y,map,signin){
 	//Teleport player. if no map specified, stay in same map.
 	mort.x = x;
 	mort.y = y;
-	if(map && mort.map !== map){ 
-		if(map.have("@")) Mortal.teleport.instance(mort,x,y,map,signin);
-		else mort.map = map;
+	if(map){
+		if(!map.have("@")){	map += '@MAIN'; }
+		if(map.have("@MAIN")){ mort.map = map;	}
+		else if(mort.map !== map){ Mortal.teleport.instance(mort,x,y,map,signin);}
 	}
-	ActiveList.remove(mort);	//need to con sider if needed or not
+	ActiveList.remove(mort);	//need to consider if needed or not
 }
+
+
 
 Mortal.teleport.instance = function(mort,x,y,map,signin){
 	if(!map){ Mortal.teleport(mort,x,y);  return; }		//regular teleport
-	if(!mort.mapSignIn && !signin){ 
-		permConsoleLog('cant teleport cuz no mapSignIn'); 
-		Chat.add(mort.id,"Report error: No mapSign"); 
-		return false; 
+	if(!map.have("@")){	map += "@MAIN"; }
+	if(map.have("@MAIN")){ Mortal.teleport(mort,x,y,map);  return; }		//regular teleport
+
+	if(typeof signin === 'object'){
+		mort.mapSignIn = deepClone(signin);
+	} else if(mort.map.have("@MAIN")){
+		mort.mapSignIn = {map:mort.map,x:mort.x,y:mort.y};	//default signin = place b4 going instance
 	}
-	if(typeof signin !== 'object' && !mort.map.have("@"))  singin = {map:mort.map,x:mort.x,y:mort.y};	//default signin
 	
-	mort.mapSignIn = signin ? deepClone(signin) : mort.mapSignIn;	//set signin
-	
-	if(!map.slice(map.indexOf('@')+1)) map += mort.name;	//set default version name
-	
+	if(map[map.length-1] === '@') map += mort.name;	//set default instance name
 	//test if need to create instance
 	if(!List.map[map]){
 		var model = map.slice(0,map.indexOf('@'));
 		var version = map.slice(map.indexOf('@')+1);
-		Map.clone(model,version); 
+		Map.creation(model,version); 
 	}
 	mort.x = x;
 	mort.y = y;
 	mort.map = map;
 	
-	//ActiveList.remove(mort);	//need to con sider if needed or not
+	
+	
+	ActiveList.remove(mort);
 }
 
 

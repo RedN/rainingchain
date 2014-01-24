@@ -28,7 +28,8 @@ Collision.PosMap = function(pos,map,player){
 		return player.mapMod[map][gridX + '-' + gridY];
 	}
 	*/
-	var map = Db.map[map].grid.input;
+	map = Map.getModel(map);
+	map = Db.map[map].grid.input;
 	if(map[pos.y] === undefined){ return  1;	} 
 	else if(map[pos.y][pos.x] === undefined){return  1;} 
 	else {return !map[pos.y][pos.x];}

@@ -1,11 +1,3 @@
-//Drop
-
-
-
-/*
-
-*/
-
 Init.db.drop = function(){
 	Db.drop = {
 		'regular':[
@@ -76,6 +68,7 @@ Drop.creation = function(d){
 	
 	List.drop[drop.id] = drop;
 	List.all[drop.id] = drop;
+	List.map[drop.map] = drop;
 }
 
 
