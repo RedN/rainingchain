@@ -1,14 +1,15 @@
 //####Update Actor####
 Actor.loop = function(mort){	
-	Test.loop.actor(i);
+	Test.loop.actor(mort.id);
 	mort.frameCount++;
 	if(mort.frameCount % 25 === 0){ Actor.loop.activeList(mort); }
 	if(!mort.active || mort.dead) return;
 		
 	if(mort.combat){
 		if(mort.hp <= 0) Actor.death(mort);
-		if(mort.boss) mort.boss.loop();    //custom boss loop
-		
+		if(mort.boss){ 
+			for(var i in mort.boss.loop) mort.boss.loop[i](mort.boss,mort);    //custom boss loop
+		}
 		Actor.loop.ability(mort);
 		Actor.loop.regen(mort);    
 		Actor.loop.status(mort);	
@@ -346,6 +347,7 @@ Actor.loop.attackReceived = function(mort){
 		}
 	}
 }
+
 
 
 

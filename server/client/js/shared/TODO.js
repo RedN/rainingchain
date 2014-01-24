@@ -1,14 +1,9 @@
 
-add map.list when mortal teleport 
-
-
 loop in map: fire floor etc..
 craft material convert
 
-binding interface
 email confirm
 
-boss loop split like deathfunc
 
 #Priority 2:
 -Crafting Ability
@@ -18,7 +13,7 @@ boss loop split like deathfunc
 -revamp animation, (including death)
 -death
 -Advanced Dialogue (Morrowind)
-
+-lvl affect enemy stats
 
 #Priority 3:
 -Improve boostDb

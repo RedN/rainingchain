@@ -78,15 +78,18 @@ Init.db.boss = function(){
 	Db.boss['iceTroll'] = function(){
 		
 		var boss = Boss.template();
-	
+		
+		boss.hole = 6;
+		boss.opening = 8;
+		
 		boss.attack['fastSpear'] = {
-			type:"bullet",'angle':0,'amount':1, 'aim': 0,
+			'type':"bullet",'angle':0,'amount':1, 'aim': 0,
 			'objImg':{'name':"iceshard",'sizeMod':1},
 			'dmg':{'melee':25,'range':25,'magic':25,'fire':10,'cold':10,'lightning':5},
 			'mods':	{'spd':40}
 		};			
 		boss.attack['slowSpear'] =	{
-			type:"bullet",'angle':0,'amount':1, 'aim': 0,
+			'type':"bullet",'angle':0,'amount':1, 'aim': 0,
 			'objImg':{'name':"iceshard",'sizeMod':1},
 			'dmg':{'melee':25,'range':25,'magic':25,'fire':10,'cold':10,'lightning':5},
 			'mods':	{'spd':5}
@@ -94,25 +97,19 @@ Init.db.boss = function(){
 		
 		
 		boss.attack['tooFar'] = {
-			type:"strike",'angle':0,'amount':1, 'aim': 0,'objImg':{'name':'iceshard','sizeMod':1.5},'hitImg':{'name':"ice1",'sizeMod':0.5},
+			'type':"strike",'angle':0,'amount':1, 'aim': 0,'objImg':{'name':'iceshard','sizeMod':1.5},'hitImg':{'name':"ice1",'sizeMod':0.5},
 			'delay':20,'maxHit':3,'w':50,'h':50,'maxRange':10000,'minRange':0,
 			'dmg':{'melee':25,'range':25,'magic':25,'fire':10,'cold':10,'lightning':5},
 		};
 		
 		
 		boss.attack['midSpear'] = {
-			type:"bullet",'angle':15,'amount':1, 'aim': 0,'objImg':{'name':"iceshard",'sizeMod':1},'hitImg':{'name':"ice2",'sizeMod':0.5},
+			'type':"bullet",'angle':15,'amount':1, 'aim': 0,'objImg':{'name':"iceshard",'sizeMod':1},'hitImg':{'name':"ice2",'sizeMod':0.5},
 			'dmgMain':1,'dmgRatio':{'melee':15,'range':5,'magic':5,'fire':2,'cold':27,'lightning':0},
 		};
 		
 		
-		for(var i in boss.attack){
-			boss.attack[i] = useTemplate(Attack.template(),boss.attack[i]);
-		}
-				
-		boss.loop = function(){
-			var boss = this;	var mort = boss.parent;		boss.frame++;	Boss.target(boss);
-						
+		boss.loop.attack = function(boss,mort){
 			if(boss.phase === 0){	//if boss on phase 0
 				boss.opening = 30;
 				for(var i in boss.target){	//for each player around the boss
@@ -153,19 +150,36 @@ Init.db.boss = function(){
 
 	
 	
-	
+	for(var i in Db.boss){
+		Db.boss[i] = Db.boss[i]();
+		Db.boss[i].id = i;
+		Boss.creation.model(Db.boss[i]);
+	}
 	
 	
 }
 
 Boss = {};
 
-
-Boss.creation = function(){
-
-
+Boss.creation = function(name){
+	var model = Db.boss[name];
+	var exception = ['loop','attack','ability'];
+	
+	var tmp = {};
+	for(var i in model){
+		if(!exception.have(i)) tmp[i] = deepClone(model[i]);
+		else tmp[i] = model[i];
+	}
+	
+	return tmp;
 }
 
+Boss.creation.model = function(boss){
+	for(var i in boss.attack){
+		boss.attack[i] = useTemplate(Attack.template(),boss.attack[i]);
+	}
+	boss.loop.target = Boss.target;
+}
 
 
 Boss.template = function(){
@@ -176,14 +190,15 @@ Boss.template = function(){
 		'angle':{},
 		'minion':{},
 		'tooFar':1000,
+		
+		'loop':{},
 		'attack':{},
 		'ability':{},
 	}
 }
 
-//Update Boss Target. can have multiple targets unlike regular enemy
-Boss.target = function(boss){
-	var mort = boss.parent;
+Boss.target = function(boss,mort){
+	//Update Boss Target. can have multiple targets unlike regular enemy
 	boss.target = {};
 	for(var key in mort.activeList){ 
 		if(List.all[key].type == 'player'){

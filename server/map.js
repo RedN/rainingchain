@@ -26,7 +26,10 @@ Init.db.map = function (){
 		
 		return m;
 	};
-	
+	//ts("Actor.creation.group({'x':1060,'y':1900,'map':'test@MAIN','respawn':100},[{'amount':1,'category':'boss','variant':'iceTroll','lvl':0,'modAmount':1},]);")
+			
+		
+		
 	Db.map['ryve'] = function(){
 		var m = {};
 		m.name = "Ryve";

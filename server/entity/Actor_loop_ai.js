@@ -134,10 +134,6 @@ Actor.loop.setTarget.stuck = function(mort){
 	mort.target.sub.list = Actor.getPath(mort,maintar);
 } 
 
-
-
-
-
 Actor.loop.input.ability = function(mort){
 	/*
 	var target = List.all[mort.target];
@@ -154,7 +150,7 @@ Actor.loop.input.ability = function(mort){
 
 Actor.getPath = function(mort,target){	//using a*
 	if(mort.map !== target.map) return [];
-	var map = Db.map[mort.map].grid.nodes;
+	var map = Db.map[Map.getModel(mort.map)].grid.nodes;
 	
 	var start = Collision.getPos(mort);
 	var end = Collision.getPos(target);
@@ -164,7 +160,6 @@ Actor.getPath = function(mort,target){	//using a*
 	
 	return astar.search.parse(astar.search(map,start,end));
 }
-
 
 Actor.isStuck = function(mort){
 	var maintar = List.all[mort.target.main.list[0]];

@@ -80,9 +80,7 @@ Actor.creation.db = function(e,d){
 	
 	
 	if(e.boss){	
-		var id = e.boss;
-		e.boss = Db.boss[id]();
-		for(var i in Db.boss[id]){e.boss[i] = Db.boss[id][i];}
+		e.boss = Boss.creation(e.boss);
 		e.boss.parent = e; 
 	}
 	var count = 0;
