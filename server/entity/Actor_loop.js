@@ -217,7 +217,6 @@ Actor.loop.summon = function(mort){
 
 //{Move
 Actor.loop.bumper = function(mort){
-	if(!Map.getModel(mort.map)) console.log(List.map,mort.map,Map.getModel(mort.map));
 	//test collision with map
 	mort.x = Math.max(mort.x,50);
 	mort.x = Math.min(mort.x,Db.map[Map.getModel(mort.map)].grid.input[0].length*32-50);

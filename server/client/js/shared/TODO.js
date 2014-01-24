@@ -1,4 +1,6 @@
 
+add map.list when mortal teleport 
+
 
 loop in map: fire floor etc..
 craft material convert
@@ -6,6 +8,7 @@ craft material convert
 binding interface
 email confirm
 
+boss loop split like deathfunc
 
 #Priority 2:
 -Crafting Ability

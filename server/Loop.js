@@ -17,6 +17,10 @@ Loop = function(){
 }
 Loop.frameCount = 0; 
 
+Loop.interval = function(num){
+	return Loop.frameCount % num === 0;
+}
+
 Loop.Actor = function(){
 	for (var i in List.actor ){     
 	    Actor.loop(List.actor[i]); 
@@ -44,14 +48,19 @@ Loop.Drop = function(){
 }
 
 Loop.Map = function(){
-	if(Loop.frameCount % (60*1000/40) === 0){		//each min
-		for(var i in List.map){
+	for(var i in List.map){
+		//Time Out Instance
+		if(Loop.frameCount % (60*1000/40) === 0){		//each min
 			if(Map.instance.player(i).length === 0){
 				List.map[i].timer -= 60*1000/25;
 				if(List.map[i].timer <= 0){
 					Map.remove(List.map[i]);
 				}
 			}	
+		}
+		
+		for(var j in List.map[i].loop){
+			List.map[i].loop[j](i);
 		}
 	}
 }

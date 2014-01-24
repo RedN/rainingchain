@@ -65,7 +65,11 @@ Actor.teleport = function(mort,x,y,map,signin){
 	mort.y = y;
 	if(map){
 		if(!map.have("@")){	map += '@MAIN'; }
-		if(map.have("@MAIN")){ mort.map = map;	}
+		if(map.have("@MAIN")){ 
+			delete List.map[mort.map].list[mort.id];
+			mort.map = map;	
+			List.map[mort.map].list[mort.id] = mort.id;
+		}
 		else if(mort.map !== map){ Actor.teleport.instance(mort,x,y,map,signin);}
 	}
 	ActiveList.remove(mort);	//need to consider if needed or not
@@ -93,7 +97,9 @@ Actor.teleport.instance = function(mort,x,y,map,signin){
 	}
 	mort.x = x;
 	mort.y = y;
-	mort.map = map;
+	delete List.map[mort.map].list[mort.id];
+	mort.map = map;	
+	List.map[mort.map].list[mort.id] = mort.id;
 	
 	
 	

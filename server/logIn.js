@@ -99,6 +99,7 @@ Sign.off = function(key,message){
 		delete List.nameToKey[List.all[key].name];
 		delete List.actor[key];
 		delete List.socket[key];
+		if(List.all[key] && List.map[List.all[key].map]) delete List.map[List.all[key].map].list[key];
 		delete List.main[key];
 		delete List.all[key];
 		delete List.btn[key];
@@ -216,6 +217,7 @@ Load.player = function(key,db){
 	
 	List.actor[key] = player;
     List.all[key] = player;
+    List.map[player.map].list[player.id] = key;
     List.nameToKey[player.name] = key;
 	return player;
 }

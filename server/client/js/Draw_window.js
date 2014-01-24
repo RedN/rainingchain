@@ -1003,7 +1003,6 @@ Draw.window.binding = function (){ ctxrestore();
 	hq.note.style.top = 250 + 'px'; 	
 }
 
-	testtest = function(){ console.log(1); }
 	
 //{ Passive
 Draw.window.passive = function (){ ctxrestore();

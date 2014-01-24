@@ -1,7 +1,9 @@
 //boss
 Init.db.boss = function(){
-	Db.boss = {};
+	Boss.attack = Combat.action.attack.perform;
 	
+	Db.boss = {};
+	/*
 	Db.boss['fireTroll'] = function(){
 		var boss = Boss.template();
 		
@@ -11,20 +13,25 @@ Init.db.boss = function(){
 		boss.opening = 10;
 		
 		//Attacks
-		boss.attack['explosion'] = 
-		{type:"strike",'angle':0,'amount':1, 'aim': 0,'objImg':{'name':'fire4','sizeMod':0.75},
-		'delay':15,'maxHit':3,'w':25,'h':25,'maxRange':10000,'minRange':0,
-		'dmg':{'melee':25,'range':25,'magic':25,'fire':10,'cold':10,'lightning':5},
-		'mods':	{}};
+		boss.attack['explosion'] = {
+			'type':"strike",'angle':0,'amount':1, 'aim': 0,'objImg':{'name':'fire4','sizeMod':0.75},
+			'delay':15,'maxHit':3,'w':25,'h':25,'maxRange':10000,'minRange':0,
+			'dmg':{'melee':25,'range':25,'magic':25,'fire':10,'cold':10,'lightning':5},
+			'mods':	{}
+		};
 		
-		boss.attack['spiral'] = 
-		{type:"strike",'angle':0,'amount':1, 'aim': 0,'objImg':{'name':'fire4','sizeMod':0.5},
-		'delay':0,'maxHit':3,'w':25,'h':25,'maxRange':10000,'minRange':0,
-		'dmg':{'melee':25,'range':25,'magic':25,'fire':10,'cold':10,'lightning':5},
-		'mods':	{}};
+		boss.attack['spiral'] = {
+			'type':"strike",'angle':0,'amount':1, 'aim': 0,'objImg':{'name':'fire4','sizeMod':0.5},
+			'delay':0,'maxHit':3,'w':25,'h':25,'maxRange':10000,'minRange':0,
+			'dmg':{'melee':25,'range':25,'magic':25,'fire':10,'cold':10,'lightning':5},
+			'mods':	{}
+		};
 		
 		//Loop
-		boss.loop = function(){
+		boss.loop = {};
+		
+		
+		function(){
 		
 			var boss = this;
 			var mort = boss.parent;
@@ -33,19 +40,19 @@ Init.db.boss = function(){
 			Boss.target(boss);
 		
 
-			if(boss.frame % 1 == 0){
+			if(boss.frame % 1 === 0){
 				for(var i = 0 ; i < 3 ; i++){
 					var angle = Math.random()*360;
 					var dist = Math.random()*200 + 500;
 					var middleX = cos(angle)*dist;
 					var middleY = sin(angle)*dist;
 						
-					Attack.creation(mort,boss.attack['explosion'],{'middleX':middleX,'middleY':middleY});    //attack?
+					//Attack.creation(mort,boss.attack['explosion'],{'middleX':middleX,'middleY':middleY});    //attack?
 				}
 			}	
 
 			
-			if(boss.phase == 0){
+			if(boss.phase === 0){
 				boss.center += 4.3;
 
 				if(boss.frame % 1 == 0){
@@ -59,7 +66,7 @@ Init.db.boss = function(){
 						var middleY = sin(angle)*dist;
 							
 						if(i != boss.hole && i != boss.hole+1){
-							addStrike(mort,boss.attack['spiral'],{'middleX':middleX,'middleY':middleY});
+							//addStrike(mort,boss.attack['spiral'],{'middleX':middleX,'middleY':middleY});
 						}
 					}
 				}
@@ -67,38 +74,35 @@ Init.db.boss = function(){
 		}
 		return boss;
 	}
-
+	*/
 	Db.boss['iceTroll'] = function(){
 		
 		var boss = Boss.template();
 	
-		boss.attack['fastSpear'] = 
-		{type:"bullet",'angle':0,'amount':1, 'aim': 0,
-		'objImg':{'name':"iceshard",'sizeMod':1},
-		'dmg':{'melee':25,'range':25,'magic':25,'fire':10,'cold':10,'lightning':5},
-		'mods':	{
-		'spd':40
-		}};			
-		boss.attack['slowSpear'] = 
-		{type:"bullet",'angle':0,'amount':1, 'aim': 0,
-		'objImg':{'name':"iceshard",'sizeMod':1},
-		'dmg':{'melee':25,'range':25,'magic':25,'fire':10,'cold':10,'lightning':5},
-		'mods':	{
-		'spd':5
-		}};
-		
-		
-		boss.attack['tooFar'] = 
-		{type:"strike",'angle':0,'amount':1, 'aim': 0,'objImg':{'name':'iceshard','sizeMod':1.5},'hitImg':{'name':"ice1",'sizeMod':0.5},
-		'delay':20,'maxHit':3,'w':50,'h':50,'maxRange':10000,'minRange':0,
-		'dmg':{'melee':25,'range':25,'magic':25,'fire':10,'cold':10,'lightning':5},
+		boss.attack['fastSpear'] = {
+			type:"bullet",'angle':0,'amount':1, 'aim': 0,
+			'objImg':{'name':"iceshard",'sizeMod':1},
+			'dmg':{'melee':25,'range':25,'magic':25,'fire':10,'cold':10,'lightning':5},
+			'mods':	{'spd':40}
+		};			
+		boss.attack['slowSpear'] =	{
+			type:"bullet",'angle':0,'amount':1, 'aim': 0,
+			'objImg':{'name':"iceshard",'sizeMod':1},
+			'dmg':{'melee':25,'range':25,'magic':25,'fire':10,'cold':10,'lightning':5},
+			'mods':	{'spd':5}
 		};
 		
 		
-		boss.attack['midSpear'] = {type:"bullet",
-			'angle':15,'amount':1, 'aim': 0,'objImg':{'name':"iceshard",'sizeMod':1},'hitImg':{'name':"ice2",'sizeMod':0.5},
+		boss.attack['tooFar'] = {
+			type:"strike",'angle':0,'amount':1, 'aim': 0,'objImg':{'name':'iceshard','sizeMod':1.5},'hitImg':{'name':"ice1",'sizeMod':0.5},
+			'delay':20,'maxHit':3,'w':50,'h':50,'maxRange':10000,'minRange':0,
+			'dmg':{'melee':25,'range':25,'magic':25,'fire':10,'cold':10,'lightning':5},
+		};
+		
+		
+		boss.attack['midSpear'] = {
+			type:"bullet",'angle':15,'amount':1, 'aim': 0,'objImg':{'name':"iceshard",'sizeMod':1},'hitImg':{'name':"ice2",'sizeMod':0.5},
 			'dmgMain':1,'dmgRatio':{'melee':15,'range':5,'magic':5,'fire':2,'cold':27,'lightning':0},
-			//'leech':{'chance':1,'magn':1,'time':1}
 		};
 		
 		
@@ -148,9 +152,21 @@ Init.db.boss = function(){
 	}
 
 	
+	
+	
+	
+	
 }
 
 Boss = {};
+
+
+Boss.creation = function(){
+
+
+}
+
+
 
 Boss.template = function(){
 	return {

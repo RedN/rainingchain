@@ -38,7 +38,7 @@ require('./server/entity/Attack');
 require('./server/entity/Actor_loop');
 require('./server/entity/Actor_loop_ai');
 require('./server/entity/Attack_loop');
-require('./server/entity/boss');
+require('./server/entity/Actor_boss');
 require('./server/Loop');
 
 require('./server/Itemlist');

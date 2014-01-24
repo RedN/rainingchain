@@ -21,6 +21,8 @@ Collision.PtMap = function(pt,map,player){
 	return Collision.PosMap(Collision.getPos(pt),map,player);
 }
 
+
+
 Collision.PosMap = function(pos,map,player){
 	//Test Collision between pt and map (can also test with player map mod)
 	/*
