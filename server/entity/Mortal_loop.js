@@ -6,7 +6,6 @@ Mortal.loop = function(mort){
 	if(!mort.active || mort.dead) return;
 		
 	if(mort.combat){
-		if(mort.killed) Mortal.death(mort);
 		if(mort.hp <= 0) Mortal.death(mort);
 		if(mort.boss) mort.boss.loop();    //custom boss loop
 		
@@ -33,8 +32,7 @@ Mortal.loop = function(mort){
 		if(mort.frameCount % 25 === 0){ Mortal.loop.friendList(mort); }    //check if any change in friend list
 		if(List.main[i].windowList.trade){ Mortal.loop.trade(mort); };    
 		if(List.main[i].dialogue){ Mortal.loop.dialogue(mort); }
-		
-		
+
 		Test.loop.player(i);	
 	}
 		
@@ -219,6 +217,7 @@ Mortal.loop.summon = function(mort){
 
 //{Move
 Mortal.loop.bumper = function(mort){
+	if(!Map.getModel(mort.map)) console.log(List.map,mort.map,Map.getModel(mort.map));
 	//test collision with map
 	mort.x = Math.max(mort.x,50);
 	mort.x = Math.min(mort.x,Db.map[Map.getModel(mort.map)].grid.input[0].length*32-50);
@@ -291,14 +290,15 @@ Mortal.loop.activeList = function(mort){
 	}
 	
 	//Add New Boys
-	for(var j in List.all){
-		if(ActiveList.test(mort,List.all[j]) && List.all[j].id != mort.id){
-			mort.activeList[j] = List.all[j].id;
-			if(mort.type !== 'player'){ List.all[j].viewedBy[mort.id] = mort.id;}
+	if(List.map[mort.map]){
+		for(var j in List.map[mort.map].list){
+			if(ActiveList.test(mort,List.all[j])){
+				mort.activeList[j] = 1;
+				if(mort.type !== 'player'){ List.all[j].viewedBy[mort.id] = 1;}	//for player, viewedBy is used in send init data
+			}
 		}
 	}
-	
-	mort.active = (Object.keys(mort.activeList).length !== 0 || mort.type == 'player')
+	mort.active = (Object.keys(mort.activeList).length || mort.type == 'player')
 
 }
 

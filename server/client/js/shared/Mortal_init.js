@@ -160,7 +160,7 @@ Init.mortal = function(){
 		mort.y = 550;	
 		mort.map = 'test@MAIN';	
 		mort.mapSignIn = {x:mort.x,y:mort.y,map:mort.map};
-		
+		mort.mapDeath = {x:mort.x,y:mort.y,map:mort.map};
 		/*
 		if(server){
 			mort.mapMod = deepClone(Map.mapMod); //mapmod: each map has a collision grid. it has as player-bound collision. ex: completing a quest opens a path

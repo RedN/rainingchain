@@ -6,6 +6,7 @@ Bullet.remove = function(b){
 	
 	delete List.bullet[b.id];
 	delete List.all[b.id]
+	if(List.map[b.map])	delete List.map[b.map].list[b.id];
 }
 
 Bullet.loop = function(b){

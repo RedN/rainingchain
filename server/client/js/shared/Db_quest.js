@@ -140,7 +140,7 @@ Init.db.quest = function(){
 					'dialogue':{'func':(function(key){
 						var player = List.main[key];
 						var quest = player.quest['questId'];
-						
+						quest.started = 1;
 						if(quest.bossKilled){
 							if(quest.receivedReward){
 								Dialogue.start(key,{'name':'questId','convo':'Jenny','node':'gratz2'});
@@ -199,6 +199,7 @@ Quest.creation = function(q){
 	qv.complete = 0;
 	qv.started = 0;
 	qv.bonusSum = 1;
+	qv.deathCount = 0;
 	qv.bonus = {};
 	for(var j in q.bonus){ qv.bonus[j] = 0; }	//0:non-active, 1:active
 	qv.requirement = '';

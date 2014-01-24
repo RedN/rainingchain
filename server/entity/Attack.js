@@ -114,6 +114,8 @@ Attack.creation.bullet = function(player,b){
 	Sprite.creation(b,{'name':b.objImg.name,'anim':"Travel",'sizeMod':b.objImg.sizeMod});
 	
 	List.bullet[b.id] = b;
+	List.map[b.map].list[b.id] = b;
+	
 	return b;
 }; 
 

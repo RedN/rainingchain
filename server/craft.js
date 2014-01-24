@@ -205,8 +205,13 @@ Craft.boost = function(seed,where,amount){
 }
 
 Craft.boost.generate = function(seed){
+	seed.quality = seed.quality || 1;
+	seed.lvl = seed.lvl || 0;
+	seed.cap = seed.cap || 1;
+	
 	var boost = Db.boost[seed.piece].randomMod(seed.lvl);
 	var value = Craft.boost.generate.roll(boost.value,seed.quality);
+	value = Math.min(value,boost.value[1]*seed.cap);	//for death for example
 	
 	return {'stat':boost.stat,
 			'type':boost.type || 'base',

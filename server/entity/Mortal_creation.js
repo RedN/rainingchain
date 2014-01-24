@@ -12,6 +12,7 @@ Mortal.creation = function(data){
 	e.data = data;
 	List.mortal[e.id] = e;
 	List.all[e.id] = e;
+	List.map[e.map].list[e.id] = e;
 	
 	if(e.nevercombat){ Mortal.creation.nevercombat(e); }	
 	else {

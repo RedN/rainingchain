@@ -107,7 +107,7 @@ ActiveList.test = function(mort,obj){
 	if(typeof obj.viewedIf === 'object' && obj.viewedIf.indexOf(mort.id) === -1){ return false; }
 	if(mort.map !== obj.map){ return false; }
 	if(obj.dead){ return false; }
-	
+	if(mort.id === obj.id){ return false; }
 	
 	var pt = {'x':obj.x,'y':obj.y};
 	var rect = [mort.x-800,mort.x+800,mort.y-600,mort.y+600];
@@ -133,8 +133,6 @@ ActiveList.remove = function(b){
         delete List.all[i].activeList[b.id];
 	}
 }
-
-
 
 remove = function(mort){
 	if(!mort) return;

@@ -35,7 +35,11 @@ Quest.reward = function(key,id){
 	var qp = List.main[key].quest[id];
 	var q = Db.quest[id];
 	
-	var seed = {'piece':q.id,'lvl':0,'quality':(qp.bonusSum+0.01*qp.complete) * q.reward.mod}
+	var seed = {
+		'piece':q.id,
+		'quality':(qp.bonusSum+0.01*qp.complete) * q.reward.mod,
+		'cap':Math.max(0.75,1-0.01*qp.deathCount)
+	};
 	
 	var boost = Craft.boost.generate(seed);
 	
@@ -97,6 +101,7 @@ Quest.complete = function(key,id){
 	qp.rewardTier = tmp[0];
 	qp.reward =	tmp[1];
 	qp.complete = tmp[2];
+	qp.deathCount = 0;
 }
 
 

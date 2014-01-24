@@ -80,6 +80,7 @@ Map.creation = function(namemodel,version){
 		grid:model.grid,
 		model:model.id,
 		timer:version === 'MAIN' ? 1/0 : 5*60*1000/25,
+		list:{},		//acts like List.all (for faster activeList)
 	};
 	
 	List.map[newid] = map;

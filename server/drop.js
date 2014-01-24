@@ -68,7 +68,7 @@ Drop.creation = function(d){
 	
 	List.drop[drop.id] = drop;
 	List.all[drop.id] = drop;
-	List.map[drop.map] = drop;
+	List.map[drop.map].list[drop.id] = drop;
 }
 
 
@@ -93,7 +93,7 @@ Drop.remove = function(drop){
 	ActiveList.remove(drop);
 	delete List.all[drop.id];
 	delete List.drop[drop.id];
-
+	if(List.map[drop.map])	delete List.map[drop.map].list[drop.id];
 }
 
 

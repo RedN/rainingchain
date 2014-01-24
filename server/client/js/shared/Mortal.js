@@ -9,6 +9,7 @@ Mortal.remove = function(mort){
 	
 	delete List.mortal[mort.id];
 	delete List.all[mort.id]
+	if(List.map[mort.map])	delete List.map[mort.map].list[mort.id];
 }
 
 Mortal.updateEquip = function(mort){
@@ -331,7 +332,7 @@ Mortal.death.player = function(mort){
 	var main = List.main[key];
 	
 	//Quest
-	for(var i in main.quest[i]) if(main.quest[i].started) main.quest[i].deathCount++;	
+	for(var i in main.quest)	if(main.quest[i].started)	main.quest[i].deathCount++;	
 	
 	//Message
 	var string = 'You are dead... ';
@@ -346,10 +347,13 @@ Mortal.death.player = function(mort){
 	string += array.random();
 	Chat.add(key,string);
 	
+	mort.x = mort.mapDeath.x;
+	mort.y = mort.mapDeath.y;
+	mort.map = List.map[mort.mapDeath.map] ? mort.mapDeath.map : 'test@MAIN';
 	
-	
-	
-	
+	for(var i in mort.resource){
+		mort[i] = mort.resource[i].max;
+	}
 	
 }
 
