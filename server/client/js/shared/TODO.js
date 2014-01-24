@@ -4,8 +4,8 @@ player death
 variable to respawn when death + function
 
 loop in map: fire floor etc..
-clean mortal attributes
-mortal func verbs
+clean actor attributes
+actor func verbs
 db map id list for activelist
 craft material convert
 

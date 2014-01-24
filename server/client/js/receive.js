@@ -97,15 +97,15 @@ Receive.parse.chargeClient = function(info){	//could be used when needed instead
 
 
 Receive.init = function(obj){
-	if(obj.type === 'enemy' || obj.type === 'player'){ Receive.init.mortal(obj); }	
+	if(obj.type === 'enemy' || obj.type === 'player'){ Receive.init.actor(obj); }	
 	else if(obj.type === 'bullet'){	Receive.init.bullet(obj);}	
 	else if(obj.type === 'drop'){	Receive.init.drop(obj);	}
 }
 
-Receive.init.mortal = function(mort){
+Receive.init.actor = function(mort){
 	mort.toRemove = 0;
 	Sprite.creation(mort,mort.sprite);
-	List.mortal[mort.id] = mort;	
+	List.actor[mort.id] = mort;	
 	List.all[mort.id] = mort;	
 	
 }

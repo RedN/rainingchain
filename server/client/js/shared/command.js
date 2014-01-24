@@ -212,7 +212,7 @@ Command.list['win,ability,swap'] = function(key,input,ab){
 	input = +input;
 	if(typeof input !== 'number' || typeof ab !== 'string'){ return; }
 	if(input < 0 || !List.all[key].abilityList[ab]){ return; } 
-	Mortal.swapAbility(List.all[key],input,ab);
+	Actor.swapAbility(List.all[key],input,ab);
 }
 
 Command.list['win,ability,mod'] = function(key,modid,abid){
@@ -246,7 +246,7 @@ Command.list['tab,inv,click'] = function(key,side,slot){
 
 Command.list['tab,swapWeapon'] = function(key,type){
 	if(['melee','range','magic'].indexOf(type) === -1){ Chat.add(key,'Invalid Param.'); return;}
-	Mortal.swapWeapon(List.all[key],type);
+	Actor.swapWeapon(List.all[key],type);
 }
 
 

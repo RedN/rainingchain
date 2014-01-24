@@ -132,7 +132,7 @@ Change.send.init = function(obj){
 	//convertInit: create object that has all needed information for the client to init the object. these information are only sent when init.
 	if(obj.type == 'bullet'){return Change.send.init.bullet(obj)}
 	if(obj.type == 'drop'){return Change.send.init.drop(obj)}
-	if(obj.type == 'enemy' || obj.type == 'player'){	return Change.send.init.mortal(obj)}
+	if(obj.type == 'enemy' || obj.type == 'player'){	return Change.send.init.actor(obj)}
 }
 
 Change.send.init.bullet = function(bullet){	//For Init
@@ -144,7 +144,7 @@ Change.send.init.bullet = function(bullet){	//For Init
 	return draw;
 }
 
-Change.send.init.mortal = function(enemy){	//For Init
+Change.send.init.actor = function(enemy){	//For Init
 	var draw = {};
 	draw.id = enemy.publicId;
 	draw.xya = [Math.round(enemy.x),Math.round(enemy.y),Math.round(enemy.angle)];

@@ -83,7 +83,7 @@ Init.db.enemy = function(){ var ePreDb = {};
 	for(var i in ePreDb){ Db.enemy[i] = {}; 
 		for(var j in ePreDb[i]){
 			
-			var temp = Mortal.template('enemy');
+			var temp = Actor.template('enemy');
 			var e = ePreDb[i][j];
 			e = useTemplate(temp,e);
 			

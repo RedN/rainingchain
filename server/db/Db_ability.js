@@ -56,7 +56,7 @@ Init.db.ability = function(cb){
 	}}}};
 	
 	a['dodgeRegular'] = {'type':'dodge','name':'Dodge','icon':'dodge.start',
-		'spd':{'main':0.8,'support':0.2},'period':25,'cost':{"dodge":75},'action':{'func':'Mortal.boost','param':[[
+		'spd':{'main':0.8,'support':0.2},'period':25,'cost':{"dodge":75},'action':{'func':'Actor.boost','param':[[
 			{"stat":"maxSpd","type":"+","value":100,"time":1,"name":"Dodge"},
 			{"stat":"acc","type":"+","value":100,"time":1,"name":"Dodge"},
 			{"stat":"friction","type":"*","value":0.7,"time":6,"name":"Dodge"},
@@ -126,7 +126,7 @@ Init.db.ability = function(cb){
 	
 	
 	a['dodgeBig'] = {'type':'dodge','name':'Evade','icon':'dodge.ninja',
-		'spd':{'main':0.8,'support':0.2},'period':250,'cost':{"dodge":100},'action':{'func':'Mortal.boost','param':[[
+		'spd':{'main':0.8,'support':0.2},'period':250,'cost':{"dodge":100},'action':{'func':'Actor.boost','param':[[
 			{"stat":"maxSpd","type":"+","value":1000,"time":1,"name":"Dodge"},
 			{"stat":"acc","type":"+","value":1000,"time":1,"name":"Dodge"},
 			{"stat":"friction","type":"*","value":0.7,"time":6,"name":"Dodge"},
@@ -237,8 +237,8 @@ Ability.creation = function(a){
 	Item.creation({
 		name:a.name,
 		visual:'plan.planA',
-		option:[	{'name':'Examine Ability','func':'Mortal.examineAbility','param':[a.id]},
-					{'name':'Learn Ability','func':'Mortal.learnAbility','param':[a.id]},
+		option:[	{'name':'Examine Ability','func':'Actor.examineAbility','param':[a.id]},
+					{'name':'Learn Ability','func':'Actor.learnAbility','param':[a.id]},
 		],
 		type:'ability',
 		id:a.id,

@@ -58,8 +58,8 @@ Test.playerStart = function(key){
 	
 }
 
-//Call every frame for every mortal
-Test.loop.mortal = function(key){
+//Call every frame for every actor
+Test.loop.actor = function(key){
     
 
 }

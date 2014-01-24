@@ -293,8 +293,8 @@ Craft.orb = function(key,orb,amount,wId,mod){
 	}
 	if(category === 'ability'){
 		Ability.creation(equip);
-		Mortal.removeAbility(mort,wId);
-		Mortal.learnAbility(mort,equip.id);
+		Actor.removeAbility(mort,wId);
+		Actor.learnAbility(mort,equip.id);
 	}
 }
 
@@ -410,10 +410,10 @@ Craft.ability.mod = function(key,abid,mod){
 	
 	//Add
 	ab.modList[mod] = 0;
-	Mortal.removeAbility(List.all[key],abid);
+	Actor.removeAbility(List.all[key],abid);
 	ab.id = Math.randomId();
 	Ability.creation(ab);
-	Mortal.learnAbility(List.all[key],ab.id);
+	Actor.learnAbility(List.all[key],ab.id);
 	Chat.add(key,'Mod Added.');
 	Itemlist.remove(List.main[key].invList,'mod-'+ mod);	
 }

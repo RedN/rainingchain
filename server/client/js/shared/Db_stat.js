@@ -897,7 +897,7 @@ Init.db.stat.bonus = function(){
 			}
 		}
 	}
-	Mortal.template.bonus = new Function('return ' + stringify(info));
+	Actor.template.bonus = new Function('return ' + stringify(info));
 }
 
 
@@ -912,6 +912,6 @@ Init.db.stat.boost = function(){
 		}
 	}
 
-	Mortal.template.boost = new Function('type', 'return type === "player" ? ' + stringify(p) + ' : ' + stringify(e));
+	Actor.template.boost = new Function('type', 'return type === "player" ? ' + stringify(p) + ' : ' + stringify(e));
 }
 

@@ -4,8 +4,8 @@ var gameStarted = false;
 var key = 0;
 
 List = {
-	all:{},		//EVERYTHING (player id refers to mortal)
-	mortal:{},	//all mortals (player,enemy)
+	all:{},		//EVERYTHING (player id refers to actor)
+	actor:{},	//all mortals (player,enemy)
 	bullet:{},	//all bullet
 	anim:{},	//all anim
 	strike:{},	//all strike
@@ -93,7 +93,7 @@ Init.game = function (data) {
 	
 	//Note: a part of Init.db are directly in index.html
 	Init.db.stat();
-	Init.mortal();
+	Init.actor();
 	Init.db.quest();
 	Init.db.customBoost();
 	
@@ -115,7 +115,7 @@ Init.game.main = function(data){
 	for(var i in data.main){ main[i] = data.main[i]; }    //set init values sent by server
 }
 Init.game.player = function(data){    //use data sent from server and default to create the player
-	player = useTemplate(Mortal.template('player'),data.player);	
+	player = useTemplate(Actor.template('player'),data.player);	
 	player.status = '000000';
 	$("#chatUserName")[0].innerHTML = player.name + ': '; 
 }

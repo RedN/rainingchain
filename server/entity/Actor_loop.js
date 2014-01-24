@@ -1,37 +1,37 @@
-//####Update Mortal####
-Mortal.loop = function(mort){	
-	Test.loop.mortal(i);
+//####Update Actor####
+Actor.loop = function(mort){	
+	Test.loop.actor(i);
 	mort.frameCount++;
-	if(mort.frameCount % 25 === 0){ Mortal.loop.activeList(mort); }
+	if(mort.frameCount % 25 === 0){ Actor.loop.activeList(mort); }
 	if(!mort.active || mort.dead) return;
 		
 	if(mort.combat){
-		if(mort.hp <= 0) Mortal.death(mort);
+		if(mort.hp <= 0) Actor.death(mort);
 		if(mort.boss) mort.boss.loop();    //custom boss loop
 		
-		Mortal.loop.ability(mort);
-		Mortal.loop.regen(mort);    
-		Mortal.loop.status(mort);	
-		Mortal.loop.boost(mort);
-		Mortal.loop.summon(mort);
-		if(mort.frameCount % 25 === 0){ Mortal.loop.attackReceived(mort); }
+		Actor.loop.ability(mort);
+		Actor.loop.regen(mort);    
+		Actor.loop.status(mort);	
+		Actor.loop.boost(mort);
+		Actor.loop.summon(mort);
+		if(mort.frameCount % 25 === 0){ Actor.loop.attackReceived(mort); }
 	}
 	if(mort.combat || mort.move){
-		Mortal.loop.setTarget(mort);  //update Enemy Target
-		Mortal.loop.input(mort); //simulate enemy key press depending on target 
+		Actor.loop.setTarget(mort);  //update Enemy Target
+		Actor.loop.input(mort); //simulate enemy key press depending on target 
 	}
-	if(mort.combat && mort.move) Mortal.loop.move.aim(mort); //impact max spd depending on aim
+	if(mort.combat && mort.move) Actor.loop.move.aim(mort); //impact max spd depending on aim
 	
 	if(mort.move){
-		Mortal.loop.bumper(mort);   //test if collision with map    
-		Mortal.loop.move(mort);  	//move the actor
+		Actor.loop.bumper(mort);   //test if collision with map    
+		Actor.loop.move(mort);  	//move the actor
 	}
 	if(mort.type === 'player'){
 		var i = mort.id;
 		if(mort.frameCount % 2 === 0){ Draw.loop(i); }    //draw everything and add button
-		if(mort.frameCount % 25 === 0){ Mortal.loop.friendList(mort); }    //check if any change in friend list
-		if(List.main[i].windowList.trade){ Mortal.loop.trade(mort); };    
-		if(List.main[i].dialogue){ Mortal.loop.dialogue(mort); }
+		if(mort.frameCount % 25 === 0){ Actor.loop.friendList(mort); }    //check if any change in friend list
+		if(List.main[i].windowList.trade){ Actor.loop.trade(mort); };    
+		if(List.main[i].dialogue){ Actor.loop.dialogue(mort); }
 
 		Test.loop.player(i);	
 	}
@@ -39,7 +39,7 @@ Mortal.loop = function(mort){
 }
 
 //{Ability
-Mortal.loop.ability = function(m){
+Actor.loop.ability = function(m){
 	var alreadyBoosted = {};
 	m.abilityChange.chargeClient = [0,0,0,0,0,0];
 	
@@ -58,25 +58,25 @@ Mortal.loop.ability = function(m){
 		m.abilityChange.chargeClient[+i] = charge[s.id] >= s.period ? 1 : charge[s.id] / s.period;
 				
 		if(press && charge[s.id] >= s.period){
-			Mortal.performAbility(m,s);
+			Actor.performAbility(m,s);
 			break;	//1 ability per frame max
 		}
 	}
 
 }
 
-Mortal.performAbility = function(mort,ab,mana,reset){
+Actor.performAbility = function(mort,ab,mana,reset){
 	//Mana
-	if(mana !== false && !Mortal.performAbility.resource(mort,ab.cost)) return;
+	if(mana !== false && !Actor.performAbility.resource(mort,ab.cost)) return;
 	
 	//Charge
-	if(reset !== false) Mortal.performAbility.resetCharge(mort,ab);
+	if(reset !== false) Actor.performAbility.resetCharge(mort,ab);
 		
 	//Do Ability Action (ex: Combat.action.attack)
 	applyFunc.key(mort.id,ab.action.func,ab.action.param);
 }
 
-Mortal.performAbility.resetCharge = function(mort,ab){
+Actor.performAbility.resetCharge = function(mort,ab){
 	var charge = mort.abilityChange.charge;
 	charge[ab.id] = Math.min(charge[ab.id] % ab.period,1);
 	
@@ -102,7 +102,7 @@ Mortal.performAbility.resetCharge = function(mort,ab){
 	}
 }
 
-Mortal.performAbility.resource = function(mort,cost){
+Actor.performAbility.resource = function(mort,cost){
 	for(var j in cost){
 		if(cost[j] > mort[j]){ return false;}
 	}
@@ -113,14 +113,14 @@ Mortal.performAbility.resource = function(mort,cost){
 //}
 
 //{Stats
-Mortal.loop.status = function(mort){
-	Mortal.loop.status.knock(mort);
-	Mortal.loop.status.burn(mort);
-	Mortal.loop.status.bleed(mort);
-	Mortal.loop.status.confuse(mort);
+Actor.loop.status = function(mort){
+	Actor.loop.status.knock(mort);
+	Actor.loop.status.burn(mort);
+	Actor.loop.status.bleed(mort);
+	Actor.loop.status.confuse(mort);
 }
 
-Mortal.loop.status.knock = function(mort){
+Actor.loop.status.knock = function(mort){
 	var status = mort.status.knock.active;
 	if(status.time > 0){ 
 		mort.spdX = cos(status.angle)*status.magn;
@@ -129,40 +129,40 @@ Mortal.loop.status.knock = function(mort){
 	}
 }
 
-Mortal.loop.status.confuse = function(mort){
+Actor.loop.status.confuse = function(mort){
 	var status = mort.status.confuse.active;
 	if(status.time > 0){
 		status.time--;
 	} 
 }
 
-Mortal.loop.status.burn = function(mort){
+Actor.loop.status.burn = function(mort){
 	var status = mort.status.burn.active;
 	if(status.time> 0){
-		if(!status.type || status.type === 'hp'){ Mortal.changeHp(mort, (1-status.magn) + '%'); }
-		if(status.type === 'maxHp'){ Mortal.changeHp(mort,-mort.resource.hp.max*status.magn);}
+		if(!status.type || status.type === 'hp'){ Actor.changeHp(mort, (1-status.magn) + '%'); }
+		if(status.type === 'maxHp'){ Actor.changeHp(mort,-mort.resource.hp.max*status.magn);}
 		status.time--;
 	}
 }
 
-Mortal.loop.status.bleed = function(mort){
+Actor.loop.status.bleed = function(mort){
 	var list = mort.status.bleed.active.list;
 	for(var i in list){
-		Mortal.changeHp(mort,-list[i].magn);
+		Actor.changeHp(mort,-list[i].magn);
 		list[i].time--;
 		if(list[i].time <= 0){ list.splice(i,1); }
 	}
 	mort.status.bleed.active.time = list.length;
 }
 
-Mortal.loop.regen = function(mort){
+Actor.loop.regen = function(mort){
 	for(var i in mort.resource){
 		mort[i] += mort.resource[i].regen;
 		mort[i] = Math.min(mort[i],mort.resource[i].max);
 	}
 }
 
-Mortal.loop.boost = function(mort,full){
+Actor.loop.boost = function(mort,full){
 	var array = {'fast':1,'reg':5,'slow':25};
 	for(var j in array){
 		if(Loop.frameCount % array[j] === 0){
@@ -171,7 +171,7 @@ Mortal.loop.boost = function(mort,full){
 					var stat = mort.boost[j][i].stat;
 					delete mort.boost.list[stat].name[mort.boost[j][i].name]
 					delete mort.boost[j][i]; 
-					Mortal.update.boost(mort,stat);
+					Actor.update.boost(mort,stat);
 				} else {
 					mort.boost[j][i].timer -= array[j];
 				}
@@ -180,14 +180,14 @@ Mortal.loop.boost = function(mort,full){
 	}
 	
 	for(var i in mort.boost.toUpdate){
-		Mortal.update.boost(mort,i);
+		Actor.update.boost(mort,i);
 		delete mort.boost.toUpdate[i];
 	}
 	
-	if(full){for(var i in mort.boost.list){Mortal.update.boost(mort,i);}}
+	if(full){for(var i in mort.boost.list){Actor.update.boost(mort,i);}}
 }
 
-Mortal.loop.summon = function(mort){
+Actor.loop.summon = function(mort){
     //check if summon child still exist (assume player is the master)
 	for(var i in mort.summon){
 		for(var j in mort.summon[i].child){
@@ -197,7 +197,7 @@ Mortal.loop.summon = function(mort){
 	
 	//(assume player is child)
     if(mort.summoned && mort.frameCount % 5 === 0){
-		if(!mort.summoned.father || !List.all[mort.summoned.father]){ Mortal.remove(mort); return; }
+		if(!mort.summoned.father || !List.all[mort.summoned.father]){ Actor.remove(mort); return; }
 	    
 	    //if too far, teleport near master
 		if(mort.map != List.all[mort.summoned.father].map || Collision.distancePtPt(mort,List.all[mort.summoned.father]) >= mort.summoned.distance){
@@ -208,7 +208,7 @@ Mortal.loop.summon = function(mort){
 		
 		mort.summoned.time -= 5;
 		if(mort.summoned.time < 0){
-			Mortal.remove(mort);
+			Actor.remove(mort);
 		}
 	}
 }
@@ -216,7 +216,7 @@ Mortal.loop.summon = function(mort){
 //}
 
 //{Move
-Mortal.loop.bumper = function(mort){
+Actor.loop.bumper = function(mort){
 	if(!Map.getModel(mort.map)) console.log(List.map,mort.map,Map.getModel(mort.map));
 	//test collision with map
 	mort.x = Math.max(mort.x,50);
@@ -229,7 +229,7 @@ Mortal.loop.bumper = function(mort){
 	}
 }
 
-Mortal.loop.move = function(mort){
+Actor.loop.move = function(mort){
 	if(mort.status && mort.status.confuse.active.time > 0){ var bind = mort.status.confuse.active.input;} else { var bind = [0,1,2,3]; }
 	if(mort.bumper[0]){mort.spdX = -Math.abs(mort.spdX*0.5) - 1;} 
 	if(mort.bumper[1]){mort.spdY = -Math.abs(mort.spdY*0.5) - 1;}
@@ -265,16 +265,16 @@ Mortal.loop.move = function(mort){
 	
 }
 
-Mortal.loop.move.aim = function (mort){	
+Actor.loop.move.aim = function (mort){	
 	//penalty if looking and moving in opposite direction
 	var diffAim = Math.abs(mort.angle - mort.moveAngle);
 	if (diffAim > 180){ diffAim = 360 - diffAim;}
-	Mortal.boost(mort,{'stat':'maxSpd','type':"*",'value':Math.pow((360-diffAim)/360,1.5),'time':2,'name':'Aim'});
+	Actor.boost(mort,{'stat':'maxSpd','type':"*",'value':Math.pow((360-diffAim)/360,1.5),'time':2,'name':'Aim'});
 }
 //}
 
 
-Mortal.loop.activeList = function(mort){
+Actor.loop.activeList = function(mort){
 	//Note: Could mix that together
 		
 	//Test Already in List if they deserve to stay
@@ -302,7 +302,7 @@ Mortal.loop.activeList = function(mort){
 
 }
 
-Mortal.loop.trade = function(mort){
+Actor.loop.trade = function(mort){
 	var key = mort.id;
 	if(List.main[List.main[key].windowList.trade.trader]){
 		List.main[key].windowList.trade.tradeList = List.main[List.main[key].windowList.trade.trader].tradeList;	
@@ -316,7 +316,7 @@ Mortal.loop.trade = function(mort){
 	}
 }
 
-Mortal.loop.dialogue = function(mort){
+Actor.loop.dialogue = function(mort){
 	//test if player has move away to end dialogue	
 	var key = mort.id;
 	var dx = List.main[key].dialogueLoc.x;
@@ -328,7 +328,7 @@ Mortal.loop.dialogue = function(mort){
 
 }
 
-Mortal.loop.friendList = function(mort){
+Actor.loop.friendList = function(mort){
 	var key = mort.id;
 	var fl = List.main[key].social.list.friend;
     
@@ -339,7 +339,7 @@ Mortal.loop.friendList = function(mort){
 	}
 }
 
-Mortal.loop.attackReceived = function(mort){
+Actor.loop.attackReceived = function(mort){
 	for(var i in mort.attackReceived){
 		mort.attackReceived[i] -= 25;
 		if(mort.attackReceived[i] <= 0){

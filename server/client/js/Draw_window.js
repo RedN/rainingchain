@@ -556,7 +556,7 @@ Draw.window.ability.generalInfo.upMod = function(mod){
 Draw.window.ability.action = function(diffX,diffY){ ctxrestore();
 	var ab = player.abilityList[Draw.old.abilityShowed];
 	if(ab.action.func === 'Combat.action.attack'){ Draw.window.ability.action.attack(diffX,diffY);}
-	if(ab.action.func === 'Mortal.boost'){ Draw.window.ability.action.boost(diffX,diffY);}
+	if(ab.action.func === 'Actor.boost'){ Draw.window.ability.action.boost(diffX,diffY);}
 	if(ab.action.func === 'Combat.action.summon'){ Draw.window.ability.action.summon(diffX,diffY);}
 
 }

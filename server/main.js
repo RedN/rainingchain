@@ -5,8 +5,8 @@ Db = {};
 Db.dialogue = {};
 
 List = {
-	all:{},		//EVERYTHING (player id refers to mortal)
-	mortal:{},	//all mortals (player,enemy)
+	all:{},		//EVERYTHING (player id refers to actor)
+	actor:{},	//all mortals (player,enemy)
 	bullet:{},	//all bullet
 	anim:{},	//all anim
 	strike:{},	//all strike
@@ -38,7 +38,7 @@ exports.initServer = function (){
 			Change.update.init();
 			Init.db.boost();
 			Init.db.customBoost();
-			Init.mortal();
+			Init.actor();
 			Init.db.enemy();
 			Init.db.boss();
 								

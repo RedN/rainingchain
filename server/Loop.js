@@ -5,7 +5,7 @@ Loop = function(){
 	Loop.Bullet();
 	Loop.Strike();
 	Loop.EnemyGroup();
-	Loop.Mortal();
+	Loop.Actor();
 	Loop.Drop();
 	Loop.Map();
 	
@@ -17,9 +17,9 @@ Loop = function(){
 }
 Loop.frameCount = 0; 
 
-Loop.Mortal = function(){
-	for (var i in List.mortal ){     
-	    Mortal.loop(List.mortal[i]); 
+Loop.Actor = function(){
+	for (var i in List.actor ){     
+	    Actor.loop(List.actor[i]); 
 	}
 }
 
@@ -67,7 +67,7 @@ Loop.EnemyGroup = function(){
 			if(!e){ delete list[j];  continue; }
 			if(!e.dead){ bool = false; }
 			if(e.dead && e.deleteOnceDead){
-				Mortal.remove(e);
+				Actor.remove(e);
 				delete list[j];
 				continue;
 			}
@@ -77,7 +77,7 @@ Loop.EnemyGroup = function(){
 		if(bool){ //aka all dead
 			g.respawn--;
 			if(g.respawn <= 0){
-				Mortal.creation.group.apply(this,g.param); 
+				Actor.creation.group.apply(this,g.param); 
 				delete List.group[i];
 				continue;
 			}
@@ -117,10 +117,10 @@ ActiveList.test = function(mort,obj){
 
 
 ActiveList.add = function(bullet){
-	for(var i in List.mortal){
-		if(ActiveList.test(List.mortal[i],bullet)){ 
-			List.mortal[i].activeList[bullet.id] = bullet.id;
-			if(List.mortal[i].type != 'player' || bullet.type == 'strike'){ bullet.viewedBy[List.mortal[i].id] = List.mortal[i].id; }
+	for(var i in List.actor){
+		if(ActiveList.test(List.actor[i],bullet)){ 
+			List.actor[i].activeList[bullet.id] = bullet.id;
+			if(List.actor[i].type != 'player' || bullet.type == 'strike'){ bullet.viewedBy[List.actor[i].id] = List.actor[i].id; }
 		}
 	}
 }
@@ -137,7 +137,7 @@ ActiveList.remove = function(b){
 remove = function(mort){
 	if(!mort) return;
 	if(mort.type === 'bullet') Bullet.remove(mort);
-	else if(mort.type === 'enemy') Mortal.remove(mort);
+	else if(mort.type === 'enemy') Actor.remove(mort);
 	else if(mort.type === 'player') Sign.off(mort.id);
 	else if(mort.type === 'drop') Drop.remove(mort);
 	else if(mort.type === 'strike') Strike.remove(mort);

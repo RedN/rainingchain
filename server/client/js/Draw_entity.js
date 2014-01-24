@@ -1,17 +1,17 @@
-Draw.mortal = function (){
-	var array = Draw.mortal.sort();
+Draw.actor = function (){
+	var array = Draw.actor.sort();
 	for(var i = 0 ; i < array.length ; i ++){
 		var mort = array[i];
 		Draw.sprite(mort);
-		if(mort.combat) Draw.mortal.hpBar(mort); 
-		if(mort.chatHead) Draw.mortal.chatHead(mort); 
+		if(mort.combat) Draw.actor.hpBar(mort); 
+		if(mort.chatHead) Draw.actor.chatHead(mort); 
 	}
 }	
 	
-Draw.mortal.sort = function(){
+Draw.actor.sort = function(){
 	var drawSortList = [];
-	for(var i in List.mortal){
-		drawSortList.push(List.mortal[i]);
+	for(var i in List.actor){
+		drawSortList.push(List.actor[i]);
 	}
 	drawSortList.push(player);
 	drawSortList.sort(function (mort,mort1){
@@ -28,7 +28,7 @@ Draw.mortal.sort = function(){
 	return drawSortList;	
 }
 
-Draw.mortal.chatHead = function(mort){
+Draw.actor.chatHead = function(mort){
 	ctx = List.ctx.stage;
 	
 	var spriteServer = mort.sprite;
@@ -45,7 +45,7 @@ Draw.mortal.chatHead = function(mort){
 	ctx.fillStyle="black";
 }		
 
-Draw.mortal.hpBar = function(mort){
+Draw.actor.hpBar = function(mort){
 	ctx = List.ctx.stage;
 	
 	var spriteServer = mort.sprite;

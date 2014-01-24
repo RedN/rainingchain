@@ -6,11 +6,11 @@ a['testing']    //testing is the item id
         'visual':'system.gold',             //icon used
         'stack':1,                          //stack?
 		'option':[	{'name':'Craft Armor',  //visible ttext for client
-		            'func':'Mortal.teleport',        //function to call when clicked
+		            'func':'Actor.teleport',        //function to call when clicked
 		            'param':[1230,1230,'ryve']},    //parameters used with function
 		            
 					{'name':'Craft Weapon','func':'Craft.plan.use','param':[{'category':'weapon'},{'item':[]}]},
-					{'name':'Tele','func':'Mortal.teleport','param':[1230,1230,'ryve']},
+					{'name':'Tele','func':'Actor.teleport','param':[1230,1230,'ryve']},
 					{'name':'Open Bank','func':'Main.openWindow','param':['bank']},
 			
 			]};
@@ -21,8 +21,8 @@ Init.db.item = function (cb){
 	Db.item = {}; var a = Db.item;
 	
 	a['quest-teleport'] = {'name':'Teleport','visual':'plan.planA',
-	'option':[		{'name':'Tele To Demon','func':'Mortal.teleport','param':[1230,1230,'ryve']},
-					{'name':'Tele Back','func':'Mortal.teleport','param':[1100,1230,'test']},
+	'option':[		{'name':'Tele To Demon','func':'Actor.teleport','param':[1230,1230,'ryve']},
+					{'name':'Tele Back','func':'Actor.teleport','param':[1100,1230,'test']},
 					{'name':'Boost','func':'addBoost','param':[{stat:'dmgMain',value:1000,type:'*',time:10000,name:'quest'}]},
 		]};
 	
@@ -38,7 +38,7 @@ Init.db.item = function (cb){
 	a['gold'] = {'name':'Gold','visual':'system.gold','stack':1,
 		'option':[	{'name':'Craft Armor','func':'Craft.plan.use','param':[{'category':'equip'},{'item':[]}]},
 						{'name':'Craft Weapon','func':'Craft.plan.use','param':[{'category':'equip'},{'item':[]}]},
-						{'name':'Tele','func':'Mortal.teleport','param':[1230,1230,'ryve']},
+						{'name':'Tele','func':'Actor.teleport','param':[1230,1230,'ryve']},
 						{'name':'Open Bank','func':'Main.openWindow','param':['bank']},
 			
 			]};
@@ -60,12 +60,12 @@ Init.db.item = function (cb){
 			]};		
 	
 	a['ironSword'] = {'name':'Sword','visual':'system.ironSword',
-			'option':[	{'name':'Tele Ice','func':'Mortal.teleport','param':[500,500,'ice']},
+			'option':[	{'name':'Tele Ice','func':'Actor.teleport','param':[500,500,'ice']},
 						{'name':'Open Bank','func':'Main.openWindow','param':['bank']},
 			]};
 	a['shield'] = {'name':'Shield','visual':'system.shield',
-			'option':[	{'name':'Teleport','func':'Mortal.teleport','param':[500,500,'fire']},
-						{'name':'Come Back','func':'Mortal.teleport','param':[1500,500,'test']}
+			'option':[	{'name':'Teleport','func':'Actor.teleport','param':[500,500,'fire']},
+						{'name':'Come Back','func':'Actor.teleport','param':[1500,500,'test']}
 			]};
 	
 	
@@ -121,7 +121,7 @@ Item = {};
 
 Item.creation = function(item){	
 	item = useTemplate(Item.template(),item);
-	if(item.drop){	item.option.push({'name':'Drop','func':'Mortal.dropInv','param':[item.id]})}
+	if(item.drop){	item.option.push({'name':'Drop','func':'Actor.dropInv','param':[item.id]})}
 	Db.item[item.id] = item;
 }
 

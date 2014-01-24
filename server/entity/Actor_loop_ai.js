@@ -1,22 +1,22 @@
 
-Mortal.loop.input = function(mort){
+Actor.loop.input = function(mort){
 	if(mort.type === 'player') return;
-	if(mort.move) Mortal.loop.input.move(mort);
+	if(mort.move) Actor.loop.input.move(mort);
 	if(mort.combat && mort.frameCount % 25 === 0){
-		Mortal.loop.input.ability(mort);
+		Actor.loop.input.ability(mort);
 	}
 }
 
-Mortal.loop.input.move = function(mort){
+Actor.loop.input.move = function(mort){
 	//update enemy input for movement.
 	var tar = mort.target;
-	if(tar.main.list.length) Mortal.loop.input.move.main(mort);
-	if(tar.sub.list.length && (tar.main.confort || tar.main.isStuck)) Mortal.loop.input.move.sub(mort);
+	if(tar.main.list.length) Actor.loop.input.move.main(mort);
+	if(tar.sub.list.length && (tar.main.confort || tar.main.isStuck)) Actor.loop.input.move.sub(mort);
 	for(var i in mort.moveInput){	if(Math.random()< 0.05){ mort.moveInput[i] = 1;} }	//Prevent Piling
 	
 }
 
-Mortal.loop.input.move.main = function(mort){
+Actor.loop.input.move.main = function(mort){
 	var target = List.all[mort.target.main.list[0]];
 	if(!target) return;
 	var x = target.x - mort.x;
@@ -53,7 +53,7 @@ Mortal.loop.input.move.main = function(mort){
 
 }
 
-Mortal.loop.input.move.sub = function(mort){
+Actor.loop.input.move.sub = function(mort){
 	var target = mort.target.sub.list[0];
 	if(!target) return;
 	var x = target.x - mort.x;
@@ -70,29 +70,29 @@ Mortal.loop.input.move.sub = function(mort){
 }
 
 
-Mortal.loop.setTarget = function(mort){
+Actor.loop.setTarget = function(mort){
 	if(mort.type !== 'enemy') return;
 	var tar = mort.target;
 	
 	//Main
 	var timemain = mort.frameCount % (tar.main.list.length ? tar.main.period.renew : tar.main.period.first) === 0;
-	if(mort.combat && timemain)	Mortal.loop.setTarget.main(mort);
+	if(mort.combat && timemain)	Actor.loop.setTarget.main(mort);
 	
 	//Sub
 	var timesub = mort.frameCount % tar.sub.period.first === 0;
-	if(mort.target.sub.list.length === 0 && tar.main.confort && timesub)	Mortal.loop.setTarget.sub(mort);
+	if(mort.target.sub.list.length === 0 && tar.main.confort && timesub)	Actor.loop.setTarget.sub(mort);
 	
 	//Stuck	
 	if(mort.frameCount % mort.target.main.period.stuck === 0){
-		tar.main.isStuck = Mortal.isStuck(mort);
+		tar.main.isStuck = Actor.isStuck(mort);
 		if(tar.main.isStuck){
-			Mortal.loop.setTarget.stuck(mort);
+			Actor.loop.setTarget.stuck(mort);
 		}
 	}
 	
 }
 
-Mortal.loop.setTarget.main = function(mort){
+Actor.loop.setTarget.main = function(mort){
 	var targetList = []; 
 	for (var i in mort.activeList){
 		var target = List.all[i];
@@ -109,7 +109,7 @@ Mortal.loop.setTarget.main = function(mort){
 	mort.target.main.list = targetList.length ? [targetList.randomMod().id] : [] ;	//could be imrpoved...
 } 
 
-Mortal.loop.setTarget.sub = function(mort){
+Actor.loop.setTarget.sub = function(mort){
 	var maintar = List.all[mort.target.main.list[0]];
 	
 	if(maintar){
@@ -127,18 +127,18 @@ Mortal.loop.setTarget.sub = function(mort){
 
 } 
 
-Mortal.loop.setTarget.stuck = function(mort){
+Actor.loop.setTarget.stuck = function(mort){
 	var maintar = List.all[mort.target.main.list[0]];
 	if(!maintar) return;
 	
-	mort.target.sub.list = Mortal.getPath(mort,maintar);
+	mort.target.sub.list = Actor.getPath(mort,maintar);
 } 
 
 
 
 
 
-Mortal.loop.input.ability = function(mort){
+Actor.loop.input.ability = function(mort){
 	/*
 	var target = List.all[mort.target];
 	var diffX = target.x - mort.x;
@@ -152,7 +152,7 @@ Mortal.loop.input.ability = function(mort){
 	}
 }
 
-Mortal.getPath = function(mort,target){	//using a*
+Actor.getPath = function(mort,target){	//using a*
 	if(mort.map !== target.map) return [];
 	var map = Db.map[mort.map].grid.nodes;
 	
@@ -166,7 +166,7 @@ Mortal.getPath = function(mort,target){	//using a*
 }
 
 
-Mortal.isStuck = function(mort){
+Actor.isStuck = function(mort){
 	var maintar = List.all[mort.target.main.list[0]];
 	if(!maintar) return 0;
 	

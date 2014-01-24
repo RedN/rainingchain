@@ -93,7 +93,7 @@ Object.defineProperty(Number.prototype, "mm", {
 applyFunc = function(func,param){
 	if(typeof func === 'string'){
 		if(func.indexOf('.') !== -1){
-			if(func.indexOf('Mortal') === 0) param[0] = List.mortal[param[0]]; 
+			if(func.indexOf('Actor') === 0) param[0] = List.actor[param[0]]; 
 			else if(func.indexOf('Main') === 0) param[0] = List.main[param[0]];
 			
 			func = valueViaArray({'origin':this,'array':func.split('.')});

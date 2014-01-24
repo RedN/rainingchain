@@ -11,7 +11,7 @@ Init.db.map = function (){
 		m.load.main = function(map){
 		
 			
-			Mortal.creation.group({'x':1060,'y':1900,'map':map,'respawn':100},[
+			Actor.creation.group({'x':1060,'y':1900,'map':map,'respawn':100},[
 				{'amount':1,"category":"troll","variant":"ice",'lvl':0,'modAmount':1},
 			]);
 			
@@ -28,7 +28,7 @@ Init.db.map = function (){
 		m.load = {};
 		m.load.main = function(map){
 			/*
-			Mortal.creation.group({'x':3000,'y':1800,'map':map,'respawn':100},[
+			Actor.creation.group({'x':3000,'y':1800,'map':map,'respawn':100},[
 				{'amount':1,"category":"boss","variant":"iceTroll","lvl":0,'modAmount':1,
 					extra:{
 						death:(function(killers){

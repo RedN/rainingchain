@@ -2,9 +2,9 @@ Quest.bonus = {};
 Quest.bonus.update = function(key,qid,bid,b){
 	var mq = List.main[key].quest[qid];
 	if(mq.bonus[bid]){
-		Mortal.permBoost(List.all[key],'qb-'+qid+'-'+bid,b);
+		Actor.permBoost(List.all[key],'qb-'+qid+'-'+bid,b);
 	} else {
-		Mortal.permBoost(List.all[key],'qb-'+qid+'-'+bid);	
+		Actor.permBoost(List.all[key],'qb-'+qid+'-'+bid);	
 	}
 	mq.bonusSum = 1;
 	for(var i in mq.bonus){
@@ -47,7 +47,7 @@ Quest.reward = function(key,id){
 	
 	if(qp.reward === null || boost.value >= qp.reward.value){
 		Chat.add(key,"Congratulations! Your character grows stronger.");
-		Mortal.permBoost(List.all[key],'Q-'+id,boost);
+		Actor.permBoost(List.all[key],'Q-'+id,boost);
 		qp.reward = boost;
 		qp.rewardTier = round(boost.tier*100,1) + '%';
 	} else {	

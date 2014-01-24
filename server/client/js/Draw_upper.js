@@ -175,8 +175,8 @@ Draw.minimap.icon = function(s){
 	var zoom = main.pref.mapZoom/100;
 	var ratio = main.pref.mapRatio;
 
-	for(var i in List.mortal){
-		var m = List.mortal[i];
+	for(var i in List.actor){
+		var m = List.actor[i];
 		if(m.minimapIcon){
 			var vx = m.x - player.x;
 			var vy = m.y - player.y;

@@ -8,7 +8,7 @@ Combat.action.attack.mod = function(player,atk){
 }
 
 Combat.action.attack.mod.bonus = function(bon,atk){
-	var bon = useTemplate(Mortal.template.bonus(),bon,0);
+	var bon = useTemplate(Actor.template.bonus(),bon,0);
 	
 	//Status Effect
 	var list = ['time','magn','chance'];

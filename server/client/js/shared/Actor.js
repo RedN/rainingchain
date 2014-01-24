@@ -1,18 +1,18 @@
 //Player
 //Check client/shared/mortalShare for player attributes information
 
-//Mortal
-Mortal = typeof Mortal !== 'undefined' ? Mortal : {};
+//Actor
+Actor = typeof Actor !== 'undefined' ? Actor : {};
 
-Mortal.remove = function(mort){
+Actor.remove = function(mort){
 	ActiveList.remove(mort);
 	
-	delete List.mortal[mort.id];
+	delete List.actor[mort.id];
 	delete List.all[mort.id]
 	if(List.map[mort.map])	delete List.map[mort.map].list[mort.id];
 }
 
-Mortal.updateEquip = function(mort){
+Actor.updateEquip = function(mort){
 	//only update armor atm
 	for(var k in Cst.element.list){	//Each Element
 		var i = Cst.element.list[k];
@@ -24,34 +24,34 @@ Mortal.updateEquip = function(mort){
 	}
 }
 
-Mortal.switchEquip = function(mort,name){
+Actor.switchEquip = function(mort,name){
 	var old = mort.equip.piece[Db.equip[name].piece];
 	var equip = Db.equip[name];
 	mort.equip.piece[equip.piece] = equip;
 	
-	Mortal.permBoost(mort,equip.piece,mort.equip.piece[equip.piece].boost);
-	Mortal.updateEquip(mort);
+	Actor.permBoost(mort,equip.piece,mort.equip.piece[equip.piece].boost);
+	Actor.updateEquip(mort);
 	Itemlist.remove(List.main[mort.id].invList,name);
 	Itemlist.add(List.main[mort.id].invList,old.id);
 	
 	if(Cst.equip.weapon.piece.have(equip.piece)){
-		Mortal.swapWeapon(mort,equip.piece);
+		Actor.swapWeapon(mort,equip.piece);
 	}
 }
 
-Mortal.swapWeapon = function(mort,piece){
+Actor.swapWeapon = function(mort,piece){
 	//Equip a weapon already present in the weaponList
 	mort.weapon = mort.equip.piece[piece];
 	
 	Sprite.change(mort,mort.weapon.sprite);
-	Mortal.permBoost(mort,'weapon',mort.weapon.boost);
+	Actor.permBoost(mort,'weapon',mort.weapon.boost);
 }
 
-Mortal.changeHp = function(mort,amount){
-    Mortal.changeResource(mort,{hp:amount});
+Actor.changeHp = function(mort,amount){
+    Actor.changeResource(mort,{hp:amount});
 }
 
-Mortal.changeResource = function(mort,heal){
+Actor.changeResource = function(mort,heal){
 	for(var i in heal){
 		if(typeof heal[i] === 'string'){ mort[i] += heal[i].numberOnly()/100*mort.resource[i].max;	}			
 		else {	mort[i] += heal[i];	}
@@ -59,24 +59,24 @@ Mortal.changeResource = function(mort,heal){
 	}
 }
 
-Mortal.teleport = function(mort,x,y,map,signin){
+Actor.teleport = function(mort,x,y,map,signin){
 	//Teleport player. if no map specified, stay in same map.
 	mort.x = x;
 	mort.y = y;
 	if(map){
 		if(!map.have("@")){	map += '@MAIN'; }
 		if(map.have("@MAIN")){ mort.map = map;	}
-		else if(mort.map !== map){ Mortal.teleport.instance(mort,x,y,map,signin);}
+		else if(mort.map !== map){ Actor.teleport.instance(mort,x,y,map,signin);}
 	}
 	ActiveList.remove(mort);	//need to consider if needed or not
 }
 
 
 
-Mortal.teleport.instance = function(mort,x,y,map,signin){
-	if(!map){ Mortal.teleport(mort,x,y);  return; }		//regular teleport
+Actor.teleport.instance = function(mort,x,y,map,signin){
+	if(!map){ Actor.teleport(mort,x,y);  return; }		//regular teleport
 	if(!map.have("@")){	map += "@MAIN"; }
-	if(map.have("@MAIN")){ Mortal.teleport(mort,x,y,map);  return; }		//regular teleport
+	if(map.have("@MAIN")){ Actor.teleport(mort,x,y,map);  return; }		//regular teleport
 
 	if(typeof signin === 'object'){
 		mort.mapSignIn = deepClone(signin);
@@ -101,7 +101,7 @@ Mortal.teleport.instance = function(mort,x,y,map,signin){
 }
 
 
-Mortal.pickDrop = function (mort,id){
+Actor.pickDrop = function (mort,id){
 	var inv = List.main[mort.id].invList;
 	var drop = List.drop[id];
 		
@@ -113,13 +113,13 @@ Mortal.pickDrop = function (mort,id){
 	}
 }
 
-Mortal.rightClickDrop = function(mort,rect){
+Actor.rightClickDrop = function(mort,rect){
 	var key = mort.id;
 	var ol = {'name':'Pick Items','option':[]};
 	for(var i in List.drop){
 		var d = List.drop[i];
 		if(d.map == List.all[key].map && Collision.RectRect(rect,[d.x,d.x+32,d.y,d.y+32]) ){
-			ol.option.push({'name':'Pick ' + Db.item[List.drop[i].item].name,'func':'Mortal.pickDrop','param':[i]});
+			ol.option.push({'name':'Pick ' + Db.item[List.drop[i].item].name,'func':'Actor.pickDrop','param':[i]});
 		}
 	}
 	
@@ -128,7 +128,7 @@ Mortal.rightClickDrop = function(mort,rect){
 	}	
 }
 	
-Mortal.dropInv = function(mort,id){
+Actor.dropInv = function(mort,id){
 	var inv = List.main[mort.id].invList;
 	var amount = Math.min(1,Itemlist.have(inv,id,0,'amount'));
 	
@@ -142,8 +142,8 @@ Mortal.dropInv = function(mort,id){
 
 
 
-Mortal.update = {};
-Mortal.update.mastery = function(player){
+Actor.update = {};
+Actor.update.mastery = function(player){
 	//Note: mod is applied in Combat.action.attack.mod.player
 	for(var i in player.mastery){
 		for(var j in player.mastery[i]){
@@ -152,7 +152,7 @@ Mortal.update.mastery = function(player){
 	}
 }
 
-Mortal.update.permBoost = function(player){
+Actor.update.permBoost = function(player){
 	player = typeof player === 'object' ? player : List.all[player];
 	
 	var pb = player.boost;
@@ -199,7 +199,7 @@ Mortal.update.permBoost = function(player){
 	for(var j in pb.custom){ Db.customBoost[j].function(pb,player.id);}
 }
 
-Mortal.update.boost = function(player,stat){
+Actor.update.boost = function(player,stat){
 	changeViaArray({'origin':player,'array':player.boost.list[stat].stat,'value':player.boost.list[stat].base});
 	for(var i in player.boost.list[stat].name){
 		var boost = player.boost.list[stat].name[i];
@@ -209,8 +209,8 @@ Mortal.update.boost = function(player,stat){
 	}
 }
 
-Mortal.boost = function(player, boost){
-	//Add a boost to a mortal
+Actor.boost = function(player, boost){
+	//Add a boost to a actor
 
 	//list[i]: i = stat
 	//toUpdate[i]: i = stat
@@ -240,17 +240,17 @@ Mortal.boost = function(player, boost){
 	
 }
 
-Mortal.permBoost = function(mort,source,boost){
+Actor.permBoost = function(mort,source,boost){
 	//remove permBoost with boost undefined
 	if(boost){
 		mort.permBoost[source] = arrayfy(boost);
 	} else { delete mort.permBoost[source]; }
 	
-	Mortal.update.permBoost(mort);
-	Mortal.update.mastery(mort);
+	Actor.update.permBoost(mort);
+	Actor.update.mastery(mort);
 }
 
-Mortal.permBoost.compile = function(b){
+Actor.permBoost.compile = function(b){
 	var tmp = {};	var temp = [];
 	
 	for(var i in b){
@@ -266,13 +266,13 @@ Mortal.permBoost.compile = function(b){
 	return temp;
 }
 
-Mortal.talk = function(mort,enemyId){
+Actor.talk = function(mort,enemyId){
 	if(List.all[enemyId].dialogue){
 		List.all[enemyId].dialogue.func(mort.id);
 	}
 }//
 
-Mortal.getDef = function(mort){
+Actor.getDef = function(mort){
 	var def = deepClone(mort.equip.def);
 	for(var i in def){
 		def[i] *= mort.mastery.def[i].mod * mort.defMain * mort.mastery.def[i].sum;
@@ -281,7 +281,7 @@ Mortal.getDef = function(mort){
 }
 
 //Ability
-Mortal.removeAbility = function(mort,name){
+Actor.removeAbility = function(mort,name){
 	delete mort.abilityList[name];
 	for(var i in mort.ability){
 		if(mort.ability[i] && mort.ability[i].id === name){
@@ -290,7 +290,7 @@ Mortal.removeAbility = function(mort,name){
 	}
 }
 
-Mortal.swapAbility = function(mort,abPos,abListPost){
+Actor.swapAbility = function(mort,abPos,abListPost){
 	var abl = mort.abilityList[abListPost];
 	
 	if(mort.type === 'player'){
@@ -298,7 +298,7 @@ Mortal.swapAbility = function(mort,abPos,abListPost){
 		if(abPos === 5 && mort.abilityList[abListPost].type !== 'dodge'){Chat.add(mort.id,'This ability slot can only support Dodge abilities.'); return;}	
 	}
 	mort.ability[abPos] = mort.abilityList[abListPost];
-	mort.abilityChange = Mortal.template.abilityChange();
+	mort.abilityChange = Actor.template.abilityChange();
 	for(var i in mort.ability){ 
 		if(mort.ability[i]){
 			mort.abilityChange.charge[mort.ability[i].id] = 0;
@@ -307,7 +307,7 @@ Mortal.swapAbility = function(mort,abPos,abListPost){
 
 }
 
-Mortal.learnAbility = function(mort,name,chance){
+Actor.learnAbility = function(mort,name,chance){
 	if(mort.abilityList[name]) return; //verify if already ahve
 	
 	var ab = Ability.uncompress(deepClone(Db.ability[name]));
@@ -318,16 +318,16 @@ Mortal.learnAbility = function(mort,name,chance){
 	}
 }
 
-Mortal.examineAbility = function(mort){}
+Actor.examineAbility = function(mort){}
 
 //Death
-Mortal.death = function(mort){	
-	if(mort.type === 'enemy') Mortal.death.enemy(mort);
-	if(mort.type === 'player') Mortal.death.player(mort);
+Actor.death = function(mort){	
+	if(mort.type === 'enemy') Actor.death.enemy(mort);
+	if(mort.type === 'player') Actor.death.player(mort);
 	
 }
 
-Mortal.death.player = function(mort){
+Actor.death.player = function(mort){
 	var key = mort.id;
 	var main = List.main[key];
 	
@@ -357,23 +357,23 @@ Mortal.death.player = function(mort){
 	
 }
 
-Mortal.death.enemy = function(mort){
+Actor.death.enemy = function(mort){
 	mort.dead = 1;
 	
-	var killers = Mortal.death.getKiller(mort);
-	Mortal.death.drop(mort,killers);
+	var killers = Actor.death.getKiller(mort);
+	Actor.death.drop(mort,killers);
 	if(mort.death){ mort.death(killers); }	//custom death function (ex quest)
-	Mortal.death.performAbility(mort);				//custom death ability function
+	Actor.death.performAbility(mort);				//custom death ability function
 	ActiveList.remove(mort);
 }
 
-Mortal.death.performAbility = function(mort){
+Actor.death.performAbility = function(mort){
 	for(var i in mort.deathAbility){
-		Mortal.performAbility(mort,mort.ability[mort.deathAbility[i]],false,false);
+		Actor.performAbility(mort,mort.ability[mort.deathAbility[i]],false,false);
 	}
 }
 
-Mortal.death.getKiller = function(mort){
+Actor.death.getKiller = function(mort){
 	var tmp = Object.keys(mort.damagedBy);
 	if(!tmp.length) return [];
 	if(tmp.length === 1) return tmp;
@@ -387,7 +387,7 @@ Mortal.death.getKiller = function(mort){
 	return tmp.splice(tmp.indexOf(killer),1).unshift(killer);	//place main killer in [0]
 }
 
-Mortal.death.drop = function(mort,killers){
+Actor.death.drop = function(mort,killers){
 	var drop = mort.drop;
 	
 	var quantity = (1 + drop.mod.quantity).mm(0); 

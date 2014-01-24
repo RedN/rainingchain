@@ -124,21 +124,21 @@ Combat.action.summon = function(key,info,enemy){
 					'hitIf':'summoned',
 					}
 		};
-		var childList = Mortal.creation.group(param0,enemy);
+		var childList = Actor.creation.group(param0,enemy);
 		
 		for(var i in childList){
 			var cid = childList[i];
 			master.summon[name].child[cid] = 1;	
 			
-			if(atkMod !== 1){ Mortal.boost(cid,{'name':'summon','stat':'dmgMain','time':info.time*timeMod,'type':'*','amount':atkMod}); }
-			if(defMod !== 1){ Mortal.boost(cid,{'name':'summon','stat':'defMain','time':info.time*timeMod,'type':'*','amount':defMod}); }
+			if(atkMod !== 1){ Actor.boost(cid,{'name':'summon','stat':'dmgMain','time':info.time*timeMod,'type':'*','amount':atkMod}); }
+			if(defMod !== 1){ Actor.boost(cid,{'name':'summon','stat':'defMain','time':info.time*timeMod,'type':'*','amount':defMod}); }
 		
 		}
 	}	
 }
 
 Combat.action.boost = function(key,info){
-    Mortal.boost.apply(this, info);
+    Actor.boost.apply(this, info);
 }
 
 
@@ -149,7 +149,7 @@ Combat.collision = function(b,mort){
     mort.attackReceived[b.hitId] = 250;	//last for 10 sec
 	
 	if(b.hitImg){Anim.creation(b.hitImg.name,mort.id,b.hitImg.sizeMod || 1);}
-	if(b.healing){ Mortal.changeResource(mort,b.healing); return; }
+	if(b.healing){ Actor.changeResource(mort,b.healing); return; }
 	
 	if(b.crit.chance >= Math.random()){ b = Combat.collision.crit(b) }
 	
@@ -204,7 +204,7 @@ Combat.collision.status.confuse = function(mort,b){
 	confuse.active.magn = info.magn*(1-confuse.resist);
 	var left = Math.floor(Math.random()*4);
 	confuse.active.input = [left%4,(left+3)%4,(left+2)%4,(left+1)%4];
-	Mortal.boost(mort,{'stat':'aim','type':"+",'value':confuse.active.magn,'time':confuse.active.time,'name':'confuse'});
+	Actor.boost(mort,{'stat':'aim','type':"+",'value':confuse.active.magn,'time':confuse.active.time,'name':'confuse'});
 }
 
 Combat.collision.status.bleed = function(mort,b,dmg){
@@ -219,7 +219,7 @@ Combat.collision.status.chill = function(mort,b){
 	var info = b.chill;
 	var chill = mort.status.chill;
 	
-	Mortal.boost(mort,{'stat':'maxSpd','type':"*",'value':(1/b.chill.magn)*(1-chill.resist),'time':b.chill.time*(1-chill.resist),'name':'chill'}); 
+	Actor.boost(mort,{'stat':'maxSpd','type':"*",'value':(1/b.chill.magn)*(1-chill.resist),'time':b.chill.time*(1-chill.resist),'name':'chill'}); 
 	//if(b.chill.atk){ addBoost(mort,{'stat':'atkSpd-0','type':"*",'value':b.chill.magn*(1-mort.resist.chill),'time':b.chill.time*(1-mort.resist.chill),'name':'chill'}); }}
 	chill.active.time = Math.max(chill.active.time,b.chill.time*(1-chill.resist));
 }
@@ -253,7 +253,7 @@ Combat.collision.status.drain = function(mort,b){
 Combat.collision.curse = function(mort,info){
 	for(var i in info.boost){
 		var boost = info.boost[i];
-		Mortal.boost(mort,{'stat':boost.stat,'type':boost.type,'value':boost.value,'time':boost.time,'name':'curse'}); 
+		Actor.boost(mort,{'stat':boost.stat,'type':boost.type,'value':boost.value,'time':boost.time,'name':'curse'}); 
 	}
 }
 
@@ -269,7 +269,7 @@ Combat.collision.leech = function(mort,b,element){
 	var player = List.all[b.parent]; if(!player) return;
 	
 	var amount = (player.resource.hp.max-player.hp) * 0.01 * info.magn;
-	Mortal.changeResource(player,{hp:amount});
+	Actor.changeResource(player,{hp:amount});
 	
 }
 
@@ -277,7 +277,7 @@ Combat.collision.reflect = function(dmg,bullet,mort){
 	var attacker = List.all[bullet.parent];
 	if(attacker && attacker.hp){
 		for(var i in Cst.element.list){
-			Mortal.changeHp(attacker,-mort.reflect[Cst.element.list[i]]*dmg[Cst.element.list[i]]/attacker.defMain);
+			Actor.changeHp(attacker,-mort.reflect[Cst.element.list[i]]*dmg[Cst.element.list[i]]/attacker.defMain);
 		}
 	}
 }
@@ -292,10 +292,10 @@ Combat.collision.crit = function(b){
 //Damage
 Combat.collision.damage = function(bullet,player){
 	
-	var dmgInfo = Combat.collision.damage.calculate(bullet.dmg,Mortal.getDef(player))
+	var dmgInfo = Combat.collision.damage.calculate(bullet.dmg,Actor.getDef(player))
 	var dmg = dmgInfo.sum;
 	
-	Mortal.changeHp(player,-dmg);
+	Actor.changeHp(player,-dmg);
 	
 	if(player.damagedBy[bullet.parent] === undefined) { player.damagedBy[bullet.parent] = 0; }
 	player.damagedBy[bullet.parent] += dmg;

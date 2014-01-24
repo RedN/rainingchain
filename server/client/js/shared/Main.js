@@ -64,7 +64,7 @@ Main.selectPassive = function(main,i,j){
 	
 	main.passivePt--;
 	main.passive[i] = main.passive[i].slice(0,j) + '1' + main.passive[i].slice(j+1);
-	Mortal.permBoost(List.all[key],'Passive',Passive.convert(main.passive));
+	Actor.permBoost(List.all[key],'Passive',Passive.convert(main.passive));
 }
 
 Main.closeAllWindow = function(main){

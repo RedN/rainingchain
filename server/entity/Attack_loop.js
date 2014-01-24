@@ -83,9 +83,9 @@ Bullet.loop.move.boomerang = function(b){
 			b.boomerang.newId = 0;
 		}
 		
-		if(List.mortal[b.parent]){
-			var diffX = b.x - List.mortal[b.parent].x;
-			var diffY = b.y - List.mortal[b.parent].y;
+		if(List.actor[b.parent]){
+			var diffX = b.x - List.actor[b.parent].x;
+			var diffY = b.y - List.actor[b.parent].y;
 		
 			var diff = Math.sqrt(diffX*diffX + diffY *diffY);
 			
@@ -101,7 +101,7 @@ Bullet.loop.move.boomerang = function(b){
 }		
 		
 Bullet.loop.collision = function(bullet){
-	Collision.BulletMortal(bullet); //collisions with living thing
+	Collision.BulletActor(bullet); //collisions with living thing
 	Collision.BulletMap(bullet); //collision with map
 }
 
@@ -123,7 +123,7 @@ Strike.loop = function(s){
 
 //Collision Strike / Life 
 Strike.loop.collision = function(atk){
-	Collision.StrikeMortal(atk);
+	Collision.StrikeActor(atk);
 }
 
 

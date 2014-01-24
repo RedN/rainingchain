@@ -37,7 +37,7 @@ Sign.up = function(socket,d){
 
 Sign.up.create = function(user,pass,salt,socket){
     var key = Math.random().toString(36).substring(7);
-    var p = Mortal.template('player'); 
+    var p = Actor.template('player'); 
 	p.name = user; 
 	p.context = user;
 	p.id = Math.randomId();
@@ -93,11 +93,11 @@ Sign.off = function(key,message){
 	if(message){ socket.emit('warning','You have been disconnected: ' + message);}
 
 	Save(key);
-	db.account.update({username:List.mortal[socket.key].name},{'$set':{online:0}},function(err){ 
+	db.account.update({username:List.actor[socket.key].name},{'$set':{online:0}},function(err){ 
 		if(err) throw err;
 		ActiveList.remove(List.all[key]);
 		delete List.nameToKey[List.all[key].name];
-		delete List.mortal[key];
+		delete List.actor[key];
 		delete List.socket[key];
 		delete List.main[key];
 		delete List.all[key];
@@ -193,7 +193,7 @@ Load = function (key,dbb,socket){
 Load.main = function(key,db){
     List.main[key] = useTemplate(Main.template(key),Load.main.uncompress(db,key));
 	List.btn[key] = [];
-	Mortal.permBoost(List.all[key],'Passive',Passive.convert(db.passive));
+	Actor.permBoost(List.all[key],'Passive',Passive.convert(db.passive));
 	return List.main[key];
 }
 
@@ -205,16 +205,16 @@ Load.main.uncompress = function(main,key){
 }
 
 Load.player = function(key,db){
-    var player = Mortal.template('player');   //set default player
+    var player = Actor.template('player');   //set default player
     db = Load.player.uncompress(db);      //use info from the db
 
     for (var i in db) { player[i] = db[i]; }
 
     player.id = key;
     player.publicId = player.name;
-    player = Mortal.creation.optionList(player);
+    player = Actor.creation.optionList(player);
 	
-	List.mortal[key] = player;
+	List.actor[key] = player;
     List.all[key] = player;
     List.nameToKey[player.name] = key;
 	return player;
@@ -225,7 +225,7 @@ Load.player.uncompress = function(player){
     for(var i in player.equip.piece){ player.equip.piece[i] = Db.equip[player.equip.piece[i].id]; }
     player.equip.def = {'melee':1,'range':1,'magic':1,'fire':1,'cold':1,'lightning':1};
     player.equip.dmg = {'melee':1,'range':1,'magic':1,'fire':1,'cold':1,'lightning':1};
-    Mortal.updateEquip(player);
+    Actor.updateEquip(player);
 
 
     for(var i in player.abilityList){
@@ -233,7 +233,7 @@ Load.player.uncompress = function(player){
     }
     for(var i in player.ability){
         if(player.ability[i]){
-            Mortal.swapAbility(player,+i,player.ability[i].id);
+            Actor.swapAbility(player,+i,player.ability[i].id);
         }
     }
     return player;

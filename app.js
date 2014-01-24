@@ -31,12 +31,12 @@ require('./server/db/Db');
 main = require('./server/main');
 
 
-require('./' + clientPath + 'client/js/shared/Mortal');
+require('./' + clientPath + 'client/js/shared/Actor');
 require('./' + clientPath + 'client/js/shared/Main');
-require('./server/entity/Mortal_creation');
+require('./server/entity/Actor_creation');
 require('./server/entity/Attack');
-require('./server/entity/Mortal_loop');
-require('./server/entity/Mortal_loop_ai');
+require('./server/entity/Actor_loop');
+require('./server/entity/Actor_loop_ai');
 require('./server/entity/Attack_loop');
 require('./server/entity/boss');
 require('./server/Loop');
@@ -69,7 +69,7 @@ require('./' + clientPath + 'client/js/shared/constant');
 require('./' + clientPath + 'client/js/shared/Button');
 require('./' + clientPath + 'client/js/shared/Db_sprite');
 require('./' + clientPath + 'client/js/shared/anim');
-require('./' + clientPath + 'client/js/shared/Mortal_init');
+require('./' + clientPath + 'client/js/shared/Actor_init');
 require('./' + clientPath + 'client/js/shared/Command');
 require('./' + clientPath + 'client/js/shared/Combat_sub');
 require('./' + clientPath + 'client/js/shared/passiveGrid');

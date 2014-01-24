@@ -1,10 +1,10 @@
 //Mort
-if(typeof Mortal === 'undefined') Mortal = {};
-if(!Mortal.creation) Mortal.creation = {};
-if(!Mortal.template) Mortal.template = {};	
+if(typeof Actor === 'undefined') Actor = {};
+if(!Actor.creation) Actor.creation = {};
+if(!Actor.template) Actor.template = {};	
 
-Init.mortal = function(){
-	var defaultPreMortal = function(type){
+Init.actor = function(){
+	var defaultPreActor = function(type){
 		var mort = {};
 		mort.change = {};
 		mort.old = {};
@@ -14,7 +14,7 @@ Init.mortal = function(){
 		mort.boost = {          //timer aka needs to be updated every frame
 			'fast':{},'reg':{},'slow':{},'custom':{},
 			'toUpdate':{},
-			'list':Mortal.template.boost(type),
+			'list':Actor.template.boost(type),
 		};
 		
 		//General
@@ -68,7 +68,7 @@ Init.mortal = function(){
 		
 		
 		//Bonus applies on top of weapon attack. If effect not on weapon, do nothing.
-		mort.bonus = Mortal.template.bonus();
+		mort.bonus = Actor.template.bonus();
 		mort.mastery = {	
 			'def':{'melee':{'+':0,'*':0,'x':0,'^':0,'sum':1,'mod':1},'range':{'+':0,'*':0,'x':0,'^':0,'sum':1,'mod':1},'magic':{'+':0,'*':0,'x':0,'^':0,'sum':1,'mod':1},'fire':{'+':0,'*':0,'x':0,'^':0,'sum':1,'mod':1},'cold':{'+':0,'*':0,'x':0,'^':0,'sum':1,'mod':1},'lightning':{'+':0,'*':0,'x':0,'^':0,'sum':1,'mod':1}},
 			'dmg':{'melee':{'+':0,'*':0,'x':0,'^':0,'sum':1,'mod':1},'range':{'+':0,'*':0,'x':0,'^':0,'sum':1,'mod':1},'magic':{'+':0,'*':0,'x':0,'^':0,'sum':1,'mod':1},'fire':{'+':0,'*':0,'x':0,'^':0,'sum':1,'mod':1},'cold':{'+':0,'*':0,'x':0,'^':0,'sum':1,'mod':1},'lightning':{'+':0,'*':0,'x':0,'^':0,'sum':1,'mod':1}},
@@ -101,7 +101,7 @@ Init.mortal = function(){
 		if(server && type == 'player'){
 			mort.weapon = Db.equip[mort.weapon.id];
 			for(var i in mort.equip.piece){	mort.equip.piece[i] = Db.equip[mort.equip.piece[i].id];}
-			Mortal.updateEquip(mort);
+			Actor.updateEquip(mort);
 		}
 		
 		mort.reflect = {"melee":0,"range":0,"magic":0,"fire":0,"cold":0,"lightning":0}; //% reflected
@@ -141,7 +141,7 @@ Init.mortal = function(){
 		//Ability
 		mort.ability = [];
 		mort.abilityList = {};
-		mort.abilityChange = Mortal.template.abilityChange();	
+		mort.abilityChange = Actor.template.abilityChange();	
 		
 		//Spec
 		mort.invisible = 0;
@@ -224,21 +224,21 @@ Init.mortal = function(){
 	}
 
 
-	var p = defaultPreMortal('player');
-	var e = defaultPreMortal('enemy');
+	var p = defaultPreActor('player');
+	var e = defaultPreActor('enemy');
 	
-	var temp = Mortal.template;
+	var temp = Actor.template;
 	
-	Mortal.template = new Function('type', 'return type === "player" ? ' + stringify(p) + ' : ' + stringify(e));
-	for(var i in temp) Mortal.template[i] = temp[i];
+	Actor.template = new Function('type', 'return type === "player" ? ' + stringify(p) + ' : ' + stringify(e));
+	for(var i in temp) Actor.template[i] = temp[i];
 }
 
 
-Mortal.template.abilityChange = function(){
+Actor.template.abilityChange = function(){
 	return {'press':'00000000000000','charge':{},'chargeClient':[0,0,0,0,0,0]};
 }
 
-Mortal.template.dialogue = function(){
+Actor.template.dialogue = function(){
 	return {
 		'talkIf':true,	//can be function
 		'location':{},

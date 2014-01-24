@@ -1,5 +1,5 @@
 Loop = function(){
-	Loop.mortal();
+	Loop.actor();
 	Loop.player();
 	Loop.bullet();
 	Loop.main();
@@ -20,14 +20,14 @@ Loop.warning = function(){
 	}
 }
 
-Loop.mortal = function(){
-	for(var i in List.mortal){
-		Mortal.loop(List.mortal[i]);
+Loop.actor = function(){
+	for(var i in List.actor){
+		Actor.loop(List.actor[i]);
 	}
 }
 
 Loop.player = function(){
-	Mortal.loop(player);
+	Actor.loop(player);
 	if(Loop.player.old.weapon !== player.weapon){ 
 		if(Db.equip[player.weapon.id]){ 
 			player.weapon = Db.equip[player.weapon.id]; 
@@ -35,11 +35,11 @@ Loop.player = function(){
 		}
 	}
 	if(Loop.player.old.permBoost !== player.permBoost){
-		Mortal.update.permBoost(player);	
+		Actor.update.permBoost(player);	
 		Loop.player.old.permBoost = player.permBoost
 	}
 	if(Loop.player.old.map !== player.map){
-		Mortal.update.permBoost(player);	
+		Actor.update.permBoost(player);	
 		Loop.player.old.map = player.map
 	}
 	
@@ -81,7 +81,7 @@ Loop.sfx = function(){
 remove = function(i){
 	i = typeof i === 'string' ? i : i.id;
 	delete List.bullet[i]; 
-	delete List.mortal[i];
+	delete List.actor[i];
 	delete List.drop[i]; 
 	delete List.all[i]; 
 
@@ -96,13 +96,13 @@ Help.update = function(elID){
 }
 
 
-if(typeof Mortal === 'undefined') Mortal = {};
-Mortal.loop = function(mort){
+if(typeof Actor === 'undefined') Actor = {};
+Actor.loop = function(mort){
 	Sprite.update(mort);
-	Mortal.loop.chatHead(mort);	
+	Actor.loop.chatHead(mort);	
 }
 
-Mortal.loop.chatHead = function(mort){	//weird name
+Actor.loop.chatHead = function(mort){	//weird name
 	if(!mort.chatHead) return;
 	if(--mort.chatHead.timer <= 0){
 		mort.chatHead = '';

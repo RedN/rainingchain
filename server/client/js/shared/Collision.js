@@ -85,7 +85,7 @@ Collision.getMouse = function(key){
 	else{ return {x:Input.mouse.x,y:Input.mouse.y} }
 }
 
-Collision.BulletMortal = function(atk){
+Collision.BulletActor = function(atk){
 	for(var i in atk.viewedBy){ 
 		var player = List.all[i];
 		if(Combat.hitIf.global(atk,player)){
@@ -108,7 +108,7 @@ Collision.BulletMap = function(bullet){
 	}
 }
 
-Collision.StrikeMortal = function(atk){
+Collision.StrikeActor = function(atk){
 	for(var j in atk.viewedBy){
 		var player = List.all[j];
 		

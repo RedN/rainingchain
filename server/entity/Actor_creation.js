@@ -1,30 +1,30 @@
-Mortal = typeof Mortal !== 'undefined' ? Mortal : {};
+Actor = typeof Actor !== 'undefined' ? Actor : {};
 
-Mortal.creation = function(data){
+Actor.creation = function(data){
 	//data: x  y  map category variant lvl modAmount extra
 
-	var e = Mortal.template('enemy');
-	e = Mortal.creation.db(e,data);
-	e = Mortal.creation.info(e,data);
-	e = Mortal.creation.extra(e,data);
-	e = Mortal.creation.optionList(e);
+	var e = Actor.template('enemy');
+	e = Actor.creation.db(e,data);
+	e = Actor.creation.info(e,data);
+	e = Actor.creation.extra(e,data);
+	e = Actor.creation.optionList(e);
 		
 	e.data = data;
-	List.mortal[e.id] = e;
+	List.actor[e.id] = e;
 	List.all[e.id] = e;
 	List.map[e.map].list[e.id] = e;
 	
-	if(e.nevercombat){ Mortal.creation.nevercombat(e); }	
+	if(e.nevercombat){ Actor.creation.nevercombat(e); }	
 	else {
-		e = Mortal.creation.mod(e,data); 
-		e = Mortal.creation.boost(e);
+		e = Actor.creation.mod(e,data); 
+		e = Actor.creation.boost(e);
 	}
-	if(e.nevermove){ Mortal.creation.nevermove(e); }
+	if(e.nevermove){ Actor.creation.nevermove(e); }
 	
 	return e.id;
 }
 
-Mortal.creation.group = function(gr,el){
+Actor.creation.group = function(gr,el){
    	/*
 	gr: x y map respawn
     el: [  {'amount':1,"category":"eSlime","variant":"Big","lvl":0,'modAmount':1},
@@ -33,7 +33,7 @@ Mortal.creation.group = function(gr,el){
 	var id = Math.randomId();
 	var enemyIdList = [];
 	
-	gr = useTemplate(Mortal.creation.group.template(),gr);	
+	gr = useTemplate(Actor.creation.group.template(),gr);	
 	List.group[id] = {
 		'id':id,
 		'param':[gr,el],        //used to revive group
@@ -47,7 +47,7 @@ Mortal.creation.group = function(gr,el){
 		for(var j = 0 ; j < amount; j++){
 			el[i] = useTemplate(el[i],gr);  //info about x,y,map
 			
-			var eid = Mortal.creation(el[i]);
+			var eid = Actor.creation(el[i]);
 			var e = List.all[eid];
 			
 			enemyIdList.push(eid);
@@ -59,18 +59,18 @@ Mortal.creation.group = function(gr,el){
 	
 }
 
-Mortal.creation.group.template = function(){
+Actor.creation.group.template = function(){
 	return {'x':0,'y':0,'v':25,'map':'test@MAIN','respawn':100}
 }
 
-Mortal.creation.boost = function(e){
+Actor.creation.boost = function(e){
 	for(var i in e.boost.list){ 
         e.boost.list[i].base = valueViaArray({'origin':e,'array':e.boost.list[i].stat});	
 	}
 	return e;
 }
 
-Mortal.creation.db = function(e,d){
+Actor.creation.db = function(e,d){
 	e = Db.enemy[d.category][d.variant]();
 	for(var i in Db.enemy[d.category][d.variant]) e[i] = Db.enemy[d.category][d.variant][i];
 	
@@ -88,8 +88,8 @@ Mortal.creation.db = function(e,d){
 	var count = 0;
 	for(var i in e.ability){ 
 		//e.abilityChance[i] = ;	//need to fix so chanceMod do something
-		Mortal.learnAbility(e,i,e.ability[i]);
-		Mortal.swapAbility(e,count,i);
+		Actor.learnAbility(e,i,e.ability[i]);
+		Actor.swapAbility(e,count,i);
 		count++;
 	}
 	
@@ -98,7 +98,7 @@ Mortal.creation.db = function(e,d){
 	return e;
 }
 
-Mortal.creation.info = function(e,cr){
+Actor.creation.info = function(e,cr){
     e.map = cr.map || 'test@MAIN';
 	e.x = cr.x + Math.randomML() * (cr.v || 0); 
 	e.y = cr.y + Math.randomML() * (cr.v || 0); 
@@ -112,11 +112,11 @@ Mortal.creation.info = function(e,cr){
 	return e;
 }
 
-Mortal.creation.mod = function(e,d){
-	var list = Object.keys(Mortal.creation.mod.list);
+Actor.creation.mod = function(e,d){
+	var list = Object.keys(Actor.creation.mod.list);
 	for(var i = 0 ; i < d.modAmount ; i++){
 		var choosen = list[Math.floor(Math.random()*list.length)];
-		e = Mortal.creation.mod.list[choosen](e);
+		e = Actor.creation.mod.list[choosen](e);
 		e.name += ': ' + choosen;
 		e.context += ': ' + choosen;
 		e.modList.push(choosen);
@@ -124,7 +124,7 @@ Mortal.creation.mod = function(e,d){
 	return e;
 }
 
-Mortal.creation.mod.list = {
+Actor.creation.mod.list = {
 	
 	'immuneFire': (function(e){ e.equip.def.fire = 1/0;  return e; }),
 	'immuneCold': (function(e){ e.equip.def.cold = 1/0;  return e; }),
@@ -152,7 +152,7 @@ Mortal.creation.mod.list = {
 	
 }
 
-Mortal.creation.extra = function(mort){
+Actor.creation.extra = function(mort){
 	mort = useTemplate(mort,mort.extra,2);	//deep clone of function
 	for(var i in mort.viaArray){ 
 		mort.viaArray[i].origin = mort;
@@ -163,17 +163,17 @@ Mortal.creation.extra = function(mort){
 	return mort;
 }
 
-Mortal.creation.optionList = function(e){
+Actor.creation.optionList = function(e){
 	var ol = {'name':e.name,'option':[]};
 	
 	if(e.type === 'player') ol.option.push({'name':'Trade',"func":'Main.openWindow',"param":['trade',e.id]});
-	if(e.dialogue)	ol.option.push({'name':'Talk To',"func":'Mortal.talk',"param":[e.id]});
+	if(e.dialogue)	ol.option.push({'name':'Talk To',"func":'Actor.talk',"param":[e.id]});
 	
 	e.optionList = ol;
 	return e;
 }
 
-Mortal.creation.nevercombat = function(mort){
+Actor.creation.nevercombat = function(mort){
 	mort.combat = 0;
 	
 	delete mort.killed;
@@ -231,7 +231,7 @@ Mortal.creation.nevercombat = function(mort){
 	mort.hp = 1;
 }
 
-Mortal.creation.nevermove = function(mort){
+Actor.creation.nevermove = function(mort){
 	mort.move = 0;
 		
 	delete mort.friction; 
@@ -251,31 +251,31 @@ Mortal.creation.nevermove = function(mort){
 	mort.maxSpd = 1;
 }
 
-Mortal.creation.dialogue = function(mort){
+Actor.creation.dialogue = function(mort){
 	if(mort.dialogue){
-		mort.dialogue = useTemplate(Mortal.template.dialogue,mort.dialogue);
+		mort.dialogue = useTemplate(Actor.template.dialogue,mort.dialogue);
 	}
-	Mortal.creation.dialogue.generic(mort);
+	Actor.creation.dialogue.generic(mort);
 	return mort;	
 }
 
-Mortal.creation.dialogue.generic = function(mort){
+Actor.creation.dialogue.generic = function(mort){
 	var overwrite = mort.dialogue.option;
 	mort.dialogue.option = {};
-	Mortal.creation.dialogue.generic.recursive(mort.dialogue.tag,mort.dialogue.option,Dialogue.generic);
+	Actor.creation.dialogue.generic.recursive(mort.dialogue.tag,mort.dialogue.option,Dialogue.generic);
 	for(var i in overwrite){
 		mort.dialogue.option[i] = overwrite[i];
 	}
 	return mort;
 }
 
-Mortal.creation.dialogue.generic.recursive = function(tag,option,dialogue){
+Actor.creation.dialogue.generic.recursive = function(tag,option,dialogue){
 	for(var j in dialogue.option){
 		option[j] = dialogue.option[j];
 	}
 	for(var j in dialogue){
 		if(j !== 'option' && tag.have(j)){
-			Mortal.creation.dialogue.generic.recursive(tag,option,dialogue[j]);
+			Actor.creation.dialogue.generic.recursive(tag,option,dialogue[j]);
 		}
 	}
 }

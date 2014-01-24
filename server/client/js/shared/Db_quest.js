@@ -135,7 +135,7 @@ Init.db.quest = function(){
 		q.map['test'] = function(map){
 			
 			
-			Mortal.creation.group({'x':1060,'y':1900,'map':map},[
+			Actor.creation.group({'x':1060,'y':1900,'map':map},[
 				{"category":"neutral","variant":"julie",'extra':{
 					'dialogue':{'func':(function(key){
 						var player = List.main[key];
