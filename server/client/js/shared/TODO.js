@@ -2,7 +2,6 @@
 craft material convert
 
 
-need password to start server
 
 #Priority 2:
 -Crafting Ability
@@ -20,9 +19,6 @@ need password to start server
 
 easy mode
 cycle system
-
-
-
 
 TUTORIAL:
 
