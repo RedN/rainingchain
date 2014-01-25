@@ -1,6 +1,5 @@
 //Map
 Init.db.map = function (){
-	
 	Db.map = {};
 	
 	Db.map['test'] = function(){
@@ -95,6 +94,7 @@ Map.creation = function(namemodel,version){
 		timer:version === 'MAIN' ? 1/0 : 5*60*1000/25,
 		list:{},		//acts like List.all (for faster activeList)
 		loop:deepClone(model.loop),
+		variable:deepClone(model.variable),
 	};
 	
 	List.map[newid] = map;
@@ -114,7 +114,7 @@ Map.creation.model = function(map){
 		}
 	}
 	map.grid = new astar.Graph(grid);
-	
+	map.variable = map.variable || {};
 	return map;
 }
 

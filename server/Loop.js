@@ -102,6 +102,7 @@ Loop.logOut = function(){
 		if((socket.timer >= 10*60*1000 || socket.toRemove) && !socket.beingRemoved){
 			Sign.off(key,'Disconnected due to inactivity.');
 		}
+		if(socket.removed)	Sign.off.remove(key);
 	}
 }
 

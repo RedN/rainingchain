@@ -87,8 +87,9 @@ Draw.sprite = function (mort){
 	var startX = spriteServer.startX * animFromDb.sizeX;
 	var startY = animFromDb.startY + spriteFromDb.side[sideAngle] * animFromDb.sizeY;
 	
-	var sizeMod = spriteFromDb.size* spriteServer.sizeMod;
-		
+	var sizeMod = spriteFromDb.size * spriteServer.sizeMod;
+	
+	ctx.globalAlpha = spriteServer.alpha;
 	ctx.drawImage(image, 
 		startX,
 		startY,
@@ -98,7 +99,7 @@ Draw.sprite = function (mort){
 		Cst.HEIGHT2-animFromDb.sizeY/2*sizeMod + mort.y-player.y,
 		animFromDb.sizeX * sizeMod,
 		animFromDb.sizeY * sizeMod);
-	
+	ctx.globalAlpha = 1;
 }
 
 Draw.drop = function(){

@@ -13,8 +13,9 @@ io.sockets.on('connection', function (socket) {
 Sign = {};
 Sign.up = function(socket,d){
 	
-    var user = customEscape(d.username);    
-	var pass = customEscape(d.password);
+    var user = escape.quote(d.username);    
+	var pass = escape.quote(d.password);
+	var email = escape.email(d.email);
 	var fuser = user.replace(/[^a-z0-9 ]/ig, '');
 	if(user !==	 fuser){ socket.emit('signUp', { 'success':0, 'message':'<font color="red">Illegal characters in username.</font>'} ); return; }
 	if(pass.length < 3){ socket.emit('signUp', {'success':0, 'message':'<font color="red">Too short password.</font>'} ); return; }
@@ -27,15 +28,15 @@ Sign.up = function(socket,d){
 		crypto.randomBytes(32, function(err,salt){
 			salt = salt.toString('base64');
 		
-			crypto.pbkdf2(pass,salt,1000,128,function(err,pass){
+			crypto.pbkdf2(pass,salt,1000,64,function(err,pass){
 				pass = new Buffer(pass, 'binary').toString('base64');
-				Sign.up.create(user,pass,salt,socket);
+				Sign.up.create(user,pass,email,salt,socket);
 			});
 		});
 	});
 }
 
-Sign.up.create = function(user,pass,salt,socket){
+Sign.up.create = function(user,pass,email,salt,socket){
     var key = Math.random().toString(36).substring(7);
     var p = Actor.template('player'); 
 	p.name = user; 
@@ -44,43 +45,55 @@ Sign.up.create = function(user,pass,salt,socket){
 	p.publicId = Math.random().toString(36).substring(13);
 	
     var m = Main.template(key); m.name = user;
-
+	
+	var activationKey = Math.randomId();
     var obj = {
         username:user,
         password:pass,
+		email:email,
         salt:salt,
-        id:key,
+		activationKey:activationKey,
+		emailActivated:0,
+		signUpDate:Date.now(),
         online:0,
-        player:Save.player(p,false),
-        main:Save.main(m,false),
-        passive:Passive.template(),
+		admin:0,
     };
-    db.account.insert(obj, function(err) { 
-        if (err) throw err;
-		socket.emit('signUp', {'success':1,'message':'<font color="green">New Account Created.</font>'} );
+	
+	
+	
+    db.account.insert(obj, function(err) { 	if (err) throw err;
+		db.player.insert(Save.player(p,false), function(err) { 	if (err) throw err;
+			db.main.insert(Save.main(m,false), function(err) { 	if (err) throw err;
+				socket.emit('signUp', {'success':1,'message':'<font color="green">New Account Created.</font>'} );
+				
+				var str = 'Welcome to Raining Chain! This is your activation key for your account "' + user + '": ' + activationKey;
+				
+				if(email) nodemailer.email(user,'Raining Chain: Activation Key',str);
+				
+			});
+		});
     });
-
 }
          
 			
 			
 //could be improved
 Sign.in = function(socket,d){
-	var user = customEscape(d.username);
-	var pass = customEscape(d.password);
+	var user = escape.quote(d.username);
+	var pass = escape.quote(d.password);
 		
 	db.account.find({username:user},function(err, results) { if(err) throw err;		
 		if(results[0] === undefined){ socket.emit('signIn', { 'success':0,'message':'<font color="red">Wrong Password or Username.</font>' }); return }
 		if(results[0].online) {	socket.emit('signIn', { 'success':0, 'message':'<font color="red">This account is already online.</font>' }); return; }
 		
-		crypto.pbkdf2(pass,results[0].salt,1000,128,function(err,pass){
+		crypto.pbkdf2(pass,results[0].salt,1000,64,function(err,pass){
 			pass = new Buffer(pass, 'binary').toString('base64');
 		
 			if(pass !== results[0].password){ socket.emit('signIn', { 'success':0,'message':'<font color="red">Wrong Password or Username.</font>' }); return; }
 			
 			//Success!
 			var key = "p" + Math.randomId();
-			Load(key,results[0],socket);
+			Load(key,user,socket);
 		
 		});
 	});
@@ -95,19 +108,23 @@ Sign.off = function(key,message){
 	Save(key);
 	db.account.update({username:List.actor[socket.key].name},{'$set':{online:0}},function(err){ 
 		if(err) throw err;
-		ActiveList.remove(List.all[key]);
-		delete List.nameToKey[List.all[key].name];
-		delete List.actor[key];
-		delete List.socket[key];
-		if(List.all[key] && List.map[List.all[key].map]) delete List.map[List.all[key].map].list[key];
-		delete List.main[key];
-		delete List.all[key];
-		delete List.btn[key];
-		socket.disconnect();
+		socket.removed = 1;
 	});
 	
 }
-
+Sign.off.remove = function(key){
+	var socket = List.socket[key]; if(!socket) return;
+	
+	ActiveList.remove(List.all[key]);
+	delete List.nameToKey[List.all[key].name];
+	delete List.actor[key];
+	delete List.socket[key];
+	if(List.all[key] && List.map[List.all[key].map]) delete List.map[List.all[key].map].list[key];
+	delete List.main[key];
+	delete List.all[key];
+	delete List.btn[key];
+	socket.disconnect();
+}
 
 
 //Save account
@@ -119,13 +136,13 @@ Save = function(key){
 Save.player = function(key,updateDb){
 	var player = typeof key === 'string' ? List.all[key] : key;
 	player = Save.player.compress(player);
-	
+	player.username = player.username || player.name;
 	var save = {};
-    var toSave = ['x','y','map','name','context','weapon','equip','lvl','ability','abilityList'];
+    var toSave = ['x','y','map','username','context','weapon','equip','lvl','ability','abilityList'];
     for(var i in toSave){	save[toSave[i]] = player[toSave[i]]; }
 
     if(updateDb !== false){
-        db.account.update({username:player.name},{'$set': {player:save}},db.err);
+        db.player.update({username:player.username},save,db.err);
     } else { return save; }	//when sign up
 }
 
@@ -154,13 +171,13 @@ Save.player.compress = function(player){
 Save.main = function(key,updateDb){
 	var main = typeof key === 'string' ? List.main[key] : key;
     main = Save.main.compress(main);
-	
+	main.username = main.username || main.name;
     var save = {};
-    var toSave = ['invList','bankList','tradeList','quest','name','social','passive','passivePt',];
+    var toSave = ['invList','bankList','tradeList','quest','username','social','passive','passivePt',];
     for(var i in toSave){ save[toSave[i]] = main[toSave[i]]; }
 
     if(updateDb !== false){
-        db.account.update({username:main.name},{'$set': {main:save,passive:main.passive}},db.err);
+        db.main.update({username:main.username},save,db.err);
     } else { return save; } //when sign up
 }
 
@@ -174,28 +191,42 @@ Save.main.compress = function(main){
 
 
 //Load Account
-Load = function (key,dbb,socket){
-	var player = Load.player(key,dbb.player);	//need to load first for passive
-    var main = Load.main(key,dbb.main);
+Load = function (key,user,socket){
+	Load.player(key,user,function(player){
+		Load.main(key,user,function(main){
+			//Player
+			List.actor[key] = player;
+			List.all[key] = player;
+			List.map[player.map].list[player.id] = key;
+			List.nameToKey[player.name] = key;
+			
+			//Main
+			Actor.permBoost(player,'Passive',Passive.convert(main.passive));
+			List.main[key] = main;
+			
+			//Init Socket
+			socket.key = key;
+			socket.toRemove = 0;
+			socket.timer = 0;
+			socket.beingRemoved = 0;
+			socket.removed = 0;
+			Test.playerStart(key);
 
-    //Init Socket
-    socket.key = key;
-    socket.toRemove = 0;
-	socket.timer = 0;
-	socket.beingRemoved = 0;
-
-    Test.playerStart(key);
-
-    db.account.update({username:player.name},{'$set':{online:1,key:key}},function(err, res) { if(err) throw err
-        socket.emit('signIn', { cloud9:cloud9, success:1, key:key, data:Load.initData(key,player,main)});
-    });
+			db.account.update({username:player.name},{'$set':{online:1,key:key}},function(err, res) { if(err) throw err
+				socket.emit('signIn', { cloud9:cloud9, success:1, key:key, data:Load.initData(key,player,main)});
+			});
+		});	
+	});	
 }
 
-Load.main = function(key,db){
-    List.main[key] = useTemplate(Main.template(key),Load.main.uncompress(db,key));
-	List.btn[key] = [];
-	Actor.permBoost(List.all[key],'Passive',Passive.convert(db.passive));
-	return List.main[key];
+Load.main = function(key,user,cb){
+    db.main.find({username:user},{_id:0},function(err, db) { if(err) throw err;	
+		db = db[0];
+		var main = useTemplate(Main.template(key),Load.main.uncompress(db,key));
+		main.name = main.username;
+		List.btn[key] = [];
+		cb(main);
+	});
 }
 
 Load.main.uncompress = function(main,key){
@@ -205,21 +236,21 @@ Load.main.uncompress = function(main,key){
     return main;
 }
 
-Load.player = function(key,db){
-    var player = Actor.template('player');   //set default player
-    db = Load.player.uncompress(db);      //use info from the db
+Load.player = function(key,user,cb){
+   db.player.find({username:user},{_id:0},function(err, db) { if(err) throw err;
+		db = db[0];
+		
+		var player = Actor.template('player');   //set default player
+		db = Load.player.uncompress(db);      //use info from the db
 
-    for (var i in db) { player[i] = db[i]; }
+		for (var i in db) { player[i] = db[i]; }
+		player.name = player.username;
+		player.id = key;
+		player.publicId = player.name;
+		player = Actor.creation.optionList(player);
 
-    player.id = key;
-    player.publicId = player.name;
-    player = Actor.creation.optionList(player);
-	
-	List.actor[key] = player;
-    List.all[key] = player;
-    List.map[player.map].list[player.id] = key;
-    List.nameToKey[player.name] = key;
-	return player;
+		cb(player);
+	});
 }
 
 Load.player.uncompress = function(player){

@@ -85,7 +85,6 @@ Init.db.sprite = function(){
     	"anim": {
     		"Walk":{"startY":0,"frame":5,"sizeX":200,"sizeY":200,"dir":4,"spd":0.5,"next":"Walk"},
     		"Attack":{"startY":0,"frame":5,"sizeX":200,"sizeY":200,"dir":4,"spd":0.5,"next":"Walk"},
-    		"Death":{"startY":800,"frame":5,"sizeX":200,"sizeY":200,"dir":4,"spd":0.5,"next":"Dead"}
     	}},
     
     	"eTroll":{"src":"actor/eTroll.png","size":1,"side":[0,1,2,3],'hpBar':-70,'legs':35,
@@ -93,7 +92,6 @@ Init.db.sprite = function(){
     	"anim": {
     		"Walk":{"startY":0,"frame":9,"sizeX":128,"sizeY":128,"dir":4,"spd":0.25,"next":"Walk"},
     		"Attack":{"startY":0,"frame":9,"sizeX":128,"sizeY":128,"dir":4,"spd":0.25,"next":"Walk"},
-    		"Death":{"startY":Cst.WIDTH2,"frame":9,"sizeX":128,"sizeY":128,"dir":1,"spd":0.25,"next":"Walk"},
     		
     	}},
     	
@@ -199,7 +197,9 @@ Sprite.template = function(){
     	startX : 0,
     	spdBoost : 1,
     	timer : 0,
-    	walk : 0
+    	walk : 0,
+		alpha: 1,
+		dead: 0,
 	}
 }
 
@@ -253,10 +253,12 @@ Sprite.update = function (mort){
 	mort.sprite.startX = Math.floor(mort.sprite.timer);
 	
 	if(mort.sprite.startX > animFromDb.frame-1){
-		if(!animFromDb.remove){
-			Sprite.change(mort,{'anim':animFromDb.next});
-		} else {
-			remove(mort.id);    //aka death animation
+		Sprite.change(mort,{'anim':animFromDb.next});
+	}
+	if(mort.sprite.dead){
+		mort.sprite.alpha -= mort.sprite.dead;
+		if(mort.sprite.alpha < 0){
+			remove(mort.id);
 		}
 	}
 	

@@ -1,19 +1,15 @@
 
-
-
-create map variable
-
 craft material convert
 
-email confirm
+
+need password to start server
 
 #Priority 2:
 -Crafting Ability
 -Portal to Friends
 -Crafting System with White
--Implement Sound System (animation + map)
--revamp animation, (including death)
--death
+-Implement Sound System map
+
 -Advanced Dialogue (Morrowind)
 -lvl affect enemy stats
 
@@ -24,6 +20,8 @@ email confirm
 
 easy mode
 cycle system
+
+
 
 
 TUTORIAL:
