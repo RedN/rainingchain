@@ -74,20 +74,32 @@ Test.loop.player = function(key){
 
 Test.a = function(){	//when starting server
 
+		
+}
+
+Test.b = function(key,amount){
 	
+	console.log(1);
+	atk = {'type':"bullet",'angle':15,'amount':1, 'aim': 0,'objImg':{'name':"iceshard",'sizeMod':1},'hitImg':{'name':"ice2",'sizeMod':0.5},
+		'dmgMain':1,'dmgRatio':{'melee':15,'range':5,'magic':5,'fire':2,'cold':27,'lightning':0}};
+
+		
+	var start = Date.now();
+	for(var i = 0 ; i< amount;i++){
+		Attack.creation(
+			{x:1000,y:1000,map:'ryve@MAIN',hitIf:'enemy',angle:0},
+			useTemplate(Attack.template(),atk)
+		);
+	}
+	console.log(Date.now()-start);
 }
 
-Test.b = function(key){
 
-	
-}
-
-
-Test.c = function(key){
+Test.c = function(){
 
 }
 
-Test.d = function(key){
+Test.d = function(){
 
 }
 

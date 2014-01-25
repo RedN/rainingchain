@@ -58,6 +58,11 @@ Loop.main = function(){
 	if(main.chatInput){	applyFunc(Input.add,main.chatInput);}
 	main.social.message.chat = [];
 	main.chatInput = '';
+	
+	if(main.sfx) Sfx.play(main.sfx); main.sfx = '';
+	if(main.song) Song.play(main.song);	main.song = '';
+	
+	
 	if(main.help) Help.update(main.help);	
 }
 

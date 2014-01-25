@@ -153,7 +153,7 @@ Combat.collision = function(b,mort){
 	
 	if(b.crit.chance >= Math.random()){ b = Combat.collision.crit(b) }
 	
-	var dmg = Combat.collision.damage(b,mort);
+	var dmg = Combat.collision.damage(b,mort); if(!dmg) return;
 	Combat.collision.reflect(dmg,b,mort);
 	
 	//Mods
@@ -290,7 +290,7 @@ Combat.collision.crit = function(b){
 
 //Damage
 Combat.collision.damage = function(bullet,player){
-	
+	if(!bullet || !player) return;
 	var dmgInfo = Combat.collision.damage.calculate(bullet.dmg,Actor.getDef(player))
 	var dmg = dmgInfo.sum;
 	

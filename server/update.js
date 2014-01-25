@@ -148,7 +148,9 @@ Change.update.init = function(){
 			},	
 		'exist':{'reg':[
 				{'array':['social','message','chat'],'reset':[]},
-				{'array':['chatInput'],'reset':''}
+				{'array':['chatInput'],'reset':''},
+				{'array':['sfx'],'reset':''},
+				{'array':['song'],'reset':''},
 			]}
 	};
 	

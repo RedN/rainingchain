@@ -19,6 +19,9 @@ Main.template = function(key){
 		'dialogue':0,
 		'name':'player000',		
 		
+		'sfx':'',
+		'song':'',
+		
 		'help':'',
 		'passivePt':0,
 		'passive':Passive.template(),

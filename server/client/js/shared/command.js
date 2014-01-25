@@ -129,34 +129,6 @@ Command.list['mute'] = function(key,user){
 	}
 }
 
-//CLIENT SIDE: Pref. many different preference values can be changed. check Command.pref.verify for more detail.
-Command.list['pref'] = function(name,value){
-	if(server) return;
-	if(main.pref[name] === undefined){ Chat.add('Invalid name.'); return; }
-	value = Command.pref.verify(name,value);
-	if(value === 'Invalid value.'){ Chat.add('Invalid value.'); return; }
-	
-	main.pref[name] = value;
-	Chat.add('Preferences Changed.');
-	localStorage.setItem('pref',JSON.stringify(main.pref))
-}
-
-Command.list['binding'] = function(type,position,value){
-	if(server) return;
-	
-	value = Math.round(+value);
-	position = Math.round(+position);
-	if((type !== 'move' && type !== 'ability') || position + '' === 'NaN' || value + '' === 'NaN'){
-		Chat.add('Wrong');
-		return;
-	}
-	Input.key[type][position][0] = value;
-	
-	Chat.add('Bindings Changed.');
-	Input.save();
-}
-
-Command.client = ['pref','binding'];
 
 //Window
 Command.list['win,close'] = function(key){
@@ -309,9 +281,60 @@ Command.list['email,activate'] = function(key,str){
 }
 
 
+//CLIENT SIDE: Pref. many different preference values can be changed. check Command.pref.verify for more detail.
+Command.list['pref'] = function(name,value){
+	if(server) return;
+	
+	if(name === 'reset'){
+		main.pref = Main.template.pref();
+		Chat.add('Preferences Reset to Default.');
+		return;
+	}
+	
+	if(main.pref[name] === undefined){ Chat.add('Invalid name.'); return; }
+	value = Command.pref.verify(name,value);
+	if(value === 'Invalid value.'){ Chat.add('Invalid value.'); return; }
+	
+	main.pref[name] = value;
+	if(Command.pref.list[name].func) Command.pref.list[name].func(value);
+	Chat.add('Preferences Changed.');
+	localStorage.setItem('pref',JSON.stringify(main.pref))
+}
+
+Command.list['binding'] = function(type,position,value){
+	if(server) return;
+	
+	value = Math.round(+value);
+	position = Math.round(+position);
+	if((type !== 'move' && type !== 'ability') || position + '' === 'NaN' || value + '' === 'NaN'){
+		Chat.add('Wrong');
+		return;
+	}
+	Input.key[type][position][0] = value;
+	
+	Chat.add('Bindings Changed.');
+	Input.save();
+}
+
+
+Command.list['music,next'] = function(type,position,value){
+	if(server) return;
+	Song.ended();
+}
+Command.list['music,info'] = function(type,position,value){
+	if(server) return;
+	var str = 'Song name: "' + Song.beingPlayed.name + '" by ' + Song.beingPlayed.author.name;
+	Chat.add(str);
+}
+
+Command.client = ['pref','binding','music,next'];
+
 
 Command.pref = {};
 Command.pref.list = {
+	'volumeSong':{name:'Volume Song',initValue:20,min:0,max:100,description:'Volume Song.','func':function(value){ Song.beingPlayed.volume = value/100 * main.pref.volumeMaster/100; }},
+	'volumeSfx':{name:'Volume Effects',initValue:100,min:0,max:100,description:'Volume Sound Effects.'},
+	'volumeMaster':{name:'Volume Master',initValue:100,min:0,max:100,description:'Volume Master. 0:Mute','func':function(value){ Song.beingPlayed.volume = value/100 * main.pref.volumeSong/100; }},
 	'mapZoom':{name:'Map Zoom',initValue:200,min:1,max:999,description:'Minimap Zoom'},
 	'mapRatio':{name:'Map Ratio',initValue:5,min:2,max:10,description:'Minimap Size'},
 	'bankTransferAmount':{name:'X- Bank',initValue:1000,min:1,max:9999999999,description:'Amount of items transfered with Shift + Left Click'},
@@ -319,6 +342,7 @@ Command.pref.list = {
 	'passiveView':{name:'Passive View',initValue:0,min:0,max:1,description:'Impact Passive Colors. 0:Access. 1:Popularity'},
 	'abilityDmgStatusTrigger':{name:'%Dmg Ability',initValue:10,min:0,max:100,description:'%Life Dealt per attack. Used to calculate chance to proc status.'}, //% life of monster per attack (used to calc % chance to trigger status)
 	'mapIconAlpha':{name:'Icon Alpha',initValue:100,min:0,max:100,description:'Minimap Icon Transparence.'},
+	
 }
 Command.pref.verify = function(name,value){
 	var req = Command.pref.list[name];
@@ -328,7 +352,7 @@ Command.pref.verify = function(name,value){
 		if(value.toString() === 'NaN'){ return 'Invalid value.'; }
 		
 		value = value.mm(req.min,req.max);			
-		if(req.round !== false){ value = Math.round(value); }
+		value = round(value,req.round || 0);
 		
 		return value;
 	}

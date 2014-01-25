@@ -13,27 +13,29 @@ Init.db.map = function (){
 			]);
 		}
 		
+		
 		m.loop = {};
-		m.loop.main =  function(map){
+		m.loop.main = function(map,variable,cst){
 			if(Loop.interval(10)){
-				var array = Map.collisionRect(map,[1000,1400,1000,1400],'player');
-				for(var i in array){
-					var mort = List.all[array[i]];
+				Map.collisionRect(map,[1000,1400,1000,1400],'player',function(key){
+					var mort = List.all[key];
 					mort.hp -= 100;
-					
-					var atk = {
-						'type':"bullet",'angle':15,'amount':1, 'aim': 0,'objImg':{'name':"iceshard",'sizeMod':1},'hitImg':{'name':"ice2",'sizeMod':0.5},
-						'dmgMain':1,'dmgRatio':{'melee':15,'range':5,'magic':5,'fire':2,'cold':27,'lightning':0},
-					};
 					
 					Attack.creation(
 						{x:mort.x,y:mort.y,map:map,hitIf:'enemy',angle:mort.angle},
-						useTemplate(Attack.template(),atk)
+						useTemplate(Attack.template(),cst.atk)
 					);
-				}
+					
+				});
 			}
 		}
 		
+		
+		
+		m.cst = {
+			atk:{'type':"bullet",'angle':15,'amount':1, 'aim': 0,'objImg':{'name':"iceshard",'sizeMod':1},'hitImg':{'name':"ice2",'sizeMod':0.5},
+				'dmgMain':1,'dmgRatio':{'melee':15,'range':5,'magic':5,'fire':2,'cold':27,'lightning':0}},
+		};
 		return m;
 	};
 	//ts("Actor.creation.group({'x':1060,'y':1900,'map':'test@MAIN','respawn':100},[{'amount':1,'category':'boss','variant':'iceTroll','lvl':0,'modAmount':1},]);")
@@ -95,6 +97,7 @@ Map.creation = function(namemodel,version){
 		list:{},		//acts like List.all (for faster activeList)
 		loop:deepClone(model.loop),
 		variable:deepClone(model.variable),
+		cst:model.cst,
 	};
 	
 	List.map[newid] = map;
@@ -115,6 +118,7 @@ Map.creation.model = function(map){
 	}
 	map.grid = new astar.Graph(grid);
 	map.variable = map.variable || {};
+	map.cst = map.cst || {};
 	return map;
 }
 
@@ -171,7 +175,7 @@ Map.remove = function(map){
 }
 
 
-Map.collisionRect = function(map,rect,type){
+Map.collisionRect = function(map,rect,type,cb){	
 	var list = List.map[map].list;
 	var array = [];
 	for(var i in list){
@@ -180,7 +184,11 @@ Map.collisionRect = function(map,rect,type){
 			array.push(i);
 		}
 	}
-	return array;
+	if(!cb) return array;
+	
+	for(var i in array){
+		cb(array[i]);	
+	}
 }
 
 

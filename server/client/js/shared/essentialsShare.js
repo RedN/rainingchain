@@ -307,7 +307,11 @@ String.prototype.keyCodeToName = function(){
 	return boost + String.fromCharCode(charCode);
  }
 String.prototype.capitalize = function() {
-    return this.charAt(0).toUpperCase() + this.slice(1);
+	if(!this.have(' '))    return this.charAt(0).toUpperCase() + this.slice(1);
+	
+	var array = this.split(' ');
+	for(var i in array) array[i] = array[i].capitalize();
+	return array.join(' ');
 }
 String.prototype.numberOnly = function(num){
 	var sign = this[0] === '-';
