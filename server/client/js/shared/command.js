@@ -12,8 +12,8 @@ if(server){
 			var param = data.param;
 			param.unshift(key);
 			
-			cmd = customEscape(cmd);
-			for(var i in param){ param[i] = customEscape(param[i]); }
+			cmd = escape.quote(cmd);
+			for(var i in param){ param[i] = escape.quote(param[i]); }
 			
 			
 			if(Command.list[cmd]){
@@ -45,17 +45,7 @@ Command.list['fl,add'] = function(key,user,nick,comment,color){
 		});
 	}
 }
-
-Command.list['fl,remove'] = function(key,user){
-	if(List.main[key].social.list.friend[user]){
-		delete List.main[key].social.list.friend[user]
-		Chat.add(key, 'Friend deleted.');
-	} else {
-		Chat.add(key, 'This player is not in your Friend List.');
-		
-	}
-}
-
+ 
 Command.list['fl,comment'] = function(key,user,comment){
 	if(List.main[key].social.list.friend[user]){
 		List.main[key].social.list.friend[user].comment = comment;
@@ -96,15 +86,15 @@ Command.list['fl,pm'] = function(key,setting){
 Command.list['fl,offlinepm'] = function(key,to,text){
 	var from = List.all[key].name;
 	
-	text = customEscape(text);
-	to = customEscape(to);
+	text = escape.quote(text);
+	to = escape.quote(to);
 
 	if(!text || !to || !from){ return; }	
 	if(to === from){ Chat.add(key,"Ever heard of thinking in your head?"); }
 	
-	db.account.find({username:to},function(err, res) { if(err) throw err;
+	db.main.find({username:to},function(err, res) { if(err) throw err;
 		if(res[0]){
-			var main = Load.main.uncompress(res[0].main);
+			var main = Load.main.uncompress(res[0]);
 			
 			if(main.social.list.friend[from]){ 
 				if(!main.social.message.chat){ main.social.message.chat = []; }
@@ -304,6 +294,20 @@ Command.list['option'] = function(key,slot){
 		
 	}	
 }
+
+
+
+Command.list['email,activate'] = function(key,str){
+	var name = List.all[key].name;
+	db.account.find({username:name},{activationKey:1},function(err,res){	if(err) throw err
+		if(res[0] && res[0].activationKey === str){
+			db.account.update({username:name},{ $set:{emailActivated:1}},function(err){	if(err) throw err
+				Chat.add(key, 'Your account is now activated.');
+			});
+		} else {Chat.add(key, 'Wrong Activation Key.');}	
+	});
+}
+
 
 
 Command.pref = {};

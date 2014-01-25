@@ -2,8 +2,6 @@
 //git push -u origin master
 
 cloud9 = typeof process.env.PORT !== 'undefined';
-dbpsw = process.argv[2] || 'test';
-
 
 //Create Server
 http = require('http');
@@ -12,6 +10,8 @@ socketio = require('socket.io');
 express = require('express');
 crypto = require('crypto');
 astar = require('astar');
+
+
 
 
 router = express();
@@ -79,5 +79,15 @@ require('./' + clientPath + 'client/js/shared/Db_quest');
 require('./' + clientPath + 'client/js/shared/Quest');
 require('./' + clientPath + 'client/js/shared/Db_customboost');
 
-
-main.initServer(); 
+Init.db('test');
+Init.email('mailmailmail');
+main.initServer(); 	
+/*	
+io.sockets.on('connection', function (socket) {
+	socket.on('initServer', function (data) {
+		Init.db(data.db);
+		Init.email(data.mail);
+		main.initServer(); 	
+	});
+});
+*/

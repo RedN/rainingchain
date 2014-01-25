@@ -51,9 +51,9 @@ Chat.add = function(key,type,text,extra){
 Chat.send = function(data){
 	var key = data.key;									//source (key)
 	var from = List.all[key].name;                      //source (name)
-	var to = customEscape(data.to);                     //destination (name)
-	var text = Chat.parse(customEscape(data.text));      //text
-	var type = customEscape(data.type);                 //clan || pm || public
+	var to = escape.quote(data.to);                     //destination (name)
+	var text = Chat.parse(escape.quote(data.text));      //text
+	var type = escape.quote(data.type);                 //clan || pm || public
 			
 	if(!type || !text || !to || !from){ return; }
 	if(to === from){ Chat.add(key,"Ever heard of thinking in your head?"); return; }
@@ -73,38 +73,22 @@ Chat.send.public = function(key,text,to,type,from,data){
 }
 
 Chat.send.pm = function(key,text,to,type,from,data){
-    Chat.send.pm.test(from,to,(function(from,to,res){
-		if(res){
-			Chat.add(List.nameToKey[to],'pm',text,{'from':from,'to':to});
-			Chat.add(key,'pm',text,{'from':from,'to':to});
-		}
-		if(res === false){
-			Chat.add(key,"This player is offline.");
-		} 
-		if(res === ''){
-			Chat.add(key,"This player doesn't exist.");
-		}	
-	}));
-	return
+    var res = Chat.send.pm.test(from,to);
+	if(res){
+		Chat.add(List.nameToKey[to],'pm',text,{'from':from,'to':to});
+		Chat.add(key,'pm',text,{'from':from,'to':to});
+	}
+	if(res === false) Chat.add(key,"This player is offline.");
+	if(res === null) Chat.add(key,"This player doesn't exist.");
 }
 
 Chat.send.pm.test = function(from,to,cb){
 	//test if player can send pm to another. check for online but also mute list
-	db.account.find({username:to},function(err, r) {
-		if(r[0]){	//aka exist
-			var bool = true;
-			var id = List.nameToKey[to];
-			var main = List.main[id];
-			if(!main){ bool = false; } 
-			else {
-				if(main.social.status === 'off'){ bool = false; }
-				if(main.social.status === 'friend'){ 
-					if(!main.social.list.friend[from]){ bool = false; }				
-				}
-			}
-			cb(from,to,bool);
-		} else { cb('');  }
-	});	
+	var main = List.main[List.nameToKey[to]];
+	if(!main) return null;
+	if(main.social.status === 'off') return false;
+	if(main.social.status === 'friend' && !main.social.list.friend[from]) return false;
+	return true;
 }
 
 Chat.send.pm.clan = function(key,text,to,type,from,data){

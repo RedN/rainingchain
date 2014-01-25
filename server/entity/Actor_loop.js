@@ -333,9 +333,7 @@ Actor.loop.friendList = function(mort){
 	var fl = List.main[key].social.list.friend;
     
 	for(var i in fl){
-		Chat.send.pm.test(List.all[key].name,i,function(from,to,status){
-			if(from) fl[to].online = status;
-		});			
+		fl[i].online = Chat.send.pm.test(List.all[key].name,i);
 	}
 }
 

@@ -332,13 +332,21 @@ logError = function(err) {
 }
 
 //Misc
-customEscape = function(str){
-	if(typeof str !== 'string'){ return false }
+escape.quote = function(str){
+	if(typeof str !== 'string'){ return '' }
 	
 	str.replaceAll('"','\"');
 	str.replaceAll("'","\'");
 	return str;
 }
+escape.email = function(str){
+	if(typeof str !== 'string'){ return '' }
+
+    var re = /[^\s@]+@[^\s@]+\.[^\s@]+/;
+    re.test(str) ? str : '';
+}
+
+
 changeVisibility = function(id){
 	var el = document.getElementById(id);
 	el.style.visibility = el.style.visibility === 'hidden' ? 'visible' : 'hidden';
