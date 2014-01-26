@@ -337,6 +337,7 @@ Draw.item = function(info,xy,size){
 }
 
 Draw.element = function(x,y,w,h,data,noover){
+	var initCtx = ctx.name;
 	var xx = x;
 	ctx.save();
 	ctx.textAlign = 'left';
@@ -364,6 +365,7 @@ Draw.element = function(x,y,w,h,data,noover){
 	ctx.lineWidth = 1;
 	
 	if(!noover && mouseOverRatio){
+		ctx = List.ctx['pop'];
 		var amount = data[mouseOverRatio];
 		if(amount < 1){ amount = round(data[mouseOverRatio]*100,0) + '%' }
 		else { amount = round(data[mouseOverRatio],0) }
@@ -375,6 +377,7 @@ Draw.element = function(x,y,w,h,data,noover){
 		ctx.fillStyle = 'black';
 		ctx.fillText(text,mx+5,my+3-30);
 	}
+	ctx = List.ctx[initCtx];
 	ctx.restore();
 }
 
@@ -433,14 +436,20 @@ Draw.gradientRG = function(n){
 
 
 Draw.context = function (){ ctxrestore();
-	var cont = main.context.text || main.clientContext.text || main.permContext.text;
+	var text = main.context.text || main.clientContext.text || main.permContext.text;
+	var top = main.context.textTop;
 	var hc = html.context.div;
 	
-	if(!hc.innerHTML || hc.innerHTML !== cont){
-		hc.style.left = (Input.mouse.x + 25).mm(0,Cst.WIDTH-25) + 'px';
-		hc.style.top = (Input.mouse.y + 25).mm(0,Cst.HEIGHT-25) + 'px';
+	if(!hc.innerHTML || hc.innerHTML !== text){
+		if(!top){
+			hc.style.left = (Input.mouse.x + 25).mm(0,Cst.WIDTH-25) + 'px';
+			hc.style.top = (Input.mouse.y + 25).mm(0,Cst.HEIGHT-25) + 'px';
+		} else {
+			hc.style.left = Cst.WIDTH/2-100 + 'px'
+			hc.style.top = "25px"
+		}
 	}
-	hc.innerHTML = cont;
+	hc.innerHTML = text;
 	if(hc.innerHTML){
 		hc.style.visibility = 'visible';
 	}

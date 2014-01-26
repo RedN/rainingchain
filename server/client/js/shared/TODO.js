@@ -1,7 +1,5 @@
 
 
-if context is monster, appear top middle instead
-bonus from weapon are counted twice
 
 craft material convert
 

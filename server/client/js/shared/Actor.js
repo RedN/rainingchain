@@ -28,7 +28,8 @@ Actor.switchEquip = function(mort,name){
 	var equip = Db.equip[name];
 	mort.equip.piece[equip.piece] = equip;
 	
-	Actor.permBoost(mort,equip.piece,mort.equip.piece[equip.piece].boost);
+	if(Cst.equip.armor.piece.have(equip.piece))	
+		Actor.permBoost(mort,equip.piece,mort.equip.piece[equip.piece].boost);
 	Actor.updateEquip(mort);
 	Itemlist.remove(List.main[mort.id].invList,name);
 	Itemlist.add(List.main[mort.id].invList,old.id);

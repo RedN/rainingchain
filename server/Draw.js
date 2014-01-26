@@ -20,7 +20,8 @@ Draw.actor = function (key){
 			
 			var info = {
 				"rect":Collision.getHitBox({x:x,y:y,hitBox:mort.hitBox}),
-				"text":mort.context
+				"text":mort.context,
+				'textTop':1,
 			};
 			
 			if(mort.optionList){

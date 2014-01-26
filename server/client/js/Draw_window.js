@@ -312,7 +312,7 @@ Draw.window.ability = function (){ ctxrestore();
 	ha.div.style.top = s.my + 'px'; 
 	
 	var diffX = 100;
-	var diffY = 120;
+	var diffY = 100;
 	Draw.window.ability.leftSide();
 	Draw.window.ability.abilityList(diffX);
 	Draw.window.ability.generalInfo(diffX,diffY);
@@ -567,28 +567,39 @@ Draw.window.ability.action.attack = function(diffX,diffY){  ctxrestore();
 	s.zy += diffY;
 	
 	var ab = player.abilityList[Draw.old.abilityShowed];
-	var atk = deepClone(ab.action.param.attack);
-	atk = Combat.action.attack.mod(player,atk);
+	var preatk = deepClone(ab.action.param.attack);
+	var atk = Combat.action.attack.mod(player,deepClone(preatk));
 	
+	var fontSize = 25;	
+	ctx.font = fontSize + 'px Monaco';
+	
+	//Ratio
+	if(atk.dmg.main){
+		helper = function(atk,name,length){
+			var str = name + ':';
+			ctx.fillText(str,s.zx,s.zy);
+			var dist = 125;
+			Draw.element(s.zx+dist,s.zy,length,fontSize,atk.dmg.ratio);
+			
+			ctx.fillText('x' + round(atk.dmg.main,1),s.zx+300+dist+25,s.zy);
+		}
+		
+		helper(preatk,'Ability',300);
+		s.zy += fontSize;
+		helper(player.weapon,'Weapon',300);
+		ctx.fillText('Compability: ' + round(atk.weaponCompability*100,1,1) + '%',s.zx+575,s.zy);
+		s.zy += fontSize;
+		helper(atk,'*Final*',300*atk.weaponCompability);
+		s.zy += fontSize*1.5;
+	}
 	
 	//General Info
-	ctx.font = '25px Monaco';
-	var dmg = round(atk.dmg.main,2);
-	var str = 'Damage: ' + dmg + ' x ';
-	
-	var dist = ctx.length(str);
-	Draw.element(s.zx+dist,s.zy,300,25,atk.dmg.ratio);
-	ctx.fillText(str,s.zx,s.zy);
+	var dmg = 0;	for(var i in atk.dmg.ratio){ dmg += atk.dmg.ratio[i]; } dmg *= atk.dmg.main;
 	str = 'x' + atk.amount + ' Bullet' + (atk.amount > 1 ? 's' : '') + ' @ ' + atk.angle + '°';
-	ctx.fillText(str,s.zx,s.zy+25);
+	str += '  =>  DPS: ' + round(dmg / ab.period * 25,1);
+	ctx.fillText(str,s.zx,s.zy);
+	s.zy += fontSize;
 	
-	//RIght
-	str = 'Weapon Compability: ' + round(atk.weaponCompability,3,1);
-	ctx.fillText(str,s.zx+500,s.zy);
-	var dmg = 0;
-	for(var i in atk.dmg){ dmg += atk.dmg[i]; }
-	str = 'DPS: ' + round(dmg / ab.period * 25,1);
-	ctx.fillText(str,s.zx+500,s.zy+30);
 	
 	//Mods
 	for(var i in atk){
@@ -603,9 +614,9 @@ Draw.window.ability.action.attack = function(diffX,diffY){  ctxrestore();
 					tmp.chance = Math.probability(base,mod);
 				}	
 				if(tmp.chance !== undefined && tmp.chance <= 0.01){ continue;}
-				Draw.icon(Draw.window.ability.action.attack.modTo[i].icon,[s.zx,s.zy+25+30],20);
-				ctx.fillText('=> ' + Draw.window.ability.action.attack.modTo[i].text(tmp),s.zx+30,s.zy+25+30);
-				s.zy += 25;
+				Draw.icon(Draw.window.ability.action.attack.modTo[i].icon,[s.zx,s.zy+30],20);
+				ctx.fillText('=> ' + Draw.window.ability.action.attack.modTo[i].text(tmp),s.zx+30,s.zy+30);
+				s.zy += fontSize;
 				
 			}
 		}

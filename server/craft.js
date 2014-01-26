@@ -183,7 +183,6 @@ Craft.equip = function(seed){	//at this point, seed should be all-set
 	
 	if(Cst.equip.weapon.piece.have(equip.piece)) equip = Craft.equip.weapon(seed,equip);
 	if(Cst.equip.armor.piece.have(equip.piece)) equip = Craft.equip.armor(seed,equip);
-	console.log(equip);
 	
 	Equip.creation(equip);
 	
@@ -191,7 +190,6 @@ Craft.equip = function(seed){	//at this point, seed should be all-set
 }
 
 Craft.equip.weapon = function(seed,equip){
-	console.log(1);
 	var mod = 0.9 + Math.pow(Math.random(),1/(seed.quality+1))*0.2;
 	equip.dmg.main = (seed.lvl+10) * mod;
 	

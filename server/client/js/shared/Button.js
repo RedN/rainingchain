@@ -22,12 +22,13 @@ Button.template = function(){
 		highlight:false,
 		key:0,
 		text:'',
+		textTop:0,
 		help:'',
 		sfx:null
 	};
 }
 
-Button.test = function (key,x,y,side){
+Button.test = function (key,x,y,side){	//on click
 	//called everytime the player clicks. check the list of buttons at that frame and test for collision
 	if(server){ var list = List.btn[key]; } 
 		else { var list = List.btn;}
@@ -55,7 +56,7 @@ Button.test = function (key,x,y,side){
 	
 }
 
-Button.context = function (key){
+Button.context = function (key){	//always
 	//check every frame if mouse is over something with a context (aka top left text)
 	if(server){ 
 		var list = List.btn[key]; 
@@ -69,7 +70,7 @@ Button.context = function (key){
 		
 	for(var i = 0 ; i < list.length ; i++){
 		if(Collision.PtRect({"x":x,'y':y},list[i].rect)){
-			if(server){ List.main[key].context = {'server':server,'text':list[i].text}; }
+			if(server){ List.main[key].context = {'server':server,'text':list[i].text,'textTop':list[i].textTop}; }
 			if(!server){ main.clientContext = {'server':server,'text':list[i].text}; }
 			return;
 		}	

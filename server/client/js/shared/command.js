@@ -321,13 +321,13 @@ Command.list['music,next'] = function(type,position,value){
 	if(server) return;
 	Song.ended();
 }
-Command.list['music,info'] = function(type,position,value){
+Command.list['music,info'] = function(){
 	if(server) return;
 	var str = 'Song name: "' + Song.beingPlayed.name + '" by ' + Song.beingPlayed.author.name;
 	Chat.add(str);
 }
 
-Command.client = ['pref','binding','music,next'];
+Command.client = ['pref','binding','music,next','music,info'];
 
 
 Command.pref = {};
