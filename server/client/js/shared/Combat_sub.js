@@ -1,13 +1,9 @@
 //Combat: Sub Functions
 if(!server) Combat = {action:{attack:{}}};
 Combat.action.attack.mod = function(player,atk){
-	console.log(1,atk.dmg.ratio);
 	atk = Combat.action.attack.mod.bonus(player.bonus,atk);
-	console.log(2,atk.dmg.ratio);
 	atk = Combat.action.attack.mod.weapon(player.weapon,atk);
-	console.log(3,atk.dmg.ratio);
 	atk = Combat.action.attack.mod.player(player,atk);
-	console.log(4,atk.dmg.ratio);
 	return atk;
 }
 

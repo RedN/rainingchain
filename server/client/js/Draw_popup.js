@@ -71,7 +71,7 @@ Draw.popup.equip.top = function(s){
 	//Draw Def/Dmg
 	ctx.font="25px Monaco";
 	ctx.textAlign = 'center';
-	var num = s.equip.category === 'armor' ? s.equip.dmg.main :  s.equip.def.main;
+	var num = s.equip.category === 'armor' ? s.equip.def.main :  s.equip.dmg.main;
 	var bar = s.equip.category === 'armor' ? Draw.popup.equip.getDef(s.equip) : s.equip.dmg.ratio;
 	ctx.fillText(round(num,0),s.x+25,s.y+50);
 	Draw.element(s.x+52,s.y+50,190,25,bar);

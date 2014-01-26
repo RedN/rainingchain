@@ -1,4 +1,11 @@
 
+
+balance:
+total equip def = lvl + 10
+total weapon = lvl + 10
+
+
+
 craft material convert
 
 

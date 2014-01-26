@@ -282,18 +282,16 @@ Combat.collision.reflect = function(dmg,bullet,mort){
 }
 	
 Combat.collision.crit = function(b){
-	for(var i in b.dmg){
-		b.dmg[i] *= b.crit.magn;
-	}
+	b.dmg.main *= b.crit.magn;
 	return b;
 }
 
 //Damage
 Combat.collision.damage = function(bullet,player){
 	var def = Actor.getDef(player);
-	if(!bullet || !def || !def.ratio) return;
 	var dmgInfo = Combat.collision.damage.calculate(bullet.dmg,def);
-	if(!dmgInfo.sum) console.log(bullet.dmg,def);
+	if(!dmgInfo.sum) return;
+	
 	Actor.changeHp(player,-dmgInfo.sum);
 	
 	if(player.damagedBy[bullet.parent] === undefined) { player.damagedBy[bullet.parent] = 0; }
