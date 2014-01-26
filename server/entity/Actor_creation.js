@@ -72,7 +72,7 @@ Actor.creation.boost = function(e){
 
 Actor.creation.db = function(e,d){
 	e = Db.enemy[d.category][d.variant]();
-	for(var i in Db.enemy[d.category][d.variant]) e[i] = Db.enemy[d.category][d.variant][i];
+	for(var i in Db.enemy[d.category][d.variant]) e[i] = Db.enemy[d.category][d.variant][i];	//not sure whats the poitn?
 	
 	e.id = Math.randomId();
 	e.publicId = Math.random().toString(36).substring(13);
@@ -124,12 +124,12 @@ Actor.creation.mod = function(e,d){
 
 Actor.creation.mod.list = {
 	
-	'immuneFire': (function(e){ e.equip.def.fire = 1/0;  return e; }),
-	'immuneCold': (function(e){ e.equip.def.cold = 1/0;  return e; }),
-	'immuneLightning': (function(e){ e.equip.def.lightning = 1/0;  return e; }),
-	'immuneMelee': (function(e){ e.equip.def.melee = 1/0;  return e; }),
-	'immuneRange': (function(e){ e.equip.def.range = 1/0;  return e; }),
-	'immuneMagic': (function(e){ e.equip.def.magic = 1/0;  return e; }),
+	'immuneFire': (function(e){ e.equip.def.fire = Cst.bigInt;  return e; }),
+	'immuneCold': (function(e){ e.equip.def.cold = Cst.bigInt;  return e; }),
+	'immuneLightning': (function(e){ e.equip.def.lightning = Cst.bigInt;  return e; }),
+	'immuneMelee': (function(e){ e.equip.def.melee = Cst.bigInt;  return e; }),
+	'immuneRange': (function(e){ e.equip.def.range = Cst.bigInt;  return e; }),
+	'immuneMagic': (function(e){ e.equip.def.magic = Cst.bigInt;  return e; }),
 
 	'immuneStatus': (function(e){ for(var i in e.status){ e.status[i].resist = 1; }  return e; }),
 

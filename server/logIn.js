@@ -260,7 +260,6 @@ Load.player.uncompress = function(player){
     player.equip.dmg = {'melee':1,'range':1,'magic':1,'fire':1,'cold':1,'lightning':1};
     Actor.updateEquip(player);
 
-
     for(var i in player.abilityList){
         player.abilityList[i] = Ability.uncompress(player.abilityList[i].id);
     }

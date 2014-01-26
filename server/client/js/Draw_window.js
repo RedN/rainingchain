@@ -573,11 +573,11 @@ Draw.window.ability.action.attack = function(diffX,diffY){  ctxrestore();
 	
 	//General Info
 	ctx.font = '25px Monaco';
-	var dmg = round(atk.dmgMain,2);
+	var dmg = round(atk.dmg.main,2);
 	var str = 'Damage: ' + dmg + ' x ';
 	
 	var dist = ctx.length(str);
-	Draw.element(s.zx+dist,s.zy,300,25,atk.dmgRatio);
+	Draw.element(s.zx+dist,s.zy,300,25,atk.dmg.ratio);
 	ctx.fillText(str,s.zx,s.zy);
 	str = 'x' + atk.amount + ' Bullet' + (atk.amount > 1 ? 's' : '') + ' @ ' + atk.angle + '°';
 	ctx.fillText(str,s.zx,s.zy+25);
@@ -599,7 +599,7 @@ Draw.window.ability.action.attack = function(diffX,diffY){  ctxrestore();
 				//Status
 				if(Cst.status.list.have(i)){ 
 					var mod = tmp.chance * player.bonus[i].chance;
-					var base = Math.pow(main.pref.abilityDmgStatusTrigger/100*atk.dmgRatio[Cst.status.toElement[i]],1.5);
+					var base = Math.pow(main.pref.abilityDmgStatusTrigger/100*atk.dmg.ratio[Cst.status.toElement[i]],1.5);
 					tmp.chance = Math.probability(base,mod);
 				}	
 				if(tmp.chance !== undefined && tmp.chance <= 0.01){ continue;}

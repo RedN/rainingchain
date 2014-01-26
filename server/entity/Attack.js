@@ -6,7 +6,7 @@ Attack.template = function(){
 	b.old = {};
 	b.x = 0;
 	b.y = 0;
-	b.angle =0;
+	b.angle = 0;
 	b.crX = 0;  //creation X
 	b.crY = 0;  //creation Y
 	b.map = 'test@MAIN';
@@ -28,9 +28,9 @@ Attack.template = function(){
 	b.maxNum = 0;
 	b.aim = 0;
 	
-	b.dmg = {'melee':0,'range':0,'magic':0,'fire':0,'cold':0,'lightning':0} ;
-	b.dmgMain = 1;
-		
+	b.dmg = {main:1,ratio:{'melee':0,'range':0,'magic':0,'fire':0,'cold':0,'lightning':0}};
+	b.dmgMain = 1;	//for nova
+	
 	//Mods
 	b.normal = 0;	//get set inside creation
 	b.nova = 0;

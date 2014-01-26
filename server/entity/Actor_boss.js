@@ -85,26 +85,27 @@ Init.db.boss = function(){
 		boss.attack['fastSpear'] = {
 			'type':"bullet",'angle':0,'amount':1, 'aim': 0,
 			'objImg':{'name':"iceshard",'sizeMod':1},
-			'dmg':{'melee':25,'range':25,'magic':25,'fire':10,'cold':10,'lightning':5},
+			'dmg':{'main':1,'ratio':{'melee':0,'range':10,'magic':80,'fire':10,'cold':0,'lightning':0}},	
 			'spd':40
 		};			
 		boss.attack['slowSpear'] =	{
 			'type':"bullet",'angle':0,'amount':1, 'aim': 0,
 			'objImg':{'name':"iceshard",'sizeMod':1},
-			'dmg':{'melee':25,'range':25,'magic':25,'fire':10,'cold':10,'lightning':5},
+			'dmg':{'main':1,'ratio':{'melee':0,'range':10,'magic':80,'fire':10,'cold':0,'lightning':0}},	
 			'spd':5
 		};
 		
 		boss.attack['tooFar'] = {
 			'type':"strike",'angle':0,'amount':1, 'aim': 0,'objImg':{'name':'iceshard','sizeMod':1.5},'hitImg':{'name':"ice1",'sizeMod':0.5},
 			'delay':20,'maxHit':3,'w':50,'h':50,'maxRange':10000,'minRange':0,
-			'dmg':{'melee':25,'range':25,'magic':25,'fire':10,'cold':10,'lightning':5},
+			'dmg':{'main':1,'ratio':{'melee':0,'range':10,'magic':80,'fire':10,'cold':0,'lightning':0}},	
+			
 		};
 		
 		
 		boss.attack['midSpear'] = {
 			'type':"bullet",'angle':15,'amount':1, 'aim': 0,'objImg':{'name':"iceshard",'sizeMod':1},'hitImg':{'name':"ice2",'sizeMod':0.5},
-			'dmgMain':1,'dmgRatio':{'melee':15,'range':5,'magic':5,'fire':2,'cold':27,'lightning':0},
+			'dmg':{'main':1,'ratio':{'melee':0,'range':10,'magic':80,'fire':10,'cold':0,'lightning':0}},	
 		};
 		
 		

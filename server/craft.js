@@ -167,15 +167,15 @@ Craft.equip = function(seed){	//at this point, seed should be all-set
 	equip.boost = Craft.boost(seed,equip.boost,seed.amount);
 	equip.id = Math.randomId();
 	
-	
 	for(var k in Cst.element.list){
 		var i = Cst.element.list[k];
-		equip.defRatio[i] = Math.random()*0.5+0.5;
-		equip.dmgRatio[i] = Math.random()*0.5+0.5;
+		equip.def.ratio[i] = Math.random()*1+0.1;
+		equip.dmg.ratio[i] = Math.random()*1;
 	}
+		
 	var mod = 0.9 + Math.pow(Math.random(),1/(seed.quality+1))*0.2;
-	equip.defMain = Math.pow(seed.lvl+10,1.5)/30 * mod;	
-	equip.dmgMain = Math.pow(seed.lvl+10,1.5)/30 * mod*100;	
+	equip.def.main = Math.pow(seed.lvl+10,1.5)/30 * mod;	
+	equip.dmg.main = Math.pow(seed.lvl+10,1.5)/30 * mod*100;	
 	
 	Equip.creation(equip);
 	
@@ -302,7 +302,6 @@ Craft.orb.formula = function(x){
 }
 
 
-
 Craft.salvage = function(key,id){
 	//transform equip into shard
 	var inv = List.main[key].invList;
@@ -316,31 +315,16 @@ Craft.salvage = function(key,id){
 	}
 }
 
-Craft.setDmgViaRatio = function(info){
-	//use dmgratio to make dmg
-	var dmg = {};
-	var sum = 0;
-	for(var i in info.dmgRatio){sum += info.dmgRatio[i];}
-	for(var i in info.dmgRatio){info.dmgRatio[i] = info.dmgRatio[i] / sum;}
-	for(var i in info.dmgRatio){ dmg[i] = info.dmgRatio[i] * info.dmgMain; }
-}
-
 Craft.ratio = {};
-
-Craft.ratio.dmg = function(info){
-	//Make it so dmg ratio is always 0<x<1
-	info.dmg = {};
+Craft.ratio.normalize = function(info){
+	var ratio = info.main ? info.ratio : info; //send whole obj instead of only ratio
 	
-	var dmg = {};
 	var sum = 0;
-	for(var i in info.dmgRatio){sum += info.dmgRatio[i];}
-	for(var i in info.dmgRatio){
-		info.dmgRatio[i] = info.dmgRatio[i] / sum;
-		info.dmg[i] = info.dmgMain * info.dmgRatio[i];
-	}
-	return info;
-}
-
+	for(var i in ratio) sum += ratio[i];
+		
+	for(var i in ratio) ratio[i] /= sum;
+	return info;	
+}	
 
 //{Ability BROKEN
 Craft.ability = function(seed){
@@ -363,10 +347,11 @@ Craft.ability.template = function(seed){
 		//All
 		if(typeof atk.angle === 'object'){ atk.angle = Craft.boost.generate.roll(atk.angle,qua); }
 		if(typeof atk.amount === 'object'){ atk.amount = Craft.boost.generate.roll(atk.amount,qua); }
-		if(typeof atk.dmgMain === 'object'){ atk.dmgMain = Craft.boost.generate.roll(atk.dmgMain,qua); }
-		for(var i in atk.dmgRatio){
-			if(typeof atk.dmgRatio[i] === 'object'){ atk.dmgRatio[i] = Craft.boost.generate.roll(atk.dmgRatio[i],qua); }
+		if(typeof atk.dmg.main === 'object'){ atk.dmg.main = Craft.boost.generate.roll(atk.dmg.main,qua); }
+		for(var i in atk.dmg.ratio){
+			if(typeof atk.dmg.ratio[i] === 'object'){ atk.dmg.ratio[i] = Craft.boost.generate.roll(atk.dmg.ratio[i],qua); }
 		}
+		atk.dmg.ratio = Craft.ratio.normalize(atk.dmg.ratio);
 		
 		//Status
 		for(var st in Cst.status.list){
@@ -417,42 +402,7 @@ Craft.ability.mod = function(key,abid,mod){
 	Itemlist.remove(List.main[key].invList,'mod-'+ mod);	
 }
 
-Craft.ability.attack = function(seed){
-	//not really used anymore cuz of template
-	var possible = {
-		'strike':[
-			{'mod':1,'hit':'attack3','dmgRatio':{'melee':100,'range':0,'magic':0,'fire':5*Math.random(),'cold':5*Math.random(),'lightning':5*Math.random()}},
-			{'mod':1,'hit':'fire2','dmgRatio':{'melee':100,'range':0,'magic':0,'fire':25,'cold':5*Math.random(),'lightning':5*Math.random()}},
-			{'mod':1,'hit':'ice2','dmgRatio':{'melee':100,'range':0,'magic':0,'fire':5*Math.random(),'cold':25,'lightning':5*Math.random()}},
-			{'mod':1,'hit':'thunder2','dmgRatio':{'melee':100,'range':0,'magic':0,'fire':5*Math.random(),'cold':5*Math.random(),'lightning':25}},
-			{'mod':1,'hit':'darkness1','dmgRatio':{'melee':100,'range':0,'magic':0,'fire':25,'cold':25,'lightning':25}},
-			],
 
-		
-		'bullet':[
-			{'mod':1,'image':'arrow','hit':'attack3','dmgRatio':{'melee':0,'range':100,'magic':0,'fire':5*Math.random(),'cold':5*Math.random(),'lightning':5*Math.random()}},
-			{'mod':1,'image':'arrow','hit':'fire2','dmgRatio':{'melee':0,'range':100,'magic':0,'fire':25,'cold':5*Math.random(),'lightning':5*Math.random()}},
-			{'mod':1,'image':'arrow','hit':'ice2','dmgRatio':{'melee':0,'range':100,'magic':0,'fire':5*Math.random(),'cold':25,'lightning':5*Math.random()}},
-			{'mod':1,'image':'arrow','hit':'thunder2','dmgRatio':{'melee':0,'range':100,'magic':0,'fire':5*Math.random(),'cold':5*Math.random(),'lightning':25}},
-			{'mod':1,'image':'arrow','hit':'darkness1','dmgRatio':{'melee':0,'range':100,'magic':0,'fire':25,'cold':25,'lightning':25}},
-			
-			{'mod':1,'image':'fireball','hit':'fire2','dmgRatio':{'melee':0,'range':0,'magic':100,'fire':100,'cold':5*Math.random(),'lightning':5*Math.random()}},
-			{'mod':1,'image':'fireball','hit':'fire2','dmgRatio':{'melee':0,'range':0,'magic':50,'fire':150,'cold':5*Math.random(),'lightning':5*Math.random()}},
-			{'mod':1,'image':'fireball','hit':'fire2','dmgRatio':{'melee':0,'range':0,'magic':150,'fire':50,'cold':5*Math.random(),'lightning':5*Math.random()}},
-			
-			{'mod':1,'image':'iceshard','hit':'ice2','dmgRatio':{'melee':0,'range':0,'magic':100,'fire':5*Math.random(),'cold':100,'lightning':5*Math.random()}},
-			{'mod':1,'image':'iceshard','hit':'ice2','dmgRatio':{'melee':0,'range':0,'magic':50,'fire':5*Math.random(),'cold':150,'lightning':5*Math.random()}},
-			{'mod':1,'image':'iceshard','hit':'ice2','dmgRatio':{'melee':0,'range':0,'magic':150,'fire':5*Math.random(),'cold':50,'lightning':5*Math.random()}},
-		
-			{'mod':1,'image':'lightningball','hit':'thunder2','dmgRatio':{'melee':0,'range':0,'magic':100,'fire':5*Math.random(),'cold':5*Math.random(),'lightning':100}},
-			{'mod':1,'image':'lightningball','hit':'thunder2','dmgRatio':{'melee':0,'range':0,'magic':50,'fire':5*Math.random(),'cold':5*Math.random(),'lightning':150}},
-			{'mod':1,'image':'lightningball','hit':'thunder2','dmgRatio':{'melee':0,'range':0,'magic':150,'fire':5*Math.random(),'cold':5*Math.random(),'lightning':50}},
-		]
-	}
-	
-	return possible[seed.type].randomMod();
-	
-}
 
 //}
 //Math.random(

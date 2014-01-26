@@ -13,12 +13,11 @@ Actor.remove = function(mort){
 }
 
 Actor.updateEquip = function(mort){
-	//only update armor atm
 	for(var k in Cst.element.list){	//Each Element
 		var i = Cst.element.list[k];
 		var sum = 0;
 		for(var j in mort.equip.piece){	//Each Piece
-			sum += mort.equip.piece[j].defMain * mort.equip.piece[j].defRatio[i] * mort.equip.piece[j].orb.upgrade.bonus;
+			sum += mort.equip.piece[j].def.main * mort.equip.piece[j].def.ratio[i] * mort.equip.piece[j].orb.upgrade.bonus;
 		}
 		mort.equip.def[i] = sum;
 	}
@@ -276,12 +275,16 @@ Actor.talk = function(mort,enemyId){
 	if(List.all[enemyId].dialogue){
 		List.all[enemyId].dialogue.func(mort.id);
 	}
-}//
+}
 
 Actor.getDef = function(mort){
-	var def = deepClone(mort.equip.def);
-	for(var i in def){
-		def[i] *= mort.mastery.def[i].mod * mort.defMain * mort.mastery.def[i].sum;
+	var def = {
+		main:mort.defMain,
+		ratio:deepClone(mort.equip.def)
+	};
+	for(var i in def.ratio){
+		def.ratio[i] *= mort.mastery.def[i].mod * mort.mastery.def[i].sum;
+		def.ratio[i].mm(1);
 	}
 	return def;
 }

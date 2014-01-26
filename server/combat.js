@@ -291,29 +291,31 @@ Combat.collision.crit = function(b){
 //Damage
 Combat.collision.damage = function(bullet,player){
 	var def = Actor.getDef(player);
-	if(!bullet || !def) return;
+	if(!bullet || !def || !def.ratio) return;
 	var dmgInfo = Combat.collision.damage.calculate(bullet.dmg,def);
-	var dmg = dmgInfo.sum;
-	
-	Actor.changeHp(player,-dmg);
+	if(!dmgInfo.sum) console.log(bullet.dmg,def);
+	Actor.changeHp(player,-dmgInfo.sum);
 	
 	if(player.damagedBy[bullet.parent] === undefined) { player.damagedBy[bullet.parent] = 0; }
-	player.damagedBy[bullet.parent] += dmg;
+	player.damagedBy[bullet.parent] += dmgInfo.sum;
 	
 	return dmgInfo;
 }
+
 	
 
 
-Combat.collision.damage.calculate = function(a,d){
+Combat.collision.damage.calculate = function(dmg,def){
 	var info = {};
-	var dmg = 0;
-	for(var i in a){ 
-		var add = a[i]/d[i]; 
-		dmg += add;
+	var sum = 0;
+	
+	var mod = dmg.main / def.main;
+	for(var i in dmg.ratio){ 
+		var add = mod * dmg.ratio[i]/def.ratio[i]; 
+		sum += add;
 		info[i] = add;
 	}
-	info.sum = dmg;
+	info.sum = sum;
 	return info;
 }
 

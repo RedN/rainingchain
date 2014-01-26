@@ -78,7 +78,7 @@ Init.actor = function(){
 		
 		//Def = DefMain * defArmor * mort.mastery.def
 		mort.defMain = 1;
-		mort.weapon = {"id":"mace"};
+		mort.weapon = {"id":"mace",'dmg':{'main':1,'ratio':{'melee':1,'range':1,'magic':1,'fire':1,'cold':1,'lightning':1}}};
 		mort.equip = {
 			"piece":{
 				"bracelet":{"id":"bracelet"},

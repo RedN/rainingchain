@@ -11,7 +11,7 @@ Cst.WIDTH2 = Cst.WIDTH/2;
 Cst.ICON = 48;
 Cst.ITEM = 48;
 
-
+Cst.bigInt = Math.pow(10,10);
 
 Cst.tab = {
 	'list':['equip','inventory','quest','skill','friend','pref'],

@@ -16,7 +16,7 @@ Init.db.map = function (){
 		
 		m.loop = {};
 		m.loop.main = function(map,variable,cst){
-			if(Loop.interval(10)){
+			if(Loop.interval(10) && false){
 				Map.collisionRect(map,[1000,1400,1000,1400],'player',function(key){
 					var mort = List.all[key];
 					mort.hp -= 100;
@@ -34,7 +34,7 @@ Init.db.map = function (){
 		
 		m.cst = {
 			atk:{'type':"bullet",'angle':15,'amount':1, 'aim': 0,'objImg':{'name':"iceshard",'sizeMod':1},'hitImg':{'name':"ice2",'sizeMod':0.5},
-				'dmgMain':1,'dmgRatio':{'melee':15,'range':5,'magic':5,'fire':2,'cold':27,'lightning':0}},
+				'dmg':{'main':1,'ratio':{'melee':0,'range':10,'magic':80,'fire':10,'cold':0,'lightning':0}}},	
 		};
 		return m;
 	};

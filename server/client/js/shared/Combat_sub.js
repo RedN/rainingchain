@@ -1,10 +1,13 @@
 //Combat: Sub Functions
 if(!server) Combat = {action:{attack:{}}};
 Combat.action.attack.mod = function(player,atk){
+	console.log(1,atk.dmg.ratio);
 	atk = Combat.action.attack.mod.bonus(player.bonus,atk);
-	atk = Combat.action.attack.mod.player(player,atk);
+	console.log(2,atk.dmg.ratio);
 	atk = Combat.action.attack.mod.weapon(player.weapon,atk);
-	atk = Combat.action.attack.mod.cst(atk);
+	console.log(3,atk.dmg.ratio);
+	atk = Combat.action.attack.mod.player(player,atk);
+	console.log(4,atk.dmg.ratio);
 	return atk;
 }
 
@@ -37,27 +40,25 @@ Combat.action.attack.mod.bonus = function(bon,atk){
 }
 
 Combat.action.attack.mod.player = function(player,attack){
-	//console.log('before',attack.dmg,player.dmgMain);
-	for(var i in attack.dmg){ 
-		attack.dmg[i] *= player.dmgMain * player.mastery.dmg[i].sum * player.mastery.dmg[i].mod;
+	attack.dmg.main *= player.dmgMain;
+	
+	for(var i in attack.dmg.ratio){ 
+		attack.dmg.ratio[i] *= player.mastery.dmg[i].sum * player.mastery.dmg[i].mod;
 	}
-	//console.log('after',attack.dmg,player.dmgMain);
 	return attack;
 }
 
 Combat.action.attack.mod.weapon = function(weapon,attack){
 	var sum = 0;
-	for (var i in attack.dmg){ 
-		attack.dmg[i] *= weapon.dmgMain;
-		var val = Math.min(weapon.dmgRatio[i],attack.dmgRatio[i]);
-		attack.dmg[i] *= val;
+	attack.dmg.main *= weapon.dmg.main;
+	for (var i in attack.dmg.ratio){ 
+		var val = Math.min(weapon.dmg.ratio[i],attack.dmg.ratio[i]);
+		attack.dmg.ratio[i] = val;
 		sum += val;
 	}
 	attack.weaponCompability = sum;
 	return	attack;
 }
 
-Combat.action.attack.mod.cst = function(attack){
-	for(var i in attack.dmg) attack.dmg *= 1000;
-}
+
 

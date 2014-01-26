@@ -2,7 +2,7 @@
 
 /*
 scaling is done with defMain and dmgMain
-weapon is always : "weapon":{'dmgMain':1,'dmgRatio':{'melee':1,'range':1,'magic':1,'fire':1,'cold':1,'lightning':1}},
+weapon is always same
 "equip":{'def':{ is only used for ratio
 
 
@@ -12,10 +12,6 @@ enemy.mainDmg = player.weapon
 
 */
 
-Actor.creation.hp = function(lvl){
-	return 
-
-}
 
 Init.db.enemy = function(){ var ePreDb = {};
 
@@ -24,10 +20,10 @@ Init.db.enemy = function(){ var ePreDb = {};
 	ePreDb["troll"]["ice"] = {  //{
 		"name":"Ice Troll",
 		"sprite":{'name':"eTroll",'sizeMod':1},
-		"ability":{'bulletSingle':0.5},
+		//"ability":{'bulletSingle':0},
 		'resource':{'hp':{'max':1000,'regen':1},'mana':{'max':100,'regen':1}},
 		
-		'defMain':39,
+		'defMain':10,
 		'dmgMain':10,
 		"equip":{'def':{'melee':1,'range':1,'magic':1,'fire':1,'cold':1,'lightning':1}},	
 		
@@ -63,7 +59,6 @@ Init.db.enemy = function(){ var ePreDb = {};
 			e.context = e.name; 
 			if(e.combat && !e.nevercombat){ 
 				e.context += ' | Lvl: ' + e.lvl;
-				e.weapon = {'dmgMain':1,'dmgRatio':{'melee':1,'range':1,'magic':1,'fire':1,'cold':1,'lightning':1}};
 			}
 			e.hp = e.resource.hp.max;
 			
