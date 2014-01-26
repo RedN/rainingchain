@@ -40,10 +40,9 @@ Init.db.ability = function(cb){
 	
 	a['bulletSingle'] = {'type':'attack','name':'Single','icon':'attackMagic.meteor',
 		'spd':{'main':0.8,'support':0.2},'period':50,'action':{'func':'Combat.action.attack','param':{'anim':'Attack',
-		'attack':{type:"bullet",
+		'attack':{'type':"bullet",
 			'angle':15,'amount':1, 'aim': 0,'objImg':{'name':"iceshard",'sizeMod':1},'hitImg':{'name':"ice2",'sizeMod':0.5},
 			'dmgMain':1,'dmgRatio':{'melee':15,'range':5,'magic':5,'fire':2,'cold':27,'lightning':0},
-			'leech':{'chance':1,'magn':1,'time':1}
 	}}}};
 
 	a['strikeSingle'] = {'type':'attack','name':'Slash','icon':'attackMelee.slash',

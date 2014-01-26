@@ -4,7 +4,7 @@ Loop = function(){
     
 	Loop.Bullet();
 	Loop.Strike();
-	Loop.EnemyGroup();
+	Loop.Group();
 	Loop.Actor();
 	Loop.Drop();
 	Loop.Map();
@@ -65,7 +65,7 @@ Loop.Map = function(){
 	}
 }
 
-Loop.EnemyGroup = function(){
+Loop.Group = function(){
 	for(var i in List.group){
 		var g = List.group[i];
 		var list = g.list;
@@ -87,6 +87,7 @@ Loop.EnemyGroup = function(){
 			g.respawn--;
 			if(g.respawn <= 0){
 				Actor.creation.group.apply(this,g.param); 
+				for(var j in list) Actor.remove(list[j]);				
 				delete List.group[i];
 				continue;
 			}

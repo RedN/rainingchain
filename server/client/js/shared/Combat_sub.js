@@ -4,6 +4,7 @@ Combat.action.attack.mod = function(player,atk){
 	atk = Combat.action.attack.mod.bonus(player.bonus,atk);
 	atk = Combat.action.attack.mod.player(player,atk);
 	atk = Combat.action.attack.mod.weapon(player.weapon,atk);
+	atk = Combat.action.attack.mod.cst(atk);
 	return atk;
 }
 
@@ -36,9 +37,11 @@ Combat.action.attack.mod.bonus = function(bon,atk){
 }
 
 Combat.action.attack.mod.player = function(player,attack){
+	//console.log('before',attack.dmg,player.dmgMain);
 	for(var i in attack.dmg){ 
 		attack.dmg[i] *= player.dmgMain * player.mastery.dmg[i].sum * player.mastery.dmg[i].mod;
 	}
+	//console.log('after',attack.dmg,player.dmgMain);
 	return attack;
 }
 
@@ -52,5 +55,9 @@ Combat.action.attack.mod.weapon = function(weapon,attack){
 	}
 	attack.weaponCompability = sum;
 	return	attack;
+}
+
+Combat.action.attack.mod.cst = function(attack){
+	for(var i in attack.dmg) attack.dmg *= 1000;
 }
 
