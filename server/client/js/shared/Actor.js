@@ -221,9 +221,9 @@ Actor.boost = function(player, boost){
 	//toUpdate[i]: i = stat
 	//fast[i]: i = stat@source
 
-	// {stat:'dmgMain',value:1000,type:'*',time:10000,name:'quest'}
+	// {stat:'globalDmg',value:1000,type:'*',time:10000,name:'quest'}
 
-	//format: boost { 'stat':'dmgMain','value':1,'type':'*','time':100,'name':'weapon'}
+	//format: boost { 'stat':'globalDmg','value':1,'type':'*','time':100,'name':'weapon'}
 	boost = arrayfy(boost);
 	for(var i in boost){ 
 		var b = boost[i];
@@ -279,7 +279,7 @@ Actor.talk = function(mort,enemyId){
 
 Actor.getDef = function(mort){
 	var def = {
-		main:mort.defMain,
+		main:mort.globalDef,
 		ratio:deepClone(mort.equip.def)
 	};
 	for(var i in def.ratio){

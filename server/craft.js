@@ -167,21 +167,57 @@ Craft.equip = function(seed){	//at this point, seed should be all-set
 	equip.boost = Craft.boost(seed,equip.boost,seed.amount);
 	equip.id = Math.randomId();
 	
-	for(var k in Cst.element.list){
-		var i = Cst.element.list[k];
-		equip.def.ratio[i] = Math.random()*1+0.1;
-		equip.dmg.ratio[i] = Math.random()*1;
-	}
+	//if(equip.sub
+	
+	equip = Craft.equip.weapon(equip);
 		
-	var mod = 0.9 + Math.pow(Math.random(),1/(seed.quality+1))*0.2;
-	equip.def.main = Math.pow(seed.lvl+10,1.5)/30 * mod;	
-	equip.dmg.main = Math.pow(seed.lvl+10,1.5)/30 * mod*100;	
+	
 	
 	Equip.creation(equip);
 	
 	return equip.id;
 }
 
+Craft.equip.weapon = function(seed){
+	var mod = 0.9 + Math.pow(Math.random(),1/(seed.quality+1))*0.2;
+	equip.dmg.main = (seed.lvl+10) * mods;
+	
+	for(var i in equip.dmg.ratio){
+		equip.dmg.ratio[i] = Math.random();
+		
+		if(Cst.element.elemental.have(i){
+			if(Math.random() < 0.25) equip.dmg.ratio[i] += 0.5+Math.random()*0.5;
+			if(Math.random() < 0.50) equip.dmg.ratio[i] += 0.0+Math.random()*0.2;
+		}
+		if(Math.random() < 0.50) equip.dmg.ratio[i] += 0.0+Math.random()*0.2;
+	}
+	if(Math.random() < 0.50) equip.dmg.ratio[seed.type] += 0.5+Math.random()*0.5;
+	if(Math.random() < 0.90) equip.dmg.ratio[seed.type] += 0.0+Math.random()*0.2;
+	return equip;
+}
+
+Craft.equip.armor = function(seed){
+	var mod = 0.9 + Math.pow(Math.random(),1/(seed.quality+1))*0.2;
+	equip.dmg.main = (seed.lvl+10) * mods;
+	
+	for(var i in equip.dmg.ratio){
+		equip.dmg.ratio[i] = Math.random();
+		
+		if(Cst.element.elemental.have(i){
+			if(Math.random() < 0.25) equip.dmg.ratio[i] += 0.5+Math.random()*0.5;
+			if(Math.random() < 0.50) equip.dmg.ratio[i] += 0.0+Math.random()*0.2;
+		}
+		if(Math.random() < 0.50) equip.dmg.ratio[i] += 0.0+Math.random()*0.2;
+	}
+	if(Math.random() < 0.50) equip.dmg.ratio[seed.type] += 0.5+Math.random()*0.5;
+	if(Math.random() < 0.90) equip.dmg.ratio[seed.type] += 0.0+Math.random()*0.2;
+	return equip;
+}
+
+
+
+	
+	
 Craft.equip.color = function(w){
 	if(w.boost.length === 0) return 'white'; 
 	if(w.boost.length <= 2) return 'blue';  

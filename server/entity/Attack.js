@@ -29,7 +29,7 @@ Attack.template = function(){
 	b.aim = 0;
 	
 	b.dmg = {main:1,ratio:{'melee':0,'range':0,'magic':0,'fire':0,'cold':0,'lightning':0}};
-	b.dmgMain = 1;	//for nova
+	b.globalDmg = 1;	//for nova
 	
 	//Mods
 	b.normal = 0;	//get set inside creation

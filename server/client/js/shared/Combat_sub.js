@@ -36,7 +36,7 @@ Combat.action.attack.mod.bonus = function(bon,atk){
 }
 
 Combat.action.attack.mod.player = function(player,attack){
-	attack.dmg.main *= player.dmgMain;
+	attack.dmg.main *= player.globalDmg;
 	
 	for(var i in attack.dmg.ratio){ 
 		attack.dmg.ratio[i] *= player.mastery.dmg[i].sum * player.mastery.dmg[i].mod;

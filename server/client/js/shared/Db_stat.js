@@ -399,10 +399,10 @@ Init.db.stat = function(){
 	//}
 
 	//{Def
-	'defMain':{
+	'globalDef':{
 		'icon':'defensive.melee',
 		'name':'Main Defense',
-		'boost':{'base':1,'stat':['defMain'],},
+		'boost':{'base':1,'stat':['globalDef'],},
 		},
 	'def-melee-+':{
 		'icon':'defensive.melee',
@@ -581,10 +581,10 @@ Init.db.stat = function(){
 	//}
 	
 	//{Dmg
-	'dmgMain':{
+	'globalDmg':{
 		'icon':'offensive.melee',
 		'name':'Main Damage',
-		'boost':{'base':1,'stat':['dmgMain'],},
+		'boost':{'base':1,'stat':['globalDmg'],},
 		},
 	'dmg-melee-+':{
 		'icon':'offensive.melee',

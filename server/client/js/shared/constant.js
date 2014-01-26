@@ -52,6 +52,8 @@ Cst.element = {
 	'list':["melee","range","magic","fire","cold","lightning"],
 	'toStatus':{"melee":"bleed","range":"knock","magic":"drain","fire":"burn","cold":"chill","lightning":"confuse"},
 	'toColor':{'melee':'#F97A03','range':'#3EEA31','magic':'#AE52F5','fire':'#FF0000','cold':'#A9F5F2','lightning':'#FFFF00'},
+	'physical':["melee","range","magic"],
+	'elemental':["fire","cold","lightning"],
 }
 Cst.status = {
 	'list':["bleed","knock","drain","burn","chill","confuse"],

@@ -135,7 +135,7 @@ Actor.creation.mod.list = {
 
 	'BAx2': (function(e){ e.bonus.bullet.amount *= 2; return e; }),
 
-	'BAx4': (function(e){ e.bonus.bullet.amount *= 4; e.dmgMain /= 2; return e; }),
+	'BAx4': (function(e){ e.bonus.bullet.amount *= 4; e.globalDmg /= 2; return e; }),
 	'regen': (function(e){ e.resource.hp.regen = e.resource.hp.max/250; return e; }),
 	'extraLife': (function(e){ e.resource.hp.max *= 2; e.hp *= 2; return e; }),
 	'leech': (function(e){ e.bonus.leech.chance = 0.5; e.bonus.leech.magn = 0.5; return e; }),
@@ -205,7 +205,7 @@ Actor.creation.nevercombat = function(mort){
 	delete mort.fury;
 	delete mort.resource;
 	
-	delete mort.defMain;	
+	delete mort.globalDef;	
 	delete mort.reflect;
 	
 	//Resist
@@ -213,7 +213,7 @@ Actor.creation.nevercombat = function(mort){
 	
 	//Atk
 	delete mort.dmg;
-	delete mort.dmgMain;
+	delete mort.globalDmg;
 	delete mort.aim;
 	delete mort.weapon;
 	delete mort.ability;

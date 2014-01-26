@@ -1,7 +1,7 @@
 //Enemy
 
 /*
-scaling is done with defMain and dmgMain
+scaling is done with globalDef and globalDmg
 weapon is always same
 "equip":{'def':{ is only used for ratio
 
@@ -23,8 +23,8 @@ Init.db.enemy = function(){ var ePreDb = {};
 		"ability":{'bulletSingle':0.5},
 		'resource':{'hp':{'max':1000,'regen':1},'mana':{'max':100,'regen':1}},
 		
-		'defMain':10,
-		'dmgMain':10,
+		'globalDef':10,
+		'globalDmg':10,
 		"equip":{'def':{'melee':1,'range':1,'magic':1,'fire':1,'cold':1,'lightning':1}},	
 		
 		"acc":2,

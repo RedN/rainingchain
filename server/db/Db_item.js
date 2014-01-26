@@ -23,7 +23,7 @@ Init.db.item = function (cb){
 	a['quest-teleport'] = {'name':'Teleport','visual':'plan.planA',
 	'option':[		{'name':'Tele To Demon','func':'Actor.teleport','param':[1230,1230,'ryve']},
 					{'name':'Tele Back','func':'Actor.teleport','param':[1100,1230,'test']},
-					{'name':'Boost','func':'addBoost','param':[{stat:'dmgMain',value:1000,type:'*',time:10000,name:'quest'}]},
+					{'name':'Boost','func':'addBoost','param':[{stat:'globalDmg',value:1000,type:'*',time:10000,name:'quest'}]},
 		]};
 	
 	

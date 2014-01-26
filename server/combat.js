@@ -9,7 +9,7 @@ anim
 
 *ADD MODIFIERS
 add player bonus to atk
-add dmg from player to atk (mastery, dmgMain, curse)
+add dmg from player to atk (mastery, globalDmg, curse)
 add dmg from weapon to atk
 
 
@@ -26,8 +26,8 @@ spawn bullet or strike
 equip.def = sum of def of all piece || updated when player change armor, never udpated for enemy
 mastery sum = same than equip.def || updates when new permBoost
 
-defMain = main def mod. cant be boost by equip. only curse/time boost || never updated manually, use it in right before calculate
-mastery mod = same than defMain but for specific element
+globalDef = main def mod. cant be boost by equip. only curse/time boost || never updated manually, use it in right before calculate
+mastery mod = same than globalDef but for specific element
 
 
 
@@ -130,8 +130,8 @@ Combat.action.summon = function(key,info,enemy){
 			var cid = childList[i];
 			master.summon[name].child[cid] = 1;	
 			
-			if(atkMod !== 1){ Actor.boost(cid,{'name':'summon','stat':'dmgMain','time':info.time*timeMod,'type':'*','amount':atkMod}); }
-			if(defMod !== 1){ Actor.boost(cid,{'name':'summon','stat':'defMain','time':info.time*timeMod,'type':'*','amount':defMod}); }
+			if(atkMod !== 1){ Actor.boost(cid,{'name':'summon','stat':'globalDmg','time':info.time*timeMod,'type':'*','amount':atkMod}); }
+			if(defMod !== 1){ Actor.boost(cid,{'name':'summon','stat':'globalDef','time':info.time*timeMod,'type':'*','amount':defMod}); }
 		
 		}
 	}	
@@ -259,7 +259,7 @@ Combat.collision.curse = function(mort,info){
 Combat.collision.pierce = function(b){
 	b.pierce.amount--; 
 	if(b.pierce.amount <= 0){ b.pierce.chance = 0; }
-	b.dmgMain *= b.pierce.dmgReduc;
+	b.globalDmg *= b.pierce.dmgReduc;
 }
 
 Combat.collision.leech = function(mort,b,element){
@@ -276,7 +276,7 @@ Combat.collision.reflect = function(dmg,bullet,mort){
 	var attacker = List.all[bullet.parent];
 	if(attacker && attacker.hp){
 		for(var i in Cst.element.list){
-			Actor.changeHp(attacker,-mort.reflect[Cst.element.list[i]]*dmg[Cst.element.list[i]]/attacker.defMain);
+			Actor.changeHp(attacker,-mort.reflect[Cst.element.list[i]]*dmg[Cst.element.list[i]]/attacker.globalDef);
 		}
 	}
 }
