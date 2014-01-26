@@ -1,10 +1,7 @@
 
 
-balance:
-total equip def = lvl + 10
-total weapon = lvl + 10
-
-
+if context is monster, appear top middle instead
+bonus from weapon are counted twice
 
 craft material convert
 

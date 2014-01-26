@@ -106,7 +106,8 @@ Init.game = function (data) {
 		
 		Init.game.player(data);
 		gameStarted = true;
-		Song.play('digital_insanity');
+		Song.play(Object.keys(Db.song).random());
+		
 		setInterval(Loop,40);
 		socket.emit('clientReady',1); 
 		if(cloud9) { Chat.add('Warning, you are running under cloud9 servers. You may experience intense lagging. Downloading the project and running it locally is recommended.');}	

@@ -150,6 +150,18 @@ Craft.plan.test = function(key,req){	//test requirement
 //}
 
 
+Craft.ratio = {};
+Craft.ratio.normalize = function(info){
+	var ratio = info.main ? info.ratio : info; //send whole obj instead of only ratio
+	
+	var sum = 0;
+	for(var i in ratio) sum += ratio[i];
+		
+	for(var i in ratio) ratio[i] /= sum;
+	return info;	
+}	
+
+
 Craft.create = function(seed){	//create what seed tell to create. 
 	seed = Craft.seed.creation(seed);
 	if(seed.category === 'equip'){ return Craft.equip(seed); }
@@ -169,52 +181,74 @@ Craft.equip = function(seed){	//at this point, seed should be all-set
 	
 	//if(equip.sub
 	
-	equip = Craft.equip.weapon(equip);
-		
-	
+	if(Cst.equip.weapon.piece.have(equip.piece)) equip = Craft.equip.weapon(seed,equip);
+	if(Cst.equip.armor.piece.have(equip.piece)) equip = Craft.equip.armor(seed,equip);
+	console.log(equip);
 	
 	Equip.creation(equip);
 	
 	return equip.id;
 }
 
-Craft.equip.weapon = function(seed){
+Craft.equip.weapon = function(seed,equip){
+	console.log(1);
 	var mod = 0.9 + Math.pow(Math.random(),1/(seed.quality+1))*0.2;
-	equip.dmg.main = (seed.lvl+10) * mods;
+	equip.dmg.main = (seed.lvl+10) * mod;
+	
+	equip.dmg.ratio = {melee:1/1000,range:0,magic:0,fire:0,cold:0,lightning:0};
 	
 	for(var i in equip.dmg.ratio){
-		equip.dmg.ratio[i] = Math.random();
-		
-		if(Cst.element.elemental.have(i){
+		if(Cst.element.elemental.have(i)){
 			if(Math.random() < 0.25) equip.dmg.ratio[i] += 0.5+Math.random()*0.5;
-			if(Math.random() < 0.50) equip.dmg.ratio[i] += 0.0+Math.random()*0.2;
+			if(Math.random() < 0.25) equip.dmg.ratio[i] += 0.0+Math.random()*0.2;
 		}
-		if(Math.random() < 0.50) equip.dmg.ratio[i] += 0.0+Math.random()*0.2;
+		if(Math.random() < 0.25) equip.dmg.ratio[i] += 0.0+Math.random()*0.2;
 	}
-	if(Math.random() < 0.50) equip.dmg.ratio[seed.type] += 0.5+Math.random()*0.5;
-	if(Math.random() < 0.90) equip.dmg.ratio[seed.type] += 0.0+Math.random()*0.2;
+	if(Math.random() < 0.90) equip.dmg.ratio[seed.piece] += 0.2+Math.random()*1;
 	return equip;
 }
 
-Craft.equip.armor = function(seed){
+Craft.equip.armor = function(seed,equip){
 	var mod = 0.9 + Math.pow(Math.random(),1/(seed.quality+1))*0.2;
-	equip.dmg.main = (seed.lvl+10) * mods;
+	mod *= Craft.equip.armor.mod[seed.piece];
+	equip.def.main = (seed.lvl+10) * mod;
 	
-	for(var i in equip.dmg.ratio){
-		equip.dmg.ratio[i] = Math.random();
-		
-		if(Cst.element.elemental.have(i){
-			if(Math.random() < 0.25) equip.dmg.ratio[i] += 0.5+Math.random()*0.5;
-			if(Math.random() < 0.50) equip.dmg.ratio[i] += 0.0+Math.random()*0.2;
-		}
-		if(Math.random() < 0.50) equip.dmg.ratio[i] += 0.0+Math.random()*0.2;
+	var list = Craft.equip.armor.ratio[seed.type];
+	
+	equip.def.ratio = {melee:1/1000,range:0,magic:0,fire:0,cold:0,lightning:0};
+	for(var i in equip.def.ratio){
+		if(list[0].have(i))	equip.def.ratio[i] += 0.8+Math.random()*0.4;
+		if(list[1].have(i))	equip.def.ratio[i] += 0.2+Math.random()*0.2;
+		if(list[2].have(i))	equip.def.ratio[i] += 0.1+Math.random()*0.1;
 	}
-	if(Math.random() < 0.50) equip.dmg.ratio[seed.type] += 0.5+Math.random()*0.5;
-	if(Math.random() < 0.90) equip.dmg.ratio[seed.type] += 0.0+Math.random()*0.2;
 	return equip;
 }
 
 
+Craft.equip.armor.ratio = {
+	'metal':  [['melee'],['range','magic'],['fire','cold','lightning']],
+	'wood':  [['range'],['melee','magic'],['fire','cold','lightning']],
+	'bone':  [['magic'],['melee','range'],['fire','cold','lightning']],
+	'chain':  [['melee'],['range','magic','fire','cold','lightning'],[]],
+	'leaf':  [['range'],['melee','magic','fire','cold','lightning'],[]],
+	'hide':  [['magic'],['melee','range','fire','cold','lightning'],[]],
+	'ruby':  [['fire'],['cold','lightning'],['melee','range','magic']],
+	'sapphire':  [['cold'],['fire','lightning'],['melee','range','magic']],
+	'topaz':  [['lightning'],['fire','cold'],['melee','range','magic']],
+}
+Craft.equip.armor.mod = {
+	'ring':20,	
+	'amulet':40,		
+	'bracelet':60,
+	'gloves':80,		
+	'boots':100,
+	'pants':120,	
+	'helm':150,	
+	'shield':200,
+	'body':250,
+}
+Craft.equip.armor.mod  = Craft.ratio.normalize(Craft.equip.armor.mod);
+	
 
 	
 	
@@ -351,16 +385,6 @@ Craft.salvage = function(key,id){
 	}
 }
 
-Craft.ratio = {};
-Craft.ratio.normalize = function(info){
-	var ratio = info.main ? info.ratio : info; //send whole obj instead of only ratio
-	
-	var sum = 0;
-	for(var i in ratio) sum += ratio[i];
-		
-	for(var i in ratio) ratio[i] /= sum;
-	return info;	
-}	
 
 //{Ability BROKEN
 Craft.ability = function(seed){
