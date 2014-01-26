@@ -51,6 +51,7 @@ Test.serverStart = function(){
 Test.playerStart = function(key){
 	var inv = List.main[key].invList;
     Itemlist.add(inv,'gold');
+    Itemlist.add(inv,'teleport');
 	Itemlist.add(inv,'test');
 	Itemlist.add(inv,'boost_orb',1000);
 	Itemlist.add(inv,'upgrade_orb',1000);

@@ -166,7 +166,17 @@ Init.db.quest = function(){
 		}
 		//}
 		
+		//{Item
+		q.item = {	
+			'teleport' :{'name':'Teleport','visual':'plan.planA','option':[
+					{'name':'Tele To Demon','func':'Actor.teleport','param':[1230,1230,'ryve']},
+					{'name':'Tele Back','func':'Actor.teleport','param':[1100,1230,'test']},
+					{'name':'Boost','func':'addBoost','param':[{stat:'globalDmg',value:1000,type:'*',time:10000,name:'quest'}]},
+				]},
+				
 		
+		}
+		//}
 		
 		return q;
 	}();
@@ -178,45 +188,76 @@ Init.db.quest = function(){
 	
 	//Note: List.main[key].quest[id] only has variable
 	var quest = {};
-	for(var i in Db.quest) Quest.creation(Db.quest[i]);
-	for(var i in Db.quest) quest[i] = deepClone(Db.quest[i].variable);
+	for(var i in Db.quest){
+		Quest.creation(Db.quest[i]);
+		quest[i] = deepClone(Db.quest[i].variable);
+	}
 	Main.template.quest = {};
 	Main.template.quest = new Function('return ' + stringify(quest));	
-	for(var i in quest){
-		Main.template.quest[i] = new Function('return ' + stringify(quest[i]));	
-	}
+	for(var i in quest)	Main.template.quest[i] = new Function('return ' + stringify(quest[i]));	
+		
 }
+
+
 
 Quest = {};
 
 Quest.creation = function(q){
-	var qv = q.variable;
+	q = useTemplate(Quest.template(),q)
+
 	//Variable
-	qv = qv || {};
-	qv.hint = 'There is no hint.';
-	qv.rewardTier = '0%';
-	qv.reward = null;
-	qv.complete = 0;
-	qv.started = 0;
-	qv.bonusSum = 1;
-	qv.deathCount = 0;
-	qv.bonus = {};
-	for(var j in q.bonus){ qv.bonus[j] = 0; }	//0:non-active, 1:active
-	qv.requirement = '';
-	for(var j in q.requirement){ qv.requirement += '0'; }	//0:non-active, 1:active
+	q.variable = useTemplate(Quest.template.variable(),q.variable);
+	for(var j in q.bonus){ q.variable.bonus[j] = 0; }	//0:non-active, 1:active
+	for(var j in q.requirement){ q.variable.requirement += '0'; }	//0:non-met, 1:met
+
+	if(!server) return q 
 	
-	if(server){
-		Db.dialogue[q.id] = {};
-		for(var i in q.dialogue) Db.dialogue[q.id][i] = q.dialogue[i];			
-		for(var i in q.map)	Db.map[i].load[q.id] = q.map[i];	
-		q.reward = arrayfy(q.reward);
-		Db.boost[q.id] = q.reward;
+	Db.dialogue[q.id] = {};
+	for(var i in q.dialogue) Db.dialogue[q.id][i] = q.dialogue[i];			
+	for(var i in q.map)	Db.map[i].load[q.id] = q.map[i];	
+	for(var i in q.item){
+		q.item.id = 'Q-'+q.id+'-'+i;
+		Item.creation(q.item[i]);
 	}
+	
+	q.reward = arrayfy(q.reward);	
+	Db.boost[q.id] = q.reward;
+	
 	return q;
 }
 
+Quest.template = function(){
+	return {
+		id:Math.random(),
+		name:'Default Quest',
+		icon:'skill.melee',
+		reward:{'stat':'dmg-fire-+','value':[0.05,0.10]},
+		rewardMod:0.5,
+		description:"Default Description",
+		variable:{},
+		requirement:[],		
+		hintGiver:function(key,mq){ return 'Default Hint';},
+		dialogue:{},
+		bonus:{},
+		mapMod:{},
+		map:{},
+		item:{}, 
+	};
+}
 
-
+Quest.template.variable = function(){
+	return {
+		hint:'There is no hint.',
+		rewardTier:'0%',
+		reward:null,
+		complete:0,
+		started:0,
+		bonusSum:1,
+		deathCount:0,
+		bonus:{},
+		requirement:''
+	};
+}
 
 
 

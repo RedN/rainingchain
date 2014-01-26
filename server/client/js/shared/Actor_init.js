@@ -25,6 +25,7 @@ Init.actor = function(){
 		mort.activeList = {};   //actors near this object
 		mort.id = Math.randomId();
 		mort.publicId = Math.random().toString(36).substring(13);   //id shared with all players
+		mort.team = mort.name;
 		mort.type = "enemy";
 		mort.active = 1;    
 		mort.dialogue = 0;      //has dialogue?

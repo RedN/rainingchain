@@ -88,7 +88,8 @@ Actor.teleport.instance = function(mort,x,y,map,signin){
 		mort.mapSignIn = {map:mort.map,x:mort.x,y:mort.y};	//default signin = place b4 going instance
 	}
 	
-	if(map[map.length-1] === '@') map += mort.name;	//set default instance name
+	if(map.have('@@')) map += mort.name;	//solo instance
+	else if(map[map.length-1] === '@') map += mort.team;	//team instance
 	//test if need to create instance
 	if(!List.map[map]){
 		var model = map.slice(0,map.indexOf('@'));

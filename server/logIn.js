@@ -247,6 +247,7 @@ Load.player = function(key,user,cb){
 		player.name = player.username;
 		player.id = key;
 		player.publicId = player.name;
+		player.team = player.name;
 		player = Actor.creation.optionList(player);
 
 		cb(player);

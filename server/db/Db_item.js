@@ -20,15 +20,7 @@ a['testing']    //testing is the item id
 Init.db.item = function (cb){
 	Db.item = {}; var a = Db.item;
 	
-	a['quest-teleport'] = {'name':'Teleport','visual':'plan.planA',
-	'option':[		{'name':'Tele To Demon','func':'Actor.teleport','param':[1230,1230,'ryve']},
-					{'name':'Tele Back','func':'Actor.teleport','param':[1100,1230,'test']},
-					{'name':'Boost','func':'addBoost','param':[{stat:'globalDmg',value:1000,type:'*',time:10000,name:'quest'}]},
-		]};
-	
-	
-	
-	
+
 	//{Crafting
 	a['shard-white'] = {'name':'White Shard','visual':'system.gold','stack':1}
 	a['shard-blue'] = {'name':'Blue Shard','visual':'system.gold','stack':1}
@@ -36,13 +28,17 @@ Init.db.item = function (cb){
 	a['shard-gold'] = {'name':'Gold Shard','visual':'system.gold','stack':1}
 	
 	a['gold'] = {'name':'Gold','visual':'system.gold','stack':1,
-		'option':[	{'name':'Craft Armor','func':'Craft.plan.use','param':[{'category':'equip'},{'item':[]}]},
-						{'name':'Craft Weapon','func':'Craft.plan.use','param':[{'category':'equip'},{'item':[]}]},
-						{'name':'Tele','func':'Actor.teleport','param':[1230,1230,'ryve']},
+		'option':[	{'name':'Craft Armor','func':'Craft.plan.use','param':[{'category':'armor'},{'item':[]}]},
+						{'name':'Craft Weapon','func':'Craft.plan.use','param':[{'category':'weapon'},{'item':[]}]},
 						{'name':'Open Bank','func':'Main.openWindow','param':['bank']},
 			
 			]};
-	
+	a['teleport'] = {'name':'Gold','visual':'system.gold','stack':1,
+		'option':[
+					{'name':'Tele Main','func':'Actor.teleport','param':[1230,1230,'test']},
+					{'name':'Tele Team','func':'Actor.teleport','param':[1230,1230,'test@']},
+					{'name':'Tele Alone','func':'Actor.teleport','param':[1230,1230,'test@@']},
+			]};
 	
 
 	

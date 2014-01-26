@@ -79,6 +79,7 @@ Craft.seed.template = function(){
 //{ Plan
 Craft.plan = {};
 Craft.plan.use = function(key,seed,req){	//when player tries to use plan
+	seed = deepClone(seed);
 	var inv = List.main[key].invList;
 	var tmp = Craft.plan.test(key,req);
 	
@@ -147,6 +148,11 @@ Craft.plan.test = function(key,req){	//test requirement
 	}
 	return bool ? '' : string;
 }
+Craft.plan.upgrade = function(){
+	//need to add stuff
+	//x2 more req but +0.5 rarity
+}
+
 //}
 
 
@@ -163,7 +169,15 @@ Craft.ratio.normalize = function(info){
 
 
 Craft.create = function(seed){	//create what seed tell to create. 
+	if(seed.category === 'weapon' || seed.category === 'armor'){
+		seed.piece = Cst.equip[seed.category].piece.random();
+		seed.category = 'equip';
+	}
+	
 	seed = Craft.seed.creation(seed);
+	
+	
+	
 	if(seed.category === 'equip'){ return Craft.equip(seed); }
 }
 
@@ -210,6 +224,8 @@ Craft.equip.armor = function(seed,equip){
 	var mod = 0.9 + Math.pow(Math.random(),1/(seed.quality+1))*0.2;
 	mod *= Craft.equip.armor.mod[seed.piece];
 	equip.def.main = (seed.lvl+10) * mod;
+	
+	console.log(seed,equip);
 	
 	var list = Craft.equip.armor.ratio[seed.type];
 	

@@ -1,8 +1,13 @@
 
-
+note: q.reward = arrayfy(q.reward); might need to be changed when change boostdb
 
 craft material convert
 
+
+fix bug that random = always first one
+
+
+item only in quest should be in quest db
 
 
 #Priority 2:

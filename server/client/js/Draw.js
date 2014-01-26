@@ -445,8 +445,9 @@ Draw.context = function (){ ctxrestore();
 			hc.style.left = (Input.mouse.x + 25).mm(0,Cst.WIDTH-25) + 'px';
 			hc.style.top = (Input.mouse.y + 25).mm(0,Cst.HEIGHT-25) + 'px';
 		} else {
-			hc.style.left = Cst.WIDTH/2-100 + 'px'
+			hc.style.left = Cst.WIDTH/2-150 + 'px'
 			hc.style.top = "25px"
+			text = '<font size="5">' + text + '</font>'
 		}
 	}
 	hc.innerHTML = text;
