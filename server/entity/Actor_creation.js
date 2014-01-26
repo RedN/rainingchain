@@ -81,7 +81,7 @@ Actor.creation.db = function(e,d){
 	
 	if(e.boss){	
 		e.boss = Boss.creation(e.boss);
-		e.boss.parent = e; 
+		e.boss.parent = e.id; 
 	}
 	var count = 0;
 	for(var i in e.ability){ 

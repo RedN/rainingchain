@@ -1,5 +1,14 @@
 //Enemy
 
+/*
+scaling is done with defMain and dmgMain
+weapon is always : "weapon":{'dmgMain':1,'dmgRatio':{'melee':1,'range':1,'magic':1,'fire':1,'cold':1,'lightning':1}},
+"equip":{'def':{ is only used for ratio
+
+
+
+*/
+
 Init.db.enemy = function(){ var ePreDb = {};
 
 	ePreDb["eSlime"] = {}; //{
@@ -7,9 +16,9 @@ Init.db.enemy = function(){ var ePreDb = {};
 		"name":"eSlime",
 		"sprite":{'name':"eSlime",'sizeMod':0.7},
 		"ability":{'bulletSingle':0.1},
-		"weapon":{'dmgMain':100,'dmgRatio':{'melee':1,'range':1,'magic':1,'fire':1,'cold':1,'lightning':1}},
 		'resource':{'hp':{'max':12,'regen':0},'mana':{'max':123,'regen':12}},
-		'armorMain':1,
+		'defMain':1,
+		'dmgMain':100,
 		"equip":{'def':{'melee':1,'range':1,'magic':1,'fire':1,'cold':1,'lightning':1}},
 		"acc":2,
 		"maxSpd":5,
@@ -23,13 +32,13 @@ Init.db.enemy = function(){ var ePreDb = {};
 		"name":"Ice Troll",
 		"sprite":{'name':"eTroll",'sizeMod':1},
 		//"ability":{'bulletSingle':0.1},
-		"weapon":{'dmgMain':100,'dmgRatio':{'melee':1,'range':1,'magic':1,'fire':1,'cold':1,'lightning':1}},
 		'resource':{'hp':{'max':12,'regen':0},'mana':{'max':123,'regen':12}},
-		'armorMain':1,
-		"equip":{'def':{'melee':1,'range':1,'magic':1,'fire':1,'cold':1,'lightning':1}},
+		'defMain':1,
+		'dmgMain':100,
+		"equip":{'def':{'melee':1,'range':1,'magic':1,'fire':1,'cold':1,'lightning':1}},	
 		"acc":2,
 		"maxSpd":5,
-		'boss':'iceTroll',	/**/
+		'boss':'iceTroll', /**/
 		"moveRange":{'ideal':200,"confort":50,"aggressive":400,"farthest":600},	
 		'drop':{'category':{'regular':1}},
 	}; //}
@@ -40,9 +49,9 @@ Init.db.enemy = function(){ var ePreDb = {};
 		"name":"Boss",
 		"sprite":{'name':"eTroll",'sizeMod':1},
 		"ability":{},
-		"weapon":{'dmgMain':100,'dmgRatio':{'melee':1,'range':1,'magic':1,'fire':1,'cold':1,'lightning':1}},
 		'resource':{'hp':{'max':12,'regen':0},'mana':{'max':123,'regen':12}},
-		'armorMain':1,
+		'defMain':1,
+		'dmgMain':100,
 		"equip":{'def':{'melee':1,'range':1,'magic':1,'fire':1,'cold':1,'lightning':1}},
 		"acc":2,
 		"maxSpd":10,
@@ -79,14 +88,14 @@ Init.db.enemy = function(){ var ePreDb = {};
 	for(var i in ePreDb){ Db.enemy[i] = {}; 
 		for(var j in ePreDb[i]){
 			var e = ePreDb[i][j];
-			if(e.armor)	for(var k in e.armor.def) e.armor.def[k] *= e.armorMain;	
 			
-			var temp = Actor.template('enemy');
-			
-			e = useTemplate(temp,e);
+			e = useTemplate(Actor.template('enemy'),e);
 			
 			e.context = e.name; 
-			if(e.combat && !e.nevercombat){ e.context += ' | Lvl: ' + e.lvl;}
+			if(e.combat && !e.nevercombat){ 
+				e.context += ' | Lvl: ' + e.lvl;
+				e.weapon = {'dmgMain':1,'dmgRatio':{'melee':1,'range':1,'magic':1,'fire':1,'cold':1,'lightning':1}};
+			}
 			e.hp = e.resource.hp.max;
 			
 			if(e.drop){
@@ -102,7 +111,6 @@ Init.db.enemy = function(){ var ePreDb = {};
 	
 }
 //
-
 
 
 

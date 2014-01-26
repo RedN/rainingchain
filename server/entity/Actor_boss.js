@@ -200,14 +200,15 @@ Boss.target = function(boss,mort){
 	//Update Boss Target. can have multiple targets unlike regular enemy
 	boss.target = {};
 	for(var key in mort.activeList){ 
-		if(List.all[key].type == 'player'){
-			boss.target[key] = List.all[key];	
+		if(List.all[key].type === 'player'){
+			boss.target[key] = key;	
 		}
 	}
 			
 	for(var i in boss.target){
-		var diffX = boss.target[i].x - mort.x;
-		var diffY = boss.target[i].y - mort.y;
+		var target = List.all[boss.target[i]];
+		var diffX = target.x - mort.x;
+		var diffY = target.y - mort.y;
 		var diff = Math.sqrt(diffX*diffX+diffY*diffY);
 		boss.angle[i] = atan2(diffY,diffX);			
 	}
