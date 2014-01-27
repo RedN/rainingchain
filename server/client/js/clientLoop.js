@@ -61,7 +61,7 @@ Loop.main = function(){
 	if(main.song) Song.play(main.song);	main.song = '';
 	
 	
-	if(main.help) Help.update(main.help);	
+	if(main.help) Help.open(main.help);	
 }
 
 Loop.anim = function(){
@@ -91,13 +91,14 @@ remove = function(i){
 }
 
 Help = {};
-Help.update = function(elID){
+Help.open = function(elID){
 	main.help = '';
 	var el = document.getElementById('HELP' + elID);
-	if(el) el.scrollIntoView(true);
+	if(!el) return
+	$( "#help" ).dialog( "open" );
+	el.scrollIntoView(true);
 	document.getElementById('gameDiv').scrollIntoView(true);		
 }
-
 
 if(typeof Actor === 'undefined') Actor = {};
 Actor.loop = function(mort){

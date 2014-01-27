@@ -160,8 +160,8 @@ socket.on('warning', function (message) {
 	$("#warningText")[0].innerHTML = '<strong>Alert:</strong> ' + message;
 });
 
-//Help aka documentation. Called once at start of game. wiki-like parser
 Init.help = function(data){
+	//Help aka documentation. Called once at start of game. wiki-like parser	
 	for(var i = 0 ; i < data.length ; i++){
 		
 		//Link
@@ -172,7 +172,7 @@ Init.help = function(data){
 					var tag = data.slice(start+2,j);
 					data = data.replaceAll(
 					'\\[\\[' + tag + '\\]\\]',
-					'<helpLink onclick="Help.update(\'' + tag + '\')" >' + tag + '</helpLink>'
+					'<span class="helpLink" onclick="Help.open(\'' + tag + '\')" >' + tag + '</span>'
 					);
 					break;
 				}
@@ -188,7 +188,7 @@ Init.help = function(data){
 					var tag = data.slice(start+2,end-1);
 					data = data.replaceAll(
 					'\\{\\{' + tag + '\\}\\}',
-					'<br><br><helpTag id="HELP' + tag + '" >' + tag + '</helpTag><br>'
+					'<br><span class="helpTag" id="HELP' + tag + '" >' + tag + '</span><br><br>'
 					);
 					break;
 				}
@@ -197,5 +197,6 @@ Init.help = function(data){
 	}
 	return data;
 }
+
 
 

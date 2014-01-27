@@ -72,12 +72,18 @@ Actor.creation.boost = function(e){
 
 Actor.creation.db = function(e,d){
 	e = Db.enemy[d.category][d.variant]();
-	for(var i in Db.enemy[d.category][d.variant]) e[i] = Db.enemy[d.category][d.variant][i];	//not sure whats the poitn?
+	for(var i in Db.enemy[d.category][d.variant]) e[i] = Db.enemy[d.category][d.variant][i];	//cuz of function (globalDmg)
 	
 	e.id = Math.randomId();
 	e.publicId = Math.random().toString(36).substring(13);
 	e.frameCount = Math.floor(Math.random()*100);
 	
+	
+	e.globalDef = typeof e.globalDef === 'function' ? e.globalDef(e.lvl) : e.globalDef * Actor.creation.db.lvlDefault(e.lvl).globalDef
+	e.globalDmg = typeof e.globalDmg === 'function' ? e.globalDmg(e.lvl) : e.globalDmg * Actor.creation.db.lvlDefault(e.lvl).globalDmg
+	
+	console.log(Db.enemy[d.category][d.variant].toString(),e.globalDmg,typeof e.globalDmg);
+	if(typeof e.globalDmg === 'function') console.log(e.globalDmg,e.globalDmg(e.lvl));
 	
 	if(e.boss){	
 		e.boss = Boss.creation(e.boss);
@@ -94,6 +100,13 @@ Actor.creation.db = function(e,d){
 	Sprite.creation(e,e.sprite);		//To set hitbox and bumper
 		
 	return e;
+}
+
+Actor.creation.db.lvlDefault = function(lvl){
+	return {
+		globalDef:lvl+10,
+		globalDmg:lvl+10,
+	};
 }
 
 Actor.creation.info = function(e,cr){
@@ -248,34 +261,4 @@ Actor.creation.nevermove = function(mort){
 	mort.spdY = 0;
 	mort.maxSpd = 1;
 }
-
-Actor.creation.dialogue = function(mort){
-	if(mort.dialogue){
-		mort.dialogue = useTemplate(Actor.template.dialogue,mort.dialogue);
-	}
-	Actor.creation.dialogue.generic(mort);
-	return mort;	
-}
-
-Actor.creation.dialogue.generic = function(mort){
-	var overwrite = mort.dialogue.option;
-	mort.dialogue.option = {};
-	Actor.creation.dialogue.generic.recursive(mort.dialogue.tag,mort.dialogue.option,Dialogue.generic);
-	for(var i in overwrite){
-		mort.dialogue.option[i] = overwrite[i];
-	}
-	return mort;
-}
-
-Actor.creation.dialogue.generic.recursive = function(tag,option,dialogue){
-	for(var j in dialogue.option){
-		option[j] = dialogue.option[j];
-	}
-	for(var j in dialogue){
-		if(j !== 'option' && tag.have(j)){
-			Actor.creation.dialogue.generic.recursive(tag,option,dialogue[j]);
-		}
-	}
-}
-
 

@@ -4,16 +4,14 @@ craft material convert
 
 
 html window
-help window
 
-item only in quest should be in quest db
+sfx in buttons
 
 
 #Priority 2:
 -Crafting Ability
 -Crafting System with White
 
--Advanced Dialogue (Morrowind)
 -lvl affect enemy stats
 
 #Priority 3:

@@ -23,8 +23,8 @@ Init.db.enemy = function(){ var ePreDb = {};
 		"ability":{'bulletSingle':0.5},
 		'resource':{'hp':{'max':1000,'regen':1},'mana':{'max':100,'regen':1}},
 		
-		'globalDef':10,
-		'globalDmg':10,
+		'globalDef':1,
+		'globalDmg':function(lvl){ return lvl + 100},
 		"equip":{'def':{'melee':1,'range':1,'magic':1,'fire':1,'cold':1,'lightning':1}},	
 		
 		"acc":2,
@@ -69,7 +69,11 @@ Init.db.enemy = function(){ var ePreDb = {};
 				e.drop.rarity = e.drop.rarity || 1;
 			}
 			
-			Db.enemy[i][j] = new Function('return ' + stringify(e));	//not used atm. currently creating from scratch everytime
+			Db.enemy[i][j] = new Function('return ' + stringify(e));
+			Db.enemy[i][j].globalDmg = ePreDb[i][j].globalDmg || e.globalDmg;	//cuz can be function
+			Db.enemy[i][j].globalDef = ePreDb[i][j].globalDef || e.globalDef;
+			
+			
 		}
 	}
 	

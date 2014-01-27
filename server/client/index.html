@@ -11,6 +11,8 @@
 		
 		<title>Raining Chain</title>
 	</head>
+
+	
 	<body>
 		<script src="/socket.io/socket.io.js"></script>
 		
@@ -136,7 +138,7 @@
 			</div>
 			
 			<!-- Window -->
-			<div id="winDiv" class="posAbs"> 
+			<div id="winDiv" class="posAbs" style="z-index:20"> 
 				<div id="winTitle" class="posAbs"></div>
 				
 				<div id="abilityWinDiv"	class="posAbs"> 
@@ -171,11 +173,11 @@
 			</div>
 			
 			<!-- Pop -->
-			<div id="popDiv" class="posAbs"></div>
+			<div id="popDiv" class="posAbs" style="z-index:40"></div>
 		</div>
 		</div>
 		
-		
+		<!-- Warning -->
 		<div class="ui-widget" id="warningDiv">
 			<div class="ui-state-error ui-corner-all" style="padding: 0 .7em;">
 				<p><span class="ui-icon ui-icon-alert" style="float: left; margin-right: .3em;"></span>
@@ -183,41 +185,28 @@
 			</div>
 		</div>
 	
+		<div id="help" title="Raining Chain Documentation"></div>
+
 			
-		<!-- Help 
-		<div id="helpDiv" class='container posAbs'>
-			<div id="helpText" class='onlyTextScroll'></div>
-			<input type="button" value="Hide/Show" onclick="changeVisibility('helpText');">
-		</div>
-		-->
-		
 		<script>
 		/*Jquery 101:
 		$( "#myId" );	$( ".myClass" );	$( "input[name='first_name']" );
 		$( "div:visible" );
+		$( "div.foo" ).has( "p" );         // div.foo elements that contain <p> tags*/
 		
-		// Refining selections.
-		$( "div.foo" ).has( "p" );         // div.foo elements that contain <p> tags
-		$( "h1" ).not( ".bar" );           // h1 elements that don't have a class of bar
-		*/
-		
-		/*
-		$("#helpDiv")[0].style.top = Cst.HEIGHT + 5 + 'px';
-		$("#helpDiv")[0].style.width = '90%';
-		$("#helpText")[0].style.width = '90%';
-		$("#helpText")[0].style.height = '170px';
-		
+	
+		$( "#help" ).dialog({autoOpen: false,width: 1000});
 		$.get('/js/help.html').success(function(data){
-			$('#helpText').html(Init.help(data));
+			$('#help').html(Init.help(data));
 		});
-		*/
-
 		
 		
 		$('#chatForm').submit(function(e) {
-            e.preventDefault();
-            Chat.send();
+			Chat.send();
+			e.preventDefault();
 		});
+		$("#warningDiv")[0].style.visibility = 'hidden';
+		$("#lg-username")[0].value = localStorage.getItem('username') || $("#lg-username")[0].value;
 		
 		var html = {
 			'chat':{'div': $("#chatBoxDiv")[0],'text': $("#chatBoxText")[0],'input': $("#chatBoxInput")[0]},
@@ -249,59 +238,9 @@
 			'passiveWin':{'div':$("#passiveWin" + "Div")[0],'text':$("#passiveWin" + "Text")[0]}
 		};
 		
-		/*
-		var html = {
-			win:{
-				main:
-				bank:
-				stat:
-				ability:
-				trade:
-				quest:
-				passive:
-			},
-			tab:{
-				main:
-				inventory:
-				equip:
-				skill:
-				friend:
-				quest:
-				setting:
-			},
-			minimap:
-			context:
-			resource:
-			chat:
-			
-			
-			
-			
-			'div': $("#chatBoxDiv")[0],'text': $("#chatBoxText")[0],'input': $("#chatBoxInput")[0]},
-			'pm':{'div':$("#pmBoxDiv")[0],'text':$("#pmBoxText")[0]},
-			'dialogue':{'div':$("#dialogueBoxDiv")[0],'text':$("#dialogueBoxText")[0]},
-			'friendTab':{'div':$("#friendListDiv")[0],'text':$("#friendListText")[0]},
-			'questTab':{'div':$("#questListDiv")[0],'text':$("#questListText")[0]},
-			'questWin':{'div':$("#questWin" + "Div")[0],
-						'info':$("#questWin" + "Info")[0],
-						'hint':$("#questWin" + "Hint")[0],
-						'description':$("#questWin" + "Description")[0],
-						'requirement':$("#questWin" + "Requirement")[0],
-						'bonus':$("#questWin" + "Bonus")[0],
-						},	
-			'win':{'div':$("#win" + "Div")[0],'title':$("#win" + "Title")[0]},	
-			'abilityWin':{'div':$("#abilityWin" + "Div")[0],
-						'subtitle':$("#abilityWin" + "SubTitle")[0],
-						'generalinfo':$("#abilityWin" + "GeneralInfo")[0],
-						'upgrade':$("#abilityWin" + "Upgrade")[0],
-						},	
-			
-			'passiveWin':{'div':$("#passiveWin" + "Div")[0],'text':$("#passiveWin" + "Text")[0]}
-		};
+		// $$$ is \r\n      var html = {$$$			win:{$$$				main:$$$				bank:$$$				stat:$$$				ability:$$$				trade:$$$				quest:$$$				passive:$$$			},$$$			tab:{$$$				main:$$$				inventory:$$$				equip:$$$				skill:$$$				friend:$$$				quest:$$$				setting:$$$			},$$$			minimap:$$$			context:$$$			resource:$$$			chat:$$$			$$$			$$$			$$$			$$$			'div': $("#chatBoxDiv")[0],'text': $("#chatBoxText")[0],'input': $("#chatBoxInput")[0]},$$$			'pm':{'div':$("#pmBoxDiv")[0],'text':$("#pmBoxText")[0]},$$$			'dialogue':{'div':$("#dialogueBoxDiv")[0],'text':$("#dialogueBoxText")[0]},$$$			'friendTab':{'div':$("#friendListDiv")[0],'text':$("#friendListText")[0]},$$$			'questTab':{'div':$("#questListDiv")[0],'text':$("#questListText")[0]},$$$			'questWin':{'div':$("#questWin" + "Div")[0],$$$						'info':$("#questWin" + "Info")[0],$$$						'hint':$("#questWin" + "Hint")[0],$$$						'description':$("#questWin" + "Description")[0],$$$						'requirement':$("#questWin" + "Requirement")[0],$$$						'bonus':$("#questWin" + "Bonus")[0],$$$						},	$$$			'win':{'div':$("#win" + "Div")[0],'title':$("#win" + "Title")[0]},	$$$			'abilityWin':{'div':$("#abilityWin" + "Div")[0],$$$						'subtitle':$("#abilityWin" + "SubTitle")[0],$$$						'generalinfo':$("#abilityWin" + "GeneralInfo")[0],$$$						'upgrade':$("#abilityWin" + "Upgrade")[0],$$$						},	$$$			$$$			'passiveWin':{'div':$("#passiveWin" + "Div")[0],'text':$("#passiveWin" + "Text")[0]}$$$		};
+	
 		
-		*/
-		
-		$("#lg-username")[0].value = localStorage.getItem('username') || $("#lg-username")[0].value;
 		
 		Init.db.sprite();
 		Init.db.anim();

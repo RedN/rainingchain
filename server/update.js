@@ -57,13 +57,13 @@ Change.update.init = function(){
 			'reg':[
 				{'array':['hp'],'filter':Math.round,'condition':(function(e){ return !e.nevercombat; })},
 				{'array':['resource','hp','max'],'filter':Math.round,'condition':(function(e){ return !e.nevercombat; })},
-				{'array':['sprite','name']},
-				{'array':['sprite','sizeMod']},
+				{'array':['spdX'],'filter':Math.round,'condition':(function(e){ return !e.nevermove; })},
+				{'array':['spdY'],'filter':Math.round,'condition':(function(e){ return !e.nevermove; })},
 			],
 			'slow':[
 				{'array':['combat']},
-				{'array':['spdX'],'filter':Math.round,'condition':(function(e){ return !e.nevermove; })},
-				{'array':['spdY'],'filter':Math.round,'condition':(function(e){ return !e.nevermove; })},
+				{'array':['sprite','name']},
+				{'array':['sprite','sizeMod']},
 			]},	
 		'exist':{'reg':[
 				{'array':['sprite','anim']},
@@ -92,14 +92,16 @@ Change.update.init = function(){
 			'reg':[
 				{'array':['spdX'],'filter':Math.round},
 				{'array':['spdY'],'filter':Math.round},
-				{'array':['combat']},
-				{'array':['map'],'filter':Change.send.convert.map},
 				{'array':['hp'],'filter':Math.round},
+				
+			],
+			'slow':[
 				{'array':['resource','hp','max'],'filter':Math.round},
 				{'array':['sprite','name']},
 				{'array':['sprite','sizeMod']},
-			],
-			
+				{'array':['combat']},
+				{'array':['map'],'filter':Change.send.convert.map},	//is useful?
+			]
 			
 			},	
 		'exist':{'reg':[
@@ -133,7 +135,6 @@ Change.update.init = function(){
 				{'array':['optionList'],'filter':Change.send.convert.optionList},
 				
 				{'array':['temp']},
-				{'array':['help']},
 				
 			],
 			'slow':[
@@ -146,12 +147,19 @@ Change.update.init = function(){
 				{'array':['passive']},				
 			]
 			},	
-		'exist':{'reg':[
+		'exist':{
+			'reg':[
 				{'array':['social','message','chat'],'reset':[]},
 				{'array':['chatInput'],'reset':''},
+			],
+			'slow':[
 				{'array':['sfx'],'reset':''},
 				{'array':['song'],'reset':''},
-			]}
+				{'array':['help'],'reset':''},
+			],
+			
+			
+			}
 	};
 	
 	//Private

@@ -73,5 +73,35 @@ Init.db.dialogue = function(){
 
 
 
+/*
+Actor.creation.dialogue = function(mort){
+	if(mort.dialogue){
+		mort.dialogue = useTemplate(Actor.template.dialogue,mort.dialogue);
+	}
+	Actor.creation.dialogue.generic(mort);
+	return mort;	
+}
+
+Actor.creation.dialogue.generic = function(mort){
+	var overwrite = mort.dialogue.option;
+	mort.dialogue.option = {};
+	Actor.creation.dialogue.generic.recursive(mort.dialogue.tag,mort.dialogue.option,Dialogue.generic);
+	for(var i in overwrite){
+		mort.dialogue.option[i] = overwrite[i];
+	}
+	return mort;
+}
+
+Actor.creation.dialogue.generic.recursive = function(tag,option,dialogue){
+	for(var j in dialogue.option){
+		option[j] = dialogue.option[j];
+	}
+	for(var j in dialogue){
+		if(j !== 'option' && tag.have(j)){
+			Actor.creation.dialogue.generic.recursive(tag,option,dialogue[j]);
+		}
+	}
+}
+*/
 
 

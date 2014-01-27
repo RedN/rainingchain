@@ -32,7 +32,6 @@ Draw.tab.main = function (){ ctxrestore();
 			"rect":[numX,numX+24,numY,numY+24],
 			"left":{"func":Chat.send.command,"param":['$tab,open,' + Cst.tab.list[i]]},
 			'text':Cst.tab.list[i].capitalize(),
-			'help':Cst.tab.list[i].capitalize(),
 		});	
 		
 		Draw.icon('tab.' + Cst.tab.list[i],[numX,numY],24);

@@ -17,6 +17,7 @@ a {
 body { 
 	cursor: default;
 	draggable:false;
+	background-image:url(img/blackmamba.png);
 }
 p{
 	/*font-family:"Fixedsys";
@@ -47,13 +48,14 @@ div{
 	user-select: none;
 }
 
-helpLink{
+/*HELP*/
+.helpLink{
 	text-decoration:underline; 
 }
 
-helpTag{
-	font-family:"Fixedsys";
-	font-size:20px;
+.helpTag{
+	font-family:"Monaco";
+	font-size:40px;
 	font-weight:100;
 }
 
@@ -98,7 +100,6 @@ helpTag{
 	text-shadow: 1.5px  1.5px 0 #000;		
 }
 
-
 .posAbs {
 	position:absolute;
 }
@@ -111,20 +112,6 @@ helpTag{
 	font-size:20px;
 }
 
-
-/*Win*/
-#winDiv{
-	z-index:20;
-}
-
-/*Pop*/
-#popDiv{
-	z-index:40;
-}
-/*Help*/
-#helpText{
-	text-align:justify;
-}
 
 
 
@@ -171,9 +158,3 @@ helpTag{
 	background: -moz-linear-gradient(top, white 0%, white 55%, #D5E4F3 130%); 
 }
 
-
-
-/*PHP Login*/
-body{
-	background-image:url(img/blackmamba.png);
-}

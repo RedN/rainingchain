@@ -10,6 +10,17 @@ Db.boost.list.all = [
 
 
 ];
+Db.boost.list.test = {
+	all:[
+		{'stat':['dmg-+'],'valueMod':2,'chance':1},
+		{'stat':'item-rarity','valueMod':1,'chance':0.5},
+	],				
+	ruby:[
+		{'stat':['burn-all'],'valueMod':1.5,'chance':1},
+		{'stat':'burn-chance','valueMod':2,'chance':1},
+		
+	]
+};
 
 Db.boost.list.amulet = {
 	all:[
@@ -169,7 +180,7 @@ Db.boost.list.gloves = {
 		{'stat':'crit-chance','valueMod':1,'chance':1},
 	],
 	hide:[
-		{'stat':'summon-all','valueMod':1,'chance':1},
+		{'stat':['summon-all'],'valueMod':1,'chance':1},
 	],
 };
 
@@ -177,7 +188,7 @@ Db.boost.list.pants = {
 	all:[
 		{'stat':['dmg-x'],'valueMod':2,'chance':1},
 		{'stat':['def-x'],'valueMod':2,'chance':1},
-		{'stat':'summon-all','valueMod':1,'chance':1},
+		{'stat':['summon-all'],'valueMod':1,'chance':1},
 		
 	],				
 	chain:[
@@ -297,9 +308,8 @@ Init.db.boost = function(){
 			var typeList = Db.boost.list[i][j];
 			
 			//Add stuff from all
-			for(var k in Db.boost.list.all)	typeList.push(Db.boost.list.all[k]);
-			for(var k in Db.boost.list[i].all)	typeList.push(Db.boost.list[i].all[k]);
-			
+			for(var k in Db.boost.list.all)	typeList.push(deepClone(Db.boost.list.all[k]));
+			for(var k in Db.boost.list[i].all)	typeList.push(deepClone(Db.boost.list[i].all[k]));
 			
 			//Convert Group into individual
 			for(var k in typeList){
@@ -318,7 +328,7 @@ Init.db.boost = function(){
 			for(var k = typeList.length-1; k >= 0; k--){
 				if(typeof typeList[k].stat !== 'string') typeList.splice(k,1);
 			}	
-				
+			
 			//Set Value
 			for(var k in typeList){
 				var base = Db.boost.base[typeList[k].stat];
@@ -330,10 +340,6 @@ Init.db.boost = function(){
 	}
 	
 }
-
-
-
-
 
 
 //##############################################

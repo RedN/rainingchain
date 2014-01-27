@@ -1,6 +1,8 @@
 Init = {};
 Init.db = function(dbpsw){
-	var databaseURI = 'mongodb://test:' + dbpsw + '@widmore.mongohq.com:10010/RainingChain_copy';  
+	//var databaseURI = 'mongodb://test:' + dbpsw + '@widmore.mongohq.com:10010/RainingChain_copy';  
+	var databaseURI = "localhost:27017/test";
+	
 	var collections = ["player","main","ability","equip","account","clan"];
 
 	db = require("mongojs").connect(databaseURI, collections);
