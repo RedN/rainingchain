@@ -1,26 +1,23 @@
 
-note: q.reward = arrayfy(q.reward); might need to be changed when change boostdb
 
 craft material convert
 
 
-fix bug that random = always first one
-
+html window
+help window
 
 item only in quest should be in quest db
 
 
 #Priority 2:
 -Crafting Ability
--Portal to Friends
 -Crafting System with White
 
 -Advanced Dialogue (Morrowind)
 -lvl affect enemy stats
 
 #Priority 3:
--Improve boostDb
--Advanced Enemy Mods
+-Advanced Enemy Mods (with name);
 -Option show strike points
 
 easy mode

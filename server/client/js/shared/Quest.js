@@ -36,12 +36,11 @@ Quest.reward = function(key,id){
 	var q = Db.quest[id];
 	
 	var seed = {
-		'piece':q.id,
 		'quality':(qp.bonusSum+0.01*qp.complete) * q.reward.mod,
 		'cap':Math.max(0.75,1-0.01*qp.deathCount)
 	};
 	
-	var boost = Craft.boost.generate(seed);
+	var boost = Craft.boost.generate(seed,q.reward);
 	
 	Chat.add(key,"The quest reward is " + round(boost.value,4) + ' in ' + Db.stat[boost.stat].name + '.');
 	

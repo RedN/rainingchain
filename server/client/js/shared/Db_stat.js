@@ -100,12 +100,6 @@ Init.db.stat = function(){
 		'boost':{'stat':['bonus','leech','magn'],},
 		'playerOnly':1,
 		},
-	'leech-time':{
-		'icon':'resource.hp',
-		'name':'Leech Life Time',
-		'boost':{'base':10,'stat':['bonus','leech','time'],},
-		'playerOnly':1,
-		},
 	'leech-chance':{
 		'icon':'resource.hp',
 		'name':'Leech Life Chance',
@@ -308,31 +302,26 @@ Init.db.stat = function(){
 		'name':'Burn Resist',
 		'boost':{'stat':['status','burn','resist'],},
 		},	
-
 	'resist-chill':{
 		'icon':'offensive.chill',
 		'name':'Chill Resist',
 		'boost':{'stat':['status','chill','resist'],},
 		},	
-	
 	'resist-drain':{
 		'icon':'offensive.drain',
 		'name':'Chill Resist',
 		'boost':{'stat':['status','drain','resist'],},
 		},	
-	
 	'resist-confuse':{
 		'icon':'offensive.confuse',
 		'name':'Confuse Resist',
 		'boost':{'stat':['status','confuse','resist'],},
 		},	
-	
 	'resist-knock':{
 		'icon':'offensive.knock',
 		'name':'Knock Resist',
 		'boost':{'stat':['status','knock','resist'],},
 		},	
-	
 	'resist-bleed':{
 		'icon':'offensive.bleed',
 		'name':'Bleed Resist',
@@ -799,7 +788,7 @@ Init.db.stat = function(){
 		'boost':{'stat':['bonus','weapon','crossbow'],},
 		'playerOnly':1,
 		},		
-	'weapon-wand':{
+	'weapon-wand':{	
 		'icon':'offensive.wand',
 		'name':'Dmg Wand',
 		'boost':{'stat':['bonus','weapon','wand'],},

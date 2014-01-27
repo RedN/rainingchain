@@ -267,8 +267,6 @@ Command.list['option'] = function(key,slot){
 	}	
 }
 
-
-
 Command.list['email,activate'] = function(key,str){
 	var name = List.all[key].name;
 	db.account.find({username:name},{activationKey:1},function(err,res){	if(err) throw err
@@ -279,6 +277,16 @@ Command.list['email,activate'] = function(key,str){
 		} else {Chat.add(key, 'Wrong Activation Key.');}	
 	});
 }
+
+
+
+Command.list['team,join'] = function(key,name){
+	name = escape.user(name);
+	List.all[key].team = name;
+	Chat.add(key, 'You are now in team "' + name + '".');
+}
+
+
 
 
 //CLIENT SIDE: Pref. many different preference values can be changed. check Command.pref.verify for more detail.

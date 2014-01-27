@@ -16,7 +16,7 @@ Sign.up = function(socket,d){
     var user = escape.quote(d.username);    
 	var pass = escape.quote(d.password);
 	var email = escape.email(d.email);
-	var fuser = user.replace(/[^a-z0-9 ]/ig, '');
+	var fuser = escape.user(user);
 	if(user !==	 fuser){ socket.emit('signUp', { 'success':0, 'message':'<font color="red">Illegal characters in username.</font>'} ); return; }
 	if(pass.length < 3){ socket.emit('signUp', {'success':0, 'message':'<font color="red">Too short password.</font>'} ); return; }
 	

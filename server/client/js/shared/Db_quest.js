@@ -220,9 +220,6 @@ Quest.creation = function(q){
 		Item.creation(q.item[i]);
 	}
 	
-	q.reward = arrayfy(q.reward);	
-	Db.boost[q.id] = q.reward;
-	
 	return q;
 }
 

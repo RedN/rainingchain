@@ -343,6 +343,10 @@ escape.quote = function(str){
 	str.replaceAll("'","\'");
 	return str;
 }
+
+escape.user = function(name){
+	return name.replace(/[^a-z0-9 ]/ig, '')
+}
 escape.email = function(str){
 	if(typeof str !== 'string'){ return '' }
 
@@ -375,33 +379,44 @@ newImage = function(src){
 }
 
 
-Object.defineProperty(Array.prototype, "randomMod", {
-    //Randomly select a mod in a list where mod[i].lvl >= lvl. Take into consideration the mod factor.
-	enumerable: false,
-    value: function(lvl){
-		var sum = 0; 
-		for(var i in this){ 
-			if(!lvl || (lvl && this[i].lvl <= lvl)){
-				sum += this[i].mod || 1; 
-			}
-		}
-		var random = Math.random() * sum;
-		for(var i in this){ 
-			if(!lvl || (lvl && this[i].lvl <= lvl)){
-				if(random < this[i].mod || 1){ return deepClone(this[i]); } 
-				random -= this[i].mod || 1;	
-			}
-		}
-		return -1;
-	}
-});
 Object.defineProperty(Array.prototype, "random", {
     enumerable: false,
-    value: function(){
+    value: function(name){
 		if(!this.length) return null;
-		return this[Math.floor(this.length*Math.random())];
+		if(!name) return this[Math.floor(this.length*Math.random())];
+		
+		var obj = {};	
+		for(var i in this) obj[i] = this[i][name];
+		var choosen = obj.random();
+		return choosen !== null ? this[choosen] : null
 	}
 });
+
+Object.defineProperty(Object.prototype, "random", {
+    enumerable: false,
+    value: function(){
+		if(!Object.keys(this).length) return null;
+		
+		var ratioed = convertRatio(this);		
+		var a = Math.random();
+		
+		for(var i in ratioed){
+			if(ratioed[i] >= a) return i;
+			a -= ratioed[i];
+		}
+		
+		return null;
+	}
+});
+
+convertRatio = function(ratio){
+	var sum = 0;
+	for(var i in ratio) sum += ratio[i];
+	for(var i in ratio) ratio[i] /= sum;
+	return ratio;
+}
+
+
 
 Object.defineProperty(Array.prototype, "have", {
     enumerable: false,

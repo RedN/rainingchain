@@ -93,7 +93,7 @@ Actor.loop.setTarget = function(mort){
 }
 
 Actor.loop.setTarget.main = function(mort){
-	var targetList = []; 
+	var targetList = {}; 
 	for (var i in mort.activeList){
 		var target = List.all[i];
 		var hIf = typeof mort.targetIf === 'function' ? mort.targetIf : Combat.hitIf.list[mort.targetIf];
@@ -101,13 +101,15 @@ Actor.loop.setTarget.main = function(mort){
 		if(Combat.targetIf.global(mort,target) && hIf(target,mort)){
 			var diff = Collision.distancePtPt(mort,target);
 			if(diff <= mort.moveRange.aggressive){
-				targetList.push({'mod':1/(diff+100),'id':i});
+				targetList[i] = 1/(diff+100);
 			}
 		}
 	}
 	
-	mort.target.main.list = targetList.length ? [targetList.randomMod().id] : [] ;	//could be imrpoved...
+	mort.target.main.list = Object.keys(targetList).length ? [targetList.random()] : [] ;	
 } 
+
+
 
 Actor.loop.setTarget.sub = function(mort){
 	var maintar = List.all[mort.target.main.list[0]];

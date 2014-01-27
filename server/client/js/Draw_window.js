@@ -224,9 +224,12 @@ Draw.window.stat.list = {
 	{'name':'Knockback','icon':'offensive.knock','stat':[{'name':'Chance','stat':'knock-chance'},{'name':'Magn','stat':'knock-magn'},{'name':'Time','stat':'knock-time'}],'string':(function(){ return Draw.window.stat.list.status('off','knock')})},
 	{'name':'Bleed','icon':'offensive.bleed','stat':[{'name':'Chance','stat':'bleed-chance'},{'name':'Magn','stat':'bleed-magn'},{'name':'Time','stat':'bleed-time'}],'string':(function(){ return Draw.window.stat.list.status('off','bleed')})},
 	{'name':'Drain','icon':'offensive.drain','stat':[{'name':'Chance','stat':'drain-chance'},{'name':'Magn','stat':'drain-magn'},{'name':'Time','stat':'drain-time'}],'string':(function(){ return Draw.window.stat.list.status('off','drain')})},
-	{'name':'Leech Hp','icon':'resource.hp','stat':[{'name':'Chance','stat':'leech-chance'},{'name':'Magn','stat':'leech-magn'},{'name':'Time','stat':'leech-time'}],'string':(function(){ return Draw.window.stat.list.status('off','leech'); })},
 	
-	{'name':'Bullet','icon':'offensive.bullet','stat':[{'name':'Amount','stat':'bullet-amount'},{'name':'Aim','stat':'aim'}],'string':(function(){ return 'Amount: ' + round(player.boost.list['bullet-amount'].base,2,1) + ' , Aim: ' + round(player.boost.list['aim'].base,2,1); })},
+	
+	{'name':'Leech Hp','icon':'resource.hp','stat':[{'name':'Chance','stat':'leech-chance'},{'name':'Magn','stat':'leech-magn'}],'string':(function(){ return 'Chance: ' + round(player.boost.list['leech-chance'].base,2,1) + ', Magn: ' + round(player.boost.list['leech-magn'].base,2,1); })},
+	{'name':'Critical','icon':'resource.hp','stat':[{'name':'Chance','stat':'crit-chance'},{'name':'Magn','stat':'crit-magn'}],'string':(function(){ return 'Chance: ' + round(player.boost.list['crit-chance'].base,2,1) + ', Magn: ' + round(player.boost.list['crit-magn'].base,2,1); })},
+	
+	{'name':'Bullet','icon':'offensive.bullet','stat':[{'name':'Amount','stat':'bullet-amount'}],'string':(function(){ return 'Amount: ' + round(player.boost.list['bullet-amount'].base,2,1); })},
 	{'name':'Strike','icon':'offensive.bullet','stat':[{'name':'AoE','stat':'bullet-amount'},{'name':'Range','stat':'aim'},{'name':'Max','stat':'aim'}],'string':(function(){ return 'AoE: ' + round(player.boost.list['strike-size'].base,2,1) + ', Range: ' + round(player.boost.list['strike-range'].base,2,1) + ', Max: ' + round(player.boost.list['strike-maxHit'].base,2,1); })},
 	{'name':'Summon','icon':'summon.wolf','stat':[{'name':'Amount','stat':'summon-amount'},{'name':'Time','stat':'summon-time'},{'name':'Attack','stat':'summon-atk'},{'name':'Defence','stat':'summon-def'}],'string':(function(){ return '#:' + round(player.boost.list['summon-amount'].base,2,1) + ', Time:' + round(player.boost.list['summon-time'].base,2,1) + ', A:' + round(player.boost.list['summon-atk'].base,2,1)+ ', D:' + round(player.boost.list['summon-def'].base,2,1); })},
 
@@ -977,7 +980,7 @@ Draw.window.binding = function (){ ctxrestore();
 	
 	
 	//Template
-	var array = ['WERTY','AZERTY','NUMBER'];
+	var array = ['QWERTY','AZERTY','NUMBER'];
 	var str = '<font size="6">Default Bindings</font>';
 	for(var i = 0; i < array.length; i++){
 		str  += '<div ' +

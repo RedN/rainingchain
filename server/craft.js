@@ -159,12 +159,8 @@ Craft.plan.upgrade = function(){
 Craft.ratio = {};
 Craft.ratio.normalize = function(info){
 	var ratio = info.main ? info.ratio : info; //send whole obj instead of only ratio
-	
-	var sum = 0;
-	for(var i in ratio) sum += ratio[i];
-		
-	for(var i in ratio) ratio[i] /= sum;
-	return info;	
+	ratio = convertRatio(ratio);
+	return info;
 }	
 
 
@@ -251,15 +247,15 @@ Craft.equip.armor.ratio = {
 	'topaz':  [['lightning'],['fire','cold'],['melee','range','magic']],
 }
 Craft.equip.armor.mod = {
-	'ring':20,	
-	'amulet':40,		
-	'bracelet':60,
-	'gloves':80,		
-	'boots':100,
-	'pants':120,	
-	'helm':150,	
-	'shield':200,
-	'body':250,
+	'ring':2,	
+	'amulet':4,		
+	'bracelet':6,
+	'gloves':8,		
+	'boots':10,
+	'pants':12,	
+	'helm':15,	
+	'shield':20,
+	'body':25,
 }
 Craft.equip.armor.mod  = Craft.ratio.normalize(Craft.equip.armor.mod);
 	
@@ -276,7 +272,7 @@ Craft.equip.color = function(w){
 Craft.boost = function(seed,where,amount){
 	//add a boost to a weapon/armor/other using a seed
 	for(var i = 0 ; i < amount && i > -1; i++){
-		var boost = Craft.boost.generate(seed);
+		var boost = Craft.boost.generate.equip(seed);
 		for(var j in where){
 			if(where[j].stat === boost.stat){ 
 				i -= 0.99;
@@ -288,12 +284,13 @@ Craft.boost = function(seed,where,amount){
 	return where;
 }
 
-Craft.boost.generate = function(seed){
+Craft.boost.generate = function(seed,boost){
 	seed.quality = seed.quality || 1;
 	seed.lvl = seed.lvl || 0;
 	seed.cap = seed.cap || 1;
 	
-	var boost = Db.boost[seed.piece].randomMod(seed.lvl);
+	boost = deepClone(boost);
+	
 	var value = Craft.boost.generate.roll(boost.value,seed.quality);
 	value = Math.min(value,boost.value[1]*seed.cap);	//for death for example
 	
@@ -303,6 +300,14 @@ Craft.boost.generate = function(seed){
 			'tier':Craft.boost.generate.tier(boost.value,value)
 	};
 }
+
+Craft.boost.generate.equip = function(seed){
+	var boost = Db.boost.list[seed.piece][seed.type].random('chance');
+	return Craft.boost.generate(seed,boost);	 
+}
+
+
+
 
 Craft.boost.generate.roll = function(mm,qual){
 	qual = qual || 0;
