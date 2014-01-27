@@ -1,5 +1,7 @@
 
 
+dodge = invincible
+
 craft material convert
 
 
@@ -12,7 +14,8 @@ revamp a*
 #Priority 2:
 -Crafting Ability
 -Crafting System with White
-
+-revamp icon
+-animation before strike
 
 #Priority 3:
 -Advanced Enemy Mods (with name);

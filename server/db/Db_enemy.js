@@ -20,11 +20,15 @@ Init.db.enemy = function(){ var ePreDb = {};
 	ePreDb["troll"]["ice"] = {  //{
 		"name":"Ice Troll",
 		"sprite":{'name':"eTroll",'sizeMod':1},
-		"ability":{'bulletSingle':0.5},
+		"ability":{'bulletSingle':0.2},
 		'resource':{'hp':{'max':1000,'regen':1},'mana':{'max':100,'regen':1}},
 		
 		'globalDef':1,
 		'globalDmg':function(lvl){ return lvl + 100},
+		'globalMod':function(e,lvl){ e.maxSpd = e.maxSpd + lvl;  return e;},
+		
+		
+		
 		"equip":{'def':{'melee':1,'range':1,'magic':1,'fire':1,'cold':1,'lightning':1}},	
 		
 		"acc":2,
@@ -72,6 +76,7 @@ Init.db.enemy = function(){ var ePreDb = {};
 			Db.enemy[i][j] = new Function('return ' + stringify(e));
 			Db.enemy[i][j].globalDmg = ePreDb[i][j].globalDmg || e.globalDmg;	//cuz can be function
 			Db.enemy[i][j].globalDef = ePreDb[i][j].globalDef || e.globalDef;
+			Db.enemy[i][j].globalMod = ePreDb[i][j].globalMod || e.globalMod;
 			
 			
 		}

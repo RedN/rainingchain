@@ -189,8 +189,9 @@ Init.db.quest = function(){
 	//Note: List.main[key].quest[id] only has variable
 	var quest = {};
 	for(var i in Db.quest){
-		Quest.creation(Db.quest[i]);
+		Db.quest[i] = Quest.creation(Db.quest[i]);
 		quest[i] = deepClone(Db.quest[i].variable);
+		console.log(Db.quest[i].variable);
 	}
 	Main.template.quest = {};
 	Main.template.quest = new Function('return ' + stringify(quest));	
@@ -209,7 +210,9 @@ Quest.creation = function(q){
 	q.variable = useTemplate(Quest.template.variable(),q.variable);
 	for(var j in q.bonus){ q.variable.bonus[j] = 0; }	//0:non-active, 1:active
 	for(var j in q.requirement){ q.variable.requirement += '0'; }	//0:non-met, 1:met
-
+	
+	console.log(q.variable);
+	
 	if(!server) return q 
 	
 	Db.dialogue[q.id] = {};

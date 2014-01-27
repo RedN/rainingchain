@@ -80,6 +80,7 @@ Actor.creation.db = function(e,d){
 	
 	e.globalDef = typeof e.globalDef === 'function' ? e.globalDef(e.lvl) : e.globalDef * Actor.creation.db.globalLvlMod(e.lvl).globalDef
 	e.globalDmg = typeof e.globalDmg === 'function' ? e.globalDmg(e.lvl) : e.globalDmg * Actor.creation.db.globalLvlMod(e.lvl).globalDmg
+	if(e.globalMod) e = e.globalMod(e,e.lvl);
 	
 	if(e.boss){	
 		e.boss = Boss.creation(e.boss);
@@ -87,7 +88,6 @@ Actor.creation.db = function(e,d){
 	}
 	var count = 0;
 	for(var i in e.ability){ 
-		//e.abilityChance[i] = ;	//need to fix so chanceMod do something
 		Actor.learnAbility(e,i,e.ability[i]);
 		Actor.swapAbility(e,count,i);
 		count++;

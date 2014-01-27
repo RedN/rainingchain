@@ -629,24 +629,24 @@ Draw.window.ability.action.attack = function(diffX,diffY){  ctxrestore();
 
 Draw.window.ability.action.attack.modTo = {
 	'burn':{icon:'offensive.burn',
-			text:(function(a){ return round(a.chance*100,2) + '% to Burn for ' + round(a.magn*100*a.time,2) + '% Hp of Monster\'s Remaining Hp over ' + round(a.time/25,2) + 's.'; }),},
+			text:(function(a){ return round(a.chance*100,2) + '% Chance to Burn for ' + round(a.magn*100*a.time,2) + '% Hp of Monster\'s Remaining Hp over ' + round(a.time/25,2) + 's.'; }),},
 	'chill':{icon:'offensive.chill',
-			text:(function(a){ return round(a.chance*100,2) + '% to Chill, reducing Speed by -' + round(a.magn*100,2) + '% for ' + round(a.time/25,2) + 's.'; })},
+			text:(function(a){ return round(a.chance*100,2) + '% Chance to Chill, reducing Speed by -' + round(a.magn*100,2) + '% for ' + round(a.time/25,2) + 's.'; })},
 	'confuse':{icon:'offensive.confuse',
-			text:(function(a){ return round(a.chance*100,2) + '% to Confuse for ' + round(a.time/25,2) + 's.'; })},
+			text:(function(a){ return round(a.chance*100,2) + '% Chance to Confuse for ' + round(a.time/25,2) + 's.'; })},
 	'bleed':{icon:'offensive.bleed',
-			text:(function(a){ return round(a.chance*100,2) + '% to Bleed for ' + round(a.magn*100*a.time,2) + '% Initial Dmg over ' + round(a.time/25,2) + 's.'; })},
+			text:(function(a){ return round(a.chance*100,2) + '% Chance to Bleed for ' + round(a.magn*100*a.time,2) + '% Initial Dmg over ' + round(a.time/25,2) + 's.'; })},
 	'knock':{icon:'offensive.knock',
-			text:(function(a){ return round(a.chance*100,2) + '% to Knockback by ' + round(a.magn*a.time,2) + ' pixel over ' + round(a.time/25,2) + 's.'; })},	
+			text:(function(a){ return round(a.chance*100,2) + '% Chance to Knockback by ' + round(a.magn*a.time,2) + ' pixel over ' + round(a.time/25,2) + 's.'; })},	
 	'drain':{icon:'offensive.drain',
-			text:(function(a){ return round(a.chance*100,2) + '% to Drain ' + round(a.magn*100,2) + '% Mana.'; })},
+			text:(function(a){ return round(a.chance*100,2) + '% Chance to Drain ' + round(a.magn*100,2) + '% Mana.'; })},
 	'leech':{icon:'offensive.leech',
-			text:(function(a){ return round(a.chance*100,2) + '% to Life Leech ' + round(a.magn*100,2) + '% Hp'; })},
+			text:(function(a){ return round(a.chance*100,2) + '% Chance to Life Leech ' + round(a.magn*100,2) + '% Hp'; })},
 	'pierce':{icon:'offensive.leech',
-			text:(function(a){ return round(a.chance*100,2) + '% to Pierce, reducing this attack damage by ' + round(100-a.dmgReduc*100,2) + '% Dmg.'; })},	
+			text:(function(a){ return round(a.chance*100,2) + '% Chance to Pierce, reducing this attack damage by ' + round(100-a.dmgReduc*100,2) + '% Dmg.'; })},	
 			
 	'curse':{icon:'curse.skull',
-			text:(function(a){ return round(a.chance*100,2) + '% to Lower ' + Db.stat[a.boost[0].stat].name + ' by ' + round(100-a.boost[0].value*100,2) + '% for ' + round(a.boost[0].time/25,2) + 's.'; })},
+			text:(function(a){ return round(a.chance*100,2) + '% Chance to Lower ' + Db.stat[a.boost[0].stat].name + ' by ' + round(100-a.boost[0].value*100,2) + '% for ' + round(a.boost[0].time/25,2) + 's.'; })},
 	'sin':{icon:'offensive.bullet',
 			text:(function(a){ return 'Sin Bullet'; })},
 	'parabole':{icon:'offensive.bullet',
@@ -672,12 +672,18 @@ Draw.window.ability.action.boost = function(diffX,diffY){  ctxrestore();
 	s.zy += diffY;
 	var ab = player.abilityList[Draw.old.abilityShowed];
 	var boost = ab.action.param;
+	if(!boost) return
 	
-	for(var i in boost){
-		Draw.icon(Db.stat[boost[i].stat].icon,[s.zx,s.zy],20);
-		var str = boost[i].type + round(boost[i].value,2) + ' ' + Db.stat[boost[i].stat].name + ' for ' + round(boost[i].time/25,2) + 's.';
-		ctx.fillText(str,s.zx+30,s.zy);
-		s.zy += 30;
+	var fontSize = 40;
+	
+	ctx.font = fontSize + 'px Monaco';
+	for(var i in boost[0]){
+		Draw.icon(Db.stat[boost[0][i].stat].icon,[s.zx,s.zy],fontSize);
+		var value = round(boost[0][i].value,2);
+		if(+value >= + Cst.bigInt) value = 'Infinity';
+		var str = boost[0][i].type + value + ' ' + Db.stat[boost[0][i].stat].name + ' for ' + round(boost[0][i].time/25,2) + 's.';
+		ctx.fillText(str,s.zx+fontSize*1.2,s.zy);
+		s.zy += fontSize*1.5;
 	}
 	
 }

@@ -1,10 +1,10 @@
 /*
 a['bulletMulti'] = {
     'type':'attack',                    //attack, buff, curse, summon
-    'name':'Multishot',                  //visible name
+    'name':'Multishot',                 //visible name
     'icon':'attackMagic.fireball',      //icon
 	'spd':{'main':0.8,'support':0.2},   //how atk spd impact ability spd
-	'period':15,                         //atk/s (period = 40 => 1 atk/s)
+	'period':15,                        //atk/s (period = 40 => 1 atk/s)
 
 	//Check Attack.js for more detail about the attribute of attack
 	'action':{'func':'Combat.action.attack','param':{'anim':'Attack',
@@ -51,12 +51,18 @@ Init.db.ability = function(cb){
 			'dmg':{'main':100,'ratio':{'melee':0,'range':10,'magic':80,'fire':10,'cold':0,'lightning':0}},
 			'hitIfMod':0,'heal':{'hp':100}
 	}}}};
-	
+	/*
 	a['dodgeRegular'] = {'type':'dodge','name':'Dodge','icon':'dodge.start',
 		'spd':{'main':0.8,'support':0.2},'period':25,'cost':{"dodge":75},'action':{'func':'Actor.boost','param':[[
 			{"stat":"maxSpd","type":"+","value":100,"time":1,"name":"Dodge"},
 			{"stat":"acc","type":"+","value":100,"time":1,"name":"Dodge"},
 			{"stat":"friction","type":"*","value":0.7,"time":6,"name":"Dodge"},
+			]]}
+	};
+	*/
+	a['dodgeRegular'] = {'type':'dodge','name':'Dodge','icon':'dodge.start',
+		'spd':{'main':0.8,'support':0.2},'period':25,'cost':{"dodge":75},'action':{'func':'Actor.boost','param':[[
+			{"stat":"globalDef","type":"+","value":Cst.bigInt,"time":4,"name":"Dodge"},
 			]]}
 	};
 	
