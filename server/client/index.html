@@ -175,10 +175,13 @@
 		</div>
 		</div>
 		
-		<div id="warningDiv" class="posAbs">
-			<div id="warningText" class='onlyText container'></div>			
-		</div>
 		
+		<div class="ui-widget" id="warningDiv">
+			<div class="ui-state-error ui-corner-all" style="padding: 0 .7em;">
+				<p><span class="ui-icon ui-icon-alert" style="float: left; margin-right: .3em;"></span>
+				<span id="warningText"></span></p>
+			</div>
+		</div>
 	
 			
 		<!-- Help 
@@ -208,12 +211,7 @@
 			$('#helpText').html(Init.help(data));
 		});
 		*/
-		
-		$("#warningDiv")[0].style.top = Cst.HEIGHT + 5 + 'px';
-		$("#warningText")[0].style.color = 'red';
-		$("#warningText")[0].style.fontSize = '200%';
-		//$("#warningDiv")[0].style.visibility = 'hidden';
-		
+
 		
 		
 		$('#chatForm').submit(function(e) {
@@ -228,7 +226,6 @@
 			'friendTab':{'div':$("#friendListDiv")[0],'text':$("#friendListText")[0]},
 			'questTab':{'div':$("#questListDiv")[0],'text':$("#questListText")[0]},
 			'prefTab':{'div':$("#prefListDiv")[0],'text':$("#prefListText")[0]},
-			'warning':{'div':$("#warningDiv")[0],'text':$("#warningText")[0]},
 			'context':{'div':$("#context" + "Div")[0]},	
 			'questWin':{'div':$("#questWin" + "Div")[0],
 						'info':$("#questWin" + "Info")[0],

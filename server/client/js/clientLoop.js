@@ -15,9 +15,7 @@ Loop.send = function(){
 }
 
 Loop.warning = function(){
-	if(html.warning.text.innerHTML){
-		html.warning.div.style.visibility = 'inline';
-	}
+	$("#warningDiv")[0].style.visibility = $("#warningText")[0].innerHTML ? 'visible' : 'hidden';
 }
 
 Loop.actor = function(){

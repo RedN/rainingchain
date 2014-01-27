@@ -221,8 +221,6 @@ Craft.equip.armor = function(seed,equip){
 	mod *= Craft.equip.armor.mod[seed.piece];
 	equip.def.main = (seed.lvl+10) * mod;
 	
-	console.log(seed,equip);
-	
 	var list = Craft.equip.armor.ratio[seed.type];
 	
 	equip.def.ratio = {melee:1/1000,range:0,magic:0,fire:0,cold:0,lightning:0};

@@ -157,7 +157,7 @@ Init.game.addCanvas = function(name,id,z){
 
 
 socket.on('warning', function (message) {
-	html.warning.text.innerHTML = '<font color="red">' + message + '</font>';
+	$("#warningText")[0].innerHTML = '<strong>Alert:</strong> ' + message;
 });
 
 //Help aka documentation. Called once at start of game. wiki-like parser
