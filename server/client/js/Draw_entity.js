@@ -80,7 +80,7 @@ Draw.sprite = function (mort){
 	var image = spriteFromDb.img;
 	var animFromDb = spriteFromDb.anim[spriteServer.anim];
 	
-	if(mort.type == 'bullet' && animFromDb == 'Attack') animFromDb = 'Travel';	//quick fix
+	if(mort.type === 'bullet' && animFromDb === 'attack') animFromDb = 'travel';	//quick fix
 	
 	var sideAngle = Math.round(mort.angle/(360/animFromDb.dir)) % animFromDb.dir;
 	

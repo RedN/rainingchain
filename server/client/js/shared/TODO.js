@@ -1,10 +1,14 @@
 
 
 
+Boss should use attack.perform. doing so = mort dmgMain isnt used
+
 craft material convert
 
 
-hit = red, invincible = white
+parabole = bof...
+hitmod not working cuz hit itself
+
 
 html window
 

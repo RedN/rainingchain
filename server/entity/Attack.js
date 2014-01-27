@@ -41,7 +41,7 @@ Attack.template = function(){
 	b.moveAngle = 0;
 	b.mouseX = 0;
 	b.mouseY = 0;
-	b.sprite = {"name":"fireball","anim":"Travel",'sizeMod':1};	
+	b.sprite = {"name":"fireball","anim":"travel",'sizeMod':1};	
 	
 	b.bleed = {'chance':1,'magn':1,'time':1};
 	b.knock = {'chance':1,'magn':1,'time':1};
@@ -59,7 +59,8 @@ Attack.template = function(){
 	b.viewedBy = {};
 	b.viewedIf = 'true';
 	
-
+	
+	
 	return b;
 }; 
 
@@ -95,7 +96,11 @@ Attack.creation.info = function(player,bullet){
 
 	bullet.angle = (player.angle || 0 +360)%360;
 	
-	bullet.bonus = player.bonus || (bullet.nova || bullet.onHit) ? Actor.template.bonus() : null ;	//bonus only useful if nova or onHit
+	if(bullet.nova || bullet.onHit){
+		bullet.bonus = player.bonus || Actor.template.bonus();
+		bullet.weapon = player.weapon || {"id":"mace",'dmg':{'main':1,'ratio':{'melee':1,'range':1,'magic':1,'fire':1,'cold':1,'lightning':1}}};
+	}
+	
 	if(player.parent){	bullet.parent = player.parent; }
 	else {bullet.parent = player.id || null;}
 	
@@ -109,13 +114,13 @@ Attack.creation.bullet = function(b){
 		var diffX = b.mouseX - Cst.WIDTH2;	var diffY = b.mouseY - Cst.HEIGHT2;
 		var diff = Math.sqrt(diffX*diffX+diffY*diffY);
 		b.parabole.dist = Math.min(Math.max(diff,b.parabole.min),b.parabole.max);
-		b.parabole.maxTimer *= b.parabole.dist/b.parabole.max;
+		b.parabole.timer *= b.parabole.dist/b.parabole.max;
 	}
-	if(b.nova){ b.angle = Math.random()*360;}
+	if(b.nova){ b.angle = Math.random()*360;}	//otherwise, circle always the same. moveAngle is same tho
 	if(!b.nova && !b.onHit){ delete b.bonus; }	//
 	if(!b.sin && !b.parabole && !b.boomerang) { b.normal = 1; }
 	
-	Sprite.creation(b,{'name':b.objImg.name,'anim':"Travel",'sizeMod':b.objImg.sizeMod});
+	Sprite.creation(b,{'name':b.objImg.name,'anim':"travel",'sizeMod':b.objImg.sizeMod});
 	
 	List.bullet[b.id] = b;
 	List.map[b.map].list[b.id] = b;

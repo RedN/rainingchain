@@ -82,22 +82,11 @@ Actor.performAbility.resetCharge = function(mort,ab){
 	charge[ab.id] = Math.min(charge[ab.id] % ab.period,1);
 	
 	//Reset the ability and related abilities
-	for(var j in ab.reset){	//'attack':0,'support':0.5,'summon':1,'tag':'fire':0.2
-		if(j === 'tag'){	//custom tag
-			for(var p in ab.reset.tag){
-				for(var n in mort.ability){
-					if(!mort.ability[n]) continue;
-					if(n !== i && mort.ability[n].tag && mort.ability[n].tag.have(p)){
-						charge[n] = charge[n] * ab.reset.tag[p];
-					}
-				}
-			}
-		} else {	//type
-			for(var k in mort.ability){
-				if(!mort.ability[k]) continue;
-				if(mort.ability[k].type === j){
-					charge[k] = charge[k] * ab.reset[j];
-				}
+	for(var j in ab.reset){	//'attack':0,'summon':1
+		for(var k in mort.ability){
+			if(!mort.ability[k]) continue;
+			if(mort.ability[k].type === j){
+				charge[k] = charge[k] * ab.reset[j];
 			}
 		}
 	}

@@ -1,22 +1,177 @@
 /*
-a['bulletMulti'] = {
-    'type':'attack',                    //attack, buff, curse, summon
+a['bulletMulti'] = {					//bulletMulti is the id of attack
+    'type':'attack',                    //attack, buff, curse, heal or summon
     'name':'Multishot',                 //visible name
     'icon':'attackMagic.fireball',      //icon
-	'spd':{'main':0.8,'support':0.2},   //how atk spd impact ability spd
+	'spd':{								//how atk spd impact ability spd
+		'main':0.8,
+		'support':0.2
+	},   
 	'period':15,                        //atk/s (period = 40 => 1 atk/s)
-
-	//Check Attack.js for more detail about the attribute of attack
-	'action':{'func':'Combat.action.attack','param':{
-			type:"bullet",'angle':15,'amount':5, 'aim': 0,
-			'objImg':{'name':"arrow",'sizeMod':1},'hitImg':{'name':"thunder2",'sizeMod':0.5},
-			'dmg':{'main':100,'ratio':{'melee':0,'range':10,'magic':80,'fire':10,'cold':0,'lightning':0}},
-	}}}};
 	
-	
-	//   'curse':{'chance':1,'boost':[{'stat':'maxSpd','type':'*','value':0.1,'time':50}]},
-	//	'func':'Combat.action.summon' ::::: {'name':'summonDragon','maxChild':5,'time':1000,'distance':500},{"category":"eSlime","variant":"Big","lvl":0,"modAmount":1,'amount':1}
+	'action':{
+		'anim':'attack',				//sprite animation to perform
+		'animOnSprite:'boost',			//anim to create below the player
 		
+		'func':'Combat.action.attack',	//function to call
+		'param':{
+			'type':"bullet",			//type of attack (bullet or strike)
+			'angle':15,					//angle between 1 and last bullet
+			'amount':5,					//amount bullet
+			'aim': 0,					//angle precision (0 = perfect)
+			'objImg':{					//bullet sprite
+				'name':"arrow",
+				'sizeMod':1
+			},
+			'hitImg':{					//anim when enemy hit by attack
+				'name':"thunder2",
+				'sizeMod':0.5
+			},
+			'dmg':{
+				'main':100,				//dmg dealt
+				'ratio':{				//ratio between the elements. will be normalize (aka sum of ratio = 1 with same proportion)
+					'melee':0,
+					'range':10,
+					'magic':80,
+					'fire':10,
+					'cold':0,
+					'lightning':0
+				}	
+			},
+		
+		//$$$$$$$$$$$$$$
+		//Optional extra
+		//$$$$$$$$$$$$$$
+			
+			'curse':{					//grant a boost to the hit target
+				'chance':1,				//chance that curse is succesful
+				'boost':[{				//can add multiple boost in same array.
+					'stat':'maxSpd',		//stat changed
+					'type':'*',				//type of boost (+ or *)
+					'value':0.1,			//value of the change
+					'time':50				//duration
+				}]
+			},
+			
+			bleed : {'chance':1,'magn':1,'time':1},		//they are MODIFIER (chance = 2 => x2 more chance that the burn effect will trigger)
+			knock : {'chance':1,'magn':1,'time':1},
+			drain : {'chance':1,'magn':1,'time':1},	
+			burn : {'chance':1,'magn':1,'time':1},
+			chill : {'chance':1,'magn':1,'time':1},
+			confuse : {'chance':1,'magn':1,'time':1},
+			leech : {'chance':1,'magn':1},			
+			crit : {'chance':1,'magn':1},
+			
+			hitIfMod':0,				//if 0: normal, 1: attack allies
+			
+			'heal':{					//regeneration resource on hit
+				'hp':100,				
+			}
+			
+			onHit:{					//When attack will hit the enemy, it will create another attack 
+				chance:1,				//chance of doing another attack
+				attack:{ATTACK},		//attack info
+			},
+		//$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+		//Bullet Only
+		
+			spd:15, 					//bullet travelling speed
+			ghost: 0,					//does bullet goes thru wall?
+			pierce : {
+				'chance':0.5,			//chance to pierce
+				'amount':2,				//max amount of enemy it can pierce
+				'dmgReduc':0.5			//everytime it pierces, globalDmg is reduced by dmgReduc
+			},
+			"parabole":{
+				'height':10,			//height of parabole (distance from middle)
+				'min':100,				//min distance where bullets will collide
+				'max':500,				//max distance where bullets will collide
+				'timer':50,				//time before bullets collide
+			},
+			'boomerang':{
+				'comeBackTime':50,		//time before bullet turns 180 degre
+				'spd':2,				//spd mod
+				'spdBack':1.5,			//spd mod when bullet comes back
+				'newId':1				//after turn back, renew id so it can hit enemy again
+			},
+			'sin':{
+				"amp":5,				//amplitude 
+				"freq":2				//frequence
+			},
+			'nova':{				//Bullet that shoots other bullets while travelling
+				'period':1,				//time per attack
+				'rotation':10,			//angle change per frame
+				'attack':{ATTACK}		//attack to cast
+			},
+			
+			
+			
+			
+		}
+	}
+};
+
+//$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+//If attack if strike = {
+	'param':{
+			'type':"strike",			//type of attack (bullet or strike)
+			
+		//Strike Only
+			'delay':2,					//delay between clicking/performing anim and the actual damage phase
+			'maxHit':1,					//max amount of enemy that can be hit by each strike
+			'width':1,					//width size of the strike hitbox
+			'height':1,					//height size of the strike hitbox
+			'minRange':5,				//min range for the center of the strike hitbox
+			'maxRange':50,				//max range for the center of the strike hitbox
+		
+		//Both Bullet and Strike
+			'angle':15,					//angle between 1 and last strike
+			'amount':5,					//amount strike
+			'aim': 0,					//angle precision (0 = perfect)
+			'objImg':{					//anim where the player clicked sprite
+				'name':"attack1",
+				'sizeMod':0.5
+			},
+			'hitImg':{					//anim when enemy hit by attack
+				'name':"attack2",
+				'sizeMod':0.5
+			},
+			
+			'dmg':{
+				'main':100,				//dmg dealt
+				'ratio':{'melee':0,'range':10,'magic':80,'fire':10,'cold':0,'lightning':0}	//ratio (will be normalize)
+			},	
+	}
+};	
+
+//$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+'func':'Combat.action.summon',
+'param':[
+	{
+		'name':'summonDragon',			//name of the summon family
+		'maxChild':5,					//max amount of familiar that a player can own at once of the same family
+		'time':1000,					//time familiar will live before disappearing
+		'distance':500,					//if enemy is farther than that distance from the player, familiar teleports ontop of player
+	},
+	{
+		"category":"eSlime",			//enemy category
+		"variant":"Big",				//enemy variant
+		"lvl":0,						//enemy lvl
+		'amount':1						//amount of enemy created per cast
+		"modAmount":0,					//amount of enemy mods (randomly selected)
+	}
+]
+
+//$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+'func':'Combat.action.boost',
+'param':[	//can add multiple boost in same array.
+	{
+	'stat':'maxSpd',	//stat changed
+	'type':'*',			//type of boost (+ or *)
+	'value':0.1,		//value of the change
+	'time':50			//duration
+	},
+]	
 */	
 
 Init.db.ability = function(cb){
@@ -33,9 +188,107 @@ Init.db.ability = function(cb){
 			'type':"bullet",'angle':15,'amount':1,
 			'objImg':{'name':"arrow",'sizeMod':1},'hitImg':{'name':"thunder2",'sizeMod':0.5},
 			'dmg':{'main':100,'ratio':{'melee':0,'range':10,'magic':80,'fire':10,'cold':0,'lightning':0}},
-			'leech':{'chance':1,'magn':1,'time':1}
 		}
 	}};
+	
+	a['bulletMulti-fast'] = {'type':'attack','name':'fast','icon':'attackMagic.fireball',
+		'spd':{'main':0.8,'support':0.2},'period':15,
+		'action':{'func':'Combat.action.attack','param':{
+			'type':"bullet",'angle':15,'amount':1,
+			'objImg':{'name':"arrow",'sizeMod':1},'hitImg':{'name':"thunder2",'sizeMod':0.5},
+			'dmg':{'main':100,'ratio':{'melee':0,'range':10,'magic':80,'fire':10,'cold':0,'lightning':0}},
+			
+			onHit:{					//When attack will hit the enemy, it will create another attack 
+				chance:1,				//chance of doing another attack
+				attack:{		//attack info
+					'type':"bullet",'angle':360,'amount':360,
+					'objImg':{'name':"arrow",'sizeMod':1},'hitImg':{'name':"thunder2",'sizeMod':0.5},
+					'dmg':{'main':100,'ratio':{'melee':0,'range':10,'magic':80,'fire':10,'cold':0,'lightning':0}},
+				},		
+			},
+	
+			
+		}
+	}};
+	
+	a['bulletMulti-hitmod'] = {'type':'attack','name':'hitmod','icon':'attackMagic.fireball',
+		'spd':{'main':0.8,'support':0.2},'period':15,
+		'action':{'func':'Combat.action.attack','param':{
+			'type':"bullet",'angle':15,'amount':1,
+			'objImg':{'name':"arrow",'sizeMod':1},'hitImg':{'name':"thunder2",'sizeMod':0.5},
+			'dmg':{'main':100,'ratio':{'melee':0,'range':10,'magic':80,'fire':10,'cold':0,'lightning':0}},
+			
+			'hitIfMod':1,'ghost':1,	
+		}
+	}};
+	
+	
+			
+			
+	a['bulletMulti-sin'] = {'type':'attack','name':'sin','icon':'attackMagic.fireball',
+		'spd':{'main':0.8,'support':0.2},'period':15,
+		'action':{'func':'Combat.action.attack','param':{
+			'type':"bullet",'angle':15,'amount':10,
+			'objImg':{'name':"arrow",'sizeMod':1},'hitImg':{'name':"thunder2",'sizeMod':0.5},
+			'dmg':{'main':100,'ratio':{'melee':0,'range':10,'magic':80,'fire':10,'cold':0,'lightning':0}},
+			
+			
+			nova:{					//When attack will hit the enemy, it will create another attack 
+				period:1,				//chance of doing another attack
+				rotation:10,
+				attack:{		//attack info
+					'type':"bullet",'angle':360,'amount':4,
+					'objImg':{'name':"arrow",'sizeMod':1},'hitImg':{'name':"thunder2",'sizeMod':0.5},
+					'dmg':{'main':100,'ratio':{'melee':0,'range':10,'magic':80,'fire':10,'cold':0,'lightning':0}},
+				},		
+			},
+			
+			
+		}
+	}};
+	
+	a['bulletMulti-para'] = {'type':'attack','name':'para','icon':'attackMagic.fireball',
+		'spd':{'main':0.8,'support':0.2},'period':15,
+		'action':{'func':'Combat.action.attack','param':{
+			'type':"bullet",'angle':15,'amount':10,
+			'objImg':{'name':"arrow",'sizeMod':1},'hitImg':{'name':"thunder2",'sizeMod':0.5},
+			'dmg':{'main':100,'ratio':{'melee':0,'range':10,'magic':80,'fire':10,'cold':0,'lightning':0}},
+			"parabole":{
+				'height':10,			//height of parabole (distance from middle)
+				'min':100,				//min distance where bullets will collide
+				'max':500,				//max distance where bullets will collide
+				'timer':50,				//time before bullets collide
+			},
+			
+		}
+	}};
+	
+	a['bulletMulti-boom'] = {'type':'attack','name':'boom','icon':'attackMagic.fireball',
+		'spd':{'main':0.8,'support':0.2},'period':15,
+		'action':{'func':'Combat.action.attack','param':{
+			'type':"bullet",'angle':15,'amount':10,
+			'objImg':{'name':"arrow",'sizeMod':1},'hitImg':{'name':"thunder2",'sizeMod':0.5},
+			'dmg':{'main':100,'ratio':{'melee':0,'range':10,'magic':80,'fire':10,'cold':0,'lightning':0}},
+			'boomerang':{
+				'comeBackTime':50,		//time before bullet turns 180 degre
+				'spd':2,				//spd mod
+				'spdBack':1.5,			//spd mod when bullet comes back
+				'newId':1				//after turn back, renew id so it can hit enemy again
+			},
+			
+		}
+	}};
+	
+	
+			
+	
+	
+	
+	
+	
+	
+	
+	//test above
 	
 	a['bullet360'] = {'type':'attack','name':'360 Shot','icon':'attackMagic.fire',
 		'spd':{'main':0.8,'support':0.2},'period':200,'cost':{'mana':50},
@@ -65,7 +318,6 @@ Init.db.ability = function(cb){
 		}	
 	}};
 
-	//{name:'invincibility',target:player.name,sizeMod:1}
 	a['dodgeRegular'] = {'type':'dodge','name':'Dodge','icon':'dodge.start',
 		'spd':{'main':0.8,'support':0.2},'period':25,'cost':{"dodge":75},
 		'action':{'func':'Actor.boost','param':[[
@@ -161,7 +413,6 @@ Ability.creation = function(a){
 	a.spd.support = 1- a.spd.main;
 	a.cost = a.cost || {};
 	a.reset = a.reset || {'attack':0};
-	a.tag = a.tag || {};
 	a.targetIf = a.targetIf || 0;
 	a.charge = 0;
 	a.press = 0;
@@ -170,17 +421,26 @@ Ability.creation = function(a){
 	a.orb = {'upgrade':{'amount':0,'bonus':'none'}};
 	a.action = a.action || [];
 	
-	if(a.action && a.action.func === 'Combat.action.attack'){
-		var at = a.action.param;
-		at.dmg = Craft.ratio.normalize(at.dmg);
+	if(a.action){
+		if(a.action.func === 'Combat.action.attack'){
+			if(a.action.anim !== false && !a.action.anim) a.action.anim = 'attack';
+			
+			var at = a.action.param;
+			at.dmg = Craft.ratio.normalize(at.dmg);
+		}
+		if(a.action.func === 'Combat.action.boost'){
+			if(a.action.animOnSprite !== false && !a.action.animOnSprite) action.animOnSprite = 'boost';
+		}
 	}
-	
+
+		
 	//Setting Item Part
 	Item.creation({
 		name:a.name,
 		visual:'plan.planA',
-		option:[	{'name':'Examine Ability','func':'Actor.examineAbility','param':[a.id]},
-					{'name':'Learn Ability','func':'Actor.learnAbility','param':[a.id]},
+		option:[	
+			{'name':'Examine Ability','func':'Actor.examineAbility','param':[a.id]},
+			{'name':'Learn Ability','func':'Actor.learnAbility','param':[a.id]},
 		],
 		type:'ability',
 		id:a.id,
@@ -191,7 +451,6 @@ Ability.creation = function(a){
 
 Ability.uncompress = function(abi){	
 	var ab = typeof abi === 'object' ? abi : deepClone(Db.ability[abi]);
-	console.log(Db.ability[abi]);
 	
 	ab = Ability.uncompress.mod(ab);
 	
@@ -212,32 +471,28 @@ Ability.uncompress.mod = function(ab){
 }
 
 Ability.template = function(){
-	return {'name':'Fire','tag':[],'icon':'melee.mace',
-		'cost':{"dodge":0},'reset':{'attack':0,'tag':{}},
+	return {
+		'name':'Fire','icon':'melee.mace',
+		'cost':{"dodge":0},'reset':{'attack':0},
 		'spd':{'main':0.8,'support':0.2},'period':25,
-			'action':
-				{'func':'Combat.action.attack','param':{
-					'attack':
-						{type:"bullet",'angle':5,'amount':1, 'aim': 0,'objImg':{'name':"fireball",'sizeMod':1},'hitImg':{'name':"fire2",'sizeMod':0.5},
-						'dmg':{'main':10,'ratio':{'melee':0,'range':10,'magic':80,'fire':10,'cold':0,'lightning':0}},
-						},
-					'anim':'Attack',
-				}}
-			
+		'action':{'func':'Combat.action.attack','param':{
+				'type':"bullet",'angle':5,'amount':1, 'aim': 0,
+				'objImg':{'name':"fireball",'sizeMod':1},'hitImg':{'name':"fire2",'sizeMod':0.5},
+				'dmg':{'main':10,'ratio':{'melee':0,'range':10,'magic':80,'fire':10,'cold':0,'lightning':0}},
+			}
+		}
 	};
 }
 
 Ability.template.attack = function(){
 	return {
-	'type':"strike",'angle':0,'amount':1,'aim': 0,'objImg':0,'hitImg':{'name':'attack3','sizeMod':0.5},
-	'delay':0,'maxHit':1,'w':1,'h':1,'maxRange':0,'minRange':0,
-	'dmg':{'main':10,'ratio':{'melee':0,'range':10,'magic':80,'fire':10,'cold':0,'lightning':0}},
-	'mods':{},
+		'type':"bullet",'angle':5,'amount':1, 'aim': 0,
+		'objImg':{'name':"fireball",'sizeMod':1},'hitImg':{'name':"fire2",'sizeMod':0.5},
+		'dmg':{'main':10,'ratio':{'melee':0,'range':10,'magic':80,'fire':10,'cold':0,'lightning':0}},
 	};
 }
 
 
-	
 
 /*
 Ability
@@ -304,17 +559,7 @@ boost-enemy
 dodge + freeze nearby
 while dodging, boost def
 
-*/
-//need premade ability AND premade ability builder
-/*
-'pierce':{"amount":2,"dmgReduc":1},
-"parabole":{'height':10,'min':100,'max':500,'maxTimer':50},
-'boomerang':{'comeBackTime':50,'spd':2,'spdBack':1.5,'newId':1},
-'nova':{'period':1,'rotation':10,'attack':{'type':"Bullet",'objImg':"fireball_mini",'angle':360,'amount':8,'aim':0,'dmg':{'main':10,'ratio':{'melee':0,'range':10,'magic':80,'fire':10,'cold':0,'lightning':0}},'mods':{ 'spd':30}}}, 'spd':8,				
-'sin':{"amp":5,"freq":2}
 
-
-'function':{'func':'test','param':[],'chance':0}
 if(attack[0].mods[i].chance <= 0.33){ attack[0].mods[i].chance *= 2;} 	else {attack[0].mods[i].chance = 1-(1-attack[0].mods[i].chance)/2}
 */
 

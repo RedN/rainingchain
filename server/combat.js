@@ -49,13 +49,17 @@ Combat.action = function(id,action){
     var player = typeof id === 'string' ? List.all[id] : id;
 	if(!player) return;
 
-    if(action.anim)	changeSprite(player,{'anim':action.anim});
+  
+	if(action.anim)	Sprite.update(player,{'anim':action.anim});
+	if(action.animOnSprite)	Anim.creation(action.animOnSprite,player,1);
 	
-	if(action.func && action.param){
-		applyFunc.key(id,action.func,action.param);
-	}
+
+	if(action.func && action.param)	applyFunc.key(id,action.func,action.param);
     
 }
+
+
+		
 
 Combat.action.attack = function(id,action){   
 	var player = typeof id === 'string' ? List.all[id] : id;
@@ -138,7 +142,7 @@ Combat.action.summon = function(key,info,enemy){
 }
 
 Combat.action.boost = function(key,info){
-    Actor.boost.apply(this, info);
+    Actor.boost.apply(this, [info]);
 }
 
 

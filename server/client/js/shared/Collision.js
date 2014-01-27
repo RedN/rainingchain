@@ -90,9 +90,10 @@ Collision.getMouse = function(key){
 Collision.BulletActor = function(atk){
 	for(var i in atk.viewedBy){ 
 		var player = List.all[i];
+		if(!player || !List.all[atk.parent]) return; 
+		
 		if(Combat.hitIf.global(atk,player)){
 			var hIf = typeof atk.hitIf == 'function' ? atk.hitIf : Combat.hitIf.list[atk.hitIf];
-			if(!player || !List.all[atk.parent]){ return; }
 			
 			var a = hIf(player,List.all[atk.parent]);
 			if((!atk.hitIfMod && a) || (atk.hitIfMod && !a)){
@@ -105,7 +106,7 @@ Collision.BulletActor = function(atk){
 }
 
 Collision.BulletMap = function(bullet){
-	if(Collision.PtMap({x:bullet.x,y:bullet.y},bullet.map,bullet)){
+	if(!bullet.ghost && Collision.PtMap({x:bullet.x,y:bullet.y},bullet.map,bullet)){
 		bullet.toRemove = 1;
 	}
 }

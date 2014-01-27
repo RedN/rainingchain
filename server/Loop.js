@@ -129,9 +129,14 @@ ActiveList.test = function(mort,obj){
 
 ActiveList.add = function(bullet){
 	for(var i in List.actor){
-		if(ActiveList.test(List.actor[i],bullet)){ 
-			List.actor[i].activeList[bullet.id] = bullet.id;
-			if(List.actor[i].type != 'player' || bullet.type == 'strike'){ bullet.viewedBy[List.actor[i].id] = List.actor[i].id; }
+		var player = List.actor[i];
+		if(!player) continue;
+		
+		if(ActiveList.test(player,bullet)){ 
+			player.activeList[bullet.id] = bullet.id;
+			if(player.type !== 'player' || bullet.type === 'strike'){ 
+				bullet.viewedBy[player.id] = 1; 
+			}
 		}
 	}
 }

@@ -250,12 +250,13 @@ Change.update.init = function(){
 }
 
 Change.update.watch = function(mort,info,priv){
+	if(!mort.old) console.log(mort);
     //Test condition to test
 	if(info.condition && !info.condition(mort)) return; 
 
 	//Get Old and New Value and Set Old = to New
 	var valRaw = valueViaArray({'origin':mort,'array':info.array});
-	if(valRaw && info.filter)  valRaw = info.filter !== 'toClient' ? info.filter(valRaw) : valRaw.toClient();
+	if(valRaw && info.filter) valRaw = info.filter(valRaw);
 	        
 	var val0 = stringify(valRaw);                                   //Get new
 	

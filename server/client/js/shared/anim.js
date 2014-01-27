@@ -109,6 +109,9 @@ Anim.creation = function(name,target,sizeMod){	//server side
 	List.anim[id] = {'sizeMod':sizeMod,'name':name,'target':target,'id':id};
 }
 
+
+
+
 if(!server){
 	Anim.creation = function(a){	//client side
 		if(typeof a.target === 'string'){

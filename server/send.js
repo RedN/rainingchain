@@ -140,7 +140,7 @@ Change.send.init.bullet = function(bullet){	//For Init
 	draw.id = bullet.id;
 	draw.xya = [Math.round(bullet.x),Math.round(bullet.y),Math.round(bullet.angle)];
 	draw.type = 'bullet';
-	draw.sprite = {'name':bullet.sprite.name,'anim':bullet.sprite.anim || 'Walk','sizeMod':bullet.sprite.sizeMod || 1};
+	draw.sprite = {'name':bullet.sprite.name,'anim':bullet.sprite.anim || 'walk','sizeMod':bullet.sprite.sizeMod || 1};
 	return draw;
 }
 
@@ -148,7 +148,7 @@ Change.send.init.actor = function(enemy){	//For Init
 	var draw = {};
 	draw.id = enemy.publicId;
 	draw.xya = [Math.round(enemy.x),Math.round(enemy.y),Math.round(enemy.angle)];
-	draw.sprite = {'name':enemy.sprite.name,'anim':enemy.sprite.anim || 'Walk','sizeMod':enemy.sprite.sizeMod || 1};
+	draw.sprite = {'name':enemy.sprite.name,'anim':enemy.sprite.anim || 'walk','sizeMod':enemy.sprite.sizeMod || 1};
 	draw.hp = Math.round(enemy.hp);
 	draw.resource = {'hp':{'max':Math.round(enemy.resource.hp.max)}};
 	draw.maxSpd = Math.round(enemy.maxSpd);

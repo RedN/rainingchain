@@ -40,7 +40,7 @@ Init.actor = function(){
 		mort.dead = 0;          //dead = invisible
 		mort.killed = 0;        //killed = cant move, 0 hp but visible (aka death animation)
 		mort.pickRadius = 100;  //distance to pick items on ground
-		mort.sprite = {"name":"pMace","anim":"Walk","sizeMod":1}			
+		mort.sprite = {"name":"pMace","anim":"walk","sizeMod":1}			
 		
 		mort.targetIf = mort.type;  //condition used by monsters to find their target. check targetIfList
 		
@@ -210,6 +210,12 @@ Init.actor = function(){
 			mort.ability = [{id:'bulletMulti'}];
 			mort.abilityList = {
 				'bulletMulti':{id:'bulletMulti'},
+				'bulletMulti-boom':{id:'bulletMulti-boom'},
+				'bulletMulti-para':{id:'bulletMulti-para'},
+				'bulletMulti-sin':{id:'bulletMulti-sin'},
+				'bulletMulti-hitmod':{id:'bulletMulti-hitmod'},
+				'bulletMulti-fast':{id:'bulletMulti-fast'},
+				
 				//'bulletSingle':{id:'bulletSingle'},
 				//'strikeSingle':{id:'strikeSingle'},
 				//'dodgeRegular':{id:'dodgeRegular'},

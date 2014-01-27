@@ -13,7 +13,7 @@ Bullet.loop = function(b){
 	Bullet.loop.collision(b);
 	Bullet.loop.move(b);
 	
-	if(b.nova){Bullet.loop.Nova(b);}
+	if(b.nova){Bullet.loop.nova(b);}
 	
 	if(++b.timer >= b.maxTimer || b.toRemove){
 		Bullet.remove(b);
@@ -24,7 +24,7 @@ Bullet.loop = function(b){
 Bullet.loop.nova = function(b){
 	b.angle += b.nova.rotation;
 	if((b.timer % b.nova.period) === 0){
-		Combat.action.attack.perform(b,b.nova.attack);
+		Combat.action.attack(b,useTemplate(Attack.template(),b.nova.attack));
 	}
 
 }
@@ -52,12 +52,12 @@ Bullet.loop.move.sin = function(b){
 }
 
 Bullet.loop.move.parabole = function(b){
-	var axeX = (b.parabole.dist/b.parabole.maxTimer*b.timer);
+	var axeX = (b.parabole.dist/b.parabole.timer*b.timer);
 	var axeY = 1/b.parabole.dist/10 
 				* b.parabole.height 
 				* ((b.num%2)*2-1) * Math.floor(b.num/2)*2/b.maxNum
-				* (b.parabole.dist/b.parabole.maxTimer*b.timer)
-				*((b.parabole.dist/b.parabole.maxTimer*b.timer)
+				* (b.parabole.dist/b.parabole.timer*b.timer)
+				*((b.parabole.dist/b.parabole.timer*b.timer)
 				-b.parabole.dist);
 
 	var	numX = (axeX*cos(b.crAngle) - axeY* sin(b.crAngle));
@@ -65,7 +65,7 @@ Bullet.loop.move.parabole = function(b){
 
 	b.x = b.crX + numX;
 	b.y = b.crY + numY;
-	if(b.timer >= b.parabole.maxTimer){ b.toRemove = 1; };
+	if(b.timer >= b.parabole.timer){ b.toRemove = 1; };
 }
 		
 Bullet.loop.move.boomerang = function(b){	

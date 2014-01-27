@@ -45,7 +45,7 @@ Init.db = function(dbpsw){
 
 	db.err = function(err){ if (err) throw err; }
 
-	db.deleteAll();
+	//db.deleteAll();
 	//db.filterDb();
 	
 	
