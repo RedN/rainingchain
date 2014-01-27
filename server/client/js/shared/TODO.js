@@ -1,9 +1,10 @@
 
 
-dodge = invincible
 
 craft material convert
 
+
+hit = red, invincible = white
 
 html window
 

@@ -7,7 +7,7 @@ try {
 	data = Receive.parse(data);
  
     //Init Anim
-	for(var i in data.a) Receive.init.anim(data.a[i]);	
+	for(var i in data.a) Anim.creation(data.a[i]);	
 	
 	//Init Full List aka never seen before
 	if(data.i){
@@ -119,30 +119,6 @@ Receive.init.bullet = function(bullet){
 	List.all[bullet.id] = bullet;	
 }
 
-Receive.init.anim = function(a){
-	if(typeof a.target === 'string'){
-		if(a.target === player.name){	a.target = player;
-		} else {a.target = List.all[a.target];}
-	}
-	
-	a.id = Math.randomId();
-	a.timer = 0;
-	a.sizeMod = a.sizeMod || 1;
-	a.spdMod = a.spdMod || 1;
-	if(a.target){  
-		a.x = a.target.x;
-		a.y = a.target.y;
-		a.slot = 0;			
-		List.anim[a.id] = a;
-	}
-	
-	var sfx = a.sfx || Db.anim[a.name].sfx;
-	if(sfx && a.sfx !== false){	
-		sfx.volume = sfx.volume || 1;
-		sfx.volume *= Math.max(0.1,1 - 0.2*Math.floor(Collision.distancePtPt(player,a)/50));	
-		Sfx.creation(sfx);
-	}	
-}
 
 Receive.init.drop = function(drop){
 	drop.toRemove = 0;

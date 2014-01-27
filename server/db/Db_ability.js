@@ -60,6 +60,7 @@ Init.db.ability = function(cb){
 			]]}
 	};
 	*/
+	//{name:'invincibility',target:player.name,sizeMod:1}
 	a['dodgeRegular'] = {'type':'dodge','name':'Dodge','icon':'dodge.start',
 		'spd':{'main':0.8,'support':0.2},'period':25,'cost':{"dodge":75},'action':{'func':'Actor.boost','param':[[
 			{"stat":"globalDef","type":"+","value":Cst.bigInt,"time":4,"name":"Dodge"},

@@ -65,7 +65,8 @@ Init.db.anim = function(){
 			"wind1":{'frame':14},
 			"wind2":{'frame':10},
 			
-			"fire_explosion":{'frame':40,'frameX':40,'spd':2}
+			"fire_explosion":{'frame':40,'frameX':40,'spd':2},
+			'invincibility':{'spd':1/4,'layer':'b','frame':7,'link':'http://fc09.deviantart.net/fs70/f/2011/305/3/8/aura_sprites_by_gohanxdaichimiura-d4ep0i5.png'},
 		}
 		
 			
@@ -101,17 +102,39 @@ Anim.loop = function (anim){
 	}	
 }
 
-Anim.creation = function(name,target,sizeMod){
+Anim.creation = function(name,target,sizeMod){	//server side
 	//Add animation to the game. target can be a string to specific an actor, or an obj x:1,y:1,map:1
 	sizeMod = sizeMod || 1;
 	var id = 'a'+Math.randomId(5);
 	List.anim[id] = {'sizeMod':sizeMod,'name':name,'target':target,'id':id};
 }
 
-
-
-
-
+if(!server){
+	Anim.creation = function(a){	//client side
+		if(typeof a.target === 'string'){
+			if(a.target === player.name){	a.target = player;
+			} else {a.target = List.all[a.target];}
+		}
+		
+		a.id = Math.randomId();
+		a.timer = 0;
+		a.sizeMod = a.sizeMod || 1;
+		a.spdMod = a.spdMod || 1;
+		if(a.target){  
+			a.x = a.target.x;
+			a.y = a.target.y;
+			a.slot = 0;			
+			List.anim[a.id] = a;
+		}
+		
+		var sfx = a.sfx || Db.anim[a.name].sfx;
+		if(sfx && a.sfx !== false){	
+			sfx.volume = sfx.volume || 1;
+			sfx.volume *= Math.max(0.1,1 - 0.2*Math.floor(Collision.distancePtPt(player,a)/50));	
+			Sfx.creation(sfx);
+		}	
+	}
+}
 
 
 

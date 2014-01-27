@@ -8,7 +8,9 @@ Loop = function(){
 	Loop.send();
 	Draw.loop();
 	Loop.warning();
+	Loop.frameCount++;
 }
+Loop.frameCount = 0;
 
 Loop.send = function(){ 
 	Input.send(); 
@@ -40,7 +42,6 @@ Loop.player = function(){
 		Actor.update.permBoost(player);	
 		Loop.player.old.map = player.map
 	}
-	
 }
 
 Loop.player.old = {};
