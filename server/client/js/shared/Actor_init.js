@@ -210,11 +210,11 @@ Init.actor = function(){
 			mort.ability = [{id:'bulletMulti'}];
 			mort.abilityList = {
 				'bulletMulti':{id:'bulletMulti'},
-				'bulletSingle':{id:'bulletSingle'},
-				'strikeSingle':{id:'strikeSingle'},
-				'dodgeRegular':{id:'dodgeRegular'},
-				'stumble':{id:'stumble'},
-				'summonDragon':{id:'summonDragon'},
+				//'bulletSingle':{id:'bulletSingle'},
+				//'strikeSingle':{id:'strikeSingle'},
+				//'dodgeRegular':{id:'dodgeRegular'},
+				//'stumble':{id:'stumble'},
+				//'summonDragon':{id:'summonDragon'},
 			};
 		}
 		

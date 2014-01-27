@@ -7,10 +7,16 @@ a['bulletMulti'] = {
 	'period':15,                        //atk/s (period = 40 => 1 atk/s)
 
 	//Check Attack.js for more detail about the attribute of attack
-	'action':{'func':'Combat.action.attack','param':{'anim':'Attack',
-		'attack':{type:"bullet",
-			'angle':15,'amount':5, 'aim': 0,'objImg':{'name':"arrow",'sizeMod':1},'hitImg':{'name':"thunder2",'sizeMod':0.5},
+	'action':{'func':'Combat.action.attack','param':{
+			type:"bullet",'angle':15,'amount':5, 'aim': 0,
+			'objImg':{'name':"arrow",'sizeMod':1},'hitImg':{'name':"thunder2",'sizeMod':0.5},
+			'dmg':{'main':100,'ratio':{'melee':0,'range':10,'magic':80,'fire':10,'cold':0,'lightning':0}},
 	}}}};
+	
+	
+	//   'curse':{'chance':1,'boost':[{'stat':'maxSpd','type':'*','value':0.1,'time':50}]},
+	//	'func':'Combat.action.summon' ::::: {'name':'summonDragon','maxChild':5,'time':1000,'distance':500},{"category":"eSlime","variant":"Big","lvl":0,"modAmount":1,'amount':1}
+		
 */	
 
 Init.db.ability = function(cb){
@@ -22,65 +28,51 @@ Init.db.ability = function(cb){
 		}
 	
 	a['bulletMulti'] = {'type':'attack','name':'Multishot','icon':'attackMagic.fireball',
-		'spd':{'main':0.8,'support':0.2},'period':15,'action':{'func':'Combat.action.attack','param':{'anim':'Attack',
-		'attack':{type:"bullet",
-			'angle':15,'amount':1, 'aim': 0,'objImg':{'name':"arrow",'sizeMod':1},'hitImg':{'name':"thunder2",'sizeMod':0.5},
+		'spd':{'main':0.8,'support':0.2},'period':15,
+		'action':{'func':'Combat.action.attack','param':{
+			'type':"bullet",'angle':15,'amount':1,
+			'objImg':{'name':"arrow",'sizeMod':1},'hitImg':{'name':"thunder2",'sizeMod':0.5},
 			'dmg':{'main':100,'ratio':{'melee':0,'range':10,'magic':80,'fire':10,'cold':0,'lightning':0}},
 			'leech':{'chance':1,'magn':1,'time':1}
-	}}}};
+		}
+	}};
 	
 	a['bullet360'] = {'type':'attack','name':'360 Shot','icon':'attackMagic.fire',
-		'spd':{'main':0.8,'support':0.2},'period':200,'cost':{'mana':50},'action':{'func':'Combat.action.attack','param':{'anim':'Attack',
-		'attack':{type:"bullet",
-			'angle':360,'amount':9, 'aim': 0,'objImg':{'name':"fireball",'sizeMod':1},'hitImg':{'name':"fire_explosion",'sizeMod':0.5},
+		'spd':{'main':0.8,'support':0.2},'period':200,'cost':{'mana':50},
+		'action':{'func':'Combat.action.attack','param':{
+			'type':"bullet",'angle':360,'amount':9,
+			'objImg':{'name':"fireball",'sizeMod':1},'hitImg':{'name':"fire_explosion",'sizeMod':0.5},
 			'dmg':{'main':100,'ratio':{'melee':0,'range':10,'magic':80,'fire':10,'cold':0,'lightning':0}},
-	}}}};	
+		}
+	}};	
 	
 	a['bulletSingle'] = {'type':'attack','name':'Single','icon':'attackMagic.meteor',
-		'spd':{'main':0.8,'support':0.2},'period':50,'action':{'func':'Combat.action.attack','param':{'anim':'Attack',
-		'attack':{'type':"bullet",
-			'angle':15,'amount':1, 'aim': 0,'objImg':{'name':"iceshard",'sizeMod':1},'hitImg':{'name':"ice2",'sizeMod':0.5},
+		'spd':{'main':0.8,'support':0.2},'period':50,
+		'action':{'func':'Combat.action.attack','param':{
+			'type':"bullet",'angle':15,'amount':1,
+			'objImg':{'name':"iceshard",'sizeMod':1},'hitImg':{'name':"ice2",'sizeMod':0.5},
 			'dmg':{'main':100,'ratio':{'melee':0,'range':10,'magic':80,'fire':10,'cold':0,'lightning':0}},
-	}}}};
+		}
+	}};
 
 	a['strikeSingle'] = {'type':'attack','name':'Slash','icon':'attackMelee.slash',
-		'spd':{'main':0.8,'support':0.2},'period':15,'action':{'func':'Combat.action.attack','param':{'anim':'Attack',
-		'attack':{'type':"strike",
-			'angle':0,'amount':1, 'aim':0, 'hitImg':{'name':"attack1",'sizeMod':0.5},'objImg':{'name':"attack1",'sizeMod':0.5},
-			'delay':2,'maxHit':1,'width':1,'height':1,'minRange':5,'maxRange':50,
+		'spd':{'main':0.8,'support':0.2},'period':15,		
+		'action':{'func':'Combat.action.attack','param':{
+			'type':"strike",'angle':0,'amount':1,'delay':2,'maxHit':1,'width':1,'height':1,'minRange':5,'maxRange':50,
+			'hitImg':{'name':"attack1",'sizeMod':0.5},'objImg':{'name':"attack1",'sizeMod':0.5},
 			'dmg':{'main':100,'ratio':{'melee':0,'range':10,'magic':80,'fire':10,'cold':0,'lightning':0}},
 			'hitIfMod':0,'heal':{'hp':100}
-	}}}};
-	/*
-	a['dodgeRegular'] = {'type':'dodge','name':'Dodge','icon':'dodge.start',
-		'spd':{'main':0.8,'support':0.2},'period':25,'cost':{"dodge":75},'action':{'func':'Actor.boost','param':[[
-			{"stat":"maxSpd","type":"+","value":100,"time":1,"name":"Dodge"},
-			{"stat":"acc","type":"+","value":100,"time":1,"name":"Dodge"},
-			{"stat":"friction","type":"*","value":0.7,"time":6,"name":"Dodge"},
-			]]}
-	};
-	*/
+		}	
+	}};
+
 	//{name:'invincibility',target:player.name,sizeMod:1}
 	a['dodgeRegular'] = {'type':'dodge','name':'Dodge','icon':'dodge.start',
-		'spd':{'main':0.8,'support':0.2},'period':25,'cost':{"dodge":75},'action':{'func':'Actor.boost','param':[[
+		'spd':{'main':0.8,'support':0.2},'period':25,'cost':{"dodge":75},
+		'action':{'func':'Actor.boost','param':[[
 			{"stat":"globalDef","type":"+","value":Cst.bigInt,"time":4,"name":"Dodge"},
-			]]}
+		]]}
 	};
 	
-	a['stumble'] = {'type':'curse','name':'Stumble','icon':'curse.stumble',
-		'spd':{'main':0.8,'support':0.2},'period':25,'cost':{'mana':50},'action':{'func':'Combat.action.attack','param':{'anim':'Attack',
-		'attack':{'type':"strike",
-			'angle':0,'amount':1, 'aim': 0,'objImg':{'name':"darkness1",'sizeMod':1},'hitImg':{'name':"darkness1",'sizeMod':0.5},
-			'delay':2,'maxHit':10,'width':100,'height':100,'minRange':100,'maxRange':200,
-			'dmg':{'main':100,'ratio':{'melee':0,'range':10,'magic':80,'fire':10,'cold':0,'lightning':0}},
-			'curse':{'chance':1,'boost':[{'stat':'maxSpd','type':'*','value':0.1,'time':50}]},
-	}}}};
-	
-	a['summonDragon'] = {'type':'summon','name':'Summon Dragon','icon':'summon.dragon',
-		'spd':{'main':0.8,'support':0.2},'period':25,'cost':{'mana':50},'action':{'func':'Combat.action.summon','param':[
-		{'name':'summonDragon','maxChild':5,'time':1000,'distance':500},{"category":"eSlime","variant":"Big","lvl":0,"modAmount":1,'amount':1}
-		
-	]}};
 	
 	
 	for(var i in a){
@@ -99,14 +91,15 @@ Init.db.ability = function(cb){
 Init.db.ability.template = function(){
 	Db.ability.template = {}; var a = Db.ability.template;
 	
-	a['fireball'] = {'type':'attack','name':'Fireball','icon':'attackMagic.fireball','orb':'dmg',
-		'spd':{'main':0.8,'support':0.2},'period':[15,20],'action':{'func':'Combat.action.attack','param':{'anim':'Attack',
-		'attack':{type:"bullet",
-			'angle':0,'amount':1, 'aim': 0,'objImg':{'name':"arrow",'sizeMod':1},'hitImg':{'name':"fire_explosion",'sizeMod':0.5},
+	a['fireball'] = {'type':'attack','name':'Fireball','icon':'attackMagic.fireball',
+		'spd':{'main':0.8,'support':0.2},'period':[15,20],'orb':'dmg',
+		'action':{'func':'Combat.action.attack','param':{	
+			'type':"bullet",'angle':0,'amount':1,
+			'objImg':{'name':"arrow",'sizeMod':1},'hitImg':{'name':"fire_explosion",'sizeMod':0.5},
 			'dmg':{'main':[1,1.2],'ratio':{'melee':0,'range':[25,50],'magic':[25,50],'fire':[25,50],'cold':0,'lightning':0}},
 			'burn':{'chance':[1.5,2],'magn':[1,1.2],'time':1}
-		}}},
-	};
+		}
+	}};
 		
 	for(var i in a){
 		if(Db.ability.orb[a[i].orb]){	a[i].orb = {'upgrade':{'amount':0,'bonus':a[i].orb}};	} 
@@ -121,7 +114,7 @@ Init.db.ability.mod = function(){	//needed by client
 			'name':'x2 Bullets',
 			'info':'Your ability shoots x2 more bullets. Main damage is reduced by 50%.',
 			'func':(function(ab,orb,log){
-				var atk = ab.action.param.attack;
+				var atk = ab.action.param;
 				atk.amount *= 2;
 				atk.dmg.main /= 1.5;
 				return ab;
@@ -146,7 +139,7 @@ Init.db.ability.orb = function(){
 	//defined here or directly inside Db.ability.template if unique
 	Db.ability.orb = {
 		'dmg':(function(ab,orb,log){
-			var atk = ab.action.param.attack;
+			var atk = ab.action.param;
 			atk.amount *= log;	//bad
 			return ab;
 		}),
@@ -178,7 +171,7 @@ Ability.creation = function(a){
 	a.action = a.action || [];
 	
 	if(a.action && a.action.func === 'Combat.action.attack'){
-		var at = a.action.param.attack;
+		var at = a.action.param;
 		at.dmg = Craft.ratio.normalize(at.dmg);
 	}
 	
@@ -198,13 +191,14 @@ Ability.creation = function(a){
 
 Ability.uncompress = function(abi){	
 	var ab = typeof abi === 'object' ? abi : deepClone(Db.ability[abi]);
+	console.log(Db.ability[abi]);
 	
 	ab = Ability.uncompress.mod(ab);
 	
 	if(ab.action && ab.action.func === 'Combat.action.attack'){
-		var at = ab.action.param.attack;
+		var at = ab.action.param;
 		at = useTemplate(Attack.template(),at);
-		ab.action.param.attack = new Function('return ' + stringify(at));
+		ab.action.param = new Function('return ' + stringify(at));
 	}
 	return ab;
 }

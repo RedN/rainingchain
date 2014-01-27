@@ -61,7 +61,7 @@ Combat.action.attack = function(id,action){
 	var player = typeof id === 'string' ? List.all[id] : id;
 	
 	//Add Bonus and mastery
-	var atk = typeof action.attack === 'function' ? action.attack() : deepClone(action.attack[i]); 
+	var atk = typeof action === 'function' ? action() : deepClone(action); 
 	atk = Combat.action.attack.mod(player,atk);
 	Combat.action.attack.perform(player,atk);
 }

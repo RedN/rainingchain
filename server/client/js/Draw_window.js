@@ -570,7 +570,7 @@ Draw.window.ability.action.attack = function(diffX,diffY){  ctxrestore();
 	s.zy += diffY;
 	
 	var ab = player.abilityList[Draw.old.abilityShowed];
-	var preatk = deepClone(ab.action.param.attack);
+	var preatk = deepClone(ab.action.param);
 	var atk = Combat.action.attack.mod(player,deepClone(preatk));
 	
 	var fontSize = 25;	

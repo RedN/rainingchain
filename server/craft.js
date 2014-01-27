@@ -419,7 +419,7 @@ Craft.ability.template = function(seed){
 	if(typeof ab.period === 'object'){ ab.period = Craft.boost.generate.roll(ab.period,qua); }
 	
 	if(ab.action.func === 'Combat.action.attack'){
-		var atk = ab.action.param.attack;
+		var atk = ab.action.param;
 		
 		//All
 		if(typeof atk.angle === 'object'){ atk.angle = Craft.boost.generate.roll(atk.angle,qua); }

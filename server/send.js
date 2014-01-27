@@ -230,7 +230,7 @@ Change.send.convert.abilityList = function(list){
 	for(var i in copy){
 		var ab = copy[i];
 		if(ab && ab.action && ab.action.func == 'Combat.action.attack'){
-			ab.action.param.attack = list[i].action.param.attack();
+			ab.action.param = list[i].action.param();
 		}
 	}
 	return copy;
