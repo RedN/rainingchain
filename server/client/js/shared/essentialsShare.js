@@ -394,12 +394,14 @@ Object.defineProperty(Array.prototype, "random", {
 
 Object.defineProperty(Object.prototype, "random", {
     enumerable: false,
-    value: function(){
+    value: function(name){
 		if(!Object.keys(this).length) return null;
 		
-		var ratioed = convertRatio(this);		
-		var a = Math.random();
+		if(name){ var ratioed = {}; for(var i in this) ratioed[i] = this[i][name]; }
+		else { var ratioed = this; }
 		
+		ratioed = convertRatio(ratioed);		
+		var a = Math.random();
 		for(var i in ratioed){
 			if(ratioed[i] >= a) return i;
 			a -= ratioed[i];

@@ -78,12 +78,8 @@ Actor.creation.db = function(e,d){
 	e.publicId = Math.random().toString(36).substring(13);
 	e.frameCount = Math.floor(Math.random()*100);
 	
-	
-	e.globalDef = typeof e.globalDef === 'function' ? e.globalDef(e.lvl) : e.globalDef * Actor.creation.db.lvlDefault(e.lvl).globalDef
-	e.globalDmg = typeof e.globalDmg === 'function' ? e.globalDmg(e.lvl) : e.globalDmg * Actor.creation.db.lvlDefault(e.lvl).globalDmg
-	
-	console.log(Db.enemy[d.category][d.variant].toString(),e.globalDmg,typeof e.globalDmg);
-	if(typeof e.globalDmg === 'function') console.log(e.globalDmg,e.globalDmg(e.lvl));
+	e.globalDef = typeof e.globalDef === 'function' ? e.globalDef(e.lvl) : e.globalDef * Actor.creation.db.globalLvlMod(e.lvl).globalDef
+	e.globalDmg = typeof e.globalDmg === 'function' ? e.globalDmg(e.lvl) : e.globalDmg * Actor.creation.db.globalLvlMod(e.lvl).globalDmg
 	
 	if(e.boss){	
 		e.boss = Boss.creation(e.boss);
@@ -102,7 +98,7 @@ Actor.creation.db = function(e,d){
 	return e;
 }
 
-Actor.creation.db.lvlDefault = function(lvl){
+Actor.creation.db.globalLvlMod = function(lvl){
 	return {
 		globalDef:lvl+10,
 		globalDmg:lvl+10,
@@ -126,41 +122,56 @@ Actor.creation.info = function(e,cr){
 Actor.creation.mod = function(e,d){
 	var list = Object.keys(Actor.creation.mod.list);
 	for(var i = 0 ; i < d.modAmount ; i++){
-		var choosen = list[Math.floor(Math.random()*list.length)];
-		e = Actor.creation.mod.list[choosen](e);
-		e.name += ': ' + choosen;
-		e.context += ': ' + choosen;
+		var choosen = Actor.creation.mod.list.random('chance');
+		if(e.modList.have(choosen)){ i -= 0.99; continue; }
+		
 		e.modList.push(choosen);
+		choosen = Actor.creation.mod.list[choosen];
+		e = choosen.func(e);
+		e.name += ': ' + choosen.name;
+		e.context += ': ' + choosen.name;
+		
 	}
 	return e;
 }
 
 Actor.creation.mod.list = {
-	
-	'immuneFire': (function(e){ e.equip.def.fire = Cst.bigInt;  return e; }),
-	'immuneCold': (function(e){ e.equip.def.cold = Cst.bigInt;  return e; }),
-	'immuneLightning': (function(e){ e.equip.def.lightning = Cst.bigInt;  return e; }),
-	'immuneMelee': (function(e){ e.equip.def.melee = Cst.bigInt;  return e; }),
-	'immuneRange': (function(e){ e.equip.def.range = Cst.bigInt;  return e; }),
-	'immuneMagic': (function(e){ e.equip.def.magic = Cst.bigInt;  return e; }),
+	'immuneMelee':{'name':'Immune to Melee','chance':1,
+		'func': (function(e){ e.equip.def.melee = Cst.bigInt;  return e; })},
+	'immuneRange':{'name':'Immune to Range','chance':1,
+		'func': (function(e){ e.equip.def.range = Cst.bigInt;  return e; })},
+	'immuneMagic':{'name':'Immune to Magic','chance':1,
+		'func': (function(e){ e.equip.def.magic = Cst.bigInt;  return e; })},
+	'immuneFire':{'name':'Immune to Fire','chance':1,
+		'func':(function(e){ e.equip.def.fire = Cst.bigInt;  return e; })},
+	'immuneCold':{'name':'Immune to Cole','chance':1,
+		'func': (function(e){ e.equip.def.cold = Cst.bigInt;  return e; })},
+	'immuneLightning':{'name':'Immune to Lightning','chance':1,
+		'func': (function(e){ e.equip.def.lightning = Cst.bigInt;  return e; })},
 
-	'immuneStatus': (function(e){ for(var i in e.status){ e.status[i].resist = 1; }  return e; }),
+	'immuneStatus':{'name':'Immune to Status','chance':1,
+		'func': (function(e){ for(var i in e.status){ e.status[i].resist = 1; }  return e; })},
 
-	'BAx2': (function(e){ e.bonus.bullet.amount *= 2; return e; }),
-
-	'BAx4': (function(e){ e.bonus.bullet.amount *= 4; e.globalDmg /= 2; return e; }),
-	'regen': (function(e){ e.resource.hp.regen = e.resource.hp.max/250; return e; }),
-	'extraLife': (function(e){ e.resource.hp.max *= 2; e.hp *= 2; return e; }),
-	'leech': (function(e){ e.bonus.leech.chance = 0.5; e.bonus.leech.magn = 0.5; return e; }),
-	
-	
-	'atkSpd': (function(e){ e.atkSpd.main *= 2; return e; }),
-	
-	
-	'reflectPhysical': (function(e){ e.reflect = {"melee":0.5,"range":0.5,"magic":0.5,"fire":0,"cold":0,"lightning":0}; return e; }),
-	'reflectElemental': (function(e){ e.reflect = {"melee":0,"range":0,"magic":0,"fire":0.5,"cold":0.5,"lightning":0.5}; return e; }),
-	'aoe': (function(e){ e.bonus.strike.size *= 2; e.bonus.strike.maxHit *= 2; return e; }),
-	
+	'BAx2':{'name':'More Bullets','chance':1,
+		'func': (function(e){ e.bonus.bullet.amount *= 2; return e; })},
+	'BAx4':{'name':'Even More Bullets','chance':1,
+		'func': (function(e){ e.bonus.bullet.amount *= 4; e.globalDmg /= 2; return e; })},
+	'regen':{'name':'Fast Regen','chance':1,
+		'func': (function(e){ e.resource.hp.regen = 2*e.resource.hp.regen || e.resource.hp.max/250; return e; })},
+	'extraLife':{'name':'More Life','chance':1,
+		'func': (function(e){ e.resource.hp.max *= 2; e.hp *= 2; return e; })},
+	'leech':{'name':'Leech Hp','chance':1,
+		'func': (function(e){ e.bonus.leech.chance = 0.5; e.bonus.leech.magn = 0.5; return e; })},
+	'atkSpd':{'name':'Faster Attack','chance':1,
+		'func': (function(e){ e.atkSpd.main *= 2; return e; })},
+	'reflectPhysical':{'name':'Reflect Physical','chance':1,
+		'func': (function(e){ e.reflect = {"melee":0.5,"range":0.5,"magic":0.5,"fire":0,"cold":0,"lightning":0}; return e; })},
+	'reflectElemental':{'name':'Reflecth Elemental','chance':1,
+		'func': (function(e){ e.reflect = {"melee":0,"range":0,"magic":0,"fire":0.5,"cold":0.5,"lightning":0.5}; return e; })},
+	'aoe':{'name':'Bigger AoE','chance':1,
+		'func': (function(e){ e.bonus.strike.size *= 2; e.bonus.strike.maxHit *= 2; return e; })},
+	'drop':{'name':'Better Drop','chance':1,
+		'func': (function(e){ e.drop.mod.quantity += 2; e.drop.mod.quality += 2; e.drop.mod.rarity += 2; return e; })},
 }
 
 Actor.creation.extra = function(mort){
@@ -180,7 +191,7 @@ Actor.creation.optionList = function(e){
 	if(e.type === 'player') ol.option.push({'name':'Trade',"func":'Main.openWindow',"param":['trade',e.id]});
 	if(e.dialogue)	ol.option.push({'name':'Talk To',"func":'Actor.talk',"param":[e.id]});
 	
-	e.optionList = ol;
+	e.optionList = ol.option.length ? '' : ol;
 	return e;
 }
 

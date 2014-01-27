@@ -7,12 +7,12 @@ html window
 
 sfx in buttons
 
+revamp a*
 
 #Priority 2:
 -Crafting Ability
 -Crafting System with White
 
--lvl affect enemy stats
 
 #Priority 3:
 -Advanced Enemy Mods (with name);
@@ -20,6 +20,10 @@ sfx in buttons
 
 easy mode
 cycle system
+
+make passive
+
+compress saved data
 
 TUTORIAL:
 

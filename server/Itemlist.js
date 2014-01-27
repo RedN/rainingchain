@@ -202,7 +202,7 @@ Itemlist.template = function(type){
 	}
 	if(type === 'bank'){
 		tmp.alwaysStack = true;
-		var size = 40;	
+		var size = 400;	
 	}
 	tmp.data = Array(size);	
     for(var i = 0 ; i < tmp.data.length ; i++) tmp.data[i] = [];
