@@ -52,13 +52,14 @@ Bullet.loop.move.sin = function(b){
 }
 
 Bullet.loop.move.parabole = function(b){
-	var axeX = (b.parabole.dist/b.parabole.timer*b.timer);
-	var axeY = 1/b.parabole.dist/10 
-				* b.parabole.height 
-				* ((b.num%2)*2-1) * Math.floor(b.num/2)*2/b.maxNum
-				* (b.parabole.dist/b.parabole.timer*b.timer)
-				*((b.parabole.dist/b.parabole.timer*b.timer)
-				-b.parabole.dist);
+	var axeX = b.parabole.dist*(b.timer/b.parabole.timer);
+	
+	var a = 1/b.parabole.dist/10 
+			* b.parabole.height 
+			* ((b.num%2)*2-1) 		//half are opposite
+	
+	var axeY = 	a * axeX * (axeX-b.parabole.dist);
+
 
 	var	numX = (axeX*cos(b.crAngle) - axeY* sin(b.crAngle));
 	var	numY = (axeX*sin(b.crAngle) + axeY* cos(b.crAngle));

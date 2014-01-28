@@ -570,6 +570,12 @@ Draw.window.ability.action.attack = function(diffX,diffY){  ctxrestore();
 	s.zx += diffX;
 	s.zy += diffY;
 	
+	
+	var equip = Db.equip[player.weapon.id];
+	if(equip === undefined){Db.query('equip',player.weapon.id); return; }
+	if(equip === 0){return;} //waiting for query answer
+	
+	
 	var ab = player.abilityList[Draw.old.abilityShowed];
 	var preatk = deepClone(ab.action.param);
 	var atk = Combat.action.attack.mod(player,deepClone(preatk));

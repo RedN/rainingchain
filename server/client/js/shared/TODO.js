@@ -4,13 +4,10 @@ plan required materials
 craft material convert
 
 
-parabole = bof...
 hitmod not working cuz hit itself
 
 
 html window
-
-fix fucking pref
 
 revamp a*
 
@@ -19,10 +16,10 @@ revamp a*
 -Crafting System with White
 -revamp icon
 -animation before strike
+-anim??s
 
 #Priority 3:
--Advanced Enemy Mods (with name);
--Option show strike points
+
 
 easy mode
 cycle system

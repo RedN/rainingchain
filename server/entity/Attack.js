@@ -113,7 +113,7 @@ Attack.creation.bullet = function(b){
 	if(b.parabole){
 		var diffX = b.mouseX - Cst.WIDTH2;	var diffY = b.mouseY - Cst.HEIGHT2;
 		var diff = Math.sqrt(diffX*diffX+diffY*diffY);
-		b.parabole.dist = Math.min(Math.max(diff,b.parabole.min),b.parabole.max);
+		b.parabole.dist = diff.mm(b.parabole.min,b.parabole.max);
 		b.parabole.timer *= b.parabole.dist/b.parabole.max;
 	}
 	if(b.nova){ b.angle = Math.random()*360;}	//otherwise, circle always the same. moveAngle is same tho

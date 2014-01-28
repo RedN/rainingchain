@@ -164,7 +164,9 @@ Combat.collision = function(b,mort){
 	if(b.leech.chance && b.leech.chance >= Math.random()){ Combat.collision.leech(mort,b) }
 	if(b.pierce.chance && b.pierce.chance >= Math.random()){ Combat.collision.pierce(b) } else {b.toRemove = 1;};
 	
-	if(b.onHit && b.onHit.chance >= Math.random()){	Combat.action.attack.perform(b,b.onHit.attack);}
+	if(b.onHit && b.onHit.chance >= Math.random()){	Combat.action.attack(b,useTemplate(Attack.template(),b.onHit.attack));}
+	
+	
 	if(b.curse && b.curse.chance >= Math.random()){ Combat.collision.curse(mort,b.curse); }
 	
 	//Apply Status

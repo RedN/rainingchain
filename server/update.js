@@ -42,7 +42,6 @@ Change.update = function(){
 
 
 Change.update.init = function(){
-	//w = watch, a = array for value, s = array to send, f = function filter, n = name, c = condition to test
 	//NOTE: for .e being in 2 category, must put r:noreset. otherwise, second wont get
 	//MEANS PRIVATE MUST BE LAST
 	
