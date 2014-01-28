@@ -145,6 +145,8 @@ JSONf.parse = function(str) {
 }
 
 //Via Array
+
+
 valueViaArray = function(d){
 	try {
 		if(typeof d.array != 'object'){ return d.origin[array]; }

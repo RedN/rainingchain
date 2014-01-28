@@ -12,6 +12,85 @@ enemy.mainDmg = player.weapon
 
 */
 
+/*
+ePreDb["troll"]["ice"] = {  //{		//troll is category, ice is variant
+	"name":"Ice Troll",				//name	
+	"sprite":{						//sprite used 
+		'name':"eTroll",
+		'sizeMod':1
+	},
+	"ability":{						//ability used by enemy
+		'bulletSingle':0.2,			//ability id : frequence (chance to be used)
+	},
+	'resource':{						
+		'hp':{
+			'max':1000,				//max hp
+			'regen':1				//how much hp enemy regen every frame
+		},
+	},
+	'globalDef':1,					//only thing that changes with enemy lvl is globalDef and globalDmg
+	'globalDmg':function(lvl){ 		//if number, globalDef = globalDef * (lvl + 10)	#RECOMMENDED because easy balance
+		return lvl + 100;			//if function, globalDef = globalDef(lvl)
+	},
+	
+	"equip":{
+		'def':{					//only used for ratio (use value between 0-1)
+			'melee':1,
+			'range':1,
+			'magic':1,
+			'fire':1,
+			'cold':1,
+			'lightning':1
+		}
+	},	
+		
+	"acc":2,					//acceleration
+	"maxSpd":5,					//max speed
+	"moveRange":{		
+		'ideal':200,			//distance monster wants to be from u
+		"confort":50,			//ideal range = ideal range more or less confort
+		"aggressive":400,		//if player within this range, enemy will attack you
+		"farthest":600			//if player farther than this range, enemy will stop following
+	},	
+	'drop':{
+		'category':{			
+			'regular':1			//drop table used : quantity modifier bonus
+		}
+	},
+	
+	
+	
+	//$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+	//Extra
+	
+	'globalMod':function(e,lvl){ 	//at the end, the whole enemy can be modded depending on its lvl
+		e.maxSpd = e.maxSpd + lvl; 
+		return e;
+	},
+	
+	'nevercombat':0,			//put 1 if enemy never fights
+	'nevermove':0,				//put 1 if enemy never moves
+	
+	'boss':'iceTroll',			//id of the boss
+	
+	
+	
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+*/
+
 
 Init.db.enemy = function(){ var ePreDb = {};
 
@@ -30,6 +109,8 @@ Init.db.enemy = function(){ var ePreDb = {};
 		
 		
 		"equip":{'def':{'melee':1,'range':1,'magic':1,'fire':1,'cold':1,'lightning':1}},	
+		
+		
 		
 		"acc":2,
 		"maxSpd":5,

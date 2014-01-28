@@ -98,11 +98,11 @@ Attack.creation.info = function(player,bullet){
 	
 	if(bullet.nova || bullet.onHit){
 		bullet.bonus = player.bonus || Actor.template.bonus();
-		bullet.weapon = player.weapon || {"id":"mace",'dmg':{'main':1,'ratio':{'melee':1,'range':1,'magic':1,'fire':1,'cold':1,'lightning':1}}};
+		bullet.weapon = player.weapon || Actor.template.weapon();
+		bullet.mastery = player.mastery || Actor.template.mastery();		
 	}
 	
-	if(player.parent){	bullet.parent = player.parent; }
-	else {bullet.parent = player.id || null;}
+	bullet.parent = player.parent || player.id || null;
 	
 	return bullet;
 }; 
@@ -117,7 +117,7 @@ Attack.creation.bullet = function(b){
 		b.parabole.timer *= b.parabole.dist/b.parabole.max;
 	}
 	if(b.nova){ b.angle = Math.random()*360;}	//otherwise, circle always the same. moveAngle is same tho
-	if(!b.nova && !b.onHit){ delete b.bonus; }	//
+	
 	if(!b.sin && !b.parabole && !b.boomerang) { b.normal = 1; }
 	
 	Sprite.creation(b,{'name':b.objImg.name,'anim':"travel",'sizeMod':b.objImg.sizeMod});

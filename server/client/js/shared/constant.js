@@ -54,7 +54,15 @@ Cst.element = {
 	'toColor':{'melee':'#F97A03','range':'#3EEA31','magic':'#AE52F5','fire':'#FF0000','cold':'#A9F5F2','lightning':'#FFFF00'},
 	'physical':["melee","range","magic"],
 	'elemental':["fire","cold","lightning"],
+	'template':function(num){
+		if(!num) return {"melee":0,"range":0,"magic":0,"fire":0,"cold":0,"lightning":0};
+		return {"melee":num,"range":num,"magic":num,"fire":num,"cold":num,"lightning":num};
+	}
 }
+
+
+
+
 Cst.status = {
 	'list':["bleed","knock","drain","burn","chill","confuse"],
 	'toElement':{"bleed":"melee","knock":"range","drain":"magic","burn":"fire","chill":"cold","confuse":"lightning"},

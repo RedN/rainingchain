@@ -37,7 +37,7 @@ Draw.window.main = function(title){ ctxrestore();
 			str += 
 			'<span ' + 
 			'style="text-decoration:' + (title[i] ? 'underline' : 'none') + '" ' +
-			'onclick="Chat.send.command(\'' + '$win,open,' + i + '\')' + '" ' + 
+			'onclick="' + "main.sfx='menu'; " + 'Chat.send.command(\'' + '$win,open,' + i + '\')' + '" ' + 
 			'onmouseover="main.permContext.text = \'' + 'Open ' + i.capitalize() + ' Window' + '\';' + '" ' + 
 			'onmouseout="main.permContext.text = null;' + '" ' + 
 			'>' + i.capitalize() + 
@@ -56,7 +56,8 @@ Draw.window.main = function(title){ ctxrestore();
 	Button.creation(0,{
 		"rect":[s.x + s.w -20,s.x + s.w,s.y,s.y+20],
 		"left":{"func":Chat.send.command,"param":['$win,close']},
-		'text':'Close'
+		'text':'Close',
+		'sfx':'close',
 	});
 		
 	return s;

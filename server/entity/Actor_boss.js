@@ -1,6 +1,5 @@
 //boss
 Init.db.boss = function(){
-	Boss.attack = Combat.action.attack.perform;
 	
 	Db.boss = {};
 	/*
@@ -115,13 +114,13 @@ Init.db.boss = function(){
 				for(var i in boss.target){	//for each player around the boss
 					if(boss.frame % 4 == 0){	//every 4 frame
 						//to form the V
-						Combat.action.attack.perform(mort,boss.attack['midSpear'],{'angle':boss.angle[i]+boss.opening});
-						Combat.action.attack.perform(mort,boss.attack['midSpear'],{'angle':boss.angle[i]-boss.opening});
+						Boss.attack(mort,'midSpear',{'angle':boss.angle[i]+boss.opening});
+						Boss.attack(mort,'midSpear',{'angle':boss.angle[i]-boss.opening});
 						
 						//random projectiles inside the V
 						if(Math.random() < 0.4){
-							Combat.action.attack.perform(mort,boss.attack['midSpear'],{'angle':boss.angle[i]+Math.randomML()*boss.opening});
-							Combat.action.attack.perform(mort,boss.attack['midSpear'],{'angle':boss.angle[i]+Math.randomML()*boss.opening});
+							Boss.attack(mort,'midSpear',{'angle':boss.angle[i]+Math.randomML()*boss.opening});
+							Boss.attack(mort,'midSpear',{'angle':boss.angle[i]+Math.randomML()*boss.opening});
 						}
 					}
 					break;
@@ -139,7 +138,7 @@ Init.db.boss = function(){
 					boss.center = Math.random()*360;
 					for(var j = 0 ; j < boss.hole ; j++){
 						for(var k = 0 ; k < (360/boss.hole-2*boss.opening) ; k+=4){
-							Combat.action.attack.perform(mort,boss.attack['midSpear'],{'angle':boss.center+360/boss.hole*j+boss.opening+k});
+							Boss.attack(mort,'midSpear',{'angle':boss.center+360/boss.hole*j+boss.opening+k});
 						}	
 					}
 				}		
@@ -214,7 +213,11 @@ Boss.target = function(boss,mort){
 		boss.angle[i] = atan2(diffY,diffX);			
 	}
 }
+Boss.attack = function(mort,name,extra){
+	Combat.action.attack(mort,mort.boss.attack[name],extra);
+}
 
+	
 
 
 

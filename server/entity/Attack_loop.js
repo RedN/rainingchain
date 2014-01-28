@@ -80,6 +80,7 @@ Bullet.loop.move.boomerang = function(b){
 
 		if(b.boomerang.newId){
 			b.hitId = Math.random();
+			b.angle += 180;
 			b.boomerang.newId = 0;
 		}
 		

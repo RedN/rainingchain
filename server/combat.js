@@ -61,13 +61,13 @@ Combat.action = function(id,action){
 
 		
 
-Combat.action.attack = function(id,action){   
+Combat.action.attack = function(id,action,extra){   
 	var player = typeof id === 'string' ? List.all[id] : id;
 	
 	//Add Bonus and mastery
 	var atk = typeof action === 'function' ? action() : deepClone(action); 
 	atk = Combat.action.attack.mod(player,atk);
-	Combat.action.attack.perform(player,atk);
+	Combat.action.attack.perform(player,atk,extra);
 }
 
 Combat.action.attack.perform = function(player,attack,extra){   //extra used for stuff like boss loop
@@ -329,13 +329,12 @@ Combat.hitIf = {};
 
 Combat.targetIf.global = function(atk,def){
 	//Used first in every target if test
-	return atk.id != def.id 
+	return atk.id !== def.id 
 	&& !def.dead 
 	&& def.combat 
-	&& (def.type == 'player' || def.type == 'enemy')
+	&& (def.type === 'player' || def.type === 'enemy')
 	&& List.all[def.id];
 }
-
 
 Combat.targetIf.list = {
 	//List of commons Target if 
@@ -373,15 +372,8 @@ Combat.targetIf.list = {
 };
 
 
-Combat.hitIf.global = function(atk,def){
-	//Used first in every hit if test
-	return atk && def && atk.id !== def.id 
-	&& atk.id !== def.parent 	//only thing different from targetIf	and idk if useful
-	&& !def.dead
-	&& def.combat
-	&& (def.type == 'player' || def.type == 'enemy') 
-	&& List.all[def.id];
-};
+
+Combat.hitIf.global = Combat.targetIf.global;
 
 (function(){
 	for(var i in Combat.targetIf.list){Combat.targetIf.list[i].id = i;}

@@ -152,9 +152,10 @@ Actor.dropInv = function(mort,id){
 Actor.update = {};
 Actor.update.mastery = function(player){
 	//Note: mod is applied in Combat.action.attack.mod.player
-	for(var i in player.mastery){
-		for(var j in player.mastery[i]){
-			player.mastery[i][j].sum = Math.pow(player.mastery[i][j]['x'] * player.mastery[i][j]['*'],player.mastery[i][j]['^']) + player.mastery[i][j]['+'];
+	var mas = player.mastery;
+	for(var i in mas){
+		for(var j in mas[i]){
+			mas[i][j].sum = Math.pow(mas[i][j]['x'] * mas[i][j]['*'],mas[i][j]['^']) + mas[i][j]['+'];
 		}
 	}
 }
