@@ -34,12 +34,15 @@ Craft.seed = {};
 Craft.seed.creation = function(sed){ //need to fix for ability too
 	var seed = deepClone(sed);
 	
-	//set the default seed. take into consideration if weapon or armorseed = seed ? deepClone(seed) : {}; 
 	seed.category = seed.category || 'equip';
 	
-	if(seed.category === 'equip')
-		seed = Craft.seed.equip(seed)
+	seed.quality = seed.quality  || 0; 
+	seed.lvl = seed.lvl || 0; 
+	seed.rarity = seed.rarity  || 0; 
 	
+	if(seed.category === 'equip') seed = Craft.seed.equip(seed);
+	if(seed.category === 'ability') seed = Craft.seed.ability(seed);
+		
 	return seed;
 }
 
@@ -47,10 +50,7 @@ Craft.seed.equip = function(seed){
 	seed.piece = seed.piece || Cst.equip.piece.random();
 	seed.type =  seed.type || Cst.equip[seed.piece].type.random(); 
 
-	seed.quality = seed.quality  || 0; 
-	seed.lvl = seed.lvl || 0; 
-	seed.rarity = seed.rarity  || 0; 
-			
+	
 	var amount = Math.pow(Math.random(),(1+seed.rarity));
 	amount = -Math.logBase(2,amount);
 	amount = Math.floor(amount);
@@ -62,6 +62,11 @@ Craft.seed.equip = function(seed){
 	seed.amount = amount+1; 
 	return seed;
 }
+Craft.seed.ability = function(seed){
+
+
+}
+
 
 Craft.seed.template = function(){
 	var seed = {}
@@ -83,19 +88,19 @@ Craft.plan.use = function(key,seed,req){	//when player tries to use plan
 	var inv = List.main[key].invList;
 	var tmp = Craft.plan.test(key,req);
 	
-	if(!tmp){ 
+	if(tmp){ //meet req
 		Itemlist.remove.bulk(inv,req.item);
 		var id = Craft.create(seed);
 		Itemlist.add(inv,id);
-	} else { 
-		var string = 'To craft ' + seed.piece + ': <br>' + tmp; 
-		Chat.add(key,string); 
+	} else { //dont meet
+		Craft.plan.examine(key,seed,req);
 	}
 }
 
 Craft.plan.creation = function(d){	//when creating a plan as a drop
 	var itemId = 'planE-' + Math.randomId();
-	var lvl = Math.max(0,Math.floor(mort.lvl * (1 + Math.randomML()/10)));	//aka lvl += 10%
+	var lvl = Math.floor(mort.lvl * (1 + Math.randomML()/10));	//aka lvl += 10%
+	lvl = lvl.mm(0);
 	
 	var req = {
 		'skill':{},
@@ -125,28 +130,40 @@ Craft.plan.creation = function(d){	//when creating a plan as a drop
 }
 
 Craft.plan.examine = function(key,seed,req){	
-	var string = 'Rarity:' + seed.rarity + ', Quality:' + seed.quality;
-	//need to add more info like item skill
-	Chat.add(key,string); 
+	var inv = List.main[key].invList;
+	var lvl = List.all[key].skill.lvl;
+	
+	var color = 'green';
+	
+	var str = 'Plan Information: ';
+	str += '<br>&emsp;Rarity:' + round(seed.rarity || 0,2) + ', Quality:' + round(seed.quality || 0,2);
+	
+	str += '<br>&emsp;Items: ';
+	for(var i in req.item){
+		color = Cst.color.test(Itemlist.have(inv,req.item[i][0],req.item[i][1]));
+		str += '<span style="color:' + color + '"> ';
+		str += 'x' + req.item[i][1] + ' ' + Db.item[req.item[i][0]].name + ', ';
+		str += '</span>';
+	}
+	str += '<br>&emsp;Skills: ';
+	for(var i in req.skill){
+		color = Cst.color.test(lvl[i] >= req.skill[i]);
+		str += '<span style="color:' + color + '">';
+		str += 'Level ' + req.skill[i] + ' ' + i.capitalize() + ', ';
+		str += '</span>';
+	}
+
+	Chat.add(key,str); 
 }
 
 Craft.plan.test = function(key,req){	//test requirement
-	var string = '';
-	var bool = true;
-	//verify if has skill lvl
-	for(var i in req.skill){
-		var color = 'green';
-		if(List.main[key].skill[i] < req.skill[i]){ bool = false; color = 'red';}
-		string += "<span style='color:" + color + "'> Level" + req.item[i].lvl + " " + Db.item[req.item[i].item].name + "</span>, ";
-	}
+	var inv = List.main[key].invList;
+	var lvl = List.all[key].skill.lvl;
 	
-	//verify if has item
-	for(var i in req.item){
-		var color = 'green';
-		if(!Itemlist.have(inv,req.item[i][0],req.item[i][1])){	bool = false; color = 'red';}
-		string += "<span style='color:" + color + "'> x" + req.item[i].amount + " " + Db.item[req.item[i].item].name + "</span>, ";
-	}
-	return bool ? '' : string;
+	for(var i in req.skill) if(lvl[i] < req.skill[i]) return false;	
+	for(var i in req.item) if(!Itemlist.have(inv,req.item[i][0],req.item[i][1])) return false;
+	
+	return true
 }
 Craft.plan.upgrade = function(){
 	//need to add stuff
@@ -166,7 +183,7 @@ Craft.ratio.normalize = function(info){
 
 Craft.create = function(seed){	//create what seed tell to create. 
 	if(seed.category === 'weapon' || seed.category === 'armor'){
-		seed.piece = Cst.equip[seed.category].piece.random();
+		seed.piece = seed.piece || Cst.equip[seed.category].piece.random();
 		seed.category = 'equip';
 	}
 	
@@ -482,7 +499,5 @@ Craft.ability.mod = function(key,abid,mod){
 
 
 //}
-//Math.random(
-//Math.random(
 
 

@@ -63,6 +63,7 @@ Sign.log = function(text){
 socket.on('signIn', function (data) {
 	if(data.success){ id = data.key; cloud9 = data.cloud9; Init.game(data.data);  }
 	else { Sign.log(data.message);  } 	
+	
 });
 
 socket.on('signUp', function (data) {

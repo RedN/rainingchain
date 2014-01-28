@@ -1,41 +1,4 @@
 
-
-
-summon bear	(Summon)
-bear teleport
-set trap (hunt + wc)
-
-burn fire	(fm, cook, craft, magic, smith, div,pray,fletch,farm,agi)
-clean herb
-cook
-craft
-cast super heat gold
-portent div
-bury bones 
-fletch
-farm pot
-toy mouse
-
-teleport varrock
-pick guard	(thief, hp, range, str, def, atk)
-kill guard
-
-
-
-
-Rules:
-start at any bank. 
-no item equip. no item in inv.
-
-no urns/lamp/things u consume and cant buy at ge (sof items)
-
-
-
-
-
-
-
-
 plan required materials
 
 craft material convert
@@ -47,7 +10,7 @@ hitmod not working cuz hit itself
 
 html window
 
-sfx in buttons
+fix fucking pref
 
 revamp a*
 
@@ -92,5 +55,24 @@ kill fire, open door
 
 
 
+/*
+summon bear	(Summon)
+bear teleport
+set trap (hunt + wc)
 
+burn fire	(fm, cook, craft, magic, smith, div,pray,fletch,farm,agi)
+clean herb
+cook
+craft
+cast super heat gold
+portent div
+bury bones 
+fletch
+farm pot
+toy mouse
+
+teleport varrock
+pick guard	(thief, hp, range, str, def, atk)
+kill guard
+*/
 

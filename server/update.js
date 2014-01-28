@@ -138,7 +138,6 @@ Change.update.init = function(){
 				
 			],
 			'slow':[
-				{'array':['pref']},	
 				{'array':['social','list']},	
 				
 				{'array':['quest']},
@@ -250,8 +249,7 @@ Change.update.init = function(){
 }
 
 Change.update.watch = function(mort,info,priv){
-	if(!mort.old) console.log(mort);
-    //Test condition to test
+	//Test condition to test
 	if(info.condition && !info.condition(mort)) return; 
 
 	//Get Old and New Value and Set Old = to New

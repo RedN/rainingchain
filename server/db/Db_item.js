@@ -33,6 +33,16 @@ Init.db.item = function (cb){
 						{'name':'Open Bank','func':'Main.openWindow','param':['bank']},
 			
 			]};
+			
+	a['gold'] = {'name':'Gold','visual':'system.gold','stack':1,
+		'option':[	{'name':'Craft Armor','func':'Craft.plan.use','param':[{'category':'armor','piece':'helm'},{'item':[]}]},
+						{'name':'Craft Weapon','func':'Craft.plan.use','param':[{'category':'weapon'},{'item':[['gold',10]],'skill':{'melee':10,'range':10}}]},
+						{'name':'Open Bank','func':'Main.openWindow','param':['bank']},
+			
+			]};
+			
+	
+			
 	a['teleport'] = {'name':'Gold','visual':'system.gold','stack':1,
 		'option':[
 					{'name':'Tele Main','func':'Actor.teleport','param':[1230,1230,'test']},

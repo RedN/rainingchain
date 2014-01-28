@@ -60,7 +60,12 @@ Cst.element = {
 	}
 }
 
+Cst.color = {
+	'green':'green',
+	'red':'red',
 
+	'test':function(bool){	return bool ? Cst.color.green : Cst.color.red;},
+}
 
 
 Cst.status = {

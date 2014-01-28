@@ -1,3 +1,4 @@
+
 Loop = function(){
 	Loop.actor();
 	Loop.player();
