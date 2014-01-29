@@ -143,7 +143,9 @@ Actor.loop.input.ability = function(mort){
 	var diffY = target.y - mort.y;
 	var diff = Math.sqrt(diffX*diffX+diffY*diffY);
 	*/
-	
+	if(!mort.target.main.list[0]){
+		mort.abilityChange.press = '0000000000000000000000'; return;
+	}
 	mort.abilityChange.press = '';
 	for(var i in mort.ability){
 		mort.abilityChange.press += mort.ability[i].chance >= Math.random() ? '1' : '0';	

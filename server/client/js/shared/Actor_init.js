@@ -172,7 +172,7 @@ Init.actor = function(){
 		}
 		//}
 		for(var i in mort.boost.list){  //init default Db.stat value
-			changeViaArray({'origin':mort,'array':mort.boost.list[i].stat,'value':mort.boost.list[i].base});
+			viaArray.set({'origin':mort,'array':mort.boost.list[i].stat,'value':mort.boost.list[i].base});
 		}
 		return mort;
 	}

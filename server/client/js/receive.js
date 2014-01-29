@@ -20,7 +20,7 @@ try {
 	if(data.u){ 
         if(data.u.p){
             for(var j in data.u.p){
-               changeViaArray({'origin':player,'array':j.split(','),'value':data.u.p[j]});	
+               viaArray.set({'origin':player,'array':j.split(','),'value':data.u.p[j]});	
             }
         }
 
@@ -28,7 +28,7 @@ try {
     	for(var i in data.u.f){
             var changeList = data.u.f[i];
             for(var j in changeList){
-                changeViaArray({'origin':List.all[i],'array':j.split(','),'value':changeList[j]});
+                viaArray.set({'origin':List.all[i],'array':j.split(','),'value':changeList[j]});
     		}
     		if(List.all[i]) List.all[i].toRemove = 0; 	
     	}
@@ -41,7 +41,7 @@ try {
     
     	//Update Main List
     	for(var i in data.u.m){
-    		changeViaArray({'origin':main,'array':i.split(','),'value':data.u.m[i]});	
+    		viaArray.set({'origin':main,'array':i.split(','),'value':data.u.m[i]});	
     	}
 	}
 	

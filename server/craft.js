@@ -405,8 +405,8 @@ Craft.orb.formula = function(x){
 	return 0.9+0.1*Math.log10(10+x);
 }
 
-
-Craft.salvage = function(key,id){
+Craft.salvage = {};
+Craft.salvage.equip = function(key,id){
 	//transform equip into shard
 	var inv = List.main[key].invList;
 	if(Itemlist.have(inv,id)){
@@ -418,6 +418,34 @@ Craft.salvage = function(key,id){
 		Itemlist.add(inv,'shard-'+equip.color);
 	}
 }
+Craft.salvage.material = function(key,id,amount){
+	//transform equip into shard
+	var inv = List.main[key].invList;
+	amount  = amount.mm(Itemlist.have(inv,id,0,'amount'));
+	if(!amount || !Itemlist.test(inv,[['material-currency',1]])) return;
+	
+	
+	
+	
+	//var currencyAmount = ...
+	//var rate = 
+	
+	Craft.material.getExchangeAmount(key,id,amount);
+	
+	//Itemlist.add(inv,'material-currency',
+	
+	var type = Db.item[id].type;
+	if(type === 'weapon'){ var equip = Db.equip[id]; }
+	else if(type === 'armor'){ var equip = Db.equip[id]; }
+	else {return;}
+	
+	
+	Itemlist.remove(inv,id,amount);
+	Itemlist.add(inv,'material-currency',currencyAmount);
+	
+}
+
+
 
 
 //{Ability BROKEN
@@ -433,8 +461,8 @@ Craft.ability.template = function(seed){
 
 	var ab = deepClone(Db.ability.template[an]);
 	
-	if(typeof ab.period.perform === 'object'){ ab.period.perform = Craft.boost.generate.roll(ab.period.perform,qua); }
-	if(typeof ab.period.cooldown === 'object'){ ab.period.cooldown = Craft.boost.generate.roll(ab.period.cooldown,qua); }
+	if(typeof ab.period.global === 'object'){ ab.period.global = Craft.boost.generate.roll(ab.period.global,qua); }
+	if(typeof ab.period.own === 'object'){ ab.period.own = Craft.boost.generate.roll(ab.period.own,qua); }
 	
 	if(ab.action.func === 'Combat.action.attack'){
 		var atk = ab.action.param;

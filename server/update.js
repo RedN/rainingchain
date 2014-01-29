@@ -252,7 +252,7 @@ Change.update.watch = function(mort,info,priv){
 	if(info.condition && !info.condition(mort)) return; 
 
 	//Get Old and New Value and Set Old = to New
-	var valRaw = valueViaArray({'origin':mort,'array':info.array});
+	var valRaw = viaArray.get({'origin':mort,'array':info.array});
 	if(valRaw && info.filter) valRaw = info.filter(valRaw);
 	        
 	var val0 = stringify(valRaw);                                   //Get new
@@ -268,7 +268,7 @@ Change.update.watch = function(mort,info,priv){
 		
 		
 	    if(info.sendArray){                                                 //Modify array of what to send
-			var valRaw = valueViaArray({'origin':mort,'array':info.sendArray});
+			var valRaw = viaArray.get({'origin':mort,'array':info.sendArray});
 			if(info.sendFilter) valRaw = info.sendFilter(valRaw);
 			var val0 = stringify(valRaw);
 		}
@@ -286,7 +286,7 @@ Change.update.exist = function(mort,info,priv){
 	//Test condition to test
 	if(info.condition && !info.condition(mort)) return; 
 
-	var valRaw = valueViaArray({'origin':mort,'array':info.array});
+	var valRaw = viaArray.get({'origin':mort,'array':info.array});
 	if(valRaw){
 	    if(Array.isArray(valRaw) && valRaw.length === 0) return;
 	    var val0 = stringify(valRaw); 
@@ -294,8 +294,8 @@ Change.update.exist = function(mort,info,priv){
 		if(!priv){ mort.change[info.id] = valRaw; }
 		else {	mort.privateChange[info.id] = valRaw; }
 			
-		if(!info.reset){ changeViaArray({'origin':mort,'array':info.array,'value':null}); }
-		else if(info.reset !== 'noreset'){ changeViaArray({'origin':mort,'array':info.array,'value':deepClone(info.reset)}); }
+		if(!info.reset){ viaArray.set({'origin':mort,'array':info.array,'value':null}); }
+		else if(info.reset !== 'noreset'){ viaArray.set({'origin':mort,'array':info.array,'value':deepClone(info.reset)}); }
 		
 	}
 }

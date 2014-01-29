@@ -1,5 +1,23 @@
 
 
+
+
+
+whocareslol222222 0:39 : https://www.youtube.com/watch?v=PCLbPLEo4Q4
+Nick McDonald 0:42 : https://www.youtube.com/watch?v=6dcrxX19xsI
+Waltsu https://www.youtube.com/watch?v=Rg5UJY-Ym6Q
+Jokke l Pum 1:02 : http://www.youtube.com/watch?v=HRGvx6JNHgo
+BurninheartRS 1:22 : https://www.youtube.com/watch?v=6ceMBFkcJ50
+Marowo 2:16 : https://www.youtube.com/watch?v=pYBLl4RRwrU
+
+
+
+http://youtu.be/_eeKlqUe84Q
+https://www.youtube.com/watch?v=
+
+
+option list client side. (aka Chatsend.command
+
 time when perform ability,
 
 

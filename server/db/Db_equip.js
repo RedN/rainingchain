@@ -220,7 +220,7 @@ Equip.creation = function(equip){
 		'option':[	
 			{'name':'Examine Equip','func':'Main.examineEquip','param':[equip.id]},
 			{'name':'Change Equip','func':'Actor.switchEquip','param':[equip.id]},
-			{'name':'Salvage','func':'Craft.salvage','param':[equip.id]},
+			{'name':'Salvage','func':'Craft.salvage.equip','param':[equip.id]},
 		],
 	};
 	

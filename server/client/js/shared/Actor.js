@@ -208,12 +208,12 @@ Actor.update.permBoost = function(player){
 }
 
 Actor.update.boost = function(player,stat){
-	changeViaArray({'origin':player,'array':player.boost.list[stat].stat,'value':player.boost.list[stat].base});
+	viaArray.set({'origin':player,'array':player.boost.list[stat].stat,'value':player.boost.list[stat].base});
 	for(var i in player.boost.list[stat].name){
 		var boost = player.boost.list[stat].name[i];
 				
-		if(boost.type === '+'){	addViaArray({'origin':player,'array':player.boost.list[stat].stat,'value':boost.value}); }
-		else if(boost.type === '*'){	addViaArray({'origin':player,'array':player.boost.list[stat].stat,'value':(boost.value-1)*player.boost.list[stat].base}); }
+		if(boost.type === '+'){	viaArray.add({'origin':player,'array':player.boost.list[stat].stat,'value':boost.value}); }
+		else if(boost.type === '*'){	viaArray.add({'origin':player,'array':player.boost.list[stat].stat,'value':(boost.value-1)*player.boost.list[stat].base}); }
 	}
 }
 

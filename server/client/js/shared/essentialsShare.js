@@ -96,7 +96,7 @@ applyFunc = function(func,param){
 			if(func.indexOf('Actor') === 0) param[0] = List.actor[param[0]]; 
 			else if(func.indexOf('Main') === 0) param[0] = List.main[param[0]];
 			
-			func = valueViaArray({'origin':this,'array':func.split('.')});
+			func = viaArray.get({'origin':this,'array':func.split('.')});
 		} else {
 			func = this[func];
 		}
@@ -145,9 +145,8 @@ JSONf.parse = function(str) {
 }
 
 //Via Array
-
-
-valueViaArray = function(d){
+viaArray = {};
+viaArray.get = function(d){
 	try {
 		if(typeof d.array != 'object'){ return d.origin[array]; }
 		if(!d.origin){ d.origin = (server ? this : window);}
@@ -164,7 +163,7 @@ valueViaArray = function(d){
 		}
 	} catch (err) { logError(err); }
 }
-changeViaArray = function(d){
+viaArray.set = function(d){
 	try {
 		if(!d.origin){ d.origin = window;}
 		var a = d.array;
@@ -179,7 +178,7 @@ changeViaArray = function(d){
 		}	
 	} catch (err) { logError(err); }
 }
-addViaArray = function(d){
+viaArray.add = function(d){
 	try {
 		if(!d.origin){ d.origin = window;}
 		var origin = d.origin;

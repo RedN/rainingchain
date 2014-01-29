@@ -58,9 +58,9 @@ Actor.loop.ability = function(m){
 			alreadyBoosted[s.id] = 1;
 		}
 		
-		m.abilityChange.chargeClient[i] = (charge[s.id] >= s.period.cooldown) ? 1 : (charge[s.id] / s.period.cooldown);
+		m.abilityChange.chargeClient[i] = (charge[s.id] >= s.period.own) ? 1 : (charge[s.id] / s.period.own);
 
-		if(press && charge[s.id] >= s.period.cooldown && m.abilityChange.globalCooldown <= 0){
+		if(press && charge[s.id] >= s.period.own && m.abilityChange.globalCooldown <= 0){
 			Actor.performAbility(m,s);
 			break;	//1 ability per frame max
 		}
@@ -81,9 +81,9 @@ Actor.performAbility = function(mort,ab,mana,reset){
 
 Actor.performAbility.resetCharge = function(mort,ab){
 	var charge = mort.abilityChange.charge;
-	charge[ab.id] = Math.min(charge[ab.id] % ab.period.cooldown,1);
+	charge[ab.id] = Math.min(charge[ab.id] % ab.period.own,1);
 	
-	mort.abilityChange.globalCooldown =  ab.period.perform * (ab.spd.main / mort.atkSpd.main.mm(0.01) + ab.spd.support / mort.atkSpd.support.mm(0.01));
+	mort.abilityChange.globalCooldown =  ab.period.global * (ab.spd.main / mort.atkSpd.main.mm(0.01) + ab.spd.support / mort.atkSpd.support.mm(0.01));
 	
 	//Reset the ability and related abilities
 	for(var j in ab.reset){	//'attack':0,'summon':1

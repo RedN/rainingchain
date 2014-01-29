@@ -65,7 +65,7 @@ Actor.creation.group.template = function(){
 
 Actor.creation.boost = function(e){
 	for(var i in e.boost.list){ 
-        e.boost.list[i].base = valueViaArray({'origin':e,'array':e.boost.list[i].stat});	
+        e.boost.list[i].base = viaArray.get({'origin':e,'array':e.boost.list[i].stat});	
 	}
 	return e;
 }
@@ -178,7 +178,7 @@ Actor.creation.extra = function(mort){
 	mort = useTemplate(mort,mort.extra,2);	//deep clone of function
 	for(var i in mort.viaArray){ 
 		mort.viaArray[i].origin = mort;
-		changeViaArray(mort.viaArray[i]);
+		viaArray.set(mort.viaArray[i]);
 	} 
 	delete mort.extra;
 	delete mort.viaArray;

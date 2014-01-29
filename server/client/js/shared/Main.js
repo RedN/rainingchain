@@ -22,6 +22,8 @@ Main.template = function(key){
 		'sfx':'',
 		'song':'',
 		
+		'material':Craft.material.template(),
+		
 		'help':'',
 		'passivePt':0,
 		'passive':Passive.template(),
