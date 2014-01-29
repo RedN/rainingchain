@@ -450,7 +450,7 @@ Draw.window.ability.generalInfo = function(diffX,diffY){ ctxrestore();
 	
 	var	str = 
 	'<span style="font:30px Monaco">' + ab.name + '</span>' +	
-	' - Level ' + (ab.lvl || 1) + ' - ( ' + round(25/ab.period,2) + ' Cast/S ';
+	' - Level ' + (ab.lvl || 1) + ' - ( ' + round(25/ab.period.cooldown,2) + ' Cast/S ';
 	if(ab.cost){
 		if(ab.cost.mana){ str += ' - ' + ab.cost.mana + ' Mana'; }
 		if(ab.cost.fury){ str += ' - ' + ab.cost.fury + ' Fury'; }
@@ -606,7 +606,7 @@ Draw.window.ability.action.attack = function(diffX,diffY){  ctxrestore();
 	//General Info
 	var dmg = 0;	for(var i in atk.dmg.ratio){ dmg += atk.dmg.ratio[i]; } dmg *= atk.dmg.main;
 	str = 'x' + atk.amount + ' Bullet' + (atk.amount > 1 ? 's' : '') + ' @ ' + atk.angle + '°';
-	str += '  =>  DPS: ' + round(dmg / ab.period * 25,1);
+	str += '  =>  DPS: ' + round(dmg / ab.period.cooldown * 25,1);
 	ctx.fillText(str,s.zx,s.zy);
 	s.zy += fontSize;
 	

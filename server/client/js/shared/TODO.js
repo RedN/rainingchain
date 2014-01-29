@@ -59,6 +59,12 @@ kill fire, open door
 
 
 
+
+
+
+
+
+
 /*
 summon bear	(Summon)
 bear teleport
@@ -78,5 +84,31 @@ toy mouse
 teleport varrock
 pick guard	(thief, hp, range, str, def, atk)
 kill guard
+
+
+
+summon: summon arctic bear
+herb: clena herb
+magic: super heat gold
+smith: super heat gold
+thief: thief man
+str: kill man
+atk: kill man
+def: kill man
+hp: kill man
+pray: kill man (bonecrusher)
+range: kill man
+
+craft: air bstaff
+fletch: broad arrow
+wc: cut tree
+fm: light fire
+cook: cook swordfish
+div: make portent
+agi: toy mouse
+farm: plant seed in pot
+hunt: catch kebbit
+
+
 */
 

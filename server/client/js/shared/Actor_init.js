@@ -229,7 +229,7 @@ Actor.template.equip = function(type){
 
 
 Actor.template.abilityChange = function(){
-	return {'press':'00000000000000','charge':{},'chargeClient':[0,0,0,0,0,0]};
+	return {'press':'00000000000000','charge':{},'chargeClient':[0,0,0,0,0,0],'globalCooldown':0};
 }
 
 Actor.template.mastery = function(type){

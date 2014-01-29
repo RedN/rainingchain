@@ -7,7 +7,10 @@ a['bulletMulti'] = {					//bulletMulti is the id of attack
 		'main':0.8,
 		'support':0.2
 	},   
-	'period':15,                        //atk/s (period = 40 => 1 atk/s)
+	'period':{							//atk/s (period = 40 => 1 atk/s)
+		'cooldown':20,					//amount of frame where player cant re-use same ability
+		'perform':10,					//amount of frame where player cant use any ability
+	},                        
 	
 	'action':{
 		'anim':'attack',				//sprite animation to perform
@@ -183,7 +186,7 @@ Init.db.ability = function(cb){
 		}
 	
 	a['bulletMulti'] = {'type':'attack','name':'Multishot','icon':'attackMagic.fireball',
-		'spd':{'main':0.8,'support':0.2},'period':15,
+		'spd':{'main':0.8,'support':0.2},'period':{'cooldown':20,'perform':10},
 		'action':{'func':'Combat.action.attack','param':{
 			'type':"bullet",'angle':15,'amount':1,
 			'objImg':{'name':"arrow",'sizeMod':1},'hitImg':{'name':"thunder2",'sizeMod':0.5},
@@ -192,7 +195,7 @@ Init.db.ability = function(cb){
 	}};
 	
 	a['bulletMulti-fast'] = {'type':'attack','name':'fast','icon':'attackMagic.fireball',
-		'spd':{'main':0.8,'support':0.2},'period':15,
+		'spd':{'main':0.8,'support':0.2},'period':{'cooldown':20,'perform':10},
 		'action':{'func':'Combat.action.attack','param':{
 			'type':"bullet",'angle':15,'amount':1,
 			'objImg':{'name':"arrow",'sizeMod':1},'hitImg':{'name':"thunder2",'sizeMod':0.5},
@@ -212,7 +215,7 @@ Init.db.ability = function(cb){
 	}};
 	
 	a['bulletMulti-hitmod'] = {'type':'attack','name':'hitmod','icon':'attackMagic.fireball',
-		'spd':{'main':0.8,'support':0.2},'period':15,
+		'spd':{'main':0.8,'support':0.2},'period':{'cooldown':20,'perform':10},
 		'action':{'func':'Combat.action.attack','param':{
 			'type':"bullet",'angle':15,'amount':1,
 			'objImg':{'name':"arrow",'sizeMod':1},'hitImg':{'name':"thunder2",'sizeMod':0.5},
@@ -226,7 +229,7 @@ Init.db.ability = function(cb){
 			
 			
 	a['bulletMulti-sin'] = {'type':'attack','name':'sin','icon':'attackMagic.fireball',
-		'spd':{'main':0.8,'support':0.2},'period':15,
+		'spd':{'main':0.8,'support':0.2},'period':{'cooldown':20,'perform':10},
 		'action':{'func':'Combat.action.attack','param':{
 			'type':"bullet",'angle':15,'amount':10,
 			'objImg':{'name':"arrow",'sizeMod':1},'hitImg':{'name':"thunder2",'sizeMod':0.5},
@@ -248,7 +251,7 @@ Init.db.ability = function(cb){
 	}};
 	
 	a['bulletMulti-para'] = {'type':'attack','name':'para','icon':'attackMagic.fireball',
-		'spd':{'main':0.8,'support':0.2},'period':15,
+		'spd':{'main':0.8,'support':0.2},'period':{'cooldown':20,'perform':10},
 		'action':{'func':'Combat.action.attack','param':{
 			'type':"bullet",'angle':15,'amount':10,
 			'objImg':{'name':"arrow",'sizeMod':1},'hitImg':{'name':"thunder2",'sizeMod':0.5},
@@ -264,7 +267,7 @@ Init.db.ability = function(cb){
 	}};
 	
 	a['bulletMulti-boom'] = {'type':'attack','name':'boom','icon':'attackMagic.fireball',
-		'spd':{'main':0.8,'support':0.2},'period':15,
+		'spd':{'main':0.8,'support':0.2},'period':{'cooldown':20,'perform':10},
 		'action':{'func':'Combat.action.attack','param':{
 			'type':"bullet",'angle':15,'amount':10,
 			'objImg':{'name':"arrow",'sizeMod':1},'hitImg':{'name':"thunder2",'sizeMod':0.5},
@@ -291,7 +294,7 @@ Init.db.ability = function(cb){
 	//test above
 	
 	a['bullet360'] = {'type':'attack','name':'360 Shot','icon':'attackMagic.fire',
-		'spd':{'main':0.8,'support':0.2},'period':200,'cost':{'mana':50},
+		'spd':{'main':0.8,'support':0.2},'period':{'cooldown':20,'perform':10},'cost':{'mana':50},
 		'action':{'func':'Combat.action.attack','param':{
 			'type':"bullet",'angle':360,'amount':9,
 			'objImg':{'name':"fireball",'sizeMod':1},'hitImg':{'name':"fire_explosion",'sizeMod':0.5},
@@ -300,7 +303,7 @@ Init.db.ability = function(cb){
 	}};	
 	
 	a['bulletSingle'] = {'type':'attack','name':'Single','icon':'attackMagic.meteor',
-		'spd':{'main':0.8,'support':0.2},'period':50,
+		'spd':{'main':0.8,'support':0.2},'period':{'cooldown':20,'perform':10},
 		'action':{'func':'Combat.action.attack','param':{
 			'type':"bullet",'angle':15,'amount':1,
 			'objImg':{'name':"iceshard",'sizeMod':1},'hitImg':{'name':"ice2",'sizeMod':0.5},
@@ -309,7 +312,7 @@ Init.db.ability = function(cb){
 	}};
 
 	a['strikeSingle'] = {'type':'attack','name':'Slash','icon':'attackMelee.slash',
-		'spd':{'main':0.8,'support':0.2},'period':15,		
+		'spd':{'main':0.8,'support':0.2},'period':{'cooldown':20,'perform':10},
 		'action':{'func':'Combat.action.attack','param':{
 			'type':"strike",'angle':0,'amount':1,'delay':2,'maxHit':1,'width':1,'height':1,'minRange':5,'maxRange':50,
 			'hitImg':{'name':"attack1",'sizeMod':0.5},'objImg':{'name':"attack1",'sizeMod':0.5},
@@ -319,7 +322,7 @@ Init.db.ability = function(cb){
 	}};
 
 	a['dodgeRegular'] = {'type':'dodge','name':'Dodge','icon':'dodge.start',
-		'spd':{'main':0.8,'support':0.2},'period':25,'cost':{"dodge":75},
+		'spd':{'main':0.8,'support':0.2},'period':{'cooldown':20,'perform':10},'cost':{"dodge":75},
 		'action':{'func':'Actor.boost','param':[[
 			{"stat":"globalDef","type":"+","value":Cst.bigInt,"time":4,"name":"Dodge"},
 		]]}
@@ -416,7 +419,9 @@ Ability.creation = function(a){
 	a.targetIf = a.targetIf || 0;
 	a.charge = 0;
 	a.press = 0;
-	a.period = a.period  || 25;
+	a.period = a.period  || {};
+	a.period.cooldown = a.period.cooldown  || 50;
+	a.period.perform = a.period.perform  || 50;
 	a.modList = a.modList || {};
 	a.orb = {'upgrade':{'amount':0,'bonus':'none'}};
 	a.action = a.action || [];
@@ -474,7 +479,7 @@ Ability.template = function(){
 	return {
 		'name':'Fire','icon':'melee.mace',
 		'cost':{"dodge":0},'reset':{'attack':0},
-		'spd':{'main':0.8,'support':0.2},'period':25,
+		'spd':{'main':0.8,'support':0.2},'period':{'cooldown':50,'perform':50},
 		'action':{'func':'Combat.action.attack','param':{
 				'type':"bullet",'angle':5,'amount':1, 'aim': 0,
 				'objImg':{'name':"fireball",'sizeMod':1},'hitImg':{'name':"fire2",'sizeMod':0.5},

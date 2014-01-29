@@ -433,7 +433,8 @@ Craft.ability.template = function(seed){
 
 	var ab = deepClone(Db.ability.template[an]);
 	
-	if(typeof ab.period === 'object'){ ab.period = Craft.boost.generate.roll(ab.period,qua); }
+	if(typeof ab.period.perform === 'object'){ ab.period.perform = Craft.boost.generate.roll(ab.period.perform,qua); }
+	if(typeof ab.period.cooldown === 'object'){ ab.period.cooldown = Craft.boost.generate.roll(ab.period.cooldown,qua); }
 	
 	if(ab.action.func === 'Combat.action.attack'){
 		var atk = ab.action.param;

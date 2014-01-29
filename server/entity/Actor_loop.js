@@ -44,21 +44,23 @@ Actor.loop.ability = function(m){
 	var alreadyBoosted = {};
 	m.abilityChange.chargeClient = [0,0,0,0,0,0];
 	
-	for(var i in m.ability){
-		var s = m.ability[i]; if(!s) continue;
+	m.abilityChange.globalCooldown--; 
+	
+	for(var i in m.ability){	
+		var s = m.ability[i]; if(!s || !s.period) continue;	//cuz can have hole if player AND enemy attack rate is are in m.ability
+		
 		
 		var charge = m.abilityChange.charge;
 		var press = +m.abilityChange.press[i];
 		
 		if(!alreadyBoosted[s.id]){  //this is because a player can set the same ability to multiple input
-			for(var j in s.spd){
-				charge[s.id] += m.atkSpd[j] * s.spd[j];
-			}
+			for(var j in s.spd)	charge[s.id] += m.atkSpd[j] * s.spd[j];
 			alreadyBoosted[s.id] = 1;
 		}
-		m.abilityChange.chargeClient[+i] = charge[s.id] >= s.period ? 1 : charge[s.id] / s.period;
-				
-		if(press && charge[s.id] >= s.period){
+		
+		m.abilityChange.chargeClient[i] = (charge[s.id] >= s.period.cooldown) ? 1 : (charge[s.id] / s.period.cooldown);
+
+		if(press && charge[s.id] >= s.period.cooldown && m.abilityChange.globalCooldown <= 0){
 			Actor.performAbility(m,s);
 			break;	//1 ability per frame max
 		}
@@ -71,15 +73,17 @@ Actor.performAbility = function(mort,ab,mana,reset){
 	if(mana !== false && !Actor.performAbility.resource(mort,ab.cost)) return;
 	
 	//Charge
-	if(reset !== false) Actor.performAbility.resetCharge(mort,ab);
-		
+	if(reset !== false)	Actor.performAbility.resetCharge(mort,ab);
+	
 	//Do Ability Action (ex: Combat.action.attack)
 	applyFunc.key(mort.id,ab.action.func,ab.action.param);
 }
 
 Actor.performAbility.resetCharge = function(mort,ab){
 	var charge = mort.abilityChange.charge;
-	charge[ab.id] = Math.min(charge[ab.id] % ab.period,1);
+	charge[ab.id] = Math.min(charge[ab.id] % ab.period.cooldown,1);
+	
+	mort.abilityChange.globalCooldown =  ab.period.perform * (ab.spd.main / mort.atkSpd.main.mm(0.01) + ab.spd.support / mort.atkSpd.support.mm(0.01));
 	
 	//Reset the ability and related abilities
 	for(var j in ab.reset){	//'attack':0,'summon':1
