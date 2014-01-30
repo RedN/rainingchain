@@ -418,35 +418,39 @@ Craft.salvage.equip = function(key,id){
 		Itemlist.add(inv,'shard-'+equip.color);
 	}
 }
+
 Craft.salvage.material = function(key,id,amount){
 	//transform equip into shard
 	var inv = List.main[key].invList;
 	amount  = amount.mm(Itemlist.have(inv,id,0,'amount'));
 	if(!amount || !Itemlist.test(inv,[['material-currency',1]])) return;
 	
+	var main = List.main[key];
 	
-	
-	
-	//var currencyAmount = ...
-	//var rate = 
-	
-	Craft.material.getExchangeAmount(key,id,amount);
-	
-	//Itemlist.add(inv,'material-currency',
-	
-	var type = Db.item[id].type;
-	if(type === 'weapon'){ var equip = Db.equip[id]; }
-	else if(type === 'armor'){ var equip = Db.equip[id]; }
-	else {return;}
-	
+	var count = Craft.salvage.material.count(main.material[id],amount);
+	count *=
+	List.main[key].material[id] += amount;
 	
 	Itemlist.remove(inv,id,amount);
-	Itemlist.add(inv,'material-currency',currencyAmount);
-	
+	Itemlist.add(inv,'material-currency',count);
+	Chat.add(key,'You have converted x' + amount + ' ' + Db.item[id].name + ' into x' + count + Db.item['material-currency'].name;
+}
+
+Craft.salvage.material.count = function(dbConvertRate,mainMaterial,amount){
+	var count = 0;
+	for(var i = 0; i < amount; i++){
+		count += Math.ceil(dbConvertRate/(Math.pow(1.1,mainMaterial));
+		mainMaterial++;
+	}
+	return count;
 }
 
 
+Craft.material = function(){
 
+
+};
+	
 
 //{Ability BROKEN
 Craft.ability = function(seed){

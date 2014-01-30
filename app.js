@@ -61,7 +61,8 @@ require('./server/db/Db_enemy');
 require('./server/db/Db_ability');
 require('./server/db/Db_item');
 require('./server/db/Db_equip');
-require('./server/db/Db_craft');
+require('./server/db/Db_boost');
+require('./server/db/Db_material');
 		
 require('./' + clientPath + 'client/js/shared/Collision');
 require('./' + clientPath + 'client/js/shared/Db_stat');

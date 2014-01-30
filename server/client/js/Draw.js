@@ -121,19 +121,21 @@ Draw.optionList = function(){ ctxrestore();
 		var name = Draw.optionList.parse(option[i].name);
 		ctx.fillText(name,sx+optionX,sy+optionY*(i+1));
 		
-		if(main.optionList.client){ 
-			Button.creation(0,{
-				'rect':[sx,sx+w,sy+nameY+optionY*i,sy+nameY+optionY*(i+1)],
-				"left":option[i],
-				'text':name,
-				});			
-		}else {
+		if(main.optionList.server){ 
 			Button.creation(0,{
 				'rect':[sx,sx+w,sy+nameY+optionY*i,sy+nameY+optionY*(i+1)],
 				"left":{'func':Chat.send.command,'param':['$option,' + i]},
 				'text':name,
-				});			
+				});	
+		}else {
+			Button.creation(0,{
+				'rect':[sx,sx+w,sy+nameY+optionY*i,sy+nameY+optionY*(i+1)],
+				"left":option[i],
+				'text':name,
+				});	
 		}
+				
+		
 	}
 	
 }

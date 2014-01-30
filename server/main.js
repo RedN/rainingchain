@@ -26,8 +26,9 @@ List = {
 exports.initServer = function (){
     require('async').series([Init.db.item, Init.db.equip, Init.db.ability,
         (function(){
-			Init.db.stat();
 			
+			Init.db.stat();
+			Init.db.material();
 			
 			//initAbilityModDb();
 			

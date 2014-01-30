@@ -287,6 +287,12 @@ Command.list['team,join'] = function(key,name){
 }
 
 
+Command.list['salvage,material'] = function(key,name,amount){
+	amount = Math.round(+amount);
+	if(Db.craft[name] || !amount) return;
+	Craft.salvage.material(key,name,amount);
+}
+
 
 
 //CLIENT SIDE: Pref. many different preference values can be changed. check Command.pref.verify for more detail.

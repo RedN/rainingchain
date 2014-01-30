@@ -1,7 +1,3 @@
-
-
-
-
 Db.boost = {};
 Db.boost.list = {};
 

@@ -22,7 +22,6 @@ Main.template = function(key){
 		'sfx':'',
 		'song':'',
 		
-		'material':Craft.material.template(),
 		
 		'help':'',
 		'passivePt':0,
@@ -52,6 +51,7 @@ Main.template = function(key){
 		main['old'] = {};
 		main['id'] = key;
 		main['dialogueLoc'] = {'x':0,'y':0};
+		main['material'] = Craft.material.template();		
 	} else {
 		main['context'] = {'text':''};
 		main['clientContext'] = {'text':''};

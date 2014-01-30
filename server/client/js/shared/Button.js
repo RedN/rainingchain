@@ -84,7 +84,7 @@ Button.optionList = function(key,option){
 		var player = List.all[key];
 		option.x = player.mouseX;
 		option.y = player.mouseY,
-		option.server = server;
+		option.server = typeof option.server !== 'undefined' ? option.server || server;
 		option.count = 2;
 		List.main[key].optionList = option;
 	}
@@ -92,7 +92,7 @@ Button.optionList = function(key,option){
 		option = key;
 		option.x = mouse.x;
 		option.y = mouse.y;
-		option.client = 1;
+		option.server = 0;
 		option.count = 2;
 		main.optionList = option;
 	}
