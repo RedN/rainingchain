@@ -1,10 +1,12 @@
 
+optionlist on client is bad idea...
+would be better to use Chat.addInput command
 
+id for ability item is ability id... problem if same
 
-
-time when perform ability,
-
-
+spending main.material is big
+split craft.orb
+revamp binding system
 
 
 
@@ -68,48 +70,6 @@ kill fire, open door
 
 
 /*
-summon bear	(Summon)
-bear teleport
-set trap (hunt + wc)
-
-burn fire	(fm, cook, craft, magic, smith, div,pray,fletch,farm,agi)
-clean herb
-cook
-craft
-cast super heat gold
-portent div
-bury bones 
-fletch
-farm pot
-toy mouse
-
-teleport varrock
-pick guard	(thief, hp, range, str, def, atk)
-kill guard
-
-
-
-summon: summon arctic bear
-herb: clena herb
-magic: super heat gold
-smith: super heat gold
-thief: thief man
-str: kill man
-atk: kill man
-def: kill man
-hp: kill man
-pray: kill man (bonecrusher)
-range: kill man
-
-craft: air bstaff
-fletch: broad arrow
-wc: cut tree
-fm: light fire
-cook: cook swordfish
-div: make portent
-agi: toy mouse
-farm: plant seed in pot
-hunt: catch kebbit
 
 whocareslol222222 0:39 : https://www.youtube.com/watch?v=PCLbPLEo4Q4
 Nick McDonald 0:42 : https://www.youtube.com/watch?v=6dcrxX19xsI

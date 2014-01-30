@@ -292,6 +292,7 @@ Load.initData = function(key,player,main){
         'main':{
             'passive':0,
             'social':0,
+			'material':0,
             'quest':0,
             'material':0,
 			'invList':Change.send.convert.itemlist,

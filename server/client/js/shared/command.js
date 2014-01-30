@@ -24,7 +24,7 @@ if(server){
 	});
 }
 
-//Fl
+//{Fl
 Command.list['fl,add'] = function(key,user,nick,comment,color){
 	if(!nick){ nick = user;}
 	if(!comment){ comment = '';}
@@ -111,7 +111,6 @@ Command.list['fl,offlinepm'] = function(key,to,text){
 	});
 }
 
-//Mute
 Command.list['mute'] = function(key,user){
 	if(user == List.all[key].name){ Chat.add(key,"-.- Seriously?"); return }
 	
@@ -128,9 +127,9 @@ Command.list['mute'] = function(key,user){
 		});
 	}
 }
+//}
 
-
-//Window
+//{Window
 Command.list['win,close'] = function(key){
 	Main.closeAllWindow(List.main[key]); 
 }
@@ -209,9 +208,9 @@ Command.list['win,ability,upMod'] = function(key,abid,mod,amount){
 	Craft.orb(key,'upgrade',amount,abid,mod);	
 }
 
+//}
 
-
-//Tab
+//{Tab
 Command.list['tab,open'] = function(key,tab){
 	if(Cst.tab.list.indexOf(tab) === -1){ Chat.add(key,'Wrong Input'); return; }
 	List.main[key].currentTab = tab;
@@ -229,9 +228,9 @@ Command.list['tab,swapWeapon'] = function(key,type){
 	if(['melee','range','magic'].indexOf(type) === -1){ Chat.add(key,'Invalid Param.'); return;}
 	Actor.swapWeapon(List.all[key],type);
 }
+//}
 
-
-//Clan
+//{Clan
 Command.list['cc,create'] = function(key,name){
 	Clan.creation(key,name);	
 }
@@ -244,7 +243,7 @@ Command.list['cc,log'] = function(key,name){
 Command.list['cc,leave'] = function(key,name){
 	Clan.leave(key,name);	
 }
-
+//}
 
 
 Command.list['dia,option'] = function(key,slot){
@@ -278,24 +277,30 @@ Command.list['email,activate'] = function(key,str){
 	});
 }
 
-
-
 Command.list['team,join'] = function(key,name){
 	name = escape.user(name);
 	List.all[key].team = name;
 	Chat.add(key, 'You are now in team "' + name + '".');
 }
 
-
-Command.list['salvage,material'] = function(key,name,amount){
+//Craft
+Command.list['material,salvage'] = function(key,name,amount){
 	amount = Math.round(+amount);
-	if(Db.craft[name] || !amount) return;
-	Craft.salvage.material(key,name,amount);
+	if(Db.material[name] || !amount) return;
+	Craft.material.salvage(key,name,amount);
+}
+
+Command.list['material,create'] = function(key,name,amount){
+	amount = Math.round(+amount);
+	if(Db.material[name] || !amount) return;
+	Craft.material.create(key,name,amount);
 }
 
 
 
-//CLIENT SIDE: Pref. many different preference values can be changed. check Command.pref.verify for more detail.
+
+
+//{CLIENT SIDE: Pref. many different preference values can be changed. check Command.pref.verify for more detail.
 Command.list['pref'] = function(name,value){
 	if(server) return;
 	
@@ -342,8 +347,9 @@ Command.list['music,info'] = function(){
 }
 
 Command.client = ['pref','binding','music,next','music,info'];
+//}
 
-
+//{Pref
 Command.pref = {};
 Command.pref.list = {
 	'volumeSong':{name:'Volume Song',initValue:20,min:0,max:100,description:'Volume Song.','func':function(value){ Song.beingPlayed.volume = value/100 * main.pref.volumeMaster/100; }},
@@ -388,4 +394,4 @@ Main.template.pref = function(){
 	return a;
 }
 
-
+//}

@@ -142,7 +142,8 @@ Change.update.init = function(){
 				{'array':['quest']},
 				
 				{'array':['passivePt']},
-				{'array':['passive']},				
+				{'array':['passive']},	
+				{'array':['material']},	//NEEDWORK, would need filter			
 			]
 			},	
 		'exist':{

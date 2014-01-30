@@ -1029,6 +1029,17 @@ Draw.window.binding = function (){ ctxrestore();
 	hq.note.style.top = 250 + 'px'; 	
 }
 
+Draw.window.material = function (){ ctxrestore();
+	var s = Draw.window.main('Material Creation');	
+	ctx = List.ctx.win;
+	
+	
+	
+	
+	
+	
+}
+
 	
 //{ Passive
 Draw.window.passive = function (){ ctxrestore();

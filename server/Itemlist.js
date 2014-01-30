@@ -256,7 +256,7 @@ Itemlist.click.inventory = function(inv,side,slot,amount){
 			return;
 		}
 		
-		if(item.option[0] && item.option[0].name !== 'Drop' && item.option[0].func){
+		if(item.option[0] && item.option[0].name !== 'Drop' && item.option[0].func && !item.option[0].client){
 			applyFunc.key(key,item.option[0].func,item.option[0].param); 
 			if(item.remove){ Itemlist.remove(inv,key,item.id); }
 		}	

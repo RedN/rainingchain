@@ -206,8 +206,8 @@ Equip.creation = function(equip){
 	equip.color = Craft.equip.color(equip);
 	equip.category = Cst.equip.weapon.piece.have(equip.piece) ? 'weapon' : 'armor';
 	
-	equip.def.ratio = Craft.ratio.normalize(equip.def.ratio);
-	equip.dmg.ratio = Craft.ratio.normalize(equip.dmg.ratio);
+	equip.def.ratio = convertRatio(equip.def.ratio);
+	equip.dmg.ratio = convertRatio(equip.dmg.ratio);
 
 	
 	Db.equip[equip.id] = equip;
@@ -220,7 +220,7 @@ Equip.creation = function(equip){
 		'option':[	
 			{'name':'Examine Equip','func':'Main.examineEquip','param':[equip.id]},
 			{'name':'Change Equip','func':'Actor.switchEquip','param':[equip.id]},
-			{'name':'Salvage','func':'Craft.salvage.equip','param':[equip.id]},
+			{'name':'Salvage','func':'Craft.equip.salvage','param':[equip.id]},
 		],
 	};
 	

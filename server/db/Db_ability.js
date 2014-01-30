@@ -235,9 +235,9 @@ Init.db.ability = function(cb){
 			'objImg':{'name':"arrow",'sizeMod':1},'hitImg':{'name':"thunder2",'sizeMod':0.5},
 			'dmg':{'main':100,'ratio':{'melee':0,'range':10,'magic':80,'fire':10,'cold':0,'lightning':0}},
 			
-			
+			spd:4,
 			nova:{					//When attack will hit the enemy, it will create another attack 
-				period:1,				//chance of doing another attack
+				period:2,				//chance of doing another attack
 				rotation:10,
 				attack:{		//attack info
 					'type':"bullet",'angle':360,'amount':4,
@@ -431,7 +431,7 @@ Ability.creation = function(a){
 			if(a.action.anim !== false && !a.action.anim) a.action.anim = 'attack';
 			
 			var at = a.action.param;
-			at.dmg = Craft.ratio.normalize(at.dmg);
+			at.dmg.ratio = convertRatio(at.dmg.ratio);
 		}
 		if(a.action.func === 'Combat.action.boost'){
 			if(a.action.animOnSprite !== false && !a.action.animOnSprite) action.animOnSprite = 'boost';

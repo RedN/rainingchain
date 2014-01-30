@@ -14,7 +14,7 @@ Test.loop = function(){
 Test.performance = function(){
     if(Test.performance.active && Loop.frameCount % Test.performance.frequence === 0){
         var d = Date.now();	
-        permConsoleLog('Performance: ' + Math.round(40*Test.performance.frequence/(d - Test.performance.oldtime)*100) + '%');	
+        permConsoleLog('Performance: ' + Math.round(40*Test.performance.frequence/(d - Test.performance.oldtime)*100+15) + '%');	//+15 cuz weird glitch making 85% them max
         Test.performance.oldtime = d;
     }
 };
@@ -48,11 +48,13 @@ Test.serverStart = function(){
 }
 
 //Called when player logs in
-Test.playerStart = function(key){
+Test.playerStart = function(key){	
 	var inv = List.main[key].invList;
     Itemlist.add(inv,'gold');
     Itemlist.add(inv,'teleport');
 	Itemlist.add(inv,'test');
+	Itemlist.add(inv,'wc-wood-10',1000);
+	Itemlist.add(inv,'material-currency',1000);
 	Itemlist.add(inv,'boost_orb',1000);
 	Itemlist.add(inv,'upgrade_orb',1000);
 	Itemlist.add(inv,'removal_orb',1000);

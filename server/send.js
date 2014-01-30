@@ -188,10 +188,14 @@ Change.send.convert.optionList = function(option){
 	draw.x = option.x;
 	draw.y = option.y;
 	draw.name = option.name;
+	if(option.client) draw.client = option.client;
 	
 	draw.option = [];
 	for(var i = 0; i < option.option.length ; i++){
-		draw.option.push({'name':option.option[i].name});
+		if(option.client || option.option[i].client)
+			draw.option.push(option.option[i]);
+		else			
+			draw.option.push({'name':option.option[i].name});
 	}
 	return draw;
 }

@@ -136,6 +136,9 @@ Craft.plan.examine = function(key,seed,req){
 	var color = 'green';
 	
 	var str = 'Plan Information: ';
+	str += '<br>&emsp;Level:' + seed.lvl;
+	if(seed.piece) str += ', Piece:' + seed.piece;
+	if(seed.type) str += ', Type:' + seed.type;
 	str += '<br>&emsp;Rarity:' + round(seed.rarity || 0,2) + ', Quality:' + round(seed.quality || 0,2);
 	
 	str += '<br>&emsp;Items: ';
@@ -172,15 +175,6 @@ Craft.plan.upgrade = function(){
 
 //}
 
-
-Craft.ratio = {};
-Craft.ratio.normalize = function(info){
-	var ratio = info.main ? info.ratio : info; //send whole obj instead of only ratio
-	ratio = convertRatio(ratio);
-	return info;
-}	
-
-
 Craft.create = function(seed){	//create what seed tell to create. 
 	if(seed.category === 'weapon' || seed.category === 'armor'){
 		seed.piece = seed.piece || Cst.equip[seed.category].piece.random();
@@ -189,11 +183,10 @@ Craft.create = function(seed){	//create what seed tell to create.
 	
 	seed = Craft.seed.creation(seed);
 	
-	
-	
 	if(seed.category === 'equip'){ return Craft.equip(seed); }
 }
 
+//{Equip
 Craft.equip = function(seed){	//at this point, seed should be all-set
 	var equip = Equip.template();
 	equip.piece = seed.piece;
@@ -249,7 +242,6 @@ Craft.equip.armor = function(seed,equip){
 	return equip;
 }
 
-
 Craft.equip.armor.ratio = {
 	'metal':  [['melee'],['range','magic'],['fire','cold','lightning']],
 	'wood':  [['range'],['melee','magic'],['fire','cold','lightning']],
@@ -272,16 +264,27 @@ Craft.equip.armor.mod = {
 	'shield':20,
 	'body':25,
 }
-Craft.equip.armor.mod  = Craft.ratio.normalize(Craft.equip.armor.mod);
-	
+Craft.equip.armor.mod  = convertRatio(Craft.equip.armor.mod);
 
-	
-	
 Craft.equip.color = function(w){
 	if(w.boost.length === 0) return 'white'; 
 	if(w.boost.length <= 2) return 'blue';  
 	return 'yellow';  
 }
+
+Craft.equip.salvage = function(key,id){
+	//transform equip into shard
+	var inv = List.main[key].invList;
+	if(Itemlist.have(inv,id)){
+		var type = Db.item[id].type;
+		if(type === 'weapon'){ var equip = Db.equip[id]; }
+		else if(type === 'armor'){ var equip = Db.equip[id]; }
+		else {return;}
+		Itemlist.remove(inv,id);
+		Itemlist.add(inv,'shard-'+equip.color);
+	}
+}
+//}
 
 //{Boost
 Craft.boost = function(seed,where,amount){
@@ -335,7 +338,7 @@ Craft.boost.generate.tier = function(mm,value){
 //}
 
 
-Craft.orb = function(key,orb,amount,wId,mod){
+Craft.orb = function(key,orb,amount,wId,mod){	//would be better if split in multi func
 	var inv = List.main[key].invList;
 	var mort = List.all[key];
 	
@@ -405,21 +408,10 @@ Craft.orb.formula = function(x){
 	return 0.9+0.1*Math.log10(10+x);
 }
 
-Craft.salvage = {};
-Craft.salvage.equip = function(key,id){
-	//transform equip into shard
-	var inv = List.main[key].invList;
-	if(Itemlist.have(inv,id)){
-		var type = Db.item[id].type;
-		if(type === 'weapon'){ var equip = Db.equip[id]; }
-		else if(type === 'armor'){ var equip = Db.equip[id]; }
-		else {return;}
-		Itemlist.remove(inv,id);
-		Itemlist.add(inv,'shard-'+equip.color);
-	}
-}
 
-Craft.salvage.material = function(key,id,amount){
+
+Craft.material = {};
+Craft.material.salvage = function(key,id,amount){
 	//transform equip into shard
 	var inv = List.main[key].invList;
 	amount  = amount.mm(Itemlist.have(inv,id,0,'amount'));
@@ -427,29 +419,59 @@ Craft.salvage.material = function(key,id,amount){
 	
 	var main = List.main[key];
 	
-	var count = Craft.salvage.material.count(main.material[id],amount);
-	count *=
-	List.main[key].material[id] += amount;
-	
+	var dbRate = Db.material[id];
+	var count = Craft.material.salvage.count(dbRate,main.material[id],amount);
+
+	main.material[id] -= amount;
 	Itemlist.remove(inv,id,amount);
 	Itemlist.add(inv,'material-currency',count);
-	Chat.add(key,'You have converted x' + amount + ' ' + Db.item[id].name + ' into x' + count + Db.item['material-currency'].name;
+	Chat.add(key,'You have converted x' + amount + ' ' + Db.item[id].name + ' into x' + count + Db.item['material-currency'].name);
 }
 
-Craft.salvage.material.count = function(dbConvertRate,mainMaterial,amount){
+Craft.material.salvage.count = function(dbRate,mainMaterial,amount){
 	var count = 0;
 	for(var i = 0; i < amount; i++){
-		count += Math.ceil(dbConvertRate/(Math.pow(1.1,mainMaterial));
-		mainMaterial++;
+		count += Math.ceil(dbRate*(Math.pow(1.1,mainMaterial)));
+		mainMaterial--;
 	}
 	return count;
 }
 
 
-Craft.material = function(){
+Craft.material.create = function(key,id,amount){
+	//amount: amount wanted to craft
+	var main = List.main[key];
+	var inv = main.invList;
+	
+	var amountFrag = Itemlist.have(inv,'material-currency',0,'amount');
+	if(!amountFrag || !Itemlist.test(inv,[[id,1]])) return;
+	
+	
+	var dbRate = Db.material[id];
+	
+	var info = Craft.material.create.count(dbRate,main.material[id],amountFrag,amount);
 
-
+	main.material[id] += info.amount;
+	Itemlist.remove(inv,'material-currency',info.cost);
+	Itemlist.add(inv,id,info.amount);
+	Chat.add(key,'You have converted x' + info.cost + ' ' + Db.item['material-currency'].name + ' into x' + info.amount + Db.item[id].name);
+	
 };
+
+Craft.material.create.count = function(dbRate,mainMaterial,amountFrag,amountWanted){
+	var amountCrafted = 0;
+	var costSum = 0;
+	for(var i = 0 ; i < amountWanted; i++){
+		var cost = Math.ceil(dbRate*(Math.pow(1.1,mainMaterial)))*2;
+		if(amountFrag < cost) break;
+	
+		costSum += cost;
+		amountFrag -= cost;
+		mainMaterial++;
+		amountCrafted++;
+	}
+	return {'amount':amountCrafted,'cost':costSum};
+}
 	
 
 //{Ability BROKEN
@@ -478,7 +500,7 @@ Craft.ability.template = function(seed){
 		for(var i in atk.dmg.ratio){
 			if(typeof atk.dmg.ratio[i] === 'object'){ atk.dmg.ratio[i] = Craft.boost.generate.roll(atk.dmg.ratio[i],qua); }
 		}
-		atk.dmg.ratio = Craft.ratio.normalize(atk.dmg.ratio);
+		atk.dmg.ratio = convertRatio(atk.dmg.ratio);
 		
 		//Status
 		for(var st in Cst.status.list){

@@ -22,6 +22,11 @@ Init.db.item = function (cb){
 	
 
 	//{Crafting
+	a['material-currency'] = {'name':'Craft Fragments','visual':'plan.planA','stack':1,'tradeable':0,
+			'option':[	{'name':'Create Material','func':'Chat.send.command','param':['$win,open,material']}
+					]};
+					
+					
 	a['shard-white'] = {'name':'White Shard','visual':'system.gold','stack':1}
 	a['shard-blue'] = {'name':'Blue Shard','visual':'system.gold','stack':1}
 	a['shard-yellow'] = {'name':'Yellow Shard','visual':'system.gold','stack':1}
