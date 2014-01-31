@@ -1,4 +1,6 @@
 
+draw passive weird block for special balancedAtk
+
 Db.plan
 
 plan required materials

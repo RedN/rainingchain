@@ -429,16 +429,16 @@ Actor.death.drop = function(mort,killers){
 		if(Math.pow(Math.random(),quantity) < drop.plan[i]){
 			var randomKiller = killer.random();
 			
-			var plan = Craft.plan.creation({
+			var id = Craft.plan.creation({
 				'rarity':rarity,
 				'quality':quality,
 				'piece':i,
 				'lvl':mort.lvl,
+				'category':'equip',
 			});
 			
 			
-			Drop.creation({'x':mort.x,'y':mort.y,'map':mort.map,'item':plan.id,'amount':1});		
-
+			Drop.creation({'x':mort.x,'y':mort.y,'map':mort.map,'item':id,'amount':1});	
 			break;
 		}
 	}
@@ -447,8 +447,9 @@ Actor.death.drop = function(mort,killers){
 
 
 
-
-
+/*
+ts("Craft.plan.creation({'rarity':0,'quality':0,'piece':'melee','lvl':10,'category':'equip',});")
+*/
 
 
 

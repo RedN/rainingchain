@@ -29,118 +29,135 @@ adding orb to ability mods improves the mod depending on Db.ability.mod function
 
 
 Craft = {};
-Craft.create = function(seed){	//create what seed tell to create. 
-	if(seed.category === 'weapon' || seed.category === 'armor'){
-		seed.piece = seed.piece || Cst.equip[seed.category].piece.random();
-		seed.category = 'equip';
-	}
-	
-	seed = Craft.seed.creation(seed);
-	
-	if(seed.category === 'equip'){ return Craft.equip(seed); }
-}
-
-//{Seed
-Craft.seed = {};
-Craft.seed.creation = function(sed){ //need to fix for ability too
-	var seed = deepClone(sed);
-	
-	seed.category = seed.category || 'equip';
-	
-	seed.quality = seed.quality  || 0; 
-	seed.lvl = seed.lvl || 0; 
-	seed.rarity = seed.rarity  || 0; 
-	
-	if(seed.category === 'equip') seed = Craft.seed.equip(seed);
-	if(seed.category === 'ability') seed = Craft.seed.ability(seed);
-		
-	return seed;
-}
-
-Craft.seed.equip = function(seed){
-	seed.piece = seed.piece || Cst.equip.piece.random();
-	seed.type =  seed.type || Cst.equip[seed.piece].type.random(); 
-
-	
-	var amount = Math.pow(Math.random(),(1+seed.rarity));
-	amount = -Math.logBase(2,amount);
-	amount = Math.floor(amount);
-	// 1/2 => 0, 1/4 => 1, 1/8 => 2, 1/16 => 3...
-	
-	if(amount > 6){	//1/256
-		//unique
-	}
-	seed.amount = amount+1; 
-	return seed;
-}
-Craft.seed.ability = function(seed){
-
-
-}
-
-
-Craft.seed.template = function(){
-	var seed = {}
-	seed.quality = 0;
-	seed.lvl = 0;
-	seed.rarity = 0;
-	seed.type = 'metal';
-	seed.category = 'equip';
-	seed.piece = 'body';
-	seed.amount = 0;
-	return seed;
-}
-//}
 
 //{Plan
+Db.plan = {
+	'randomArmor':{
+		name:'bugged-plan',
+		icon:'plan.equip',
+		category:'equip',
+		piece:'helm',	
+		type:'metal',	
+		id:'randomArmor',
+		quality:0, 
+		lvl:0,
+		rarity:0, 
+		req:{'skill':{},'item':[]},
+		name:'Bugged Plan',
+		minAmount:0,
+		maxAmount:10,
+	},
+	'randomWeapon':{
+		name:'bugged-plan',
+		icon:'plan.equip',
+		category:'equip',
+		piece:'melee',	
+		type:'sword',		
+		id:'randomWeapon',
+		quality:0, 
+		lvl:0,
+		rarity:0, 
+		req:{'skill':{},'item':[]},
+		name:'Bugged Plan',
+		minAmount:0,
+		maxAmount:10,
+	},
+};
 Craft.plan = {};
-Craft.plan.use = function(key,seed,req){	//when player tries to use plan
-	seed = deepClone(seed);
-	var inv = List.main[key].invList;
-	var tmp = Craft.plan.test(key,req);
+
+
+Craft.plan.creation = function(preplan){
+	//seed: lvl, category,[ piece, type, rarity, quality,]
+	//extra: definitive, minBoost, maxBoost
 	
-	if(tmp){ //meet req
-		Itemlist.remove.bulk(inv,req.item);
-		var id = Craft.create(seed);
-		Itemlist.add(inv,id);
-	} else { //dont meet
-		Craft.plan.examine(key,seed,req);
+	var plan = useTemplate(Craft.plan.template(),preplan);
+	if(plan.category === 'equip' || plan.category === 'weapon' || plan.category === 'armor') 
+		plan = Craft.plan.template.equip(plan);
+	if(plan.category === 'ability') plan = Craft.plan.template.ability(plan);	
+	
+	Db.plan[plan.id] = plan;
+	
+	Item.creation({
+		'id':plan.id,
+		'name':plan.name,
+		'icon':plan.icon,
+		'option':[	
+			{'name':'Craft Item','func':'Craft.plan.use','param':[plan.id]},
+			{'name':'Craft Item','func':'Craft.plan.examine','param':[plan.id]},
+		]
+	});
+	
+	if(plan.definitive) return plan.id;
+	
+	plan.lvl = Math.floor(plan.lvl * (1 + 0.1*Math.randomML()));	//aka lvl += 10
+	plan.rarity += Math.randomML();	
+	plan.quality += Math.randomML();
+	
+	plan.lvl = plan.lvl.mm(0);
+	plan.rarity = plan.rarity.mm(0);	
+	plan.quality = plan.quality.mm(0);	
+	
+	return plan.id;
+}
+
+
+Craft.plan.template = function(){
+	var id = 'plan-' + Math.randomId();
+	return {
+		name:'bugged-plan',
+		icon:'plan.equip',
+		category:'equip',	
+		id:id,
+		quality:0, 
+		lvl:0,
+		rarity:0, 
+		req:{'skill':{},'item':[[id,1]]},
+		name:'Bugged Plan',
+		minAmount:0,
+		maxAmount:10,
 	}
 }
 
-Craft.plan.creation = function(d){	//when creating a plan as a drop
-	var itemId = 'planE-' + Math.randomId();
-	var lvl = Math.floor(mort.lvl * (1 + Math.randomML()/10));	//aka lvl += 10%
-	lvl = lvl.mm(0);
+Craft.plan.template.equip = function(plan){
+	if(plan.category === 'weapon' || plan.category === 'armor'){
+		plan.piece = plan.piece || Cst.equip[plan.category].piece.random();
+		plan.category = 'equip';
+	} else {	
+		plan.piece = plan.piece || Cst.equip.piece.random();
+	}
 	
-	var req = {
-		'skill':{},
-		'item':[
-			[itemId,1],
-		
-		
-		],
-	};
-	var seed = {
-		'lvl':d.lvl,
-		'rarity':d.rarity,
-		'quality':d.quality,
-		'piece':d.piece,
-		'category':'equip',
-	};
+	plan.name = plan.piece.capitalize() + ' Plan';
+	plan.icon = 'plan.equip';
+	plan.type = plan.type || Cst.equip[plan.piece].type.random(); 
 	
-	Item.creation(
-		{'id':itemId,
-		'name':d.piece.capitalize() + " Plan",
-		'icon':'plan.'+d.piece,
-		'option':[	
-			{'name':'Craft Item','func':'Craft.plan.use','param':[seed,req]},
-			{'name':'Craft Item','func':'Craft.plan.examine','param':[seed,req]},
-		]});
-	return itemId;
+	return seed;
 }
 
-Craft.plan.examine = function(key,seed,req){	
+Craft.plan.template.ability = function(plan){
+
+
+}
+
+Craft.plan.use = function(key,id){	//when player tries to use plan
+	var plan = Db.plan[id];
+	if(!plan) return;
+	
+	var inv = List.main[key].invList;
+	
+	if(Craft.plan.test(key,plan.req)){ //meet req
+		Itemlist.remove.bulk(inv,plan.req.item);
+			
+		if(plan.category === 'equip') Itemlist.add(inv, Craft.equip(plan)); 
+		if(plan.category === 'ability') Itemlist.add(inv, Craft.ability(plan)); 
+	} else { //dont meet
+		console.log('nop...');
+		//Craft.plan.examine.chat(key,id);
+	}
+}
+
+Craft.plan.examine = {};
+
+Craft.plan.examine.chat = function(key,seed,req){	
 	var inv = List.main[key].invList;
 	var lvl = List.all[key].skill.lvl;
 	
@@ -187,31 +204,48 @@ Craft.plan.upgrade = function(){
 //}
 
 //{Equip
-Craft.equip = function(seed){	//at this point, seed should be all-set
+Craft.equip = function(plan){	//at this point, seed should be all-set
 	var equip = Equip.template();
-	equip.piece = seed.piece;
-	equip.type = seed.type;
-	equip.icon = seed.piece + '.' + seed.type;
-	equip.name = seed.type;
-	equip.lvl = seed.lvl;
-	equip.seed = seed;
+	equip.piece = plan.piece;
+	equip.type = plan.type;
+	equip.icon = plan.piece + '.' + plan.type;
+	equip.name = plan.type.capitalize();
+	equip.lvl = plan.lvl;
+	equip.plan = plan;
 	
-	equip.boost = Craft.boost(seed,equip.boost,seed.amount);
+	var amount = Craft.equip.amount(plan);
+	equip.boost = Craft.boost(plan,equip.boost,amount);
+	
 	equip.id = Math.randomId();
-	
-	//if(equip.sub
-	
-	if(Cst.equip.weapon.piece.have(equip.piece)) equip = Craft.equip.weapon(seed,equip);
-	if(Cst.equip.armor.piece.have(equip.piece)) equip = Craft.equip.armor(seed,equip);
+		
+	if(Cst.equip.weapon.piece.have(equip.piece)) equip = Craft.equip.weapon(plan,equip);
+	if(Cst.equip.armor.piece.have(equip.piece)) equip = Craft.equip.armor(plan,equip);
 	
 	Equip.creation(equip);
 	
 	return equip.id;
 }
 
-Craft.equip.weapon = function(seed,equip){
-	var mod = 0.9 + Math.pow(Math.random(),1/(seed.quality+1))*0.2;
-	equip.dmg.main = (seed.lvl+10) * mod;
+Craft.equip.amount = function(plan){
+	var amount = Math.pow(Math.random(),(1+plan.rarity));
+	amount = -Math.logBase(2,amount);
+	amount = Math.floor(amount);
+	// 1/2 => 0, 1/4 => 1, 1/8 => 2, 1/16 => 3...
+	
+	if(amount > 6){	//1/256
+		//unique
+		amount = 6;
+	}
+	
+	amount = amount.mm(plan.minAmount,plan.maxAmount);
+	console.log(amount);
+	return amount; 
+}
+
+
+Craft.equip.weapon = function(plan,equip){
+	var mod = 0.9 + Math.pow(Math.random(),1/(plan.quality+1))*0.2;
+	equip.dmg.main = (plan.lvl+10) * mod;
 	
 	equip.dmg.ratio = {melee:1/1000,range:0,magic:0,fire:0,cold:0,lightning:0};
 	
@@ -222,16 +256,16 @@ Craft.equip.weapon = function(seed,equip){
 		}
 		if(Math.random() < 0.25) equip.dmg.ratio[i] += 0.0+Math.random()*0.2;
 	}
-	if(Math.random() < 0.90) equip.dmg.ratio[seed.piece] += 0.2+Math.random()*1;
+	if(Math.random() < 0.90) equip.dmg.ratio[plan.piece] += 0.2+Math.random()*1;
 	return equip;
 }
 
-Craft.equip.armor = function(seed,equip){
-	var mod = 0.9 + Math.pow(Math.random(),1/(seed.quality+1))*0.2;
-	mod *= Craft.equip.armor.mod[seed.piece];
-	equip.def.main = (seed.lvl+10) * mod;
+Craft.equip.armor = function(plan,equip){
+	var mod = 0.9 + Math.pow(Math.random(),1/(plan.quality+1))*0.2;
+	mod *= Craft.equip.armor.mod[plan.piece];
+	equip.def.main = (plan.lvl+10) * mod;
 	
-	var list = Craft.equip.armor.ratio[seed.type];
+	var list = Craft.equip.armor.ratio[plan.type];
 	
 	equip.def.ratio = {melee:1/1000,range:0,magic:0,fire:0,cold:0,lightning:0};
 	for(var i in equip.def.ratio){

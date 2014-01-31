@@ -33,20 +33,10 @@ Init.db.item = function (cb){
 	a['shard-gold'] = {'name':'Gold Shard','icon':'system.gold','stack':1}
 	
 	a['gold'] = {'name':'Gold','icon':'system.gold','stack':1,
-		'option':[	{'name':'Craft Armor','func':'Craft.plan.use','param':[{'category':'armor'},{'item':[]}]},
-						{'name':'Craft Weapon','func':'Craft.plan.use','param':[{'category':'weapon'},{'item':[]}]},
+		'option':[	{'name':'Craft Armor','func':'Craft.plan.use','param':['randomArmor']},
+						{'name':'Craft Weapon','func':'Craft.plan.use','param':['randomWeapon']},
 						{'name':'Open Bank','func':'Main.openWindow','param':['bank']},
-			
-			]};
-			
-	a['gold'] = {'name':'Gold','icon':'system.gold','stack':1,
-		'option':[	{'name':'Craft Armor','func':'Craft.plan.use','param':[{'category':'armor','piece':'helm'},{'item':[]}]},
-						{'name':'Craft Weapon','func':'Craft.plan.use','param':[{'category':'weapon'},{'item':[['gold',10]],'skill':{'melee':10,'range':10}}]},
-						{'name':'Open Bank','func':'Main.openWindow','param':['bank']},
-			
-			]};
-			
-	
+			]};	
 			
 	a['teleport'] = {'name':'Gold','icon':'system.gold','stack':1,
 		'option':[
