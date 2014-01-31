@@ -65,7 +65,7 @@ Draw.window.main = function(title){ ctxrestore();
 
 Draw.window.main.constant = function(){
 	var startX = 20;
-	var startY = 50;
+	var startY = 20;
 	var sizeX = 1020;
 	var sizeY = 576;
 	var marginX = 15;
@@ -94,14 +94,14 @@ Draw.window.bank = function (){ ctxrestore();
 	var numY = s.y+15;
 	
 	var prefAmount = main.pref.bankTransferAmount;
-	var string = 'X-Amount: ' + prefAmount;
+	var string = 'Shift-Left Click Amount: ' + prefAmount;
 	
 	ctx.font = '25px Monaco';
-	ctx.fillText(string,numX,numY);
+	ctx.fillText(string,numX-150,numY);
 	Button.creation(0,{
 		"rect":[numX,numX+ctx.measureText(string).width,numY,numY+25],
 		"left":{"func":Input.add,"param":['$pref,bankTransferAmount,']},
-		"text":'Change X-Amount.'
+		"text":'Change Shift-Left Click Amount.'
 		});	
 	
 	//Draw Items
@@ -115,6 +115,7 @@ Draw.window.bank = function (){ ctxrestore();
 			"rect":[numX,numX+32,numY,numY+32],
 			"left":{"func":Chat.send.command,"param":['$win,bank,click,left,' + i]},
 			"shiftLeft":{"func":Chat.send.command,"param":['$win,bank,click,shiftLeft,' + i+ ',' + main.pref.bankTransferAmount]},
+			"shiftRight":{"func":Chat.send.command,"param":['$win,bank,click,shiftLeft,' + i + ',' + 999999999]},
 			"right":{"func":Chat.send.command,"param":['$win,bank,click,right,' + i]},
 			'text':'Withdraw ' + main.bankList[i][2]
 		});	
@@ -725,14 +726,8 @@ Draw.window.trade = function (){ ctxrestore();
 	
 	ctx.font = '25px Monaco';
 	ctx.fillText(string,numX,numY);
-
-	
-	
 	
 	//##################################
-	
-	
-	
 	
 	var trade = main.windowList.trade;
 	var myList = main.tradeList;
@@ -948,7 +943,6 @@ Draw.window.binding = function (){ ctxrestore();
 	hq.div.style.left = s.mx + 'px'; 
 	hq.div.style.top = s.my + 'px'; 
 	
-
 	//Table
 	hq.table.style.left = 50 + 'px'; 
 	hq.table.style.top = 0 + 'px'; 
@@ -1036,10 +1030,79 @@ Draw.window.material = function (){ ctxrestore();
 	var list = Object.keys(main.material).sort();
 	
 	
+	for(var i in list){
+		var numX = s.zx + 15 + 150*Math.floor(i/10);
+		var numY = s.zy + 0 + 40*(i%10);
+		
+		var mat = Db.material[list[i]];
+		
+		//Mat Icon
+		Draw.icon(mat.icon,[numX,numY],32);
+		Button.creation(0,{
+			"rect":[numX,numX+32,numY,numY+32],
+			'text':mat.name + '  (' + main.material[mat.id] + ')',
+		});
+		numX += 40;
+		
+		//Create
+		Draw.icon('system1.more',[numX,numY],32);
+		ctx.fillStyle = 'green';
+		ctx.globalAlpha = 0.5;
+		ctx.fillRect(numX,numY,32,32)
+		ctx.globalAlpha = 1;
+		Button.creation(0,{
+			"rect":[numX,numX+32,numY,numY+32],
+			'text':'Create ' + mat.name + ' | Cost:' + Draw.window.material.cost(mat.id,1),
+			'right':{'func':Draw.window.material.click,'param':[mat.id,'create']},
+			'left':{'func':Chat.send.command,'param':['$material,create,' + mat.id + ',1']},
+		});
 	
+		numX += 40;
+		
+		//Salvage
+		Draw.icon('system1.less',[numX,numY],32);
+		ctx.fillStyle = 'red';
+		ctx.globalAlpha = 0.5;
+		ctx.fillRect(numX,numY,32,32);
+		ctx.globalAlpha = 1;
+		Button.creation(0,{
+			"rect":[numX,numX+32,numY,numY+32],
+			'text':'Salvage ' + mat.name + ' | Gain:' + Draw.window.material.cost(mat.id),
+			'right':{'func':Draw.window.material.click,'param':[mat.id,'salvage']},
+			'left':{'func':Chat.send.command,'param':['$material,salvage,' + mat.id + ',1']},
+		});
+	}
 	
+	html.materialWin.div.style.visibility = 'visible';
+	html.materialWin.note.style.top = s.y + 450 + 'px';
+	html.materialWin.note.style.left = s.x + 20 + 'px';
+	html.materialWin.note.innerHTML = '<font size="6">Note: Trading with other players is always more profitable.</font>';
 	
 }
+
+Draw.window.material.cost = function(id,buy){
+	var a = Math.ceil(Db.material[id].exchangeRate * Math.pow(1.1,main.material[id]));
+	if(buy) a *=2;
+	return a;
+}
+
+Draw.window.material.click = function(id,type){
+	var name = type === 'create' ? 'Create' : 'Salvage';
+	var cmd = type === 'create' ? '$material,create,' + id + ',' : '$material,salvage,' + id + ',';
+	
+	var mat = Db.material[id];
+	
+	var option = {'name':name,'option':[],'count':0};
+	
+	option.option = [
+		{'name':name + ' x1','func':Chat.send.command,'param':[cmd+1]},
+		{'name':name + ' x10','func':Chat.send.command,'param':[cmd+10]},	
+		{'name':name + ' x','func':Input.add,'param':[cmd]},
+	];
+		
+	Button.optionList(option);
+}
+
 
 	
 //{ Passive

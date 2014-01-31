@@ -139,7 +139,6 @@ Command.list['win,open'] = function(key,win,param0){
 	if(win === 'bank'){ Chat.add(key,'Access denied.'); return;}
 	if(win === 'quest' && Db.quest[param0] === undefined){ Chat.add(key,'Wrong Input'); return; }
 	
-	console.log(win);
 	Main.openWindow(List.main[key],win,param0);
 }
 
@@ -287,13 +286,13 @@ Command.list['team,join'] = function(key,name){
 //Craft
 Command.list['material,salvage'] = function(key,name,amount){
 	amount = Math.round(+amount);
-	if(Db.material[name] || !amount) return;
+	if(!Db.material[name] || !amount){ Chat.add(key,'Invalid Parameters'); return;}
 	Craft.material.salvage(key,name,amount);
 }
 
 Command.list['material,create'] = function(key,name,amount){
 	amount = Math.round(+amount);
-	if(Db.material[name] || !amount) return;
+	if(!Db.material[name] || !amount){ Chat.add(key,'Invalid Parameters'); return;}
 	Craft.material.create(key,name,amount);
 }
 

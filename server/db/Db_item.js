@@ -3,7 +3,7 @@
 /*
 a['testing']    //testing is the item id
     = { 'name':'Gold',                      //name of item
-        'visual':'system.gold',             //icon used
+        'icon':'system.gold',             //icon used
         'stack':1,                          //stack?
 		'option':[	{'name':'Craft Armor',  //visible ttext for client
 		            'func':'Actor.teleport',        //function to call when clicked
@@ -22,24 +22,24 @@ Init.db.item = function (cb){
 	
 
 	//{Crafting
-	a['material-currency'] = {'name':'Craft Fragments','visual':'plan.equip','stack':1,'tradeable':0,
+	a['material-currency'] = {'name':'Craft Fragments','icon':'plan.equip','stack':1,'tradeable':0,
 			'option':[	{'param':['material'],'name':'Material Window','func':'Main.openWindow'},
 					]};
 					
 					
-	a['shard-white'] = {'name':'White Shard','visual':'system.gold','stack':1}
-	a['shard-blue'] = {'name':'Blue Shard','visual':'system.gold','stack':1}
-	a['shard-yellow'] = {'name':'Yellow Shard','visual':'system.gold','stack':1}
-	a['shard-gold'] = {'name':'Gold Shard','visual':'system.gold','stack':1}
+	a['shard-white'] = {'name':'White Shard','icon':'system.gold','stack':1}
+	a['shard-blue'] = {'name':'Blue Shard','icon':'system.gold','stack':1}
+	a['shard-yellow'] = {'name':'Yellow Shard','icon':'system.gold','stack':1}
+	a['shard-gold'] = {'name':'Gold Shard','icon':'system.gold','stack':1}
 	
-	a['gold'] = {'name':'Gold','visual':'system.gold','stack':1,
+	a['gold'] = {'name':'Gold','icon':'system.gold','stack':1,
 		'option':[	{'name':'Craft Armor','func':'Craft.plan.use','param':[{'category':'armor'},{'item':[]}]},
 						{'name':'Craft Weapon','func':'Craft.plan.use','param':[{'category':'weapon'},{'item':[]}]},
 						{'name':'Open Bank','func':'Main.openWindow','param':['bank']},
 			
 			]};
 			
-	a['gold'] = {'name':'Gold','visual':'system.gold','stack':1,
+	a['gold'] = {'name':'Gold','icon':'system.gold','stack':1,
 		'option':[	{'name':'Craft Armor','func':'Craft.plan.use','param':[{'category':'armor','piece':'helm'},{'item':[]}]},
 						{'name':'Craft Weapon','func':'Craft.plan.use','param':[{'category':'weapon'},{'item':[['gold',10]],'skill':{'melee':10,'range':10}}]},
 						{'name':'Open Bank','func':'Main.openWindow','param':['bank']},
@@ -48,7 +48,7 @@ Init.db.item = function (cb){
 			
 	
 			
-	a['teleport'] = {'name':'Gold','visual':'system.gold','stack':1,
+	a['teleport'] = {'name':'Gold','icon':'system.gold','stack':1,
 		'option':[
 					{'name':'Tele Main','func':'Actor.teleport','param':[1230,1230,'test']},
 					{'name':'Tele Team','func':'Actor.teleport','param':[1230,1230,'test@']},
@@ -57,24 +57,24 @@ Init.db.item = function (cb){
 	
 
 	
-	a['bugged-drop'] = {'name':'I AM ERROR','visual':'craft.lobster'};
+	a['bugged-drop'] = {'name':'I AM ERROR','icon':'craft.lobster'};
 	
-	a['lobster'] = {'name':'Lobster','visual':'craft.lobster'};
-	a['wood'] = {'name':'wood','visual':'wood.wood'};	
-	a['logs'] = {'name':'logs','visual':'craft.logs'};	
+	a['lobster'] = {'name':'Lobster','icon':'craft.lobster'};
+	a['wood'] = {'name':'wood','icon':'wood.wood'};	
+	a['logs'] = {'name':'logs','icon':'craft.logs'};	
 	//}
 	
 	//{Testing
-	a['test'] = {'name':'Test','visual':'system.square','stack':1,
+	a['test'] = {'name':'Test','icon':'system.square','stack':1,
 			'option':[	
 			    
 			]};		
 	
-	a['ironSword'] = {'name':'Sword','visual':'system.square',
+	a['ironSword'] = {'name':'Sword','icon':'system.square',
 			'option':[	{'name':'Tele Ice','func':'Actor.teleport','param':[500,500,'ice']},
 						{'name':'Open Bank','func':'Main.openWindow','param':['bank']},
 			]};
-	a['shield'] = {'name':'Shield','visual':'system.square',
+	a['shield'] = {'name':'Shield','icon':'system.square',
 			'option':[	{'name':'Teleport','func':'Actor.teleport','param':[500,500,'fire']},
 						{'name':'Come Back','func':'Actor.teleport','param':[1500,500,'test']}
 			]};
@@ -87,21 +87,21 @@ Init.db.item = function (cb){
 	
 	
 	//{Orb
-	a['boost_orb'] = {'name':'Orb of Power','visual':'orb.boost','stack':1,
+	a['boost_orb'] = {'name':'Orb of Power','icon':'orb.boost','stack':1,
 			'option':[	
 				{'name':'Use','func':'Main.selectInv','param':[{'name':'Use Orb','func':'Craft.orb','param':['boost',1]}]},
 				{'name':'Use x10','func':'Main.selectInv','param':[{'name':'Use Orb','func':'Craft.orb','param':['boost',10]}]},
 				{'name':'Use x100','func':'Main.selectInv','param':[{'name':'Use Orb','func':'Craft.orb','param':['boost',100]}]},
 				{'name':'Use x1000','func':'Main.selectInv','param':[{'name':'Use Orb','func':'Craft.orb','param':['boost',1000]}]},
 			]};	
-	a['upgrade_orb'] = {'name':'Orb of Upgrade','visual':'orb.upgrade','stack':1,
+	a['upgrade_orb'] = {'name':'Orb of Upgrade','icon':'orb.upgrade','stack':1,
 			'option':[	
 				{'name':'Use','func':'Main.selectInv','param':[{'name':'Use Orb','func':'Craft.orb','param':['upgrade',1]}]},
 				{'name':'Use x10','func':'Main.selectInv','param':[{'name':'Use Orb','func':'Craft.orb','param':['upgrade',10]}]},
 				{'name':'Use x100','func':'Main.selectInv','param':[{'name':'Use Orb','func':'Craft.orb','param':['upgrade',100]}]},
 				{'name':'Use x1000','func':'Main.selectInv','param':[{'name':'Use Orb','func':'Craft.orb','param':['upgrade',1000]}]},
 			]};	
-	a['removal_orb'] = {'name':'Orb of Removal','visual':'orb.removal','stack':1,
+	a['removal_orb'] = {'name':'Orb of Removal','icon':'orb.removal','stack':1,
 			'option':[	
 				{'name':'Use','func':'Main.selectInv','param':[{'name':'Use Orb','func':'Craft.orb','param':['removal',1]}]},
 				{'name':'Use x10','func':'Main.selectInv','param':[{'name':'Use Orb','func':'Craft.orb','param':['removal',10]}]},
@@ -132,7 +132,7 @@ Item.creation = function(item){
 Item.template = function(){
 	var item = {
 		'name':'buggedItem',
-		'visual':'system.gold',
+		'icon':'system.gold',
 		'trade':1, 
 		'sell':0,  
 		'drop':1,

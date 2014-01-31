@@ -121,7 +121,7 @@ Craft.plan.creation = function(d){	//when creating a plan as a drop
 	Item.creation(
 		{'id':itemId,
 		'name':d.piece.capitalize() + " Plan",
-		'visual':'plan.'+d.piece,
+		'icon':'plan.'+d.piece,
 		'option':[	
 			{'name':'Craft Item','func':'Craft.plan.use','param':[seed,req]},
 			{'name':'Craft Item','func':'Craft.plan.examine','param':[seed,req]},
@@ -191,7 +191,7 @@ Craft.equip = function(seed){	//at this point, seed should be all-set
 	var equip = Equip.template();
 	equip.piece = seed.piece;
 	equip.type = seed.type;
-	equip.visual = seed.piece + '.' + seed.type;
+	equip.icon = seed.piece + '.' + seed.type;
 	equip.name = seed.type;
 	equip.lvl = seed.lvl;
 	equip.seed = seed;
@@ -425,7 +425,7 @@ Craft.material.salvage = function(key,id,amount){
 	main.material[id] -= amount;
 	Itemlist.remove(inv,id,amount);
 	Itemlist.add(inv,'material-currency',count);
-	Chat.add(key,'You have converted x' + amount + ' ' + Db.item[id].name + ' into x' + count + Db.item['material-currency'].name);
+	Chat.add(key,'You have converted x' + amount + ' ' + Db.item[id].name + ' into x' + count + ' ' + Db.item['material-currency'].name);
 }
 
 Craft.material.salvage.count = function(dbRate,mainMaterial,amount){
@@ -454,7 +454,7 @@ Craft.material.create = function(key,id,amount){
 	main.material[id] += info.amount;
 	Itemlist.remove(inv,'material-currency',info.cost);
 	Itemlist.add(inv,id,info.amount);
-	Chat.add(key,'You have converted x' + info.cost + ' ' + Db.item['material-currency'].name + ' into x' + info.amount + Db.item[id].name);
+	Chat.add(key,'You have converted x' + info.cost + ' ' + Db.item['material-currency'].name + ' into x' + info.amount + ' ' + Db.item[id].name);
 	
 };
 

@@ -305,7 +305,6 @@ Draw.chat.constant = function(){
 Draw.icon = function(info,xy,size){
 	size = size || 32;
 	var slot = Img.icon.index[info];
-	if(!slot) console.log(info);
 	ctx.drawImage(Img.icon,slot.x,slot.y,Cst.ICON,Cst.ICON,xy[0],xy[1],size,size);
 }
 
@@ -324,7 +323,7 @@ Draw.item = function(info,xy,size){
 			else { amount = amount + "K";}
 		}
 			
-		ctx.globalAlpha = 0.4;
+		ctx.globalAlpha = 0.8;
 		ctx.fillStyle = "black";
 		ctx.strokeStyle = "white";
 		ctx.roundRect(xy[0]-2,xy[1]+size-9,size+4,15);

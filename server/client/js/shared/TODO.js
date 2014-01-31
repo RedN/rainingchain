@@ -1,7 +1,6 @@
 
 
 
-spending main.material is big
 split craft.orb
 revamp binding system
 

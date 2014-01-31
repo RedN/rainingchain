@@ -380,7 +380,7 @@ Init.db.ability.mod = function(){	//needed by client
 	for(var i in Db.ability.mod){
 		Item.creation({
 			name:Db.ability.mod[i].name,
-			visual:'plan.planA',
+			icon:'plan.equip',
 			option:[	{'name':'Select Mod','func':'Main.abilityModClick','param':[i]} ],
 			type:'mod',
 			id:'mod-'+i,
@@ -442,7 +442,7 @@ Ability.creation = function(a){
 	//Setting Item Part
 	Item.creation({
 		name:a.name,
-		visual:'plan.planA',
+		icon:'plan.ability',
 		option:[	
 			{'name':'Examine Ability','func':'Actor.examineAbility','param':[a.id]},
 			{'name':'Learn Ability','func':'Actor.learnAbility','param':[a.id]},

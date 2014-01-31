@@ -70,8 +70,8 @@ Draw.tab.inventory = function (){ ctxrestore();
 	for (i = 0 ; i < main.invList.length ; i++){
 		if(main.invList[i]){
 			var amountX = 4;
-			var numX = s.x + 20 + 42*(i%amountX);
-			var numY = s.y + 15 + 41 * Math.floor(i/amountX);
+			var numX = s.x + 20 + 45*(i%amountX);
+			var numY = s.y + 5 + 43*Math.floor(i/amountX);
 			
 			var text = 'Use ' + main.invList[i][2];
 			// !(temp.selectInv && temp.reset && temp.reset.selectInv) ? 'Use ' + main.invList[i][0] : temp.selectInv.name + ' on ' + invList[i][0];
@@ -81,6 +81,7 @@ Draw.tab.inventory = function (){ ctxrestore();
 				"left":{"func":Chat.send.command,"param":['$tab,inv,click,left,' + i]},
 				"right":{"func":Chat.send.command,"param":['$tab,inv,click,right,' + i]},
 				"shiftLeft":{"func":Chat.send.command,"param":['$tab,inv,click,shiftLeft,' + i + ',' + main.pref.bankTransferAmount]},
+				"shiftRight":{"func":Chat.send.command,"param":['$tab,inv,click,shiftLeft,' + i + ',' + 999999999]},
 				"text":text
 			});	
 			
@@ -102,7 +103,7 @@ Draw.tab.equip = function (){ ctxrestore();
 		var piece = Cst.equip.weapon.piece[i];
 		if(player.weapon.piece != Cst.equip.weapon.piece[i]){ ctx.globalAlpha = 0.5; } 
 		
-		Draw.icon(player.equip.piece[Cst.equip.weapon.piece[i]].visual,[numX,numY],40);
+		Draw.icon(player.equip.piece[Cst.equip.weapon.piece[i]].icon,[numX,numY],40);
 		ctx.globalAlpha = 1;
 		
 		if(Collision.PtRect(Collision.getMouse(),[numX,numX+40,numY,numY+40])){
@@ -123,7 +124,7 @@ Draw.tab.equip = function (){ ctxrestore();
 		var numY = s.y + 7 + 5 + 45 * Math.floor(i/3);
 		var piece = player.equip.piece[Cst.equip.armor.piece[i]];
 		
-		Draw.icon(piece.visual,[numX+10,numY],40);
+		Draw.icon(piece.icon,[numX+10,numY],40);
 		
 		if(Collision.PtRect(Collision.getMouse(0),[numX,numX+40,numY,numY+40])){
 			main.popupList.equip = piece.id;
@@ -140,10 +141,10 @@ Draw.tab.equip = function (){ ctxrestore();
 	ctx.font = '18px Monaco';
 	
 	var array = [
-		['offensive','offensive.melee'],
+		['offensive','element.melee'],
 		['defensive','body.metal'],
-		['ability','offensive.magic'],
-		['passive','offensive.magic'],
+		['ability','element.magic'],
+		['passive','element.magic'],
 	];
 	
 	for(var i in array){

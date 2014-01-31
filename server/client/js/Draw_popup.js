@@ -54,7 +54,7 @@ Draw.popup.equip.frame = function(s){
 
 Draw.popup.equip.top = function(s){
 	//Draw icon
-	Draw.icon(s.equip.visual,[s.x+2,s.y+2],48);
+	Draw.icon(s.equip.icon,[s.x+2,s.y+2],48);
 	
 	//Draw Name
 	ctx.font="25px Monaco";

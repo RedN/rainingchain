@@ -7,7 +7,7 @@ Init.db.customBoost = function(){
 	b.balancedAtk = {
 		'name':'Balanced Attack',
 		'description':'For each element, your damage mastery is equal to the lowest of the 4 damage masteries.',
-		'icon':'offensive.melee',
+		'icon':'element.melee',
 		'function':(function(pb,key){
 			var mod;
 			var pbl = pb.list;
@@ -30,7 +30,7 @@ Init.db.customBoost = function(){
 	b.balancedAtk = {
 		'name':'Risk Taker',
 		'description':'x2 Life Leech. Cannot use Potions.',
-		'icon':'offensive.melee',
+		'icon':'element.melee',
 		'function':(function(pb,key){
 			var mod;
 			var pbl = pb.list;

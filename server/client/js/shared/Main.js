@@ -83,9 +83,7 @@ Main.closeAllWindow = function(main){
 Main.openWindow = function(main,name,param){
 	Main.closeAllWindow(main);
 	main.windowList[name] = 1;
-	
-	console.log(name);
-	
+		
 	var key = main.id;
 	
 	if(name === 'quest'){

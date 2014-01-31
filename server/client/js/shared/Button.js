@@ -68,7 +68,7 @@ Button.context = function (key){	//always
 		var y = Input.mouse.y;
 	}
 		
-	for(var i = 0 ; i < list.length ; i++){
+	for(var i = list.length-1 ; i >= 0  ; i--){
 		if(Collision.PtRect({"x":x,'y':y},list[i].rect)){
 			if(server){ List.main[key].context = {'server':server,'text':list[i].text,'textTop':list[i].textTop}; }
 			if(!server){ main.clientContext = {'server':server,'text':list[i].text}; }
@@ -90,8 +90,8 @@ Button.optionList = function(key,option){
 	}
 	if(!server){
 		option = key;
-		option.x = mouse.x;
-		option.y = mouse.y;
+		option.x = Input.mouse.x;
+		option.y = Input.mouse.y;
 		option.client = 1;
 		option.count = 2;
 		main.optionList = option;

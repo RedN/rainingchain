@@ -173,7 +173,7 @@ Save.main = function(key,updateDb){
     main = Save.main.compress(main);
 	main.username = main.username || main.name;
     var save = {};
-    var toSave = ['invList','bankList','tradeList','quest','username','social','passive','passivePt',];
+    var toSave = ['invList','bankList','tradeList','quest','username','social','passive','passivePt','material'];
     for(var i in toSave){ save[toSave[i]] = main[toSave[i]]; }
 
     if(updateDb !== false){

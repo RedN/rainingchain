@@ -61,7 +61,7 @@ Sign.log = function(text){
 
 
 socket.on('signIn', function (data) {
-	if(data.success){ id = data.key; cloud9 = data.cloud9; Init.game(data.data);  }
+	if(data.success){ /*id = data.key;*/ cloud9 = data.cloud9; Init.game(data.data);  }
 	else { Sign.log(data.message);  } 	
 	
 });
@@ -97,6 +97,7 @@ Init.game = function (data) {
 	Init.actor();
 	Init.db.quest();
 	Init.db.customBoost();
+	Init.db.material();
 	
 	//initAbilityModDb();   //need fixing
 	Img.preload(Img.preloader,function(){   //load images

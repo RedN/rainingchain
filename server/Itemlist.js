@@ -150,7 +150,7 @@ Itemlist.toClient = function(){
 		ret[i] = '';
 		if(inv.data[i][0]){
             ret[i] = [];
-            ret[i][0] = Db.item[inv.data[i][0]].visual;
+            ret[i][0] = Db.item[inv.data[i][0]].icon;
 			ret[i][1] = inv.data[i][1];
 			ret[i][2] = Db.item[inv.data[i][0]].name;
 		}

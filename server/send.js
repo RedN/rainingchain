@@ -164,7 +164,7 @@ Change.send.init.drop = function(drop){
 	draw.y = Math.round(drop.y);
 	draw.id = drop.publicId;
 	draw.type = drop.type;
-	draw.item = Db.item[drop.item].visual;
+	draw.item = Db.item[drop.item].icon;
 	
 	return draw;
 }
@@ -202,7 +202,7 @@ Change.send.convert.itemlist = function(inv){
 		draw[i] = '';
 		if(inv.data[i][0]){
 			draw[i] = [];
-			draw[i][0] = Db.item[inv.data[i][0]].visual;
+			draw[i][0] = Db.item[inv.data[i][0]].icon;
 			draw[i][1] = inv.data[i][1];
 			draw[i][2] = Db.item[inv.data[i][0]].name;
 		}
