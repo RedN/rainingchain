@@ -121,7 +121,6 @@ Draw.optionList = function(){ ctxrestore();
 		var name = Draw.optionList.parse(option[i].name);
 		ctx.fillText(name,sx+optionX,sy+optionY*(i+1));
 		
-		console.log(main.optionList);
 		if(main.optionList.client || option[i].client){ 
 			Button.creation(0,{
 				'rect':[sx,sx+w,sy+nameY+optionY*i,sy+nameY+optionY*(i+1)],
@@ -306,16 +305,15 @@ Draw.chat.constant = function(){
 Draw.icon = function(info,xy,size){
 	size = size || 32;
 	var slot = Img.icon.index[info];
+	if(!slot) console.log(info);
 	ctx.drawImage(Img.icon,slot.x,slot.y,Cst.ICON,Cst.ICON,xy[0],xy[1],size,size);
 }
 
 Draw.item = function(info,xy,size){
 	size = size || 32;
+	Draw.icon(typeof info === 'string' ? info : info[0],xy,size);
 	
-	var name = typeof info === 'string' ? info : info[0];
 	var amount = typeof info === 'string' ? 1 : Math.floor(info[1]);
-	var slot = Img.item.index[name];
-	ctx.drawImage(Img.item,slot.x,slot.y,Cst.ITEM,Cst.ITEM,xy[0],xy[1],size,size);
 	
 	if(amount > 1){
 		if(amount >= 100000){

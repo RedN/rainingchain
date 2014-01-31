@@ -41,21 +41,41 @@ Img.frame.postit = newImage('img/img/interface/postit.png');
 //Icon
 Img.icon = newImage("img/img/iconSheet.png");
 (function(){
-	var equip = 10;
-	var ability = equip + 12;
+	var system = 0;
+	var ability = system + 11 + 1;
+	var equip = ability + 9 + 1;
+	var craft = equip + 12 + 1;
+	
+	
+	
 	Img.icon.index = {};
 	var iconPreIndex = {
-	'system':{'y':0,'x':['square','close','arrow','heart','gold']},
-	'tab':{'y':1,'x':['equip','inventory','quest','skill','friend','pref']},
-	'element':{'y':2,'x':['melee','range','magic','fire','cold','lightning']},
-	'status':{'y':3,'x':['bleed','knock','drain','burn','chill','confuse']},
-	'resource':{'y':4,'x':['hp','mana','fury','dodge','heal']},
-	'skill':{'y':5,'x':['melee','range','magic','metalwork','woodwork','leatherwork','geology','metallurgy','trapping']},
-	'friend':{'y':6,'x':['friend','mute','add','remove']},
-	'minimapIcon':{'y':7,'x':['enemy','boss','npc','quest','player']},
-	'offensive':{'y':8,'x':['melee','range','magic','fire','cold','lightning','mace','spear','sword','bow','boomerang','crossbow','wand','staff','orb','bleed','knock','drain','burn','chill','confuse','pierce','bullet','strike','leech','atkSpd']},
-	'defensive':{'y':9,'x':['melee','range','magic','fire','cold','lightning','bleed','knock','drain','burn','chill','confuse','speed','pickup','life','item']},
+	//System
+	'system':{'y':system+0,'x':['square','close','arrow','heart','gold']},
+	'system1':{'y':system+1,'x':['left','right','down','up']},
+	'tab':{'y':system+2,'x':['equip','inventory','quest','skill','friend','pref']},
+	'element':{'y':system+3,'x':['melee','range','magic','fire','cold','lightning']},
+	'status':{'y':system+4,'x':['bleed','knock','drain','burn','chill','confuse']},
+	'resource':{'y':system+5,'x':['hp','mana','fury','dodge','heal']},
+	'skill':{'y':system+6,'x':['melee','range','magic','metalwork','woodwork','leatherwork','geology','metallurgy','trapping']},
+	'friend':{'y':system+7,'x':['friend','mute','add','remove']},
+	'minimapIcon':{'y':system+8,'x':['enemy','boss','npc','quest','player']},
+	'offensive':{'y':system+9,'x':['pierce','bullet','strike','leech','atkSpd']},
+	'defensive':{'y':system+10,'x':['speed','pickup','life','item']},
 	
+	
+	//Ability
+	'attackMelee':{'y':ability+0,'x':['slash','pierce','scar','trio','triple','punch','box','slice','bleed','fierce','alert','ground','chop','cube']},
+	'attackRange':{'y':ability+1,'x':['trio','steady','rocket','bleed','rain','thunder','head']},
+	'attackMagic':{'y':ability+2,'x':['thunder','ring','breathe','fog','nova','crystal','tsunami','fireball','meteor','fire','ball','lightning','static','spark','storm']},
+	'blessing':{'y':ability+3,'x':['angel','fly','beat','spike','sumo','muscle','strong','cycle','reflect','multi','wave','block']},
+	'curse':{'y':ability+4,'x':['back','nuclear','ghost','fang','death','haunt','bleed','broken','sand','skull','stumble']},
+	'dodge':{'y':ability+5,'x':['start','ninja','stand','footprint','wing','stop']},
+	'heal':{'y':ability+6,'x':['plus','pill','open','pills','fixed','sink','pot','tower','mix','tree','vial','cake','dropplet','flower']},
+	'summon':{'y':ability+7,'x':['wolf','moon','cat','bird','fang','head','peck','fish','dino','ram','gull','dragon','duo','rex','lion']},
+	'heal':{'y':ability+8,'x':['teleport','circle','hourglass','timebomb','forward','disync','clock','invisible']},
+	
+	//Equip
 	'melee':{'y':equip+0,'x':['mace','spear','sword']},
 	'range':{'y':equip+1,'x':['bow','boomerang','crossbow']},
 	'magic':{'y':equip+2,'x':['wand','staff','orb']},
@@ -69,15 +89,16 @@ Img.icon = newImage("img/img/iconSheet.png");
 	'pants':{'y':equip+10,'x':['chain','leaf','hide']},
 	'boots':{'y':equip+11,'x':['chain','leaf','hide']},
 	
-	'attackMelee':{'y':ability+0,'x':['slash','pierce','scar','trio','triple','punch','box','slice','bleed','fierce','alert','ground','chop','cube']},
-	'attackRange':{'y':ability+1,'x':['trio','steady','rocket','bleed','rain','thunder','head']},
-	'attackMagic':{'y':ability+2,'x':['thunder','ring','breathe','fog','nova','crystal','tsunami','fireball','meteor','fire','ball','lightning','static','spark','storm']},
-	'blessing':{'y':ability+3,'x':['angel','fly','beat','spike','sumo','muscle','strong','cycle','reflect','multi','wave','block']},
-	'curse':{'y':ability+4,'x':['back','nuclear','ghost','fang','death','haunt','bleed','broken','sand','skull','stumble']},
-	'dodge':{'y':ability+5,'x':['start','ninja','stand','footprint','wing','stop']},
-	'heal':{'y':ability+6,'x':['plus','pill','open','pills','fixed','sink','pot','tower','mix','tree','vial','cake','dropplet','flower']},
-	'summon':{'y':ability+7,'x':['wolf','moon','cat','bird','fang','head','peck','fish','dino','ram','gull','dragon','duo','rex','lion']},
-	'heal':{'y':ability+8,'x':['teleport','circle','hourglass','timebomb','forward','disync','clock','invisible']},
+	//Craft
+	'plan':{'y':craft+0,'x':['equip','ability']},
+	'orb':{'y':craft+1,'x':['upgrade','boost','removal']},
+	'metal':{'y':craft+2,'x':['metal']},
+	'chain':{'y':craft+3,'x':['chain']},
+	'wood':{'y':craft+4,'x':['wood']},
+	'leaf':{'y':craft+5,'x':['leaf']},
+	'bone':{'y':craft+6,'x':['bone']},
+	'hide':{'y':craft+7,'x':['hide']},
+	
 	
 	
 	};
@@ -91,41 +112,6 @@ Img.icon = newImage("img/img/iconSheet.png");
 		}
 	}
 })();
-
-//Item
-Img.item = newImage("img/img/itemSheet.png");
-(function(){
-	Img.item.index = {};
-	var itemPreIndex =
-	{
-	'system':{'y':0,'x':['gold','ironSword','shield']},
-	'melee':{'y':1,'x':['mace','spear','sword']},
-	'range':{'y':2,'x':['bow','boomerang','crossbow']},
-	'magic':{'y':3,'x':['wand','staff','orb']},
-	'amulet':{'y':4,'x':['ruby','sapphire','topaz']},
-	'helm':{'y':5,'x':['metal','wood','bone']},
-	'ring':{'y':6,'x':['ruby','sapphire','topaz']},
-	'gloves':{'y':7,'x':['chain','leaf','hide']},
-	'body':{'y':8,'x':['metal','wood','bone']},
-	'shield':{'y':9,'x':['metal','wood','bone']},
-	'bracelet':{'y':10,'x':['ruby','sapphire','topaz']},
-	'pants':{'y':11,'x':['chain','leaf','hide']},
-	'boots':{'y':12,'x':['chain','leaf','hide']},
-	'plan':{'y':13,'x':['planA']},
-	'craft':{'y':14,'x':['lobster','logs','wood']},
-	'orb':{'y':15,'x':['upgrade','boost','removal']},
-	};
-
-	for(var i in itemPreIndex){
-		Img.item.index[i.toUpperCase()] = itemPreIndex[i].y * Cst.ITEM;
-		for(var j = 0 ; j < itemPreIndex[i].x.length; j++){
-			var x = j * Cst.ITEM;
-			var y = itemPreIndex[i].y * Cst.ITEM;
-			Img.item.index[i + '.' + itemPreIndex[i].x[j]] = {'x':x,'y':y};
-		}
-	}
-})();
-
 
 
 //Npc Face Sheet

@@ -414,12 +414,12 @@ Craft.material = {};
 Craft.material.salvage = function(key,id,amount){
 	//transform equip into shard
 	var inv = List.main[key].invList;
-	amount  = amount.mm(Itemlist.have(inv,id,0,'amount'));
+	amount = amount.mm(0,Itemlist.have(inv,id,0,'amount'));
 	if(!amount || !Itemlist.test(inv,[['material-currency',1]])) return;
 	
 	var main = List.main[key];
 	
-	var dbRate = Db.material[id];
+	var dbRate = Db.material[id].exchangeRate;
 	var count = Craft.material.salvage.count(dbRate,main.material[id],amount);
 
 	main.material[id] -= amount;
@@ -447,7 +447,7 @@ Craft.material.create = function(key,id,amount){
 	if(!amountFrag || !Itemlist.test(inv,[[id,1]])) return;
 	
 	
-	var dbRate = Db.material[id];
+	var dbRate = Db.material[id].exchangeRate;
 	
 	var info = Craft.material.create.count(dbRate,main.material[id],amountFrag,amount);
 

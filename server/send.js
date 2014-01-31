@@ -188,14 +188,10 @@ Change.send.convert.optionList = function(option){
 	draw.x = option.x;
 	draw.y = option.y;
 	draw.name = option.name;
-	if(option.client) draw.client = option.client;
 	
 	draw.option = [];
 	for(var i = 0; i < option.option.length ; i++){
-		if(option.client || option.option[i].client)
-			draw.option.push(option.option[i]);
-		else			
-			draw.option.push({'name':option.option[i].name});
+		draw.option.push({'name':option.option[i].name});
 	}
 	return draw;
 }
@@ -222,7 +218,12 @@ Change.send.convert.status = function(info){
 	return str;
 }
 
-Change.send.convert.tradeWindow = function(data){
+Change.send.convert.windowList = function(data){
+	if(data.trade)	data.trade = Change.send.convert.windowList.trade(deepClone(data.trade));
+	return data;
+}
+
+Change.send.convert.windowList.trade = function(data){
 	var draw = deepClone(data);
 	draw.tradeList = Change.send.convert.itemlist(draw.tradeList);
 	draw.trader = List.all[draw.trader].publicId;

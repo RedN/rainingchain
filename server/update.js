@@ -119,14 +119,7 @@ Change.update.init = function(){
 				
 				{'array':['popupList','equip']},
 				
-				{'array':['windowList','bank']},
-				{'array':['windowList','offensive']},
-				{'array':['windowList','defensive']},
-				{'array':['windowList','trade'],'filter':Change.send.convert.tradeWindow},
-				{'array':['windowList','ability']},
-				{'array':['windowList','passive']},
-				{'array':['windowList','quest']},
-				{'array':['windowList','binding']},
+				{'array':['windowList'],'filter':Change.send.convert.windowList},
 				
 				{'array':['invList'],'filter':Change.send.convert.itemlist},
 				{'array':['bankList'],'filter':Change.send.convert.itemlist},

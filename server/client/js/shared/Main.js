@@ -10,7 +10,7 @@ Main.template = function(key){
 		'pref':Main.template.pref(),
 		
 		"currentTab":"inventory",
-		"windowList":{'bank':0,'trade':0,'offensive':0,'defensive':0,'ability':0,'passive':0,'quest':0,'binding':0,},
+		"windowList":{'bank':0,'trade':0,'offensive':0,'defensive':0,'ability':0,'passive':0,'quest':0,'binding':0,'material':0,},
 		"popupList":{'equip':0},
 		
 		'invList': ['','','','','','','','','','','','','','','','','','','','','','','',''],
@@ -83,6 +83,8 @@ Main.closeAllWindow = function(main){
 Main.openWindow = function(main,name,param){
 	Main.closeAllWindow(main);
 	main.windowList[name] = 1;
+	
+	console.log(name);
 	
 	var key = main.id;
 	

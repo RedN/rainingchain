@@ -191,7 +191,7 @@ Actor.creation.optionList = function(e){
 	if(e.type === 'player') ol.option.push({'name':'Trade',"func":'Main.openWindow',"param":['trade',e.id]});
 	if(e.dialogue)	ol.option.push({'name':'Talk To',"func":'Actor.talk',"param":[e.id]});
 	
-	e.optionList = ol.option.length ? '' : ol;
+	e.optionList = ol.option.length ? ol : '';
 	return e;
 }
 

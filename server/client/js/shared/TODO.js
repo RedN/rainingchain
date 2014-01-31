@@ -1,8 +1,5 @@
 
-optionlist on client is bad idea...
-would be better to use Chat.addInput command
 
-id for ability item is ability id... problem if same
 
 spending main.material is big
 split craft.orb

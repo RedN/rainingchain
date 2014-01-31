@@ -36,10 +36,10 @@ Chat.parse = function(data){
 }
 
 //add text to chat of player.
-Chat.add = function(key,type,text,extra){
+Chat.add = function(key,text,type,extra){
 	List.main[key].social.message.chat = List.main[key].social.message.chat || [];
-    extra = extra || {};
-	if(text === undefined){ text = type; type = 'game';}
+	type = type || 'game';
+	extra = extra || {};
 	
 	extra.text = text;
 	extra.type = type;
@@ -68,15 +68,15 @@ Chat.send.public = function(key,text,to,type,from,data){
     if(text === data.text){
 		List.all[key].chatHead = {'text':text,'timer':25*10};
 	}
-	for(var i in List.main){	Chat.add(i,'public',text,{'from':from});}
+	for(var i in List.main){	Chat.add(i,text,'public',{'from':from});}
 	return;
 }
 
 Chat.send.pm = function(key,text,to,type,from,data){
     var res = Chat.send.pm.test(from,to);
 	if(res){
-		Chat.add(List.nameToKey[to],'pm',text,{'from':from,'to':to});
-		Chat.add(key,'pm',text,{'from':from,'to':to});
+		Chat.add(List.nameToKey[to],text,'pm',{'from':from,'to':to});
+		Chat.add(key,text,'pm',{'from':from,'to':to});
 	}
 	if(res === false) Chat.add(key,"This player is offline.");
 	if(res === null) Chat.add(key,"This player doesn't exist.");
@@ -100,7 +100,7 @@ Chat.send.pm.clan = function(key,text,to,type,from,data){
     
     for(var i in clan.memberList){	
     	if(clan.memberList[i].active && List.nameToKey[i]){
-    		Chat.add(List.nameToKey[i],'clan',text,{'from':[clan.nick,from]});
+    		Chat.add(List.nameToKey[i],text,'clan',{'from':[clan.nick,from]});
     	}
     }
     return;

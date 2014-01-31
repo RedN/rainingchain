@@ -22,8 +22,8 @@ Init.db.item = function (cb){
 	
 
 	//{Crafting
-	a['material-currency'] = {'name':'Craft Fragments','visual':'plan.planA','stack':1,'tradeable':0,
-			'option':[	{'name':'Create Material','func':'Chat.send.command','param':['$win,open,material']}
+	a['material-currency'] = {'name':'Craft Fragments','visual':'plan.equip','stack':1,'tradeable':0,
+			'option':[	{'param':['material'],'name':'Material Window','func':'Main.openWindow'},
 					]};
 					
 					
@@ -60,21 +60,21 @@ Init.db.item = function (cb){
 	a['bugged-drop'] = {'name':'I AM ERROR','visual':'craft.lobster'};
 	
 	a['lobster'] = {'name':'Lobster','visual':'craft.lobster'};
-	a['wood'] = {'name':'wood','visual':'craft.wood'};	
+	a['wood'] = {'name':'wood','visual':'wood.wood'};	
 	a['logs'] = {'name':'logs','visual':'craft.logs'};	
 	//}
 	
 	//{Testing
-	a['test'] = {'name':'Test','visual':'system.shield','stack':1,
+	a['test'] = {'name':'Test','visual':'system.square','stack':1,
 			'option':[	
 			    
 			]};		
 	
-	a['ironSword'] = {'name':'Sword','visual':'system.ironSword',
+	a['ironSword'] = {'name':'Sword','visual':'system.square',
 			'option':[	{'name':'Tele Ice','func':'Actor.teleport','param':[500,500,'ice']},
 						{'name':'Open Bank','func':'Main.openWindow','param':['bank']},
 			]};
-	a['shield'] = {'name':'Shield','visual':'system.shield',
+	a['shield'] = {'name':'Shield','visual':'system.square',
 			'option':[	{'name':'Teleport','func':'Actor.teleport','param':[500,500,'fire']},
 						{'name':'Come Back','func':'Actor.teleport','param':[1500,500,'test']}
 			]};
@@ -83,10 +83,6 @@ Init.db.item = function (cb){
 	
 	
 	
-	
-	a['planA'] = {'name':'Plan','visual':'plan.planA',
-			'option':[	{'name':'Craft Item','func':'Craft.plan.use','param':[{},{'item':[]}]}
-					]};
 	//}
 	
 	

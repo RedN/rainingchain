@@ -115,7 +115,7 @@ Init.db.quest = function(){
 		
 		//{ Functions
 		q.giveDevice = function(key){
-		    Itemlist.add(List.main[key].invList,'quest-teleport');
+		    Itemlist.add(List.main[key].invList,'Q-questId-teleport');
 		    List.main[key].quest['questId'].receivedDevice = true;
 		};
 		
@@ -168,7 +168,7 @@ Init.db.quest = function(){
 		
 		//{Item
 		q.item = {	
-			'teleport' :{'name':'Teleport','visual':'plan.planA','option':[
+			'teleport' :{'name':'Teleport','visual':'plan.ability','option':[
 					{'name':'Tele To Demon','func':'Actor.teleport','param':[1230,1230,'ryve']},
 					{'name':'Tele Back','func':'Actor.teleport','param':[1100,1230,'test']},
 					{'name':'Boost','func':'addBoost','param':[{stat:'globalDmg',value:1000,type:'*',time:10000,name:'quest'}]},

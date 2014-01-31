@@ -111,18 +111,11 @@ Chat.send.message.reply.history = [];
 Chat.receive = function(pack){
 	if(pack.from){ for(var i in main.social.list.mute){ if(i == pack.from){ return; }}}
 	
-	if(pack.type === 'game'){
-		html.chat.text.innerHTML += '<br>' + pack.text; 
-	}
-	if(pack.type === 'client'){
-		html.chat.text.innerHTML += '<br>' + pack.text; 
-	}
-	if(pack.type === 'clan'){
-		html.chat.text.innerHTML += "<br> <span style='color:" + '#800080' + "'>" + '[' + pack.from[0] + '] ' + pack.from[1] + ': ' + pack.text + "</span>"; 
-	}
-	if(pack.type === 'input'){
-		Input.add(pack.text,1);
-	}
+	if(pack.type === 'game')	html.chat.text.innerHTML += '<br>' + pack.text; 
+	if(pack.type === 'client')	html.chat.text.innerHTML += '<br>' + pack.text; 
+	if(pack.type === 'clan') 	html.chat.text.innerHTML += "<br> <span style='color:" + '#800080' + "'>" + '[' + pack.from[0] + '] ' + pack.from[1] + ': ' + pack.text + "</span>"; 
+	if(pack.type === 'input')	Input.add(pack.text,1);
+	
 	if(pack.type === 'pm'){
 		var color = 'cyan';
 		if(pack.from === player.name){	//AKA you just sent a pm to someone
@@ -141,7 +134,7 @@ Chat.receive = function(pack){
 		html.pm.text.innerHTML += 	"<br> <span style='color:cyan'>" + d + ' - From ' + pack.from + ': ' +  pack.text + "</span>"; 
 	}
 	
-	if(pack.type == 'public'){	
+	if(pack.type === 'public'){	
 		var id = Math.random();
 		var text = '<span id="' + id + '" oncontextmenu="Chat.click.name(\'' + pack.from + '\')">' + pack.from + "</span>" + ': ' + '<span style="color:blue">' + pack.text + "</span>";
 		html.chat.text.innerHTML += '<br>' + text; 

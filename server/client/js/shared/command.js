@@ -139,6 +139,7 @@ Command.list['win,open'] = function(key,win,param0){
 	if(win === 'bank'){ Chat.add(key,'Access denied.'); return;}
 	if(win === 'quest' && Db.quest[param0] === undefined){ Chat.add(key,'Wrong Input'); return; }
 	
+	console.log(win);
 	Main.openWindow(List.main[key],win,param0);
 }
 
