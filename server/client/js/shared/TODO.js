@@ -1,14 +1,8 @@
 
-
-
-split craft.orb
-revamp binding system
-
-
+Db.plan
 
 plan required materials
 
-craft material convert
 
 
 hitmod not working cuz hit itself

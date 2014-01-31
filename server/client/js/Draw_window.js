@@ -947,7 +947,6 @@ Draw.window.binding = function (){ ctxrestore();
 	hq.table.style.left = 50 + 'px'; 
 	hq.table.style.top = 0 + 'px'; 
 	
-	var move = ['Right','Down','Left','Up'];
 	var str = '<table>';
 	
 	str += '<tr>';
@@ -955,24 +954,34 @@ Draw.window.binding = function (){ ctxrestore();
 	str += '<td>Key Id</td>'
 	str += '<td>Key Name</td>'
 	str += '</tr>';
-		
-	for(var i = 0; i < Input.key.move.length; i++){
-		str += '<tr ' +
-				'onclick="Input.add(\'' + '$binding,move,' + i + ',' + '\')' + '" ' + 
-				'>'
-		str += '<td>Move ' + move[i] + '</td>'
-		str += '<td>' + Input.key.move[i][0] + '</td>'
-		str += '<td>' + Input.key.move[i][0].toString().keyCodeToName() + '</td>'
-		str += '</tr>';
-	}
-	for(var i = 0; i < Input.key.ability.length; i++){
-		str += '<tr ' +
-				'onclick="Input.add(\'' + '$binding,ability,' + i + ',' + '\')' + '" ' + 
-				'>'
-		str += '<td>Ability ' + i + '</td>'
-		str += '<td>' + Input.key.ability[i][0] + '</td>'
-		str += '<td>' + Input.key.ability[i][0].toString().keyCodeToName() + '</td>'
-		str += '</tr>';
+	
+	var list = [
+		{'id':'move','name':'Move','list':['Right','Down','Left','Up']},
+		{'id':'ability','name':'Ability','list':[0,1,2,3,4,5]}
+	];
+	
+	for(var j in list){
+		var info = list[j];
+		for(var i = 0; i < Input.key[info.id].length; i++){
+			var id = Input.key[info.id][i][0];
+			var name = Input.key[info.id][i][0].toString().keyCodeToName();
+			if(Input.binding[info.id] === i){
+				id = '***';
+				name = '***';
+			}
+			
+			var str2 = 'Change Key Binding for ' + info.name + ' ' + info.list[i];
+			
+			str += '<tr ' +
+					'onclick="Input.binding.' + info.id + ' = ' + i + ';" ' + 
+					'onmouseover="main.permContext.text = \'' + str2 + '\';' + '" ' + 
+					'onmouseout="main.permContext.text = null;' + '" ' + 
+					'>'
+			str += '<td>Move ' + info.list[i] + '</td>'
+			str += '<td>' + id + '</td>'
+			str += '<td>' + name + '</td>'
+			str += '</tr>';
+		}
 	}
 	str += '</table>';
 	
@@ -980,12 +989,7 @@ Draw.window.binding = function (){ ctxrestore();
 		Draw.old.binding = str
 		hq.table.innerHTML = str;	
 	}
-	
-	//Last Input
-	hq.lastInput.style.left = 75 + 'px'; 
-	hq.lastInput.style.top = 420 + 'px'; 
-	
-	
+
 	//Template
 	var array = ['QWERTY','AZERTY','NUMBER'];
 	var str = '<font size="6">Default Bindings</font>';
@@ -1005,22 +1009,6 @@ Draw.window.binding = function (){ ctxrestore();
 	hq.template.style.left = 600 + 'px'; 
 	hq.template.style.top = 25 + 'px'; 
 	
-	//Note
-	var str =
-	'<font size="4">' +
-	'Holding Shift: +1000' + '<br>' +
-	'Do not use Ctrl. (Ctrl+W: Close Window)' + '<br><br>' +
-	'To change a binding:' + '<br>' +
-	'-Press the key you would like to use.' + '<br>' +
-	'-Last Input Key Id will show its id. Remember it.' + '<br>' +
-	'-Click on the row/action you want to change.' + '<br>' +
-	'-Enter the id.'  + '<br>' +
-	'-Press "ENTER"' +
-	'</font>'
-	hq.note.innerHTML = str;
-	
-	hq.note.style.left = 600 + 'px'; 
-	hq.note.style.top = 250 + 'px'; 	
 }
 
 Draw.window.material = function (){ ctxrestore();

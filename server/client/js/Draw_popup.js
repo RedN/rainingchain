@@ -1,13 +1,25 @@
 Draw.popup = function(){
-	if(main.popupList.equip){Draw.popup.equip();}
+	if(main.popupList.equip) Draw.popup.equip();
+	if(main.popupList.plan) Draw.popup.plan();
 }
 
+Draw.popup.frame = function(s){
+	ctx.globalAlpha = 0.9;
+	ctx.fillStyle = "#696969";
+	ctx.strokeStyle="black";
+	ctx.drawRect(s.x,s.y,s.w,s.h);
+	ctx.globalAlpha = 1;
+}
+
+
+
+//{Equip
 Draw.popup.equip = function(){ ctxrestore();
 	var s = Draw.popup.equip.main();
 	if(!s) return;
 	
 	Draw.popup.equip.boost(s);
-	Draw.popup.equip.frame(s);
+	Draw.popup.frame(s);
 	Draw.popup.equip.top(s);	
 	Draw.popup.equip.boost(s);
 }
@@ -44,7 +56,7 @@ Draw.popup.equip.main = function(){
 	};
 }
 
-Draw.popup.equip.frame = function(s){
+Draw.popup.frame = function(s){
 	ctx.globalAlpha = 0.9;
 	ctx.fillStyle = "#696969";
 	ctx.strokeStyle="black";
@@ -108,3 +120,106 @@ Draw.popup.equip.getDef = function(equip){
 	}
 	return tmp;
 }
+//}
+
+/*
+//{Plan
+Draw.popup.plan = function(){ ctxrestore();
+	var s = Draw.popup.plan.main();
+	if(!s) return;
+	
+	Draw.popup.plan.boost(s);
+	Draw.popup.plan.frame(s);
+	Draw.popup.plan.top(s);	
+	Draw.popup.plan.boost(s);
+}
+
+Draw.popup.plan.main = function(){
+	var w = 250;
+	var h = 250;
+	var pop = main.popupList.plan;
+	ctx = List.ctx.win;
+	
+	if(typeof pop === 'object'){
+		var id = pop.id;
+		var posx = pop.x;
+		var posy = pop.y;
+	} else {
+		var id = pop;
+		var posx = Input.mouse.x;
+		var posy = Input.mouse.y;
+	}
+	
+	var equip = Db.plan[id];
+	if(equip === undefined){Db.query('plan',id); return; }
+	if(equip === 0){return;} //waiting for query answer
+	
+	var sx = Math.max(0,Math.min(posx-w,Cst.WIDTH-w));
+	var sy = Math.max(0,Math.min(posy-h,Cst.HEIGHT - h));	
+	
+	return {
+		'w':w,
+		'h':h,
+		'x':sx,
+		'y':sy,
+		'equip':equip
+	};
+}
+
+Draw.popup.plan.top = function(s){
+	//Draw icon
+	Draw.icon(s.equip.icon,[s.x+2,s.y+2],48);
+	
+	//Draw Name
+	ctx.font="25px Monaco";
+	ctx.fillStyle = s.equip.color;
+	ctx.textAlign = 'center';
+	ctx.fillTextU(s.equip.name,s.x + 150,s.y);
+	ctx.textAlign = 'left';
+	ctx.fillStyle = 'white';
+	
+	ctx.font="15px Monaco";
+	var string = 'Lv:' + s.equip.lvl + '  Orb: +' + round(s.equip.orb.upgrade.bonus*100-100,2) + '% | ' + s.equip.orb.upgrade.amount;
+	ctx.fillText(string,s.x+50+5,s.y+28);
+	
+	//Draw Def/Dmg
+	ctx.font="25px Monaco";
+	ctx.textAlign = 'center';
+	var bar = s.equip.category === 'armor' ? s.equip.def.ratio  : s.equip.dmg.ratio;
+	var num = s.equip.category === 'armor' ? s.equip.def.main :  s.equip.dmg.main;
+	num = num < 1 ? (num < 0.1 ? round(num,2) : round(num,1) ) : round(num,0);
+	ctx.fillText(round(num,0),s.x+25,s.y+50);
+	Draw.element(s.x+52,s.y+50,190,25,bar);
+	
+	
+	//Separation
+	ctx.beginPath();
+	ctx.moveTo(s.x,s.y+80);
+	ctx.lineTo(s.x+s.w,s.y+80);
+	ctx.stroke();
+}
+
+Draw.popup.plan.boost = function(s){
+	//Boost
+	ctx.font="20px Monaco";
+	ctx.textAlign = 'left';
+	var numY = s.y+80;
+	var sum = 0;
+	for(var i in s.equip.boost){
+		var boost = s.equip.boost[i];
+		var info = Draw.convert.boost(boost);
+		ctx.fillText('-' + info[0],s.x+10,numY+sum*20);
+		ctx.fillText(info[1],s.x+10+150,numY+sum*20);
+		sum++;	
+	}
+}
+
+
+
+//}
+
+*/
+
+
+
+

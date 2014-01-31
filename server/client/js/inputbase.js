@@ -89,6 +89,8 @@ Input.key.ability = JSON.parse(localStorage.getItem('bindingAbility')) || Input.
 
 //### End Customization###
 
+Input.binding = {move:null,ability:null};
+
 Input.save = function(){
 	localStorage.setItem('bindingMove',JSON.stringify(Input.key.move));
 	localStorage.setItem('bindingAbility',JSON.stringify(Input.key.ability));
@@ -142,10 +144,15 @@ Input.event.key = function(code,dir,event){
 			}
 		}
 	}
+	
 	if(code !== 16 && code !== 1016 && code !== 10016 && code !== 11016
-		&& code !== 17 && code !== 1017 && code !== 10017 && code !== 11017)
-	html.bindingWin.lastInput.innerHTML = '<font size="6">Last Input Key Id : ' + code + '</font>';
+		&& code !== 17 && code !== 1017 && code !== 10017 && code !== 11017){
 		
+		if(Input.binding.move !== null) Input.key.move[Input.binding.move][0] = code;
+		if(Input.binding.ability !== null) Input.key.ability[Input.binding.ability][0] = code;
+		Input.binding.move = null;
+		Input.binding.ability = null;
+	}	
 }
 
 Input.event.combo = function(){
@@ -178,7 +185,6 @@ Input.event.mouse.click = function(code,dir){
 	//Emit Mouse Click
 	if(dir === 'down'){
 		var side = 'left';
-		html.bindingWin.lastInput.innerHTML = '<font size="6">Last Input Key Id : ' + code + '</font>';
 		switch(code){
 			case 1: side = 'left'; break;
 			case 3: side = 'right'; break;
@@ -191,6 +197,10 @@ Input.event.mouse.click = function(code,dir){
 		socket.emit('click', [side,Input.mouse.x,Input.mouse.y]);
 		Button.reset();
 		Button.test(0,Input.mouse.x,Input.mouse.y,side);
+	}
+	if(Input.binding.ability !== null){
+		Input.key.ability[Input.binding.ability][0] = code;
+		Input.binding.ability = null;
 	}
 }
 

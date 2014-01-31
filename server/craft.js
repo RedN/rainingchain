@@ -29,7 +29,18 @@ adding orb to ability mods improves the mod depending on Db.ability.mod function
 
 
 Craft = {};
-//{ Seed
+Craft.create = function(seed){	//create what seed tell to create. 
+	if(seed.category === 'weapon' || seed.category === 'armor'){
+		seed.piece = seed.piece || Cst.equip[seed.category].piece.random();
+		seed.category = 'equip';
+	}
+	
+	seed = Craft.seed.creation(seed);
+	
+	if(seed.category === 'equip'){ return Craft.equip(seed); }
+}
+
+//{Seed
 Craft.seed = {};
 Craft.seed.creation = function(sed){ //need to fix for ability too
 	var seed = deepClone(sed);
@@ -81,7 +92,7 @@ Craft.seed.template = function(){
 }
 //}
 
-//{ Plan
+//{Plan
 Craft.plan = {};
 Craft.plan.use = function(key,seed,req){	//when player tries to use plan
 	seed = deepClone(seed);
@@ -174,17 +185,6 @@ Craft.plan.upgrade = function(){
 }
 
 //}
-
-Craft.create = function(seed){	//create what seed tell to create. 
-	if(seed.category === 'weapon' || seed.category === 'armor'){
-		seed.piece = seed.piece || Cst.equip[seed.category].piece.random();
-		seed.category = 'equip';
-	}
-	
-	seed = Craft.seed.creation(seed);
-	
-	if(seed.category === 'equip'){ return Craft.equip(seed); }
-}
 
 //{Equip
 Craft.equip = function(seed){	//at this point, seed should be all-set
@@ -337,13 +337,13 @@ Craft.boost.generate.tier = function(mm,value){
 }
 //}
 
-
+//{Orb
 Craft.orb = function(key,orb,amount,wId,mod){	//would be better if split in multi func
 	var inv = List.main[key].invList;
 	var mort = List.all[key];
 	
 	//Set amount of orbs used
-	amount = Math.min(amount,Itemlist.have(inv,orb + '_orb',0,'amount'));
+	amount = amount.mm(0,Itemlist.have(inv,orb + '_orb',0,'amount'));
 	if(!amount) return;
 	
 	//Know if ability or equip
@@ -357,34 +357,11 @@ Craft.orb = function(key,orb,amount,wId,mod){	//would be better if split in mult
 	
 	
 	//Use Orb
-	if(orb === 'boost'){
-		//need to change so amount makes impact
-		amount = 1;
-		equip.boost = Craft.boost(equip.seed,equip.boost,1);
-		equip.orb.boost.history.push([Date.now(),equip.boost[equip.boost.length-1]]);
-	}
-	if(orb === 'removal'){
-		//need to change so amount makes impact
-		amount = 1;
-		if(!equip.boost.length){ Chat.add(key,"This piece of equipment doesn't have any boost to remove."); return; }
-		var remove = Math.floor(Math.random()*equip.boost.length);
-		equip.boost.splice(remove,1);
-	}
+	if(orb === 'boost') Craft.orb.boost(key,equip,amount);
+	if(orb === 'removal') Craft.orb.removal(key,equip);
+	if(orb === 'upgrade') Craft.orb.upgrade(key,equip,amount,mod);
 	
-	if(orb === 'upgrade'){
-		if(mod){	//aka want to upgrade a mod on an ability
-			if(equip.modList && equip.modList[mod] !== undefined){
-				equip.modList[mod] += amount;
-			} else { Chat.add(key,"This ability doesn't have this mod."); return; }
-		} 
-		if(!mod){	//aka want to upgrade equip or ability has a whole
-			equip.orb.upgrade.amount += amount;
-			equip.orb.upgrade.bonus = Craft.orb.formula(equip.orb.upgrade.amount);	//so-so useful for ability
-		}
-	}
-	
-	
-	
+
 	//Save the changes
 	Item.remove(equip.id);
 	Itemlist.remove(inv,orb + '_orb',amount);
@@ -404,12 +381,43 @@ Craft.orb = function(key,orb,amount,wId,mod){	//would be better if split in mult
 	}
 }
 
-Craft.orb.formula = function(x){
-	return 0.9+0.1*Math.log10(10+x);
+Craft.orb.boost = function(key,equip,amount){
+	//need to change so amount makes impact
+	amount = amount || 1;
+	equip.boost = Craft.boost(equip.seed,equip.boost,1);
+	equip.orb.boost.history.push([Date.now(),equip.boost[equip.boost.length-1]]);
+}
+
+Craft.orb.removal = function(key,equip){
+	if(!equip.boost.length){ Chat.add(key,"This piece of equipment doesn't have any boost to remove."); return; }
+	equip.boost = [];
+	equip.color = 'white';
+}
+
+Craft.orb.upgrade = function(key,equip,amount,mod){
+	if(mod){	//aka want to upgrade a mod on an ability
+		if(equip.modList && equip.modList[mod] !== undefined){
+			equip.modList[mod] += amount;
+			return;
+		} else {
+			Chat.add(key,"This ability doesn't have this mod.");
+			return; 
+		}
+	} 
+	
+	//aka want to upgrade equip or ability has a whole
+	equip.orb.upgrade.amount += amount;
+	equip.orb.upgrade.bonus = Craft.orb.upgrade.formula(equip.orb.upgrade.amount);	//so-so useful for ability
 }
 
 
 
+Craft.orb.upgrade.formula = function(x){
+	return 0.9+0.1*Math.log10(10+x);
+}
+//}
+
+//{Material
 Craft.material = {};
 Craft.material.salvage = function(key,id,amount){
 	//transform equip into shard
@@ -472,7 +480,7 @@ Craft.material.create.count = function(dbRate,mainMaterial,amountFrag,amountWant
 	}
 	return {'amount':amountCrafted,'cost':costSum};
 }
-	
+//}	
 
 //{Ability BROKEN
 Craft.ability = function(seed){

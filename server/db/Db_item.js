@@ -57,11 +57,11 @@ Init.db.item = function (cb){
 	
 
 	
-	a['bugged-drop'] = {'name':'I AM ERROR','icon':'craft.lobster'};
+	a['bugged-drop'] = {'name':'I AM ERROR','icon':'system.square'};
 	
-	a['lobster'] = {'name':'Lobster','icon':'craft.lobster'};
-	a['wood'] = {'name':'wood','icon':'wood.wood'};	
-	a['logs'] = {'name':'logs','icon':'craft.logs'};	
+	a['lobster'] = {'name':'Lobster','icon':'system.square'};
+	a['wood'] = {'name':'wood','icon':'system.square'};	
+	a['logs'] = {'name':'logs','icon':'system.square'};	
 	//}
 	
 	//{Testing
@@ -132,7 +132,7 @@ Item.creation = function(item){
 Item.template = function(){
 	var item = {
 		'name':'buggedItem',
-		'icon':'system.gold',
+		'icon':'system.square',
 		'trade':1, 
 		'sell':0,  
 		'drop':1,
