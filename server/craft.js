@@ -285,13 +285,15 @@ Craft.material.salvage = function(key,id,amount){
 	//transform equip into shard
 	var inv = List.main[key].invList;
 	amount = amount.mm(0,Itemlist.have(inv,id,0,'amount'));
-	if(!amount || !Itemlist.test(inv,[['material-currency',1]])) return;
+	
+	if(!amount){Chat.add(key,'You cant\'t something you don\'t own.');return;}
+	if(!Itemlist.test(inv,[['material-currency',1]])){Chat.add(key,'You don\'t have inventory space for that.');return;}
 	
 	var main = List.main[key];
 	
 	var dbRate = Db.material[id].exchangeRate;
 	var count = Craft.material.salvage.count(dbRate,main.material[id],amount);
-	if(count) return;
+	if(!count) return;
 	
 	main.material[id] -= amount;
 	Itemlist.remove(inv,id,amount);
@@ -314,14 +316,16 @@ Craft.material.create = function(key,id,amount){
 	var main = List.main[key];
 	var inv = main.invList;
 	
+	if(!Itemlist.test(inv,[[id,1]])){Chat.add(key,'You don\'t have inventory space for that.');return;}
+	
 	var amountFrag = Itemlist.have(inv,'material-currency',0,'amount');
-	if(!amountFrag || !Itemlist.test(inv,[[id,1]])) return;
-	
-	
 	var dbRate = Db.material[id].exchangeRate;
 	
 	var info = Craft.material.create.count(dbRate,main.material[id],amountFrag,amount);
-
+	
+	if(!info.amount){Chat.add(key,'You don\'t have enough currency for that.');return;}
+	
+	
 	main.material[id] += info.amount;
 	Itemlist.remove(inv,'material-currency',info.cost);
 	Itemlist.add(inv,id,info.amount);

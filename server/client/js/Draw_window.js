@@ -1018,28 +1018,36 @@ Draw.window.material = function (){ ctxrestore();
 	var list = Object.keys(main.material).sort();
 	
 	
+	ctx.font = '20px Monaco';
+	
 	for(var i in list){
-		var numX = s.zx + 15 + 150*Math.floor(i/10);
-		var numY = s.zy + 0 + 40*(i%10);
+		var numX = s.zx + 15 + 300*Math.floor(i/15);
+		var numY = s.zy + 0 + 30*(i%15);
 		
 		var mat = Db.material[list[i]];
 		
 		//Mat Icon
-		Draw.icon(mat.icon,[numX,numY],32);
-		Button.creation(0,{
-			"rect":[numX,numX+32,numY,numY+32],
-			'text':mat.name + '  (' + main.material[mat.id] + ')',
-		});
+		Draw.icon(mat.icon,[numX,numY],24);
 		numX += 40;
 		
+		//Name
+		ctx.fillStyle = 'black';		
+		ctx.fillText(mat.name,numX,numY);
+		numX += 150;
+		Button.creation(0,{
+			"rect":[numX-190,numX,numY,numY+24],
+			'text':mat.name + '  (' + main.material[mat.id] + ')',
+		});
+		
+		
 		//Create
-		Draw.icon('system1.more',[numX,numY],32);
+		Draw.icon('system1.more',[numX,numY],24);
 		ctx.fillStyle = 'green';
 		ctx.globalAlpha = 0.5;
-		ctx.fillRect(numX,numY,32,32)
+		ctx.fillRect(numX,numY,24,24)
 		ctx.globalAlpha = 1;
 		Button.creation(0,{
-			"rect":[numX,numX+32,numY,numY+32],
+			"rect":[numX,numX+24,numY,numY+24],
 			'text':'Create ' + mat.name + ' | Cost:' + Draw.window.material.cost(mat.id,1),
 			'right':{'func':Draw.window.material.click,'param':[mat.id,'create']},
 			'left':{'func':Chat.send.command,'param':['$material,create,' + mat.id + ',1']},
@@ -1048,13 +1056,13 @@ Draw.window.material = function (){ ctxrestore();
 		numX += 40;
 		
 		//Salvage
-		Draw.icon('system1.less',[numX,numY],32);
+		Draw.icon('system1.less',[numX,numY],24);
 		ctx.fillStyle = 'red';
 		ctx.globalAlpha = 0.5;
-		ctx.fillRect(numX,numY,32,32);
+		ctx.fillRect(numX,numY,24,24);
 		ctx.globalAlpha = 1;
 		Button.creation(0,{
-			"rect":[numX,numX+32,numY,numY+32],
+			"rect":[numX,numX+24,numY,numY+24],
 			'text':'Salvage ' + mat.name + ' | Gain:' + Draw.window.material.cost(mat.id),
 			'right':{'func':Draw.window.material.click,'param':[mat.id,'salvage']},
 			'left':{'func':Chat.send.command,'param':['$material,salvage,' + mat.id + ',1']},
@@ -1062,7 +1070,7 @@ Draw.window.material = function (){ ctxrestore();
 	}
 	
 	html.materialWin.div.style.visibility = 'visible';
-	html.materialWin.note.style.top = s.y + 450 + 'px';
+	html.materialWin.note.style.top = s.y + 490 + 'px';
 	html.materialWin.note.style.left = s.x + 20 + 'px';
 	html.materialWin.note.innerHTML = '<font size="6">Note: Trading with other players is always more profitable.</font>';
 	

@@ -1,8 +1,6 @@
 
 draw passive weird block for special balancedAtk
 
-plan required materials
-
 white items...
 
 
