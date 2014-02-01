@@ -28,12 +28,7 @@ a['testing']  = {   //testing is the item id
 Init.db.item = function (cb){
 	Db.item = {}; var a = Db.item;
 
-	//{Crafting
-	a['material-currency'] = {'name':'Craft Fragments','icon':'plan.equip','stack':1,'tradeable':0,
-			'option':[	{'param':['material'],'name':'Material Window','func':'Main.openWindow'},
-					]};
-					
-					
+	//{Crafting					
 	a['shard-white'] = {'name':'White Shard','icon':'system.gold','stack':1}
 	a['shard-blue'] = {'name':'Blue Shard','icon':'system.gold','stack':1}
 	a['shard-yellow'] = {'name':'Yellow Shard','icon':'system.gold','stack':1}

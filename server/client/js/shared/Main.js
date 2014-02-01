@@ -10,7 +10,7 @@ Main.template = function(key){
 		'pref':Main.template.pref(),
 		
 		"currentTab":"inventory",
-		"windowList":{'bank':0,'trade':0,'offensive':0,'defensive':0,'ability':0,'passive':0,'quest':0,'binding':0,'material':0,},
+		"windowList":{'bank':0,'trade':0,'offensive':0,'defensive':0,'ability':0,'passive':0,'quest':0,'binding':0},
 		"popupList":{'equip':0,'plan':0},
 		
 		'invList': ['','','','','','','','','','','','','','','','','','','','','','','',''],
@@ -50,8 +50,7 @@ Main.template = function(key){
 		main['tradeList'] = Itemlist.template('inventory');
 		main['old'] = {};
 		main['id'] = key;
-		main['dialogueLoc'] = {'x':0,'y':0};
-		main['material'] = Craft.material.template();		
+		main['dialogueLoc'] = {'x':0,'y':0};		
 	} else {
 		main['context'] = {'text':''};
 		main['clientContext'] = {'text':''};

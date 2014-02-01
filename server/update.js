@@ -136,7 +136,6 @@ Change.update.init = function(){
 				
 				{'array':['passivePt']},
 				{'array':['passive']},	
-				{'array':['material']},	//NEEDWORK, would need filter			
 			]
 			},	
 		'exist':{

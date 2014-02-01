@@ -54,7 +54,6 @@ Test.playerStart = function(key){
     Itemlist.add(inv,'teleport');
 	Itemlist.add(inv,'test');
 	Itemlist.add(inv,'wood-20',1000);
-	Itemlist.add(inv,'material-currency',1000);
 	Itemlist.add(inv,'boost_orb',1000);
 	Itemlist.add(inv,'upgrade_orb',1000);
 	Itemlist.add(inv,'removal_orb',1000);

@@ -70,7 +70,7 @@ Craft.equip.amount = function(plan){
 }
 
 Craft.equip.boost = function(plan,where,amount){
-	//add a boost to a weapon/armor/other using a plan
+	//add boosts to a weapon/armor/other using a plan
 	//plan: piece, type, quality, lvl, cap, 
 	//amount overwrite plan.amount
 	
@@ -287,75 +287,6 @@ Craft.orb.upgrade.formula = function(x){
 }
 //}
 
-//{Material
-Craft.material = {};
-Craft.material.salvage = function(key,id,amount){
-	//transform equip into shard
-	var inv = List.main[key].invList;
-	amount = amount.mm(0,Itemlist.have(inv,id,0,'amount'));
-	
-	if(!amount){Chat.add(key,'You cant\'t something you don\'t own.');return;}
-	if(!Itemlist.test(inv,[['material-currency',1]])){Chat.add(key,'You don\'t have inventory space for that.');return;}
-	
-	var main = List.main[key];
-	
-	var dbRate = Db.material[id].exchangeRate;
-	var count = Craft.material.salvage.count(dbRate,main.material[id],amount);
-	if(!count) return;
-	
-	main.material[id] -= amount;
-	Itemlist.remove(inv,id,amount);
-	Itemlist.add(inv,'material-currency',count);
-	Chat.add(key,'You have converted x' + amount + ' ' + Db.item[id].name + ' into x' + count + ' ' + Db.item['material-currency'].name);
-}
-
-Craft.material.salvage.count = function(dbRate,mainMaterial,amount){
-	var count = 0;
-	for(var i = 0; i < amount; i++){
-		count += Math.ceil(dbRate*(Math.pow(1.01,mainMaterial)));
-		mainMaterial--;
-	}
-	return count;
-}
-
-
-Craft.material.create = function(key,id,amount){
-	//amount: amount wanted to craft
-	var main = List.main[key];
-	var inv = main.invList;
-	
-	if(!Itemlist.test(inv,[[id,1]])){Chat.add(key,'You don\'t have inventory space for that.');return;}
-	
-	var amountFrag = Itemlist.have(inv,'material-currency',0,'amount');
-	var dbRate = Db.material[id].exchangeRate;
-	
-	var info = Craft.material.create.count(dbRate,main.material[id],amountFrag,amount);
-	
-	if(!info.amount){Chat.add(key,'You don\'t have enough currency for that.');return;}
-	
-	
-	main.material[id] += info.amount;
-	Itemlist.remove(inv,'material-currency',info.cost);
-	Itemlist.add(inv,id,info.amount);
-	Chat.add(key,'You have converted x' + info.cost + ' ' + Db.item['material-currency'].name + ' into x' + info.amount + ' ' + Db.item[id].name);
-	
-};
-
-Craft.material.create.count = function(dbRate,mainMaterial,amountFrag,amountWanted){
-	var amountCrafted = 0;
-	var costSum = 0;
-	for(var i = 0 ; i < amountWanted; i++){
-		var cost = Math.ceil(dbRate*(Math.pow(1.01,mainMaterial)))*2;
-		if(amountFrag < cost) break;
-	
-		costSum += cost;
-		amountFrag -= cost;
-		mainMaterial++;
-		amountCrafted++;
-	}
-	return {'amount':amountCrafted,'cost':costSum};
-}
-//}	
 
 //{Ability BROKEN
 Craft.ability = function(seed){

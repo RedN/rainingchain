@@ -173,7 +173,7 @@ Save.main = function(key,updateDb){
     main = Save.main.compress(main);
 	main.username = main.username || main.name;
     var save = {};
-    var toSave = ['invList','bankList','tradeList','quest','username','social','passive','passivePt','material'];
+    var toSave = ['invList','bankList','tradeList','quest','username','social','passive','passivePt'];
     for(var i in toSave){ save[toSave[i]] = main[toSave[i]]; }
 
     if(updateDb !== false){
@@ -292,9 +292,7 @@ Load.initData = function(key,player,main){
         'main':{
             'passive':0,
             'social':0,
-			'material':0,
             'quest':0,
-            'material':0,
 			'invList':Change.send.convert.itemlist,
 			'bankList':Change.send.convert.itemlist,
 			'tradeList':Change.send.convert.itemlist,
