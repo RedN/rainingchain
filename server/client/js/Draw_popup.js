@@ -18,7 +18,6 @@ Draw.popup.equip = function(){ ctxrestore();
 	var s = Draw.popup.equip.main();
 	if(!s) return;
 	
-	Draw.popup.equip.boost(s);
 	Draw.popup.frame(s);
 	Draw.popup.equip.top(s);	
 	Draw.popup.equip.boost(s);
@@ -52,6 +51,7 @@ Draw.popup.equip.main = function(){
 		'h':h,
 		'x':sx,
 		'y':sy,
+		'mx':sx+w/2,
 		'equip':equip
 	};
 }
@@ -85,6 +85,7 @@ Draw.popup.equip.top = function(s){
 	ctx.textAlign = 'center';
 	var bar = s.equip.category === 'armor' ? s.equip.def.ratio  : s.equip.dmg.ratio;
 	var num = s.equip.category === 'armor' ? s.equip.def.main :  s.equip.dmg.main;
+	num *= s.equip.orb.upgrade.bonus;
 	num = num < 1 ? (num < 0.1 ? round(num,2) : round(num,1) ) : round(num,0);
 	ctx.fillText(round(num,0),s.x+25,s.y+50);
 	Draw.element(s.x+52,s.y+50,190,25,bar);
@@ -111,27 +112,17 @@ Draw.popup.equip.boost = function(s){
 		sum++;	
 	}
 }
-
-Draw.popup.equip.getDef = function(equip){
-	var tmp = {};
-	for(var j in Cst.element.list){
-		var i = Cst.element.list[j];
-		tmp[i] = equip.def.main * equip.def.ratio[i] * equip.orb.upgrade.bonus;
-	}
-	return tmp;
-}
 //}
 
-/*
+
 //{Plan
 Draw.popup.plan = function(){ ctxrestore();
 	var s = Draw.popup.plan.main();
 	if(!s) return;
 	
-	Draw.popup.plan.boost(s);
-	Draw.popup.plan.frame(s);
+	Draw.popup.frame(s);
 	Draw.popup.plan.top(s);	
-	Draw.popup.plan.boost(s);
+	Draw.popup.plan.req(s);
 }
 
 Draw.popup.plan.main = function(){
@@ -162,6 +153,7 @@ Draw.popup.plan.main = function(){
 		'h':h,
 		'x':sx,
 		'y':sy,
+		'mx':sx+w/2,
 		'equip':equip
 	};
 }
@@ -171,25 +163,24 @@ Draw.popup.plan.top = function(s){
 	Draw.icon(s.equip.icon,[s.x+2,s.y+2],48);
 	
 	//Draw Name
-	ctx.font="25px Monaco";
 	ctx.fillStyle = s.equip.color;
+	ctx.font="25px Monaco";
 	ctx.textAlign = 'center';
-	ctx.fillTextU(s.equip.name,s.x + 150,s.y);
+	ctx.fillTextU(s.equip.name,s.x+ 150,s.y);
 	ctx.textAlign = 'left';
 	ctx.fillStyle = 'white';
 	
 	ctx.font="15px Monaco";
-	var string = 'Lv:' + s.equip.lvl + '  Orb: +' + round(s.equip.orb.upgrade.bonus*100-100,2) + '% | ' + s.equip.orb.upgrade.amount;
-	ctx.fillText(string,s.x+50+5,s.y+28);
+	var str = 'Lv:' + s.equip.lvl + ', Rar.: ' + round(s.equip.rarity*100,0) + '%, Qual.:' + round(s.equip.quality*100,0) + '%';
+	ctx.fillText(str,s.x+50+5,s.y+28);
 	
-	//Draw Def/Dmg
+	//Piece Type
 	ctx.font="25px Monaco";
+	var str = s.equip.piece.capitalize(); 
+	if(s.equip.type) str += ' - ' + s.equip.type.capitalize();
 	ctx.textAlign = 'center';
-	var bar = s.equip.category === 'armor' ? s.equip.def.ratio  : s.equip.dmg.ratio;
-	var num = s.equip.category === 'armor' ? s.equip.def.main :  s.equip.dmg.main;
-	num = num < 1 ? (num < 0.1 ? round(num,2) : round(num,1) ) : round(num,0);
-	ctx.fillText(round(num,0),s.x+25,s.y+50);
-	Draw.element(s.x+52,s.y+50,190,25,bar);
+	ctx.fillText(str,s.mx,s.y+50);
+	ctx.textAlign = 'left';
 	
 	
 	//Separation
@@ -199,18 +190,36 @@ Draw.popup.plan.top = function(s){
 	ctx.stroke();
 }
 
-Draw.popup.plan.boost = function(s){
-	//Boost
-	ctx.font="20px Monaco";
+Draw.popup.plan.req = function(s){
+	//Skill
+	var fontSize = 20;
+	
+	ctx.font= fontSize + "px Monaco";
 	ctx.textAlign = 'left';
-	var numY = s.y+80;
-	var sum = 0;
-	for(var i in s.equip.boost){
-		var boost = s.equip.boost[i];
-		var info = Draw.convert.boost(boost);
-		ctx.fillText('-' + info[0],s.x+10,numY+sum*20);
-		ctx.fillText(info[1],s.x+10+150,numY+sum*20);
-		sum++;	
+	
+	
+	var count = 0;
+	var numX = s.x+10;
+
+	for(var i in s.equip.req.skill){
+		var numY = s.y+80+count*20;
+		
+		Draw.icon('skill.' + i,[numX-2,numY+2],16);	
+		
+		var str = 'Level '  + s.equip.req.skill[i] + ' ' + i.capitalize();
+		ctx.fillText(str,numX+25,numY);
+		count++;	
+	}
+	count++;	
+	
+	for(var i in s.equip.req.item){
+		var numY = s.y+80+count*20;
+		
+		var info = s.equip.req.item[i];
+		Draw.icon(info[0],[numX-2,numY+2],16);	
+		var str = 'x'  + info[1] + ' ' + info[2];
+		ctx.fillText(str,numX+25,numY);
+		count++;	
 	}
 }
 
@@ -218,7 +227,7 @@ Draw.popup.plan.boost = function(s){
 
 //}
 
-*/
+
 
 
 

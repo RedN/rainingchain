@@ -24,6 +24,7 @@ Db = {	//local compilation of information so server doesnt send many times the s
 	equip:{},
 	ability:{},
 	item:{},
+	plan:{},
 };  
 
 

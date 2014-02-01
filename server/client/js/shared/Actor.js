@@ -386,7 +386,9 @@ Actor.death.performAbility = function(mort){
 }
 
 Actor.death.getKiller = function(mort){
-	var tmp = Object.keys(mort.damagedBy);
+	for(var i in mort.damagedBy) if(!List.all[i]) delete mort.damagedBy[i];
+	
+	var tmp = Object.keys(mort.damagedBy);	
 	if(!tmp.length) return [];
 	if(tmp.length === 1) return tmp;
 	
@@ -410,7 +412,7 @@ Actor.death.drop = function(mort,killers){
 		quality += List.all[killers[0]].item.quality; 	//only for plan
 		rarity += List.all[killers[0]].item.rarity; 		//only for plan
 	}
-
+	
 	//Category
 	var list = Drop.getCategoryList(drop.category,mort.lvl,quantity);
 	
@@ -425,21 +427,24 @@ Actor.death.drop = function(mort,killers){
 		
 	
 	//Plan
+	planLoop:
 	for(var i in drop.plan){
-		if(Math.pow(Math.random(),quantity) < drop.plan[i]){
-			var randomKiller = killer.random();
+		for(var j in drop.plan[i]){
+			if(Math.pow(Math.random(),quantity) < drop.plan[i][j]){
+				var randomKiller = killers.random();
+				
+				var id = Plan.creation({
+					'rarity':rarity,
+					'quality':quality,
+					'piece':i,
+					'type':j,
+					'lvl':mort.lvl,
+					'category':'equip',
+				});
 			
-			var id = Craft.plan.creation({
-				'rarity':rarity,
-				'quality':quality,
-				'piece':i,
-				'lvl':mort.lvl,
-				'category':'equip',
-			});
-			
-			
-			Drop.creation({'x':mort.x,'y':mort.y,'map':mort.map,'item':id,'amount':1});	
-			break;
+				Drop.creation({'x':mort.x,'y':mort.y,'map':mort.map,'item':id,'amount':1,'timer':Drop.timer,'viewedIf':[killer]});	
+				break planLoop;
+			}
 		}
 	}
 
@@ -447,9 +452,9 @@ Actor.death.drop = function(mort,killers){
 
 
 
-/*
-ts("Craft.plan.creation({'rarity':0,'quality':0,'piece':'melee','lvl':10,'category':'equip',});")
-*/
+
+//ts("Plan.creation({'rarity':0,'quality':0,'piece':'melee','lvl':10,'category':'equip',});")
+
 
 
 

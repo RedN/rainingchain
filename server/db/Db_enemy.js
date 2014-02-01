@@ -55,6 +55,18 @@ ePreDb["troll"]["ice"] = {  //{		//troll is category, ice is variant
 	'drop':{
 		'category':{			
 			'regular':1			//drop table used : quantity modifier bonus
+		},
+		'plan':{				//chance to drop plan
+			'melee':1/100,
+			'body':1/100,
+			'range':{
+				'bow':1/100,			
+			}
+		},
+		'mod':{					
+			quantity:1,			//chance to drop something
+			quality:1,			//plan only: higher chance for high roll
+			rarity:1,			//plan only: higher chance to have more boost
 		}
 	},
 	
@@ -115,7 +127,7 @@ Init.db.enemy = function(){ var ePreDb = {};
 		"acc":2,
 		"maxSpd":5,
 		"moveRange":{'ideal':200,"confort":50,"aggressive":400,"farthest":600},	
-		'drop':{'category':{'regular':1}},
+		'drop':{'category':{'regular':1},'plan':{'melee':0.5,'helm':0.5}},
 	}; //}
 	//}
 	
@@ -147,11 +159,24 @@ Init.db.enemy = function(){ var ePreDb = {};
 			}
 			e.hp = e.resource.hp.max;
 			
+			//Init Drop
 			if(e.drop){
 				e.drop.mod = e.drop.mod || {};
-				e.drop.quantity = e.drop.quantity || 1;
-				e.drop.quality = e.drop.quality || 1;
-				e.drop.rarity = e.drop.rarity || 1;
+				e.drop.mod.quantity = e.drop.mod.quantity || 1;
+				e.drop.mod.quality = e.drop.mod.quality || 1;
+				e.drop.mod.rarity = e.drop.mod.rarity || 1;
+				
+				
+				if(e.drop.plan){
+					for(var k in e.drop.plan){
+						if(typeof e.drop.plan[k] === 'number'){
+							var tmp = e.drop.plan[k];
+							e.drop.plan[k] = {};
+							for(var t in Cst.equip[k].type)	e.drop.plan[k][Cst.equip[k].type[t]] = tmp/3;							
+						}
+					}
+				}
+				
 			}
 			
 			Db.enemy[i][j] = new Function('return ' + stringify(e));

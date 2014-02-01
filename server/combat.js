@@ -332,6 +332,7 @@ Combat.hitIf = {};
 Combat.targetIf.global = function(atk,def){
 	//Used first in every target if test
 	return atk.id !== def.id 
+	&& atk.parent !== def.id 
 	&& !def.dead 
 	&& def.combat 
 	&& (def.type === 'player' || def.type === 'enemy')

@@ -60,6 +60,7 @@ require('./server/Draw');
 require('./server/db/Db_enemy');
 require('./server/db/Db_ability');
 require('./server/db/Db_item');
+require('./server/db/Db_plan');
 require('./server/db/Db_equip');
 require('./server/db/Db_boost');
 		

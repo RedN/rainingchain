@@ -63,11 +63,9 @@ Clan.leave = function(key,name){
 		}
 	}
 	
-	if(name == 'ALL'){	
-		main.social.list.clan = [];
-	} else {
-		main.social.list.clan.splice(main.social.list.clan.indexOf(name),1);
-	}
+	if(name === 'ALL')	main.social.list.clan = [];
+	else main.social.list.clan.splice(main.social.list.clan.indexOf(name),1);
+	
 	
 }
 

@@ -9,7 +9,7 @@ a['testing']    //testing is the item id
 		            'func':'Actor.teleport',        //function to call when clicked
 		            'param':[1230,1230,'ryve']},    //parameters used with function
 		            
-					{'name':'Craft Weapon','func':'Craft.plan.use','param':[{'category':'weapon'},{'item':[]}]},
+					{'name':'Craft Weapon','func':'Plan.use','param':[{'category':'weapon'},{'item':[]}]},
 					{'name':'Tele','func':'Actor.teleport','param':[1230,1230,'ryve']},
 					{'name':'Open Bank','func':'Main.openWindow','param':['bank']},
 			
@@ -19,7 +19,6 @@ a['testing']    //testing is the item id
 //Similar format than Equip
 Init.db.item = function (cb){
 	Db.item = {}; var a = Db.item;
-	
 
 	//{Crafting
 	a['material-currency'] = {'name':'Craft Fragments','icon':'plan.equip','stack':1,'tradeable':0,
@@ -33,8 +32,8 @@ Init.db.item = function (cb){
 	a['shard-gold'] = {'name':'Gold Shard','icon':'system.gold','stack':1}
 	
 	a['gold'] = {'name':'Gold','icon':'system.gold','stack':1,
-		'option':[	{'name':'Craft Armor','func':'Craft.plan.use','param':['randomArmor']},
-						{'name':'Craft Weapon','func':'Craft.plan.use','param':['randomWeapon']},
+		'option':[	{'name':'Craft Armor','func':'Plan.use','param':['randomArmor']},
+						{'name':'Craft Weapon','func':'Plan.use','param':['randomWeapon']},
 						{'name':'Open Bank','func':'Main.openWindow','param':['bank']},
 			]};	
 			

@@ -6,10 +6,8 @@ Init.db.equip = function (cb){
 	var pre = {};
 
 	db.equip.find({},{'_id':0},function(err, results) { if(err) throw err
-		for(var i in results){
-			pre[results[i].id] = results[i];
+		for(var i in results)	pre[results[i].id] = results[i];
 			
-	}
 	
 	
 	pre['metalbody'] = {'name':"Hello Kitty",'piece':'body','type':'metal','icon':'body.metal',

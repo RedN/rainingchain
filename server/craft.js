@@ -31,177 +31,7 @@ adding orb to ability mods improves the mod depending on Db.ability.mod function
 Craft = {};
 
 //{Plan
-Db.plan = {
-	'randomArmor':{
-		name:'bugged-plan',
-		icon:'plan.equip',
-		category:'equip',
-		piece:'helm',	
-		type:'metal',	
-		id:'randomArmor',
-		quality:0, 
-		lvl:0,
-		rarity:0, 
-		req:{'skill':{},'item':[]},
-		name:'Bugged Plan',
-		minAmount:0,
-		maxAmount:10,
-	},
-	'randomWeapon':{
-		name:'bugged-plan',
-		icon:'plan.equip',
-		category:'equip',
-		piece:'melee',	
-		type:'sword',		
-		id:'randomWeapon',
-		quality:0, 
-		lvl:0,
-		rarity:0, 
-		req:{'skill':{},'item':[]},
-		name:'Bugged Plan',
-		minAmount:0,
-		maxAmount:10,
-	},
-};
-Craft.plan = {};
 
-
-Craft.plan.creation = function(preplan){
-	//seed: lvl, category,[ piece, type, rarity, quality,]
-	//extra: definitive, minBoost, maxBoost
-	
-	var plan = useTemplate(Craft.plan.template(),preplan);
-	if(plan.category === 'equip' || plan.category === 'weapon' || plan.category === 'armor') 
-		plan = Craft.plan.template.equip(plan);
-	if(plan.category === 'ability') plan = Craft.plan.template.ability(plan);	
-	
-	Db.plan[plan.id] = plan;
-	
-	Item.creation({
-		'id':plan.id,
-		'name':plan.name,
-		'icon':plan.icon,
-		'option':[	
-			{'name':'Craft Item','func':'Craft.plan.use','param':[plan.id]},
-			{'name':'Craft Item','func':'Craft.plan.examine','param':[plan.id]},
-		]
-	});
-	
-	if(plan.definitive) return plan.id;
-	
-	plan.lvl = Math.floor(plan.lvl * (1 + 0.1*Math.randomML()));	//aka lvl += 10
-	plan.rarity += Math.randomML();	
-	plan.quality += Math.randomML();
-	
-	plan.lvl = plan.lvl.mm(0);
-	plan.rarity = plan.rarity.mm(0);	
-	plan.quality = plan.quality.mm(0);	
-	
-	return plan.id;
-}
-
-
-Craft.plan.template = function(){
-	var id = 'plan-' + Math.randomId();
-	return {
-		name:'bugged-plan',
-		icon:'plan.equip',
-		category:'equip',	
-		id:id,
-		quality:0, 
-		lvl:0,
-		rarity:0, 
-		req:{'skill':{},'item':[[id,1]]},
-		name:'Bugged Plan',
-		minAmount:0,
-		maxAmount:10,
-	}
-}
-
-Craft.plan.template.equip = function(plan){
-	if(plan.category === 'weapon' || plan.category === 'armor'){
-		plan.piece = plan.piece || Cst.equip[plan.category].piece.random();
-		plan.category = 'equip';
-	} else {	
-		plan.piece = plan.piece || Cst.equip.piece.random();
-	}
-	
-	plan.name = plan.piece.capitalize() + ' Plan';
-	plan.icon = 'plan.equip';
-	plan.type = plan.type || Cst.equip[plan.piece].type.random(); 
-	
-	return seed;
-}
-
-Craft.plan.template.ability = function(plan){
-
-
-}
-
-Craft.plan.use = function(key,id){	//when player tries to use plan
-	var plan = Db.plan[id];
-	if(!plan) return;
-	
-	var inv = List.main[key].invList;
-	
-	if(Craft.plan.test(key,plan.req)){ //meet req
-		Itemlist.remove.bulk(inv,plan.req.item);
-			
-		if(plan.category === 'equip') Itemlist.add(inv, Craft.equip(plan)); 
-		if(plan.category === 'ability') Itemlist.add(inv, Craft.ability(plan)); 
-	} else { //dont meet
-		console.log('nop...');
-		//Craft.plan.examine.chat(key,id);
-	}
-}
-
-Craft.plan.examine = {};
-
-Craft.plan.examine.chat = function(key,seed,req){	
-	var inv = List.main[key].invList;
-	var lvl = List.all[key].skill.lvl;
-	
-	var color = 'green';
-	
-	var str = 'Plan Information: ';
-	str += '<br>&emsp;Level:' + seed.lvl;
-	if(seed.piece) str += ', Piece:' + seed.piece;
-	if(seed.type) str += ', Type:' + seed.type;
-	str += '<br>&emsp;Rarity:' + round(seed.rarity || 0,2) + ', Quality:' + round(seed.quality || 0,2);
-	
-	str += '<br>&emsp;Items: ';
-	for(var i in req.item){
-		color = Cst.color.test(Itemlist.have(inv,req.item[i][0],req.item[i][1]));
-		str += '<span style="color:' + color + '"> ';
-		str += 'x' + req.item[i][1] + ' ' + Db.item[req.item[i][0]].name + ', ';
-		str += '</span>';
-	}
-	str += '<br>&emsp;Skills: ';
-	for(var i in req.skill){
-		color = Cst.color.test(lvl[i] >= req.skill[i]);
-		str += '<span style="color:' + color + '">';
-		str += 'Level ' + req.skill[i] + ' ' + i.capitalize() + ', ';
-		str += '</span>';
-	}
-
-	Chat.add(key,str); 
-}
-
-Craft.plan.test = function(key,req){	//test requirement
-	var inv = List.main[key].invList;
-	var lvl = List.all[key].skill.lvl;
-	
-	for(var i in req.skill) if(lvl[i] < req.skill[i]) return false;	
-	for(var i in req.item) if(!Itemlist.have(inv,req.item[i][0],req.item[i][1])) return false;
-	
-	return true
-}
-Craft.plan.upgrade = function(){
-	//need to add stuff
-	//x2 more req but +0.5 rarity
-}
-
-//}
 
 //{Equip
 Craft.equip = function(plan){	//at this point, seed should be all-set
@@ -238,7 +68,6 @@ Craft.equip.amount = function(plan){
 	}
 	
 	amount = amount.mm(plan.minAmount,plan.maxAmount);
-	console.log(amount);
 	return amount; 
 }
 
@@ -310,10 +139,9 @@ Craft.equip.salvage = function(key,id){
 	//transform equip into shard
 	var inv = List.main[key].invList;
 	if(Itemlist.have(inv,id)){
-		var type = Db.item[id].type;
-		if(type === 'weapon'){ var equip = Db.equip[id]; }
-		else if(type === 'armor'){ var equip = Db.equip[id]; }
-		else {return;}
+		var equip = Db.equip[id];
+		if(!equip) return;
+		
 		Itemlist.remove(inv,id);
 		Itemlist.add(inv,'shard-'+equip.color);
 	}
@@ -463,7 +291,8 @@ Craft.material.salvage = function(key,id,amount){
 	
 	var dbRate = Db.material[id].exchangeRate;
 	var count = Craft.material.salvage.count(dbRate,main.material[id],amount);
-
+	if(count) return;
+	
 	main.material[id] -= amount;
 	Itemlist.remove(inv,id,amount);
 	Itemlist.add(inv,'material-currency',count);
@@ -473,7 +302,7 @@ Craft.material.salvage = function(key,id,amount){
 Craft.material.salvage.count = function(dbRate,mainMaterial,amount){
 	var count = 0;
 	for(var i = 0; i < amount; i++){
-		count += Math.ceil(dbRate*(Math.pow(1.1,mainMaterial)));
+		count += Math.ceil(dbRate*(Math.pow(1.01,mainMaterial)));
 		mainMaterial--;
 	}
 	return count;
@@ -504,7 +333,7 @@ Craft.material.create.count = function(dbRate,mainMaterial,amountFrag,amountWant
 	var amountCrafted = 0;
 	var costSum = 0;
 	for(var i = 0 ; i < amountWanted; i++){
-		var cost = Math.ceil(dbRate*(Math.pow(1.1,mainMaterial)))*2;
+		var cost = Math.ceil(dbRate*(Math.pow(1.01,mainMaterial)))*2;
 		if(amountFrag < cost) break;
 	
 		costSum += cost;

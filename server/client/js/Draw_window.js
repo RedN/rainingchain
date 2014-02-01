@@ -1069,7 +1069,7 @@ Draw.window.material = function (){ ctxrestore();
 }
 
 Draw.window.material.cost = function(id,buy){
-	var a = Math.ceil(Db.material[id].exchangeRate * Math.pow(1.1,main.material[id]));
+	var a = Math.ceil(Db.material[id].exchangeRate * Math.pow(1.01,main.material[id]));
 	if(buy) a *=2;
 	return a;
 }

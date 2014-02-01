@@ -15,8 +15,7 @@ if(server){
 			cmd = escape.quote(cmd);
 			for(var i in param){ param[i] = escape.quote(param[i]); }
 			
-			
-			if(Command.list[cmd]){
+			if(!Command.client.have(cmd) && Command.list[cmd]){
 				Command.list[cmd].apply(this,param);
 			}
 			
@@ -302,8 +301,6 @@ Command.list['material,create'] = function(key,name,amount){
 
 //{CLIENT SIDE: Pref. many different preference values can be changed. check Command.pref.verify for more detail.
 Command.list['pref'] = function(name,value){
-	if(server) return;
-	
 	if(name === 'reset'){
 		main.pref = Main.template.pref();
 		Chat.add('Preferences Reset to Default.');
@@ -320,33 +317,17 @@ Command.list['pref'] = function(name,value){
 	localStorage.setItem('pref',JSON.stringify(main.pref))
 }
 
-Command.list['binding'] = function(type,position,value){
-	if(server) return;
-	
-	value = Math.round(+value);
-	position = Math.round(+position);
-	if((type !== 'move' && type !== 'ability') || position + '' === 'NaN' || value + '' === 'NaN'){
-		Chat.add('Wrong');
-		return;
-	}
-	Input.key[type][position][0] = value;
-	
-	Chat.add('Bindings Changed.');
-	Input.save();
-}
 
 
 Command.list['music,next'] = function(type,position,value){
-	if(server) return;
 	Song.ended();
 }
 Command.list['music,info'] = function(){
-	if(server) return;
 	var str = 'Song name: "' + Song.beingPlayed.name + '" by ' + Song.beingPlayed.author.name;
 	Chat.add(str);
 }
 
-Command.client = ['pref','binding','music,next','music,info'];
+Command.client = ['pref','music,next','music,info'];
 //}
 
 //{Pref

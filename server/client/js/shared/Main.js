@@ -11,7 +11,7 @@ Main.template = function(key){
 		
 		"currentTab":"inventory",
 		"windowList":{'bank':0,'trade':0,'offensive':0,'defensive':0,'ability':0,'passive':0,'quest':0,'binding':0,'material':0,},
-		"popupList":{'equip':0},
+		"popupList":{'equip':0,'plan':0},
 		
 		'invList': ['','','','','','','','','','','','','','','','','','','','','','','',''],
 		'bankList':[],
@@ -103,15 +103,16 @@ Main.openWindow = function(main,name,param){
 
 Main.openPopup = function(main,name,id){
 	var player = List.all[main.id];
-	if(name === 'equip'){
-		main.popupList.equip = {'x':player.mouseX,'y':player.mouseY,'id':id};
-	}	
+	if(name === 'equip') main.popupList.equip = {'x':player.mouseX,'y':player.mouseY,'id':id};
+	if(name === 'plan')	main.popupList.plan = {'x':player.mouseX,'y':player.mouseY,'id':id};
 }
 
 Main.examineEquip = function(main, id){
 	Main.openPopup(main,'equip',id);
 }
-
+Main.examinePlan = function(main, id){
+	Main.openPopup(main,'plan',id);
+}
 Main.selectInv = function(main,obj){
 	main.temp.selectInv = obj;
 	main.temp.reset.selectInv = 1;

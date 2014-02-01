@@ -230,6 +230,7 @@ Change.send.convert.windowList.trade = function(data){
 	return draw;
 }
 
+
 Change.send.convert.abilityList = function(list){
 	var copy = deepClone(list);
 	for(var i in copy){

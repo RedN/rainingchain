@@ -24,7 +24,7 @@ Itemlist.add = function (inv,id,amount){
 
 Itemlist.add.bulk = function (inv,array_items){
 	for(var i in array_items){
-		Itemlist.add(inv,array_items[0],array_items[1] || 1);
+		Itemlist.add(inv,array_items[i][0],array_items[i][1] || 1);
 	}	
 }
 
@@ -85,7 +85,7 @@ Itemlist.remove = function (inv,id,amount){
 
 Itemlist.remove.bulk = function (inv,array_items){
 	for(var i in array_items){
-		Itemlist.remove(inv,array_items[0],array_items[1] || 1);
+		Itemlist.remove(inv,array_items[i][0],array_items[i][1] || 1);
 	}	
 }
 

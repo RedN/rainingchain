@@ -1,23 +1,14 @@
 
 draw passive weird block for special balancedAtk
 
-Db.plan
-
 plan required materials
 
+white items...
 
-
-hitmod not working cuz hit itself
-
-
-html window
-
-revamp a*
 
 #Priority 2:
 -Crafting Ability
 -Crafting System with White
--revamp icon
 -animation before strike
 -anim??s
 
@@ -27,9 +18,11 @@ revamp a*
 easy mode
 cycle system
 
+revamp a*
 make passive
 
 compress saved data
+html window
 
 TUTORIAL:
 

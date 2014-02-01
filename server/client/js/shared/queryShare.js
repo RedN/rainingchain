@@ -1,21 +1,39 @@
 //The client can make a query to the server database.
-//used when the client wants to draw a weapon but doesnt have info about it
+//used when the client wants to draw something but doesnt have info about it
 if(server){
+	Db.query = function(d){
+		var source; var filter;
+	
+		switch(d.db){
+			case 'equip': source = Db.equip;	break;
+			case 'ability': source = Db.ability;	break;		
+			case 'plan': source = Db.plan; filter = Db.query.plan; break;
+		}
+		if(!source) return;
+		d.info = source[d.id];
+		if(!d.info) return;
+
+		if(filter) d.info = filter(deepClone(d.info));
+		
+		return d;
+	}
+	Db.query.plan = function(info){
+		for(var i in info.req.item){
+			var s = info.req.item[i];
+			var tmp = [];
+			tmp[0] = Db.item[s[0]].icon;
+			tmp[1] = s[1];
+			tmp[2] = Db.item[s[0]].name;
+			info.req.item[i] = tmp;
+		}	
+		return info;
+	}
+	
 	io.sockets.on('connection', function (socket) {
 		socket.on('queryDb', function (d) {
-			var source;
-			
-			switch(d.db){
-				case 'equip': source = Db.equip; 	break;
-				case 'ability': source = Db.ability;	break;		
-			}
-			if(source && source[d.id]){
-				socket.emit('queryDb',{db:d.db,id:d.id,info:source[d.id]}); 
-			} else {
-				socket.emit('queryDb',{'failure':1}); 
-			}
-
-		
+			var toreturn = Db.query(d);
+			if(toreturn) socket.emit('queryDb',toreturn); 
+			else socket.emit('queryDb',{'failure':1});
 		});
 	});
 } else {
@@ -32,8 +50,6 @@ if(server){
 		}		
 	});
 }
-
-
 
 
 //Testing

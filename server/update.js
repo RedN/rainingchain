@@ -117,7 +117,7 @@ Change.update.init = function(){
 				{'array':['context']},
 				{'array':['dialogue']},	
 				
-				{'array':['popupList','equip']},
+				{'array':['popupList']},
 				
 				{'array':['windowList'],'filter':Change.send.convert.windowList},
 				
