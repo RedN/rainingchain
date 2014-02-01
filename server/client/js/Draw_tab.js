@@ -99,20 +99,23 @@ Draw.tab.equip = function (){ ctxrestore();
 	for (var i = 0 ; i < Cst.equip.weapon.piece.length ; i++){
 		var numX = s.x + 10;
 		var numY = s.y + 7 + 5 + 45 * i;
-		
 		var piece = Cst.equip.weapon.piece[i];
-		if(player.weapon.piece != Cst.equip.weapon.piece[i]){ ctx.globalAlpha = 0.5; } 
+		var equip = player.equip.piece[piece];
 		
-		Draw.icon(player.equip.piece[Cst.equip.weapon.piece[i]].icon,[numX,numY],40);
+		if(!equip) continue;	//dont have this weapon piece equipped
+		
+		if(player.weapon.piece != piece){ ctx.globalAlpha = 0.5; } 
+		
+		Draw.icon(equip.icon,[numX,numY],40);
 		ctx.globalAlpha = 1;
 		
 		if(Collision.PtRect(Collision.getMouse(),[numX,numX+40,numY,numY+40])){
-			main.popupList.equip = player.equip.piece[Cst.equip.weapon.piece[i]].id;
+			main.popupList.equip = equip.id;
 		}
 		
 		Button.creation(0,{
 			"rect":[numX,numX+40,numY,numY+40],
-			"left":{"func":Chat.send.command,"param":['$tab,swapWeapon,' + Cst.equip.weapon.piece[i]]},
+			"left":{"func":Chat.send.command,"param":['$tab,swapWeapon,' + piece]},
 			"text":'Swap Weapon'
 		});
 			
@@ -122,12 +125,16 @@ Draw.tab.equip = function (){ ctxrestore();
 	for (i = 0 ; i < Cst.equip.armor.piece.length ; i++){
 		var numX = s.x + 55 + 45*(i%3);
 		var numY = s.y + 7 + 5 + 45 * Math.floor(i/3);
-		var piece = player.equip.piece[Cst.equip.armor.piece[i]];
 		
-		Draw.icon(piece.icon,[numX+10,numY],40);
+		var piece = Cst.equip.armor.piece[i];
+		var equip = player.equip.piece[piece];
+		
+		if(!equip) continue;	//dont have this piece equipped
+		
+		Draw.icon(equip.icon,[numX+10,numY],40);
 		
 		if(Collision.PtRect(Collision.getMouse(0),[numX,numX+40,numY,numY+40])){
-			main.popupList.equip = piece.id;
+			main.popupList.equip = equip.id;
 		}		
 	}
 	

@@ -91,13 +91,15 @@ Img.icon = newImage("img/img/iconSheet.png");
 	
 	//Craft
 	'plan':{'y':craft+0,'x':['equip','ability']},
-	'orb':{'y':craft+1,'x':['upgrade','boost','removal']},
-	'metal':{'y':craft+2,'x':['metal']},
-	'chain':{'y':craft+3,'x':['chain']},
-	'wood':{'y':craft+4,'x':['wood']},
-	'leaf':{'y':craft+5,'x':['leaf']},
-	'bone':{'y':craft+6,'x':['bone']},
-	'hide':{'y':craft+7,'x':['hide']},
+	'shard':{'y':craft+1,'x':['white','blue','yellow','gold']},
+	'orb':{'y':craft+2,'x':['upgrade','boost','removal']},
+	'metal':{'y':craft+3,'x':['metal']},
+	'chain':{'y':craft+4,'x':['chain']},
+	'wood':{'y':craft+5,'x':['wood']},
+	'leaf':{'y':craft+6,'x':['leaf']},
+	'bone':{'y':craft+7,'x':['bone']},
+	'hide':{'y':craft+8,'x':['hide']},
+	'rare':{'y':craft+9,'x':['0','1','2','3','4','5','6','7','8','9']},
 	
 	
 	

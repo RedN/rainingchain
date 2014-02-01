@@ -1,5 +1,5 @@
 Init = {};
-Init.db = function(dbpsw){
+Init.db = function(dbpsw,deleteDb){
 	//var databaseURI = 'mongodb://test:' + dbpsw + '@widmore.mongohq.com:10010/RainingChain_copy';  
 	var databaseURI = "localhost:27017/test";
 	
@@ -44,7 +44,8 @@ Init.db = function(dbpsw){
 	}
 
 	db.err = function(err){ if (err) throw err; }
-
+	
+	if(deleteDb) db.deleteAll();
 	//db.deleteAll();
 	//db.filterDb();
 	

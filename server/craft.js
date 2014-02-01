@@ -280,8 +280,6 @@ Craft.orb.upgrade = function(key,equip,amount,mod){
 	equip.orb.upgrade.bonus = Craft.orb.upgrade.formula(equip.orb.upgrade.amount);	//so-so useful for ability
 }
 
-
-
 Craft.orb.upgrade.formula = function(x){
 	return 0.9+0.1*Math.log10(10+x);
 }

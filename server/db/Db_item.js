@@ -29,10 +29,10 @@ Init.db.item = function (cb){
 	Db.item = {}; var a = Db.item;
 
 	//{Crafting					
-	a['shard-white'] = {'name':'White Shard','icon':'system.gold','stack':1}
-	a['shard-blue'] = {'name':'Blue Shard','icon':'system.gold','stack':1}
-	a['shard-yellow'] = {'name':'Yellow Shard','icon':'system.gold','stack':1}
-	a['shard-gold'] = {'name':'Gold Shard','icon':'system.gold','stack':1}
+	a['shard-white'] = {'name':'White Shard','icon':'shard.white','stack':1}
+	a['shard-blue'] = {'name':'Blue Shard','icon':'shard.blue','stack':1}
+	a['shard-yellow'] = {'name':'Yellow Shard','icon':'shard.yellow','stack':1}
+	a['shard-gold'] = {'name':'Gold Shard','icon':'shard.gold','stack':1}
 	
 	a['gold'] = {'name':'Gold','icon':'system.gold','stack':1,
 		'option':[	{'name':'Craft Armor','func':'Plan.use','param':['randomArmor']},

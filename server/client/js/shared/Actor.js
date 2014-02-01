@@ -17,9 +17,10 @@ Actor.updateEquip = function(mort){
 		var i = Cst.element.list[k];
 		var sum = 0;
 		for(var j in mort.equip.piece){	//Each Piece
+			if(!mort.equip.piece[j]) continue;
 			sum += mort.equip.piece[j].def.main * mort.equip.piece[j].def.ratio[i] * mort.equip.piece[j].orb.upgrade.bonus;
 		}
-		mort.equip.def[i] = sum;
+		mort.equip.def[i] = sum || 1;
 	}
 }
 

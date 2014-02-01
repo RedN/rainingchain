@@ -171,7 +171,8 @@ Draw.minimap.button = function(s){
 		});	
 }
 
-Draw.minimap.icon = function(s){
+Draw.minimap.icon = function(s){	//creates lag? bug NEEDWORK
+	return;
 	var zoom = main.pref.mapZoom/100;
 	var ratio = main.pref.mapRatio;
 
@@ -189,11 +190,12 @@ Draw.minimap.icon = function(s){
 			var numY = cy+vy/zoom/ratio-size/2;
 		
 			if(Collision.PtRect({x:numX+size/2,y:numY+size/2},[s.x,s.x+Cst.WIDTH/main.pref.mapRatio,s.y,s.y+Cst.HEIGHT/main.pref.mapRatio])){
+				console.log(1);
 				Draw.icon(m.minimapIcon,[numX,numY],size);
 			}
 		}
 	}
-	Draw.icon('system.square',[s.x + Cst.WIDTH/main.pref.mapRatio/2-2,s.y + Cst.HEIGHT/main.pref.mapRatio/2-2],4);
+	//Draw.icon('system.square',[s.x + Cst.WIDTH/main.pref.mapRatio/2-2,s.y + Cst.HEIGHT/main.pref.mapRatio/2-2],4);
 }
 //}
 

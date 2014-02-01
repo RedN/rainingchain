@@ -98,7 +98,6 @@ Init.game = function (data) {
 	Init.actor();
 	Init.db.quest();
 	Init.db.customBoost();
-	Init.db.material();
 	
 	//initAbilityModDb();   //need fixing
 	Img.preload(Img.preloader,function(){   //load images

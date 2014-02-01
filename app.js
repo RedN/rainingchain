@@ -63,8 +63,8 @@ require('./server/db/Db_item');
 require('./server/db/Db_plan');
 require('./server/db/Db_equip');
 require('./server/db/Db_boost');
+require('./server/db/Db_material');
 		
-require('./' + clientPath + 'client/js/shared/Db_material');
 require('./' + clientPath + 'client/js/shared/Collision');
 require('./' + clientPath + 'client/js/shared/Db_stat');
 require('./' + clientPath + 'client/js/shared/constant');
@@ -81,7 +81,8 @@ require('./' + clientPath + 'client/js/shared/Db_quest');
 require('./' + clientPath + 'client/js/shared/Quest');
 require('./' + clientPath + 'client/js/shared/Db_customboost');
 
-Init.db('test');
+
+Init.db('test',process.argv[2]);	//if(process.argv[2]) => delete db
 Init.email('mailmailmail');
 main.initServer(); 	
 /*	
