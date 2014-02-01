@@ -71,7 +71,7 @@ Draw.tab.inventory = function (){ ctxrestore();
 		if(main.invList[i]){
 			var amountX = 4;
 			var numX = s.x + 20 + 45*(i%amountX);
-			var numY = s.y + 5 + 43*Math.floor(i/amountX);
+			var numY = s.y + 5 + 50*Math.floor(i/amountX);
 			
 			var text = 'Use ' + main.invList[i][2];
 			// !(temp.selectInv && temp.reset && temp.reset.selectInv) ? 'Use ' + main.invList[i][0] : temp.selectInv.name + ' on ' + invList[i][0];

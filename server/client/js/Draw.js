@@ -326,13 +326,13 @@ Draw.item = function(info,xy,size){
 		ctx.globalAlpha = 0.8;
 		ctx.fillStyle = "black";
 		ctx.strokeStyle = "white";
-		ctx.roundRect(xy[0]-2,xy[1]+size-9,size+4,15);
+		ctx.roundRect(xy[0]-2,xy[1]+size-2,size+4,15);
 		ctx.globalAlpha = 1;
 		
 				
 		ctx.fillStyle = "yellow";
 		ctx.font= size/32*13 + "px Monaco";
-		ctx.fillText(amount,xy[0],xy[1]+size-9);
+		ctx.fillText(amount,xy[0],xy[1]+size-2);
 	}
 	
 }

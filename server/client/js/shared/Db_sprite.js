@@ -1,5 +1,5 @@
 /*
-"pMace":{                               //id of the sprite
+"mace":{                               //id of the sprite
     "src":"img/Sprite/human.png"        //image src
     "size":1.5,                         //size factor
     "side":[2,6,0,4,1,5,3,7],           //side[0] = 2 => the right-facing position is in the 3rd row. 
@@ -30,42 +30,44 @@ Init.db.sprite = function(){
     	
     //PLAYER
     
-    	"pMace":{"src":"actor/human.png","size":1.5,"side":[2,6,0,4,1,5,3,7],'hpBar':-40,'legs':35,
-    	"preHitBox":[ -12,12,-35,35 ],"preBumperBox":[ -12,12,0,35 ],
-    	"anim": {
-    		"walk":{"startY":0,"frame":4,"sizeX":70,"sizeY":70,"dir":8,"spd":0.8,'walk':1,"next":"walk"},
-    		"attack":{"startY":0,"frame":4,"sizeX":70,"sizeY":70,"dir":8,"spd":0.8,"next":"walk"}
-    	}},
+    	
     
-    	"pMace2":{"src":"actor/pMace.png","size":1.5,"side":[3,2,1,0],'hpBar':-40,'legs':20,
+    	"mace":{"src":"actor/mace.png","size":1.5,"side":[3,2,1,0],'hpBar':-40,'legs':20,
     	"preHitBox":[ -20,20,-20,32 ],"preBumperBox":[ -12,12,4,30 ],
     	"anim": {
     		"walk":{"startY":64*8,"frame":9,"sizeX":64,"sizeY":64,"dir":4,"spd":1,'walk':1,"next":"walk"},
     		"attack":{"startY":64*21,"frame":6,"sizeX":64*3,"sizeY":64*3,"dir":4,"spd":1,"next":"walk"}
     	}},
-    	
-    	"pSpear":{"src":"actor/pSpear.png","size":1.5,"side":[3,2,1,0],'hpBar':-40,'legs':20,
+		
+    	"mace2":{"src":"actor/human.png","size":1.5,"side":[2,6,0,4,1,5,3,7],'hpBar':-40,'legs':35,
+    	"preHitBox":[ -12,12,-35,35 ],"preBumperBox":[ -12,12,0,35 ],
+    	"anim": {
+    		"walk":{"startY":0,"frame":4,"sizeX":70,"sizeY":70,"dir":8,"spd":0.8,'walk':1,"next":"walk"},
+    		"attack":{"startY":0,"frame":4,"sizeX":70,"sizeY":70,"dir":8,"spd":0.8,"next":"walk"}
+    	}},
+		
+    	"spear":{"src":"actor/spear.png","size":1.5,"side":[3,2,1,0],'hpBar':-40,'legs':20,
     	"preHitBox":[ -20,20,-20,32 ],"preBumperBox":[ -12,12,4,30 ],
     	"anim": {
     		"walk":{"startY":64*8,"frame":9,"sizeX":64,"sizeY":64,"dir":4,"spd":1,'walk':1,"next":"walk"},
     		"attack":{"startY":64*21,"frame":8,"sizeX":64*3,"sizeY":64*3,"dir":4,"spd":1,"next":"walk"}
     	}},
     	
-    	"pSword":{"src":"actor/pSword.png","size":1.5,"side":[3,2,1,0],'hpBar':-40,'legs':20,
+    	"sword":{"src":"actor/sword.png","size":1.5,"side":[3,2,1,0],'hpBar':-40,'legs':20,
     	"preHitBox":[ -20,20,-20,32 ],"preBumperBox":[ -12,12,4,30 ],
     	"anim": {
     		"walk":{"startY":64*8,"frame":9,"sizeX":64,"sizeY":64,"dir":4,"spd":1,'walk':1,"next":"walk"},
     		"attack":{"startY":64*21,"frame":6,"sizeX":64*3,"sizeY":64*3,"dir":4,"spd":1,"next":"walk"}
     	}},
     	
-    	"pBow":{"src":"actor/pBow.png","size":1.5,"side":[3,2,1,0],'hpBar':-40,'legs':20,
+    	"bow":{"src":"actor/bow.png","size":1.5,"side":[3,2,1,0],'hpBar':-40,'legs':20,
     	"preHitBox":[ -20,20,-20,32 ],"preBumperBox":[ -12,12,4,30 ],
     	"anim": {
     		"walk":{"startY":64*8,"frame":9,"sizeX":64,"sizeY":64,"dir":4,"spd":1,'walk':1,"next":"walk"},
     		"attack":{"startY":64*16,"frame":13,"sizeX":64,"sizeY":64,"dir":4,"spd":1,"next":"walk"}
     	}},
     	
-    	"pWand":{"src":"actor/pWand.png","size":1.5,"side":[3,2,1,0],'hpBar':-40,'legs':20,
+    	"wand":{"src":"actor/wand.png","size":1.5,"side":[3,2,1,0],'hpBar':-40,'legs':20,
     	"preHitBox":[ -20,20,-20,32 ],"preBumperBox":[ -12,12,4,30 ],
     	"anim": {
     		"walk":{"startY":64*8,"frame":9,"sizeX":64,"sizeY":64,"dir":4,"spd":1,'walk':1,"next":"walk"},
@@ -80,14 +82,14 @@ Init.db.sprite = function(){
     	}},
     	
     //ENEMY
-    	"eSlime":{"src":"actor/eSlime.png","size":1,"side":[0,1,2,3],'hpBar':-110,'legs':70,
+    	"slime":{"src":"actor/slime.png","size":1,"side":[0,1,2,3],'hpBar':-110,'legs':70,
     	"preHitBox":[ -70,70,-45,90 ],"preBumperBox":[ -55,55,-15,80 ],
     	"anim": {
     		"walk":{"startY":0,"frame":5,"sizeX":200,"sizeY":200,"dir":4,"spd":0.5,"next":"walk"},
     		"attack":{"startY":0,"frame":5,"sizeX":200,"sizeY":200,"dir":4,"spd":0.5,"next":"walk"},
     	}},
     
-    	"eTroll":{"src":"actor/eTroll.png","size":1,"side":[0,1,2,3],'hpBar':-70,'legs':35,
+    	"troll":{"src":"actor/troll.png","size":1,"side":[0,1,2,3],'hpBar':-70,'legs':35,
     	"preHitBox":[ -33,33,-30,64 ],"preBumperBox":[ -33,33,-30,64 ],
     	"anim": {
     		"walk":{"startY":0,"frame":9,"sizeX":128,"sizeY":128,"dir":4,"spd":0.25,"next":"walk"},

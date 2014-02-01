@@ -157,7 +157,7 @@ a['bulletMulti'] = {					//bulletMulti is the id of attack
 		'distance':500,					//if enemy is farther than that distance from the player, familiar teleports ontop of player
 	},
 	{
-		"category":"eSlime",			//enemy category
+		"category":"slime",			//enemy category
 		"variant":"Big",				//enemy variant
 		"lvl":0,						//enemy lvl
 		'amount':1						//amount of enemy created per cast

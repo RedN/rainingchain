@@ -30,11 +30,8 @@ adding orb to ability mods improves the mod depending on Db.ability.mod function
 
 Craft = {};
 
-//{Plan
-
-
 //{Equip
-Craft.equip = function(plan){	//at this point, seed should be all-set
+Craft.equip = function(plan){
 	var equip = Equip.template();
 	equip.piece = plan.piece;
 	equip.type = plan.type;
@@ -43,8 +40,8 @@ Craft.equip = function(plan){	//at this point, seed should be all-set
 	equip.lvl = plan.lvl;
 	equip.plan = plan;
 	
-	var amount = Craft.equip.amount(plan);
-	equip.boost = Craft.boost(plan,equip.boost,amount);
+	plan.amount = Craft.equip.amount(plan);
+	equip.boost = Craft.equip.boost(plan,equip.boost);
 	
 	equip.id = Math.randomId();
 		
@@ -57,12 +54,13 @@ Craft.equip = function(plan){	//at this point, seed should be all-set
 }
 
 Craft.equip.amount = function(plan){
-	var amount = Math.pow(Math.random(),(1+plan.rarity));
+	var amount = Math.pow(Math.random(),(1+(plan.rarity||0)));
 	amount = -Math.logBase(2,amount);
 	amount = Math.floor(amount);
-	// 1/2 => 0, 1/4 => 1, 1/8 => 2, 1/16 => 3...
+	amount += 1;
+	// 1/2 => 1, 1/4 => 2, 1/8 => 3, 1/16 => 4...
 	
-	if(amount > 6){	//1/256
+	if(amount > 6){	//1/128
 		//unique
 		amount = 6;
 	}
@@ -71,8 +69,30 @@ Craft.equip.amount = function(plan){
 	return amount; 
 }
 
+Craft.equip.boost = function(plan,where,amount){
+	//add a boost to a weapon/armor/other using a plan
+	//plan: piece, type, quality, lvl, cap, 
+	//amount overwrite plan.amount
+	
+	loop:
+	for(var i = 0 ; i < (amount || plan.amount) && i > -1; i++){
+		var boost = Craft.equip.boost.generate(plan);
+		for(var j in where) if(where[j].stat === boost.stat){ i -= 0.99;continue loop;}	//verify if always have it
+		where.push(boost);		
+	}
+	return where;
+}
+
+Craft.equip.boost.generate = function(plan){	//return a random boost adequat for piece and type
+	var boost = Db.boost.list[plan.piece][plan.type].random('chance');
+	return Craft.boost(plan,boost);	 
+}
 
 Craft.equip.weapon = function(plan,equip){
+	equip.sprite = {'name':Craft.equip.weapon.sprite[plan.type].name,'sizeMod':Craft.equip.weapon.sprite[plan.type].sizeMod};
+
+	if(equip.model) return equip; //aka using it has model
+	
 	var mod = 0.9 + Math.pow(Math.random(),1/(plan.quality+1))*0.2;
 	equip.dmg.main = (plan.lvl+10) * mod;
 	
@@ -87,6 +107,18 @@ Craft.equip.weapon = function(plan,equip){
 	}
 	if(Math.random() < 0.90) equip.dmg.ratio[plan.piece] += 0.2+Math.random()*1;
 	return equip;
+}
+
+Craft.equip.weapon.sprite = {
+	'mace':{'name':"mace",'sizeMod':1},
+	'sword':{'name':"sword",'sizeMod':1},
+	'spear':{'name':"spear",'sizeMod':1},
+	'bow':{'name':"bow",'sizeMod':1},
+	'boomerang':{'name':"bow",'sizeMod':1},
+	'crossbow':{'name':"bow",'sizeMod':1},
+	'wand':{'name':"wand",'sizeMod':1},
+	'staff':{'name':"wand",'sizeMod':1},
+	'orb':{'name':"wand",'sizeMod':1},
 }
 
 Craft.equip.armor = function(plan,equip){
@@ -129,11 +161,6 @@ Craft.equip.armor.mod = {
 }
 Craft.equip.armor.mod  = convertRatio(Craft.equip.armor.mod);
 
-Craft.equip.color = function(w){
-	if(w.boost.length === 0) return 'white'; 
-	if(w.boost.length <= 2) return 'blue';  
-	return 'yellow';  
-}
 
 Craft.equip.salvage = function(key,id){
 	//transform equip into shard
@@ -146,55 +173,36 @@ Craft.equip.salvage = function(key,id){
 		Itemlist.add(inv,'shard-'+equip.color);
 	}
 }
+
+
+
 //}
 
 //{Boost
-Craft.boost = function(seed,where,amount){
-	//add a boost to a weapon/armor/other using a seed
-	for(var i = 0 ; i < amount && i > -1; i++){
-		var boost = Craft.boost.generate.equip(seed);
-		for(var j in where){
-			if(where[j].stat === boost.stat){ 
-				i -= 0.99;
-				continue;
-			} 
-		}
-		where.push(boost);		
-	}
-	return where;
-}
-
-Craft.boost.generate = function(seed,boost){
-	seed.quality = seed.quality || 1;
+Craft.boost = function(seed,boost){
+	seed.quality = seed.quality || 0;
 	seed.lvl = seed.lvl || 0;
 	seed.cap = seed.cap || 1;
 	
 	boost = deepClone(boost);
 	
-	var value = Craft.boost.generate.roll(boost.value,seed.quality);
-	value = Math.min(value,boost.value[1]*seed.cap);	//for death for example
+	var value = Craft.boost.roll(boost.value,seed.quality);
+	value = Math.min(value,boost.value[1]*seed.cap);	//for quest death for example
 	
-	return {'stat':boost.stat,
-			'type':boost.type || 'base',
-			'value':value,
-			'tier':Craft.boost.generate.tier(boost.value,value)
+	return {
+		'stat':boost.stat,
+		'type':boost.type || 'base',
+		'value':value,
+		'tier':Craft.boost.tier(boost.value,value),
 	};
 }
 
-Craft.boost.generate.equip = function(seed){
-	var boost = Db.boost.list[seed.piece][seed.type].random('chance');
-	return Craft.boost.generate(seed,boost);	 
-}
-
-
-
-
-Craft.boost.generate.roll = function(mm,qual){
+Craft.boost.roll = function(mm,qual){
 	qual = qual || 0;
 	return mm[0] + (mm[1]-mm[0])*( Math.pow(Math.random(),1/(qual+1)));
 }
 
-Craft.boost.generate.tier = function(mm,value){
+Craft.boost.tier = function(mm,value){
 	return (value-mm[0])/(mm[1]-mm[0])
 }
 //}
@@ -246,7 +254,7 @@ Craft.orb = function(key,orb,amount,wId,mod){	//would be better if split in mult
 Craft.orb.boost = function(key,equip,amount){
 	//need to change so amount makes impact
 	amount = amount || 1;
-	equip.boost = Craft.boost(equip.seed,equip.boost,1);
+	equip.boost = Craft.equip.boost(equip.seed,equip.boost,1);
 	equip.orb.boost.history.push([Date.now(),equip.boost[equip.boost.length-1]]);
 }
 
@@ -362,18 +370,18 @@ Craft.ability.template = function(seed){
 
 	var ab = deepClone(Db.ability.template[an]);
 	
-	if(typeof ab.period.global === 'object'){ ab.period.global = Craft.boost.generate.roll(ab.period.global,qua); }
-	if(typeof ab.period.own === 'object'){ ab.period.own = Craft.boost.generate.roll(ab.period.own,qua); }
+	if(typeof ab.period.global === 'object'){ ab.period.global = Craft.boost.roll(ab.period.global,qua); }
+	if(typeof ab.period.own === 'object'){ ab.period.own = Craft.boost.roll(ab.period.own,qua); }
 	
 	if(ab.action.func === 'Combat.action.attack'){
 		var atk = ab.action.param;
 		
 		//All
-		if(typeof atk.angle === 'object'){ atk.angle = Craft.boost.generate.roll(atk.angle,qua); }
-		if(typeof atk.amount === 'object'){ atk.amount = Craft.boost.generate.roll(atk.amount,qua); }
-		if(typeof atk.dmg.main === 'object'){ atk.dmg.main = Craft.boost.generate.roll(atk.dmg.main,qua); }
+		if(typeof atk.angle === 'object'){ atk.angle = Craft.boost.roll(atk.angle,qua); }
+		if(typeof atk.amount === 'object'){ atk.amount = Craft.boost.roll(atk.amount,qua); }
+		if(typeof atk.dmg.main === 'object'){ atk.dmg.main = Craft.boost.roll(atk.dmg.main,qua); }
 		for(var i in atk.dmg.ratio){
-			if(typeof atk.dmg.ratio[i] === 'object'){ atk.dmg.ratio[i] = Craft.boost.generate.roll(atk.dmg.ratio[i],qua); }
+			if(typeof atk.dmg.ratio[i] === 'object'){ atk.dmg.ratio[i] = Craft.boost.roll(atk.dmg.ratio[i],qua); }
 		}
 		atk.dmg.ratio = convertRatio(atk.dmg.ratio);
 		
@@ -381,19 +389,19 @@ Craft.ability.template = function(seed){
 		for(var st in Cst.status.list){
 			var i = Cst.status.list[st];
 			if(typeof atk[i] === 'object'){ 
-				if(typeof atk[i].chance === 'object'){ atk[i].chance = Craft.boost.generate.roll(atk[i].chance,qua); }
-				if(typeof atk[i].magn === 'object'){ atk[i].magn = Craft.boost.generate.roll(atk[i].magn,qua); }
-				if(typeof atk[i].time === 'object'){ atk[i].time = Craft.boost.generate.roll(atk[i].time,qua); }
+				if(typeof atk[i].chance === 'object'){ atk[i].chance = Craft.boost.roll(atk[i].chance,qua); }
+				if(typeof atk[i].magn === 'object'){ atk[i].magn = Craft.boost.roll(atk[i].magn,qua); }
+				if(typeof atk[i].time === 'object'){ atk[i].time = Craft.boost.roll(atk[i].time,qua); }
 			}
 		}
 		if(atk.leech){
-			if(typeof atk.leech.chance === 'object'){ atk.leech.chance = Craft.boost.generate.roll(atk.leech.chance,qua); }
-			if(typeof atk.leech.magn === 'object'){ atk.leech.magn = Craft.boost.generate.roll(atk.leech.magn,qua); }
-			if(typeof atk.leech.time === 'object'){ atk.leech.time = Craft.boost.generate.roll(atk.leech.time,qua); }
+			if(typeof atk.leech.chance === 'object'){ atk.leech.chance = Craft.boost.roll(atk.leech.chance,qua); }
+			if(typeof atk.leech.magn === 'object'){ atk.leech.magn = Craft.boost.roll(atk.leech.magn,qua); }
+			if(typeof atk.leech.time === 'object'){ atk.leech.time = Craft.boost.roll(atk.leech.time,qua); }
 		}
 		if(atk.pierce){
-			if(typeof atk.pierce.chance === 'object'){ atk.pierce.chance = Craft.boost.generate.roll(atk.pierce.chance,qua); }
-			if(typeof atk.pierce.dmgReduc === 'object'){ atk.pierce.dmgReduc = Craft.boost.generate.roll(atk.pierce.dmgReduc,qua); }
+			if(typeof atk.pierce.chance === 'object'){ atk.pierce.chance = Craft.boost.roll(atk.pierce.chance,qua); }
+			if(typeof atk.pierce.dmgReduc === 'object'){ atk.pierce.dmgReduc = Craft.boost.roll(atk.pierce.dmgReduc,qua); }
 		}
 		//need to add curse etc...
 	}

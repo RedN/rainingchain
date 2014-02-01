@@ -1,19 +1,27 @@
 //Item
 
 /*
-a['testing']    //testing is the item id
-    = { 'name':'Gold',                      //name of item
-        'icon':'system.gold',             //icon used
-        'stack':1,                          //stack?
-		'option':[	{'name':'Craft Armor',  //visible ttext for client
-		            'func':'Actor.teleport',        //function to call when clicked
-		            'param':[1230,1230,'ryve']},    //parameters used with function
+a['testing']  = {   //testing is the item id
+		'name':'Gold',			//name of item
+        'icon':'system.gold',	//icon used
+        'stack':1,				//only use 1 inventory slot
+		'trade':1, 				//can be traded				
+		'drop':1,				//can be dropped
+		'remove':0,				//remove item when used
+		'bank':1,				//can be put in a bank
+		'type':'item',			//item be default, can be equip, plan, ability
+		
+		
+		'option':[				//option when right clicking
+			{
+			'name':'Teleport',  		//visible text for client
+		    'func':'Actor.teleport',    //function to call when clicked
+		    'param':[1230,1230,'ryve']	//parameters used with function (put in array)
+			},    
 		            
-					{'name':'Craft Weapon','func':'Plan.use','param':[{'category':'weapon'},{'item':[]}]},
-					{'name':'Tele','func':'Actor.teleport','param':[1230,1230,'ryve']},
-					{'name':'Open Bank','func':'Main.openWindow','param':['bank']},
+			{'name':'Open Bank','func':'Main.openWindow','param':['bank']},
 			
-			]};
+		]};
 */
 
 //Similar format than Equip

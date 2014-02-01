@@ -27,7 +27,7 @@ Actor.creation = function(data){
 Actor.creation.group = function(gr,el){
    	/*
 	gr: x y map respawn
-    el: [  {'amount':1,"category":"eSlime","variant":"Big","lvl":0,'modAmount':1},
+    el: [  {'amount':1,"category":"slime","variant":"Big","lvl":0,'modAmount':1},
 		{'amount':10,"category":"troll","variant":"ice","lvl":0,'modAmount':1},	];
 	*/
 	var id = Math.randomId();
@@ -111,7 +111,7 @@ Actor.creation.info = function(e,cr){
 	e.y = cr.y + Math.randomML() * (cr.v || 0); 
 	e.crX = cr.x;
 	e.crY = cr.y;
-	e.category = cr.category || 'eSlime'; 
+	e.category = cr.category || 'slime'; 
 	e.variant = cr.variant || 'Regular'; 
 	e.lvl = cr.lvl || 0; 
 	e.modAmount = cr.modAmount !== undefined ?  cr.modAmount : 1;

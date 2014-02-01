@@ -101,7 +101,7 @@ Init.db.equip = function (cb){
 	
 	pre['mace'] = {
 		'piece': 'melee','type': 'mace','icon':'melee.mace',
-		'name':"Mace",'sprite':{'name':"pMace",'sizeMod':1},
+		'name':"Mace",'sprite':{'name':"mace",'sizeMod':1},
 		'dmg':{'main':10,'ratio':{'melee':0,'range':10,'magic':80,'fire':10,'cold':0,'lightning':0}},
 		'boost': [		
 			
@@ -114,7 +114,7 @@ Init.db.equip = function (cb){
 
 	pre['spear'] = {
 		'piece': 'melee','type': 'spear','icon': 'melee.spear',
-		'name':"Spear",'sprite':{'name':"pSpear",'sizeMod':1},
+		'name':"Spear",'sprite':{'name':"spear",'sizeMod':1},
 		'dmg':{'main':10,'ratio':{'melee':0,'range':10,'magic':80,'fire':10,'cold':0,'lightning':0}},
 		'boost': [],
 
@@ -122,7 +122,7 @@ Init.db.equip = function (cb){
 	
 	pre['sword'] = {
 		'piece': 'melee','type': 'sword','icon': 'melee.sword',
-		'name':"Sword",'sprite':{'name':"pSword",'sizeMod':1},
+		'name':"Sword",'sprite':{'name':"sword",'sizeMod':1},
 		'dmg':{'main':10,'ratio':{'melee':0,'range':10,'magic':80,'fire':10,'cold':0,'lightning':0}},
 		'boost': [],
 
@@ -130,7 +130,7 @@ Init.db.equip = function (cb){
 		
 	pre['bow'] = {
 		'piece': 'range','type': 'bow','icon': 'range.bow',
-		'name':"Bow",'sprite':{'name':"pBow",'sizeMod':1},
+		'name':"Bow",'sprite':{'name':"bow",'sizeMod':1},
 		'dmg':{'main':10,'ratio':{'melee':0,'range':10,'magic':80,'fire':10,'cold':0,'lightning':0}},
 		'boost':[],
 
@@ -138,7 +138,7 @@ Init.db.equip = function (cb){
 	
 	pre['boomerang'] = {
 		'piece': 'range','type': 'boomerang','icon': 'range.boomerang',
-		'name':"Boomerang", 'sprite':{'name':"pBow",'sizeMod':1},
+		'name':"Boomerang", 'sprite':{'name':"bow",'sizeMod':1},
 		'dmg':{'main':10,'ratio':{'melee':0,'range':10,'magic':80,'fire':10,'cold':0,'lightning':0}},
 		'boost':[	
 		
@@ -148,7 +148,7 @@ Init.db.equip = function (cb){
 	
 	pre['crossbow'] = {
 		'piece': 'range','type': 'crossbow','icon': 'range.crossbow',
-		'name':"Crossbow", 'sprite':{'name':"pBow",'sizeMod':1},
+		'name':"Crossbow", 'sprite':{'name':"bow",'sizeMod':1},
 		'dmg':{'main':10,'ratio':{'melee':0,'range':10,'magic':80,'fire':10,'cold':0,'lightning':0}},
 		'boost':[],
 		
@@ -156,7 +156,7 @@ Init.db.equip = function (cb){
 	
 	pre['wand'] = {
 		'piece': 'magic','type': 'wand','icon': 'magic.wand',
-		'name':"Wand", 'sprite':{'name':"pWand",'sizeMod':1},
+		'name':"Wand", 'sprite':{'name':"wand",'sizeMod':1},
 		'dmg':{'main':10,'ratio':{'melee':0,'range':10,'magic':80,'fire':10,'cold':0,'lightning':0}},
 		'boost':[],
 		
@@ -164,7 +164,7 @@ Init.db.equip = function (cb){
 	
 	pre['staff'] = {
 		'piece': 'magic','type': 'staff','icon': 'magic.staff',
-		'name':"Staff", 'sprite':{'name':"pWand",'sizeMod':1},
+		'name':"Staff", 'sprite':{'name':"wand",'sizeMod':1},
 		'dmg':{'main':10,'ratio':{'melee':0,'range':10,'magic':80,'fire':10,'cold':0,'lightning':0}},
 		'boost':[],
 		
@@ -172,7 +172,7 @@ Init.db.equip = function (cb){
 
 	pre['orb'] = {
 		'piece': 'magic','type': 'orb','icon': 'magic.orb',
-		'name':"Orb", 'type': 'orb','sprite':{'name':"pWand",'sizeMod':1},
+		'name':"Orb", 'type': 'orb','sprite':{'name':"wand",'sizeMod':1},
 		'dmg':{'main':10,'ratio':{'melee':0,'range':10,'magic':80,'fire':10,'cold':0,'lightning':0}},
 		'boost':[],
 		
@@ -180,7 +180,7 @@ Init.db.equip = function (cb){
 	
 	pre['goddess'] = {
 		'piece': 'magic','type': 'orb','icon': 'magic.orb',
-		'name':"Wand", 'type': 'staff','sprite':{'name':"pWand",'sizeMod':1},
+		'name':"Wand", 'type': 'staff','sprite':{'name':"wand",'sizeMod':1},
 		'dmg':{'main':10,'ratio':{'melee':0,'range':10,'magic':80,'fire':10,'cold':0,'lightning':0}},
 		'boost':[],
 			
@@ -201,7 +201,7 @@ Equip = {};
 Equip.creation = function(equip){
 	equip = useTemplate(Equip.template(),equip);
 	
-	equip.color = Craft.equip.color(equip);
+	equip.color = Equip.creation.color(equip);
 	equip.category = Cst.equip.weapon.piece.have(equip.piece) ? 'weapon' : 'armor';
 	
 	equip.def.ratio = convertRatio(equip.def.ratio);
@@ -228,6 +228,14 @@ Equip.creation = function(equip){
 	db.equip.update( {'id':equip.id}, equip, { upsert: true }, db.err);
 
 }
+
+Equip.creation.color = function(w){
+	if(w.boost.length === 0) return 'white'; 
+	if(w.boost.length <= 2) return 'blue';  
+	return 'yellow';  
+}
+
+
 //Add Default Weapon elements and init weapon
 	
 	
@@ -244,12 +252,10 @@ Equip.template = function(){
 		'dmg':{'main':0,'ratio':{'melee':1,'range':1,'magic':1,'fire':1,'cold':1,'lightning':1}},		
 		'boost':[],
 		'orb':{'upgrade':{'amount':0,'bonus':1},'boost':{'amount':0,'bonus':0,'history':[]}},
-		'selfFound':1,
+		'creator':null,
 		'accountBound':0,
 		'color':'white',
-		'sprite':{'name':"pMace",'sizeMod':1},
 	}
-	//equip.seed = Craft.seed.template(equip);
 }
 	
 

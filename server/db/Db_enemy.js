@@ -16,7 +16,7 @@ enemy.mainDmg = player.weapon
 ePreDb["troll"]["ice"] = {  //{		//troll is category, ice is variant
 	"name":"Ice Troll",				//name	
 	"sprite":{						//sprite used 
-		'name':"eTroll",
+		'name':"troll",
 		'sizeMod':1
 	},
 	"ability":{						//ability used by enemy
@@ -110,7 +110,7 @@ Init.db.enemy = function(){ var ePreDb = {};
 	ePreDb["troll"] = {}; //{
 	ePreDb["troll"]["ice"] = {  //{
 		"name":"Ice Troll",
-		"sprite":{'name':"eTroll",'sizeMod':1},
+		"sprite":{'name':"troll",'sizeMod':1},
 		"ability":{'bulletSingle':0.2},
 		'resource':{'hp':{'max':1000,'regen':1},'mana':{'max':100,'regen':1}},
 		
@@ -118,16 +118,12 @@ Init.db.enemy = function(){ var ePreDb = {};
 		'globalDmg':function(lvl){ return lvl + 100},
 		'globalMod':function(e,lvl){ e.maxSpd = e.maxSpd + lvl;  return e;},
 		
-		
-		
 		"equip":{'def':{'melee':1,'range':1,'magic':1,'fire':1,'cold':1,'lightning':1}},	
-		
-		
-		
+
 		"acc":2,
 		"maxSpd":5,
 		"moveRange":{'ideal':200,"confort":50,"aggressive":400,"farthest":600},	
-		'drop':{'category':{'regular':1},'plan':{'melee':0.5,'helm':0.5}},
+		'drop':{'category':{'regular':1},'plan':{'melee':1/10,'helm':1/10}},
 	}; //}
 	//}
 	

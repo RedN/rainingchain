@@ -198,7 +198,7 @@ Itemlist.template = function(type){
 	tmp.key = 'not_set';
 	if(type === 'inventory'){
 		tmp.alwaysStack = false;
-		var size = 24;	
+		var size = 20;	
 	}
 	if(type === 'bank'){
 		tmp.alwaysStack = true;

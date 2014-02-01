@@ -82,7 +82,7 @@ Init.actor = function(){
 		//}
 		
 		//{Setting Used for Db.enemy
-		mort.category = "eSlime";   //for enemy
+		mort.category = "slime";   //for enemy
 		mort.variant = "Regular";   //for enemy
 		mort.lvl = 0;
 		mort.name = "Goblin";     //visible name
@@ -96,7 +96,7 @@ Init.actor = function(){
 			'plan':[],
 		};    
 		mort.minimapIcon = 'minimapIcon.enemy';     //icon used for minimap
-		mort.sprite = {"name":"pMace","anim":"walk","sizeMod":1}			
+		mort.sprite = {"name":"mace","anim":"walk","sizeMod":1}			
 		mort.equip = Actor.template.equip();
 		mort.weapon = Actor.template.weapon();
 		mort.moveRange = {
