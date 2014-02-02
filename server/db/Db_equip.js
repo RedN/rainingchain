@@ -8,6 +8,11 @@ Init.db.equip = function (cb){
 	db.equip.find({},{'_id':0},function(err, results) { if(err) throw err
 		for(var i in results)	pre[results[i].id] = results[i];
 			
+	pre['unarmed'] = {		//DONT TOUCH
+		'piece': 'melee','type': 'mace','icon':'melee.mace',
+		'name':"Mace",'sprite':{'name':"mace",'sizeMod':1},
+		'dmg':{'main':1,'ratio':{'melee':1,'range':1,'magic':1,'fire':1,'cold':1,'lightning':1}},
+	};					//DONT TOUCH
 	
 	
 	pre['metalbody'] = {'name':"Hello Kitty",'piece':'body','type':'metal','icon':'body.metal',
@@ -100,11 +105,7 @@ Init.db.equip = function (cb){
 	}
 	
 	
-	pre['unarmed'] = {
-		'piece': 'melee','type': 'mace','icon':'melee.mace',
-		'name':"Mace",'sprite':{'name':"mace",'sizeMod':1},
-		'dmg':{'main':1,'ratio':{'melee':1,'range':1,'magic':1,'fire':1,'cold':1,'lightning':1}},
-	};
+	
 	
 	
 	pre['mace'] = {

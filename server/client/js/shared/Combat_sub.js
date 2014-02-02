@@ -45,7 +45,8 @@ Combat.action.attack.mod.player = function(player,attack){
 }
 
 Combat.action.attack.mod.weapon = function(weaponid,attack){
-	var weapon = Db.equip[weaponid] || Db.equip['unarmed'];
+	if(server) var weapon = Db.equip[weaponid] || Db.equip['unarmed'];
+	if(!server) var weapon = Db.query('equip',player.weapon) || {main:1,ratio:Cst.element.template(1)};
 	
 	var sum = 0;
 	attack.dmg.main *= weapon.dmg.main;

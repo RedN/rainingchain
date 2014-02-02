@@ -37,16 +37,18 @@ Draw.loop = function (){
 }
 
 Draw.map = function (layer){ ctxrestore();
+	var SIZEFACT = 2;	//image is x2 smaller than ingame
+
 	ctx = List.ctx.stage;
 	var map = Db.map[player.map];
-	var mapX = Math.min(map.img[layer].length-1,Math.max(0,Math.floor((player.x-1024)/2048)));
-	var mapY = Math.min(map.img[layer][mapX].length-1,Math.max(0,Math.floor((player.y-1024)/2048)));
+	var mapX = Math.floor((player.x-1024)/2048).mm(0,map.img[layer].length-1);
+	var mapY = Math.floor((player.y-1024)/2048).mm(0,map.img[layer][mapX].length-1);
 	var mapXY = map.img[layer][mapX][mapY];
 	var pX = player.x-mapX*2048;
 	var pY = player.y-mapY*2048;
 	
-	var numX = (pX - Cst.WIDTH/2)/2 ;
-	var numY = (pY - Cst.HEIGHT/2) /2 ;
+	var numX = (pX - Cst.WIDTH/2)/SIZEFACT ;
+	var numY = (pY - Cst.HEIGHT/2)/SIZEFACT ;
 	var longueur = Cst.WIDTH/2;
 	var hauteur = Cst.HEIGHT/2;
 	var diffX = numX + longueur - mapXY.width;
@@ -58,7 +60,7 @@ Draw.map = function (layer){ ctxrestore();
 	var tailleX = Math.min(endX-startX,mapXY.width);
 	var tailleY = Math.min(endY-startY,mapXY.height);
 	
-	ctx.drawImage(mapXY, startX,startY,tailleX,tailleY,(startX-numX)*2,(startY-numY)*2,tailleX*2,tailleY*2);	
+	ctx.drawImage(mapXY, startX,startY,tailleX,tailleY,(startX-numX)*SIZEFACT,(startY-numY)*SIZEFACT,tailleX*SIZEFACT,tailleY*SIZEFACT);	
 }
 
 

@@ -1,3 +1,5 @@
+MAPSIZEFACT = 1;
+
 
 //{State
 Draw.state = function(){
@@ -120,8 +122,8 @@ Draw.minimap.constant = function(){
 
 Draw.minimap.map = function(s,layer){
 	var map = Db.map[player.map];
-	var mapX = Math.min(map.img[layer].length-1,Math.max(0,Math.floor((player.x-1024)/2048)));
-	var mapY = Math.min(map.img[layer][mapX].length-1,Math.max(0,Math.floor((player.y-1024)/2048)));
+	var mapX = Math.floor((player.x-1024)/2048).mm(0,map.img[layer].length-1);
+	var mapY = Math.floor((player.y-1024)/2048).mm(0,map.img[layer][mapX].length-1);
 	var mapXY = map.img[layer][mapX][mapY];
 	var pX = player.x-mapX*2048;
 	var pY = player.y-mapY*2048;
@@ -143,7 +145,6 @@ Draw.minimap.map = function(s,layer){
 	if(layer === 'i') ctx.globalAlpha = main.pref.mapIconAlpha/100;
 	ctx.drawImage(mapXY, startX,startY,tailleX,tailleY,s.x+(startX-numX)/mapCst*2,s.y + (startY-numY)/mapCst*2,tailleX/mapCst*2,tailleY/mapCst*2);
 	ctx.globalAlpha = 1;
-	
 }
 
 Draw.minimap.box = function(s){

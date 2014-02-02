@@ -10,6 +10,7 @@ Db.query = function(d){
 		},
 		ability:{
 			source:Db.ability,	//note: in Db, ability attack are in object
+			filter:Db.query.ability
 		},
 		plan:{
 			source:Db.plan,
@@ -40,7 +41,14 @@ Db.query.plan = function(info){
 	}	
 	return info;
 }
-	
+
+Db.query.ability = function(info){
+	var ab = deepClone(info);
+	if(ab.action && ab.action.func === 'Combat.action.attack'){
+		ab.action.param = useTemplate(Attack.template(),ab.action.param);
+	}
+	return ab;
+}	
 	
 	
 io.sockets.on('connection', function (socket) {

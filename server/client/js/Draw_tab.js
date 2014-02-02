@@ -103,21 +103,26 @@ Draw.tab.equip = function (){ ctxrestore();
 		
 		var id = player.equip.piece[piece];
 		var equip = Db.query('equip',id);
-		if(!equip) continue;
 		
-		Draw.icon(equip.icon,[numX,numY],40);
-		ctx.globalAlpha = 1;
-		
-		if(Collision.PtRect(Collision.getMouse(),[numX,numX+40,numY,numY+40])){
-			main.popupList.equip = equip.id;
-		}
-		
-		Button.creation(0,{
-			"rect":[numX,numX+40,numY,numY+40],
-			"left":{"func":Chat.send.command,"param":['$tab,swapWeapon,' + piece]},
-			"text":'Swap Weapon'
-		});
+		if(equip){
+			if(player.weapon !== player.equip.piece[piece]) ctx.globalAlpha = 0.5;
+			Draw.icon(equip.icon,[numX,numY],40);
+			ctx.globalAlpha = 1;
 			
+			if(Collision.PtRect(Collision.getMouse(),[numX,numX+40,numY,numY+40])){
+				main.popupList.equip = equip.id;
+			}
+			
+			Button.creation(0,{
+				"rect":[numX,numX+40,numY,numY+40],
+				"left":{"func":Chat.send.command,"param":['$tab,swapWeapon,' + piece]},
+				"right":{"func":Chat.send.command,"param":['$tab,removeEquip,' + piece]},
+				"text":'Left: Swap Weapon | Right: Remove'
+			});
+		} else {
+			ctx.fillStyle = 'black';
+			ctx.strokeRect(numX,numY,40,40);
+		}
 	}
 	
 	//Armor
@@ -126,17 +131,26 @@ Draw.tab.equip = function (){ ctxrestore();
 		var numY = s.y + 7 + 5 + 45 * Math.floor(i/3);
 		
 		var piece = Cst.equip.armor.piece[i];
-		var equip = Db.equip[player.equip.piece[piece]];
 		
 		var id = player.equip.piece[piece];
 		var equip = Db.query('equip',id);
-		if(!equip) continue;
-		
-		Draw.icon(equip.icon,[numX+10,numY],40);
-		
-		if(Collision.PtRect(Collision.getMouse(0),[numX,numX+40,numY,numY+40])){
-			main.popupList.equip = equip.id;
-		}		
+		if(equip){
+			Draw.icon(equip.icon,[numX,numY],40);
+			
+			if(Collision.PtRect(Collision.getMouse(0),[numX,numX+40,numY,numY+40])){
+				main.popupList.equip = equip.id;
+			}
+			
+			Button.creation(0,{
+				"rect":[numX,numX+40,numY,numY+40],
+				"right":{"func":Chat.send.command,"param":['$tab,removeEquip,' + piece]},
+				"text":'Remove Equip'
+			});		
+			
+		} else {
+			ctx.fillStyle = 'black';
+			ctx.strokeRect(numX,numY,40,40);
+		}
 	}
 	
 	

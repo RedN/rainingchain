@@ -20,6 +20,12 @@ Init.db.plan = function(cb){
 			req:{item:[],skill:{}},
 		};
 		
+		a['randomWeapon2'] = {
+			category:'equip',
+			piece:'magic',	
+			type:'wand',		
+			req:{item:[],skill:{}},
+		};
 		
 		for(var i in Db.plan){
 			Db.plan[i].id = i;

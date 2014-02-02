@@ -12,6 +12,11 @@ Actor.remove = function(mort){
 	if(List.map[mort.map])	delete List.map[mort.map].list[mort.id];
 }
 
+
+	
+	
+
+
 Actor.updateEquip = function(mort){
 	for(var k in Cst.element.list){	//Each Element
 		var i = Cst.element.list[k];
@@ -25,11 +30,15 @@ Actor.updateEquip = function(mort){
 	}
 }
 
-Actor.switchEquip = function(mort,name){
-	var equip = Db.equip[name];
-	if(!equip) return;	//invalid switchEquip
+Actor.switchEquip = function(mort,name,piece){
+	//the player can have nothing in the equip.piece[i]
+	//however, he must have something in the player.weapon
+	//if equip.piece[weapon] is '', player.weapon becomes 'unarmed'
 	
-	var piece = equip.piece;
+	var equip = Db.equip[name];
+	equip = equip || '';	//incase wants to be unarmed
+	
+	piece = piece || equip.piece;		//piece is defined when changing to unarmed
 	var old = mort.equip.piece[piece];	//get old
 	mort.equip.piece[piece] = name;		//set new
 	
@@ -40,18 +49,17 @@ Actor.switchEquip = function(mort,name){
 	
 	
 	var inv = List.main[mort.id].invList;
-	Itemlist.remove(inv,name);		//remove equipped item from inv
-	if(old) Itemlist.add(inv,old);	//add old item if it wasnt unarmed
+	if(equip) Itemlist.remove(inv,name);		//remove equipped item from inv if equip isnt unarmed
+	if(old) Itemlist.add(inv,old);				//add old item if it wasnt unarmed
 	
-	if(Cst.equip.weapon.piece.have(equip.piece)){
-		Actor.swapWeapon(mort,equip.piece);
+	if(Cst.equip.weapon.piece.have(piece)){
+		Actor.swapWeapon(mort,piece);
 	}
 }
 
 Actor.swapWeapon = function(mort,piece){
 	//Equip a weapon already present in the weaponList
-	if(!mort.equip.piece[piece]) return; 		//unarmed on this slot
-	mort.weapon = mort.equip.piece[piece];
+	mort.weapon = mort.equip.piece[piece] || 'unarmed';
 	
 	var equip = Db.equip[mort.weapon];
 	Sprite.change(mort,equip.sprite);

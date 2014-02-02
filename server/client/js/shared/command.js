@@ -228,6 +228,17 @@ Command.list['tab,swapWeapon'] = function(key,type){
 	if(['melee','range','magic'].indexOf(type) === -1){ Chat.add(key,'Invalid Param.'); return;}
 	Actor.swapWeapon(List.all[key],type);
 }
+
+Command.list['tab,removeEquip'] = function(key,type){
+	if(!Cst.equip.piece.have(type)){ Chat.add(key,'Invalid Param.'); return;}
+	if(!Itemlist.empty(List.main[key].invList,1)){ Chat.add(key,'No Inventory room.'); return;}
+	Actor.switchEquip(List.all[key],'',type);
+}
+
+
+
+
+
 //}
 
 //{Clan
