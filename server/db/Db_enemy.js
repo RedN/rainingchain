@@ -111,7 +111,7 @@ Init.db.enemy = function(){ var ePreDb = {};
 	ePreDb["troll"]["ice"] = {  //{
 		"name":"Ice Troll",
 		"sprite":{'name':"troll",'sizeMod':1},
-		"ability":{'bulletSingle':0.2},
+		"abilityList":{'bulletSingle':0.2},
 		'resource':{'hp':{'max':1000,'regen':1},'mana':{'max':100,'regen':1}},
 		
 		'globalDef':1,

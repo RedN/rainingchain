@@ -147,8 +147,8 @@ Actor.loop.input.ability = function(mort){
 		mort.abilityChange.press = '0000000000000000000000'; return;
 	}
 	mort.abilityChange.press = '';
-	for(var i in mort.ability){
-		mort.abilityChange.press += mort.ability[i].chance >= Math.random() ? '1' : '0';	
+	for(var i in mort.abilityList){
+		mort.abilityChange.press += mort.abilityList[i] >= Math.random() ? '1' : '0';	
 	}
 }
 

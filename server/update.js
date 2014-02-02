@@ -194,7 +194,7 @@ Change.update.init = function(){
 						
 				
 				{'array':['ability'],'filter':Change.send.convert.abilityList },
-				{'array':['abilityList'],'filter':Change.send.convert.abilityList },
+				{'array':['abilityList']},
 				
 				{'array':['skill','exp']},
 				{'array':['skill','lvl']},

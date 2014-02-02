@@ -86,11 +86,10 @@ Actor.creation.db = function(e,d){
 		e.boss = Boss.creation(e.boss);
 		e.boss.parent = e.id; 
 	}
-	var count = 0;
-	for(var i in e.ability){ 
-		Actor.learnAbility(e,i,e.ability[i]);
-		Actor.swapAbility(e,count,i);
-		count++;
+	var position = 0;
+	for(var i in e.abilityList){ 
+		Actor.swapAbility(e,i,position);
+		position++;
 	}
 	
 	Sprite.creation(e,e.sprite);		//To set hitbox and bumper

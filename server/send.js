@@ -230,17 +230,14 @@ Change.send.convert.windowList.trade = function(data){
 	return draw;
 }
 
-
 Change.send.convert.abilityList = function(list){
-	var copy = deepClone(list);
-	for(var i in copy){
-		var ab = copy[i];
-		if(ab && ab.action && ab.action.func == 'Combat.action.attack'){
-			ab.action.param = list[i].action.param();
-		}
+	var tmp = [];
+	for(var i in list){
+		tmp[i] = list[i] ? list[i].id : 0;		
 	}
-	return copy;
+	return tmp;
 }
+
 
 Change.send.convert.abilityChangeClient = function(info){
 	var tmp = '';

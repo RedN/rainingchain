@@ -427,14 +427,14 @@ Ability.creation = function(a){
 	a.action = a.action || [];
 	
 	if(a.action){
-		if(a.action.func === 'Combat.action.attack'){
-			if(a.action.anim !== false && !a.action.anim) a.action.anim = 'attack';
+		var aa = a.action;
+		if(aa.func === 'Combat.action.attack'){
+			if(aa.anim !== false && !aa.anim) aa.anim = 'attack';
 			
-			var at = a.action.param;
-			at.dmg.ratio = convertRatio(at.dmg.ratio);
+			aa.param.dmg.ratio = convertRatio(aa.param.dmg.ratio);
 		}
-		if(a.action.func === 'Combat.action.boost'){
-			if(a.action.animOnSprite !== false && !a.action.animOnSprite) action.animOnSprite = 'boost';
+		if(aa.func === 'Combat.action.boost'){
+			if(aa.animOnSprite !== false && !aa.animOnSprite) action.animOnSprite = 'boost';
 		}
 	}
 
@@ -454,8 +454,9 @@ Ability.creation = function(a){
 	return a.id;
 }
 
-Ability.uncompress = function(abi){	
-	var ab = typeof abi === 'object' ? abi : deepClone(Db.ability[abi]);
+Ability.uncompress = function(name){	
+	var ab = typeof name === 'object' ? name : deepClone(Db.ability[name]);
+	if(!ab) return 0;
 	
 	ab = Ability.uncompress.mod(ab);
 	
@@ -468,10 +469,11 @@ Ability.uncompress = function(abi){
 }
 
 Ability.uncompress.mod = function(ab){	
-	for(var i in ab.modList){
-		ab = abilityModDb[i].func(ab,ab.modList[i],Craft.orb.upgrade.formula(ab.modList[i]));
+	for(var i in ab.modList){	//custom mods
+		var amountOrb = ab.modList[i];
+		ab = abilityModDb[i].func(ab,amountOrb,Craft.orb.upgrade.formula(amountOrb));
 	}
-	ab = Db.ability.orb[ab.orb.upgrade.bonus](ab,ab.orb.upgrade.amount);
+	ab = Db.ability.orb[ab.orb.upgrade.bonus](ab,ab.orb.upgrade.amount);	//regular upgrade
 	return ab;
 }
 

@@ -190,7 +190,6 @@ Draw.minimap.icon = function(s){	//creates lag? bug NEEDWORK
 			var numY = cy+vy/zoom/ratio-size/2;
 		
 			if(Collision.PtRect({x:numX+size/2,y:numY+size/2},[s.x,s.x+Cst.WIDTH/main.pref.mapRatio,s.y,s.y+Cst.HEIGHT/main.pref.mapRatio])){
-				console.log(1);
 				Draw.icon(m.minimapIcon,[numX,numY],size);
 			}
 		}

@@ -6,7 +6,6 @@ if(!Actor.template) Actor.template = {};
 Init.actor = function(){
 	var defaultPreActor = function(type){
 		var mort = {};
-
 		
 		//{Dont touch
 		mort.change = {};
@@ -138,10 +137,6 @@ Init.actor = function(){
 		//}	
 	
 
-		
-
-	
-		
 		//{Player Only
 		if(type === 'player'){
 			mort.skill = Actor.template.skill();
@@ -230,22 +225,16 @@ Actor.template.mastery = function(type){
 
 Actor.template.abilityList = function(){
 	return {
-		'bulletMulti':{id:'bulletMulti'},
-		'bulletMulti-boom':{id:'bulletMulti-boom'},
-		'bulletMulti-para':{id:'bulletMulti-para'},
-		'bulletMulti-sin':{id:'bulletMulti-sin'},
-		'bulletMulti-hitmod':{id:'bulletMulti-hitmod'},
-		'bulletMulti-fast':{id:'bulletMulti-fast'},
-		
-		//'bulletSingle':{id:'bulletSingle'},
-		//'strikeSingle':{id:'strikeSingle'},
-		//'dodgeRegular':{id:'dodgeRegular'},
-		//'stumble':{id:'stumble'},
-		//'summonDragon':{id:'summonDragon'},
+		'bulletMulti':1,
+		'bulletMulti-boom':1,
+		'bulletMulti-para':1,
+		'bulletMulti-sin':1,
+		'bulletMulti-hitmod':1,
+		'bulletMulti-fast':1,
 	};
 }
 Actor.template.ability = function(){
-	return [{id:'bulletMulti'}];
+	return [0,0,0,0,0,0];
 }
 
 

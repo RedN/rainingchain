@@ -184,11 +184,12 @@ Command.list['win,passive,select'] = function(key,i,j){
 	Main.selectPassive(List.main[key],i,j);
 }
 
-Command.list['win,ability,swap'] = function(key,input,ab){
-	input = +input;
-	if(typeof input !== 'number' || typeof ab !== 'string'){ return; }
-	if(input < 0 || !List.all[key].abilityList[ab]){ return; } 
-	Actor.swapAbility(List.all[key],input,ab);
+Command.list['win,ability,swap'] = function(key,name,position){
+//(key,input,ab){
+	position = +position;
+	if(typeof position !== 'number' || typeof name !== 'string'){ return; }
+	if(position < 0 || !List.all[key].abilityList[name]){ return; } 
+	Actor.swapAbility(List.all[key],name,position);
 }
 
 Command.list['win,ability,mod'] = function(key,modid,abid){

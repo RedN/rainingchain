@@ -313,24 +313,28 @@ Actor.removeAbility = function(mort,name){
 	}
 }
 
-Actor.swapAbility = function(mort,abPos,abListPost){
-	var abl = mort.abilityList[abListPost];
+Actor.swapAbility = function(mort,name,position){
 	
+	/*
 	if(mort.type === 'player'){
 		if(abPos === 4 && mort.abilityList[abListPost].type !== 'heal'){Chat.add(mort.id,'This ability slot can only support Healing abilities.'); return;}	
 		if(abPos === 5 && mort.abilityList[abListPost].type !== 'dodge'){Chat.add(mort.id,'This ability slot can only support Dodge abilities.'); return;}	
 	}
-	mort.ability[abPos] = mort.abilityList[abListPost];
+	*/
+	if(!mort.abilityList[name]) return; 		//dont have access to this ability
+	var ability = Ability.uncompress(name);
+	
+	mort.ability[position] = ability;
 	mort.abilityChange = Actor.template.abilityChange();
 	for(var i in mort.ability){ 
-		if(mort.ability[i]){
-			mort.abilityChange.charge[mort.ability[i].id] = 0;
-		}
+		if(mort.ability[i])		mort.abilityChange.charge[mort.ability[i].id] = 0;
 	}
 
 }
 
 Actor.learnAbility = function(mort,name,chance){
+	return; //useless..
+	
 	if(mort.abilityList[name]) return; //verify if already ahve
 	
 	var ab = Ability.uncompress(deepClone(Db.ability[name]));

@@ -236,19 +236,9 @@ Load.player = function(key,user,cb){
 
 Save.player.compress = function(player){
     //player.equip = {piece:player.equip.piece};
+	
+	for(var i in player.ability)	player.ability[i] = player.ability[i] ? player.ability[i].id : 0;
 
-	var tmp = [];
-    for(var i in player.ability)   if(player.ability[i])  tmp.push(player.ability[i].id);
-	player.ability = tmp;
-	
-	var tmp = [];
-	console.log(player.ability,player.abilityList);
-    for(var i = 0; i< player.abilityList.length;i++){	//cuz also have attribute... but only array is good
-		tmp.push(player.abilityList[i]); 
-	}
-	player.abilityList = tmp;
-	
-	
 	if(!player.map.have("@MAIN")){
 		player.x = player.mapSignIn.x || 0;
 		player.y = player.mapSignIn.y || 0;
@@ -267,15 +257,7 @@ Load.player.uncompress = function(player){
 	*/
 	Actor.updateEquip(player);
 	
-    for(var i in player.abilityList){
-		var id = player.abilityList[i];
-        player.abilityList[id] = Ability.uncompress(deepClone(Db.ability[id]));
-    }
-    for(var i in player.ability){
-        if(player.ability[i]){
-            Actor.swapAbility(player,+i,player.ability[i]);
-        }
-    }
+    for(var i in player.ability)	player.ability[i] = Ability.uncompress(player.ability[i]);
     return player;
 }
 

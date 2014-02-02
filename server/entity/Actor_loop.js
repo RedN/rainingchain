@@ -48,19 +48,22 @@ Actor.loop.ability = function(m){
 	
 	for(var i in m.ability){	
 		var s = m.ability[i]; if(!s || !s.period) continue;	//cuz can have hole if player AND enemy attack rate is are in m.ability
+		var id = s.id;
 		
-		
-		var charge = m.abilityChange.charge;
+		var charge = m.abilityChange.charge;	//cant used [id] cuz otherwise not longer reference
 		var press = +m.abilityChange.press[i];
 		
-		if(!alreadyBoosted[s.id]){  //this is because a player can set the same ability to multiple input
-			for(var j in s.spd)	charge[s.id] += m.atkSpd[j] * s.spd[j];
-			alreadyBoosted[s.id] = 1;
+		//Charge
+		if(!alreadyBoosted[id]){  //this is because a player can set the same ability to multiple input
+			for(var j in s.spd)	charge[id] += m.atkSpd[j] * s.spd[j];
+			alreadyBoosted[id] = 1;
 		}
 		
-		m.abilityChange.chargeClient[i] = (charge[s.id] >= s.period.own) ? 1 : (charge[s.id] / s.period.own);
-
-		if(press && charge[s.id] >= s.period.own && m.abilityChange.globalCooldown <= 0){
+		//Client
+		//m.abilityChange.chargeClient[i] = (charge[id] >= s.period.own) ? 1 : (charge[id] / s.period.own);
+	
+		//Perform
+		if(press && charge[id] >= s.period.own && m.abilityChange.globalCooldown <= 0){
 			Actor.performAbility(m,s);
 			break;	//1 ability per frame max
 		}

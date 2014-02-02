@@ -4,22 +4,29 @@ if(server){
 	
 	
 Db.query = function(d){
-	var source; var filter;
-
-	switch(d.db){
-		case 'equip': source = Db.equip;	break;
-		case 'ability': source = Db.ability;	break;		
-		case 'plan': source = Db.plan; filter = Db.query.plan; break;
+	var list = {
+		equip:{
+			source:Db.equip,
+		},
+		ability:{
+			source:Db.ability,	//note: in Db, ability attack are in object
+		},
+		plan:{
+			source:Db.plan,
+			filter:Db.query.plan
+		},
 	}
-	if(!source) return;
-	d.info = source[d.id];
-	if(!d.info) return;
-
-	if(filter) d.info = filter(deepClone(d.info));
 	
+	if(!list[d.db]) return;
+	
+	var info = list[d.db].source[d.id];
+	if(!info) return;
+
+	if(list[d.db].filter) info = list[d.db].filter(deepClone(info));
+	
+	d.info = info;
 	return d;
 }
-
 
 
 Db.query.plan = function(info){
