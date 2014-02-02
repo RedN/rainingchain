@@ -2,7 +2,6 @@
 
 draw passive weird block for special balancedAtk
 
-white items...
 
 
 #Priority 2:
@@ -12,6 +11,7 @@ white items...
 -anim??s
 
 #Priority 3:
+white items...
 
 
 easy mode

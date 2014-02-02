@@ -340,17 +340,9 @@ Actor.swapAbility = function(mort,name,position){
 
 }
 
-Actor.learnAbility = function(mort,name,chance){
-	return; //useless..
-	
-	if(mort.abilityList[name]) return; //verify if already ahve
-	
-	var ab = Ability.uncompress(deepClone(Db.ability[name]));
-		
-	mort.abilityList[ab.id] = ab;
-	if(mort.type === 'enemy'){
-		ab.chance = chance || 1;
-	}
+Actor.learnAbility = function(mort,name){
+	if(!Db.ability[name]) return;
+	mort.abilityList[name] = 1;
 }
 
 Actor.examineAbility = function(mort){}

@@ -12,6 +12,19 @@ a['bulletMulti'] = {					//bulletMulti is the id of attack
 		'global':10,					//amount of frame where player cant use any ability
 	},                        
 	
+	
+	'modList':{
+		//to be added by player
+	},
+	'orb' = {
+		'upgrade':{
+			'amount':0,
+			'bonus':'none'			//specify what type of bonus the orb of upgrade grants to this ability
+		}
+	},
+	
+	
+	
 	'action':{
 		'anim':'attack',				//sprite animation to perform
 		'animOnSprite:'boost',			//anim to create below the player
@@ -283,13 +296,6 @@ Init.db.ability = function(cb){
 	}};
 	
 	
-			
-	
-	
-	
-	
-	
-	
 	
 	//test above
 	
@@ -329,6 +335,11 @@ Init.db.ability = function(cb){
 	};
 	
 	
+	if(server){
+		Init.db.ability.orb();
+		Init.db.ability.mod();
+		Init.db.ability.template();	
+	}
 	
 	for(var i in a){
 		a[i].id = i;
@@ -336,18 +347,20 @@ Init.db.ability = function(cb){
 	}	
 	cb();});
 	
-	if(server){
-		Init.db.ability.orb();
-		Init.db.ability.mod();
-		Init.db.ability.template();	
-	}
+	
 }
 
+//Each Ability has a Orb Modifier (string) which refer to the Db.abilityOrb (function)
+//A ability can be upgraded with orb of upgrade. doing so, the new ability will be modified depending on Orb Modifier
+
+//Each ability can also have mods that come in Db.abilityMod
+
+
 Init.db.ability.template = function(){
-	Db.ability.template = {}; var a = Db.ability.template;
+	Db.abilityTemplate = {}; var a = Db.abilityTemplate;
 	
 	a['fireball'] = {'type':'attack','name':'Fireball','icon':'attackMagic.fireball',
-		'spd':{'main':0.8,'support':0.2},'period':[15,20],'orb':'dmg',
+		'spd':{'main':0.8,'support':0.2},'period':{'own':[10,20],'global':[10,20]},'orb':'dmg',		
 		'action':{'func':'Combat.action.attack','param':{	
 			'type':"bullet",'angle':0,'amount':1,
 			'objImg':{'name':"arrow",'sizeMod':1},'hitImg':{'name':"fire_explosion",'sizeMod':0.5},
@@ -357,74 +370,46 @@ Init.db.ability.template = function(){
 	}};
 		
 	for(var i in a){
-		if(Db.ability.orb[a[i].orb]){	a[i].orb = {'upgrade':{'amount':0,'bonus':a[i].orb}};	} 
-		else { 	Db.ability.orb[a[i].id] = a[i].orb; a[i].orb = a[i].id; }	//custom orbMod (need to be func)
-	}
+		//Orb
+		a[i].orb = a[i].orb || 'dmg';
 	
-}
-
-Init.db.ability.mod = function(){	//needed by client
-	Db.ability.mod = {
-		'x2b':{
-			'name':'x2 Bullets',
-			'info':'Your ability shoots x2 more bullets. Main damage is reduced by 50%.',
-			'func':(function(ab,orb,log){
-				var atk = ab.action.param;
-				atk.amount *= 2;
-				atk.dmg.main /= 1.5;
-				return ab;
-			})},	
-	}
-	
-	
-	for(var i in Db.ability.mod){
+		if(Db.abilityOrb[a[i].orb]){
+			a[i].orb = {'upgrade':{'amount':0,'bonus':a[i].orb}};	 
+		} else { 
+			//create a custom orb bonus only for this ability
+			Db.abilityOrb[a[i].id] = a[i].orb;
+			Db.abilityOrb[a[i].id].id = a[i].id;
+		}	
+		
+		
 		Item.creation({
-			name:Db.ability.mod[i].name,
-			icon:'plan.equip',
-			option:[	{'name':'Select Mod','func':'Main.abilityModClick','param':[i]} ],
-			type:'mod',
-			id:'mod-'+i,
+			id:'abilityPlan-'+i,
+			icon:'plan.ability',
+			name:a[i].name,
+			option:[	{'name':'Learn Ability','func':'Plan.use.ability','param':[{'piece':i,'quality':0,'item':'abilityPlan-'+i}]} ],
+			type:'abilityTemplate',		
 		});
+		
 	}
-	
 	
 }
 
-Init.db.ability.orb = function(){
-	//defined here or directly inside Db.ability.template if unique
-	Db.ability.orb = {
-		'dmg':(function(ab,orb,log){
-			var atk = ab.action.param;
-			atk.amount *= log;	//bad
-			return ab;
-		}),
-		'none':(function(ab,orb){
-			return ab;
-		}),
-	}
-}
 
 
 Ability = {};
 Ability.creation = function(a){
-	
 	//Setting Ability
 	db.ability.update( {'id':a.id}, a, { upsert: true }, db.err);	
 	
-	Db.ability[a.id] = a;	
-	a.spd.main = a.spd.main / (a.spd.main + a.spd.support);
-	a.spd.support = 1- a.spd.main;
+	a.spd = convertRatio(a.spd);
 	a.cost = a.cost || {};
 	a.reset = a.reset || {'attack':0};
-	a.targetIf = a.targetIf || 0;
-	a.charge = 0;
-	a.press = 0;
 	a.period = a.period  || {};
 	a.period.own = a.period.own  || 50;
 	a.period.global = a.period.global  || 50;
 	a.modList = a.modList || {};
-	a.orb = {'upgrade':{'amount':0,'bonus':'none'}};
-	a.action = a.action || [];
+	a.orb = a.orb || {'upgrade':{'amount':0,'bonus':'none'}};	//dunno if should be more complete
+	a.action = a.action || {};
 	
 	if(a.action){
 		var aa = a.action;
@@ -437,7 +422,9 @@ Ability.creation = function(a){
 			if(aa.animOnSprite !== false && !aa.animOnSprite) action.animOnSprite = 'boost';
 		}
 	}
-
+	
+	Db.ability[a.id] = a;	
+	
 		
 	//Setting Item Part
 	Item.creation({
@@ -469,15 +456,22 @@ Ability.uncompress = function(name){
 }
 
 Ability.uncompress.mod = function(ab){	
-	for(var i in ab.modList){	//custom mods
+	//ability mods
+	for(var i in ab.modList){
+		var modType = i;
 		var amountOrb = ab.modList[i];
-		ab = abilityModDb[i].func(ab,amountOrb,Craft.orb.upgrade.formula(amountOrb));
+		ab = Db.abilityMod[modType].func(ab,amountOrb,Craft.orb.upgrade.formula(amountOrb));
 	}
-	ab = Db.ability.orb[ab.orb.upgrade.bonus](ab,ab.orb.upgrade.amount);	//regular upgrade
+	
+	//ability orb
+	var orbType = ab.orb.upgrade.bonus;
+	var amountOrb = ab.orb.upgrade.amount;
+	ab = Db.abilityOrb[orbType].func(ab,amountOrb,Craft.orb.upgrade.formula(amountOrb));	
+	
 	return ab;
 }
 
-Ability.template = function(){
+Ability.template = function(){	//unused
 	return {
 		'name':'Fire','icon':'melee.mace',
 		'cost':{"dodge":0},'reset':{'attack':0},
@@ -491,7 +485,7 @@ Ability.template = function(){
 	};
 }
 
-Ability.template.attack = function(){
+Ability.template.attack = function(){	//unused
 	return {
 		'type':"bullet",'angle':5,'amount':1, 'aim': 0,
 		'objImg':{'name':"fireball",'sizeMod':1},'hitImg':{'name':"fire2",'sizeMod':0.5},

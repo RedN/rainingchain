@@ -288,16 +288,18 @@ Craft.orb.upgrade.formula = function(x){
 
 //{Ability BROKEN
 Craft.ability = function(seed){
+	//seed: quality, piece (piece refers to the id of the template to use);
+
 	var a = Craft.ability.template(seed);
 	Ability.creation(a);
 	return a.id;	
 }
 
 Craft.ability.template = function(seed){
-	var qua = seed.quality || 1;
-	var an = seed.type || 'fireball';
+	var qua = seed.quality || 0;
+	var an = seed.piece || 'fireball';
 
-	var ab = deepClone(Db.ability.template[an]);
+	var ab = deepClone(Db.abilityTemplate[an]);
 	
 	if(typeof ab.period.global === 'object'){ ab.period.global = Craft.boost.roll(ab.period.global,qua); }
 	if(typeof ab.period.own === 'object'){ ab.period.own = Craft.boost.roll(ab.period.own,qua); }
@@ -345,22 +347,22 @@ Craft.ability.template = function(seed){
 	return ab;
 }
 
-Craft.ability.mod = function(key,abid,mod){
+Craft.ability.mod = function(key,id,mod){
 	//abid: Ability Id, mod: mod Id
 	
 	//Verify
-	var ab = deepClone(Db.ability[abid]);
+	var ab = deepClone(Db.ability[id]);
 	if(ab.modList[mod] !== undefined){ Chat.add(key,'This ability already has this mod.'); return; }
 	if(Object.keys(ab.modList).length > 5){ Chat.add(key,'This ability already has the maximal amount of mods.'); return; }
 	
 	//Add
 	ab.modList[mod] = 0;
-	Actor.removeAbility(List.all[key],abid);
+	Actor.removeAbility(List.all[key],id);
 	ab.id = Math.randomId();
 	Ability.creation(ab);
 	Actor.learnAbility(List.all[key],ab.id);
 	Chat.add(key,'Mod Added.');
-	Itemlist.remove(List.main[key].invList,'mod-'+ mod);	
+	Itemlist.remove(List.main[key].invList,Db.abilityMod[mod].item);	
 }
 
 

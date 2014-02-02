@@ -275,8 +275,8 @@ Load.initData = function(key,player,main){
             'equip':0,
             'weapon':0,
             'skill':0,
-            'ability':Change.send.convert.abilityList,
-            'abilityList':Change.send.convert.abilityList
+            'ability':Change.send.convert.ability,
+            'abilityList':0,
         },
         'main':{
             'passive':0,

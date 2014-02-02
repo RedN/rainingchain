@@ -193,7 +193,7 @@ Change.update.init = function(){
 				{'array':['def']},
 						
 				
-				{'array':['ability'],'filter':Change.send.convert.abilityList },
+				{'array':['ability'],'filter':Change.send.convert.ability },
 				{'array':['abilityList']},
 				
 				{'array':['skill','exp']},

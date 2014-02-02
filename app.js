@@ -59,6 +59,7 @@ require('./server/Draw');
 
 require('./server/db/Db_enemy');
 require('./server/db/Db_ability');
+require('./' + clientPath + 'client/js/shared/Db_ability_sub');
 require('./server/db/Db_item');
 require('./server/db/Db_plan');
 require('./server/db/Db_equip');

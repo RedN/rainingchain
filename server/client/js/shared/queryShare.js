@@ -100,6 +100,10 @@ if(server){
 				var key = socket.key;
 				var p = List.all[key];
 				var m = List.main[key];
+				var inv = List.main[key].invList;
+				
+				var add = Itemlist.add;
+				
 				var q = m.quest;
 				var e = [];
 				var pl = [];

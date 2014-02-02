@@ -119,14 +119,13 @@ Main.selectInv = function(main,obj){
 
 Main.abilityModClick = function(main,id){
 	if(!main.windowList.ability){
-		Chat.add(main.id,'The Ability Window needs to be opened to use this mod. It will have the following effect: <br>' + abilityModDb[id].info);
+		Chat.add(main.id,'The Ability Window needs to be opened to use this mod. It will have the following effect: <br>' + Db.abilityMod[id].info);
 		return;
 	} else {
-		main.chatInput = ['$win,ability,mod,' + id + ',',0];
+		main.chatInput = ['$win,ability,addMod,' + id + ','   ,   0];
 	}
 	
 }
-
 
 
 

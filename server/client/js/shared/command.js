@@ -192,18 +192,20 @@ Command.list['win,ability,swap'] = function(key,name,position){
 	Actor.swapAbility(List.all[key],name,position);
 }
 
-Command.list['win,ability,mod'] = function(key,modid,abid){
-	if(!List.all[key].abilityList[abid] || !abilityModDb[modid] || !Itemlist.have(List.main[key].invList,'mod-'+modid)){ Chat.add(key,'bad'); }
-	Craft.ability.mod(key,abid,modid);
-}
-
 Command.list['win,ability,upgrade'] = function(key,abid,amount){
 	amount = +amount;
 	if(!amount || !List.all[key].abilityList[abid] || amount < 1){ Chat.add(key,'Wrong'); return;}
 	Craft.orb(key,'upgrade',amount,abid);	
 }
-Command.list['win,ability,upMod'] = function(key,abid,mod,amount){
+Command.list['win,ability,addMod'] = function(key,mod,abid){
+	if(!List.all[key].abilityList[abid] || !Db.abilityMod[mod]){ Chat.add(key,'Wrong Input.'); return; }
+	if(!Itemlist.have(List.main[key].invList,Db.abilityMod[mod].item)){ Chat.add(key,'You don\'t have this mod.'); return; }
+
+	Craft.ability.mod(key,abid,mod);
+}
+Command.list['win,ability,upMod'] = function(key,abid,mod,amount){	//cant be named upgradeMod cuz inteference with ability,upgrade
 	amount = +amount;
+	console.log(1,List.all[key].abilityList[abid],amount);
 	if(!amount || !List.all[key].abilityList[abid] || amount < 1){ Chat.add(key,'Wrong'); return;}
 	Craft.orb(key,'upgrade',amount,abid,mod);	
 }

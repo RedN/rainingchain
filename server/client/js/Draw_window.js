@@ -429,40 +429,7 @@ Draw.window.ability.abilityList = function(diffX){ ctxrestore();
 		
 	}
 }
-
-Draw.window.ability.upgrade = function(diffX,diffY){
-	var s = Draw.window.main.constant(); 
-	s.x += diffX;
-	s.y += diffY;
-	s.zx += diffX;
-	s.zy += diffY;
 	
-	var hu = html.abilityWin.upgrade;
-	hu.style.left = diffX + 'px'; 
-	hu.style.top = diffY + 'px'; 
-	hu.style.width = '400px';
-	hu.style.height = '400px';
-	hu.style.font = 30 + 'px Monaco';
-	
-	var str = 
-	'<span ' + 
-	'onclick="Draw.window.ability.generalInfo.mod();' + '" ' + 
-	'title="Add Ability Modifier"' + 
-	'>' + 'Add Mod' + 
-	'</span>';
-	str +=  '<br>';
-	str +=
-	'<span ' + 
-	'onclick="Draw.window.ability.generalInfo.upgrade();' + '" ' + 
-	'title="Upgrade using Ability Upgrades"' + 
-	'>' + 'Upgrade' + 
-	'</span>';
-	
-	if(Draw.old.abilityUpgrade !== str){
-		hu.innerHTML = str;
-		Draw.old.abilityUpgrade = str;
-	}
-}	
 
 Draw.window.ability.generalInfo = function(diffX,diffY){ ctxrestore();
 	var s = Draw.window.main.constant(); 
@@ -515,7 +482,7 @@ Draw.window.ability.generalInfo = function(diffX,diffY){ ctxrestore();
 			'</span>';
 			
 			str += '<span ' +
-			'title="' + abilityModDb[array[i]].info + '">' + plus + abilityModDb[array[i]].name + '</span>';
+			'title="' + Db.abilityMod[array[i]].info + '">' + plus + Db.abilityMod[array[i]].name + '</span>';
 		} else { str += '+ ________________'}
 		
 		str += '</td>';
@@ -529,9 +496,43 @@ Draw.window.ability.generalInfo = function(diffX,diffY){ ctxrestore();
 	}
 }
 
+Draw.window.ability.upgrade = function(diffX,diffY){
+	var s = Draw.window.main.constant(); 
+	s.x += diffX;
+	s.y += diffY;
+	s.zx += diffX;
+	s.zy += diffY;
+	
+	var hu = html.abilityWin.upgrade;
+	hu.style.left = diffX + 'px'; 
+	hu.style.top = diffY + 'px'; 
+	hu.style.width = '400px';
+	hu.style.height = '400px';
+	hu.style.font = 30 + 'px Monaco';
+	
+	var str = 
+	'<span ' + 
+	'onclick="Draw.window.ability.generalInfo.mod();' + '" ' + 
+	'title="Add Ability Modifier"' + 
+	'>' + 'Add Mod' + 
+	'</span>';
+	str +=  '<br>';
+	str +=
+	'<span ' + 
+	'onclick="Draw.window.ability.generalInfo.upgrade();' + '" ' + 
+	'title="Upgrade using Ability Upgrades"' + 
+	'>' + 'Upgrade' + 
+	'</span>';
+	
+	if(Draw.old.abilityUpgrade !== str){
+		hu.innerHTML = str;
+		Draw.old.abilityUpgrade = str;
+	}
+}
+
 Draw.window.ability.generalInfo.mod = function(){
-	if(html.chat.input.value.indexOf('$win,ability,mod,') !== -1){
-		Chat.send.command(html.chat.input.value + Draw.old.abilityShowed);
+	if(html.chat.input.value.have('$win,ability,addMod,')){
+		Chat.send.command(html.chat.input.value + Draw.old.abilityShowed.id);
 		html.chat.input.value = '';
 	} else {
 		Chat.add('Select an ability mod in your inventory first.');
@@ -539,7 +540,7 @@ Draw.window.ability.generalInfo.mod = function(){
 }
 
 Draw.window.ability.generalInfo.upgrade = function(){
-	var name = Draw.old.abilityShowed;
+	var name = Draw.old.abilityShowed.id;
 	var option = {'name':'Upgrade ' + name,'count':1,'option':[
 		{'name':'Use 1 Orb','func':Chat.send.command,'param':['$win,ability,upgrade,' + name + ',1']},
 		{'name':'Use 10 Orbs','func':Chat.send.command,'param':['$win,ability,upgrade,' + name + ',10']},
@@ -550,16 +551,19 @@ Draw.window.ability.generalInfo.upgrade = function(){
 }
 
 Draw.window.ability.generalInfo.upMod = function(mod){
-	var name = Draw.old.abilityShowed;
-	var option = {'name':'Upgrade Mod ' + abilityModDb[mod].name + ' of ' + name,'count':1,'option':[
+	var name = Draw.old.abilityShowed.id;
+	var option = {'name':'Upgrade Mod','count':1,'option':[
 		{'name':'Use 1 Orb','func':Chat.send.command,'param':['$win,ability,upMod,' + name + ',' + mod + ',1']},
 		{'name':'Use 10 Orbs','func':Chat.send.command,'param':['$win,ability,upMod,' + name + ',' + mod + ',10']},
 		{'name':'Use 100 Orbs','func':Chat.send.command,'param':['$win,ability,upMod,' + name + ',' + mod + ',100']},
-		{'name':'Use ' +main.pref.orbAmount+ ' Orbs','func':Input.add,'param':['$win,ability,upMod,' + name + ',' + mod + ',' +main.pref.orbAmount]},
+		{'name':'Use X Orbs','func':Input.add,'param':['$win,ability,upMod,' + name + ',' + mod + ',']},
 	]};
 	
 	Button.optionList(option);
 }
+
+
+
 
 Draw.window.ability.action = function(diffX,diffY){ ctxrestore();
 	var ab = Draw.old.abilityShowed;

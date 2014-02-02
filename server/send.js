@@ -230,7 +230,7 @@ Change.send.convert.windowList.trade = function(data){
 	return draw;
 }
 
-Change.send.convert.abilityList = function(list){
+Change.send.convert.ability = function(list){
 	var tmp = [];
 	for(var i in list){
 		tmp[i] = list[i] ? list[i].id : 0;		
