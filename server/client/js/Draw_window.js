@@ -572,8 +572,8 @@ Draw.window.ability.action.attack = function(diffX,diffY){  ctxrestore();
 	s.zy += diffY;
 	
 	
-	var equip = Db.equip[player.weapon.id];
-	if(equip === undefined){Db.query('equip',player.weapon.id); return; }
+	var equip = Db.equip[player.weapon];
+	if(equip === undefined && player.weapon){Db.query('equip',player.weapon); return; }
 	if(equip === 0){return;} //waiting for query answer
 	
 	

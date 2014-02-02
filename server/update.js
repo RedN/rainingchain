@@ -178,23 +178,8 @@ Change.update.init = function(){
 				{'array':['status'],'filter':Change.send.convert.status},
 				
 				
-				{'array':['equip','piece','body','id'],'sendArray':['equip','piece','body'],'sendFilter':Change.send.convert.equipPiece},
-				{'array':['equip','piece','helm','id'],'sendArray':['equip','piece','helm'],'sendFilter':Change.send.convert.equipPiece},
-				{'array':['equip','piece','shield','id'],'sendArray':['equip','piece','shield'],'sendFilter':Change.send.convert.equipPiece},
-				{'array':['equip','piece','bracelet','id'],'sendArray':['equip','piece','bracelet'],'sendFilter':Change.send.convert.equipPiece},
-				{'array':['equip','piece','gloves','id'],'sendArray':['equip','piece','gloves'],'sendFilter':Change.send.convert.equipPiece},
-				{'array':['equip','piece','boots','id'],'sendArray':['equip','piece','boots'],'sendFilter':Change.send.convert.equipPiece},
-				{'array':['equip','piece','pants','id'],'sendArray':['equip','piece','pants'],'sendFilter':Change.send.convert.equipPiece},
-				{'array':['equip','piece','amulet','id'],'sendArray':['equip','piece','amulet'],'sendFilter':Change.send.convert.equipPiece},
-				{'array':['equip','piece','ring','id'],'sendArray':['equip','piece','ring'],'sendFilter':Change.send.convert.equipPiece},
-				
-				{'array':['equip','piece','melee','id'],'sendArray':['equip','piece','melee'],'sendFilter':Change.send.convert.equipPiece},
-				{'array':['equip','piece','range','id'],'sendArray':['equip','piece','range'],'sendFilter':Change.send.convert.equipPiece},
-				{'array':['equip','piece','magic','id'],'sendArray':['equip','piece','magic'],'sendFilter':Change.send.convert.equipPiece},
-				
-				
-				{'array':['weapon','id'],'sendArray':['weapon'],'sendFilter':Change.send.convert.equipWeapon},
-				
+				{'array':['equip','piece']},
+				{'array':['weapon']},
 			
 				
 				

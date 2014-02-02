@@ -100,11 +100,10 @@ Draw.tab.equip = function (){ ctxrestore();
 		var numX = s.x + 10;
 		var numY = s.y + 7 + 5 + 45 * i;
 		var piece = Cst.equip.weapon.piece[i];
-		var equip = player.equip.piece[piece];
 		
-		if(!equip) continue;	//dont have this weapon piece equipped
-		
-		if(player.weapon.piece != piece){ ctx.globalAlpha = 0.5; } 
+		var id = player.equip.piece[piece];
+		var equip = Db.query('equip',id);
+		if(!equip) continue;
 		
 		Draw.icon(equip.icon,[numX,numY],40);
 		ctx.globalAlpha = 1;
@@ -127,9 +126,11 @@ Draw.tab.equip = function (){ ctxrestore();
 		var numY = s.y + 7 + 5 + 45 * Math.floor(i/3);
 		
 		var piece = Cst.equip.armor.piece[i];
-		var equip = player.equip.piece[piece];
+		var equip = Db.equip[player.equip.piece[piece]];
 		
-		if(!equip) continue;	//dont have this piece equipped
+		var id = player.equip.piece[piece];
+		var equip = Db.query('equip',id);
+		if(!equip) continue;
 		
 		Draw.icon(equip.icon,[numX+10,numY],40);
 		

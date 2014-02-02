@@ -39,9 +39,8 @@ Draw.popup.equip.main = function(){
 		var posy = Input.mouse.y;
 	}
 	
-	var equip = Db.equip[id];
-	if(equip === undefined){Db.query('equip',id); return; }
-	if(equip === 0){return;} //waiting for query answer
+	var equip = Db.query('equip',id);
+	if(!equip) return; 
 	
 	var sx = Math.max(0,Math.min(posx-w,Cst.WIDTH-w));
 	var sy = Math.max(0,Math.min(posy-h,Cst.HEIGHT - h));	
@@ -141,9 +140,8 @@ Draw.popup.plan.main = function(){
 		var posy = Input.mouse.y;
 	}
 	
-	var equip = Db.plan[id];
-	if(equip === undefined){Db.query('plan',id); return; }
-	if(equip === 0){return;} //waiting for query answer
+	var equip = Db.query('plan',id);
+	if(!equip) return;
 	
 	var sx = Math.max(0,Math.min(posx-w,Cst.WIDTH-w));
 	var sy = Math.max(0,Math.min(posy-h,Cst.HEIGHT - h));	

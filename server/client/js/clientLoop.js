@@ -29,12 +29,6 @@ Loop.actor = function(){
 
 Loop.player = function(){
 	Actor.loop(player);
-	if(Loop.player.old.weapon !== player.weapon){ 
-		if(Db.equip[player.weapon.id]){ 
-			player.weapon = Db.equip[player.weapon.id]; 
-			Loop.player.old.weapon = player.weapon; 
-		}
-	}
 	if(Loop.player.old.permBoost !== player.permBoost){
 		Actor.update.permBoost(player);	
 		Loop.player.old.permBoost = player.permBoost

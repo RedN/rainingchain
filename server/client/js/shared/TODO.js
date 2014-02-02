@@ -1,4 +1,6 @@
 
+rework abilityList...
+
 draw passive weird block for special balancedAtk
 
 white items...

@@ -17,23 +17,31 @@ Actor.updateEquip = function(mort){
 		var i = Cst.element.list[k];
 		var sum = 0;
 		for(var j in mort.equip.piece){	//Each Piece
-			if(!mort.equip.piece[j]) continue;
-			sum += mort.equip.piece[j].def.main * mort.equip.piece[j].def.ratio[i] * mort.equip.piece[j].orb.upgrade.bonus;
+			var equip = Db.equip[mort.equip.piece[j]];
+			if(!equip) continue;
+			sum += equip.def.main * equip.def.ratio[i] * equip.orb.upgrade.bonus;
 		}
 		mort.equip.def[i] = sum || 1;
 	}
 }
 
 Actor.switchEquip = function(mort,name){
-	var old = mort.equip.piece[Db.equip[name].piece];
 	var equip = Db.equip[name];
-	mort.equip.piece[equip.piece] = equip;
+	if(!equip) return;	//invalid switchEquip
 	
-	if(Cst.equip.armor.piece.have(equip.piece))	
-		Actor.permBoost(mort,equip.piece,mort.equip.piece[equip.piece].boost);
-	Actor.updateEquip(mort);
-	Itemlist.remove(List.main[mort.id].invList,name);
-	Itemlist.add(List.main[mort.id].invList,old.id);
+	var piece = equip.piece;
+	var old = mort.equip.piece[piece];	//get old
+	mort.equip.piece[piece] = name;		//set new
+	
+	if(Cst.equip.armor.piece.have(piece))		//if armor, add boost
+		Actor.permBoost(mort,piece,equip.boost);
+
+	Actor.updateEquip(mort);	//update def
+	
+	
+	var inv = List.main[mort.id].invList;
+	Itemlist.remove(inv,name);		//remove equipped item from inv
+	if(old) Itemlist.add(inv,old);	//add old item if it wasnt unarmed
 	
 	if(Cst.equip.weapon.piece.have(equip.piece)){
 		Actor.swapWeapon(mort,equip.piece);
@@ -42,10 +50,12 @@ Actor.switchEquip = function(mort,name){
 
 Actor.swapWeapon = function(mort,piece){
 	//Equip a weapon already present in the weaponList
+	if(!mort.equip.piece[piece]) return; 		//unarmed on this slot
 	mort.weapon = mort.equip.piece[piece];
 	
-	Sprite.change(mort,mort.weapon.sprite);
-	Actor.permBoost(mort,'weapon',mort.weapon.boost);
+	var equip = Db.equip[mort.weapon];
+	Sprite.change(mort,equip.sprite);
+	Actor.permBoost(mort,'weapon',equip.boost);
 }
 
 Actor.changeHp = function(mort,amount){

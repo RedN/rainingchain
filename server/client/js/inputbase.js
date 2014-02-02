@@ -167,6 +167,8 @@ Input.event.combo = function(){
 
 Input.event.mouse = {};
 Input.event.mouse.click = function(code,dir){
+	console.log(code);
+
 	var start = +$("#chatBoxInput").is(":focus");
 	var num = dir === 'down' ? 1 : 0;
 	if(code === 1) Input.mouse.left = num; 

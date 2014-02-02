@@ -144,11 +144,6 @@ Init.actor = function(){
 		
 		//{Player Only
 		if(type === 'player'){
-			if(server){
-				mort.weapon = Db.equip[mort.weapon.id];
-				for(var i in mort.equip.piece){	mort.equip.piece[i] = Db.equip[mort.equip.piece[i].id];}
-				Actor.updateEquip(mort);
-			}
 			mort.skill = Actor.template.skill();
 			mort.removeList = {};	//for things that got removed from activeList
 			mort.type = 'player';
@@ -198,7 +193,7 @@ Actor.template.skill = function(){
 
 
 Actor.template.weapon = function(){
-	return {"id":"mace",'dmg':{'main':1,'ratio':{'melee':1,'range':1,'magic':1,'fire':1,'cold':1,'lightning':1}}};
+	return 'unarmed';
 };
 
 Actor.template.equip = function(type){
@@ -206,20 +201,8 @@ Actor.template.equip = function(type){
 		return {"def":Cst.element.template(1),"dmg":Cst.element.template(1)};	
 
 	return {
-		"piece":{				
-			"bracelet":{"id":"bracelet"},
-			"helm":{"id":"metalhelm"},
-			"amulet":{"id":"amulet"},
-			"gloves":{"id":"gloves"},
-			"body":{"id":"metalbody"},
-			"shield":{"id":"metalshield"},
-			"boots":{"id":"boots"},
-			"pants":{"id":"pants"},	
-			"ring":{"id":"ring"},
-			"melee":{'id':"mace"},
-			"range":{'id':"boomerang"},
-			"magic":{'id':"wand"},
-		},
+		//"piece":{							"bracelet":{"id":"bracelet"},			"helm":{"id":"metalhelm"},			"amulet":{"id":"amulet"},			"gloves":{"id":"gloves"},			"body":{"id":"metalbody"},			"shield":{"id":"metalshield"},			"boots":{"id":"boots"},			"pants":{"id":"pants"},				"ring":{"id":"ring"},			"melee":{'id':"mace"},			"range":{'id':"boomerang"},			"magic":{'id':"wand"},		},
+		"piece":{"bracelet":'',"helm":'',"amulet":'',"gloves":'',"body":'',"shield":'',"boots":'',"pants":'',"ring":'',"melee":'',"range":'',"magic":'',},
 		"def":Cst.element.template(1),
 		"dmg":Cst.element.template(1),
 	};

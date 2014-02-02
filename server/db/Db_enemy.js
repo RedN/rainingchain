@@ -8,7 +8,7 @@ weapon is always same
 
 ideally:
 enemy.mainDef * ratio = player.equip.def
-enemy.mainDmg = player.weapon
+enemy.mainDmg = player.Weapon
 
 */
 

@@ -99,6 +99,14 @@ Init.db.equip = function (cb){
 		],
 	}
 	
+	
+	pre['unarmed'] = {
+		'piece': 'melee','type': 'mace','icon':'melee.mace',
+		'name':"Mace",'sprite':{'name':"mace",'sizeMod':1},
+		'dmg':{'main':1,'ratio':{'melee':1,'range':1,'magic':1,'fire':1,'cold':1,'lightning':1}},
+	};
+	
+	
 	pre['mace'] = {
 		'piece': 'melee','type': 'mace','icon':'melee.mace',
 		'name':"Mace",'sprite':{'name':"mace",'sizeMod':1},

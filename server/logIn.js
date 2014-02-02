@@ -138,7 +138,7 @@ Save.player = function(key,updateDb){
 	player = Save.player.compress(player);
 	player.username = player.username || player.name;
 	var save = {};
-    var toSave = ['x','y','map','username','context','weapon','equip','lvl','ability','abilityList'];
+    var toSave = ['x','y','map','username','weapon','equip','lvl','ability','abilityList'];
     for(var i in toSave){	save[toSave[i]] = player[toSave[i]]; }
 
     if(updateDb !== false){
@@ -146,27 +146,6 @@ Save.player = function(key,updateDb){
     } else { return save; }	//when sign up
 }
 
-Save.player.compress = function(player){
-    player.weapon = {"id":player.weapon.id};
-    for(var i in player.equip.piece){ player.equip.piece[i] = {"id":player.equip.piece[i].id}; }
-    player.equip = {'piece':player.equip.piece};
-
-    for(var i in player.ability){
-        if(player.ability[i]){
-            player.ability[i] = {"id":player.ability[i].id};
-        }
-    }
-    for(var i in player.abilityList){ player.abilityList[i] = {"id":player.abilityList[i].id}; }
-
-	
-	if(!player.map.have("@MAIN")){
-		player.x = player.mapSignIn.x || 0;
-		player.y = player.mapSignIn.y || 0;
-		player.map = player.mapSignIn.map || 'test@MAIN';		
-	}
-	
-    return player;
-}
 
 Save.main = function(key,updateDb){
 	var main = typeof key === 'string' ? List.main[key] : key;
@@ -245,6 +224,7 @@ Load.player = function(key,user,cb){
 
 		for (var i in db) { player[i] = db[i]; }
 		player.name = player.username;
+		player.context = player.username;
 		player.id = key;
 		player.publicId = player.name;
 		player.team = player.name;
@@ -254,19 +234,46 @@ Load.player = function(key,user,cb){
 	});
 }
 
-Load.player.uncompress = function(player){
-    player.weapon = Db.equip[player.weapon.id];
-    for(var i in player.equip.piece){ player.equip.piece[i] = Db.equip[player.equip.piece[i].id]; }
-    player.equip.def = {'melee':1,'range':1,'magic':1,'fire':1,'cold':1,'lightning':1};
-    player.equip.dmg = {'melee':1,'range':1,'magic':1,'fire':1,'cold':1,'lightning':1};
-    Actor.updateEquip(player);
+Save.player.compress = function(player){
+    //player.equip = {piece:player.equip.piece};
 
+	var tmp = [];
+    for(var i in player.ability)   if(player.ability[i])  tmp.push(player.ability[i].id);
+	player.ability = tmp;
+	
+	var tmp = [];
+	console.log(player.ability,player.abilityList);
+    for(var i = 0; i< player.abilityList.length;i++){	//cuz also have attribute... but only array is good
+		tmp.push(player.abilityList[i]); 
+	}
+	player.abilityList = tmp;
+	
+	
+	if(!player.map.have("@MAIN")){
+		player.x = player.mapSignIn.x || 0;
+		player.y = player.mapSignIn.y || 0;
+		player.map = player.mapSignIn.map || 'test@MAIN';		
+	}
+	
+    return player;
+}
+Load.player.uncompress = function(player){
+	//Equip
+	/*
+	var model = Actor.template.equip('player');
+	model.piece = player.equip.piece;
+	player.equip = model;
+	
+	*/
+	Actor.updateEquip(player);
+	
     for(var i in player.abilityList){
-        player.abilityList[i] = Ability.uncompress(player.abilityList[i].id);
+		var id = player.abilityList[i];
+        player.abilityList[id] = Ability.uncompress(deepClone(Db.ability[id]));
     }
     for(var i in player.ability){
         if(player.ability[i]){
-            Actor.swapAbility(player,+i,player.ability[i].id);
+            Actor.swapAbility(player,+i,player.ability[i]);
         }
     }
     return player;
