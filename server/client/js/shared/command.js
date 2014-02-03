@@ -205,7 +205,6 @@ Command.list['win,ability,addMod'] = function(key,mod,abid){
 }
 Command.list['win,ability,upMod'] = function(key,abid,mod,amount){	//cant be named upgradeMod cuz inteference with ability,upgrade
 	amount = +amount;
-	console.log(1,List.all[key].abilityList[abid],amount);
 	if(!amount || !List.all[key].abilityList[abid] || amount < 1){ Chat.add(key,'Wrong'); return;}
 	Craft.orb(key,'upgrade',amount,abid,mod);	
 }

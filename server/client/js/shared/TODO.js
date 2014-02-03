@@ -5,7 +5,6 @@ draw passive weird block for special balancedAtk
 
 
 #Priority 2:
--Crafting Ability
 -Crafting System with White
 -animation before strike
 -anim??s

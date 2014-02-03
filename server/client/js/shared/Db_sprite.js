@@ -30,13 +30,21 @@ Init.db.sprite = function(){
     	
     //PLAYER
     
-    	
-    
+    	//ts("Sprite.change(p,{'anim':'attack'})")
+		/*
     	"mace":{"src":"actor/mace.png","size":1.5,"side":[3,2,1,0],'hpBar':-40,'legs':20,
     	"preHitBox":[ -20,20,-20,32 ],"preBumperBox":[ -12,12,4,30 ],
     	"anim": {
     		"walk":{"startY":0,"frame":9,"sizeX":64,"sizeY":64,"dir":4,"spd":1,'walk':1,"next":"walk"},
     		"attack":{"startY":0,"frame":9,"sizeX":64,"sizeY":64,"dir":4,"spd":1,"next":"walk"}
+    	}},
+		*/
+		
+		"mace":{"src":"actor/mace.png","size":1.5,"side":[3,2,1,0],'hpBar':-40,'legs':20,
+    	"preHitBox":[ -20,20,-20,32 ],"preBumperBox":[ -12,12,4,30 ],
+    	"anim": {
+    		"walk":{"startY":0,"frame":9,"sizeX":64,"sizeY":64,"dir":4,"spd":1,'walk':1,"next":"walk"},
+    		"attack":{"startY":256,"frame":6,"sizeX":128,"sizeY":64,"dir":4,"spd":1,"next":"walk"}
     	}},
 		
 		"sword":{"src":"actor/mace.png","size":1.5,"side":[3,2,1,0],'hpBar':-40,'legs':20,
@@ -114,14 +122,14 @@ Init.db.sprite = function(){
     	"slime":{"src":"actor/slime.png","size":1,"side":[0,1,2,3],'hpBar':-110,'legs':70,
     	"preHitBox":[ -70,70,-45,90 ],"preBumperBox":[ -55,55,-15,80 ],
     	"anim": {
-    		"walk":{"startY":0,"frame":5,"sizeX":200,"sizeY":200,"dir":4,"spd":0.5,"next":"walk"},
+    		"walk":{"startY":0,"frame":5,"sizeX":200,"sizeY":200,"dir":4,"spd":0.5,'walk':1,"next":"walk"},
     		"attack":{"startY":0,"frame":5,"sizeX":200,"sizeY":200,"dir":4,"spd":0.5,"next":"walk"},
     	}},
     
     	"troll":{"src":"actor/troll.png","size":1,"side":[0,1,2,3],'hpBar':-70,'legs':35,
     	"preHitBox":[ -33,33,-30,64 ],"preBumperBox":[ -33,33,-30,64 ],
     	"anim": {
-    		"walk":{"startY":0,"frame":9,"sizeX":128,"sizeY":128,"dir":4,"spd":0.25,"next":"walk"},
+    		"walk":{"startY":0,"frame":9,"sizeX":128,"sizeY":128,"dir":4,"spd":0.25,'walk':1,"next":"walk"},
     		"attack":{"startY":0,"frame":9,"sizeX":128,"sizeY":128,"dir":4,"spd":0.25,"next":"walk"},
     		
     	}},
@@ -224,7 +232,8 @@ Sprite.template = function(){
 	return {
     	name:'pBow',
     	anim:'walk',
-    	sizeMod : 1,
+    	oldAnim:'walk',
+		sizeMod : 1,
     	startX : 0,
     	spdBoost : 1,
     	timer : 0,
@@ -237,20 +246,21 @@ Sprite.template = function(){
 
 Sprite.change = function(mort,info){
     if(!mort || !mort.sprite) return;
-    if(info.name){ Sprite.creation(mort,info);}
+
 	if(info.anim){ 
 		mort.sprite.anim = info.anim;
 		mort.sprite.startX = 0;
 		mort.sprite.spdBoost = 1;
 		mort.sprite.timer = 0;
 	}
-	mort.sprite.anim = mort.sprite.anim || "walk";
+	mort.sprite.name = info.name || mort.sprite.name || 'mace';
 	mort.sprite.sizeMod = info.sizeMod || mort.sprite.sizeMod || 1;
 	
-	if(server && (info.name || info.sizeMod)) Sprite.updateBumper(mort);
+	if(info.sizeMod || info.name) Sprite.updateBumper(mort);
+	
 }
 
-Sprite.updateBumper = function(player){	
+Sprite.updateBumper = function(player){		//server only
 	//Set the Sprite Bumper Box to fit the sizeMod
 	if(Db.sprite[player.sprite.name].hitBox){	//Attack Dont
 		player.hitBox = deepClone(Db.sprite[player.sprite.name].hitBox);
@@ -267,12 +277,18 @@ Sprite.updateBumper = function(player){
 
 
 
-Sprite.update = function (mort){
+Sprite.update = function (mort){	//client side only
 	if(!mort.sprite) return;
-	var spriteServer = mort.sprite;
-	var spriteFromDb = Db.sprite[spriteServer.name];
-	var image = spriteFromDb.img;
-	var animFromDb = spriteFromDb.anim[spriteServer.anim];
+	var spriteFromDb = Db.sprite[mort.sprite.name];
+	
+	if(mort.sprite.animOld !== mort.sprite.anim){	//otherwise, animation can be cut if timer for walk is high 
+		mort.sprite.animOld = mort.sprite.anim;
+		Sprite.change(mort,{'anim':mort.sprite.anim});
+	}
+	var animFromDb = spriteFromDb.anim[mort.sprite.anim];
+	
+	
+	
 	
 	var mod = 1;
 	if(animFromDb.walk){    //if walking, the speed of animation depends on movement speed

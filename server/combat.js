@@ -49,19 +49,17 @@ Combat.action = function(id,action){
     var player = typeof id === 'string' ? List.all[id] : id;
 	if(!player) return;
 
-  
-	if(action.anim)	Sprite.update(player,{'anim':action.anim});
+	if(action.anim !== false){
+		Sprite.change(player,{'anim':action.anim || 'attack'});
+	}
 	if(action.animOnSprite)	Anim.creation(action.animOnSprite,player,1);
-	
-
-	if(action.func && action.param)	applyFunc.key(id,action.func,action.param);
-    
 }
 
 
 		
 
 Combat.action.attack = function(id,action,extra){   
+	Combat.action(id,action);
 	var player = typeof id === 'string' ? List.all[id] : id;
 	
 	//Add Bonus and mastery
@@ -71,7 +69,7 @@ Combat.action.attack = function(id,action,extra){
 }
 
 Combat.action.attack.perform = function(player,attack,extra){   //extra used for stuff like boss loop
-    if(extra){ attack = deepClone(attack); }    //cuz probably from boss
+	if(extra){ attack = deepClone(attack); }    //cuz probably from boss
 	
 	//At this point, player.bonus/mastery must be already applied
 	if(attack.func && attack.func.chance >= Math.random()){
@@ -96,11 +94,11 @@ Combat.action.attack.perform = function(player,attack,extra){   //extra used for
 	}
 }	
 	
-Combat.action.summon = function(key,info,enemy){
-	var name = info.name || Math.randomId();
-	info.maxChild = info.maxChild || 1;
-	info.time = info.time || 1/0;
-	info.distance = info.distance || 500;
+Combat.action.summon = function(key,action,enemy){
+	var name = action.name || Math.randomId();
+	action.maxChild = action.maxChild || 1;
+	action.time = action.time || 1/0;
+	action.distance = action.distance || 500;
 	var master = List.all[key];
 	
 	if(!master.summon[name]){	master.summon[name] = {'child':{}}; }
@@ -117,13 +115,13 @@ Combat.action.summon = function(key,info,enemy){
 		defMod = master.bonus.summon.def;
 	}
 	
-	if(info.maxChild*amountMod > Object.keys(master.summon[name].child).length){	
+	if(action.maxChild*amountMod > Object.keys(master.summon[name].child).length){	
 		var param0 = {
 			'x':master.x,
 			'y':master.y,
 			'map':master.map,
 			'extra':{'deleteOnceDead':1,
-					'summoned':{'father':master.id,'time':info.time*timeMod,'distance':info.distance},
+					'summoned':{'father':master.id,'time':action.time*timeMod,'distance':action.distance},
 					'targetIf':'summoned',
 					'hitIf':'summoned',
 					}
@@ -134,8 +132,8 @@ Combat.action.summon = function(key,info,enemy){
 			var cid = childList[i];
 			master.summon[name].child[cid] = 1;	
 			
-			if(atkMod !== 1){ Actor.boost(cid,{'name':'summon','stat':'globalDmg','time':info.time*timeMod,'type':'*','amount':atkMod}); }
-			if(defMod !== 1){ Actor.boost(cid,{'name':'summon','stat':'globalDef','time':info.time*timeMod,'type':'*','amount':defMod}); }
+			if(atkMod !== 1){ Actor.boost(cid,{'name':'summon','stat':'globalDmg','time':action.time*timeMod,'type':'*','amount':atkMod}); }
+			if(defMod !== 1){ Actor.boost(cid,{'name':'summon','stat':'globalDef','time':action.time*timeMod,'type':'*','amount':defMod}); }
 		
 		}
 	}	

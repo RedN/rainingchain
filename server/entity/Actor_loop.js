@@ -45,7 +45,6 @@ Actor.loop.ability = function(m){
 	m.abilityChange.chargeClient = [0,0,0,0,0,0];
 	
 	m.abilityChange.globalCooldown--; 
-	
 	for(var i in m.ability){	
 		var s = m.ability[i]; if(!s || !s.period) continue;	//cuz can have hole if player AND enemy attack rate is are in m.ability
 		var id = s.id;
@@ -56,6 +55,7 @@ Actor.loop.ability = function(m){
 		//Charge
 		if(!alreadyBoosted[id]){  //this is because a player can set the same ability to multiple input
 			for(var j in s.spd)	charge[id] += m.atkSpd[j] * s.spd[j];
+			charge[id] = charge[id] || 0;	//cuz if null bug
 			alreadyBoosted[id] = 1;
 		}
 		
@@ -85,7 +85,6 @@ Actor.performAbility = function(mort,ab,mana,reset){
 Actor.performAbility.resetCharge = function(mort,ab){
 	var charge = mort.abilityChange.charge;
 	charge[ab.id] = Math.min(charge[ab.id] % ab.period.own,1);
-	
 	mort.abilityChange.globalCooldown =  ab.period.global * (ab.spd.main / mort.atkSpd.main.mm(0.01) + ab.spd.support / mort.atkSpd.support.mm(0.01));
 	
 	//Reset the ability and related abilities
@@ -93,7 +92,7 @@ Actor.performAbility.resetCharge = function(mort,ab){
 		for(var k in mort.ability){
 			if(!mort.ability[k]) continue;
 			if(mort.ability[k].type === j){
-				charge[k] = charge[k] * ab.reset[j];
+				charge[mort.ability[k].id] = charge[mort.ability[k].id] * ab.reset[j];
 			}
 		}
 	}

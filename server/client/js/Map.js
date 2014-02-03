@@ -25,7 +25,7 @@ Map.creation = function(name,info){
 		for(var i = 0 ; i < info[0]; i++){
 			m.img[layer][i] = [];
 			for(var j = 0 ; j < info[1]; j++){
-				var str = "img/Map/" + name + "/" + layer.capitalize() + "/" + name + layer.capitalize() + '_(' + i + ',' + j + ')' + ".png";
+				var str = "img/Map/" + name + "/" + layer.capitalize() + "/" + name + layer.capitalize() + '_(' + i + ',' + j + ')' + '.png';
 				var im = newImage(str);
 				Img.preloader.push(str);
 				m.img[layer][i].push(im);

@@ -394,8 +394,6 @@ Init.db.ability.template = function(){
 	
 }
 
-
-
 Ability = {};
 Ability.creation = function(a){
 	//Setting Ability
