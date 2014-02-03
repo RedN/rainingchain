@@ -24,6 +24,7 @@ Actor.loop = function(mort){
 	if(mort.combat && mort.move) Actor.loop.move.aim(mort); //impact max spd depending on aim
 	
 	if(mort.move){
+		Actor.loop.pushed(mort);
 		Actor.loop.bumper(mort);   //test if collision with map    
 		Actor.loop.move(mort);  	//move the actor
 	}
@@ -113,7 +114,17 @@ Actor.performAbility.resource = function(mort,cost){
 
 //}
 
-//{Stats
+
+Actor.loop.pushed = function(mort){
+	var status = mort.pushed;
+	if(status.time > 0){ 
+		mort.spdX = cos(status.angle)*status.magn;
+		mort.spdY = sin(status.angle)*status.magn;
+		status.time--;
+	}
+}
+
+//{Status + stats
 Actor.loop.status = function(mort){
 	Actor.loop.status.knock(mort);
 	Actor.loop.status.burn(mort);

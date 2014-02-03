@@ -160,11 +160,11 @@ Init.db.sprite = function(){
     	}},
     	
     //Picture
-    	"barrier":{"src":"picture/barrier.png","size":1,"side":[0],
-    	"anim": {
-    		"walk":{"startY":0,"frame":1,"sizeX":80,"sizeY":40,"dir":1,"spd":0,"next":"walk"},
+		"block2x2":{"src":"picture/block2x2.png","size":1,"side":[0],
+    	"preBumperBox":[ -32,32,-32,32 ],"preHitBox":[ -32,32,-32,32 ],
+		"anim": {
+    		"walk":{"startY":0,"frame":1,"sizeX":64,"sizeY":64,"dir":1,"spd":0,"next":"walk"},    	
     	}},
-    
     
     
     	
@@ -195,19 +195,21 @@ Init.db.sprite = function(){
         for(var i in Db.sprite){
     		var sp = Db.sprite[i];
     		sp.sizeMod = 1;
-    		if(sp.preHitBox){
-    			sp.hitBox = []; sp.bumperBox = [];
-    			sp.hitBox[0] = { "x":sp.preHitBox[1]*sp.size,"y":(sp.preHitBox[2]-sp.preHitBox[3])/2*sp.size };
-    			sp.hitBox[1] = { "x":(sp.preHitBox[0]-sp.preHitBox[1])/2*sp.size,"y":sp.preHitBox[3]*sp.size };
-    			sp.hitBox[2] = { "x":sp.preHitBox[0]*sp.size,"y":(sp.preHitBox[2]-sp.preHitBox[3])/2*sp.size };
-    			sp.hitBox[3] = { "x":(sp.preHitBox[0]-sp.preHitBox[1])/2*sp.size,"y":sp.preHitBox[2]*sp.size };
-    			
-    			sp.bumperBox = []; sp.bumperBox = [];
+    		if(sp.preBumperBox){			
+    			sp.bumperBox = [];
     			sp.bumperBox[0] = { "x":sp.preBumperBox[1]*sp.size,"y":(sp.preBumperBox[2]+sp.preBumperBox[3])/2*sp.size };
     			sp.bumperBox[1] = { "x":(sp.preBumperBox[0]+sp.preBumperBox[1])/2*sp.size,"y":sp.preBumperBox[3]*sp.size };
     			sp.bumperBox[2] = { "x":sp.preBumperBox[0]*sp.size,"y":(sp.preBumperBox[2]+sp.preBumperBox[3])/2*sp.size };
     			sp.bumperBox[3] = { "x":(sp.preBumperBox[0]+sp.preBumperBox[1])/2*sp.size,"y":sp.preBumperBox[2]*sp.size };
     		}
+			if(sp.preHitBox){
+    			sp.hitBox = []; 
+    			sp.hitBox[0] = { "x":sp.preHitBox[1]*sp.size,"y":(sp.preHitBox[2]-sp.preHitBox[3])/2*sp.size };
+    			sp.hitBox[1] = { "x":(sp.preHitBox[0]-sp.preHitBox[1])/2*sp.size,"y":sp.preHitBox[3]*sp.size };
+    			sp.hitBox[2] = { "x":sp.preHitBox[0]*sp.size,"y":(sp.preHitBox[2]-sp.preHitBox[3])/2*sp.size };
+    			sp.hitBox[3] = { "x":(sp.preHitBox[0]-sp.preHitBox[1])/2*sp.size,"y":sp.preHitBox[2]*sp.size };
+    		}
+			
     	}
     }
     
@@ -265,7 +267,8 @@ Sprite.updateBumper = function(player){		//server only
 	if(Db.sprite[player.sprite.name].hitBox){	//Attack Dont
 		player.hitBox = deepClone(Db.sprite[player.sprite.name].hitBox);
 		player.bumperBox = deepClone(Db.sprite[player.sprite.name].bumperBox);	
-	
+		
+		
 		for(var i = 0 ; i < player.hitBox.length ; i++){
 			player.hitBox[i].x *= player.sprite.sizeMod;
 			player.hitBox[i].y *= player.sprite.sizeMod;

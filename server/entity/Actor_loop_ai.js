@@ -1,7 +1,7 @@
 
 Actor.loop.input = function(mort){
 	if(mort.type === 'player') return;
-	if(mort.move) Actor.loop.input.move(mort);
+	if(mort.move && mort.moveSelf) Actor.loop.input.move(mort);
 	if(mort.combat && mort.frameCount % 25 === 0){
 		Actor.loop.input.ability(mort);
 	}

@@ -124,7 +124,6 @@ Collision.StrikeActor = function(atk){
 	
 		//Touch?
 		if(Collision.StrikeActor.collision(atk,player)){
-			console.log(1);
 			Combat.collision(atk,player);
 			atk.maxHit--;
 		}

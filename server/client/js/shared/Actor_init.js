@@ -31,19 +31,20 @@ Init.actor = function(){
 			path:{list:[],period:25},
 		};
 		
-		
 		mort.bonus = Actor.template.bonus();	//Bonus applies on top of ability attack. If effect not on ability, do nothing.
 		mort.mastery = Actor.template.mastery(type);
 		
 		mort.status = {
-			'knock':{'active':{"time":0,"magn":0,"angle":0},'resist':0},
-			'burn':{'active':{"time":0,"magn":0},'resist':0},
-			'chill':{'active':{"time":0,"magn":0,"atk":0},'resist':0},
-			'confuse':{'active':{"time":0,"magn":0,"input":[0,1,2,3]},'resist':0},
-			'bleed':{'active':{"time":0,"list":[]},'resist':0,},
-			'drain':{'active':{"time":0,"magn":0},'resist':0},
+			'bleed':{'active':{"time":0,"list":[]},'resist':0,},				//fixed dmg per frame
+			'knock':{'active':{"time":0,"magn":0,"angle":0},'resist':0},		//push
+			'drain':{'active':{"time":0,"magn":0},'resist':0},					//leech mana
+			'burn':{'active':{"time":0,"magn":0},'resist':0},					//dmg pre frame depending on hp
+			'chill':{'active':{"time":0,"magn":0,"atk":0},'resist':0},			//slower move
+			'confuse':{'active':{"time":0,"magn":0,"input":[0,1,2,3]},'resist':0},	//change key moves binding
 		}
-		
+		mort.pushed = {"time":0,"magn":0,"angle":0};							//same than knock but no combat related
+		mort.block = 0; 	//{direction:4,distance:0};
+			
 		mort.angle = 1;	
 		mort.moveAngle = 1;
 		mort.spdX = 0;	
@@ -105,6 +106,8 @@ Init.actor = function(){
 			'aggressive':400,           //attack player if within this range
 			'farthest':400,             //stop follow player if above this range
 		};
+		mort.moveSelf = 1; 		//generate its own input
+		
 		mort.reflect = Cst.element.template(); //% reflected
 		mort.nevercombat = 0;
 		mort.boss = '';
@@ -135,6 +138,8 @@ Init.actor = function(){
 		mort.deleteOnceDead = 0;
 		mort.hitIf = mort.type;
 		mort.targetIf = mort.type;  //condition used by monsters to find their target. check targetIfList
+		mort.onclick = {};
+		
 		//}	
 	
 

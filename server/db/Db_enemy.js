@@ -53,6 +53,7 @@ ePreDb["troll"]["ice"] = {  //{		//troll is category, ice is variant
 		"aggressive":400,		//if player within this range, enemy will attack you
 		"farthest":600			//if player farther than this range, enemy will stop following
 	},	
+	'moveSelf':0,
 	'drop':{
 		'category':{			
 			'regular':1			//drop table used : quantity modifier bonus
@@ -139,6 +140,18 @@ Init.db.enemy = function(){ var ePreDb = {};
 		'nevercombat':1,
 		"acc":0.5,
 		"maxSpd":3,
+	}; //}
+	
+	
+	ePreDb["block"] = {}; //{
+	ePreDb["block"]["2x2"] = {  //{
+		"name":"Block",
+		"sprite":{'name':"block2x2",'sizeMod':1},
+		'nevercombat':1,
+		'moveSelf':0,
+		"acc":0.5,
+		"maxSpd":3,
+		"block":{direction:4,distance:50,magn:10,time:10,size:[-1,1,-1,1]},
 	}; //}
 	//}
 

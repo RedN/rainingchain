@@ -65,6 +65,8 @@ require('./server/db/Db_plan');
 require('./server/db/Db_equip');
 require('./server/db/Db_boost');
 require('./server/db/Db_material');
+require('./server/db/Db_map');
+
 		
 require('./' + clientPath + 'client/js/shared/Collision');
 require('./' + clientPath + 'client/js/shared/Db_stat');

@@ -15,7 +15,37 @@ Actor.remove = function(mort){
 
 	
 	
+Actor.pushing = function(pusher,beingPushed){
+	var mort = List.all[beingPushed];
+	if(!mort.block) return
+	
+	var pusherAngle = atan2(mort.y - pusher.y,mort.x - pusher.x);			//only work with square block
+	
+	//Test if too far
+	var fact = 360/mort.block.direction;
+	var angle = Math.floor((pusherAngle+fact/2)/fact)*fact%360;
+	
+	var middleVarX = 0;	//only supported direction =4
+	var middleVarY = 0;
+	if(angle === 0) middleVarX = mort.block.size[0];
+	if(angle === 90) middleVarY = mort.block.size[2];
+	if(angle === 180) middleVarX = mort.block.size[1];
+	if(angle === 270) middleVarY = mort.block.size[3];
+	
+	middleVarX *= 32;
+	middleVarY *= 32;
+	
+	var pos = {'x':mort.x + middleVarX,'y':mort.y+middleVarY};
+	if(Collision.distancePtPt(pos,pusher) > mort.block.distance) return;
 
+	//
+	console.log(1);
+	mort.pushed.time = mort.block.time;
+	mort.pushed.magn = mort.block.magn;
+	mort.pushed.angle = angle;
+
+
+}
 
 Actor.updateEquip = function(mort){
 	for(var k in Cst.element.list){	//Each Element

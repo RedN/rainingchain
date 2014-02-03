@@ -132,7 +132,6 @@ Combat.action.boost = function(key,info){
 
 //COLLISION//
 Combat.collision = function(b,mort){
-	if(!mort.attackReceived) console.log(mort);
 	if(mort.attackReceived[b.hitId]) return;    //for pierce
     mort.attackReceived[b.hitId] = 250;	//last for 10 sec
 	

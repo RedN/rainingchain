@@ -176,7 +176,10 @@ Actor.creation.mod.list = {
 }
 
 Actor.creation.extra = function(mort){
-	mort = useTemplate(mort,mort.extra,2);	//deep clone of function
+	if(typeof mort.extra === 'function'){
+		mort = mort.extra(mort);
+	} else mort = useTemplate(mort,mort.extra,2);	//deep clone of function
+
 	for(var i in mort.viaArray){ 
 		mort.viaArray[i].origin = mort;
 		viaArray.set(mort.viaArray[i]);
@@ -191,6 +194,7 @@ Actor.creation.optionList = function(e){
 	
 	if(e.type === 'player') ol.option.push({'name':'Trade',"func":'Main.openWindow',"param":['trade',e.id]});
 	if(e.dialogue)	ol.option.push({'name':'Talk To',"func":'Actor.talk',"param":[e.id]});
+	if(e.block) ol.option.push({'name':'Push',"func":'Actor.pushing',"param":[e.id]});
 	
 	e.optionList = ol.option.length ? ol : '';
 	return e;

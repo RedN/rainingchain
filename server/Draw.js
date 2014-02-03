@@ -27,7 +27,9 @@ Draw.actor = function (key){
 			if(mort.optionList){
 				info['right'] = {'func':'Button.optionList','param':mort.optionList};
 			}
-			
+			for(var i in mort.onclick){
+				info[i] = {'func':mort.onclick[i].func,'param':mort.onclick[i].param};
+			}
 			Button.creation(key,info);
 		}
 	}		
