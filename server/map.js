@@ -87,7 +87,7 @@ Map.remove = function(map){
 	var id = map.id;
 	for(var i in List.all){
 		if(List.all[i].map === id){
-			remove(List.all[i]);
+			removeAny(List.all[i]);
 		}
 	}
 	delete List.map[id];

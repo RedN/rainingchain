@@ -24,6 +24,7 @@ Actor.loop = function(mort){
 	if(mort.combat && mort.move) Actor.loop.move.aim(mort); //impact max spd depending on aim
 	
 	if(mort.move){
+		if(mort.frameCount % 10 === 0){ Actor.loop.mapMod(mort); }
 		Actor.loop.pushed(mort);
 		Actor.loop.bumper(mort);   //test if collision with map    
 		Actor.loop.move(mort);  	//move the actor
@@ -114,6 +115,27 @@ Actor.performAbility.resource = function(mort,cost){
 
 //}
 
+Actor.loop.mapMod = function(mort){
+	mort.mapMod = {};
+
+	for(var i in mort.activeList){
+		var b = List.all[i];
+		if(!b || !b.block || !b.block.condition) continue;
+		if(b.block.condition === 'true'
+			|| (typeof b.block.condition === 'function' && b.block.condition(mort.id,mort,b))){
+			var size = b.block.size;
+			var pos = Collision.getPos(b);
+			
+			for(var j = size[0]; j <= size[1]; j++){
+				for(var k = size[2]; k <= size[3]; k++){
+					mort.mapMod[(pos.x+j) + '-' + (pos.y+k)] = 1;
+				}
+			}
+		}
+	}
+
+
+};
 
 Actor.loop.pushed = function(mort){
 	var status = mort.pushed;

@@ -36,7 +36,7 @@ try {
 		for(var i in data.u.r){
 			if(List.all[i] && List.all[i].sprite){ 
 				List.all[i].sprite.dead = List.all[i].type === 'enemy' ? 1/12 : 1/3;
-			} else{remove(i);}			
+			} else{removeAny(i);}			
 		}
     
     	//Update Main List
@@ -51,7 +51,7 @@ try {
 		if(mort){	
 			mort.toRemove++;
 			if(mort.toRemove > 40){ //&& (!mort.sprite || (mort.sprite && mort.sprite.anim && !mort.sprite.anim.remove))){
-				remove(i);
+				removeAny(i);
 			}
 		}
 	}

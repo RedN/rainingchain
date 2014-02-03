@@ -1,12 +1,9 @@
-strike
 
 draw passive weird block for special balancedAtk
 
-req lvl for equip
 
 select boost is weird?
 
-exp when killing mosnters
 
 #Priority 2:
 -Crafting System with White

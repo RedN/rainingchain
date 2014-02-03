@@ -160,7 +160,7 @@ Init.db.sprite = function(){
     	}},
     	
     //Picture
-		"block2x2":{"src":"picture/block2x2.png","size":1,"side":[0],
+		"block1x1":{"src":"picture/block2x2.png","size":0.5,"side":[0],
     	"preBumperBox":[ -32,32,-32,32 ],"preHitBox":[ -32,32,-32,32 ],
 		"anim": {
     		"walk":{"startY":0,"frame":1,"sizeX":64,"sizeY":64,"dir":1,"spd":0,"next":"walk"},    	
@@ -308,7 +308,7 @@ Sprite.update = function (mort){	//client side only
 	if(mort.sprite.dead){
 		mort.sprite.alpha -= mort.sprite.dead;
 		if(mort.sprite.alpha < 0){
-			remove(mort.id);
+			removeAny(mort.id);
 		}
 	}
 	

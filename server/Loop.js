@@ -150,7 +150,7 @@ ActiveList.remove = function(b){
 	}
 }
 
-remove = function(mort){
+removeAny = function(mort){
 	if(!mort) return;
 	if(mort.type === 'bullet') Bullet.remove(mort);
 	else if(mort.type === 'enemy') Actor.remove(mort);

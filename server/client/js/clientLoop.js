@@ -77,7 +77,7 @@ Loop.sfx = function(){
 }
 
 
-remove = function(i){
+removeAny = function(i){
 	i = typeof i === 'string' ? i : i.id;
 	delete List.bullet[i]; 
 	delete List.actor[i];

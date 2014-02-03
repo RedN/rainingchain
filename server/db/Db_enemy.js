@@ -54,6 +54,16 @@ ePreDb["troll"]["ice"] = {  //{		//troll is category, ice is variant
 		"farthest":600			//if player farther than this range, enemy will stop following
 	},	
 	'moveSelf':0,
+	
+	"block":{
+		condition:'true',		//condition to block player | 'true' = always, other function(key)
+		size:[-1,1,-1,1]		//area blocked by the block. [minX,maxX,minY,maxY] relative to center
+		pushable:1,				//can player push block
+		magn:10,				//when pushed, increase spd by magn
+		time:10,				//when pushed, increase spd for time amount of frame
+	},
+	
+	
 	'drop':{
 		'category':{			
 			'regular':1			//drop table used : quantity modifier bonus
@@ -144,12 +154,12 @@ Init.db.enemy = function(){ var ePreDb = {};
 	
 	
 	ePreDb["block"] = {}; //{
-	ePreDb["block"]["2x2"] = {  //{
+	ePreDb["block"]["3x3"] = {  //{
 		"name":"Block",
-		"sprite":{'name':"block2x2",'sizeMod':1},
+		"sprite":{'name':"block1x1",'sizeMod':3},
 		'nevercombat':1,
 		'moveSelf':0,
-		"block":{pushable:1,direction:4,distance:50,magn:10,time:10,size:[-1,1,-1,1]},
+		"block":{condition:'true',pushable:1,magn:10,time:10,size:[-1,1,-1,1]},
 	}; //}
 	//}
 

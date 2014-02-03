@@ -20,27 +20,39 @@ Actor.pushing = function(pusher,beingPushed){
 	if(!mort.block || !mort.block.pushable) return
 	
 	var pusherAngle = atan2(mort.y - pusher.y,mort.x - pusher.x);			//only work with square block
-	var fact = 360/mort.block.direction;
+	var fact = 360/4;
 	var angle = Math.floor((pusherAngle+fact/2)/fact)*fact%360;
 	
 	//Test if too far
-	var middleVarX = 0;	//only supported direction =4
-	var middleVarY = 0;
-	if(angle === 0) middleVarX = mort.block.size[0];
-	if(angle === 90) middleVarY = mort.block.size[2];
-	if(angle === 180) middleVarX = mort.block.size[1];
-	if(angle === 270) middleVarY = mort.block.size[3];
+		//Block
+	var blockVarX = 0;	//only supported direction =4
+	var blockVarY = 0;
+	if(angle === 0) blockVarX = mort.block.size[0];
+	if(angle === 90) blockVarY = mort.block.size[2];
+	if(angle === 180) blockVarX = mort.block.size[1];
+	if(angle === 270) blockVarY = mort.block.size[3];
 	
-	middleVarX *= 32;
-	middleVarY *= 32;
+	blockVarX *= 32;
+	blockVarY *= 32;
 	
-	var pos = {'x':mort.x + middleVarX,'y':mort.y+middleVarY};
-	if(Collision.distancePtPt(pos,pusher) > mort.block.distance) return
+		//Player
+	var pusherVarX = 0;	//only supported direction =4
+	var pusherVarY = 0;
+	if(angle === 0) pusherVarX = mort.bumperBox[0].x;
+	if(angle === 90) pusherVarY = mort.bumperBox[1].y;
+	if(angle === 180) pusherVarX = mort.bumperBox[2].x;
+	if(angle === 270) pusherVarY = mort.bumperBox[3].y;
+	
+	var posB = {'x':mort.x + blockVarX,'y':mort.y+blockVarY};
+	var posP = {'x':pusher.x + pusherVarX,'y':pusher.y+pusherVarY};
+	
+	if(Collision.distancePtPt(posB,posP) > 64) return
 	//
 	
 	mort.pushed.time = mort.block.time;
 	mort.pushed.magn = mort.block.magn;
 	mort.pushed.angle = angle;
+	
 }
 
 
