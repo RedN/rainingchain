@@ -194,8 +194,10 @@ Actor.creation.optionList = function(e){
 	
 	if(e.type === 'player') ol.option.push({'name':'Trade',"func":'Main.openWindow',"param":['trade',e.id]});
 	if(e.dialogue)	ol.option.push({'name':'Talk To',"func":'Actor.talk',"param":[e.id]});
-	if(e.block) ol.option.push({'name':'Push',"func":'Actor.pushing',"param":[e.id]});
-	
+	if(e.block && e.block.pushable){
+		ol.option.push({'name':'Push',"func":'Actor.pushing',"param":[e.id]});
+		e.onclick.shiftRight = {'func':'Actor.pushing',	'param':[e.id]};
+	}		
 	e.optionList = ol.option.length ? ol : '';
 	return e;
 }

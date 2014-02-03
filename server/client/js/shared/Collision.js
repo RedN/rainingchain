@@ -25,17 +25,13 @@ Collision.PtMap = function(pt,map,player){
 
 Collision.PosMap = function(pos,map,player){
 	//Test Collision between pt and map (can also test with player map mod)
-	/*
-	if(player && player.mapMod && player.mapMod[map] && player.mapMod[map][gridX + '-' + gridY]){
-		return player.mapMod[map][gridX + '-' + gridY];
+	if(player && player.mapMod && player.mapMod && player.mapMod[pos.x + '-' + pos.y]){
+		return player.mapMod[pos.x + '-' + pos.y];
 	}
-	*/
-	map = Map.getModel(map);
-	map = Db.map[map].grid.input;
-	if(map[pos.y] === undefined){ return  1;	} 
-	else if(map[pos.y][pos.x] === undefined){return  1;} 
-	else {return !map[pos.y][pos.x];}
-	return 1;
+	var grid = Db.map[Map.getModel(map)].grid.input;
+	if(grid[pos.y] === undefined) return  1; 
+	if(grid[pos.y][pos.x] === undefined) return  1;
+	return !grid[pos.y][pos.x];
 }
 
 

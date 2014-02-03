@@ -14,15 +14,7 @@ Init.db.map = function (){
 			]);
 			*/
 			Actor.creation.group({'x':1060,'y':1900,'map':map,'respawn':100},[
-				{'amount':1,"category":"block","variant":"2x2",'extra':
-					(function(e){
-						e.onclick.shiftRight = {
-							'func':'Actor.pushing',
-							'param':[e.id],
-						}
-						return e;
-					})
-				}
+				{'amount':1,"category":"block","variant":"2x2"}
 			]);
 		}
 		

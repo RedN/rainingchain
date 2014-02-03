@@ -149,9 +149,7 @@ Init.db.enemy = function(){ var ePreDb = {};
 		"sprite":{'name':"block2x2",'sizeMod':1},
 		'nevercombat':1,
 		'moveSelf':0,
-		"acc":0.5,
-		"maxSpd":3,
-		"block":{direction:4,distance:50,magn:10,time:10,size:[-1,1,-1,1]},
+		"block":{pushable:1,direction:4,distance:50,magn:10,time:10,size:[-1,1,-1,1]},
 	}; //}
 	//}
 
