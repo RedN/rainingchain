@@ -80,6 +80,7 @@ Actor.creation.db = function(e,d){
 	
 	e.globalDef = typeof e.globalDef === 'function' ? e.globalDef(e.lvl) : e.globalDef * Actor.creation.db.globalLvlMod(e.lvl).globalDef
 	e.globalDmg = typeof e.globalDmg === 'function' ? e.globalDmg(e.lvl) : e.globalDmg * Actor.creation.db.globalLvlMod(e.lvl).globalDmg
+	e.deathExp = e.deathExp * Actor.creation.db.globalLvlMod(e.lvl).deathExp;
 	if(e.globalMod) e = e.globalMod(e,e.lvl);
 	
 	if(e.boss){	
@@ -101,6 +102,7 @@ Actor.creation.db.globalLvlMod = function(lvl){
 	return {
 		globalDef:lvl+10,
 		globalDmg:lvl+10,
+		deathExp:Math.logBase(2,lvl+8)-2,	//0:x1, 8:x2, 24:x3, 56:x4
 	};
 }
 

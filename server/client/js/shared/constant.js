@@ -43,7 +43,14 @@ Cst.equip = {
 		Cst.equip.weapon[Cst.equip.weapon.piece[i]] = Cst.equip[Cst.equip.weapon.piece[i]];
 	for(var i in Cst.equip.armor.piece)
 		Cst.equip.armor[Cst.equip.armor.piece[i]] = Cst.equip[Cst.equip.armor.piece[i]];
-
+	
+	
+	Cst.isWeapon = function(piece){
+		return Cst.equip.weapon.piece.have(piece);
+	}
+	Cst.isArmor = function(piece){
+		return Cst.equip.armor.piece.have(piece);
+	}
 })();
 
 Cst.skill = {

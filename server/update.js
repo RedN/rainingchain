@@ -185,7 +185,7 @@ Change.update.init = function(){
 				
 			],
 			'slow':[
-				{'array':['resource'],'filter':(function(w){ for(var i in w){ for(var j in w[i]){ w[i][j] = Math.round(w[i][j]); }} })},
+				{'array':['resource'],'filter':(function(w){ for(var i in w){ for(var j in w[i]){ w[i][j] = Math.round(w[i][j]); return w; }} })},
 				
 				{'array':['permBoost']},
 				{'array':['equip','def']},

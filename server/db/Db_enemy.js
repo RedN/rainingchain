@@ -32,6 +32,7 @@ ePreDb["troll"]["ice"] = {  //{		//troll is category, ice is variant
 	'globalDmg':function(lvl){ 		//if number, globalDef = globalDef * (lvl + 10)	#RECOMMENDED because easy balance
 		return lvl + 100;			//if function, globalDef = globalDef(lvl)
 	},
+	'deathExp':1,					//same system than other global
 	
 	"equip":{
 		'def':{					//only used for ratio (use value between 0-1)
@@ -117,6 +118,7 @@ Init.db.enemy = function(){ var ePreDb = {};
 		'globalDef':1,
 		'globalDmg':function(lvl){ return lvl + 100},
 		'globalMod':function(e,lvl){ e.maxSpd = e.maxSpd + lvl;  return e;},
+		'deathExp':1,
 		
 		"equip":{'def':{'melee':1,'range':1,'magic':1,'fire':1,'cold':1,'lightning':1}},	
 
@@ -176,7 +178,7 @@ Init.db.enemy = function(){ var ePreDb = {};
 			}
 			
 			Db.enemy[i][j] = new Function('return ' + stringify(e));
-			Db.enemy[i][j].globalDmg = ePreDb[i][j].globalDmg || e.globalDmg;	//cuz can be function
+			Db.enemy[i][j].globalDmg = ePreDb[i][j].globalDmg || e.globalDmg;	//cuz cant stringify function
 			Db.enemy[i][j].globalDef = ePreDb[i][j].globalDef || e.globalDef;
 			Db.enemy[i][j].globalMod = ePreDb[i][j].globalMod || e.globalMod;
 			

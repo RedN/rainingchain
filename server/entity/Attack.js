@@ -2,63 +2,75 @@ Attack = {};
 
 Attack.template = function(){
 	var b = {};
+	//NO TOUCH
 	b.change = {};
 	b.old = {};
+	b.viewedBy = {};
+	b.viewedIf = 'true';
 	b.x = 0;
 	b.y = 0;
 	b.angle = 0;
 	b.crX = 0;  //creation X
 	b.crY = 0;  //creation Y
 	b.map = 'test@MAIN';
-	b.normal = 0;
-	b.maxTimer = 40;
-	b.timer = 0;
 	b.toRemove = 0;
-	b.spd = 15;
-	
-	b.width = 10;       //width for strike
-	b.height = 10;       //height for strike
-	b.delay = 0;    //delay between cast and dmg phase for strike
-	b.point = [{'x':10,'y':10}];
-	
 	b.id = Math.randomId();
 	b.hitId = Math.randomId();
-	b.hitIfMod = 0; //if 1, hit allies
-	b.num = 0;
-	b.maxNum = 0;
-	b.aim = 0;
+	b.type = 'bullet';				//or strike
+	//NO TOUCH
 	
-	b.dmg = {main:1,ratio:{'melee':0,'range':0,'magic':0,'fire':0,'cold':0,'lightning':0}};
+	
+	//All
+	b.dmg = {main:1,ratio:Cst.element.template(1)};
 	b.globalDmg = 1;	//for nova
 	
-	//Mods
+	b.objImg = 0;	//for bullet: sprite when travelling {name,anim,sizeMod} || for strike: anim when performing {name,sizeMod}
+	b.hitImg = 0;	//when enemy get hits, use anim on him {name,sizeMod}
+	
+	
+	b.hitIfMod = 0; //if 1, hit allies
+	b.num = 0;		//# bullet if many shoot at once
+	b.amount = 1;	//# bullets shot (useless here tho)
+	b.aim = 0;
+	
+	b.bleed = {'chance':1,'magn':1,'time':1};	//act as modifier
+	b.knock = {'chance':1,'magn':1,'time':1};
+	b.drain = {'chance':1,'magn':1,'time':1};	
+	b.burn = {'chance':1,'magn':1,'time':1};
+	b.chill = {'chance':1,'magn':1,'time':1};
+	b.confuse = {'chance':1,'magn':1,'time':1};
+	b.crit = {'chance':1,'magn':1};
+	b.leech = {'chance':1,'magn':1,'time':1};	
+	b.pierce = {'chance':0,'dmgReduc':0.5};		//will be overwrite completly
+	b.curse = 0;
+	
+	
+	
+
+	//Strike
+	b.width = 10;      			 //width for strike
+	b.height = 10;       		//height for strike
+	b.delay = 0;   				 //delay between cast and dmg phase for strike
+	b.point = [{'x':10,'y':10}];	//used for collision
+	b.minRange = 5;				//min distance player-strike
+	b.maxRange = 50;			//max distance player-strike
+	
+	
+	//Bullet
+	b.maxTimer = 40;
+	b.timer = 0;
+	b.spd = 15;
+	
 	b.normal = 0;	//get set inside creation
 	b.nova = 0;
 	b.boomerang = 0;
 	b.ghost = 0;
 	b.parabole = 0;
 	b.sin = 0;
-	b.moveAngle = 0;
-	b.mouseX = 0;
+	b.moveAngle = 0;	//where bullet moves (not facing necesrraly)
+	b.mouseX = 0;	//strike and parabole
 	b.mouseY = 0;
 	b.sprite = {"name":"fireball","anim":"travel",'sizeMod':1};	
-	
-	b.bleed = {'chance':1,'magn':1,'time':1};
-	b.knock = {'chance':1,'magn':1,'time':1};
-	b.drain = {'chance':1,'magn':1,'time':1};	
-	b.burn = {'chance':1,'magn':1,'time':1};
-	b.chill = {'chance':1,'magn':1,'time':1};
-	b.confuse = {'chance':1,'magn':1,'time':1};
-	
-	b.leech = {'chance':1,'magn':1,'time':1};
-	b.pierce = {'chance':0,'dmgReduc':0.5};
-	b.crit = {'chance':1,'magn':1};
-	b.curse = 0;
-	
-	
-	b.viewedBy = {};
-	b.viewedIf = 'true';
-	
 	
 	
 	return b;
@@ -139,21 +151,22 @@ Attack.creation.strike = function(s){
 	if(s.middleX === undefined){ s.middleX = dist * cos(angle); }
 	if(s.middleY === undefined){ s.middleY = dist * sin(angle); }
 	
-	var middleX = s.middleX;
-	var middleY = s.middleY;
-	
 	if(dist > s.maxRange){
-		middleX = middleX * s.maxRange / dist;
-		middleY = middleY * s.maxRange / dist
+		s.middleX = s.middleX * s.maxRange / dist;
+		s.middleY = s.middleY * s.maxRange / dist
 	}
 	if(dist < s.minRange){
-		middleX = middleX * s.minRange / dist;
-		middleY = middleY * s.minRange / dist
+		s.middleX = s.middleX * s.minRange / dist;
+		s.middleY = s.middleY * s.minRange / dist
 	}
+	
+	//s.crX: where attack for created (player position)
+	//s.middleX : when the strike is. after that, we place 9 points around this middleX. exact position depends on width and height of strike
+	
 	
 	var w = s.width; var h = s.height;
 	var startX = -w; var startY = -h;
-	
+		
 	for(var k = 0 ; k < 9 ; k++){
 		var axeX = startX + (k % 3)*w;
 		var axeY = startY + Math.floor(k/3)*h;
@@ -161,13 +174,11 @@ Attack.creation.strike = function(s){
 		var numY =  (axeX*sin(angle) + axeY * cos(angle));
 				
 		s.point[k] = 
-		{'x':numX + s.crX + middleX,'y':numY + s.crY + middleY};
+		{'x':numX + s.crX + s.middleX,'y':numY + s.crY + s.middleY};
 	}
 	
-	if(s.objImg){ Anim.creation(s.objImg.name,{'x':s.crX + middleX,'y':s.crY + middleY,'map':s.map,'viewedIf':s.viewedIf},s.objImg.sizeMod);}
-	
-	
-	
+	if(s.preDelayAnim){ Anim.creation(s.preDelayAnim.name,{'x':s.crX + s.middleX,'y':s.crY + s.middleY,'map':s.map,'viewedIf':s.viewedIf},s.preDelayAnim.sizeMod);}
+		
 	List.strike[s.id] = s;
 	
 	return s;

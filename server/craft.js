@@ -39,18 +39,32 @@ Craft.equip = function(plan){
 	equip.name = plan.type.capitalize();
 	equip.lvl = plan.lvl;
 	equip.plan = plan;
+	equip.req = Craft.equip.req(plan);
 	
 	plan.amount = Craft.equip.amount(plan);
 	equip.boost = Craft.equip.boost(plan,equip.boost);
 	
 	equip.id = Math.randomId();
 		
-	if(Cst.equip.weapon.piece.have(equip.piece)) equip = Craft.equip.weapon(plan,equip);
-	if(Cst.equip.armor.piece.have(equip.piece)) equip = Craft.equip.armor(plan,equip);
+	if(Cst.isWeapon(equip.piece)) equip = Craft.equip.weapon(plan,equip);
+	if(Cst.isArmor(equip.piece)) equip = Craft.equip.armor(plan,equip);
 	
 	Equip.creation(equip);
 	
 	return equip.id;
+}
+
+Craft.equip.req = function(plan){
+	var req = {};
+	if(Cst.isWeapon(plan.piece)){	//aka weapon
+		req[plan.piece] = plan.lvl;
+	} else {	//aka armor
+		if(['metal','chain','ruby'].have(plan.type)) req['melee'] = plan.lvl;
+		if(['wood','leaf','sapphire'].have(plan.type)) req['range'] = plan.lvl;
+		if(['bone','hide','topaz'].have(plan.type)) req['magic'] = plan.lvl;
+	}
+	return req;
+
 }
 
 Craft.equip.amount = function(plan){

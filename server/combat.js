@@ -1,20 +1,18 @@
 /*
 *INIT
-every frame, boost ability charge,
-if charge > period && pressed, start input
-reset other ability / mana if needed
+every frame, boost ability charge, and globalCooldown--
+if charge > period && pressed && globalCooldown < 0, start input 
+reset other ability / mana if needed / globalCooldown
 
 call custom func if action has func
-anim
+anim	(player.sprite.anim)
+animOnSprite	(Anim.creation)
 
 *ADD MODIFIERS
 add player bonus to atk
 add dmg from player to atk (mastery, globalDmg, curse)
 add dmg from weapon to atk
 
-
-
-call custom func if attack has func
 spawn bullet or strike
 
 
@@ -30,36 +28,22 @@ globalDef = main def mod. cant be boost by equip. only curse/time boost || never
 mastery mod = same than globalDef but for specific element
 
 
-
-
-
-*/
-
-/*
 status chance: dmg/maxhp * abilityMod [1] * playerMod [1]
 leech chance: unrelated to dmg. abilityMod [1] * playerMod [0]
+
+
 */
+
+
 
 Combat = {};
 
 //NOTE: Combat.action.attack.mod is inside	Combat_sub.js
 
 //ACTION//
-Combat.action = function(id,action){
-    var player = typeof id === 'string' ? List.all[id] : id;
-	if(!player) return;
-
-	if(action.anim !== false){
-		Sprite.change(player,{'anim':action.anim || 'attack'});
-	}
-	if(action.animOnSprite)	Anim.creation(action.animOnSprite,player,1);
-}
-
-
-		
+Combat.action = {};
 
 Combat.action.attack = function(id,action,extra){   
-	Combat.action(id,action);
 	var player = typeof id === 'string' ? List.all[id] : id;
 	
 	//Add Bonus and mastery
@@ -69,9 +53,10 @@ Combat.action.attack = function(id,action,extra){
 }
 
 Combat.action.attack.perform = function(player,attack,extra){   //extra used for stuff like boss loop
+	//At this point, player.bonus/mastery must be already applied
+	
 	if(extra){ attack = deepClone(attack); }    //cuz probably from boss
 	
-	//At this point, player.bonus/mastery must be already applied
 	if(attack.func && attack.func.chance >= Math.random()){
 		applyFunc.key(player.id,attack.func.func,attack.func.param);
 	}
@@ -90,7 +75,7 @@ Combat.action.attack.perform = function(player,attack,extra){   //extra used for
 		
 		if(extra && extra.angle !== undefined){ angle = extra.angle; }	//quickfix
 		
-		Attack.creation(player,atkList[i],{'angle':angle,'num':i,'maxNum':atkList[i].amount});
+		Attack.creation(player,atkList[i],{'angle':angle,'num':i});	//num used for parabole/sin
 	}
 }	
 	
@@ -147,6 +132,7 @@ Combat.action.boost = function(key,info){
 
 //COLLISION//
 Combat.collision = function(b,mort){
+	if(!mort.attackReceived) console.log(mort);
 	if(mort.attackReceived[b.hitId]) return;    //for pierce
     mort.attackReceived[b.hitId] = 250;	//last for 10 sec
 	

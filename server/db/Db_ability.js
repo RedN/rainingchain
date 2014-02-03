@@ -35,14 +35,24 @@ a['bulletMulti'] = {					//bulletMulti is the id of attack
 			'angle':15,					//angle between 1 and last bullet
 			'amount':5,					//amount bullet
 			'aim': 0,					//angle precision (0 = perfect)
-			'objImg':{					//bullet sprite
-				'name':"arrow",
-				'sizeMod':1
-			},
 			'hitImg':{					//anim when enemy hit by attack
 				'name':"thunder2",
 				'sizeMod':0.5
 			},
+			'objImg':{					//bullet sprite (BULLET ONLY)
+				'name':"arrow",
+				'sizeMod':1
+			},
+			'delayAnim':{				//Anim.creation when using ability	(STRIKE ONLY)
+				'name':"fire1",
+				'sizeMod':0.5
+			},
+			'preDelayAnim':{			//Anim.creation when delay is over (STRIKE ONLY)
+				'name':"fire2",
+				'sizeMod':0.5
+			},
+			
+			
 			'dmg':{
 				'main':100,				//dmg dealt
 				'ratio':{				//ratio between the elements. will be normalize (aka sum of ratio = 1 with same proportion)
@@ -133,21 +143,25 @@ a['bulletMulti'] = {					//bulletMulti is the id of attack
 			'type':"strike",			//type of attack (bullet or strike)
 			
 		//Strike Only
-			'delay':2,					//delay between clicking/performing anim and the actual damage phase
 			'maxHit':1,					//max amount of enemy that can be hit by each strike
 			'width':1,					//width size of the strike hitbox
 			'height':1,					//height size of the strike hitbox
 			'minRange':5,				//min range for the center of the strike hitbox
 			'maxRange':50,				//max range for the center of the strike hitbox
-		
+			'delay':2,					//delay between clicking/performing anim and the actual damage phase
+			'preDelayAnim':{			//anim where the player clicked sprite
+				'name':"attack1",
+				'sizeMod':0.5
+			},
+			'delayAnim':{				//anim where the player clicked sprite after the delay
+				'name':"attack1",
+				'sizeMod':0.5
+			},
+			
 		//Both Bullet and Strike
 			'angle':15,					//angle between 1 and last strike
 			'amount':5,					//amount strike
 			'aim': 0,					//angle precision (0 = perfect)
-			'objImg':{					//anim where the player clicked sprite
-				'name':"attack1",
-				'sizeMod':0.5
-			},
 			'hitImg':{					//anim when enemy hit by attack
 				'name':"attack2",
 				'sizeMod':0.5
@@ -279,19 +293,21 @@ Init.db.ability = function(cb){
 		}
 	}};
 	
+	
+	//is now a strike
 	a['bulletMulti-boom'] = {'type':'attack','name':'boom','icon':'attackMagic.fireball',
 		'spd':{'main':0.8,'support':0.2},'period':{'own':20,'global':10},
 		'action':{'func':'Combat.action.attack','param':{
-			'type':"bullet",'angle':15,'amount':10,
-			'objImg':{'name':"arrow",'sizeMod':1},'hitImg':{'name':"thunder2",'sizeMod':0.5},
+			'type':"strike",'angle':0,'amount':1,
+			'delayAnim':{'name':"fire1",'sizeMod':0.5},
+			'hitImg':{'name':"fire2",'sizeMod':0.2},
+			'preDelayAnim':{'name':"fire2",'sizeMod':0.5},
 			'dmg':{'main':100,'ratio':{'melee':0,'range':10,'magic':80,'fire':10,'cold':0,'lightning':0}},
-			'boomerang':{
-				'comeBackTime':50,		//time before bullet turns 180 degre
-				'spd':2,				//spd mod
-				'spdBack':1.5,			//spd mod when bullet comes back
-				'newId':1				//after turn back, renew id so it can hit enemy again
-			},
-			
+			'width':100,
+			'height':100,
+			'delay':1,
+			'minRange':50,
+			'maxRange':500,
 		}
 	}};
 	

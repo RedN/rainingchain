@@ -36,13 +36,16 @@ Actor.switchEquip = function(mort,name,piece){
 	//if equip.piece[weapon] is '', player.weapon becomes 'unarmed'
 	
 	var equip = Db.equip[name];
+	if(equip && !Actor.switchEquip.req(mort,equip)){
+		Chat.add(mort.id,'You need have the level to wear this equip.');
+	}
 	equip = equip || '';	//incase wants to be unarmed
 	
 	piece = piece || equip.piece;		//piece is defined when changing to unarmed
 	var old = mort.equip.piece[piece];	//get old
 	mort.equip.piece[piece] = name;		//set new
 	
-	if(Cst.equip.armor.piece.have(piece))		//if armor, add boost
+	if(Cst.isArmor(piece))		//if armor, add boost
 		Actor.permBoost(mort,piece,equip.boost);
 
 	Actor.updateEquip(mort);	//update def
@@ -52,9 +55,16 @@ Actor.switchEquip = function(mort,name,piece){
 	if(equip) Itemlist.remove(inv,name);		//remove equipped item from inv if equip isnt unarmed
 	if(old) Itemlist.add(inv,old);				//add old item if it wasnt unarmed
 	
-	if(Cst.equip.weapon.piece.have(piece)){
+	if(Cst.isWeapon(piece)){
 		Actor.swapWeapon(mort,piece);
 	}
+}
+
+Actor.switchEquip.req = function(mort,equip){
+	for(var i in equip.req){
+		if(mort.skill.lvl[i] < equip.req[i]) return false;
+	}
+	return true;
 }
 
 Actor.swapWeapon = function(mort,piece){
@@ -389,6 +399,7 @@ Actor.death.enemy = function(mort){
 	
 	var killers = Actor.death.getKiller(mort);
 	Actor.death.drop(mort,killers);
+	Actor.death.exp(mort,killers);
 	if(mort.death){ mort.death(killers); }	//custom death function (ex quest)
 	Actor.death.performAbility(mort);				//custom death ability function
 	ActiveList.remove(mort);
@@ -483,6 +494,16 @@ Actor.death.drop = function(mort,killers){
 
 }
 
+Actor.death.exp = function(mort,killers){
+	for(var i in killers){
+		var killer = List.all[killers[i]];
+		if(!killer) continue;
+		var equip = Db.equip[killer.weapon];
+		if(!equip) continue;
+		var style = equip.piece;
+		Skill.addExp(killers[i],style,mort.deathExp);
+	}
+}
 
 
 

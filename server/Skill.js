@@ -26,8 +26,8 @@ Skill.updateLvl = function(key,sk){
 	
 	for(var i in sk){
 		var skill = sk[i];
-		if(player.skill.exp[skill] >= Cst.exp.list[player.skilllvl[skill]+1]){
-			var newLvl = binarySearch(Cst.exp.list,player.skillexp[skill]);
+		if(player.skill.exp[skill] >= Cst.exp.list[player.skill.lvl[skill]+1]){
+			var newLvl = binarySearch(Cst.exp.list,player.skill.exp[skill]);
 			
 			var lvlDiff = newLvl-player.skill.lvl[skill];
 			main.passivePt += lvlDiff;

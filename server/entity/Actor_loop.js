@@ -78,6 +78,11 @@ Actor.performAbility = function(mort,ab,mana,reset){
 	//Charge
 	if(reset !== false)	Actor.performAbility.resetCharge(mort,ab);
 	
+	
+	//Anim
+	if(ab.action.anim) Sprite.change(mort,{'anim':ab.action.anim});
+	if(ab.action.animOnSprite)	Anim.creation(ab.action.animOnSprite,mort,1);
+	
 	//Do Ability Action (ex: Combat.action.attack)
 	applyFunc.key(mort.id,ab.action.func,ab.action.param);
 }

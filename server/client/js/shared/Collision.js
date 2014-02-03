@@ -90,7 +90,7 @@ Collision.getMouse = function(key){
 Collision.BulletActor = function(atk){
 	for(var i in atk.viewedBy){ 
 		var player = List.all[i];
-		if(!player || !List.all[atk.parent]) return; 
+		if(!player || !List.all[atk.parent]) return; //note: bullet could have its own hitIf
 		
 		if(Combat.hitIf.global(atk,player)){
 			var hIf = typeof atk.hitIf == 'function' ? atk.hitIf : Combat.hitIf.list[atk.hitIf];
@@ -112,34 +112,39 @@ Collision.BulletMap = function(bullet){
 }
 
 Collision.StrikeActor = function(atk){
-	for(var j in atk.viewedBy){
+	for(var j in atk.viewedBy){	//could be optimized with other function and return;
 		var player = List.all[j];
 		
-		if(Combat.hitIf.global(atk,player)){
+		if(!Combat.hitIf.global(atk,player)) continue;	
 		
 		//Test if can hit that target
 		var hIf = typeof atk.hitIf == 'function' ? atk.hitIf : Combat.hitIf.list[atk.hitIf];
-		var a = hIf(player,List.all[atk.parent]);
-		if((!atk.hitIfMod && a) || (atk.hitIfMod && !a)){
-
-			//Test Center First with Rot Rect
-			var bol = Collision.PtRRect({'x':player.x,'y':player.y},[atk.point[2],atk.point[8],atk.point[0],atk.point[6]]);	
-			
-			//Test 9 Pts
-			if(!bol){	for(var i = 0 ; i < atk.point.length; i++){
-				if(Collision.PtRect(atk.point[i],Collision.getHitBox(player))){ bol = true; break;}
-			}}
-			
-			//If touched
-			if(bol){
-				Combat.collision(atk,player);
-				atk.maxHit--;
-			}
-			if(atk.maxHit <=0){	break;	}
-			
-		}}
+		var a = hIf(player,List.all[atk.parent]);						//a = regular test
+		if((atk.hitIfMod && a) || (!atk.hitIfMod && !a)) continue;		//atk.hitIfMod = flip the regular test (ex: healing)
+	
+		//Touch?
+		if(Collision.StrikeActor.collision(atk,player)){
+			console.log(1);
+			Combat.collision(atk,player);
+			atk.maxHit--;
+		}
+		if(atk.maxHit <= 0) return;	//can not longer hit someone
 	}
 }
+
+Collision.StrikeActor.collision = function(atk,player){
+	//Test Center First with Rot Rect
+	if(Collision.PtRRect({'x':player.x,'y':player.y},[atk.point[2],atk.point[8],atk.point[0],atk.point[6]])) return true;	
+	
+	//Test 9 Pts
+	for(var i = 0 ; i < atk.point.length; i++){
+		if(Collision.PtRect(atk.point[i],Collision.getHitBox(player))) return true;
+	}
+		
+	return false;
+}
+
+
 
 Collision.distancePtPt = function(pt1,pt2){
 	return Math.sqrt(Math.pow(pt1.x - pt2.x,2) + Math.pow(pt1.y - pt2.y,2));

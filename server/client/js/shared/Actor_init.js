@@ -84,6 +84,7 @@ Init.actor = function(){
 		mort.category = "slime";   //for enemy
 		mort.variant = "Regular";   //for enemy
 		mort.lvl = 0;
+		mort.deathExp = 1;			//exp given when player kills this enemy
 		mort.name = "Goblin";     //visible name
 		mort.drop = {
 			"mod":{

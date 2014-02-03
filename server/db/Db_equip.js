@@ -211,7 +211,7 @@ Equip.creation = function(equip){
 	equip = useTemplate(Equip.template(),equip);
 	
 	equip.color = Equip.creation.color(equip);
-	equip.category = Cst.equip.weapon.piece.have(equip.piece) ? 'weapon' : 'armor';
+	equip.category = Cst.isWeapon(equip.piece) ? 'weapon' : 'armor';
 	
 	equip.def.ratio = convertRatio(equip.def.ratio);
 	equip.dmg.ratio = convertRatio(equip.dmg.ratio);
