@@ -6,6 +6,7 @@ Init.db.map = function(){
 	var mapDb = {
 		'test':[1,1],
 		'ryve':[3,1],
+		'tutorial':[1,1],
 	}
 
 
