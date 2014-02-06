@@ -32,7 +32,7 @@ Map.creation.model = function(map){
 	for(var i = 0 ; i < map.grid.length; i++){	
 		grid[i] = [];
 		for(var j = 0 ; j < map.grid[i].length; j++){
-			grid[i][j] = +!+map.grid[i][j];
+			grid[i][j] = +!+map.grid[i][j];	//need to switch 0 - 1 for astar to work
 		}
 	}
 	map.grid = new astar.Graph(grid);

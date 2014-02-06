@@ -107,7 +107,23 @@ Bullet.loop.collision = function(bullet){
 	Collision.BulletMap(bullet); //collision with map
 }
 
-
+Bullet.mapMod = {};
+Bullet.loop.mapMod = function(){
+	Bullet.mapMod = {};
+	for(var i in List.all){
+		var b = List.all[i];
+		if(!b || !b.block || !b.block.condition || b.block.condition !== 'true') continue;
+		
+		var size = b.block.size;
+		var pos = Collision.getPos(b);
+			
+		for(var j = size[0]; j <= size[1]; j++){
+			for(var k = size[2]; k <= size[3]; k++){
+				Bullet.mapMod[b.map + '-' + (pos.x+j) + '-' + (pos.y+k)] = 1;
+			}
+		}
+	}
+}
 
 
 //Update Strike

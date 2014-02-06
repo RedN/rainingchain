@@ -171,7 +171,7 @@ Actor.isStuck = function(mort){
 	
 	var path = Collision.getPath(Collision.getPos(mort),Collision.getPos(maintar));
 	for(var i in path){
-		if(Collision.PosMap(path[i],mort.map)) return 1;	
+		if(Collision.ActorMap(path[i],mort.map,mort)) return 1;	
 	}
 	return 0;
 }

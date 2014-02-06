@@ -31,6 +31,9 @@ Loop.Bullet = function (){
 	for(var i in List.bullet){
 		Bullet.loop(List.bullet[i]);
 	}
+	if(Loop.interval(25)){
+		Bullet.loop.mapMod();	
+	}
 }
 
 Loop.Strike = function(){
