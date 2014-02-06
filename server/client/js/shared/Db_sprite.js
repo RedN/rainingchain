@@ -161,22 +161,31 @@ Init.db.sprite = function(){
     	
     //Picture
 		"block1x1":{"src":"picture/block2x2.png","size":0.5,"side":[0],
-    	"preBumperBox":[ -32,32,-32,32 ],"preHitBox":[ -32,32,-32,32 ],
+    	"preBumperBox":[ -31,31,-31,31 ],"preHitBox":[ -31,31,-31,31 ],
 		"anim": {
     		"walk":{"startY":0,"frame":1,"sizeX":64,"sizeY":64,"dir":1,"spd":0,"next":"walk"},    	
     	}},
     
-    
+		"switchBox":{"src":"picture/switch.png","size":1,"side":[0],
+    	"preBumperBox":[ -16,16,-16,16 ],"preHitBox":[ -16,16,-16,16 ],
+		"anim": {
+    		"walk":{"startY":0,"frame":1,"sizeX":32,"sizeY":32,"dir":1,"spd":0,"next":"walk"},  
+			"on":{"startY":0,"frame":1,"sizeX":32,"sizeY":32,"dir":1,"spd":0,"next":"on"},	
+			"off":{"startY":64,"frame":1,"sizeX":32,"sizeY":32,"dir":1,"spd":0,"next":"off"},			
+    	}},
     	
     }
     
     
     for(var i in Db.sprite){
-    	if(!Db.sprite[i].size){  Db.sprite[i].size = 1; }
-    	if(!Db.sprite[i].legs){  Db.sprite[i].legs = 0; }
-    	
-    	for(var j in Db.sprite[i]){
-    		var anim = Db.sprite[i][j];
+		var spr = Db.sprite[i];
+    	spr.size = spr.size || 1;
+    	spr.legs = spr.legs || 0;
+		
+		if(spr.preBumperBox) spr.preHitBox = spr.preHitBox || deepClone(spr.preBumperBox);
+		
+    	for(var j in spr.anim){
+    		var anim = spr.anim[j];
     		anim.startY = anim.startY || 0; 
     		anim.spd = anim.spd || 1; 
     		anim.next = anim.next || 'walk';

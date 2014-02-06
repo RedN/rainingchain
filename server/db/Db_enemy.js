@@ -162,7 +162,14 @@ Init.db.enemy = function(){ var ePreDb = {};
 		"block":{condition:'true',pushable:1,magn:10,time:10,size:[-1,1,-1,1]},
 	}; //}
 	//}
-
+	ePreDb["switch"] = {}; //{
+	ePreDb["switch"]["box"] = {  //{
+		"name":"Switch",
+		"sprite":{'name':"switchBox",'sizeMod':1},
+		'nevercombat':1,
+		'nevermove':1,
+	}; //}
+	//}
 	
 	//Turn Object into function
 	Db.enemy = {};
