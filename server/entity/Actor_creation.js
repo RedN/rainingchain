@@ -177,7 +177,7 @@ Actor.creation.mod.list = {
 
 Actor.creation.extra = function(mort){
 	if(typeof mort.extra === 'function'){
-		mort = mort.extra(mort);
+		mort.extra(mort);
 	} else mort = useTemplate(mort,mort.extra,2);	//deep clone of function
 
 	for(var i in mort.viaArray){ 
@@ -194,10 +194,22 @@ Actor.creation.optionList = function(e){
 	
 	if(e.type === 'player') ol.option.push({'name':'Trade',"func":'Main.openWindow',"param":['trade',e.id]});
 	if(e.dialogue)	ol.option.push({'name':'Talk To',"func":'Actor.talk',"param":[e.id]});
+	
+	if(e.waypoint){
+		var info = {'name':'Set Waypoint',"func":'Actor.setWaypoint',"param":[e.waypoint]};
+		ol.option.push(info);
+		e.onclick.shiftLeft = info;	
+	}
+	
 	if(e.block && e.block.pushable){
-		ol.option.push({'name':'Push',"func":'Actor.pushing',"param":[e.id]});
-		e.onclick.shiftRight = {'func':'Actor.pushing',	'param':[e.id]};
-	}		
+		var info = {'name':'Push',"func":'Actor.pushing',"param":[e.id]};
+		ol.option.push(info);
+		e.onclick.shiftLeft = info;
+	} else if(e.onclick.shiftLeft){
+		ol.option.push(e.onclick.shiftLeft);
+	}
+	
+	
 	e.optionList = ol.option.length ? ol : '';
 	return e;
 }

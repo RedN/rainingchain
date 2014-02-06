@@ -43,9 +43,10 @@ Init.db.item = function (cb){
 			
 	a['teleport'] = {'name':'Gold','icon':'system.gold','stack':1,
 		'option':[
+					{'name':'Tele Tuto','func':'Actor.teleport','param':[1241*2,1111*2,'tutorial']},
 					{'name':'Tele Main','func':'Actor.teleport','param':[1230,1230,'test']},
 					{'name':'Tele Team','func':'Actor.teleport','param':[1230,1230,'test@']},
-					{'name':'Tele Alone','func':'Actor.teleport','param':[1230,1230,'test@@']},
+					{'name':'Tele Alone','func':'Actor.teleport','param':[1241*2,1111*2,'test@@']},
 			]};
 	
 

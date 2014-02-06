@@ -20,9 +20,9 @@ ePreDb["troll"]["ice"] = {  //{		//troll is category, ice is variant
 		'sizeMod':1
 	},
 	"ability":{						//ability used by enemy
-		'bulletSingle':0.2,			//ability id : frequence (chance to be used)
+		'bulletSingle':0.2,			//ability id : frequence (chance to be used, 0-1 chance per second)
 	},
-	'resource':{						
+	'resource':{
 		'hp':{
 			'max':1000,				//max hp
 			'regen':1				//how much hp enemy regen every frame
@@ -62,7 +62,11 @@ ePreDb["troll"]["ice"] = {  //{		//troll is category, ice is variant
 		magn:10,				//when pushed, increase spd by magn
 		time:10,				//when pushed, increase spd for time amount of frame
 	},
-	
+	'waypoint':{				//player can right click to set their respawnLoc
+		x:10,
+		y:10,
+		map:'as'
+	}
 	
 	'drop':{
 		'category':{			
@@ -154,12 +158,35 @@ Init.db.enemy = function(){ var ePreDb = {};
 	
 	
 	ePreDb["block"] = {}; //{
+	ePreDb["block"]["1x1"] = {  //{
+		"name":"Block",
+		"sprite":{'name':"block1x1",'sizeMod':1},
+		'nevercombat':1,
+		'moveSelf':0,
+		"block":{condition:'true',pushable:1,magn:4,time:16,size:[-1,1,-1,1]},
+	}; //}
+	
+	ePreDb["block"]["2x2"] = {  //{
+		"name":"Block",
+		"sprite":{'name':"block1x1",'sizeMod':2},
+		'nevercombat':1,
+		'moveSelf':0,
+		"block":{condition:'true',pushable:1,magn:4,time:16,size:[-1,1,-1,1]},
+	}; //}
 	ePreDb["block"]["3x3"] = {  //{
 		"name":"Block",
 		"sprite":{'name':"block1x1",'sizeMod':3},
 		'nevercombat':1,
 		'moveSelf':0,
-		"block":{condition:'true',pushable:1,magn:10,time:10,size:[-1,1,-1,1]},
+		"block":{condition:'true',pushable:1,magn:4,time:64,size:[-1,1,-1,1]},
+	}; //}
+	
+	ePreDb["block"]["4x4"] = {  //{
+		"name":"Block",
+		"sprite":{'name':"block1x1",'sizeMod':4},
+		'nevercombat':1,
+		'moveSelf':0,
+		"block":{condition:'true',pushable:1,magn:4,time:16,size:[-1,1,-1,1]},
 	}; //}
 	//}
 	ePreDb["switch"] = {}; //{

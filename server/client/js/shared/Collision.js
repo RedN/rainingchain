@@ -86,20 +86,25 @@ Collision.getMouse = function(key){
 Collision.BulletActor = function(atk){
 	for(var i in atk.viewedBy){ 
 		var player = List.all[i];
-		if(!player || !List.all[atk.parent]) return; //note: bullet could have its own hitIf
+		if(!player) continue;	//test bullet exist
+		if(!Combat.hitIf.global(atk,player)) continue;	//exist is same map, not himself etc
+		if(!Collision.BulletActor.test(atk,player)) continue;	//exist if can attack this type of player
+		if(!Collision.PtRect({'x':atk.x,'y':atk.y},Collision.getHitBox(player))) continue;	//test if nearby
 		
-		if(Combat.hitIf.global(atk,player)){
-			var hIf = typeof atk.hitIf == 'function' ? atk.hitIf : Combat.hitIf.list[atk.hitIf];
-			
-			var a = hIf(player,List.all[atk.parent]);
-			if((!atk.hitIfMod && a) || (atk.hitIfMod && !a)){
-				if(Collision.PtRect({'x':atk.x,'y':atk.y},Collision.getHitBox(player))){
-					Combat.collision(atk,player);
-				}
-			}
-		}
+		Combat.collision(atk,player);
 	}	
 }
+Collision.BulletActor.test = function(atk,player){
+	var normal = true;
+	if(!['map','true','all'].have(atk.hitIf)){
+		var hIf = typeof atk.hitIf == 'function' ? atk.hitIf : Combat.hitIf.list[atk.hitIf];
+		normal = List.all[atk.parent] && hIf(player,List.all[atk.parent])
+	}
+	return (!atk.hitIfMod && normal) || (atk.hitIfMod && !normal); 
+}
+
+
+
 
 Collision.BulletMap = function(bullet){
 	if(bullet.ghost) return;

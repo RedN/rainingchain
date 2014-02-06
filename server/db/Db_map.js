@@ -12,10 +12,11 @@ Init.db.map = function (){
 			Actor.creation.group({'x':1060,'y':1900,'map':map,'respawn':100},[
 				{'amount':1,"category":"troll","variant":"ice",'lvl':0,'modAmount':1},
 			]);
-			*/
+			
 			Actor.creation.group({'x':1060,'y':1900,'map':map,'respawn':100},[
 				{'amount':10,"category":"block","variant":"3x3"}
 			]);
+			*/
 		}
 		/*
 		[0,0,0,1,2,0,0,
@@ -96,13 +97,87 @@ Init.db.map = function (){
 		m.load = {};
 		m.load.main = function(map){
 			
+			
+			Actor.creation({'x':765*2,'y':831*2,'map':map,
+				"category":"block","variant":"2x2"
+			});
+			Actor.creation({'x':1100*2,'y':686*2,'map':map,
+				"category":"block","variant":"2x2"
+			});
+			
+			Actor.creation({'x':1155*2,'y':611*2,'map':map,
+				"category":"switch","variant":"box",extra:function(mort){
+					mort.onclick.shiftLeft = {
+						name:'Activate',
+						param:[mort.id],
+						func:function(key,mortid){
+							var mort = List.all[mortid];
+							List.map[mort.map].variable.rotation *= -1;
+							Sprite.change(mort,{'anim':'off'});
+							Actor.removeOnClick(mort,'shiftLeft');
+							Chat.add(key,"You have activated a switch.");
+						}
+					};
+				}
+			});
 		};
+		
+		/*
+		610-790 arrow
+		1100-686 block
+		1241-1111 fire
+		1155-611 switch
+		765 831 block
+		*/
+		
 		m.loop = {};
-		m.loop.main =  function(map){
+		m.loop.main =  function(map,variable,cst){
 
+			if(Loop.interval(4)){
+				
+				//Arrow
+				Attack.creation(
+					{hitIf:'map',x:610*2,y:790*2,map:map,angle:0},
+					useTemplate(Attack.template(),cst.arrow)
+				);
+				
+				//Fireball
+				
+				variable.angle += variable.rotation;
+				variable.angle = (variable.angle+360)%360;
+				Attack.creation(
+					{hitIf:'map',x:1241*2,y:1111*2,map:map,angle:variable.angle},
+					useTemplate(Attack.template(),cst.fireball)
+				);
+				
+				Attack.creation(
+					{hitIf:'map',x:1241*2,y:1111*2,map:map,angle:(variable.angle+120)%360},
+					useTemplate(Attack.template(),cst.fireball)
+				);
+				
+				Attack.creation(
+					{hitIf:'map',x:1241*2,y:1111*2,map:map,angle:(variable.angle+240)%360},
+					useTemplate(Attack.template(),cst.fireball)
+				);
+				
+				
+				
+			}
 			
 		}
+		m.variable = {
+			rotation: -7,
+			angle:0,
 		
+		};
+		m.cst = {
+			arrow:{'type':"bullet",'angle':15,'amount':1, 'aim': 0,'objImg':{'name':"arrow",'sizeMod':1},'hitImg':{'name':"ice2",'sizeMod':0.5},
+				'dmg':{'main':1,'ratio':{'melee':0,'range':10,'magic':80,'fire':10,'cold':0,'lightning':0}}},	
+			fireball:{maxTimer:15,'type':"bullet",'angle':360,'amount':4, 'aim': 0,'objImg':{'name':"fireball",'sizeMod':1},'hitImg':{'name':"ice2",'sizeMod':0.5},
+				'dmg':{'main':1,'ratio':{'melee':0,'range':10,'magic':80,'fire':10,'cold':0,'lightning':0}}},	
+		
+		
+		};
 		return m;
 	};
 	

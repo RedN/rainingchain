@@ -34,8 +34,6 @@ leech chance: unrelated to dmg. abilityMod [1] * playerMod [0]
 
 */
 
-
-
 Combat = {};
 
 //NOTE: Combat.action.attack.mod is inside	Combat_sub.js
@@ -289,9 +287,6 @@ Combat.collision.damage = function(bullet,player){
 	return dmgInfo;
 }
 
-	
-
-
 Combat.collision.damage.calculate = function(dmg,def){
 	var info = {};
 	var sum = 0;
@@ -308,7 +303,7 @@ Combat.collision.damage.calculate = function(dmg,def){
 
 
 
-
+//TargetIf hitIf
 Combat.targetIf = {};
 Combat.hitIf = {};
 
@@ -327,31 +322,32 @@ Combat.targetIf.list = {
 	'player':(function(tar,self){ 
 		try {
 			if(tar.summoned){
-				if(tar.summoned.father == self.id){ return false }
-				var hIf = typeof self.hitIf == 'function' ? self.hitIf : Combat.hitIf.list[self.hitIf];
+				if(tar.summoned.father === self.id){ return false }
+				var hIf = typeof self.hitIf === 'function' ? self.hitIf : Combat.hitIf.list[self.hitIf];
 				return hIf(List.all[tar.summoned.father],self);
 			}
-			return tar.type == "enemy"; 
+			return tar.type === "enemy"; 
 		} catch(err) { logError(err); }
 	}),
 	'enemy':(function(tar,self){ 
 		try {
 		if(tar.summoned){
-			if(tar.summoned.father == self.id){ return false }
-			var hIf = typeof self.hitIf == 'function' ? self.hitIf : Combat.hitIf.list[self.hitIf];
+			if(tar.summoned.father === self.id){ return false }
+			var hIf = typeof self.hitIf === 'function' ? self.hitIf : Combat.hitIf.list[self.hitIf];
 			return hIf(List.all[tar.summoned.father],self);
 		}
-		return tar.type == "player"; 
+		return tar.type === "player"; 
 		} catch(err) { logError(err); }
 	}),
 	'all':(function(tar,self){ return true }),
 	'true':(function(tar,self){ return true }),
+	'map':(function(tar,self){ return true }),
 	'none':(function(tar,self){ return false }),
 	'false':(function(tar,self){ return false }),
 	'summoned':(function(tar,self){
 		try {
-			if(tar.id == self.summoned.father){ return false; }
-			var hIf = typeof List.all[self.summoned.father].hitIf == 'function' ? List.all[self.summoned.father].hitIf : Combat.hitIf.list[List.all[self.summoned.father].hitIf];
+			if(tar.id === self.summoned.father){ return false; }
+			var hIf = typeof List.all[self.summoned.father].hitIf === 'function' ? List.all[self.summoned.father].hitIf : Combat.hitIf.list[List.all[self.summoned.father].hitIf];
 			return hIf(tar,List.all[self.summoned.father]);
 		} catch(err) { logError(err); } //quickfix
 	}),

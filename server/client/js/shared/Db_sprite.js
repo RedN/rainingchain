@@ -40,8 +40,8 @@ Init.db.sprite = function(){
     	}},
 		*/
 		
-		"mace":{"src":"actor/mace.png","size":1.5,"side":[3,2,1,0],'hpBar':-40,'legs':20,
-    	"preHitBox":[ -20,20,-20,32 ],"preBumperBox":[ -12,12,4,30 ],
+		"mace":{"src":"actor/mace.png","size":1.5*0.9,"side":[3,2,1,0],'hpBar':-40,'legs':20,
+    	"preHitBox":[ -20,20,-20,32 ],"preBumperBox":[ -12,12,4,35 ],
     	"anim": {
     		"walk":{"startY":0,"frame":9,"sizeX":64,"sizeY":64,"dir":4,"spd":1,'walk':1,"next":"walk"},
     		"attack":{"startY":256,"frame":6,"sizeX":128,"sizeY":64,"dir":4,"spd":1,"next":"walk"}
@@ -161,12 +161,12 @@ Init.db.sprite = function(){
     	
     //Picture
 		"block1x1":{"src":"picture/block2x2.png","size":0.5,"side":[0],
-    	"preBumperBox":[ -31,31,-31,31 ],"preHitBox":[ -31,31,-31,31 ],
+    	"preBumperBox":[ -28,28,-28,28 ],"preHitBox":[ -28,28,-28,28 ],
 		"anim": {
     		"walk":{"startY":0,"frame":1,"sizeX":64,"sizeY":64,"dir":1,"spd":0,"next":"walk"},    	
     	}},
     
-		"switchBox":{"src":"picture/switch.png","size":1,"side":[0],
+		"switchBox":{"src":"picture/switch.png","size":2,"side":[0],
     	"preBumperBox":[ -16,16,-16,16 ],"preHitBox":[ -16,16,-16,16 ],
 		"anim": {
     		"walk":{"startY":0,"frame":1,"sizeX":32,"sizeY":32,"dir":1,"spd":0,"next":"walk"},  

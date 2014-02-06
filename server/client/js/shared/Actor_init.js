@@ -43,7 +43,7 @@ Init.actor = function(){
 			'confuse':{'active':{"time":0,"magn":0,"input":[0,1,2,3]},'resist':0},	//change key moves binding
 		}
 		mort.pushed = {"time":0,"magn":0,"angle":0};							//same than knock but no combat related
-		mort.block = 0; 	//{direction:4,distance:0};
+		mort.block = 0; 						//{direction:4,distance:0};
 			
 		mort.angle = 1;	
 		mort.moveAngle = 1;
@@ -74,7 +74,7 @@ Init.actor = function(){
 		mort.id = Math.randomId();
 		mort.publicId = Math.randomId(6);   //id shared with all players
 		mort.optionList = '';   //list of option when right-clicked
-		mort.modList = [];  
+		mort.modList = [];  		//list of enemy mods (ex immuneFire)
 		mort.group = '';            //enemy group
 		mort.x = 1050;	
 		mort.y = 550;	
@@ -139,7 +139,7 @@ Init.actor = function(){
 		mort.hitIf = mort.type;
 		mort.targetIf = mort.type;  //condition used by monsters to find their target. check targetIfList
 		mort.onclick = {};
-		
+		mort.waypoint = null; 		//right click = setRespawnLoc
 		//}	
 	
 
@@ -160,7 +160,7 @@ Init.actor = function(){
 			mort.pickRadius = 100;  //distance to pick items on ground
 			
 			mort.mapSignIn = {x:mort.x,y:mort.y,map:mort.map};
-			mort.mapDeath = {x:mort.x,y:mort.y,map:mort.map};
+			mort.respawnLoc = {x:mort.x,y:mort.y,map:mort.map};
 			
 			Sprite.creation(mort,mort.sprite);
 			mort.ability = Actor.template.ability(type);

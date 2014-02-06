@@ -12,8 +12,16 @@ Actor.remove = function(mort){
 	if(List.map[mort.map])	delete List.map[mort.map].list[mort.id];
 }
 
-
+Actor.removeOnClick = function(mort,side){
+	for(var i in mort.optionList.option){
+		if(mort.optionList.option[i] === mort.onclick[side]){
+			mort.optionList.option.splice(i,1);
+			delete mort.onclick[side];
+			return;
+		}
+	}
 	
+}	
 	
 Actor.pushing = function(pusher,beingPushed){
 	var mort = List.all[beingPushed];
@@ -55,8 +63,9 @@ Actor.pushing = function(pusher,beingPushed){
 	
 }
 
-
-
+Actor.setRespawnLoc = function(mort,wp){
+	mort.respawnLoc = {x:wp.x,y:wp.y,map:wp.map};
+}
 
 Actor.updateEquip = function(mort){
 	for(var k in Cst.element.list){	//Each Element
@@ -425,9 +434,9 @@ Actor.death.player = function(mort){
 	string += array.random();
 	Chat.add(key,string);
 	
-	mort.x = mort.mapDeath.x;
-	mort.y = mort.mapDeath.y;
-	mort.map = List.map[mort.mapDeath.map] ? mort.mapDeath.map : 'test@MAIN';
+	mort.x = mort.respawnLoc.x;
+	mort.y = mort.respawnLoc.y;
+	mort.map = List.map[mort.respawnLoc.map] ? mort.respawnLoc.map : 'test@MAIN';
 	
 	for(var i in mort.resource){
 		mort[i] = mort.resource[i].max;
