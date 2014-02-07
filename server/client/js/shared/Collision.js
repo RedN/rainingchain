@@ -17,23 +17,20 @@ Collision.PtRect = function(pt,rect){
 	return (pt.x >= rect[0] && pt.x <= rect[1] && pt.y >= rect[2] && pt.y <= rect[3])
 }
 
-Collision.PtMap = function(pt,map,player){
-	return Collision.PosMap(Collision.getPos(pt),map,player);
+
+Collision.PosMap = function(pos,map,type){
+	//Test Collision between pt and map
+	
+	var grid = Db.map[Map.getModel(map)].grid[type];
+	return !grid[pos.y] || !+grid[pos.y][pos.x];
 }
 
-
-
-Collision.PosMap = function(pos,map,player){
-	//Test Collision between pt and map (can also test with player map mod)
-	if(player && player.mapMod && player.mapMod && player.mapMod[pos.x + '-' + pos.y]){
+Collision.ActorMap = function(pos,map,player){
+	if(player && player.mapMod && player.mapMod[pos.x + '-' + pos.y]){
 		return player.mapMod[pos.x + '-' + pos.y];
 	}
-	var grid = Db.map[Map.getModel(map)].grid.input;	//could be optimze in 1 line. problem is that i need to send opposite of grid.x.y
-	return !grid[pos.y] || !grid[pos.y][pos.x];
-}
-
-
-Collision.ActorMap = Collision.PosMap;
+	return Collision.PosMap(pos,map,'actor');
+};
 
 Collision.getHitBox = function(player){
 	return [player.x + player.hitBox[2].x,player.x + player.hitBox[0].x,player.y + player.hitBox[3].y,player.y + player.hitBox[1].y];
@@ -111,7 +108,7 @@ Collision.BulletMap = function(bullet){
 
 	var pos = Collision.getPos(bullet);
 	var str = bullet.map + '-' + pos.x + '-' + pos.y;
-	if(Bullet.mapMod[str] || Collision.PosMap(pos,bullet.map,bullet))
+	if(Bullet.mapMod[str] || Collision.PosMap(pos,bullet.map,'bullet'))
 		bullet.toRemove = 1;
 	
 }

@@ -1,13 +1,16 @@
 
 
-bullet map mod
-
+hotspt in loop
+hotspot xy param
+test gravestone
+find tree for wc
 
 draw passive weird block for special balancedAtk
 
 
 select boost is weird?
 
+init drawing css client
 
 #Priority 2:
 -Crafting System with White

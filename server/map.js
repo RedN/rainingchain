@@ -32,10 +32,16 @@ Map.creation.model = function(map){
 	for(var i = 0 ; i < map.grid.length; i++){	
 		grid[i] = [];
 		for(var j = 0 ; j < map.grid[i].length; j++){
-			grid[i][j] = +!+map.grid[i][j];	//need to switch 0 - 1 for astar to work
+			grid[i][j] = +!+map.grid[i][j];
 		}
 	}
-	map.grid = new astar.Graph(grid);
+	
+	var strGrid = stringify(map.grid);
+	map.grid = {};
+	map.grid.astar = new astar.Graph(grid);
+	map.grid.actor = JSON.parse(strGrid.replaceAll('0','a').replaceAll('1','0').replaceAll('2','0').replaceAll('a','1'));
+	map.grid.bullet = JSON.parse(strGrid.replaceAll('0','a').replaceAll('1','0').replaceAll('2','1').replaceAll('a','1'));
+	
 	map.variable = map.variable || {};
 	map.cst = map.cst || {};
 	return map;
@@ -55,7 +61,7 @@ Map.getModel = function(name){
 Map.load = function(model,loadedmapid){
 	loadedmapid = loadedmapid || model + '@MAIN';
 	for(var i in Db.map[model].load){
-		Db.map[model].load[i](loadedmapid,i);
+		Db.map[model].load[i](loadedmapid,i,Db.map[model].hotspot);
 	}
 }
 
@@ -94,7 +100,7 @@ Map.remove = function(map){
 }
 
 
-Map.collisionRect = function(map,rect,type,cb){	
+Map.collisionRect = function(map,rect,type,cb){	//used in map loop
 	var list = List.map[map].list;
 	var array = [];
 	for(var i in list){

@@ -250,15 +250,17 @@ Actor.loop.summon = function(mort){
 //}
 
 //{Move
-Actor.loop.bumper = function(mort){
-	//test collision with map
+Actor.loop.bumper = function(mort){	//test collision with map
+	//test global limit
 	mort.x = Math.max(mort.x,50);
-	mort.x = Math.min(mort.x,Db.map[Map.getModel(mort.map)].grid.input[0].length*32-50);
+	mort.x = Math.min(mort.x,Db.map[Map.getModel(mort.map)].grid.actor[0].length*32-50);
 	mort.y = Math.max(mort.y,50);
-	mort.y = Math.min(mort.y,Db.map[Map.getModel(mort.map)].grid.input.length*32-50);
+	mort.y = Math.min(mort.y,Db.map[Map.getModel(mort.map)].grid.actor.length*32-50);
 	
+	//test bumpers
 	for(var i = 0 ; i < 4 ; i ++){
-		mort.bumper[i] = Collision.PtMap({x:mort.x + mort.bumperBox[i].x,y:mort.y + mort.bumperBox[i].y},mort.map,mort);
+		var pos = Collision.getPos({x:mort.x + mort.bumperBox[i].x,y:mort.y + mort.bumperBox[i].y});
+		mort.bumper[i] = Collision.ActorMap(pos,mort.map,mort);
 	}
 }
 

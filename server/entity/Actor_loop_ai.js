@@ -154,7 +154,7 @@ Actor.loop.input.ability = function(mort){
 
 Actor.getPath = function(mort,target){	//using a*
 	if(mort.map !== target.map) return [];
-	var map = Db.map[Map.getModel(mort.map)].grid.nodes;
+	var map = Db.map[Map.getModel(mort.map)].grid.astar.nodes;
 	
 	var start = Collision.getPos(mort);
 	var end = Collision.getPos(target);
