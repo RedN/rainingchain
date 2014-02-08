@@ -39,12 +39,19 @@ Init.db.sprite = function(){
     		"attack":{"startY":0,"frame":9,"sizeX":64,"sizeY":64,"dir":4,"spd":1,"next":"walk"}
     	}},
 		*/
-		
+		/*
 		"mace":{"src":"actor/mace.png","size":1.5*0.9,"side":[3,2,1,0],'hpBar':-40,'legs':20,
     	"preHitBox":[ -20,20,-20,32 ],"preBumperBox":[ -18,18,4,35 ],
     	"anim": {
     		"walk":{"startY":0,"frame":9,"sizeX":64,"sizeY":64,"dir":4,"spd":1,'walk':1,"next":"walk"},
     		"attack":{"startY":256,"frame":6,"sizeX":128,"sizeY":64,"dir":4,"spd":1,"next":"walk"}
+    	}},
+		*/
+		"mace":{"src":"actor/newMain.png","size":2.5,"side":[1,2,3,0],'hpBar':-50/3,'legs':20,
+    	"preHitBox":[ -30/3,30/3,-10/3,50/3],"preBumperBox":[ -30/3,30/3,-10/3,50/3 ],
+    	"anim": {
+    		"walk":{"startY":0,"frame":4,"sizeX":24,"sizeY":32,"dir":4,"spd":0.4,'walk':1,"next":"walk"},
+    		"attack":{"startY":0,"frame":4,"sizeX":24,"sizeY":32,"dir":4,"spd":0.4,"next":"walk"}
     	}},
 		
 		"sword":{"src":"actor/mace.png","size":1.5,"side":[3,2,1,0],'hpBar':-40,'legs':20,

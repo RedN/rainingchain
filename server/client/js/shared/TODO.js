@@ -4,10 +4,11 @@ save position if @MAIN...
 
 distance for tree and switch and chest
 
-hotspt in loop
+fadeout when death
+fadeout block disappear
+
+
 hotspot xy param
-test gravestone
-find tree for wc
 
 draw passive weird block for special balancedAtk
 protect db, list, itemlist
