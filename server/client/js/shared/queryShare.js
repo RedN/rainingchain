@@ -110,8 +110,11 @@ if(server){
 				var q = m.quest;
 				var e = [];
 				var pl = [];
+				var ec = [];
 				for(var i in List.all){
-					if(List.all[i].type === 'enemy'){e.push(List.all[i]);}
+					if(List.all[i].type === 'enemy'){e.push(List.all[i]);
+						if(List.all[i].combat) ec.push(List.all[i])
+					}
 					if(List.all[i].type === 'player'){pl.push(List.all[i]);}
 					if(List.all[i].type === 'bullet'){var b = List.all[i];}
 				}				

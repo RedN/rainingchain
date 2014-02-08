@@ -51,9 +51,11 @@ Test.serverStart = function(){
 Test.playerStart = function(key){	
 	var inv = List.main[key].invList;
 	var mort = List.all[key];
-    Itemlist.add(inv,'gold');
-    Itemlist.add(inv,'teleport');
+    
 	
+	/*
+	Itemlist.add(inv,'gold');
+    Itemlist.add(inv,'teleport');
 	var al = {
 		'bulletMulti':1,
 		'bulletMulti-boom':1,
@@ -63,10 +65,10 @@ Test.playerStart = function(key){
 		'bulletMulti-fast':1
 	};
 	for(var i in al) mort.abilityList[i] = al[i];
+	*/
 	
-	mort.x = 56*32;
-	mort.y = 101*32;
-	mort.map = "tutorial@MAIN";
+	Actor.teleport(mort,56*32,101*32,"tutorial@MAIN");
+	mort.respawnLoc = {x:56*32,y:101*32,map:"tutorial@MAIN"};
 	
 	/*
 	Itemlist.add(inv,'test');

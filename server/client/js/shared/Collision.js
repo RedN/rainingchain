@@ -93,9 +93,13 @@ Collision.BulletActor = function(atk){
 }
 Collision.BulletActor.test = function(atk,player){
 	var normal = true;
-	if(!['map','true','all'].have(atk.hitIf)){
-		var hIf = typeof atk.hitIf == 'function' ? atk.hitIf : Combat.hitIf.list[atk.hitIf];
-		normal = List.all[atk.parent] && hIf(player,List.all[atk.parent])
+	if(!['map','true','all'].have(atk.hitIf)){	//no testing needed
+		if(['player-simple','enemy-simple'].have(atk.hitIf)){	//only testing type
+			normal = Combat.hitIf.list[atk.hitIf](player);
+		} else {												//testing type and summon
+			var hIf = typeof atk.hitIf == 'function' ? atk.hitIf : Combat.hitIf.list[atk.hitIf];
+			normal = List.all[atk.parent] && hIf(player,List.all[atk.parent])
+		}
 	}
 	return (!atk.hitIfMod && normal) || (atk.hitIfMod && !normal); 
 }

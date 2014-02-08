@@ -16,6 +16,8 @@ Actor.creation = function(data){
 	
 	
 	if(e.treasure) e.treasure = {func:e.treasure,list:[]};
+	for(var i in e.immune) e.equip.def[i] = Cst.bigInt;
+	
 	
 	if(e.nevercombat){ Actor.creation.nevercombat(e); }	
 	else {

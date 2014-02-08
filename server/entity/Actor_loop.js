@@ -37,6 +37,9 @@ Actor.loop = function(mort){
 		if(List.main[i].dialogue){ Actor.loop.dialogue(mort); }
 
 		Test.loop.player(i);	
+		
+		
+			
 	}
 		
 }

@@ -433,9 +433,18 @@ Actor.swapAbility = function(mort,name,position){
 }
 
 Actor.learnAbility = function(mort,name){
+	console.log(name);
 	if(!Db.ability[name]) return;
+	Chat.add(mort.id,"You have learnt a new ability.");
 	mort.abilityList[name] = 1;
 }
+
+Actor.useAbilityPlan = function(mort,name){
+	Actor.learnAbility(mort,name);
+	Itemlist.remove(List.main[mort.id].invList,name,1);
+}
+
+
 
 Actor.examineAbility = function(mort){}
 

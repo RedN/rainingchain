@@ -128,6 +128,7 @@ Init.actor = function(){
 		mort.nevermove = 0;
 		mort.maxSpd = 15;	
 		mort.acc = 3;
+		mort.immune = {};
 		//}
 		
 		//{Setting for Map.load extra

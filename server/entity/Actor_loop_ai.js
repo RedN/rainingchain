@@ -120,7 +120,6 @@ Actor.loop.setTarget.main = function(mort){
 			}
 		}
 	}
-	
 	mort.target.main.list = Object.keys(targetList).length ? [targetList.random()] : [] ;	
 } 
 

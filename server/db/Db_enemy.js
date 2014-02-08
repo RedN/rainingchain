@@ -158,11 +158,11 @@ Init.db.enemy = function(){ var ePreDb = {};
 		"moveRange":{'ideal':50,"confort":50,"aggressive":200,"farthest":300},	
 	}; //}
 	ePreDb["tutorial"]["demon"] = {  //{
-		"name":"I am Immune Fireballs.",
+		"name":"Demon Immune To Fireballs.",
 		"sprite":{'name':"demon",'sizeMod':1},
-		"abilityList":{'fireNova':0.5},
-		'resource':{'hp':{'max':1000,'regen':1},'mana':{'max':100,'regen':1}},
-		
+		"abilityList":{'fireNova':0.4,fireCircle:0.7},
+		'resource':{'hp':{'max':100,'regen':1},'mana':{'max':100,'regen':1}},
+		'immune':{'fire':1},
 		'globalDef':1,
 		'globalDmg':0.2,
 		'deathExp':1,

@@ -10,7 +10,7 @@ Init.db.plan = function(cb){
 			category:'equip',
 			piece:'magic',	
 			type:'staff',
-			unique:'E-tutorial-staff',
+			unique:'Q-tutorial-fakestaff',
 			req:{item:[['wood-0',1],['Q-tutorial-staff',1]],skill:{}},
 		};
 	

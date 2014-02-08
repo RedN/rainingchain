@@ -1,4 +1,8 @@
+death should loop and first param key, 2nd killers
 
+save position if @MAIN...
+
+distance for tree and switch and chest
 
 hotspt in loop
 hotspot xy param
