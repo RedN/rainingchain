@@ -16,17 +16,17 @@ Init.db.material = function(){
 		'chain-80':{'name':'Crystal Chain','icon':'chain.chain'},
 		
 		//Woodcutting
-		'wood-0':{'name':'Ash Wood','icon':'wood.wood'},
-		'wood-20':{'name':'Oak Wood','icon':'wood.wood'},
-		'wood-40':{'name':'Birch Wood','icon':'wood.wood'},
-		'wood-60':{'name':'Maple Wood','icon':'wood.wood'},
-		'wood-80':{'name':'Hickory Wood','icon':'wood.wood'},
+		'wood-0':{'name':'Red Wood','icon':'wood.wood'},
+		'wood-20':{'name':'Yellow Wood','icon':'wood.wood'},
+		'wood-40':{'name':'Blue Wood','icon':'wood.wood'},
+		'wood-60':{'name':'Grey Wood','icon':'wood.wood'},
+		'wood-80':{'name':'Dark Wood','icon':'wood.wood'},
 		
-		'leaf-0':{'name':'Ash Leaf','icon':'leaf.leaf'},
-		'leaf-20':{'name':'Oak Leaf','icon':'leaf.leaf'},
-		'leaf-40':{'name':'Birch Leaf','icon':'leaf.leaf'},
-		'leaf-60':{'name':'Maple Leaf','icon':'leaf.leaf'},
-		'leaf-80':{'name':'Hickory Leaf','icon':'leaf.leaf'},
+		'leaf-0':{'name':'Red Leaf','icon':'leaf.leaf'},
+		'leaf-20':{'name':'Yellow Leaf','icon':'leaf.leaf'},
+		'leaf-40':{'name':'Blue Leaf','icon':'leaf.leaf'},
+		'leaf-60':{'name':'Grey Leaf','icon':'leaf.leaf'},
+		'leaf-80':{'name':'Dark Leaf','icon':'leaf.leaf'},
 		
 		
 		//Hunter

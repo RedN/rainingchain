@@ -14,6 +14,9 @@ Actor.creation = function(data){
 	List.all[e.id] = e;
 	List.map[e.map].list[e.id] = e;
 	
+	
+	if(e.treasure) e.treasure = {func:e.treasure,list:[]};
+	
 	if(e.nevercombat){ Actor.creation.nevercombat(e); }	
 	else {
 		e = Actor.creation.mod(e,data); 
@@ -92,7 +95,6 @@ Actor.creation.db = function(e,d){
 		Actor.swapAbility(e,i,position);
 		position++;
 	}
-	
 	Sprite.creation(e,e.sprite);		//To set hitbox and bumper
 		
 	return e;
@@ -194,12 +196,9 @@ Actor.creation.optionList = function(e){
 	
 	if(e.type === 'player') ol.option.push({'name':'Trade',"func":'Main.openWindow',"param":['trade',e.id]});
 	if(e.dialogue)	ol.option.push({'name':'Talk To',"func":'Actor.talk',"param":[e.id]});
-	
-	if(e.waypoint){
-		var info = {'name':'Set Waypoint',"func":'Actor.setWaypoint',"param":[e.waypoint]};
-		ol.option.push(info);
-		e.onclick.shiftLeft = info;	
-	}
+	if(e.waypoint)	ol.option.push({'name':'Set Respawn',"func":'Actor.setRespawn',"param":[{x:e.x,y:e.y+64,map:e.map}]});
+	if(e.treasure)	ol.option.push({'name':'Open Chest',"func":'Actor.openChest',"param":[e.id]});
+	if(e.tree)	ol.option.push({'name':'Cut Tree',"func":'Actor.cutTree',"param":[e.id]});
 	
 	if(e.block && e.block.pushable){
 		var info = {'name':'Push',"func":'Actor.pushing',"param":[e.id]};
@@ -208,7 +207,6 @@ Actor.creation.optionList = function(e){
 	} else if(e.onclick.shiftLeft){
 		ol.option.push(e.onclick.shiftLeft);
 	}
-	
 	
 	e.optionList = ol.option.length ? ol : '';
 	return e;

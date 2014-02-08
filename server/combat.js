@@ -319,38 +319,49 @@ Combat.targetIf.global = function(atk,def){
 
 Combat.targetIf.list = {
 	//List of commons Target if 
-	'player':(function(tar,self){ 
+	
+	'player-simple':(function(def,atk){ 
+		return def.type === "player";
+	}),
+	'enemy-simple':(function(def,atk){ 
+		return def.type === "enemy";
+	}),
+	
+	'player':(function(def,atk){ 
 		try {
-			if(tar.summoned){
-				if(tar.summoned.father === self.id){ return false }
-				var hIf = typeof self.hitIf === 'function' ? self.hitIf : Combat.hitIf.list[self.hitIf];
-				return hIf(List.all[tar.summoned.father],self);
-			}
-			return tar.type === "enemy"; 
+			if(!def.summoned) return def.type === "player"; 
+			
+			if(def.summoned.father === atk.id) return false;
+			var hIf = typeof atk.hitIf === 'function' ? atk.hitIf : Combat.hitIf.list[atk.hitIf];
+			return hIf(List.all[def.summoned.father],atk);
+			
 		} catch(err) { logError(err); }
 	}),
-	'enemy':(function(tar,self){ 
+	'enemy':(function(def,atk){ 
 		try {
-		if(tar.summoned){
-			if(tar.summoned.father === self.id){ return false }
-			var hIf = typeof self.hitIf === 'function' ? self.hitIf : Combat.hitIf.list[self.hitIf];
-			return hIf(List.all[tar.summoned.father],self);
-		}
-		return tar.type === "player"; 
+			if(!def.summoned) return def.type === "enemy"; 
+			
+			if(def.summoned.father === atk.id) return false;
+			var hIf = typeof atk.hitIf === 'function' ? atk.hitIf : Combat.hitIf.list[atk.hitIf];
+			return hIf(List.all[def.summoned.father],atk);
+			
 		} catch(err) { logError(err); }
 	}),
-	'all':(function(tar,self){ return true }),
-	'true':(function(tar,self){ return true }),
-	'map':(function(tar,self){ return true }),
-	'none':(function(tar,self){ return false }),
-	'false':(function(tar,self){ return false }),
-	'summoned':(function(tar,self){
+	'summoned':(function(def,atk){
 		try {
-			if(tar.id === self.summoned.father){ return false; }
-			var hIf = typeof List.all[self.summoned.father].hitIf === 'function' ? List.all[self.summoned.father].hitIf : Combat.hitIf.list[List.all[self.summoned.father].hitIf];
-			return hIf(tar,List.all[self.summoned.father]);
+			if(def.id === atk.summoned.father){ return false; }
+			var master = List.all[atk.summoned.father];
+			var hIf = typeof master.hitIf === 'function' ? master.hitIf : Combat.hitIf.list[master.hitIf];
+			return hIf(def,master);
 		} catch(err) { logError(err); } //quickfix
 	}),
+	
+	'all':(function(def,atk){ return true }),
+	'true':(function(def,atk){ return true }),
+	'map':(function(def,atk){ return true }),
+	'none':(function(def,atk){ return false }),
+	'false':(function(def,atk){ return false }),
+	
 };
 
 

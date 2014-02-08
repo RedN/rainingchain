@@ -41,7 +41,7 @@ Init.db.sprite = function(){
 		*/
 		
 		"mace":{"src":"actor/mace.png","size":1.5*0.9,"side":[3,2,1,0],'hpBar':-40,'legs':20,
-    	"preHitBox":[ -20,20,-20,32 ],"preBumperBox":[ -12,12,4,35 ],
+    	"preHitBox":[ -20,20,-20,32 ],"preBumperBox":[ -18,18,4,35 ],
     	"anim": {
     		"walk":{"startY":0,"frame":9,"sizeX":64,"sizeY":64,"dir":4,"spd":1,'walk':1,"next":"walk"},
     		"attack":{"startY":256,"frame":6,"sizeX":128,"sizeY":64,"dir":4,"spd":1,"next":"walk"}
@@ -134,6 +134,9 @@ Init.db.sprite = function(){
     		
     	}},
     	
+		"bee":{"src":"actor/bee.png",rgpvx:1},
+		"demon":{"src":"actor/demon.png",rgpvx:1},
+		
     //BULLET
     	"fireball":{"src":"bullet/fireball.png","size":1,"side":[0,1,2,3],
     	"anim": {
@@ -159,13 +162,41 @@ Init.db.sprite = function(){
     		"travel":{"startY":0,"frame":8,"sizeX":52,"sizeY":52,"dir":1,"spd":1,"next":"travel"},
     	}},
     	
-    //Picture
+    //System
 		"block1x1":{"src":"picture/block2x2.png","size":0.5,"side":[0],
-    	"preBumperBox":[ -28,28,-28,28 ],"preHitBox":[ -28,28,-28,28 ],
+    	"preBumperBox":[ -26,26,-26,26 ],"preHitBox":[ -26,26,-26,26 ],
 		"anim": {
     		"walk":{"startY":0,"frame":1,"sizeX":64,"sizeY":64,"dir":1,"spd":0,"next":"walk"},    	
     	}},
-    
+		
+		"grave":{"src":"picture/grave.png","size":2,"side":[0],
+    	"preBumperBox":[ -16,16,-16,16 ],"preHitBox":[ -16,16,-16,16 ],
+		"anim": {
+    		"walk":{"startY":0,"frame":1,"sizeX":32,"sizeY":32,"dir":1,"spd":0,"next":"walk"},    	
+    	}},
+		
+		"chest":{"src":"picture/chest.png","size":2,"side":[0],
+    	"preBumperBox":[ -16,16,-16,16 ],"preHitBox":[ -16,16,-16,16 ],
+		"anim": {
+    		"walk":{"startY":0,"frame":1,"sizeX":32,"sizeY":32,"dir":1,"spd":0,"next":"walk"},  
+			"close":{"startY":0,"frame":1,"sizeX":32,"sizeY":32,"dir":1,"spd":0,"next":"close"},
+			"open":{"startY":32,"frame":1,"sizeX":32,"sizeY":32,"dir":1,"spd":0,"next":"open"},			
+    	}},
+		
+		"block1x1-black":{"src":"picture/block2x2Fix.png","size":0.5,"side":[0],
+    	"preBumperBox":[ -26,26,-26,26 ],"preHitBox":[ -26,26,-26,26 ],
+		"anim": {
+    		"walk":{"startY":0,"frame":1,"sizeX":64,"sizeY":64,"dir":1,"spd":0,"next":"walk"},    	
+    	}},
+		
+		"tree-red":{"src":"picture/red_tree.png","size":2,"side":[0],
+    	"preBumperBox":[ -32,32,-40,40 ],"preHitBox":[ -32,32,-40,40 ],
+		"anim": {
+    		"walk":{"startY":0,"frame":1,"sizeX":64,"sizeY":80,"dir":1,"spd":0,"next":"walk"}, 
+			"ready":{"startY":0,"frame":1,"sizeX":64,"sizeY":80,"dir":1,"spd":0,"next":"ready"},
+			"cut":{"startY":80,"frame":1,"sizeX":64,"sizeY":80,"dir":1,"spd":0,"next":"cut"},  		  			
+    	}},
+		
 		"switchBox":{"src":"picture/switch.png","size":2,"side":[0],
     	"preBumperBox":[ -16,16,-16,16 ],"preHitBox":[ -16,16,-16,16 ],
 		"anim": {
@@ -179,7 +210,23 @@ Init.db.sprite = function(){
     
     for(var i in Db.sprite){
 		var spr = Db.sprite[i];
-    	spr.size = spr.size || 1;
+    	
+		if(spr.rgpvx){
+			var src = spr.src;
+			spr = {"size":2,"side":[2,0,1,3],'hpBar':-22,'legs':16,
+			"preHitBox":[ -16,16,-16,16 ],"preBumperBox":[ -16,16,-16,16 ],
+			"anim": {
+				"walk":{"startY":0,"frame":3,"sizeX":32,"sizeY":32,"dir":4,"spd":0.5,'walk':1,"next":"walk"},
+				"attack":{"startY":0,"frame":3,"sizeX":32,"sizeY":32,"dir":4,"spd":0.5,"next":"attack"},
+			}};
+			spr.src = src;
+			Db.sprite[i] = spr;
+		}
+		
+		
+		
+		
+		spr.size = spr.size || 1;
     	spr.legs = spr.legs || 0;
 		
 		if(spr.preBumperBox) spr.preHitBox = spr.preHitBox || deepClone(spr.preBumperBox);
@@ -190,7 +237,7 @@ Init.db.sprite = function(){
     		anim.spd = anim.spd || 1; 
     		anim.next = anim.next || 'walk';
     	}
-    
+		
     
     }
     

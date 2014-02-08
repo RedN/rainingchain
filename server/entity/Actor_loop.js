@@ -143,6 +143,9 @@ Actor.loop.pushed = function(mort){
 		mort.spdX = cos(status.angle)*status.magn;
 		mort.spdY = sin(status.angle)*status.magn;
 		status.time--;
+	} else {
+		status.spdX = 0;
+		status.spdY = 0;
 	}
 }
 

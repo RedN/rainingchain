@@ -20,7 +20,14 @@ Actor.removeOnClick = function(mort,side){
 			return;
 		}
 	}
-	
+}	
+Actor.removeOption = function(mort,option){	//option is object or name
+	for(var i in mort.optionList.option){
+		if(mort.optionList.option[i] === option || mort.optionList.option[i].name === option){
+			mort.optionList.option.splice(i,1);
+			return;
+		}
+	}
 }	
 	
 Actor.pushing = function(pusher,beingPushed){
@@ -63,8 +70,33 @@ Actor.pushing = function(pusher,beingPushed){
 	
 }
 
-Actor.setRespawnLoc = function(mort,wp){
+Actor.cutTree = function(mort,tree){	//quick fix...
+	Itemlist.add(List.main[mort.id].invList,'wood-0',1);
+	Sprite.change(List.all[tree],{'anim':'cut'});
+	Chat.add(mort.id,"You manage to cut a branch off this Red Tree.");
+	Actor.removeOption(List.all[tree],'Cut Tree');
+
+}
+
+Actor.setRespawn = function(mort,wp){
+	Chat.add(mort.id,"You have changed your respawn point. Upon dying, you will now be teleported here.");
 	mort.respawnLoc = {x:wp.x,y:wp.y,map:wp.map};
+}
+
+Actor.openChest = function(mort,eid){	//need work
+	var e = List.all[eid];
+	var chest = e.treasure;
+	if(!chest) return;
+	if(chest.list.have(mort.id)){
+		Chat.add(mort.id,"You have already opened that chest.");
+		return;
+	}
+	Chat.add(mort.id,"You opened the chest.");
+		
+	if(chest.func(mort.id) !== false){
+		Sprite.change(e,{'anim':'open'});
+		chest.list.push(mort.id);
+	};
 }
 
 Actor.updateEquip = function(mort){
@@ -450,7 +482,7 @@ Actor.death.enemy = function(mort){
 	var killers = Actor.death.getKiller(mort);
 	Actor.death.drop(mort,killers);
 	Actor.death.exp(mort,killers);
-	if(mort.death){ mort.death(killers); }	//custom death function (ex quest)
+	if(mort.deathFunc){ mort.deathFunc(killers); }	//custom death function (ex quest)
 	Actor.death.performAbility(mort);				//custom death ability function
 	ActiveList.remove(mort);
 }

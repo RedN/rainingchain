@@ -195,19 +195,26 @@ Draw.popup.plan.req = function(s){
 	ctx.font= fontSize + "px Monaco";
 	ctx.textAlign = 'left';
 	
-	
 	var count = 0;
 	var numX = s.x+10;
-
-	for(var i in s.equip.req.skill){
-		var numY = s.y+80+count*20;
+	
+	if(Object.keys(s.equip.req.skill).length){
+		ctx.fillText('Skills Required:',numX,s.y+80+count*20);
+		count++;
 		
-		Draw.icon('skill.' + i,[numX-2,numY+2],16);	
+		for(var i in s.equip.req.skill){
+			var numY = s.y+80+count*20;
+			
+			Draw.icon('skill.' + i,[numX-2,numY+2],16);	
+			
+			var str = 'Level '  + s.equip.req.skill[i] + ' ' + i.capitalize();
+			ctx.fillText(str,numX+25,numY);
+			count++;	
+		}
 		
-		var str = 'Level '  + s.equip.req.skill[i] + ' ' + i.capitalize();
-		ctx.fillText(str,numX+25,numY);
 		count++;	
 	}
+	ctx.fillText('Items Required:',numX,s.y+80+count*20);
 	count++;	
 	
 	for(var i in s.equip.req.item){

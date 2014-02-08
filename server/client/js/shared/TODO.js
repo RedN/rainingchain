@@ -6,7 +6,7 @@ test gravestone
 find tree for wc
 
 draw passive weird block for special balancedAtk
-
+protect db, list, itemlist
 
 select boost is weird?
 
@@ -30,45 +30,19 @@ html window
 
 
 
-TUTORIAL:
-
-rotating blade clockwise, hit button to change rotation,
-
-#########
-##### $	###
-#####	  #
-	  B   #
-####	  #
-
-monster in room. cant kill cuz no aiblity
-go next room: get fireball on ground. equip it
-kill monster, go next room
-
-3 monster for each element
-first is first but cant kill
-kill lightning and cold to get new ability 
-
-(requires bow) and a bow
-
-kill fire, open door
+Selling points:
+no generic quest: fetch, kill X,  => puzzle, unique boss
+no p2w
+50% skills, 25% gear, 25% lvlup
+best gear = require effort, create own gear
+encourage collect things yourself
+quest as hard as you can handle it.
+open source
+fight enemy pack; boss fight
+no download.
+changeable graphics
+dark souls dodge
+enemy different with lvl
 
 
-
-
-
-
-
-
-
-/*
-
-whocareslol222222 0:39 : https://www.youtube.com/watch?v=PCLbPLEo4Q4
-Nick McDonald 0:42 : https://www.youtube.com/watch?v=6dcrxX19xsI
-Waltsu https://www.youtube.com/watch?v=Rg5UJY-Ym6Q
-Jokke l Pum 1:02 : http://www.youtube.com/watch?v=HRGvx6JNHgo
-BurninheartRS 1:22 : https://www.youtube.com/watch?v=6ceMBFkcJ50
-Marowo 2:16 : https://www.youtube.com/watch?v=pYBLl4RRwrU
-
-
-*/
 

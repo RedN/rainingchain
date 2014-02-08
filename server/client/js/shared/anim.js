@@ -2,7 +2,7 @@
 Init.db.anim = function(){
 	Db.anim ={
 			"slash":{'frame':8},
-			"attack1":{'frame':3},
+			"attack1":{'frame':3,spd:0.5},
 			"attack2":{'frame':8},
 			"attack3":{'frame':10},
 			"attack4":{'frame':7},

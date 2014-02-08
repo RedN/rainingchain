@@ -247,7 +247,7 @@ Itemlist.click.inventory = function(inv,side,slot,amount){
 	//No Window
 	var item = Db.item[inv.data[slot][0]];
 	if(side === 'left'){	
-		if(m.temp.selectInv){
+		if(m.temp.selectInv){	//select inv
 			var array = [inv.data[slot][0]];
 			for(var i = List.main[key].temp.selectInv.param.length-1 ; i >= 0 ; i--){
 				array.unshift(List.main[key].temp.selectInv.param[i]); }
@@ -258,7 +258,7 @@ Itemlist.click.inventory = function(inv,side,slot,amount){
 		
 		if(item.option[0] && item.option[0].name !== 'Drop' && item.option[0].func && !item.option[0].client){
 			applyFunc.key(key,item.option[0].func,item.option[0].param); 
-			if(item.remove){ Itemlist.remove(inv,key,item.id); }
+			if(item.remove){ Itemlist.remove(inv,item.id); }
 		}	
 	}
 

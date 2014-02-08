@@ -6,6 +6,14 @@ Init.db.plan = function(cb){
 	db.plan.find({},{'_id':0},function(err, results) { if(err) throw err
 		for(var i in results)	a[results[i].id] = results[i];
 	
+		a['Q-tutorial-staff'] = {
+			category:'equip',
+			piece:'magic',	
+			type:'staff',
+			unique:'E-tutorial-staff',
+			req:{item:[['wood-0',1],['Q-tutorial-staff',1]],skill:{}},
+		};
+	
 		a['randomArmor'] = {
 			category:'equip',
 			piece:'helm',	
@@ -183,8 +191,12 @@ Plan.use = function(key,id){	//when player tries to use plan
 	var inv = List.main[key].invList;
 	
 	if(Plan.test(key,plan.req)){ //meet req
+		console.log(plan.req.item);
 		Itemlist.remove.bulk(inv,plan.req.item);
-			
+		
+		if(plan.unique){ Itemlist.add(inv, plan.unique); return;}	//unique items
+
+		
 		if(plan.category === 'equip') Itemlist.add(inv, Craft.equip(plan)); 
 		if(plan.category === 'ability') Itemlist.add(inv, Craft.ability(plan)); 
 	} else { //dont meet

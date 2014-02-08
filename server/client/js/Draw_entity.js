@@ -3,7 +3,7 @@ Draw.actor = function (){
 	for(var i = 0 ; i < array.length ; i ++){
 		var mort = array[i];
 		Draw.sprite(mort);
-		if(mort.combat) Draw.actor.hpBar(mort); 
+		if(mort.combat && mort !== player) Draw.actor.hpBar(mort); 
 		if(mort.chatHead) Draw.actor.chatHead(mort); 
 	}
 }	

@@ -31,14 +31,17 @@ Db.query = function(d){
 
 
 Db.query.plan = function(info){
+	var item = [];
 	for(var i in info.req.item){
 		var s = info.req.item[i];
 		var tmp = [];
+		if(s[0] === info.id) continue;
 		tmp[0] = Db.item[s[0]].icon;
 		tmp[1] = s[1];
 		tmp[2] = Db.item[s[0]].name;
-		info.req.item[i] = tmp;
+		item.push(tmp);
 	}	
+	info.req.item = item;
 	return info;
 }
 

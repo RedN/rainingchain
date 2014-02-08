@@ -106,8 +106,6 @@ Draw.minimap = function (){ ctxrestore();
 	var s = Draw.minimap.constant();
 	Draw.minimap.box(s);
 	Draw.minimap.map(s,'b');
-	//Draw.minimap.map(s,'i');	//require swapping...
-	Draw.minimap.icon(s);
 	Draw.minimap.button(s);
 }
 
@@ -120,10 +118,12 @@ Draw.minimap.constant = function(){
 	}
 }
 
-Draw.minimap.map = function(s,layer){
+Draw.minimap.map = function(s,layer){	//bugged
 	var map = Db.map[player.map];
 	var mapX = Math.floor((player.x-1024)/2048).mm(0,map.img[layer].length-1);
-	var mapY = Math.floor((player.y-1024)/2048).mm(0,map.img[layer][mapX].length-1);
+	mapX = mapX.mm(0,map.img[layer].length-1);
+	if(!map.img[layer][mapX])	return;
+	var mapY = Math.floor((player.y-1024)/2048).mm(0,map.img[layer][0].length-1);
 	var mapXY = map.img[layer][mapX][mapY];
 	var pX = player.x-mapX*2048;
 	var pY = player.y-mapY*2048;

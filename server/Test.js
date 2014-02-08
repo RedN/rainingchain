@@ -50,13 +50,31 @@ Test.serverStart = function(){
 //Called when player logs in
 Test.playerStart = function(key){	
 	var inv = List.main[key].invList;
+	var mort = List.all[key];
     Itemlist.add(inv,'gold');
     Itemlist.add(inv,'teleport');
+	
+	var al = {
+		'bulletMulti':1,
+		'bulletMulti-boom':1,
+		'bulletMulti-para':1,
+		'bulletMulti-sin':1,
+		'bulletMulti-hitmod':1,
+		'bulletMulti-fast':1
+	};
+	for(var i in al) mort.abilityList[i] = al[i];
+	
+	mort.x = 56*32;
+	mort.y = 101*32;
+	mort.map = "tutorial@MAIN";
+	
+	/*
 	Itemlist.add(inv,'test');
 	Itemlist.add(inv,'wood-20',1000);
 	Itemlist.add(inv,'boost_orb',1000);
 	Itemlist.add(inv,'upgrade_orb',1000);
 	Itemlist.add(inv,'removal_orb',1000);
+	*/
 	
 }
 

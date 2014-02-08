@@ -63,7 +63,7 @@ Loop.Map = function(){
 		}
 		
 		for(var j in List.map[i].loop){
-			List.map[i].loop[j](i,List.map[i].variable,List.map[i].cst);
+			List.map[i].loop[j](i,List.map[i].variable,List.map[i].cst,Db.map[Map.getModel(i)].hotspot);
 		}
 	}
 }

@@ -104,7 +104,7 @@ Attack.creation.info = function(player,bullet){
 	
 	bullet.map = player.map || 'test@MAIN';	
 	bullet.viewedIf = player.viewedIf || 'true';
-	bullet.hitIf = player.hitIf || 'enemy';
+	bullet.hitIf = player.hitIf || 'player';
 	
 	bullet.angle = (player.angle || 0 +360)%360;
 	

@@ -212,6 +212,71 @@ Init.db.ability = function(cb){
 			a[results[i].id] = results[i];
 		}
 	
+	
+	//Bee.
+	a['pierce'] = {'type':'attack','name':'boom','icon':'attackMagic.fireball',
+		'spd':{'main':1,'support':0},'period':{'own':25,'global':25},
+		'action':{'func':'Combat.action.attack','param':{
+			'type':"strike",'angle':0,'amount':1,
+			'hitImg':{'name':"attack1",'sizeMod':0.5},
+			'dmg':{'main':100,'ratio':{'melee':0,'range':10,'magic':80,'fire':10,'cold':0,'lightning':0}},
+			'width':50,
+			'height':50,
+			'delay':0,
+			'minRange':0,
+			'maxRange':50,
+		}
+	}};
+	
+	//Ability Given
+	a['tutorial-slash'] = {'type':'attack','name':'Slash','icon':'attackMelee.slash',
+		'spd':{'main':1,'support':0},'period':{'own':25,'global':25},
+		'action':{'func':'Combat.action.attack','param':{
+			'type':"strike",'angle':0,'amount':1,
+			'hitImg':{'name':"attack1",'sizeMod':0.5},
+			'dmg':{'main':100,'ratio':{'melee':50,'range':0,'magic':50,'fire':0,'cold':0,'lightning':0}},
+			'width':50,
+			'height':50,
+			'delay':0,
+			'minRange':0,
+			'maxRange':50,
+		}
+	}};
+	
+	//Demon
+	a['fireNova'] = {'type':'attack','name':'sin','icon':'attackMagic.fireball',
+		'spd':{'main':1,'support':0},'period':{'own':25,'global':25},
+		'action':{'func':'Combat.action.attack','param':{
+			'type':"bullet",'angle':0,'amount':1,
+			'objImg':{'name':"fireball",'sizeMod':1},'hitImg':{'name':"fire2",'sizeMod':0.5},
+			'dmg':{'main':100,'ratio':{'melee':0,'range':10,'magic':80,'fire':10,'cold':0,'lightning':0}},
+			
+			spd:5,
+			nova:{					
+				period:4,				
+				rotation:10,
+				attack:{		//attack info
+					'type':"bullet",'angle':180,'amount':2,
+					'objImg':{'name':"fireball",'sizeMod':0.5},'hitImg':{'name':"fire2",'sizeMod':0.3},
+					'dmg':{'main':25,'ratio':{'melee':0,'range':10,'magic':80,'fire':10,'cold':0,'lightning':0}},
+				},		
+			},
+		}
+	}};
+	
+	//First fireball
+	a['fireball'] = {'type':'attack','name':'Basic Fireball','icon':'attackMagic.fireball',
+		'spd':{'main':1,'support':0},'period':{'own':25,'global':25},
+		'action':{'func':'Combat.action.attack','param':{
+			'type':"bullet",'angle':0,'amount':1,
+			'objImg':{'name':"fireball",'sizeMod':1},'hitImg':{'name':"fire2",'sizeMod':0.5},
+			'dmg':{'main':100,'ratio':{'melee':0,'range':0,'magic':0,'fire':100,'cold':0,'lightning':0}},
+		}
+	}};
+	
+	
+	
+	
 	a['bulletMulti'] = {'type':'attack','name':'Multishot','icon':'attackMagic.fireball',
 		'spd':{'main':0.8,'support':0.2},'period':{'own':20,'global':10},
 		'action':{'func':'Combat.action.attack','param':{
@@ -444,6 +509,7 @@ Ability.creation = function(a){
 	Item.creation({
 		name:a.name,
 		icon:'plan.ability',
+		remove:1,
 		option:[	
 			{'name':'Examine Ability','func':'Actor.examineAbility','param':[a.id]},
 			{'name':'Learn Ability','func':'Actor.learnAbility','param':[a.id]},

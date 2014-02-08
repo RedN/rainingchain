@@ -14,6 +14,15 @@ Init.db.equip = function (cb){
 		'dmg':{'main':1,'ratio':{'melee':1,'range':1,'magic':1,'fire':1,'cold':1,'lightning':1}},
 	};					//DONT TOUCH
 	
+	pre['E-tutorial-staff'] = {
+		'piece': 'magic','type': 'staff','icon':'magic.staff',
+		'name':"Crappy Staff",'sprite':{'name':"mace",'sizeMod':1},
+		'dmg':{'main':10,'ratio':{'melee':20,'range':0,'magic':40,'fire':40,'cold':0,'lightning':0}},
+		'boost': [],
+	}
+	
+	
+	
 	
 	pre['metalbody'] = {'name':"Hello Kitty",'piece':'body','type':'metal','icon':'body.metal',
 		'def':{'main':10,'ratio':{'melee':1,'range':1,'magic':1,'fire':1,'cold':1,'lightning':1}},

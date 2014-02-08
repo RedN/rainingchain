@@ -69,6 +69,21 @@ Actor.loop.input.move.sub = function(mort){
 
 }
 
+Actor.loop.input.ability = function(mort){
+	/*
+	var target = List.all[mort.target];
+	var diffX = target.x - mort.x;
+	var diffY = target.y - mort.y;
+	var diff = Math.sqrt(diffX*diffX+diffY*diffY);
+	*/
+	if(!mort.target.main.list[0]){
+		mort.abilityChange.press = '0000000000000000000000'; return;
+	}
+	mort.abilityChange.press = '';
+	for(var i in mort.abilityList){
+		mort.abilityChange.press += mort.abilityList[i] >= Math.random() ? '1' : '0';	
+	}
+}
 
 Actor.loop.setTarget = function(mort){
 	if(mort.type !== 'enemy') return;
@@ -136,21 +151,6 @@ Actor.loop.setTarget.stuck = function(mort){
 	mort.target.sub.list = Actor.getPath(mort,maintar);
 } 
 
-Actor.loop.input.ability = function(mort){
-	/*
-	var target = List.all[mort.target];
-	var diffX = target.x - mort.x;
-	var diffY = target.y - mort.y;
-	var diff = Math.sqrt(diffX*diffX+diffY*diffY);
-	*/
-	if(!mort.target.main.list[0]){
-		mort.abilityChange.press = '0000000000000000000000'; return;
-	}
-	mort.abilityChange.press = '';
-	for(var i in mort.abilityList){
-		mort.abilityChange.press += mort.abilityList[i] >= Math.random() ? '1' : '0';	
-	}
-}
 
 Actor.getPath = function(mort,target){	//using a*
 	if(mort.map !== target.map) return [];

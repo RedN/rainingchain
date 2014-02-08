@@ -182,7 +182,35 @@ Init.db.quest = function(){
 	}();
 	//}
 	
+	//{tutorial
+	Db.quest['tutorial'] = function(){
+		var q = {};
+		q.id = 'tutorial';
+		q.name = 'Tutorial';
+		q.icon = 'skill.melee';
+		q.reward = {'stat':'dmg-fire-+','value':[0.05,0.10]};
+		q.rewardMod = 0.5;
+		q.description = "Raining Chain Tutorial";
+		
+		q.variable = {
+            beeDead:false,
+            bossDead:false,
+		};
+		
+		q.requirement = [];
+		q.hintGiver = function(key,mq){	return 'None.';};
+		q.dialogue = {};
+		q.bonus = {};
+		q.map = {};
+		q.item = {};
+		
+		//{ Functions
 	
+		//}
+		
+		return q;
+	}();
+	//}
 	
 	
 	

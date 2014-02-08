@@ -7,7 +7,7 @@ Init.actor = function(){
 	var defaultPreActor = function(type){
 		var mort = {};
 		
-		//{Dont touch
+		//dont touch
 		mort.change = {};
 		mort.old = {};
 		mort.permBoost = {};    //no timer
@@ -68,7 +68,7 @@ Init.actor = function(){
 		mort.move = 1;
 		mort.summon = {};       //if actor is master
 		mort.summoned = 0;      //if actor is child. .summoned = master id
-		//}
+		//}}
 		
 		//{Setting Affected for Db.enemy
 		mort.id = Math.randomId();
@@ -136,10 +136,11 @@ Init.actor = function(){
 		mort.deathAbility = [];
 		mort.combat = 1;
 		mort.deleteOnceDead = 0;
-		mort.hitIf = mort.type;
-		mort.targetIf = mort.type;  //condition used by monsters to find their target. check targetIfList
+		mort.hitIf = 'player';
+		mort.targetIf = 'player';  //condition used by monsters to find their target. check targetIfList
 		mort.onclick = {};
-		mort.waypoint = null; 		//right click = setRespawnLoc
+		mort.waypoint = null; 		//right click = setRespawn
+		mort.treasure = null;		//right click = gives items;
 		//}	
 	
 
@@ -148,7 +149,7 @@ Init.actor = function(){
 			mort.skill = Actor.template.skill();
 			mort.removeList = {};	//for things that got removed from activeList
 			mort.type = 'player';
-			mort.hitIf = 'player';
+			mort.hitIf = 'enemy';
 			mort.targetIf = 'player';
 			mort.privateChange = {};
 			mort.privateOld = {};
@@ -186,8 +187,9 @@ Init.actor = function(){
 
 //Template
 Actor.template.skill = function(){
+	var value = Cst.exp.list[0];
 	return {
-		'exp':{'melee':100000,'range':100000,'magic':100000,'metalwork':100000,'woodwork':100000,'leatherwork':100000,'geology':100000,'metallurgy':100000,'trapping':100000},
+		'exp':{'melee':value,'range':value,'magic':value,'metalwork':value,'woodwork':value,'leatherwork':value,'geology':value,'metallurgy':value,'trapping':value},
 		'lvl':{'melee':0,'range':0,'magic':0,'metalwork':0,'woodwork':0,'leatherwork':0,'geology':0,'metallurgy':0,'trapping':0},
 	}; 
 };
@@ -230,14 +232,7 @@ Actor.template.mastery = function(type){
 };
 
 Actor.template.abilityList = function(){
-	return {
-		'bulletMulti':1,
-		'bulletMulti-boom':1,
-		'bulletMulti-para':1,
-		'bulletMulti-sin':1,
-		'bulletMulti-hitmod':1,
-		'bulletMulti-fast':1,
-	};
+	return {};	//check Test
 }
 Actor.template.ability = function(){
 	return [0,0,0,0,0,0];
