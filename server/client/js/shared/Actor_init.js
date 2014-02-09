@@ -135,15 +135,18 @@ Init.actor = function(){
 		mort.dialogue = '';      //function used to trigger dialogue
 		mort.chatHead = "";     //is talking?
 		mort.deathAbility = [];
+		mort.deathFunc = null;	//function param = id of each killer
+		mort.deathFuncArray = null;	//function param = array id of killers
+		mort.shiftClick = null;
 		mort.combat = 1;
 		mort.deleteOnceDead = 0;
 		mort.hitIf = 'player';
 		mort.targetIf = 'player';  //condition used by monsters to find their target. check targetIfList
-		mort.onclick = {};
+		mort.onclick = {};			
 		mort.waypoint = null; 		//right click = setRespawn
 		mort.treasure = null;		//right click = gives items;
 		//}	
-	
+		
 
 		//{Player Only
 		if(type === 'player'){

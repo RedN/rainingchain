@@ -79,6 +79,8 @@ Attack.template = function(){
 
 
 Attack.creation = function(player,attack,extra){
+	if(player.xy){ player.x = player.xy.x; player.y = player.xy.y; delete player.xy; }
+	
 	var s = attack;
 	s = Attack.creation.info(player,s);
 	
@@ -86,6 +88,7 @@ Attack.creation = function(player,attack,extra){
 	s.hitId = Math.randomId();
 	
 	attack = useTemplate(attack,extra); //need here so angle isnt always player angle
+	s.angle = (s.angle%360+360)%360
 	s.crAngle = s.angle; s.moveAngle = s.angle;
 
 	List.all[s.id] = s;

@@ -16,19 +16,6 @@ Init.db.map = function (){
 			
 			
 		}
-		/*
-		[0,0,0,1,2,0,0,
-		0,0,0,0,3,0,0,0,]
-		
-		enemyList = [
-		{x:4*32,y:0*32},
-		{x:5*32,y:0*32},
-		{x:5*32,y:1*32},
-		
-		]
-		
-		x:enemyList[3].x
-		*/
 		
 		m.loop = {};
 		m.loop.main = function(map,variable,cst){
@@ -66,9 +53,7 @@ Init.db.map = function (){
 		
 		m.load = {};
 		m.load.main = function(map,loadtype,hotspot){
-			
-			
-			
+
 			//grave
 			Actor.creation({'xy':hotspot.h,'map':map,
 				"category":"system","variant":"grave"
@@ -167,8 +152,6 @@ Init.db.map = function (){
 		
 		m.loop = {};
 		m.loop.main =  function(map,variable,cst,hotspot){
-
-		
 			if(Loop.interval(25)){
 				Map.collisionRect(map,hotspot.n,'player',function(key){
 					var mort = List.all[key];
@@ -183,10 +166,9 @@ Init.db.map = function (){
 					
 			
 			if(Loop.interval(6)){
-				
 				//Arrow
 				Attack.creation(
-					{hitIf:'player-simple',x:hotspot.a.x,y:hotspot.a.y,map:map,angle:Math.randomML()*2},
+					{hitIf:'player-simple',xy:hotspot.a,map:map,angle:Math.randomML()*2},
 					useTemplate(Attack.template(),cst.arrow)
 				);
 			}
@@ -194,19 +176,19 @@ Init.db.map = function (){
 			if(Loop.interval(4)){
 				//Fireball
 				variable.angle += variable.rotation;
-				variable.angle = (variable.angle+360)%360;
+				variable.angle = variable.angle+360;
 				Attack.creation(
-					{hitIf:'player-simple',x:hotspot.d.x,y:hotspot.d.y,map:map,angle:variable.angle},
+					{hitIf:'player-simple',xy:hotspot.d,map:map,angle:variable.angle},
 					useTemplate(Attack.template(),cst.fireball)
 				);
 				
 				Attack.creation(
-					{hitIf:'player-simple',x:hotspot.d.x,y:hotspot.d.y,map:map,angle:(variable.angle+120)%360},
+					{hitIf:'player-simple',xy:hotspot.d,map:map,angle:variable.angle+120},
 					useTemplate(Attack.template(),cst.fireball)
 				);
 				
 				Attack.creation(
-					{hitIf:'player-simple',x:hotspot.d.x,y:hotspot.d.y,map:map,angle:(variable.angle+240)%360},
+					{hitIf:'player-simple',xy:hotspot.d,map:map,angle:variable.angle+240},
 					useTemplate(Attack.template(),cst.fireball)
 				);
 				
@@ -219,12 +201,10 @@ Init.db.map = function (){
 		
 		};
 		m.cst = {
-			arrow:{'type':"bullet",'angle':15,'amount':1, 'aim': 0,'objImg':{'name':"arrow",'sizeMod':1},'hitImg':{'name':"ice2",'sizeMod':0.5},
+			arrow:{'type':"bullet",'angle':15,'amount':1,'objImg':{'name':"arrow",'sizeMod':1},'hitImg':{'name':"ice2",'sizeMod':0.5},
 				'dmg':{'main':10000,'ratio':{'melee':100,'range':0,'magic':0,'fire':0,'cold':0,'lightning':0}}},	
-			fireball:{maxTimer:15,'type':"bullet",'angle':0,'amount':1, 'aim': 0,'objImg':{'name':"fireball",'sizeMod':1},'hitImg':{'name':"ice2",'sizeMod':0.5},
-				'dmg':{'main':10000,'ratio':{'melee':100,'range':0,'magic':0,'fire':0,'cold':0,'lightning':0}}},	
-		
-		
+			fireball:{maxTimer:15,'type':"bullet",'angle':0,'amount':1,'objImg':{'name':"fireball",'sizeMod':1},'hitImg':{'name':"ice2",'sizeMod':0.5},
+				'dmg':{'main':10000,'ratio':{'melee':100,'range':0,'magic':0,'fire':0,'cold':0,'lightning':0}}},		
 		};
 		return m;
 	};

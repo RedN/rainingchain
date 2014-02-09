@@ -191,7 +191,6 @@ Plan.use = function(key,id){	//when player tries to use plan
 	var inv = List.main[key].invList;
 	
 	if(Plan.test(key,plan.req)){ //meet req
-		console.log(plan.req.item);
 		Itemlist.remove.bulk(inv,plan.req.item);
 		
 		if(plan.unique){ Itemlist.add(inv, plan.unique); return;}	//unique items

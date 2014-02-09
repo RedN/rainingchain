@@ -141,8 +141,6 @@ Save.player = function(key,updateDb){
     var toSave = ['x','y','map','username','weapon','equip','skill','ability','abilityList'];
     for(var i in toSave){	save[toSave[i]] = player[toSave[i]]; }
 	
-	
-	console.log(player);
     if(updateDb !== false){
         db.player.update({username:player.username},save,db.err);
     } else { return save; }	//when sign up

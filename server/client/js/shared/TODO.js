@@ -1,5 +1,11 @@
 death should loop and first param key, 2nd killers
 
+real swt5ich 
+
+quest on server only, query for quest info
+quest in seperate files with everything needed (sprite, ability,map etc..)
+
+nova weird
 
 fadeout when death
 fadeout block disappear
@@ -7,10 +13,13 @@ fadeout block disappear
 remake tileset
 make tutorial as a quest
 
-hotspot xy param
 
 draw passive weird block for special balancedAtk
 protect db, list, itemlist
+
+
+documentation for map extra for mort
+documentation map function
 
 select boost is weird?
 

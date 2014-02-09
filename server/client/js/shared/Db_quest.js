@@ -131,10 +131,8 @@ Init.db.quest = function(){
 		//}
 		
 		//{Map
-		q.map = {};
-		q.map['test'] = function(map){
-			
-			
+		q.map = {loop:{},load:{}};
+		q.map.load['test'] = function(map){
 			Actor.creation.group({'x':1060,'y':1900,'map':map},[
 				{"category":"neutral","variant":"julie",'extra':{
 					'dialogue':{'func':(function(key){
@@ -156,13 +154,9 @@ Init.db.quest = function(){
 						{'array':['target','sub','period'],'value':{first:100,renew:100}},
 					]
 					
-					
 					}
 				},
 			]);
-			
-			
-			
 		}
 		//}
 		
@@ -201,7 +195,21 @@ Init.db.quest = function(){
 		q.hintGiver = function(key,mq){	return 'None.';};
 		q.dialogue = {};
 		q.bonus = {};
-		q.map = {};
+		q.map = {loop:{},load:{}};
+		//q.map.loop = 
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
 		q.item = {};
 		
 		//{ Functions
@@ -242,7 +250,8 @@ Quest.creation = function(q){
 	
 	Db.dialogue[q.id] = {};
 	for(var i in q.dialogue) Db.dialogue[q.id][i] = q.dialogue[i];			
-	for(var i in q.map)	Db.map[i].load[q.id] = q.map[i];	
+	for(var i in q.map.load) Db.map[i].load[q.id] = q.map.load[i];	
+	for(var i in q.map.loop) Db.map[i].loop[q.id] = q.map.loop[i];	
 	for(var i in q.item){
 		q.item.id = 'Q-'+q.id+'-'+i;
 		Item.creation(q.item[i]);

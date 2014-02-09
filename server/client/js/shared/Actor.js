@@ -192,6 +192,8 @@ Actor.teleport = function(mort,x,y,map,signin){
 	ActiveList.remove(mort);	//need to consider if needed or not
 }
 
+
+
 Actor.teleport.instance = function(mort,x,y,map,signin){
 	if(!map){ Actor.teleport(mort,x,y);  return; }		//regular teleport
 	if(!map.have("@")){	map += "@MAIN"; }
@@ -221,6 +223,7 @@ Actor.teleport.instance = function(mort,x,y,map,signin){
 	
 	ActiveList.remove(mort);
 }
+
 
 Actor.pickDrop = function (mort,id){
 	var inv = List.main[mort.id].invList;
@@ -445,7 +448,6 @@ Actor.swapAbility = function(mort,name,position){
 }
 
 Actor.learnAbility = function(mort,name){
-	console.log(name);
 	if(!Db.ability[name]) return;
 	Chat.add(mort.id,"You have learnt a new ability.");
 	mort.abilityList[name] = 1;
@@ -503,7 +505,9 @@ Actor.death.enemy = function(mort){
 	var killers = Actor.death.getKiller(mort);
 	Actor.death.drop(mort,killers);
 	Actor.death.exp(mort,killers);
-	if(mort.deathFunc){ mort.deathFunc(killers); }	//custom death function (ex quest)
+	if(mort.deathFunc)	for(var i in killers) mort.deathFunc(killers[i]) //custom death function (ex quest)
+	if(mort.deathFuncArray) mort.deathFuncAll(killers)
+	
 	Actor.death.performAbility(mort);				//custom death ability function
 	ActiveList.remove(mort);
 }

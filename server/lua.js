@@ -1,7 +1,7 @@
 // Copy paste the Collision layer information
 // Replace the data = { for data = [
 // Do same thing for the ending ] of data.
-// Run this on Google Chrome. (F12, console, copy paste, press enter)
+// Run this on Google Chrome. (F12, Console, copy paste, press enter)
 
 ////
 convertChart = {
@@ -203,7 +203,7 @@ for(var y = 0 ; y < array.length ;y++){
 		var type = array[y][x];
 		if(!zone[type]){
 			zone[type] = {start:{x:x,y:y},count:0};
-			console.log(zone);
+			window['cons'+'ole'].log(zone);
 		}
 		zone[type].end = {x:x,y:y};
 		zone[type].count++;
@@ -228,7 +228,7 @@ for(var i in zone){
 }
 
 
-if(Object.keys(zone).length <= 2) console.log(str);
-else console.log(JSON.stringify(zone));
+if(Object.keys(zone).length <= 2) window['cons'+'ole'].log(str);
+else window['cons'+'ole'].log(JSON.stringify(zone));
 
 
