@@ -1,6 +1,7 @@
 Actor = typeof Actor !== 'undefined' ? Actor : {};
 
 Actor.creation = function(data){
+	if(data.xy){ data.x = data.xy.x; data.y = data.xy.y; delete data.xy;}
 	//data: x  y  map category variant lvl modAmount extra
 
 	var e = Actor.template('enemy');
@@ -38,7 +39,9 @@ Actor.creation.group = function(gr,el){
 	var id = Math.randomId();
 	var enemyIdList = [];
 	
+	if(gr.xy){ gr.x = gr.xy.x; gr.y = gr.xy.y; delete gr.xy;}
 	gr = useTemplate(Actor.creation.group.template(),gr);	
+	
 	List.group[id] = {
 		'id':id,
 		'param':[gr,el],        //used to revive group

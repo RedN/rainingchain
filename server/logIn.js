@@ -138,9 +138,11 @@ Save.player = function(key,updateDb){
 	player = Save.player.compress(player);
 	player.username = player.username || player.name;
 	var save = {};
-    var toSave = ['x','y','map','username','weapon','equip','lvl','ability','abilityList'];
+    var toSave = ['x','y','map','username','weapon','equip','skill','ability','abilityList'];
     for(var i in toSave){	save[toSave[i]] = player[toSave[i]]; }
-
+	
+	
+	console.log(player);
     if(updateDb !== false){
         db.player.update({username:player.username},save,db.err);
     } else { return save; }	//when sign up
@@ -239,14 +241,22 @@ Save.player.compress = function(player){
 	
 	for(var i in player.ability)	player.ability[i] = player.ability[i] ? player.ability[i].id : 0;
 
-	if(!player.map.have("@MAIN")){
-		player.x = player.mapSignIn.x || 0;
-		player.y = player.mapSignIn.y || 0;
-		player.map = player.mapSignIn.map || 'test@MAIN';		
+	if(!player.map.have("@MAIN")){	//then need to modify xymap
+		if(player.respawnLoc.map.have("@MAIN")){
+			player.x = player.respawnLoc.x || 0;
+			player.y = player.respawnLoc.y || 0;
+			player.map = player.respawnLoc.map || 'test@MAIN';		
+		} else {
+			player.x = player.mapSignIn.x || 0;
+			player.y = player.mapSignIn.y || 0;
+			player.map = player.mapSignIn.map || 'test@MAIN';	
+		}		
 	}
 	
     return player;
 }
+
+
 Load.player.uncompress = function(player){
 	//Equip
 	/*

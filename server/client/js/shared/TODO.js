@@ -1,12 +1,11 @@
 death should loop and first param key, 2nd killers
 
-save position if @MAIN...
-
-distance for tree and switch and chest
 
 fadeout when death
 fadeout block disappear
 
+remake tileset
+make tutorial as a quest
 
 hotspot xy param
 

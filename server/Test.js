@@ -27,10 +27,12 @@ Test.performance.frequence = 10*1000/40;
 Test.bandwidth = function(type,data){
     if(Test.bandwidth[type].active){
         Test.bandwidth[type].size += Test.bandwidth.getSize(data);
+		if(Test.bandwidth[type].log) Test.bandwidth[type].logString += stringify(data);
     }
+	
 }
-Test.bandwidth.upload = {'active':false,'size':0};
-Test.bandwidth.download = {'active':false,'size':0};
+Test.bandwidth.upload = {'active':true,log:true,'size':0,logString:""};
+Test.bandwidth.download = {'active':true,log:true,'size':0,logString:""};
 Test.bandwidth.frequence = 10*1000/40;
 Test.bandwidth.getSize = function(obj){
     return stringify(obj).length * 2;   //in bytes

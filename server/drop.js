@@ -61,6 +61,8 @@ Drop.getCategoryList = function(drop,lvl,qu){
 }
 
 Drop.creation = function(d){
+	if(d.xy){ d.x = d.xy.x; d.y = d.xy.y; delete d.xy;}
+	
 	var drop = useTemplate(Drop.template(),d);
 	
 	drop.x += Math.randomML(drop.vx);

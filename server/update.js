@@ -72,16 +72,12 @@ Change.update.init = function(){
 		
 	Change.update.list['bullet'] = {
 		'watch':{'priority':[
-				{'array':['x'],'filter':Math.round},
-				{'array':['y'],'filter':Math.round},
-				{'array':['angle'],'filter':Math.round},
+				{'array':['x'],'filter':Math.round,'condition':(function(e){ return !e.normal; })},
+				{'array':['y'],'filter':Math.round,'condition':(function(e){ return !e.normal; })},
+				{'array':['angle'],'filter':Math.round,'condition':(function(e){ return !e.normal; })},
 			],
-			'reg':[
-				{'array':['sprite','name']},
-				{'array':['sprite','sizeMod']},
-			]}
+		}
 	};
-	
 	Change.update.list['player'] = {
 		'watch':{'priority':[
 				{'array':['x'],'filter':Math.round},
@@ -99,7 +95,6 @@ Change.update.init = function(){
 				{'array':['sprite','name']},
 				{'array':['sprite','sizeMod']},
 				{'array':['combat']},
-				{'array':['map'],'filter':Change.send.convert.map},	//is useful?
 			]
 			
 			},	

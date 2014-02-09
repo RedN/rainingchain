@@ -148,7 +148,7 @@ Init.actor = function(){
 		//{Player Only
 		if(type === 'player'){
 			mort.skill = Actor.template.skill();
-			mort.removeList = {};	//for things that got removed from activeList
+			mort.removeList = [];	//for things that got removed from activeList
 			mort.type = 'player';
 			mort.hitIf = 'enemy';
 			mort.targetIf = 'player';

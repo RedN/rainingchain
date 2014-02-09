@@ -70,15 +70,15 @@ Init.db.map = function (){
 			
 			
 			//grave
-			Actor.creation({'x':hotspot.h.x,'y':hotspot.h.y,'map':map,
+			Actor.creation({'xy':hotspot.h,'map':map,
 				"category":"system","variant":"grave"
 			});
-			Actor.creation({'x':hotspot.q.x,'y':hotspot.q.y,'map':map,
+			Actor.creation({'xy':hotspot.q,'map':map,
 				"category":"system","variant":"grave"
 			});
 			
 			//chest
-			Actor.creation({'x':hotspot.m.x,'y':hotspot.m.y,'map':map,
+			Actor.creation({'xy':hotspot.m,'map':map,
 				"category":"system","variant":"chest",extra:{
 					'treasure':function(key){
 						Itemlist.add(List.main[key].invList,'tutorial-iceshard',1);
@@ -88,28 +88,28 @@ Init.db.map = function (){
 			});
 			
 			//tree
-			Actor.creation({'x':hotspot.e.x,'y':hotspot.e.y,'map':map,
+			Actor.creation({'xy':hotspot.e,'map':map,
 				"category":"tree","variant":"red"
 			});
 			
 			
 			
 			//drop staff
-			Drop.creation({'x':hotspot.o.x,'y':hotspot.o.y,'map':map,
+			Drop.creation({'xy':hotspot.o,'map':map,
 				"item":"Q-tutorial-staff","amount":1,'timer':1/0
 			});
 			
 			//block for switch
-			Actor.creation({'x':hotspot.b.x,'y':hotspot.b.y,'map':map,
+			Actor.creation({'xy':hotspot.b,'map':map,
 				"category":"block","variant":"2x2"
 			});
 			//Block to block arrow
-			Actor.creation({'x':hotspot.f.x,'y':hotspot.f.y,'map':map,
+			Actor.creation({'xy':hotspot.f,'map':map,
 				"category":"block","variant":"2x2"
 			});
 			
 			//Block that disppear when bee dead
-			Actor.creation({'x':hotspot.j.x,'y':hotspot.j.y,'map':map,
+			Actor.creation({'xy':hotspot.j,'map':map,
 				"category":"block","variant":"2x2Fix",extra:{
 					'viewedIf':function(key){
 						if(List.all[key].type !== 'player') return true;
@@ -119,7 +119,7 @@ Init.db.map = function (){
 			});
 			
 			//First monster
-			Actor.creation({'x':hotspot.i.x,'y':hotspot.i.y,'map':map,
+			Actor.creation({'xy':hotspot.i,'map':map,
 				"category":"tutorial","variant":"bee",extra:{
 					'deathFunc':function(killers){
 						for(var i in killers){
@@ -131,12 +131,12 @@ Init.db.map = function (){
 			});
 			
 			//Bees Near Chest
-			Actor.creation.group({'x':hotspot.l.x,'y':hotspot.l.y,'map':map,'respawn':25*100},[
+			Actor.creation.group({'xy':hotspot.l,'map':map,'respawn':25*100},[
 				{'amount':3,"category":"tutorial","variant":"bee","lvl":0,'modAmount':0}
 			]);
 			
 			//Boss Fire
-			Actor.creation({'x':hotspot.k.x,'y':hotspot.k.y,'map':map,
+			Actor.creation({'xy':hotspot.k,'map':map,
 				"category":"tutorial","variant":"demon",extra:{
 					deathFunc:function(killers){
 						for(var i in killers){
@@ -147,7 +147,7 @@ Init.db.map = function (){
 			});
 			
 			//Switch
-			Actor.creation({'x':hotspot.c.x,'y':hotspot.c.y,'map':map,
+			Actor.creation({'xy':hotspot.c,'map':map,
 				"category":"switch","variant":"box",extra:function(mort){
 					mort.onclick.shiftLeft = {
 						name:'Activate',

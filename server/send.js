@@ -8,8 +8,8 @@ Change.send = function(){
 		
 		//Update Private Player
 		var player = List.all[key];
-		sa.u.p = player.privateChange;
-		sa.u.p = Change.send.compressXYA(sa.u.p);
+		sa.p = player.privateChange;
+		sa.p = Change.send.compressXYA(sa.p);
 		
 		//Update ActiveList AKA List.all
 		var array = [];
@@ -18,26 +18,24 @@ Change.send = function(){
 			var obj = List.all[i];
 			if(!obj){ delete player.activeList[i]; continue; }
 			
-			for(var j in obj.viewedBy){	if(j === player.id){bool = false;}}	//cant see himself
+			for(var j in obj.viewedBy){	if(j === player.id){bool = false;}}	//test if player is in viewedBy list of obj
 				
+			var id = obj.publicId || obj.id;
+			
 			if(bool){		//Need to Init
-				var id = obj.id;
-				if(obj.publicId){ id = obj.publicId;}
-				sa.i.f[id] = Change.send.init(obj);
+				sa.i[id] = Change.send.init(obj);
 				obj.viewedBy[key] = player.id;		//Add so the next time it will update instead of init
 			} else {			//Only Update
-				var id = obj.id;
-				if(obj.publicId){ id = obj.publicId;}
-				sa.u.f[id] = obj.change;
-				sa.u.f[id] = Change.send.compressXYA(sa.u.f[id]);
+				sa.u[id] = obj.change;
+				sa.u[id] = Change.send.compressXYA(sa.u[id]);
 			}
 			
 		}
 		//Remove List
-		sa.u.r = player.removeList;
+		sa.r = player.removeList;
 		
 		//Main
-		sa.u.m = List.main[key].change;
+		sa.m = List.main[key].change;
 		
 		//Anim
 		//note: remove map and viewedif from .target and slot?
@@ -60,11 +58,10 @@ Change.send = function(){
 		
 		//Delete things that are empty
 		sa = Change.send.clearEmpty(sa);
-		if(Object.keys(sa).length === 0){ continue; }
+		//if(Object.keys(sa).length === 0){ continue; }
 		
 		//Send
 		List.socket[key].emit('change', sa );
-		
 		
 	    Test.bandwidth('upload',sa);
 	}
@@ -75,28 +72,26 @@ Change.send = function(){
 
 Change.send.template = function(){
 	return {
-		i : {'f':{},'p':{},'m':{}},  //init (first time seen by player)
-		u : {'f':{},'p':{},'m':{},'r':{}},  //update (already init-ed)
-		a : [],  //animation
+		i:{},  //init (first time seen by player		
+		u:{},  //update (already init-ed)
+		p:{},	//player
+		m:{},	//main
+		r:[],	//removeList
+		a:[],  //animation
 	}
 }
 
 Change.send.clearEmpty = function(sa){
 	if(sa.a.length === 0){ delete sa.a }
-	
-	
-	if(Object.keys(sa.i.f).length === 0){ delete sa.i.f }
-	if(Object.keys(sa.i.p).length === 0){ delete sa.i.p }
-	if(Object.keys(sa.i.m).length === 0){ delete sa.i.m }
+		
 	if(Object.keys(sa.i).length === 0){ delete sa.i }
+	if(Object.keys(sa.p).length === 0){ delete sa.p }
+	if(Object.keys(sa.m).length === 0){ delete sa.m }
+	if(Object.keys(sa.r).length === 0){ delete sa.r }
 	
 	if(Loop.frameCount % 10 !== 0 ){ //other, if nothing moves, client thinks enemy is removed
-		for(var i in sa.u.f) if(Object.keys(sa.u.f[i]).length === 0) delete sa.u.f[i] 
+		for(var i in sa.u) if(Object.keys(sa.u[i]).length === 0) delete sa.u[i] 
 	}
-	if(Object.keys(sa.u.f).length === 0){ delete sa.u.f }
-	if(Object.keys(sa.u.p).length === 0){ delete sa.u.p }
-	if(Object.keys(sa.u.m).length === 0){ delete sa.u.m }
-	if(Object.keys(sa.u.r).length === 0){ delete sa.u.r }
 	if(Object.keys(sa.u).length === 0){ delete sa.u }
 	
 	return sa;
@@ -124,7 +119,7 @@ Change.send.compressXYA = function(info){
 Change.send.reset = function(){
 	List.anim = {};
 	for(var i in List.all){ List.all[i].change = {}; }
-	for(var i in List.main){ List.main[i].change = {}; List.all[i].privateChange = {}; List.all[i].removeList = {};}
+	for(var i in List.main){ List.main[i].change = {}; List.all[i].privateChange = {}; 	List.all[i].removeList = [];}
 }
 
 //####################################
@@ -136,11 +131,16 @@ Change.send.init = function(obj){
 }
 
 Change.send.init.bullet = function(bullet){	//For Init
-	var draw = {};
-	draw.id = bullet.id;
-	draw.xya = [Math.round(bullet.x),Math.round(bullet.y),Math.round(bullet.angle)];
-	draw.type = 'bullet';
-	draw.sprite = {'name':bullet.sprite.name,'anim':bullet.sprite.anim || 'walk','sizeMod':bullet.sprite.sizeMod || 1};
+	var draw = [
+		'b',
+		Math.round(bullet.x),
+		Math.round(bullet.y),
+		Math.round(bullet.angle),
+		bullet.sprite.name,
+		bullet.sprite.sizeMod,
+	];
+	if(bullet.normal) draw.push(bullet.spd);
+	
 	return draw;
 }
 

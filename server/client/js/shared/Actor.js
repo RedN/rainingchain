@@ -21,6 +21,7 @@ Actor.removeOnClick = function(mort,side){
 		}
 	}
 }	
+
 Actor.removeOption = function(mort,option){	//option is object or name
 	for(var i in mort.optionList.option){
 		if(mort.optionList.option[i] === option || mort.optionList.option[i].name === option){
@@ -71,6 +72,8 @@ Actor.pushing = function(pusher,beingPushed){
 }
 
 Actor.cutTree = function(mort,tree){	//quick fix...
+	if(Collision.distancePtPt(mort,List.all[tree]) > 100){ Chat.add(mort.id,"You're too far away."); return;}
+	
 	Itemlist.add(List.main[mort.id].invList,'wood-0',1);
 	Sprite.change(List.all[tree],{'anim':'cut'});
 	Chat.add(mort.id,"You manage to cut a branch off this Red Tree.");
@@ -85,6 +88,9 @@ Actor.setRespawn = function(mort,wp){
 
 Actor.openChest = function(mort,eid){	//need work
 	var e = List.all[eid];
+	
+	if(Collision.distancePtPt(mort,e) > 100){ Chat.add(mort.id,"You're too far away."); return;}
+	
 	var chest = e.treasure;
 	if(!chest) return;
 	if(chest.list.have(mort.id)){
@@ -186,8 +192,6 @@ Actor.teleport = function(mort,x,y,map,signin){
 	ActiveList.remove(mort);	//need to consider if needed or not
 }
 
-
-
 Actor.teleport.instance = function(mort,x,y,map,signin){
 	if(!map){ Actor.teleport(mort,x,y);  return; }		//regular teleport
 	if(!map.have("@")){	map += "@MAIN"; }
@@ -218,17 +222,25 @@ Actor.teleport.instance = function(mort,x,y,map,signin){
 	ActiveList.remove(mort);
 }
 
-
 Actor.pickDrop = function (mort,id){
 	var inv = List.main[mort.id].invList;
 	var drop = List.drop[id];
 		
-	if(drop){
-		if(Collision.distancePtPt(mort,drop) <= mort.pickRadius && Itemlist.test(inv,[[List.drop[id].item,List.drop[id].amount]])){
-			Itemlist.add(inv,drop.item,drop.amount);
-			Drop.remove(drop);		
-		}
+	if(!drop) return;
+	
+	if(!Collision.distancePtPt(mort,drop) > mort.pickRadius){
+		Chat.add(mort.id,"You're too far away.");
+		return;
 	}
+
+	if(!Itemlist.test(inv,[[List.drop[id].item,List.drop[id].amount]])){
+		Chat.add(mort.id,"Inventory full.");
+		return;
+	}
+	
+	Itemlist.add(inv,drop.item,drop.amount);
+	Drop.remove(drop);		
+
 }
 
 Actor.rightClickDrop = function(mort,rect){

@@ -4,45 +4,42 @@ Change = {};
 Receive = Change.receive = function(data){
 try {
 	if(Receive.showData) permConsoleLog(JSON.stringify(data));  //for testing
+	if(!data) return;
 	data = Receive.parse(data);
  
     //Init Anim
 	for(var i in data.a) Anim.creation(data.a[i]);	
 	
 	//Init Full List aka never seen before
-	if(data.i){
-		for(var i in data.i.f){
-			Receive.init(data.i.f[i]);			
-		}
+	for(var i in data.i){
+		Receive.init(data.i[i],i);
 	}
 	
 	//Update Player Private
-	if(data.u){ 
-        if(data.u.p){
-            for(var j in data.u.p){
-               viaArray.set({'origin':player,'array':j.split(','),'value':data.u.p[j]});	
-            }
-        }
+	for(var j in data.p){
+	   viaArray.set({'origin':player,'array':j.split(','),'value':data.p[j]});	
+	}
+        
 
-    	//Update Full List
-    	for(var i in data.u.f){
-            var changeList = data.u.f[i];
-            for(var j in changeList){
-                viaArray.set({'origin':List.all[i],'array':j.split(','),'value':changeList[j]});
-    		}
-    		if(List.all[i]) List.all[i].toRemove = 0; 	
-    	}
-    	
-		for(var i in data.u.r){
-			if(List.all[i] && List.all[i].sprite){ 
-				List.all[i].sprite.dead = List.all[i].type === 'enemy' ? 1/12 : 1/3;
-			} else{removeAny(i);}			
+	//Update Full List
+	for(var i in data.u){
+		var changeList = data.u[i];
+		for(var j in changeList){
+			viaArray.set({'origin':List.all[i],'array':j.split(','),'value':changeList[j]});
 		}
+		if(List.all[i]) List.all[i].toRemove = 0; 	
+	}
+    	
+	for(var i in data.r){
+		var id = data.r[i];
+		if(List.all[id] && List.all[id].sprite){ 
+			List.all[id].sprite.dead = List.all[id].type === 'enemy' ? 1/12 : 1/3;
+		} else{removeAny(id);}			
+	}
     
-    	//Update Main List
-    	for(var i in data.u.m){
-    		viaArray.set({'origin':main,'array':i.split(','),'value':data.u.m[i]});	
-    	}
+	//Update Main List
+	for(var i in data.m){
+		viaArray.set({'origin':main,'array':i.split(','),'value':data.m[i]});	
 	}
 	
 	//Remove Inactive FullList
@@ -56,6 +53,16 @@ try {
 		}
 	}
 	
+	//Update Bullet
+	for(var i in List.bullet){
+		var b = List.bullet[i];
+		if(b.spd === null || b.sprite.dead) continue;
+		b.x += cos(b.angle)*b.spd;
+		b.y += sin(b.angle)*b.spd;	
+	}
+	
+	
+	
 } catch (err){ logError(err) }
 }
 
@@ -63,16 +70,12 @@ socket.on('change', Receive);
 Receive.showData = false;
 
 Receive.parse = function(data){
-	if(data.u){ 
-	    if(data.u.p){
-			data.u.p = Receive.parse.xya(data.u.p); 
-			data.u.p = Receive.parse.chargeClient(data.u.p);
-		}
-    	for(var i in data.u.f)	data.u.f[i] = Receive.parse.xya(data.u.f[i]);   
+	if(data.p){
+		data.p = Receive.parse.xya(data.p); 
+		data.p = Receive.parse.chargeClient(data.p);
 	}
-	if(data.i){		
-		for(var i in data.i.f) data.i.f[i] = Receive.parse.xya(data.i.f[i]);
-	}
+    for(var i in data.u) data.u[i] = Receive.parse.xya(data.u[i]);   	
+	for(var i in data.i) data.i[i] = Receive.parse.xya(data.i[i]);
 	
 	return data;
 }
@@ -98,9 +101,9 @@ Receive.parse.chargeClient = function(info){	//could be used when needed instead
 }
 
 
-Receive.init = function(obj){
+Receive.init = function(obj,id){
+	if(obj[0] === 'b'){	Receive.init.bullet(obj,id);}	
 	if(obj.type === 'enemy' || obj.type === 'player'){ Receive.init.actor(obj); }	
-	else if(obj.type === 'bullet'){	Receive.init.bullet(obj);}	
 	else if(obj.type === 'drop'){	Receive.init.drop(obj);	}
 }
 
@@ -112,11 +115,27 @@ Receive.init.actor = function(mort){
 	
 }
 
-Receive.init.bullet = function(bullet){
+Receive.init.bullet = function(obj,id){
+	/*
 	bullet.toRemove = 0;
 	Sprite.creation(bullet,bullet.sprite);
 	List.bullet[bullet.id] = bullet;	
-	List.all[bullet.id] = bullet;	
+	List.all[bullet.id] = bullet;
+	*/
+	// ['b',Math.round(bullet.x),Math.round(bullet.y),Math.round(bullet.angle),bullet.sprite.name,bullet.sprite.sizeMod];
+	
+	var bullet = {
+		toRemove:0,
+		id:id,
+		x:obj[1],
+		y:obj[2],
+		angle:obj[3],
+		sprite:{name:obj[4],sizeMod:obj[5],anim:'travel'},
+		spd:obj[6] || null,
+	}
+	Sprite.creation(bullet,bullet.sprite);
+	List.bullet[id] = bullet;	
+	List.all[id] = bullet;	
 }
 
 

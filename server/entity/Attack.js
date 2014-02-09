@@ -15,6 +15,7 @@ Attack.template = function(){
 	b.map = 'test@MAIN';
 	b.toRemove = 0;
 	b.id = Math.randomId();
+	b.publicId = Math.randomId(6);
 	b.hitId = Math.randomId();
 	b.type = 'bullet';				//or strike
 	//NO TOUCH
