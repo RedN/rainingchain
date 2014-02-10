@@ -31,8 +31,8 @@ Test.bandwidth = function(type,data){
     }
 	
 }
-Test.bandwidth.upload = {'active':true,log:true,'size':0,logString:""};
-Test.bandwidth.download = {'active':true,log:true,'size':0,logString:""};
+Test.bandwidth.upload = {'active':false,log:false,'size':0,logString:""};
+Test.bandwidth.download = {'active':false,log:false,'size':0,logString:""};
 Test.bandwidth.frequence = 10*1000/40;
 Test.bandwidth.getSize = function(obj){
     return stringify(obj).length * 2;   //in bytes

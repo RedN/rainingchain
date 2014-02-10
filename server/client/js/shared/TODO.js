@@ -1,11 +1,13 @@
-death should loop and first param key, 2nd killers
 
 real swt5ich 
+real tree
 
 quest on server only, query for quest info
 quest in seperate files with everything needed (sprite, ability,map etc..)
 
 nova weird
+
+pvp
 
 fadeout when death
 fadeout block disappear

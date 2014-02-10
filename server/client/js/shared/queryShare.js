@@ -16,6 +16,10 @@ Db.query = function(d){
 			source:Db.plan,
 			filter:Db.query.plan
 		},
+		quest:{
+			source:Db.quest,
+			filter:Db.query.quest,
+		},
 	}
 	
 	if(!list[d.db]) return;
@@ -28,6 +32,9 @@ Db.query = function(d){
 	d.info = info;
 	return d;
 }
+
+
+
 
 
 Db.query.plan = function(info){
@@ -52,6 +59,53 @@ Db.query.ability = function(info){
 	}
 	return ab;
 }	
+	
+Db.query.quest = function(info){
+	var toSend = {
+		'id':0,
+		'name':0,
+		'icon':0,
+		'reward':0,
+		'description':0,
+		'variable':0,
+		'requirement':Db.query.quest.req,
+		'bonus':Db.query.quest.bonus,
+	};
+	var tmp = {};
+	
+	for(var i in toSend){
+		if(toSend[i]) tmp[i] = toSend[i](info[i]);
+		else tmp[i] = info[i];
+	}
+	return tmp;
+}
+	
+Db.query.quest.req = function(info){
+	var tmp = [];
+	for(var i in info){
+		tmp[i] = {text:info[i].text};
+	}
+	return tmp;
+}	
+	
+Db.query.quest.bonus = function(info){
+	var tmp = {};
+	for(var i in info){
+		tmp[i] = {
+			name:info[i].name,
+			info:info[i].info,
+			bonus:info[i].bonus,
+		};
+	}
+	return tmp;
+}	
+
+	
+
+
+
+
+
 	
 	
 io.sockets.on('connection', function (socket) {

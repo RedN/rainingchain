@@ -67,7 +67,11 @@ require('./server/db/Db_boost');
 require('./server/db/Db_material');
 require('./server/db/Db_map');
 
-		
+require('./server/db/Db_quest');
+require('./server/db/quest/tutorial');
+require('./server/Quest');
+
+
 require('./' + clientPath + 'client/js/shared/Collision');
 require('./' + clientPath + 'client/js/shared/Db_stat');
 require('./' + clientPath + 'client/js/shared/constant');
@@ -80,8 +84,6 @@ require('./' + clientPath + 'client/js/shared/Combat_sub');
 require('./' + clientPath + 'client/js/shared/passiveGrid');
 require('./' + clientPath + 'client/js/shared/queryShare');
 require('./' + clientPath + 'client/js/shared/clanShare');
-require('./' + clientPath + 'client/js/shared/Db_quest');
-require('./' + clientPath + 'client/js/shared/Quest');
 require('./' + clientPath + 'client/js/shared/Db_customboost');
 
 

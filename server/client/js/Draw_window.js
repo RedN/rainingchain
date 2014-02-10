@@ -320,7 +320,7 @@ Draw.window.ability = function (){ ctxrestore();
 	
 	Draw.old.abilityShowed = Draw.old.abilityShowed || Object.keys(player.abilityList)[0];
 	if(typeof Draw.old.abilityShowed === 'string'){
-		Draw.old.abilityShowed = Db.query('ability',Draw.old.abilityShowed)
+		Draw.old.abilityShowed = Db.query('ability',Draw.old.abilityShowed);
 	}
 	if(!Draw.old.abilityShowed) return;
 	
@@ -718,6 +718,167 @@ Draw.window.ability.action.summon = function(diffX,diffY){  ctxrestore();
 
 //}
 
+
+//{quest
+Draw.window.quest = function (){ ctxrestore();
+	var s = Draw.window.main('Quest');	
+	ctx = List.ctx.win;
+	
+	var q = Db.query('quest',main.windowList.quest);
+	if(!q) return;
+	var hq = html.questWin;	
+	hq.div.style.visibility = 'visible';
+	hq.div.style.left = s.mx + 'px'; 
+	hq.div.style.top = s.my + 'px'; 
+	
+	var mq = main.quest[main.windowList.quest];
+	
+	var charY = 22;
+	Draw.window.quest.upper(s,charY,q,mq,hq);
+	Draw.window.quest.hint(s,charY,q,mq,hq);
+	Draw.window.quest.description(s,charY,q,mq,hq);
+	Draw.window.quest.req(s,charY,q,mq,hq);
+	Draw.window.quest.bonus(s,charY,q,mq,hq);
+}
+
+Draw.window.quest.upper = function(s,charY,q,mq,hq){
+	var icon = charY*4;
+	
+	//Icon
+	Draw.icon(q.icon,[s.zx,s.zy],icon);
+	
+	//Info
+	hq.info.style.left = icon + 5 + 'px'; 
+	hq.info.style.top = 0 + 'px'; 
+	
+	hq.info.style.font = charY + 'px Monaco';
+	hq.info.style.width = s.dw/2 - icon - 5 + 'px';
+	hq.info.style.height = charY*4*1.2 + 'px';
+
+	
+	var str = '';
+	str += 'Name: ' + q.name + '<br>';
+	var state = mq.complete ? 'Complete (x' + mq.complete + ')' : (mq.started ? 'Started' : 'Not Started');
+	str += 'State: ' + state + '<br>';
+	str += 'Reward: ' + round(q.reward.value[0],3,1) + ' - ' + round(q.reward.value[1],3,1) + ' in ' + Db.stat[q.reward.stat].name + '<br>';
+	if(mq.complete){
+		var boost = Draw.convert.boost(mq.reward);
+		str += 'Current Reward: ' + boost[1] + ' in ' + boost[0] + '(' + mq.rewardTier + ')' + '<br>';
+	}
+	
+	hq.info.innerHTML = str;
+
+}
+
+Draw.window.quest.hint = function(s,charY,q,mq,hq){
+	//Hint
+	var diffY = 10 + hq.info.style.top.numberOnly(1) + hq.info.style.height.numberOnly(1);
+	
+	ctx.font = charY-2 + 'px Monaco';
+	ctx.fillStyle = 'black';
+	
+	ctx.fillTextU('Hint:',s.zx-2,s.zy+diffY);
+	hq.hint.style.left = 0 + 'px'; 
+	hq.hint.style.top = diffY + charY + 'px'; 
+	
+	hq.hint.style.font = charY + 'px Monaco';
+	hq.hint.style.width = s.dw/2 -10 + 'px'
+	hq.hint.style.height = charY*2*1.2 + 'px'
+	
+	hq.hint.innerHTML = mq.hint;
+
+}
+
+Draw.window.quest.description = function(s,charY,q,mq,hq){
+	//Description
+	var diffY = 30 + hq.hint.style.top.numberOnly(1) + hq.hint.style.height.numberOnly(1);
+	
+	ctx.font = charY-2 + 'px Monaco';
+	ctx.fillStyle = 'black';
+	
+	ctx.fillTextU('Description:',s.zx-2,s.zy+diffY);
+	hq.description.style.left = 0 + 'px'; 
+	hq.description.style.top = diffY + charY + 'px'; 
+	
+	hq.description.style.font = charY + 'px Monaco';
+	hq.description.style.width = s.dw/2 -10 + 'px'
+	hq.description.style.height = charY*5*1.2 + 'px'
+	
+	hq.description.innerHTML = q.description;
+}
+
+Draw.window.quest.req = function(s,charY,q,mq,hq){
+	//Requirements	
+	ctx.font = charY-2 + 'px Monaco';
+	ctx.fillStyle = 'black';
+	ctx.textAlign = 'left';
+	ctx.fillTextU('Requirements:',s.mcx,s.zy);
+	hq.requirement.style.left = s.mdx + 'px'; 
+	hq.requirement.style.top = charY + 'px'; 
+	
+	hq.requirement.style.font = charY + 'px Monaco';
+	hq.requirement.style.width = s.dw/2 + 'px'
+	hq.requirement.style.height = charY*q.requirement.length*1.2 + 'px'
+	
+	hq.requirement.innerHTML = Draw.window.quest.req.convert(mq.requirement,q.requirement);
+}
+
+Draw.window.quest.req.convert = function(qvar,req){
+	//convert the quest req object into string
+	if(!req || !req.length){ return 'None.'; }
+	
+	var returnStr = '';
+	for(var i in req){
+		var text = req[i].text;
+		if(+qvar[i]) returnStr += '<del>' + text + '</del>';	//if requirement is met
+		else returnStr += text;		
+		returnStr += '<br>';
+	}
+
+	return returnStr.slice(0,-4);
+}
+
+Draw.window.quest.bonus = function(s,charY,q,mq,hq){
+	//Bonus	
+	var diffY = 30 + hq.requirement.style.top.numberOnly(1) + hq.requirement.style.height.numberOnly(1);
+	
+	ctx.font = charY-2 + 'px Monaco';
+	ctx.fillStyle = 'black';
+	ctx.textAlign = 'left';
+	
+	hq.bonus.style.left = s.mdx + 'px'; 
+	hq.bonus.style.top = diffY + charY + 'px'; 
+	
+	hq.bonus.style.font = charY + 'px Monaco';
+	hq.bonus.style.width = s.dw/2 + 'px'
+	hq.bonus.style.height = charY*Object.keys(q.bonus).length*1.2 + 'px'
+	
+	var str = '';
+	for(var i in q.bonus){
+		var b = q.bonus[i];
+		
+		var color = mq.bonus[i] ? '#00FF00' : '#FF0000';
+		
+		str += 
+			'<span ' + 
+			'class="shadow" ' + 
+			'style="color:' + color + '" ' +
+			'onclick="Chat.send.command(\'' + '$win,quest,toggleBonus,' + q.id + ',' + i + '\')' + '" ' + 
+			'onmouseover=\"main.permContext.text = \'Toggle Bonus\'\" ' +
+			'onmouseout="main.permContext.text = null;' + '" ' + 
+			'>' + b.info + ' - (x' + b.bonus + ')' +
+			'</span><br>';
+	}
+	str = str.slice(0,-4);
+	if(Draw.old.questWin !== str){	
+		Draw.old.questWin = str;
+		hq.bonus.innerHTML = str;
+	}
+	
+	ctx.fillTextU('Bonus:  x' + round(mq.bonusSum + 0.01*mq.complete,3),s.mcx,s.zy+diffY);
+}
+//}
+
 Draw.window.trade = function (){ ctxrestore();
 	var s = Draw.window.main('Bank');	
 	ctx = List.ctx.win;
@@ -806,136 +967,6 @@ Draw.window.trade = function (){ ctxrestore();
 	
 	Draw.icon(trade.confirm.other ? 'system.heart' : 'system.close',[numX+7,numY+7],20);
 	
-	
-}
-
-
-Draw.window.quest = function (){ ctxrestore();
-	var s = Draw.window.main('Quest');	
-	ctx = List.ctx.win;
-	
-	var q = Db.quest[main.windowList.quest];
-	var hq = html.questWin;
-	var mq = main.quest[main.windowList.quest];
-	
-	var charY = 22;
-	var icon = charY*4;
-	
-	hq.div.style.visibility = 'visible';
-	hq.div.style.left = s.mx + 'px'; 
-	hq.div.style.top = s.my + 'px'; 
-	
-	//Icon
-	Draw.icon(q.icon,[s.zx,s.zy],icon);
-	
-	//Info
-	hq.info.style.left = icon + 5 + 'px'; 
-	hq.info.style.top = 0 + 'px'; 
-	
-	hq.info.style.font = charY + 'px Monaco';
-	hq.info.style.width = s.dw/2 - icon - 5 + 'px';
-	hq.info.style.height = charY*4*1.2 + 'px';
-
-	
-	var str = '';
-	str += 'Name: ' + q.name + '<br>';
-	var state = mq.complete ? 'Complete (x' + mq.complete + ')' : (mq.started ? 'Started' : 'Not Started');
-	str += 'State: ' + state + '<br>';
-	str += 'Reward: ' + round(q.reward.value[0],3,1) + ' - ' + round(q.reward.value[1],3,1) + ' in ' + Db.stat[q.reward.stat].name + '<br>';
-	if(mq.complete){
-		var boost = Draw.convert.boost(mq.reward);
-		str += 'Current Reward: ' + boost[1] + ' in ' + boost[0] + '(' + mq.rewardTier + ')' + '<br>';
-	}
-	
-	hq.info.innerHTML = str;
-	
-	
-	
-	//Hint
-	var diffY = 10 + hq.info.style.top.numberOnly(1) + hq.info.style.height.numberOnly(1);
-	
-	ctx.font = charY-2 + 'px Monaco';
-	ctx.fillStyle = 'black';
-	
-	ctx.fillTextU('Hint:',s.zx-2,s.zy+diffY);
-	hq.hint.style.left = 0 + 'px'; 
-	hq.hint.style.top = diffY + charY + 'px'; 
-	
-	hq.hint.style.font = charY + 'px Monaco';
-	hq.hint.style.width = s.dw/2 -10 + 'px'
-	hq.hint.style.height = charY*2*1.2 + 'px'
-	
-	hq.hint.innerHTML = mq.hint;
-	
-	//Description
-	var diffY = 30 + hq.hint.style.top.numberOnly(1) + hq.hint.style.height.numberOnly(1);
-	
-	ctx.font = charY-2 + 'px Monaco';
-	ctx.fillStyle = 'black';
-	
-	ctx.fillTextU('Description:',s.zx-2,s.zy+diffY);
-	hq.description.style.left = 0 + 'px'; 
-	hq.description.style.top = diffY + charY + 'px'; 
-	
-	hq.description.style.font = charY + 'px Monaco';
-	hq.description.style.width = s.dw/2 -10 + 'px'
-	hq.description.style.height = charY*5*1.2 + 'px'
-	
-	hq.description.innerHTML = q.description;
-	
-	
-	//Requirements	
-	ctx.font = charY-2 + 'px Monaco';
-	ctx.fillStyle = 'black';
-	ctx.textAlign = 'left';
-	ctx.fillTextU('Requirements:',s.mcx,s.zy);
-	hq.requirement.style.left = s.mdx + 'px'; 
-	hq.requirement.style.top = charY + 'px'; 
-	
-	hq.requirement.style.font = charY + 'px Monaco';
-	hq.requirement.style.width = s.dw/2 + 'px'
-	hq.requirement.style.height = charY*q.requirement.length*1.2 + 'px'
-	
-	hq.requirement.innerHTML = Quest.req.convert(mq.requirement,q.requirement);
-	
-	
-	//Bonus	
-	var diffY = 30 + hq.requirement.style.top.numberOnly(1) + hq.requirement.style.height.numberOnly(1);
-	
-	ctx.font = charY-2 + 'px Monaco';
-	ctx.fillStyle = 'black';
-	ctx.textAlign = 'left';
-	
-	hq.bonus.style.left = s.mdx + 'px'; 
-	hq.bonus.style.top = diffY + charY + 'px'; 
-	
-	hq.bonus.style.font = charY + 'px Monaco';
-	hq.bonus.style.width = s.dw/2 + 'px'
-	hq.bonus.style.height = charY*Object.keys(q.bonus).length*1.2 + 'px'
-	
-	var str = '';
-	for(var i in q.bonus){
-		var b = q.bonus[i];
-		
-		var color = mq.bonus[i] ? '#00FF00' : '#FF0000';
-		
-		str += 
-			'<span ' + 
-			'class="shadow" ' + 
-			'style="color:' + color + '" ' +
-			'onclick="Chat.send.command(\'' + '$win,quest,toggleBonus,' + q.id + ',' + i + '\')' + '" ' + 
-			'onmouseover=\"main.permContext.text = \'Toggle Bonus\'\" ' +
-			'onmouseout="main.permContext.text = null;' + '" ' + 
-			'>' + b.info + ' - (x' + b.bonus + ')' +
-			'</span><br>';
-	}
-	str = str.slice(0,-4);
-	if(Draw.old.questWin !== str){	
-		Draw.old.questWin = str;
-		hq.bonus.innerHTML = str;
-	}
-	
-	ctx.fillTextU('Bonus:  x' + round(mq.bonusSum + 0.01*mq.complete,3),s.mcx,s.zy+diffY);
 	
 }
 

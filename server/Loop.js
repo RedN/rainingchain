@@ -63,7 +63,12 @@ Loop.Map = function(){
 		}
 		
 		for(var j in List.map[i].loop){
-			List.map[i].loop[j](i,List.map[i].variable,List.map[i].cst,Db.map[Map.getModel(i)].hotspot);
+			List.map[i].loop[j](
+				i,
+				List.map[i].hotspot[j],
+				List.map[i].variable[j],
+				List.map[i].cst[j]
+			);
 		}
 	}
 }
@@ -128,7 +133,6 @@ ActiveList.test = function(mort,obj){
 	
 	return Collision.PtRect(pt,rect);
 }
-
 
 ActiveList.add = function(bullet){
 	for(var i in List.actor){

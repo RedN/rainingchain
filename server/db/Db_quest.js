@@ -1,5 +1,6 @@
+if(typeof Db === 'undefined') Db = {};
+Db.quest = {};
 Init.db.quest = function(){
-	Db.quest = {};
 	
 	//Model
 	//{questId
@@ -103,16 +104,6 @@ Init.db.quest = function(){
 		};
 		//}
 		
-		q.mapMod = {
-			'test':{
-				'42-47':0,
-				'43-47':0,
-				'44-47':0,
-				'45-47':0,
-				'46-47':0,
-			}
-		};
-		
 		//{ Functions
 		q.giveDevice = function(key){
 		    Itemlist.add(List.main[key].invList,'Q-questId-teleport');
@@ -131,8 +122,9 @@ Init.db.quest = function(){
 		//}
 		
 		//{Map
-		q.map = {loop:{},load:{}};
-		q.map.load['test'] = function(map){
+		q.map = {};
+		q.map['test'] = {};
+		q.map['test'].load = function(map){
 			Actor.creation.group({'x':1060,'y':1900,'map':map},[
 				{"category":"neutral","variant":"julie",'extra':{
 					'dialogue':{'func':(function(key){
@@ -176,65 +168,21 @@ Init.db.quest = function(){
 	}();
 	//}
 	
-	//{tutorial
-	Db.quest['tutorial'] = function(){
-		var q = {};
-		q.id = 'tutorial';
-		q.name = 'Tutorial';
-		q.icon = 'skill.melee';
-		q.reward = {'stat':'dmg-fire-+','value':[0.05,0.10]};
-		q.rewardMod = 0.5;
-		q.description = "Raining Chain Tutorial";
-		
-		q.variable = {
-            beeDead:false,
-            bossDead:false,
-		};
-		
-		q.requirement = [];
-		q.hintGiver = function(key,mq){	return 'None.';};
-		q.dialogue = {};
-		q.bonus = {};
-		q.map = {loop:{},load:{}};
-		//q.map.loop = 
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		q.item = {};
-		
-		//{ Functions
 	
-		//}
-		
-		return q;
-	}();
-	//}
 	
 	
 	
 	//Note: List.main[key].quest[id] only has variable
-	var quest = {};
+	var questVar = {};
 	for(var i in Db.quest){
 		Db.quest[i] = Quest.creation(Db.quest[i]);
-		quest[i] = deepClone(Db.quest[i].variable);
+		questVar[i] = deepClone(Db.quest[i].variable);
 	}
 	Main.template.quest = {};
-	Main.template.quest = new Function('return ' + stringify(quest));	
-	for(var i in quest)	Main.template.quest[i] = new Function('return ' + stringify(quest[i]));	
+	Main.template.quest = new Function('return ' + stringify(questVar));	
+	for(var i in questVar)	Main.template.quest[i] = new Function('return ' + stringify(questVar[i]));	
 		
 }
-
-
 
 Quest = {};
 
@@ -249,9 +197,12 @@ Quest.creation = function(q){
 	if(!server) return q 
 	
 	Db.dialogue[q.id] = {};
-	for(var i in q.dialogue) Db.dialogue[q.id][i] = q.dialogue[i];			
-	for(var i in q.map.load) Db.map[i].load[q.id] = q.map.load[i];	
-	for(var i in q.map.loop) Db.map[i].loop[q.id] = q.map.loop[i];	
+	for(var i in q.dialogue) Db.dialogue[q.id][i] = q.dialogue[i];		
+	for(var i in q.map)
+		for(var j in q.map[i]){
+			Db.map[i][j][q.id] = q.map[i][j];
+	}
+	
 	for(var i in q.item){
 		q.item.id = 'Q-'+q.id+'-'+i;
 		Item.creation(q.item[i]);

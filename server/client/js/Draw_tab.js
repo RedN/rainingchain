@@ -394,7 +394,6 @@ Draw.tab.quest = function(){ ctxrestore();
 		
 		for(var i in main.quest){
 			var q = main.quest[i];
-			var qdb = Db.quest[i];
 			
 			var color = q.complete ? '#00FF00' : (q.started ? 'yellow' : 'red');
 			
@@ -404,9 +403,9 @@ Draw.tab.quest = function(){ ctxrestore();
 			'class="shadow" ' + 
 			'style="color:' + color + '" ' +
 			'onclick="Chat.send.command(\'' + '$win,open,quest,' + i + '\')' + '" ' + 
-			'onmouseover="main.permContext.text = \'' + qdb.name + '\';' + '" ' + 
+			'onmouseover="main.permContext.text = \'' + i + '\';' + '" ' + 
 			'onmouseout="main.permContext.text = null;' + '" ' + 
-			'>' + qdb.name + 
+			'>' + i + 
 			'</span>';
 			
 		}

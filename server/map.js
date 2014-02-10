@@ -14,14 +14,15 @@ Map.creation = function(namemodel,version){
 		model:model.id,
 		timer:version === 'MAIN' ? 1/0 : 5*60*1000/25,
 		list:{},		//acts like List.all (for faster activeList)
-		loop:deepClone(model.loop),
+		
+		loop:model.loop,
+		load:model.load,
+		hotspot:model.hotspot,
 		variable:deepClone(model.variable),
 		cst:model.cst,
 	};
 	
 	List.map[newid] = map;
-	
-	Map.mapMod[newid] = {};
 	
 	Map.load(namemodel,newid);
 	return newid;
@@ -44,6 +45,9 @@ Map.creation.model = function(map){
 	
 	map.variable = map.variable || {};
 	map.cst = map.cst || {};
+	map.hotspot = map.hotspot || {};
+	map.load = map.load || {};
+	map.loop = map.loop || {};
 	return map;
 }
 
@@ -58,11 +62,21 @@ Map.mapMod = {};
 Map.getModel = function(name){
 	return List.map[name].model;
 }	
-Map.load = function(model,loadedmapid){
-	loadedmapid = loadedmapid || model + '@MAIN';
-	for(var i in Db.map[model].load){
-		Db.map[model].load[i](loadedmapid,i,Db.map[model].hotspot);
+
+Map.load = function(modelId,loadedmapId){
+	var map = List.map[loadedmapId];
+	
+	for(var i in map.load){
+		map.load[i](
+			loadedmapId,
+			map.hotspot,
+			map.variable,
+			map.cst
+		);
 	}
+	//console.log(map);
+	//console.log(map.hotspot);
+	
 }
 
 

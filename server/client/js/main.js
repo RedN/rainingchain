@@ -19,13 +19,20 @@ List = {
 	ctx:{},		//all of canvas (window,popup,stage)
 	sfx:{}, 	//all sfx
 };
-
-Db = {	//local compilation of information so server doesnt send many times the same info
+//local compilation of information so server doesnt send many times the same info
+if(typeof Db === 'undefined') Db = {};
+Db.equip = {};
+Db.ability = {};
+Db.item = {};
+Db.plan = {};
+Db.quest = {};
+/*
+Db = {
 	equip:{},
 	ability:{},
 	item:{},
 	plan:{},
-};  
+};  */
 
 
 
@@ -96,7 +103,7 @@ Init.game = function (data) {
 	//Note: a part of Init.db are directly in index.html
 	Init.db.stat();
 	Init.actor();
-	Init.db.quest();
+	//Init.db.quest();
 	Init.db.customBoost();
 	Init.db.ability();
 	

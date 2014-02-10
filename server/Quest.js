@@ -60,21 +60,6 @@ Quest.hint.update = function(key,id){
 }
 
 Quest.req = {};
-Quest.req.convert = function(qvar,req){
-	//convert the quest req object into string
-	if(!req){ return 'None.'; }
-	
-	var returnStr = '';
-	for(var i in req){
-		var q = req[i];
-		var temp = q.text;
-		if(+qvar[+i]) temp = '<del>' + temp + '</del>';	//if requirement is met
-		temp += '<br>';
-		returnStr += temp;
-	}
-
-	return returnStr.slice(0,-4);
-}
 
 Quest.req.update = function(key,id){
 	//update the test about hte quest req (strike if done)
