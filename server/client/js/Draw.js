@@ -6,6 +6,8 @@ Draw.loop = function (){
 	for(var i in List.ctx){List.ctx[i].clearRect(0, 0, Cst.WIDTH, Cst.HEIGHT);}
 	for(var i in html){ 
 		if(i === 'warning') continue;
+		//if(i === 'command') continue;
+		//if(i === 'context') continue;
 		html[i].div.style.visibility = 'hidden';
 	}
 	List.btn = [];
@@ -33,6 +35,7 @@ Draw.loop = function (){
 	
 	Button.context();	//update for client buttons only
 	Draw.context();     //top left
+	Draw.command();
 	//clientContext = '';		
 }
 
@@ -461,7 +464,39 @@ Draw.context = function (){ ctxrestore();
 
 
 
-
+Draw.command = function(){
+	html.command.div.style.visibility = html.command.div.innerHTML ? 'visible' : 'hidden';
+	
+	html.command.div.style.top = '550px';
+	html.command.div.style.left = '100px';
+	
+	if(html.chat.input.value[0] !== '$'){
+		html.command.div.innerHTML = '';
+		return;
+	}
+	
+	if(Draw.old.command === html.chat.input.value) return;
+	
+	Draw.old.command = html.chat.input.value;
+	
+	var info = html.command.div;
+	
+	var txt = html.chat.input.value.slice(1);
+	for(var i in Command.list){
+		if(txt.have(i)){
+			var cmd = Command.list[i].doc;
+			var str = cmd.description;
+			for(var j in cmd.param){
+				str += '<br>@param' + j + ' ' + cmd.param[j].name + ' [' + cmd.param[j].type + ']';
+				if(cmd.param[j].optional) str += ' -Optional'
+			}
+			info.innerHTML = str;	
+			return;			
+		}
+	}
+	info.innerHTML = '';
+	
+}
 
 
 

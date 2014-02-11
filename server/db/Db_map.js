@@ -1,3 +1,219 @@
+
+
+/*
+Db.map['test'] = function(){	//'test' = mapId
+	var m = {};
+	m.name = "Test";				//display name of name
+	m.grid = ['111000001']			//used for collision test. (generate via lua.js and tiled)
+	m.hotspot = {					//list of location used to create actor, drop, attack zone etc... (generate via lua.js and tiled)
+		'main':{						//id of the loop that has access to those hotspot
+			a:{x:1,y:12},					//pt hotspot
+			b:{x:21,y:12},
+			c:[minX,maxX,minY,maxY],		//zone hotspot
+		}
+	},	
+	
+	
+	m.cst = {};						//list of oftenly used objects all instance maps share same copy (main point of cst is performance)
+	m.cst.main = {						//.main = cst for the loop 'main'
+		atk:{'type':"bullet",'angle':15,'amount':1, 'aim': 0,'objImg':{'name':"iceshard",'sizeMod':1},'hitImg':{'name':"ice2",'sizeMod':0.5},
+			'dmg':{'main':1,'ratio':{'melee':0,'range':10,'magic':80,'fire':10,'cold':0,'lightning':0}}},	
+		anything:'youwant',
+	};
+	
+	m.variable = {};						//list of custom variable used by map to remember stuff. each map has its own copy
+	m.variable.main = {						//.main = variable for the loop 'main'
+		rotation:-1
+	};
+	
+	
+	m.load = {};					//actions generated only once when loading the map.
+	
+	m.load.main = function(map,hotspot,variable,cst){	//main: loadId, map:instancedName, hotspot = map.hotspot[loadId], variable = map.variable[loadId], cst = map.cst[loadId],
+		//######################
+		Actor.creation({				//create 1 enemy that cant respawn
+			'xy':hotspot.c,				//location
+			'map':map,					//always put 'map':map.
+			"category":"system",		
+			"variant":"switch",
+			"extra":{},
+		});
+		
+		//#############
+		//EXTRA
+		//#####
+		//Normal format:	99% case
+		extra:{
+			'attribute':value,
+			'att2':value2
+		}
+		//#####
+		//Via Array: If you want to access a sub-attribute, use viaArray
+		extra:{
+			'viaArray':[
+				{'array':['target','sub','period','first'],'value':100},
+			],
+			'normalAtt':value,
+		},
+		//#####
+		//Function: use when needs to know mortId
+		extra:function(mort){		//@param: enemy object
+			mort.hp = 100;
+		}
+		//#####
+		//#####
+		//COMMON EXTRA:		
+		PARAM: key: playerID, | mort:enemy Obj that has this properties, | mortid: enemy Id that has this properties, | map: mapId 
+		
+		//can right click to talkTo. used to trigger dialogues.
+		dialogue:function(key){
+			if(List.main[key].quest.Qtest.stuff){			
+				Quest.complete(key,'Qtest');
+				Dialogue.start(key,{'name':'Qtest','convo':'Jenny','node':'gratz2'});
+			} else {
+				Dialogue.start(key,{'name':'Qtest','convo':'Jenny','node':'first'});
+			}		
+		},
+		
+		//list of abilities the enemy will trigger when dying. ABILITIES NEED TO BE IN .ability . if want only to be cast at death, put 0 chance to trigger for ai
+		deathAbility:[		
+			'fireball',
+			'explosion',
+		],
+		
+		//called for each player who dealt 1+ dmg to this monster when this monster dies
+		deathFunc:function(key,mort,map){},		
+		
+		//called once whe monsters dies. killers is array of playerId. first id is guy who has the drop
+		deathFuncArray:function(killers,mort,map){},	
+		
+		//delete this enemy when he dies. 
+		deleteOnceDead:1,
+		
+		//enemy in combat? overwrite Db.enemy
+		combat:0,
+		
+		//change condition so attacks will hit another actor. check Combat.hitIf
+		hitIf:function(defObj,atkObj){
+			return 
+		},
+		hitIf:'enemy',		//can also be string and will refer to Combat.hitIf.list
+		
+		//test if defObj can be a target of the enemy.
+		targetIf:		exact same than hitIf
+		
+		//set a function to call when player click on the enemy. onclick info will be added to optionList automatically
+		onclick:{
+			'shiftLeft':{
+				'func':function(key,param0,param1...){},
+				'param':['param0','param1',...]		
+			},
+			'left':same,
+			'shiftRight':same,
+			'right':same,	//NOT RECOMMENDED. leave for optionList						
+		}
+		
+		//change the respawnLoc of the player aka place the player respawn when dead
+		waypoint:{
+			x:10,
+			y:10,
+			map:map,		
+		},
+		
+		//an enemy that acts as a switch. REQ: enemy needs to have anim:'off' and 'on'
+		mort.switch = {		
+			on:function(key,mort,map){	//function when player activate the switch. map = map Obj
+				map.variable.Qtutorial.rotation *= -1;
+			},
+			off:function(key,mort,map){ //function when player desactivate the switch
+				map.variable.Qtutorial.rotation *= -1;		
+			}
+			off:null		//once activated, the switch cant be desactivated.
+		
+		}
+		
+		//an enemy that acts as a chest. can only be opened once REQ: enemy needs to have anim:'open' and 'close'. NOTE: will be trasnformed to {func:,list:[]}
+		mort.treasure = function(key,eId){
+			Itemlist.add(List.main[key].invList,'gold',1000);
+		} 
+		
+		
+		
+		
+		
+
+		
+		//######################
+		Actor.creation.group(			//create a group of monsters that respawns
+			{
+				'x':1060,				//or 'xy':hotspot.a
+				'y':1900,
+				'map':map,				//always put 'map':map.
+				'respawn':100			//frames before enemy group respawns. (timer starts when every members is dead)
+			},
+			[
+				{							//first enemy type of the group
+					'amount':3,					//amount
+					"category":"troll",			//enemy category
+					"variant":"ice",			//enemy variant
+					'lvl':0,					//enemy lvl
+					'modAmount':1				//amount of mods each enemy has (see modList)
+				},
+				{'amount':3,"category":"troll","variant":"ice",'lvl':0,'modAmount':1},		//second enemy type of the group
+			]
+		);
+		
+		//######################
+		Drop.creation({						//create a drop on the ground
+			'xy':hotspot.o,
+			'map':map,
+			"item":"Q-tutorial-staff",		//itemId
+			"amount":1,						//item amount
+			'timer':1/0						//how long it will stay on the ground b4 dissappearing
+		});
+		
+	}
+
+
+	
+	m.loop = {};				//actions generated every frame for each instance
+	m.loop.main = function(map,hotspot,variable,cst){	//main: loadId, map:instancedName, hotspot = map.hotspot[loadId], variable = map.variable[loadId], cst = map.cst[loadId],
+		
+		//######################
+		if(Loop.interval(10)){		//only happens 1 times out of 10 frames
+			//stuff
+		}		
+
+		//######################
+		Map.collisionRect(		//call a function for each actor in a zone
+			map,					//map
+			zone,					//zone that will trigger the function (use hotspot)
+			type,					//either 'player' or 'enemy'. for both, create 2 Map.collisionRect
+			function(key){			//function that will be called for each actor thats in the zone. param is their id
+				List.all[key].hp -= 100;
+			}
+		);
+		
+		//######################
+		Attack.creation(		//create an attack generated by the map
+			{
+				hitIf:'player-simple',		//condition to hit. either 'player-simple' or 'enemy-simple'
+				xy:hotspot.a,				//position
+				map:map,					//map
+				angle:Math.randomML()*2		//angle used to shoot bullets
+			},
+			useTemplate(Attack.template(),cst.arrow)	//attack information. use cst to generate attack that are often used
+		);
+
+	}
+	
+
+
+
+
+*/
+
+
 Init.db.map = function (){
 	Db.map = {};
 	

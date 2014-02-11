@@ -13,6 +13,9 @@ Loop = function(){
 }
 Loop.frameCount = 0;
 
+
+
+
 Loop.send = function(){ 
 	Input.send(); 
 }
@@ -101,6 +104,10 @@ Actor.loop = function(mort){
 	Sprite.update(mort);
 	Actor.loop.chatHead(mort);	
 }
+
+
+
+
 
 Actor.loop.chatHead = function(mort){	//weird name
 	if(!mort.chatHead) return;

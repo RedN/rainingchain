@@ -69,13 +69,11 @@ Map.load = function(modelId,loadedmapId){
 	for(var i in map.load){
 		map.load[i](
 			loadedmapId,
-			map.hotspot,
-			map.variable,
-			map.cst
+			map.hotspot[i],
+			map.variable[i],
+			map.cst[i]
 		);
 	}
-	//console.log(map);
-	//console.log(map.hotspot);
 	
 }
 

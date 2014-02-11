@@ -1,6 +1,3 @@
-//Player
-//Check client/shared/mortalShare for player attributes information
-
 //Actor
 Actor = typeof Actor !== 'undefined' ? Actor : {};
 
@@ -12,99 +9,34 @@ Actor.remove = function(mort){
 	if(List.map[mort.map])	delete List.map[mort.map].list[mort.id];
 }
 
-Actor.removeOnClick = function(mort,side){
-	for(var i in mort.optionList.option){
-		if(mort.optionList.option[i] === mort.onclick[side]){
-			mort.optionList.option.splice(i,1);
-			delete mort.onclick[side];
-			return;
-		}
-	}
-}	
-
-Actor.removeOption = function(mort,option){	//option is object or name
-	for(var i in mort.optionList.option){
-		if(mort.optionList.option[i] === option || mort.optionList.option[i].name === option){
-			mort.optionList.option.splice(i,1);
-			return;
-		}
-	}
-}	
-	
-Actor.pushing = function(pusher,beingPushed){
-	var mort = List.all[beingPushed];
-	if(!mort.block || !mort.block.pushable) return
-	
-	var pusherAngle = atan2(mort.y - pusher.y,mort.x - pusher.x);			//only work with square block
-	var fact = 360/4;
-	var angle = Math.floor((pusherAngle+fact/2)/fact)*fact%360;
-	
-	//Test if too far
-		//Block
-	var blockVarX = 0;	//only supported direction =4
-	var blockVarY = 0;
-	if(angle === 0) blockVarX = mort.block.size[0];
-	if(angle === 90) blockVarY = mort.block.size[2];
-	if(angle === 180) blockVarX = mort.block.size[1];
-	if(angle === 270) blockVarY = mort.block.size[3];
-	
-	blockVarX *= 32;
-	blockVarY *= 32;
-	
-		//Player
-	var pusherVarX = 0;	//only supported direction =4
-	var pusherVarY = 0;
-	if(angle === 0) pusherVarX = mort.bumperBox[0].x;
-	if(angle === 90) pusherVarY = mort.bumperBox[1].y;
-	if(angle === 180) pusherVarX = mort.bumperBox[2].x;
-	if(angle === 270) pusherVarY = mort.bumperBox[3].y;
-	
-	var posB = {'x':mort.x + blockVarX,'y':mort.y+blockVarY};
-	var posP = {'x':pusher.x + pusherVarX,'y':pusher.y+pusherVarY};
-	
-	if(Collision.distancePtPt(posB,posP) > 64) return
-	//
-	
-	mort.pushed.time = mort.block.time;
-	mort.pushed.magn = mort.block.magn;
-	mort.pushed.angle = angle;
-	
+//{Combat
+Actor.changeHp = function(mort,amount){
+    Actor.changeResource(mort,{hp:amount});
 }
 
-Actor.cutTree = function(mort,tree){	//quick fix...
-	if(Collision.distancePtPt(mort,List.all[tree]) > 100){ Chat.add(mort.id,"You're too far away."); return;}
-	
-	Itemlist.add(List.main[mort.id].invList,'wood-0',1);
-	Sprite.change(List.all[tree],{'anim':'cut'});
-	Chat.add(mort.id,"You manage to cut a branch off this Red Tree.");
-	Actor.removeOption(List.all[tree],'Cut Tree');
-
-}
-
-Actor.setRespawn = function(mort,wp){
-	Chat.add(mort.id,"You have changed your respawn point. Upon dying, you will now be teleported here.");
-	mort.respawnLoc = {x:wp.x,y:wp.y,map:wp.map};
-}
-
-Actor.openChest = function(mort,eid){	//need work
-	var e = List.all[eid];
-	
-	if(Collision.distancePtPt(mort,e) > 100){ Chat.add(mort.id,"You're too far away."); return;}
-	
-	var chest = e.treasure;
-	if(!chest) return;
-	if(chest.list.have(mort.id)){
-		Chat.add(mort.id,"You have already opened that chest.");
-		return;
+Actor.changeResource = function(mort,heal){
+	for(var i in heal){
+		if(typeof heal[i] === 'string'){ mort[i] += heal[i].numberOnly()/100*mort.resource[i].max;	}			
+		else {	mort[i] += heal[i];	}
+		mort[i] = Math.min(mort[i],mort.resource[i].max);
 	}
-	Chat.add(mort.id,"You opened the chest.");
-		
-	if(chest.func(mort.id) !== false){
-		Sprite.change(e,{'anim':'open'});
-		chest.list.push(mort.id);
+}
+
+Actor.getDef = function(mort){
+	var def = {
+		main:mort.globalDef,
+		ratio:deepClone(mort.equip.def)
 	};
+	for(var i in def.ratio){
+		def.ratio[i] *= mort.mastery.def[i].mod * mort.mastery.def[i].sum;
+		def.ratio[i].mm(1);
+	}
+	return def;
 }
 
+//}
+
+//{Player Command
 Actor.updateEquip = function(mort){
 	for(var k in Cst.element.list){	//Each Element
 		var i = Cst.element.list[k];
@@ -164,117 +96,9 @@ Actor.swapWeapon = function(mort,piece){
 	Actor.permBoost(mort,'weapon',equip.boost);
 }
 
-Actor.changeHp = function(mort,amount){
-    Actor.changeResource(mort,{hp:amount});
-}
+//}
 
-Actor.changeResource = function(mort,heal){
-	for(var i in heal){
-		if(typeof heal[i] === 'string'){ mort[i] += heal[i].numberOnly()/100*mort.resource[i].max;	}			
-		else {	mort[i] += heal[i];	}
-		mort[i] = Math.min(mort[i],mort.resource[i].max);
-	}
-}
-
-Actor.teleport = function(mort,x,y,map,signin){
-	//Teleport player. if no map specified, stay in same map.
-	mort.x = x;
-	mort.y = y;
-	if(map){
-		if(!map.have("@")){	map += '@MAIN'; }
-		if(map.have("@MAIN")){ 
-			delete List.map[mort.map].list[mort.id];
-			mort.map = map;	
-			List.map[mort.map].list[mort.id] = mort.id;
-		}
-		else if(mort.map !== map){ Actor.teleport.instance(mort,x,y,map,signin);}
-	}
-	ActiveList.remove(mort);	//need to consider if needed or not
-}
-
-
-
-Actor.teleport.instance = function(mort,x,y,map,signin){
-	if(!map){ Actor.teleport(mort,x,y);  return; }		//regular teleport
-	if(!map.have("@")){	map += "@MAIN"; }
-	if(map.have("@MAIN")){ Actor.teleport(mort,x,y,map);  return; }		//regular teleport
-
-	if(typeof signin === 'object'){
-		mort.mapSignIn = deepClone(signin);
-	} else if(mort.map.have("@MAIN")){
-		mort.mapSignIn = {map:mort.map,x:mort.x,y:mort.y};	//default signin = place b4 going instance
-	}
-	
-	if(map.have('@@')) map += mort.name;	//solo instance
-	else if(map[map.length-1] === '@') map += mort.team;	//team instance
-	//test if need to create instance
-	if(!List.map[map]){
-		var model = map.slice(0,map.indexOf('@'));
-		var version = map.slice(map.indexOf('@')+1);
-		Map.creation(model,version); 
-	}
-	mort.x = x;
-	mort.y = y;
-	delete List.map[mort.map].list[mort.id];
-	mort.map = map;	
-	List.map[mort.map].list[mort.id] = mort.id;
-	
-	
-	
-	ActiveList.remove(mort);
-}
-
-
-Actor.pickDrop = function (mort,id){
-	var inv = List.main[mort.id].invList;
-	var drop = List.drop[id];
-		
-	if(!drop) return;
-	
-	if(!Collision.distancePtPt(mort,drop) > mort.pickRadius){
-		Chat.add(mort.id,"You're too far away.");
-		return;
-	}
-
-	if(!Itemlist.test(inv,[[List.drop[id].item,List.drop[id].amount]])){
-		Chat.add(mort.id,"Inventory full.");
-		return;
-	}
-	
-	Itemlist.add(inv,drop.item,drop.amount);
-	Drop.remove(drop);		
-
-}
-
-Actor.rightClickDrop = function(mort,rect){
-	var key = mort.id;
-	var ol = {'name':'Pick Items','option':[]};
-	for(var i in List.drop){
-		var d = List.drop[i];
-		if(d.map == List.all[key].map && Collision.RectRect(rect,[d.x,d.x+32,d.y,d.y+32]) ){
-			ol.option.push({'name':'Pick ' + Db.item[List.drop[i].item].name,'func':'Actor.pickDrop','param':[i]});
-		}
-	}
-	
-	if(ol.option){ 
-		Button.optionList(key,ol);  
-	}	
-}
-	
-Actor.dropInv = function(mort,id){
-	var inv = List.main[mort.id].invList;
-	var amount = Math.min(1,Itemlist.have(inv,id,0,'amount'));
-	
-	if(!amount) return;
-	
-	Drop.creation({'x':mort.x,'y':mort.y,'map':mort.map,'item':id,'amount':amount,'timer':25*30});
-	Itemlist.remove(inv,id,amount);
-}
-
-
-
-
-
+//{Update
 Actor.update = {};
 Actor.update.mastery = function(player){
 	//Note: mod is applied in Combat.action.attack.mod.player
@@ -400,25 +224,230 @@ Actor.permBoost.compile = function(b){
 	return temp;
 }
 
+//}
+
+//{Map Interaction
 Actor.talk = function(mort,enemyId){
 	if(List.all[enemyId].dialogue){
 		List.all[enemyId].dialogue.func(mort.id);
 	}
 }
 
-Actor.getDef = function(mort){
-	var def = {
-		main:mort.globalDef,
-		ratio:deepClone(mort.equip.def)
-	};
-	for(var i in def.ratio){
-		def.ratio[i] *= mort.mastery.def[i].mod * mort.mastery.def[i].sum;
-		def.ratio[i].mm(1);
-	}
-	return def;
+Actor.pushing = function(pusher,beingPushed){
+	var mort = List.all[beingPushed];
+	if(!mort.block || !mort.block.pushable) return
+	
+	var pusherAngle = atan2(mort.y - pusher.y,mort.x - pusher.x);			//only work with square block
+	var fact = 360/4;
+	var angle = Math.floor((pusherAngle+fact/2)/fact)*fact%360;
+	
+	//Test if too far
+		//Block
+	var blockVarX = 0;	//only supported direction =4
+	var blockVarY = 0;
+	if(angle === 0) blockVarX = mort.block.size[0];
+	if(angle === 90) blockVarY = mort.block.size[2];
+	if(angle === 180) blockVarX = mort.block.size[1];
+	if(angle === 270) blockVarY = mort.block.size[3];
+	
+	blockVarX *= 32;
+	blockVarY *= 32;
+	
+		//Player
+	var pusherVarX = 0;	//only supported direction =4
+	var pusherVarY = 0;
+	if(angle === 0) pusherVarX = mort.bumperBox[0].x;
+	if(angle === 90) pusherVarY = mort.bumperBox[1].y;
+	if(angle === 180) pusherVarX = mort.bumperBox[2].x;
+	if(angle === 270) pusherVarY = mort.bumperBox[3].y;
+	
+	var posB = {'x':mort.x + blockVarX,'y':mort.y+blockVarY};
+	var posP = {'x':pusher.x + pusherVarX,'y':pusher.y+pusherVarY};
+	
+	if(Collision.distancePtPt(posB,posP) > 64) return
+	//
+	
+	mort.pushed.time = mort.block.time;
+	mort.pushed.magn = mort.block.magn;
+	mort.pushed.angle = angle;
+	
 }
 
-//Ability
+Actor.cutTree = function(mort,tree){	//quick fix...
+	if(Collision.distancePtPt(mort,List.all[tree]) > 100){ Chat.add(mort.id,"You're too far away."); return;}
+	
+	Itemlist.add(List.main[mort.id].invList,'wood-0',1);
+	Sprite.change(List.all[tree],{'anim':'cut'});
+	Chat.add(mort.id,"You manage to cut a branch off this Red Tree.");
+	Actor.removeOption(List.all[tree],'Cut Tree');
+
+}
+
+Actor.setRespawn = function(mort,wp){
+	Chat.add(mort.id,"You have changed your respawn point. Upon dying, you will now be teleported here.");
+	mort.respawnLoc = {x:wp.x,y:wp.y,map:wp.map};
+}
+
+Actor.openChest = function(mort,eid){	//need work
+	var e = List.all[eid];
+	
+	if(Collision.distancePtPt(mort,e) > 100){ Chat.add(mort.id,"You're too far away."); return;}
+	
+	var chest = e.treasure;
+	if(!chest) return;
+	if(chest.list.have(mort.id)){
+		Chat.add(mort.id,"You have already opened that chest.");
+		return;
+	}
+	Chat.add(mort.id,"You opened the chest.");
+		
+	if(chest.func(mort.id) !== false){
+		Sprite.change(e,{'anim':'open'});
+		chest.list.push(mort.id);
+	};
+}
+
+Actor.activateSwitch = function(mort,eid){
+	var e = List.all[eid];
+	
+	if(Collision.distancePtPt(mort,e) > 100){ Chat.add(mort.id,"You're too far away."); return;}
+	
+	var sw = e.switch;
+	if(!sw) return;
+	var oldstate = e.switch.state;
+	e.switch.state = e.switch.state === 'off' ? 'on' : 'off';
+	
+	if(e.switch[e.switch.state]) e.switch[e.switch.state](mort.id,e,List.map[e.map]);
+	
+	Sprite.change(e,{'anim':e.switch.state});
+	Chat.add(mort.id,"You turned the switch " + e.switch.state + '.');
+		
+	if(!e.switch[oldstate]){
+		Actor.removeOnClick(mort,'Pull Switch');
+	}
+
+
+}
+Actor.removeOnClick = function(mort,side){
+	for(var i in mort.optionList.option){
+		if(mort.optionList.option[i] === mort.onclick[side]){
+			mort.optionList.option.splice(i,1);
+			delete mort.onclick[side];
+			return;
+		}
+	}
+}	
+
+Actor.removeOption = function(mort,option){	//option is object or name
+	for(var i in mort.optionList.option){
+		if(mort.optionList.option[i] === option || mort.optionList.option[i].name === option){
+			mort.optionList.option.splice(i,1);
+			return;
+		}
+	}
+}	
+	
+Actor.teleport = function(mort,x,y,map,signin){
+	//Teleport player. if no map specified, stay in same map.
+	mort.x = x;
+	mort.y = y;
+	if(map){
+		if(!map.have("@")){	map += '@MAIN'; }
+		if(map.have("@MAIN")){ 
+			delete List.map[mort.map].list[mort.id];
+			mort.map = map;	
+			List.map[mort.map].list[mort.id] = mort.id;
+		}
+		else if(mort.map !== map){ Actor.teleport.instance(mort,x,y,map,signin);}
+	}
+	ActiveList.remove(mort);	//need to consider if needed or not
+}
+
+
+
+Actor.teleport.instance = function(mort,x,y,map,signin){
+	if(!map){ Actor.teleport(mort,x,y);  return; }		//regular teleport
+	if(!map.have("@")){	map += "@MAIN"; }
+	if(map.have("@MAIN")){ Actor.teleport(mort,x,y,map);  return; }		//regular teleport
+
+	if(typeof signin === 'object'){
+		mort.mapSignIn = deepClone(signin);
+	} else if(mort.map.have("@MAIN")){
+		mort.mapSignIn = {map:mort.map,x:mort.x,y:mort.y};	//default signin = place b4 going instance
+	}
+	
+	if(map.have('@@')) map += mort.name;	//solo instance
+	else if(map[map.length-1] === '@') map += mort.team;	//team instance
+	//test if need to create instance
+	if(!List.map[map]){
+		var model = map.slice(0,map.indexOf('@'));
+		var version = map.slice(map.indexOf('@')+1);
+		Map.creation(model,version); 
+	}
+	mort.x = x;
+	mort.y = y;
+	delete List.map[mort.map].list[mort.id];
+	mort.map = map;	
+	List.map[mort.map].list[mort.id] = mort.id;
+	
+	
+	
+	ActiveList.remove(mort);
+}
+
+
+Actor.pickDrop = function (mort,id){
+	var inv = List.main[mort.id].invList;
+	var drop = List.drop[id];
+		
+	if(!drop) return;
+	
+	if(!Collision.distancePtPt(mort,drop) > mort.pickRadius){
+		Chat.add(mort.id,"You're too far away.");
+		return;
+	}
+
+	if(!Itemlist.test(inv,[[List.drop[id].item,List.drop[id].amount]])){
+		Chat.add(mort.id,"Inventory full.");
+		return;
+	}
+	
+	Itemlist.add(inv,drop.item,drop.amount);
+	Drop.remove(drop);		
+
+}
+
+Actor.rightClickDrop = function(mort,rect){
+	var key = mort.id;
+	var ol = {'name':'Pick Items','option':[]};
+	for(var i in List.drop){
+		var d = List.drop[i];
+		if(d.map == List.all[key].map && Collision.RectRect(rect,[d.x,d.x+32,d.y,d.y+32]) ){
+			ol.option.push({'name':'Pick ' + Db.item[List.drop[i].item].name,'func':'Actor.pickDrop','param':[i]});
+		}
+	}
+	
+	if(ol.option){ 
+		Button.optionList(key,ol);  
+	}	
+}
+	
+Actor.dropInv = function(mort,id){
+	var inv = List.main[mort.id].invList;
+	var amount = Math.min(1,Itemlist.have(inv,id,0,'amount'));
+	
+	if(!amount) return;
+	
+	Drop.creation({'x':mort.x,'y':mort.y,'map':mort.map,'item':id,'amount':amount,'timer':25*30});
+	Itemlist.remove(inv,id,amount);
+}
+
+
+
+
+//}
+
+//{Ability
 Actor.removeAbility = function(mort,name){
 	delete mort.abilityList[name];
 	for(var i in mort.ability){
@@ -458,11 +487,10 @@ Actor.useAbilityPlan = function(mort,name){
 	Itemlist.remove(List.main[mort.id].invList,name,1);
 }
 
-
-
 Actor.examineAbility = function(mort){}
+//}
 
-//Death
+//{Death
 Actor.death = function(mort){	
 	if(mort.type === 'enemy') Actor.death.enemy(mort);
 	if(mort.type === 'player') Actor.death.player(mort);
@@ -505,8 +533,8 @@ Actor.death.enemy = function(mort){
 	var killers = Actor.death.getKiller(mort);
 	Actor.death.drop(mort,killers);
 	Actor.death.exp(mort,killers);
-	if(mort.deathFunc)	for(var i in killers) mort.deathFunc(killers[i]) //custom death function (ex quest)
-	if(mort.deathFuncArray) mort.deathFuncAll(killers)
+	if(mort.deathFunc)	for(var i in killers) mort.deathFunc(killers[i],mort,mort.map) //custom death function (ex quest)
+	if(mort.deathFuncArray) mort.deathFuncAll(killers,mort,mort.map)
 	
 	Actor.death.performAbility(mort);				//custom death ability function
 	ActiveList.remove(mort);
@@ -611,7 +639,7 @@ Actor.death.exp = function(mort,killers){
 		Skill.addExp(killers[i],style,mort.deathExp);
 	}
 }
-
+//}
 
 
 //ts("Plan.creation({'rarity':0,'quality':0,'piece':'melee','lvl':10,'category':'equip',});")

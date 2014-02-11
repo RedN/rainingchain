@@ -17,7 +17,6 @@ Collision.PtRect = function(pt,rect){
 	return (pt.x >= rect[0] && pt.x <= rect[1] && pt.y >= rect[2] && pt.y <= rect[3])
 }
 
-
 Collision.PosMap = function(pos,map,type){
 	//Test Collision between pt and map
 	
@@ -26,7 +25,9 @@ Collision.PosMap = function(pos,map,type){
 }
 
 Collision.ActorMap = function(pos,map,player){
-	if(player && player.mapMod && player.mapMod[pos.x + '-' + pos.y]){
+	if(player.ghost) return 0;
+
+	if(player.mapMod && player.mapMod[pos.x + '-' + pos.y]){
 		return player.mapMod[pos.x + '-' + pos.y];
 	}
 	return Collision.PosMap(pos,map,'actor');

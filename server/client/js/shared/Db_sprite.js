@@ -197,7 +197,7 @@ Init.db.sprite = function(){
     	}},
 		
 		"tree-red":{"src":"picture/red_tree.png","size":2,"side":[0],
-    	"preBumperBox":[ -32,32,-40,40 ],"preHitBox":[ -32,32,-40,40 ],
+    	"preBumperBox":[ -32,32,-40,40 ],"preHitBox":[ -32,32,-40,40 ],'defaultAnim':'ready',
 		"anim": {
     		"walk":{"startY":0,"frame":1,"sizeX":64,"sizeY":80,"dir":1,"spd":0,"next":"walk"}, 
 			"ready":{"startY":0,"frame":1,"sizeX":64,"sizeY":80,"dir":1,"spd":0,"next":"ready"},
@@ -205,11 +205,11 @@ Init.db.sprite = function(){
     	}},
 		
 		"switchBox":{"src":"picture/switch.png","size":2,"side":[0],
-    	"preBumperBox":[ -16,16,-16,16 ],"preHitBox":[ -16,16,-16,16 ],
+    	"preBumperBox":[ -16,16,-16,16 ],"preHitBox":[ -16,16,-16,16 ],'defaultAnim':'off',
 		"anim": {
-    		"walk":{"startY":0,"frame":1,"sizeX":32,"sizeY":32,"dir":1,"spd":0,"next":"walk"},  
-			"on":{"startY":0,"frame":1,"sizeX":32,"sizeY":32,"dir":1,"spd":0,"next":"on"},	
-			"off":{"startY":64,"frame":1,"sizeX":32,"sizeY":32,"dir":1,"spd":0,"next":"off"},			
+    		//"walk":{"startY":64,"frame":1,"sizeX":32,"sizeY":32,"dir":1,"spd":0,"next":"walk"},  
+			"off":{"startY":0,"frame":1,"sizeX":32,"sizeY":32,"dir":1,"spd":0,"next":"off"},	
+			"on":{"startY":64,"frame":1,"sizeX":32,"sizeY":32,"dir":1,"spd":0,"next":"on"},							
     	}},
     	
     }
@@ -232,7 +232,7 @@ Init.db.sprite = function(){
 		
 		
 		
-		
+		spr.defaultAnim = spr.defaultAnim || Object.keys(spr.anim)[0];
 		spr.size = spr.size || 1;
     	spr.legs = spr.legs || 0;
 		
@@ -290,12 +290,15 @@ Init.db.sprite = function(){
 Sprite = {};
 
 Sprite.creation = function(player,info){
+	if(!info.anim) info.anim = Db.sprite[info.name || 'mace'].defaultAnim;
+	info.oldAnim = info.anim;
+	
 	player.sprite = useTemplate(Sprite.template(),info);
-    if(server)	Sprite.updateBumper(player);
+	if(server)	Sprite.updateBumper(player);
 }
 Sprite.template = function(){
 	return {
-    	name:'pBow',
+    	name:'mace',
     	anim:'walk',
     	oldAnim:'walk',
 		sizeMod : 1,

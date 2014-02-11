@@ -53,16 +53,6 @@ ePreDb["troll"]["ice"] = {  //{		//troll is category, ice is variant
 		"aggressive":400,		//if player within this range, enemy will attack you
 		"farthest":600			//if player farther than this range, enemy will stop following
 	},	
-	'moveSelf':0,
-	
-	"block":{
-		condition:'true',		//condition to block player | 'true' = always, other function(key)
-		size:[-1,1,-1,1]		//area blocked by the block. [minX,maxX,minY,maxY] relative to center
-		pushable:1,				//can player push block
-		magn:10,				//when pushed, increase spd by magn
-		time:10,				//when pushed, increase spd for time amount of frame
-	},
-	'waypoint':1,				//palyer can right clikc to set respawnLoc
 	
 	
 	'drop':{
@@ -98,8 +88,22 @@ ePreDb["troll"]["ice"] = {  //{		//troll is category, ice is variant
 	
 	'boss':'iceTroll',			//id of the boss
 	
+	'moveSelf':0,
 	
+	"block":{
+		condition:'true',		//condition to block player | 'true' = always, other function(key)
+		size:[-1,1,-1,1]		//area blocked by the block. [minX,maxX,minY,maxY] relative to center
+		pushable:1,				//can player push block
+		magn:10,				//when pushed, increase spd by magn
+		time:10,				//when pushed, increase spd for time amount of frame
+	},
+	'waypoint':1,				//palyer can right clikc to set respawnLoc
 	
+	'immune':{					//grants immunity to elements
+		'fire':1,
+	},
+	
+	'ghost':1,					//bypass collision test
 };
 
 
@@ -193,6 +197,18 @@ Init.db.enemy = function(){ var ePreDb = {};
 		'nevercombat':1,
 		'nevermove':1,
 	}; //}
+	ePreDb["system"]["chest"] = {  //{
+		"name":"Chest",
+		"sprite":{'name':"chest",'sizeMod':1},
+		'nevercombat':1,
+		'nevermove':1,
+	}; //}
+	ePreDb["system"]["switch"] = {  //{
+		"name":"Switch",
+		"sprite":{'name':"switchBox",'sizeMod':1},
+		'nevercombat':1,
+		'nevermove':1,
+	}; //}
 	
 	ePreDb["block"] = {}; //{
 	ePreDb["block"]["1x1"] = {  //{
@@ -217,12 +233,7 @@ Init.db.enemy = function(){ var ePreDb = {};
 		'moveSelf':0,
 		"block":{condition:'true',pushable:0,size:[-1,1,-1,1]},
 	}; //}
-	ePreDb["system"]["chest"] = {  //{
-		"name":"Chest",
-		"sprite":{'name':"chest",'sizeMod':1},
-		'nevercombat':1,
-		'nevermove':1,
-	}; //}
+
 	ePreDb["block"]["3x3"] = {  //{
 		"name":"Block",
 		"sprite":{'name':"block1x1",'sizeMod':3},
@@ -239,14 +250,7 @@ Init.db.enemy = function(){ var ePreDb = {};
 		"block":{condition:'true',pushable:1,magn:8,time:8,size:[-1,1,-1,1]},
 	}; //}
 	//}
-	ePreDb["switch"] = {}; //{
-	ePreDb["switch"]["box"] = {  //{
-		"name":"Switch",
-		"sprite":{'name':"switchBox",'sizeMod':1},
-		'nevercombat':1,
-		'nevermove':1,
-	}; //}
-	//}
+
 	
 	ePreDb["tree"] = {}; //{
 	ePreDb["tree"]["red"] = {  //{
@@ -262,50 +266,52 @@ Init.db.enemy = function(){ var ePreDb = {};
 	
 	//Turn Object into function
 	Db.enemy = {};
-	for(var i in ePreDb){ Db.enemy[i] = {}; 
+	for(var i in ePreDb){ 
+		Db.enemy[i] = {}; 
 		for(var j in ePreDb[i]){
-			var e = ePreDb[i][j];
-			
-			e = useTemplate(Actor.template('enemy'),e);
-			
-			e.context = e.name; 
-			if(e.combat && !e.nevercombat){ 
-				e.context += ' | Lvl: ' + e.lvl;
-			}
-			e.hp = e.resource.hp.max;
-			
-			//Init Drop
-			if(e.drop){
-				e.drop.mod = e.drop.mod || {};
-				e.drop.mod.quantity = e.drop.mod.quantity || 1;
-				e.drop.mod.quality = e.drop.mod.quality || 1;
-				e.drop.mod.rarity = e.drop.mod.rarity || 1;
-				
-				
-				if(e.drop.plan){
-					for(var k in e.drop.plan){
-						if(typeof e.drop.plan[k] === 'number'){
-							var tmp = e.drop.plan[k];
-							e.drop.plan[k] = {};
-							for(var t in Cst.equip[k].type)	e.drop.plan[k][Cst.equip[k].type[t]] = tmp/3;							
-						}
-					}
-				}
-				
-			}
-			
-			Db.enemy[i][j] = new Function('return ' + stringify(e));
-			Db.enemy[i][j].globalDmg = ePreDb[i][j].globalDmg || e.globalDmg;	//cuz cant stringify function
-			Db.enemy[i][j].globalDef = ePreDb[i][j].globalDef || e.globalDef;
-			Db.enemy[i][j].globalMod = ePreDb[i][j].globalMod || e.globalMod;
-			
-			
+			ePreDb[i][j].category = i;
+			ePreDb[i][j].variant = j;
+			Init.db.enemy.creation(ePreDb[i][j]);			
 		}
 	}
 	
 }
 //
-
+Init.db.enemy.creation = function(e){
+	e = useTemplate(Actor.template('enemy'),e);
+	
+	e.context = e.name; 
+	if(e.combat && !e.nevercombat){ 
+		e.context += ' | Lvl: ' + e.lvl;
+	}
+	e.hp = e.resource.hp.max;
+	
+	//Init Drop
+	if(e.drop){
+		e.drop.mod = e.drop.mod || {};
+		e.drop.mod.quantity = e.drop.mod.quantity || 1;
+		e.drop.mod.quality = e.drop.mod.quality || 1;
+		e.drop.mod.rarity = e.drop.mod.rarity || 1;
+		
+		
+		if(e.drop.plan){
+			for(var k in e.drop.plan){
+				if(typeof e.drop.plan[k] === 'number'){
+					var tmp = e.drop.plan[k];
+					e.drop.plan[k] = {};
+					for(var t in Cst.equip[k].type)	e.drop.plan[k][Cst.equip[k].type[t]] = tmp/3;							
+				}
+			}
+		}
+		
+	}
+	
+	Db.enemy[e.category][e.variant] = new Function('return ' + stringify(e));
+	Db.enemy[e.category][e.variant].globalDmg = e.globalDmg;	//cuz cant stringify function
+	Db.enemy[e.category][e.variant].globalDef = e.globalDef;
+	Db.enemy[e.category][e.variant].globalMod = e.globalMod;
+	return e;
+}
 
 
 

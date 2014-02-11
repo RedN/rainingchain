@@ -40,7 +40,6 @@ tut.variable = {
 };
 		
 tut.load = function(map,hotspot,variable,cst){
-	console.log('sad');
 	//grave
 	Actor.creation({'xy':hotspot.h,'map':map,
 		"category":"system","variant":"grave"
@@ -93,12 +92,9 @@ tut.load = function(map,hotspot,variable,cst){
 	//First monster
 	Actor.creation({'xy':hotspot.i,'map':map,
 		"category":"tutorial","variant":"bee",extra:{
-			'deathFunc':function(killers){
-				for(var i in killers){
-					var main = List.main[killers[i]];
-					main.quest['Qtutorial'].beeDead = true;						
-				}
-			}				
+			'deathFunc':function(key){
+				List.main[key].quest['Qtutorial'].beeDead = true;						
+			}		
 		}
 	});
 	
@@ -110,32 +106,25 @@ tut.load = function(map,hotspot,variable,cst){
 	//Boss Fire
 	Actor.creation({'xy':hotspot.k,'map':map,
 		"category":"tutorial","variant":"demon",extra:{
-			deathFunc:function(killers){
-				for(var i in killers){
-					List.main[killers[i]].quest.Qtutorial.bossDead = true;
-				}
+			deathFunc:function(key){
+				List.main[key].quest.Qtutorial.bossDead = true;
 			}
 		}
 	});
 	
 	//Switch
 	Actor.creation({'xy':hotspot.c,'map':map,
-		"category":"switch","variant":"box",extra:function(mort){
-			mort.onclick.shiftLeft = {
-				name:'Activate',
-				param:[mort.id],
-				func:function(key,mortid){
-					var mort = List.all[mortid];
-					List.map[mort.map].variable.rotation *= -1;
-					Sprite.change(mort,{'anim':'off'});
-					Actor.removeOnClick(mort,'shiftLeft');
-					Chat.add(key,"You have activated a switch.");
+		"category":"system","variant":"switch",extra:function(mort){
+			mort.switch = {
+				on:function(key,mortid,map){
+					map.variable.Qtutorial.rotation *= -1;		
 				}
 			};
 		}
 	});
 	
 };
+
 
 tut.loop =  function(map,hotspot,variable,cst){
 	if(Loop.interval(25)){

@@ -137,7 +137,6 @@ Init.actor = function(){
 		mort.deathAbility = [];
 		mort.deathFunc = null;	//function param = id of each killer
 		mort.deathFuncArray = null;	//function param = array id of killers
-		mort.shiftClick = null;
 		mort.combat = 1;
 		mort.deleteOnceDead = 0;
 		mort.hitIf = 'player';
@@ -145,6 +144,7 @@ Init.actor = function(){
 		mort.onclick = {};			
 		mort.waypoint = null; 		//right click = setRespawn
 		mort.treasure = null;		//right click = gives items;
+		mort.block = null;			//change map coliision
 		//}	
 		
 

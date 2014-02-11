@@ -16,7 +16,6 @@ Actor.creation = function(data){
 	List.map[e.map].list[e.id] = e;
 	
 	
-	if(e.treasure) e.treasure = {func:e.treasure,list:[]};
 	for(var i in e.immune) e.equip.def[i] = Cst.bigInt;
 	
 	
@@ -202,8 +201,16 @@ Actor.creation.optionList = function(e){
 	if(e.type === 'player') ol.option.push({'name':'Trade',"func":'Main.openWindow',"param":['trade',e.id]});
 	if(e.dialogue)	ol.option.push({'name':'Talk To',"func":'Actor.talk',"param":[e.id]});
 	if(e.waypoint)	ol.option.push({'name':'Set Respawn',"func":'Actor.setRespawn',"param":[{x:e.x,y:e.y+64,map:e.map}]});
-	if(e.treasure)	ol.option.push({'name':'Open Chest',"func":'Actor.openChest',"param":[e.id]});
+	if(e.treasure){
+		ol.option.push({'name':'Open Chest',"func":'Actor.openChest',"param":[e.id]});
+		e.treasure = {func:e.treasure,list:[]}
+	}
+	
 	if(e.tree)	ol.option.push({'name':'Cut Tree',"func":'Actor.cutTree',"param":[e.id]});
+	if(e.switch){
+		ol.option.push({'name':'Pull Switch',"func":'Actor.activateSwitch',"param":[e.id]});
+		e.switch.state = e.switch.state || 'off';
+	}
 	
 	if(e.block && e.block.pushable){
 		var info = {'name':'Push',"func":'Actor.pushing',"param":[e.id]};

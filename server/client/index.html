@@ -106,6 +106,7 @@
 			<div id="canvasDiv" class='posAbs' onclick='document.activeElement.blur()'></div>
 			
 			<div id="contextDiv" style="white-space: nowrap; width:auto; padding:3px; z-index:100;" class='posAbs gradientBoxesWithOuterShadows'></div>
+			<div id="commandDiv" style="white-space: nowrap; width:auto; padding:3px; z-index:100;" class='posAbs gradientBoxesWithOuterShadows'></div>
 			<!-- Chat -->
 			<div id="chatBoxDiv" class="posAbs"> 
 				<div id="chatBoxText" class='taJust onlyTextScroll'></div>
@@ -212,6 +213,7 @@
 			'questTab':{'div':$("#questListDiv")[0],'text':$("#questListText")[0]},
 			'prefTab':{'div':$("#prefListDiv")[0],'text':$("#prefListText")[0]},
 			'context':{'div':$("#context" + "Div")[0]},	
+			'command':{'div':$("#command" + "Div")[0]},
 			'questWin':{'div':$("#questWin" + "Div")[0],
 						'info':$("#questWin" + "Info")[0],
 						'hint':$("#questWin" + "Hint")[0],

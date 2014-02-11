@@ -23,6 +23,9 @@ if(server){
 	});
 }
 
+
+
+
 //{Fl
 Command.list['fl,add'] = function(key,user,nick,comment,color){
 	if(!nick){ nick = user;}
@@ -44,7 +47,30 @@ Command.list['fl,add'] = function(key,user,nick,comment,color){
 		});
 	}
 }
- 
+Command.list['fl,add'].doc = {
+	'description':'Add a new Friend to your Friend List',
+	'param':[
+		{type:'Letters',name:'Username to add',optional:0},
+		{type:'Letters',name:'Set Nickname',optional:1},
+		{type:'Letters',name:'Set Comment',optional:1},
+		{type:'Letters',name:'Set PM Color',optional:1},
+	],
+}
+Command.list['fl,remove'] = function(key,user){
+	if(List.main[key].friendList[user]){
+		delete List.main[key].friendList[user]
+		Chat.add(key, 'Friend deleted.');
+	} else {
+		Chat.add(key, 'This player is not in your Friend List.');		
+	}
+}
+Command.list['fl,remove'].doc = {
+	'description':'Remove a Friend',
+	'param':[
+		{type:'Letters',name:'Username to remove',optional:0},
+	],
+}
+
 Command.list['fl,comment'] = function(key,user,comment){
 	if(List.main[key].social.list.friend[user]){
 		List.main[key].social.list.friend[user].comment = comment;
@@ -52,6 +78,13 @@ Command.list['fl,comment'] = function(key,user,comment){
 	} else {
 		Chat.add(key, 'This player is not in your Friend List.');
 	}
+}
+Command.list['fl,comment'].doc = {
+	'description':'Set Comment of a friend',
+	'param':[
+		{type:'Letters',name:'Username',optional:0},
+		{type:'Letters',name:'Comment',optional:0},
+	],
 }
 
 Command.list['fl,nick'] = function(key,user,nick){
@@ -62,6 +95,13 @@ Command.list['fl,nick'] = function(key,user,nick){
 		Chat.add(key, 'This player is not in your Friend List.');
 	}
 }
+Command.list['fl,nick'].doc = {
+	'description':'Set Nickname for a friend',
+	'param':[
+		{type:'Letters',name:'Username',optional:0},
+		{type:'Letters',name:'Nickname',optional:0},
+	],
+}
 
 Command.list['fl,color'] = function(key,user,color){
 	if(List.main[key].social.list.friend[user]){
@@ -70,6 +110,13 @@ Command.list['fl,color'] = function(key,user,color){
 	} else {
 		Chat.add(key, 'This player is not in your Friend List.');
 	}
+}
+Command.list['fl,color'].doc = {
+	'description':'Set Nickname for a friend',
+	'param':[
+		{type:'Letters',name:'Username',optional:0},
+		{type:'Letters',name:'Color',optional:0},
+	],
 }
 
 Command.list['fl,pm'] = function(key,setting){
@@ -80,6 +127,12 @@ Command.list['fl,pm'] = function(key,setting){
 	} else {
 		Chat.add(key, "Wrong Private Setting. Use one of the following: " + possible.toString());
 	}
+}
+Command.list['fl,pm'].doc = {
+	'description':'Change who can PM you right now.',
+	'param':[
+		{type:'Letters',name:'Option (on,off or friend)',optional:0},
+	],
 }
 
 Command.list['fl,offlinepm'] = function(key,to,text){
@@ -110,6 +163,14 @@ Command.list['fl,offlinepm'] = function(key,to,text){
 	});
 }
 
+Command.list['fl,offlinepm'].doc = {
+	'description':"Send a PM to a player who isn't online right now.",
+	'param':[
+		{type:'Letters',name:'Username',optional:0},
+		{type:'Letters',name:'Message',optional:0},
+	],
+}
+
 Command.list['mute'] = function(key,user){
 	if(user == List.all[key].name){ Chat.add(key,"-.- Seriously?"); return }
 	
@@ -126,13 +187,25 @@ Command.list['mute'] = function(key,user){
 		});
 	}
 }
+Command.list['mute'].doc = {
+	'description':"Mute a player.",
+	'param':[
+		{type:'Letters',name:'Username',optional:0},
+	],
+}
+
 //}
 
 //{Window
 Command.list['win,close'] = function(key){
 	Main.closeAllWindow(List.main[key]); 
 }
-
+Command.list['win,close'].doc = {
+	'description':"Close the window.",
+	'param':[
+		
+	],
+}
 Command.list['win,open'] = function(key,win,param0){
 	if(List.main[key].windowList[win] === undefined){ Chat.add(key,'Wrong Input'); return; }
 	if(win === 'bank'){ Chat.add(key,'Access denied.'); return;}
@@ -140,7 +213,12 @@ Command.list['win,open'] = function(key,win,param0){
 	
 	Main.openWindow(List.main[key],win,param0);
 }
-
+Command.list['win,open'].doc = {
+	'description':"Open a window.",
+	'param':[
+		{type:'Letters',name:'Window Name',optional:0},
+	],
+}
 Command.list['win,bank,click'] = function(key,side,slot,amount){
 	var m = List.main[key];
 	if(!m.windowList.bank){ Chat.add(key,'Access denied.'); return;}
@@ -149,11 +227,25 @@ Command.list['win,bank,click'] = function(key,side,slot,amount){
 	amount = Math.round(amount.mm(1));
 	Itemlist.click.bank(m.bankList,side,+slot,amount);
 }
-
+Command.list['win,bank,click'].doc = {
+	'description':"Withdraw Items from Bank.",
+	'param':[
+		{type:'Letters',name:'Mouse Button',optional:0},
+		{type:'Number',name:'Bank Slot',optional:0},
+		{type:'Number',name:'Amount to withdraw',optional:1},
+	],
+}
 Command.list['win,trade,click'] = function(key,side,slot){
 	var m = List.main[key];
 	if(!m.windowList.trade){ Chat.add(key,'Access denied.'); return;}
 	Itemlist.click.trade(m.tradeList,side,+slot);
+}
+Command.list['win,trade,click'].doc = {
+	'description':"Withdraw Itms from Trade.",
+	'param':[
+		{type:'Letters',name:'Mouse Button',optional:0},
+		{type:'Number',name:'Trade Slot',optional:0},
+	],
 }
 Command.list['win,trade,toggle'] = function(key){
 	var m = List.main[key];
@@ -166,6 +258,11 @@ Command.list['win,trade,toggle'] = function(key){
 		Itemlist.trade(m.tradeList,List.main[other].tradeList);
 	}
 }
+Command.list['win,trade,toggle'].doc = {
+	'description':"Toggle the Accept/Decline Button",
+	'param':[
+	],
+}
 Command.list['win,quest,toggleBonus'] = function(key,id,bonus){
 	var mq = List.main[key].quest[id];
 	if(!mq){ Chat.add(key,'Wrong Input.'); return; }	
@@ -174,7 +271,13 @@ Command.list['win,quest,toggleBonus'] = function(key,id,bonus){
 	
 	Quest.bonus.toggle(key,id,bonus);
 }
-
+Command.list['win,quest,toggleBonus'].doc = {
+	'description':"Toggle a Quest Bonus.",
+	'param':[
+		{type:'Letters',name:'Quest Id',optional:0},
+		{type:'Letters',name:'Bonus Id',optional:0},
+	],
+}
 Command.list['win,passive,select'] = function(key,i,j){
 	i = Math.floor(+i); j = Math.floor(+j);
 	if(!Db.passive[i] || !Db.passive[i][j]){ return; }
@@ -182,6 +285,13 @@ Command.list['win,passive,select'] = function(key,i,j){
 	if(typeof i !== 'number' || typeof j !== 'number'){ return; }
 	
 	Main.selectPassive(List.main[key],i,j);
+}
+Command.list['win,passive,select'].doc = {
+	'description':"Select a Passive",
+	'param':[
+		{type:'Number',name:'Position Y',optional:0},
+		{type:'Number',name:'Position X',optional:0},
+	],
 }
 
 Command.list['win,ability,swap'] = function(key,name,position){
@@ -191,24 +301,55 @@ Command.list['win,ability,swap'] = function(key,name,position){
 	if(position < 0 || !List.all[key].abilityList[name]){ return; } 
 	Actor.swapAbility(List.all[key],name,position);
 }
+Command.list['win,ability,swap'].doc = {
+	'description':"Set an Ability to a Key",
+	'param':[
+		{type:'Letters',name:'Ability Id',optional:0},
+		{type:'Number',name:'Key Position (0-6)',optional:0},
+	],
+}
 
 Command.list['win,ability,upgrade'] = function(key,abid,amount){
 	amount = +amount;
 	if(!amount || !List.all[key].abilityList[abid] || amount < 1){ Chat.add(key,'Wrong'); return;}
 	Craft.orb(key,'upgrade',amount,abid);	
 }
+Command.list['win,ability,upgrade'].doc = {
+	'description':"Upgrade an Ability",
+	'param':[
+		{type:'Letters',name:'Ability Id',optional:0},
+		{type:'Number',name:'Amount of Orbs Used',optional:0},
+	],
+}
+
 Command.list['win,ability,addMod'] = function(key,mod,abid){
 	if(!List.all[key].abilityList[abid] || !Db.abilityMod[mod]){ Chat.add(key,'Wrong Input.'); return; }
 	if(!Itemlist.have(List.main[key].invList,Db.abilityMod[mod].item)){ Chat.add(key,'You don\'t have this mod.'); return; }
 
 	Craft.ability.mod(key,abid,mod);
 }
+Command.list['win,ability,addMod'].doc = {
+	'description':"Add a Mod to an Ability",
+	'param':[
+		{type:'Letters',name:'Mod Id',optional:0},
+		{type:'Letters',name:'Ability Id',optional:0},
+	],
+}
+
+
 Command.list['win,ability,upMod'] = function(key,abid,mod,amount){	//cant be named upgradeMod cuz inteference with ability,upgrade
 	amount = +amount;
 	if(!amount || !List.all[key].abilityList[abid] || amount < 1){ Chat.add(key,'Wrong'); return;}
 	Craft.orb(key,'upgrade',amount,abid,mod);	
 }
-
+Command.list['win,ability,upMod'].doc = {
+	'description':"Upgrade a Mod of an Ability",
+	'param':[
+		{type:'Letters',name:'Ability Id',optional:0},
+		{type:'Letters',name:'Mod Id',optional:0},
+		{type:'Number',name:'Amount of Orbs Used',optional:0},
+	],
+}
 //}
 
 //{Tab
@@ -216,7 +357,12 @@ Command.list['tab,open'] = function(key,tab){
 	if(Cst.tab.list.indexOf(tab) === -1){ Chat.add(key,'Wrong Input'); return; }
 	List.main[key].currentTab = tab;
 }
-
+Command.list['tab,open'].doc = {
+	'description':"Open a Tab",
+	'param':[
+		{type:'Letters',name:'Tab Name',optional:0},
+	],
+}
 Command.list['tab,inv,click'] = function(key,side,slot,amount){
 	if(List.main[key].currentTab !== 'inventory'){ Chat.add(key,'Access denied.'); return;}
 	amount = +amount || 1;
@@ -224,18 +370,37 @@ Command.list['tab,inv,click'] = function(key,side,slot,amount){
 	amount = Math.round(amount.mm(1));
 	Itemlist.click.inventory(List.main[key].invList,side,slot,amount);
 }
-
+Command.list['tab,inv,click'].doc = {
+	'description':"Deposit/Use Items in Inventory.",
+	'param':[
+		{type:'Letters',name:'Mouse Button',optional:0},
+		{type:'Number',name:'Inventory Slot',optional:0},
+		{type:'Number',name:'Amount to withdraw',optional:1},
+	],
+}
 Command.list['tab,swapWeapon'] = function(key,type){
 	if(['melee','range','magic'].indexOf(type) === -1){ Chat.add(key,'Invalid Param.'); return;}
 	Actor.swapWeapon(List.all[key],type);
 }
+Command.list['tab,swapWeapon'].doc = {
+	'description':"Change Weapon for another already Equipped",
+	'param':[
+		{type:'Letters',name:'New Weapon Type',optional:0},
+	],
+}
+
 
 Command.list['tab,removeEquip'] = function(key,type){
 	if(!Cst.equip.piece.have(type)){ Chat.add(key,'Invalid Param.'); return;}
 	if(!Itemlist.empty(List.main[key].invList,1)){ Chat.add(key,'No Inventory room.'); return;}
 	Actor.switchEquip(List.all[key],'',type);
 }
-
+Command.list['tab,removeEquip'].doc = {
+	'description':"Remove a piece of equipment",
+	'param':[
+		{type:'Letters',name:'Equipement Piece',optional:0},
+	],
+}
 
 
 
@@ -246,14 +411,30 @@ Command.list['tab,removeEquip'] = function(key,type){
 Command.list['cc,create'] = function(key,name){
 	Clan.creation(key,name);	
 }
+Command.list['cc,create'].doc = {
+	'description':"Create a new Clan",
+	'param':[
+		{type:'Letters',name:'Clan Name',optional:0},
+	],
+}
 Command.list['cc,enter'] = function(key,name){
 	Clan.enter(key,name);	
 }
-Command.list['cc,log'] = function(key,name){
-	Clan.enter(key,name);	
+Command.list['cc,enter'].doc = {
+	'description':"Enter a Clan",
+	'param':[
+		{type:'Letters',name:'Clan Name',optional:0},
+	],
 }
+
 Command.list['cc,leave'] = function(key,name){
 	Clan.leave(key,name);	
+}
+Command.list['cc,leave'].doc = {
+	'description':"Leave a Clan",
+	'param':[
+		{type:'Letters',name:'Clan Name (ALL will leave all clans)',optional:0},
+	],
 }
 //}
 
@@ -264,7 +445,12 @@ Command.list['dia,option'] = function(key,slot){
 		Dialogue.option(key,main.dialogue.option[slot]);
 	}	
 }
-
+Command.list['dia,option'].doc = {
+	'description':"Choose a dialogue option.",
+	'param':[
+		{type:'Number',name:'Dialogue Option #',optional:0},
+	],
+}
 Command.list['option'] = function(key,slot){
 	var main = List.main[key];
 	if(main.optionList && main.optionList.option[slot]){
@@ -277,7 +463,12 @@ Command.list['option'] = function(key,slot){
 		
 	}	
 }
-
+Command.list['option'].doc = {
+	'description':"Select an option from the Right-Click Option List.",
+	'param':[
+		{type:'Number',name:'Option Position',optional:0},
+	],
+}
 Command.list['email,activate'] = function(key,str){
 	var name = List.all[key].name;
 	db.account.find({username:name},{activationKey:1},function(err,res){	if(err) throw err
@@ -288,18 +479,45 @@ Command.list['email,activate'] = function(key,str){
 		} else {Chat.add(key, 'Wrong Activation Key.');}	
 	});
 }
-
+Command.list['email,activate'].doc = {
+	'description':"Activate your Email.",
+	'param':[
+		{type:'Letters',name:'Activation Code',optional:0},
+	],
+}
 Command.list['team,join'] = function(key,name){
 	name = escape.user(name);
 	List.all[key].team = name;
 	Chat.add(key, 'You are now in team "' + name + '".');
 }
-
+Command.list['team,join'].doc = {
+	'description':"Join a team.",
+	'param':[
+		{type:'Letters',name:'Team Name (Usually Username)',optional:0},
+	],
+}
 
 
 
 
 //{CLIENT SIDE: Pref. many different preference values can be changed. check Command.pref.verify for more detail.
+Command.client = ['pref','music,next','music,info','help'];
+
+Command.list['help'] = function(){
+	for(var i in Command.list){
+		var str = '$' + i + ' :     ' + Command.list[i].doc.description;
+		Chat.add(str);
+	}
+}
+
+
+Command.list['help'].doc = {
+	'description':"Show List of Commands.",
+	'param':[
+	],
+}
+
+
 Command.list['pref'] = function(name,value){
 	if(name === 'reset'){
 		main.pref = Main.template.pref();
@@ -316,18 +534,33 @@ Command.list['pref'] = function(name,value){
 	Chat.add('Preferences Changed.');
 	localStorage.setItem('pref',JSON.stringify(main.pref))
 }
+Command.list['pref'].doc = {
+	'description':"Change a Preference.",
+	'param':[
+		{type:'Letters',name:'Pref Id',optional:0},
+		{type:'Number',name:'New Pref Value',optional:0},
+	],
+}
 
 
-
-Command.list['music,next'] = function(type,position,value){
+Command.list['music,next'] = function(){
 	Song.ended();
+}
+Command.list['music,next'].doc = {
+	'description':"Skip this song.",
+	'param':[	
+	],
 }
 Command.list['music,info'] = function(){
 	var str = 'Song name: "' + Song.beingPlayed.name + '" by ' + Song.beingPlayed.author.name;
 	Chat.add(str);
 }
+Command.list['music,info'].doc = {
+	'description':"Get info about song being played.",
+	'param':[	
+	],
+}
 
-Command.client = ['pref','music,next','music,info'];
 //}
 
 //{Pref
@@ -343,7 +576,6 @@ Command.pref.list = {
 	'passiveView':{name:'Passive View',initValue:0,min:0,max:1,description:'Impact Passive Colors. 0:Access. 1:Popularity'},
 	'abilityDmgStatusTrigger':{name:'%Dmg Ability',initValue:10,min:0,max:100,description:'%Life Dealt per attack. Used to calculate chance to proc status.'}, //% life of monster per attack (used to calc % chance to trigger status)
 	'mapIconAlpha':{name:'Icon Alpha',initValue:100,min:0,max:100,description:'Minimap Icon Transparence.'},
-	
 }
 Command.pref.verify = function(name,value){
 	var req = Command.pref.list[name];
