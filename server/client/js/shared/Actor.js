@@ -277,7 +277,7 @@ Actor.cutTree = function(mort,tree){	//quick fix...
 	if(Collision.distancePtPt(mort,List.all[tree]) > 100){ Chat.add(mort.id,"You're too far away."); return;}
 	
 	Itemlist.add(List.main[mort.id].invList,'wood-0',1);
-	Sprite.change(List.all[tree],{'anim':'cut'});
+	Sprite.change(List.all[tree],{'initAnim':'cut'});
 	Chat.add(mort.id,"You manage to cut a branch off this Red Tree.");
 	Actor.removeOption(List.all[tree],'Cut Tree');
 
@@ -302,7 +302,7 @@ Actor.openChest = function(mort,eid){	//need work
 	Chat.add(mort.id,"You opened the chest.");
 		
 	if(chest.func(mort.id) !== false){
-		Sprite.change(e,{'anim':'open'});
+		Sprite.change(e,{'initAnim':'open'});
 		chest.list.push(mort.id);
 	};
 }
@@ -319,7 +319,7 @@ Actor.activateSwitch = function(mort,eid){
 	
 	if(e.switch[e.switch.state]) e.switch[e.switch.state](mort.id,e,List.map[e.map]);
 	
-	Sprite.change(e,{'anim':e.switch.state});
+	Sprite.change(e,{'initAnim':e.switch.state});
 	Chat.add(mort.id,"You turned the switch " + e.switch.state + '.');
 		
 	if(!e.switch[oldstate]){

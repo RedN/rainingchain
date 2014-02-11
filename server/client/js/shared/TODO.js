@@ -1,7 +1,8 @@
 
 real tree
 
-sprite anim is null verywhere (because update exist)
+
+quest: onNewPlayerLog, onPlayerLeave
 
 quest on server only, query for quest info
 quest in seperate files with everything needed (sprite, ability,map etc..)

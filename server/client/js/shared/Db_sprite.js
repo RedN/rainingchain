@@ -292,6 +292,7 @@ Sprite = {};
 Sprite.creation = function(player,info){
 	if(!info.anim) info.anim = Db.sprite[info.name || 'mace'].defaultAnim;
 	info.oldAnim = info.anim;
+	info.initAnim = info.anim;
 	
 	player.sprite = useTemplate(Sprite.template(),info);
 	if(server)	Sprite.updateBumper(player);
@@ -299,10 +300,11 @@ Sprite.creation = function(player,info){
 Sprite.template = function(){
 	return {
     	name:'mace',
-    	anim:'walk',
-    	oldAnim:'walk',
-		sizeMod : 1,
-    	startX : 0,
+		initAnim:'walk',			//info about anim sent to client when init. use when anim is constant (ex: switch off)
+    	anim:'walk',				//normally null. change for 1 frame when attack etc... changing initAnim will also change anim
+    	sizeMod : 1,
+    	oldAnim:'walk',				//client stuff
+		startX : 0,
     	spdBoost : 1,
     	timer : 0,
     	walk : 0,
@@ -315,8 +317,10 @@ Sprite.template = function(){
 Sprite.change = function(mort,info){
     if(!mort || !mort.sprite) return;
 
-	if(info.anim){ 
-		mort.sprite.anim = info.anim;
+	if(info.initAnim || info.anim){ 
+		mort.sprite.initAnim = info.initAnim || mort.sprite.initAnim;
+		mort.sprite.anim = info.initAnim || info.anim;
+		
 		mort.sprite.startX = 0;
 		mort.sprite.spdBoost = 1;
 		mort.sprite.timer = 0;
