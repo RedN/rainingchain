@@ -119,7 +119,11 @@ Change.send.compressXYA = function(info){
 Change.send.reset = function(){
 	List.anim = {};
 	for(var i in List.all){ List.all[i].change = {}; }
-	for(var i in List.main){ List.main[i].change = {}; List.all[i].privateChange = {}; 	List.all[i].removeList = [];}
+	for(var i in List.main){ 
+		List.main[i].change = {}; 
+		List.all[i].privateChange = {}; 	
+		List.all[i].removeList = [];
+	}
 }
 
 //####################################

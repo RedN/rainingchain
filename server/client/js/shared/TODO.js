@@ -1,31 +1,37 @@
 
-real tree
+real tree/skilling plot
 
+strike test path
 
 quest: onNewPlayerLog, onPlayerLeave
 
 quest on server only, query for quest info
-quest in seperate files with everything needed (sprite, ability,map etc..)
+quest in seperate files with everything needed (enemy,ability,map etc..)
 
 nova weird
 
-pvp
+map loop if NOT in zone
+
+pvp:
+create map
+create bonus (onNewPlayerLog)
+remove bonus (onPlayerLeave)
+set respawn
+safespot: combat = 0; 
+
+weather/animations...
 
 fadeout when death
-fadeout block disappear
 
 remake tileset
-make tutorial as a quest
-
 
 draw passive weird block for special balancedAtk
 protect db, list, itemlist
 
+upload own graphics real time
 
-documentation for map extra for mort
-documentation map function
 
-select boost is weird?
+select boost algo is weird?
 
 init drawing css client
 

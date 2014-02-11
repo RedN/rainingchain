@@ -327,6 +327,7 @@ Actor.loop.activeList = function(mort){
 		if(!ActiveList.test(mort,List.all[j])){
 			delete List.all[j].viewedBy[mort.id];
 			delete mort.activeList[j];
+			if(mort.removeList) mort.removeList.push(List.all[j].publicId || j);
 		}
 	}
 	
@@ -339,7 +340,7 @@ Actor.loop.activeList = function(mort){
 			}
 		}
 	}
-	mort.active = (Object.keys(mort.activeList).length || mort.type == 'player')
+	mort.active = Object.keys(mort.activeList).length || mort.type == 'player';
 
 }
 

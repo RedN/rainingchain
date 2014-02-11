@@ -40,13 +40,14 @@ Db.map['test'] = function(){	//'test' = mapId
 		});
 		
 		//#############
-		//EXTRA
+		//EXTRA: Create a enemy with certain attributes different than the DB
 		//#####
 		//Normal format:	99% case
 		extra:{
 			'attribute':value,
 			'att2':value2
 		}
+		
 		//#####
 		//Via Array: If you want to access a sub-attribute, use viaArray
 		extra:{
@@ -133,8 +134,10 @@ Db.map['test'] = function(){	//'test' = mapId
 		}
 		
 		//an enemy that acts as a chest. can only be opened once REQ: enemy needs to have anim:'open' and 'close'. NOTE: will be trasnformed to {func:,list:[]}
+		//must return a boolean about the success of the action (Ex: if enough inventory space)
 		mort.treasure = function(key,eId){
 			Itemlist.add(List.main[key].invList,'gold',1000);
+			return true;
 		} 
 		
 		

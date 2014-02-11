@@ -30,7 +30,7 @@ tut.hotspot = {"m":{"x":1904,"y":272},"n":[864,1024,352,384],"l":{"x":1840,"y":4
 tut.cst = {
 	arrow:{'type':"bullet",'angle':15,'amount':1,'objImg':{'name':"arrow",'sizeMod':1},'hitImg':{'name':"ice2",'sizeMod':0.5},
 		'dmg':{'main':10000,'ratio':{'melee':100,'range':0,'magic':0,'fire':0,'cold':0,'lightning':0}}},	
-	fireball:{maxTimer:15,'type':"bullet",'angle':0,'amount':1,'objImg':{'name':"fireball",'sizeMod':1},'hitImg':{'name':"ice2",'sizeMod':0.5},
+	fireball:{maxTimer:20,'type':"bullet",'angle':0,'amount':1,'objImg':{'name':"fireball",'sizeMod':1},'hitImg':{'name':"ice2",'sizeMod':0.5},
 		'dmg':{'main':10000,'ratio':{'melee':100,'range':0,'magic':0,'fire':0,'cold':0,'lightning':0}}},		
 };
 
@@ -44,6 +44,7 @@ tut.load = function(map,hotspot,variable,cst){
 	Actor.creation({'xy':hotspot.h,'map':map,
 		"category":"system","variant":"grave"
 	});
+	
 	Actor.creation({'xy':hotspot.q,'map':map,
 		"category":"system","variant":"grave"
 	});

@@ -49,7 +49,7 @@ Command.list['fl,add'] = function(key,user,nick,comment,color){
 }
 Command.list['fl,add'].doc = {
 	'description':'Add a new Friend to your Friend List',
-	'param':[
+	'help':1,'param':[
 		{type:'Letters',name:'Username to add',optional:0},
 		{type:'Letters',name:'Set Nickname',optional:1},
 		{type:'Letters',name:'Set Comment',optional:1},
@@ -57,8 +57,8 @@ Command.list['fl,add'].doc = {
 	],
 }
 Command.list['fl,remove'] = function(key,user){
-	if(List.main[key].friendList[user]){
-		delete List.main[key].friendList[user]
+	if(List.main[key].social.list.friend[user]){
+		delete List.main[key].social.list.friend[user]
 		Chat.add(key, 'Friend deleted.');
 	} else {
 		Chat.add(key, 'This player is not in your Friend List.');		
@@ -66,7 +66,7 @@ Command.list['fl,remove'] = function(key,user){
 }
 Command.list['fl,remove'].doc = {
 	'description':'Remove a Friend',
-	'param':[
+	'help':1,'param':[
 		{type:'Letters',name:'Username to remove',optional:0},
 	],
 }
@@ -81,7 +81,7 @@ Command.list['fl,comment'] = function(key,user,comment){
 }
 Command.list['fl,comment'].doc = {
 	'description':'Set Comment of a friend',
-	'param':[
+	'help':1,'param':[
 		{type:'Letters',name:'Username',optional:0},
 		{type:'Letters',name:'Comment',optional:0},
 	],
@@ -97,7 +97,7 @@ Command.list['fl,nick'] = function(key,user,nick){
 }
 Command.list['fl,nick'].doc = {
 	'description':'Set Nickname for a friend',
-	'param':[
+	'help':1,'param':[
 		{type:'Letters',name:'Username',optional:0},
 		{type:'Letters',name:'Nickname',optional:0},
 	],
@@ -113,7 +113,7 @@ Command.list['fl,color'] = function(key,user,color){
 }
 Command.list['fl,color'].doc = {
 	'description':'Set Nickname for a friend',
-	'param':[
+	'help':1,'param':[
 		{type:'Letters',name:'Username',optional:0},
 		{type:'Letters',name:'Color',optional:0},
 	],
@@ -130,7 +130,7 @@ Command.list['fl,pm'] = function(key,setting){
 }
 Command.list['fl,pm'].doc = {
 	'description':'Change who can PM you right now.',
-	'param':[
+	'help':1,'param':[
 		{type:'Letters',name:'Option (on,off or friend)',optional:0},
 	],
 }
@@ -165,7 +165,7 @@ Command.list['fl,offlinepm'] = function(key,to,text){
 
 Command.list['fl,offlinepm'].doc = {
 	'description':"Send a PM to a player who isn't online right now.",
-	'param':[
+	'help':1,'param':[
 		{type:'Letters',name:'Username',optional:0},
 		{type:'Letters',name:'Message',optional:0},
 	],
@@ -189,7 +189,7 @@ Command.list['mute'] = function(key,user){
 }
 Command.list['mute'].doc = {
 	'description':"Mute a player.",
-	'param':[
+	'help':1,'param':[
 		{type:'Letters',name:'Username',optional:0},
 	],
 }
@@ -202,7 +202,7 @@ Command.list['win,close'] = function(key){
 }
 Command.list['win,close'].doc = {
 	'description':"Close the window.",
-	'param':[
+	'help':0,'param':[
 		
 	],
 }
@@ -215,7 +215,7 @@ Command.list['win,open'] = function(key,win,param0){
 }
 Command.list['win,open'].doc = {
 	'description':"Open a window.",
-	'param':[
+	'help':0,'param':[
 		{type:'Letters',name:'Window Name',optional:0},
 	],
 }
@@ -229,7 +229,7 @@ Command.list['win,bank,click'] = function(key,side,slot,amount){
 }
 Command.list['win,bank,click'].doc = {
 	'description':"Withdraw Items from Bank.",
-	'param':[
+	'help':0,'param':[
 		{type:'Letters',name:'Mouse Button',optional:0},
 		{type:'Number',name:'Bank Slot',optional:0},
 		{type:'Number',name:'Amount to withdraw',optional:1},
@@ -242,7 +242,7 @@ Command.list['win,trade,click'] = function(key,side,slot){
 }
 Command.list['win,trade,click'].doc = {
 	'description':"Withdraw Itms from Trade.",
-	'param':[
+	'help':0,'param':[
 		{type:'Letters',name:'Mouse Button',optional:0},
 		{type:'Number',name:'Trade Slot',optional:0},
 	],
@@ -260,7 +260,7 @@ Command.list['win,trade,toggle'] = function(key){
 }
 Command.list['win,trade,toggle'].doc = {
 	'description':"Toggle the Accept/Decline Button",
-	'param':[
+	'help':0,'param':[
 	],
 }
 Command.list['win,quest,toggleBonus'] = function(key,id,bonus){
@@ -273,7 +273,7 @@ Command.list['win,quest,toggleBonus'] = function(key,id,bonus){
 }
 Command.list['win,quest,toggleBonus'].doc = {
 	'description':"Toggle a Quest Bonus.",
-	'param':[
+	'help':0,'param':[
 		{type:'Letters',name:'Quest Id',optional:0},
 		{type:'Letters',name:'Bonus Id',optional:0},
 	],
@@ -288,7 +288,7 @@ Command.list['win,passive,select'] = function(key,i,j){
 }
 Command.list['win,passive,select'].doc = {
 	'description':"Select a Passive",
-	'param':[
+	'help':0,'param':[
 		{type:'Number',name:'Position Y',optional:0},
 		{type:'Number',name:'Position X',optional:0},
 	],
@@ -303,7 +303,7 @@ Command.list['win,ability,swap'] = function(key,name,position){
 }
 Command.list['win,ability,swap'].doc = {
 	'description':"Set an Ability to a Key",
-	'param':[
+	'help':0,'param':[
 		{type:'Letters',name:'Ability Id',optional:0},
 		{type:'Number',name:'Key Position (0-6)',optional:0},
 	],
@@ -316,7 +316,7 @@ Command.list['win,ability,upgrade'] = function(key,abid,amount){
 }
 Command.list['win,ability,upgrade'].doc = {
 	'description':"Upgrade an Ability",
-	'param':[
+	'help':0,'param':[
 		{type:'Letters',name:'Ability Id',optional:0},
 		{type:'Number',name:'Amount of Orbs Used',optional:0},
 	],
@@ -330,7 +330,7 @@ Command.list['win,ability,addMod'] = function(key,mod,abid){
 }
 Command.list['win,ability,addMod'].doc = {
 	'description':"Add a Mod to an Ability",
-	'param':[
+	'help':0,'param':[
 		{type:'Letters',name:'Mod Id',optional:0},
 		{type:'Letters',name:'Ability Id',optional:0},
 	],
@@ -344,7 +344,7 @@ Command.list['win,ability,upMod'] = function(key,abid,mod,amount){	//cant be nam
 }
 Command.list['win,ability,upMod'].doc = {
 	'description':"Upgrade a Mod of an Ability",
-	'param':[
+	'help':0,'param':[
 		{type:'Letters',name:'Ability Id',optional:0},
 		{type:'Letters',name:'Mod Id',optional:0},
 		{type:'Number',name:'Amount of Orbs Used',optional:0},
@@ -359,7 +359,7 @@ Command.list['tab,open'] = function(key,tab){
 }
 Command.list['tab,open'].doc = {
 	'description':"Open a Tab",
-	'param':[
+	'help':0,'param':[
 		{type:'Letters',name:'Tab Name',optional:0},
 	],
 }
@@ -372,7 +372,7 @@ Command.list['tab,inv,click'] = function(key,side,slot,amount){
 }
 Command.list['tab,inv,click'].doc = {
 	'description':"Deposit/Use Items in Inventory.",
-	'param':[
+	'help':0,'param':[
 		{type:'Letters',name:'Mouse Button',optional:0},
 		{type:'Number',name:'Inventory Slot',optional:0},
 		{type:'Number',name:'Amount to withdraw',optional:1},
@@ -384,7 +384,7 @@ Command.list['tab,swapWeapon'] = function(key,type){
 }
 Command.list['tab,swapWeapon'].doc = {
 	'description':"Change Weapon for another already Equipped",
-	'param':[
+	'help':0,'param':[
 		{type:'Letters',name:'New Weapon Type',optional:0},
 	],
 }
@@ -397,7 +397,7 @@ Command.list['tab,removeEquip'] = function(key,type){
 }
 Command.list['tab,removeEquip'].doc = {
 	'description':"Remove a piece of equipment",
-	'param':[
+	'help':0,'param':[
 		{type:'Letters',name:'Equipement Piece',optional:0},
 	],
 }
@@ -413,7 +413,7 @@ Command.list['cc,create'] = function(key,name){
 }
 Command.list['cc,create'].doc = {
 	'description':"Create a new Clan",
-	'param':[
+	'help':1,'param':[
 		{type:'Letters',name:'Clan Name',optional:0},
 	],
 }
@@ -422,7 +422,7 @@ Command.list['cc,enter'] = function(key,name){
 }
 Command.list['cc,enter'].doc = {
 	'description':"Enter a Clan",
-	'param':[
+	'help':1,'param':[
 		{type:'Letters',name:'Clan Name',optional:0},
 	],
 }
@@ -432,7 +432,7 @@ Command.list['cc,leave'] = function(key,name){
 }
 Command.list['cc,leave'].doc = {
 	'description':"Leave a Clan",
-	'param':[
+	'help':1,'param':[
 		{type:'Letters',name:'Clan Name (ALL will leave all clans)',optional:0},
 	],
 }
@@ -447,7 +447,7 @@ Command.list['dia,option'] = function(key,slot){
 }
 Command.list['dia,option'].doc = {
 	'description':"Choose a dialogue option.",
-	'param':[
+	'help':0,'param':[
 		{type:'Number',name:'Dialogue Option #',optional:0},
 	],
 }
@@ -465,7 +465,7 @@ Command.list['option'] = function(key,slot){
 }
 Command.list['option'].doc = {
 	'description':"Select an option from the Right-Click Option List.",
-	'param':[
+	'help':0,'param':[
 		{type:'Number',name:'Option Position',optional:0},
 	],
 }
@@ -481,7 +481,7 @@ Command.list['email,activate'] = function(key,str){
 }
 Command.list['email,activate'].doc = {
 	'description':"Activate your Email.",
-	'param':[
+	'help':1,'param':[
 		{type:'Letters',name:'Activation Code',optional:0},
 	],
 }
@@ -492,7 +492,7 @@ Command.list['team,join'] = function(key,name){
 }
 Command.list['team,join'].doc = {
 	'description':"Join a team.",
-	'param':[
+	'help':1,'param':[
 		{type:'Letters',name:'Team Name (Usually Username)',optional:0},
 	],
 }
@@ -503,17 +503,21 @@ Command.list['team,join'].doc = {
 //{CLIENT SIDE: Pref. many different preference values can be changed. check Command.pref.verify for more detail.
 Command.client = ['pref','music,next','music,info','help'];
 
-Command.list['help'] = function(){
+Command.list['help'] = function(lvl){
+	lvl = typeof lvl === 'undefined' ? lvl : 1;
 	for(var i in Command.list){
-		var str = '$' + i + ' :     ' + Command.list[i].doc.description;
-		Chat.add(str);
+		if(Command.list[i].doc.help >= lvl){
+			var str = '$' + i + ' :     ' + Command.list[i].doc.description;
+			Chat.add(str);
+		}
 	}
 }
 
 
 Command.list['help'].doc = {
 	'description':"Show List of Commands.",
-	'param':[
+	'help':1,'param':[
+		{type:'Number',name:'Show ALL Options (Not Recommended)',optional:1},
 	],
 }
 
@@ -536,7 +540,7 @@ Command.list['pref'] = function(name,value){
 }
 Command.list['pref'].doc = {
 	'description':"Change a Preference.",
-	'param':[
+	'help':1,'param':[
 		{type:'Letters',name:'Pref Id',optional:0},
 		{type:'Number',name:'New Pref Value',optional:0},
 	],
@@ -548,7 +552,7 @@ Command.list['music,next'] = function(){
 }
 Command.list['music,next'].doc = {
 	'description':"Skip this song.",
-	'param':[	
+	'help':1,'param':[	
 	],
 }
 Command.list['music,info'] = function(){
@@ -557,7 +561,7 @@ Command.list['music,info'] = function(){
 }
 Command.list['music,info'].doc = {
 	'description':"Get info about song being played.",
-	'param':[	
+	'help':1,'param':[	
 	],
 }
 

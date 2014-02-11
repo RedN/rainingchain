@@ -91,8 +91,8 @@ Chat.send.pm.test = function(from,to,cb){
 	return true;
 }
 
-Chat.send.pm.clan = function(key,text,to,type,from,data){
-    var clanName = List.main[key].social.list.clan[+to];
+Chat.send.clan = function(key,text,to,type,from,data){
+    var clanName = List.main[key].social.list.clan[to];
     		
     if(!clanName){ Chat.add(key,'You typed too many \"/\".'); return; }
     var clan = Db.clan[clanName];
