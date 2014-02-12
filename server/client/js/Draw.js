@@ -21,7 +21,11 @@ Draw.loop = function (){
 	Draw.bullet();
 	Draw.anim('a');  //above player
 	Draw.map('a');   //above player
-			
+	
+
+	Draw.screenEffect(main.screenEffect);
+
+	
 	Draw.tab();     //bottom right
 	Draw.chat();    //bottom left
 
@@ -65,6 +69,22 @@ Draw.map = function (layer){ ctxrestore();
 	
 	ctx.drawImage(mapXY, startX,startY,tailleX,tailleY,(startX-numX)*SIZEFACT,(startY-numY)*SIZEFACT,tailleX*SIZEFACT,tailleY*SIZEFACT);	
 }
+
+
+Draw.screenEffect = function(fx){
+	if(!fx || fx.time < 0) return;
+	if(fx.name === 'fadeout'){
+		var a = Math.abs(fx.maxTimer/2 - fx.time);
+		a = (1 - a/fx.maxTimer*2);
+		ctx.globalAlpha = a;
+		ctx.fillStyle = fx.color || 'black';
+		ctx.fillRect(0,0,Cst.WIDTH,Cst.HEIGHT);
+		ctx.globalAlpha = 1;
+	}
+
+	fx.time--;
+}
+
 
 
 //Option
@@ -440,7 +460,6 @@ Draw.gradientRG = function(n){
 	return 'rgb(' + Math.round(R) + ',' + Math.round(G) + ',' + Math.round(B) + ')';
 }
 
-
 Draw.context = function (){ ctxrestore();
 	var text = main.context.text || main.clientContext.text || main.permContext.text;
 	var top = main.context.textTop;
@@ -461,8 +480,6 @@ Draw.context = function (){ ctxrestore();
 		hc.style.visibility = 'visible';
 	}
 }
-
-
 
 Draw.command = function(){
 	html.command.div.style.visibility = html.command.div.innerHTML ? 'visible' : 'hidden';

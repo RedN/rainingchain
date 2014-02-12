@@ -3,8 +3,13 @@ Actor.loop = function(mort){
 	Test.loop.actor(mort.id);
 	mort.frameCount++;
 	if(mort.frameCount % 25 === 0){ Actor.loop.activeList(mort); }
-	if(!mort.active || mort.dead) return;
-		
+	if(!mort.active) return;
+	
+	if(mort.dead){
+		if(mort.type === 'player' && mort.respawn-- <= 0)
+			Actor.respawn.player(mort);
+		return;
+	}
 	if(mort.combat){
 		if(mort.hp <= 0) Actor.death(mort);
 		if(mort.boss){ 
@@ -37,8 +42,6 @@ Actor.loop = function(mort){
 		if(List.main[i].dialogue){ Actor.loop.dialogue(mort); }
 
 		Test.loop.player(i);	
-		
-		
 			
 	}
 		

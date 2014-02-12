@@ -522,6 +522,8 @@ Actor.death.player = function(mort){
 	var key = mort.id;
 	var main = List.main[key];
 	
+	main.screenEffect = {'name':'fadeout','time':50,'maxTimer':50,'color':'black'};
+	
 	//Quest
 	for(var i in main.quest)	if(main.quest[i].started)	main.quest[i].deathCount++;	
 	
@@ -538,14 +540,9 @@ Actor.death.player = function(mort){
 	string += array.random();
 	Chat.add(key,string);
 	
-	mort.x = mort.respawnLoc.x;
-	mort.y = mort.respawnLoc.y;
-	mort.map = List.map[mort.respawnLoc.map] ? mort.respawnLoc.map : 'test@MAIN';
 	
-	for(var i in mort.resource){
-		mort[i] = mort.resource[i].max;
-	}
-	
+	mort.dead = 1;
+	mort.respawn = 25;
 }
 
 Actor.death.enemy = function(mort){
@@ -662,7 +659,20 @@ Actor.death.exp = function(mort,killers){
 }
 //}
 
+Actor.respawn = {};
 
+Actor.respawn.player = function(mort){
+
+	mort.x = mort.respawnLoc.x;
+	mort.y = mort.respawnLoc.y;
+	mort.map = List.map[mort.respawnLoc.map] ? mort.respawnLoc.map : 'test@MAIN';
+	
+	for(var i in mort.resource){
+		mort[i] = mort.resource[i].max;
+	}
+	mort.dead = 0;
+	console.log(1);
+}
 //ts("Plan.creation({'rarity':0,'quality':0,'piece':'melee','lvl':10,'category':'equip',});")
 
 

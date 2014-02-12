@@ -22,6 +22,7 @@ Main.template = function(key){
 		'sfx':'',
 		'song':'',
 		
+		'screenEffect':null,
 		
 		'help':'',
 		'passivePt':0,

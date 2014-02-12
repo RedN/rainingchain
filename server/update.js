@@ -122,7 +122,6 @@ Change.update.init = function(){
 				{'array':['optionList'],'filter':Change.send.convert.optionList},
 				
 				{'array':['temp']},
-				
 			],
 			'slow':[
 				{'array':['social','list']},	
@@ -137,6 +136,7 @@ Change.update.init = function(){
 			'reg':[
 				{'array':['social','message','chat'],'reset':[]},
 				{'array':['chatInput'],'reset':''},
+				{'array':['screenEffect']},
 			],
 			'slow':[
 				{'array':['sfx'],'reset':''},
