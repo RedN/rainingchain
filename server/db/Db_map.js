@@ -170,7 +170,7 @@ Db.map['test'] = function(){	//'test' = mapId
 		Drop.creation({						//create a drop on the ground
 			'xy':hotspot.o,
 			'map':map,
-			"item":"Q-tutorial-staff",		//itemId
+			"item":"gold",		//itemId
 			"amount":1,						//item amount
 			'timer':1/0						//how long it will stay on the ground b4 dissappearing
 		});

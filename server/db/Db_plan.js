@@ -6,13 +6,6 @@ Init.db.plan = function(cb){
 	db.plan.find({},{'_id':0},function(err, results) { if(err) throw err
 		for(var i in results)	a[results[i].id] = results[i];
 	
-		a['Q-tutorial-staff'] = {
-			category:'equip',
-			piece:'magic',	
-			type:'staff',
-			unique:'Q-tutorial-fakestaff',
-			req:{item:[['wood-0',1],['Q-tutorial-staff',1]],skill:{}},
-		};
 	
 		a['randomArmor'] = {
 			category:'equip',

@@ -198,16 +198,27 @@ Quest.creation = function(q){
 	
 	Db.dialogue[q.id] = {};
 	for(var i in q.dialogue) Db.dialogue[q.id][i] = q.dialogue[i];		
-	for(var i in q.map)
-		for(var j in q.map[i]){
-			Db.map[i][j][q.id] = q.map[i][j];
-	}
+	for(var i in q.map)	for(var j in q.map[i])	Db.map[i][j][q.id] = q.map[i][j];
+	
+	Db.enemy[q.id] = {};
+	for(var i in q.enemy) Db.enemy[q.id][i] = q.enemy[i];
 	
 	for(var i in q.item){
-		q.item.id = 'Q-'+q.id+'-'+i;
+		q.item[i].id = q.id+'-'+i;
 		Item.creation(q.item[i]);
 	}
-	
+	for(var i in q.equip){
+		q.equip[i].id = q.id+'-'+i;
+		Equip.creation(q.equip[i]);
+	}
+	for(var i in q.ability){
+		q.ability[i].id = q.id+'-'+i;
+		Ability.creation(q.ability[i]);
+	}
+	for(var i in q.plan){
+		q.plan[i].id = q.id+'-'+i;
+		Plan.creation(q.plan[i]);
+	}
 	return q;
 }
 
@@ -227,6 +238,10 @@ Quest.template = function(){
 		mapMod:{},
 		map:{},
 		item:{}, 
+		equip:{},
+		enemy:{},
+		ability:{},
+		
 	};
 }
 

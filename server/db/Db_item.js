@@ -34,21 +34,8 @@ Init.db.item = function (cb){
 	a['shard-yellow'] = {'name':'Yellow Shard','icon':'shard.yellow','stack':1}
 	a['shard-gold'] = {'name':'Gold Shard','icon':'shard.gold','stack':1}
 	
-	
-	a['Q-tutorial-fakestaff'] = {'name':'Staff','icon':'magic.staff',
-		'option':[	{'name':'Examine Equip','func':'Main.examineEquip','param':['E-tutorial-staff']},
-					{'name':'Change Equip','param':['E-tutorial-staff'],'func':function(key){
-						Actor.learnAbility(List.all[key],'fireball');
-						Actor.swapAbility(List.all[key],'fireball',0);
-						Itemlist.remove(List.main[key].invList,'Q-tutorial-fakestaff',1);
-						Chat.add(key,"You can now throw fireballs with Left-Click.");
-						Chat.add(key,"You can now manage your abilities via the ABILITY button under the EQUIP Tab.");
-						Actor.switchEquip(List.all[key],'E-tutorial-staff');
-					}},
-			]};	
-	
-	
-	
+
+
 	//
 	a['gold'] = {'name':'Gold','icon':'system.gold','stack':1,
 		'option':[	{'name':'Craft Armor','func':'Plan.use','param':['randomArmor']},

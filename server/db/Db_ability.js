@@ -228,29 +228,7 @@ Init.db.ability = function(cb){
 		}
 	}};
 	
-	//Ability Given
-	a['tutorial-slash'] = {'type':'attack','name':'Slash','icon':'attackMelee.slash',
-		'spd':{'main':1,'support':0},'period':{'own':25,'global':25},
-		'action':{'func':'Combat.action.attack','param':{
-			'type':"strike",'angle':0,'amount':1,
-			'hitImg':{'name':"attack1",'sizeMod':0.5},
-			'dmg':{'main':100,'ratio':{'melee':50,'range':0,'magic':50,'fire':0,'cold':0,'lightning':0}},
-			'width':50,
-			'height':50,
-			'delay':0,
-			'minRange':0,
-			'maxRange':50,
-		}
-	}};
-	
-	a['tutorial-iceshard'] = {'type':'attack','name':'Ice Shard','icon':'attackMagic.crystal',
-		'spd':{'main':1,'support':0},'period':{'own':25,'global':25},
-		'action':{'func':'Combat.action.attack','param':{
-			'type':"bullet",'angle':0,'amount':1,
-			'objImg':{'name':"iceshard",'sizeMod':1},'hitImg':{'name':"ice2",'sizeMod':0.5},
-			'dmg':{'main':100,'ratio':{'melee':0,'range':0,'magic':30,'fire':0,'cold':70,'lightning':0}},
-		}
-	}};
+
 	
 	//Demon
 	a['fireNova'] = {'type':'attack','name':'sin','icon':'attackMagic.fireball',

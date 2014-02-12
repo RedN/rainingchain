@@ -43,10 +43,13 @@ exports.initServer = function (){
 		Init.db.boost();
 		Init.db.customBoost();
 		Init.actor();
+		
+		Init.db.quest();
+		
 		Init.db.enemy();
 		Init.db.boss();
 							
-		Init.db.quest();
+		
 		Init.db.dialogue();
 		Map.creation.all();
 		
