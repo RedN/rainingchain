@@ -71,6 +71,7 @@ Test.playerStart = function(key){
 	
 	Actor.teleport(mort,56*32,101*32,"tutorial@MAIN");
 	mort.respawnLoc = {x:56*32,y:101*32,map:"tutorial@MAIN"};
+	Itemlist.add(inv,'teleport');
 	
 	/*
 	Itemlist.add(inv,'test');

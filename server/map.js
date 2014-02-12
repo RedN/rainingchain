@@ -1,3 +1,19 @@
+
+/*
+Db.map loaded.
+Map model created
+Quest loaded
+	Modify Map Model
+	Modify Enemy
+	Modify Item
+	Modify Ability
+	Modify Equip
+	Modify Equip
+Map MAIN created
+
+*/
+
+
 Map = {};
 
 Map.creation = function(namemodel,version){
@@ -20,6 +36,9 @@ Map.creation = function(namemodel,version){
 		hotspot:model.hotspot,
 		variable:deepClone(model.variable),
 		cst:model.cst,
+		
+		playerLeave:model.playerLeave,
+		playerEnter:model.playerEnter,
 	};
 	
 	List.map[newid] = map;
@@ -28,7 +47,7 @@ Map.creation = function(namemodel,version){
 	return newid;
 }
 
-Map.creation.model = function(map){
+Map.creation.model = function(map){	//create the model that will be in Db.map | Model will then be modded by quest
 	var grid = [];
 	for(var i = 0 ; i < map.grid.length; i++){	
 		grid[i] = [];
@@ -48,6 +67,8 @@ Map.creation.model = function(map){
 	map.hotspot = map.hotspot || {};
 	map.load = map.load || {};
 	map.loop = map.loop || {};
+	map.playerEnter = map.playerEnter || {};
+	map.playerLeave = map.playerLeave || {};
 	return map;
 }
 

@@ -120,12 +120,13 @@ ePreDb["troll"]["ice"] = {  //{		//troll is category, ice is variant
 
 */
 
-
-Init.db.enemy = function(){ var ePreDb = {};
+Db.enemy = {};
+Init.db.enemy = function(){ 
+	var a = Db.enemy;
 
 	
-	ePreDb["troll"] = {}; //{
-	ePreDb["troll"]["ice"] = {  //{
+	a["troll"] = {}; //{
+	a["troll"]["ice"] = {  //{
 		"name":"Ice Troll",
 		"sprite":{'name':"troll",'sizeMod':1},
 		"abilityList":{'bulletSingle':0.2},
@@ -145,43 +146,11 @@ Init.db.enemy = function(){ var ePreDb = {};
 	}; //}
 	//}
 	
-	
-	ePreDb["tutorial"] = {}; //{
-	ePreDb["tutorial"]["bee"] = {  //{
-		"name":"Bee",
-		"sprite":{'name':"bee",'sizeMod':1},
-		"abilityList":{'pierce':0.8},
-		'resource':{'hp':{'max':1,'regen':1},'mana':{'max':100,'regen':1}},
 		
-		'globalDef':1,
-		'globalDmg':0.1,
-		'deathExp':1,
-		"equip":{'def':{'melee':1,'range':1,'magic':1,'fire':1,'cold':1,'lightning':1}},	
-		"acc":2,
-		"maxSpd":5,
-		"moveRange":{'ideal':50,"confort":50,"aggressive":200,"farthest":300},	
-	}; //}
-	ePreDb["tutorial"]["demon"] = {  //{
-		"name":"Demon Immune To Fireballs.",
-		"sprite":{'name':"demon",'sizeMod':1},
-		"abilityList":{'fireNova':0.4,fireCircle:0.7},
-		'resource':{'hp':{'max':100,'regen':0.3},'mana':{'max':100,'regen':1}},
-		'immune':{'fire':1},
-		'globalDef':1,
-		'globalDmg':0.2,
-		'deathExp':1,
-		"equip":{'def':{'melee':1,'range':1,'magic':1,'fire':1,'cold':1,'lightning':1}},	
-		"acc":2,
-		"maxSpd":5,
-		"moveRange":{'ideal':200,"confort":50,"aggressive":300,"farthest":400},	
-	}; //}
-	//}
 	
 	
-	
-	
-	ePreDb["neutral"] = {}; //{
-	ePreDb["neutral"]["julie"] = {  //{
+	a["neutral"] = {}; //{
+	a["neutral"]["julie"] = {  //{
 		"name":"Jenny",
 		"sprite":{'name':"julie",'sizeMod':1},
 		'nevercombat':1,
@@ -189,29 +158,29 @@ Init.db.enemy = function(){ var ePreDb = {};
 		"maxSpd":3,
 	}; //}
 	//}
-	ePreDb["system"] = {};
-	ePreDb["system"]["grave"] = {  //{
+	a["system"] = {};
+	a["system"]["grave"] = {  //{
 		"name":"Grave",
 		"sprite":{'name':"grave",'sizeMod':1},
 		"waypoint":1,
 		'nevercombat':1,
 		'nevermove':1,
 	}; //}
-	ePreDb["system"]["chest"] = {  //{
+	a["system"]["chest"] = {  //{
 		"name":"Chest",
 		"sprite":{'name':"chest",'sizeMod':1},
 		'nevercombat':1,
 		'nevermove':1,
 	}; //}
-	ePreDb["system"]["switch"] = {  //{
+	a["system"]["switch"] = {  //{
 		"name":"Switch",
 		"sprite":{'name':"switchBox",'sizeMod':1},
 		'nevercombat':1,
 		'nevermove':1,
 	}; //}
 	
-	ePreDb["block"] = {}; //{
-	ePreDb["block"]["1x1"] = {  //{
+	a["block"] = {}; //{
+	a["block"]["1x1"] = {  //{
 		"name":"Block",
 		"sprite":{'name':"block1x1",'sizeMod':1},
 		'nevercombat':1,
@@ -219,14 +188,14 @@ Init.db.enemy = function(){ var ePreDb = {};
 		"block":{condition:'true',pushable:1,magn:4,time:16,size:[-1,1,-1,1]},
 	}; //}
 	
-	ePreDb["block"]["2x2"] = {  //{
+	a["block"]["2x2"] = {  //{
 		"name":"Block",
 		"sprite":{'name':"block1x1",'sizeMod':2},
 		'nevercombat':1,
 		'moveSelf':0,
 		"block":{condition:'true',pushable:1,magn:4,time:9,size:[-1,1,-1,1]},
 	}; //}
-	ePreDb["block"]["2x2Fix"] = {  //{
+	a["block"]["2x2Fix"] = {  //{
 		"name":"Block",
 		"sprite":{'name':"block1x1-black",'sizeMod':2},
 		'nevercombat':1,
@@ -234,7 +203,7 @@ Init.db.enemy = function(){ var ePreDb = {};
 		"block":{condition:'true',pushable:0,size:[-1,1,-1,1]},
 	}; //}
 
-	ePreDb["block"]["3x3"] = {  //{
+	a["block"]["3x3"] = {  //{
 		"name":"Block",
 		"sprite":{'name':"block1x1",'sizeMod':3},
 		'nevercombat':1,
@@ -242,7 +211,7 @@ Init.db.enemy = function(){ var ePreDb = {};
 		"block":{condition:'true',pushable:1,magn:8,time:8,size:[-1,1,-1,1]},
 	}; //}
 	
-	ePreDb["block"]["4x4"] = {  //{
+	a["block"]["4x4"] = {  //{
 		"name":"Block",
 		"sprite":{'name':"block1x1",'sizeMod':4},
 		'nevercombat':1,
@@ -252,8 +221,8 @@ Init.db.enemy = function(){ var ePreDb = {};
 	//}
 
 	
-	ePreDb["tree"] = {}; //{
-	ePreDb["tree"]["red"] = {  //{
+	a["tree"] = {}; //{
+	a["tree"]["red"] = {  //{
 		"name":"Red Tree",
 		"sprite":{'name':"tree-red",'sizeMod':1},
 		'nevercombat':1,
@@ -262,21 +231,18 @@ Init.db.enemy = function(){ var ePreDb = {};
 	}; //}
 	//}
 	
-	
-	
+
 	//Turn Object into function
-	Db.enemy = {};
-	for(var i in ePreDb){ 
-		Db.enemy[i] = {}; 
-		for(var j in ePreDb[i]){
-			ePreDb[i][j].category = i;
-			ePreDb[i][j].variant = j;
-			Init.db.enemy.creation(ePreDb[i][j]);			
+	for(var i in a){ 
+		for(var j in a[i]){
+			a[i][j].category = i;
+			a[i][j].variant = j;
+			Init.db.enemy.creation(a[i][j]);			
 		}
 	}
 	
 }
-//
+
 Init.db.enemy.creation = function(e){
 	e = useTemplate(Actor.template('enemy'),e);
 	

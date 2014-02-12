@@ -347,20 +347,42 @@ Actor.removeOption = function(mort,option){	//option is object or name
 	}
 }	
 	
-Actor.teleport = function(mort,x,y,map,signin){
+Actor.teleport = function(mort,x,y,map){
 	//Teleport player. if no map specified, stay in same map.
 	mort.x = x;
 	mort.y = y;
-	if(map){
-		if(!map.have("@")){	map += '@MAIN'; }
-		if(map.have("@MAIN")){ 
-			delete List.map[mort.map].list[mort.id];
-			mort.map = map;	
-			List.map[mort.map].list[mort.id] = mort.id;
-		}
-		else if(mort.map !== map){ Actor.teleport.instance(mort,x,y,map,signin);}
+	
+	if(!map){ //regular teleport
+		ActiveList.remove(mort);
+		return; 
+	}		
+	
+	if(!map.have("@"))	map += '@MAIN'; 			//main instance
+	if(map[map.length-1] === '@') map += mort.team;	//team instance
+	if(map.have("@@"))	map += mort.name; 			//alone instance
+	
+	if(mort.map === map){ //regular teleport
+		ActiveList.remove(mort);
+		return; 
 	}
-	ActiveList.remove(mort);	//need to consider if needed or not
+	
+	if(!List.map[map]){	//test if need to create instance
+		var model = map.slice(0,map.indexOf('@'));
+		var version = map.slice(map.indexOf('@')+1);
+		Map.creation(model,version); 
+	}
+	
+	var oldmap = List.map[mort.map];
+	for(var i in oldmap.playerLeave) oldmap.playerLeave[i](mort.id,mort.map);
+	
+	delete List.map[mort.map].list[mort.id];
+	mort.map = map;	
+	List.map[mort.map].list[mort.id] = mort.id;
+	
+	var newmap = List.map[mort.map];
+	for(var i in newmap.playerEnter) newmap.playerEnter[i](mort.id,mort.map);
+	
+	ActiveList.remove(mort);	
 }
 
 
@@ -389,7 +411,6 @@ Actor.teleport.instance = function(mort,x,y,map,signin){
 	delete List.map[mort.map].list[mort.id];
 	mort.map = map;	
 	List.map[mort.map].list[mort.id] = mort.id;
-	
 	
 	
 	ActiveList.remove(mort);

@@ -3,10 +3,9 @@ real tree/skilling plot
 
 strike test path
 
-quest: onNewPlayerLog, onPlayerLeave
-
-quest on server only, query for quest info
 quest in seperate files with everything needed (enemy,ability,map etc..)
+
+when map removed cuz not active, BUG
 
 nova weird
 
