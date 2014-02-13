@@ -34,10 +34,11 @@ Something like `<img src="smiley.gif">` will obviously not work.
 
 
 
+in hotspot, info about map
+so use xy:{x,y,map}
 
 
-
-
+respawnLoc: {safe:(@MAIN),active:(ANY)}. if array, select random
 
 
 

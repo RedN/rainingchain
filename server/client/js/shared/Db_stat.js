@@ -167,6 +167,12 @@ Init.db.stat = function(){
 		'boost':{'base':1,'stat':['bonus','bullet','amount'],},
 		'playerOnly':1,
 		},
+	'bullet-spd':{
+		'icon':'offensive.bullet',
+		'name':'Proj. Spd',
+		'boost':{'base':1,'stat':['bonus','bullet','spd'],},
+		'playerOnly':1,
+		},
 	'strike-range':{
 		'icon':'offensive.strike',
 		'name':'Strike Range',

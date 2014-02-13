@@ -498,6 +498,16 @@ Command.list['team,join'].doc = {
 }
 
 
+Command.list['pvp'] = function(key,slot){
+	var mort = List.all[key];
+	Actor.teleport(mort,250,250,'pvpF4A');
+}
+Command.list['pvp'].doc = {
+	'description':"Teleport to PvP Zone.",
+	'help':1,'param':[
+		{type:'Number',name:'0:Free For All. 1:Ranked. 2:Custom',optional:1},
+	],
+}
 
 
 //{CLIENT SIDE: Pref. many different preference values can be changed. check Command.pref.verify for more detail.

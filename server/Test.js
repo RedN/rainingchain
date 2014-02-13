@@ -58,6 +58,8 @@ Test.playerStart = function(key){
 	/*
 	Itemlist.add(inv,'gold');
     Itemlist.add(inv,'teleport');
+	*/
+	
 	var al = {
 		'bulletMulti':1,
 		'bulletMulti-boom':1,
@@ -67,10 +69,10 @@ Test.playerStart = function(key){
 		'bulletMulti-fast':1
 	};
 	for(var i in al) mort.abilityList[i] = al[i];
-	*/
+	
 	
 	Actor.teleport(mort,56*32,101*32,"tutorial@MAIN");
-	mort.respawnLoc = {x:56*32,y:101*32,map:"tutorial@MAIN"};
+	mort.respawnLoc = {safe:{x:56*32,y:101*32,map:"tutorial@MAIN"},recent:{x:56*32,y:101*32,map:"tutorial@MAIN"}};
 	Itemlist.add(inv,'teleport');
 	
 	/*

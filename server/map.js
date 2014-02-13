@@ -22,6 +22,9 @@ Map.creation = function(namemodel,version){
 	var newid = namemodel + '@' + version;
 	var model = Db.map[namemodel];
 	
+	var hs = deepClone(model.hotspot);
+	for(var i in hs) for(var j in hs[i]) hs[i][j].map = newid;
+	
 	var map = {
 		id:newid,
 		name:model.name,
@@ -33,7 +36,7 @@ Map.creation = function(namemodel,version){
 		
 		loop:model.loop,
 		load:model.load,
-		hotspot:model.hotspot,
+		hotspot:hs,
 		variable:deepClone(model.variable),
 		cst:model.cst,
 		

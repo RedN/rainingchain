@@ -399,7 +399,8 @@ Object.defineProperty(Object.prototype, "random", {
 		if(!Object.keys(this).length) return null;
 		
 		if(name){ var ratioed = {}; for(var i in this) ratioed[i] = this[i][name]; }
-		else { var ratioed = this; }
+		else { var ratioed = this;}
+		
 		
 		ratioed = convertRatio(ratioed);		
 		var a = Math.random();
@@ -412,6 +413,13 @@ Object.defineProperty(Object.prototype, "random", {
 	}
 });
 
+Object.defineProperty(Object.prototype, "randomAttribute", {
+    enumerable: false,
+    value: function(){
+		return Object.keys(this).random();
+	}
+});	
+	
 convertRatio = function(ratio){
 	var sum = 0;
 	for(var i in ratio) sum += ratio[i];

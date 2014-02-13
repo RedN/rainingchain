@@ -240,15 +240,9 @@ Save.player.compress = function(player){
 	for(var i in player.ability)	player.ability[i] = player.ability[i] ? player.ability[i].id : 0;
 
 	if(!player.map.have("@MAIN")){	//then need to modify xymap
-		if(player.respawnLoc.map.have("@MAIN")){
-			player.x = player.respawnLoc.x || 0;
-			player.y = player.respawnLoc.y || 0;
-			player.map = player.respawnLoc.map || 'test@MAIN';		
-		} else {
-			player.x = player.mapSignIn.x || 0;
-			player.y = player.mapSignIn.y || 0;
-			player.map = player.mapSignIn.map || 'test@MAIN';	
-		}		
+		player.x = player.respawnLoc.safe.x || 0;
+		player.y = player.respawnLoc.safe.y || 0;
+		player.map = player.respawnLoc.safe.map || 'test@MAIN';
 	}
 	
     return player;
@@ -265,6 +259,9 @@ Load.player.uncompress = function(player){
 	*/
 	Actor.updateEquip(player);
 	
+	player.respawnLoc = {safe:{x:player.x,y:player.y,map:player.map},
+							recent:{x:player.x,y:player.y,map:player.map}};
+							
     for(var i in player.ability)	player.ability[i] = Ability.uncompress(player.ability[i]);
     return player;
 }

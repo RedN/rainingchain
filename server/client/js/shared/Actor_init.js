@@ -164,8 +164,7 @@ Init.actor = function(){
 			mort.item = {"quantity":0,"quality":0,"rarity":0};  //aka magic find
 			mort.pickRadius = 100;  //distance to pick items on ground
 			
-			mort.mapSignIn = {x:mort.x,y:mort.y,map:mort.map};
-			mort.respawnLoc = {x:mort.x,y:mort.y,map:mort.map};
+			mort.respawnLoc = {safe:{x:mort.x,y:mort.y,map:mort.map},recent:{x:mort.x,y:mort.y,map:mort.map}};
 			
 			Sprite.creation(mort,mort.sprite);
 			mort.ability = Actor.template.ability(type);

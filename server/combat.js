@@ -358,10 +358,8 @@ Combat.targetIf.list = {
 	
 	'all':(function(def,atk){ return true }),
 	'true':(function(def,atk){ return true }),
-	'map':(function(def,atk){ return true }),
 	'none':(function(def,atk){ return false }),
 	'false':(function(def,atk){ return false }),
-	
 };
 
 

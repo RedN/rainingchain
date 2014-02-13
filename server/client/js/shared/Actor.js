@@ -285,7 +285,9 @@ Actor.cutTree = function(mort,tree){	//quick fix...
 
 Actor.setRespawn = function(mort,wp){
 	Chat.add(mort.id,"You have changed your respawn point. Upon dying, you will now be teleported here.");
-	mort.respawnLoc = {x:wp.x,y:wp.y,map:wp.map};
+
+	mort.respawnLoc.recent = {x:wp.x,y:wp.y,map:wp.map};
+	if(wp.map.have('@MAIN')) mort.respawnLoc.safe = {x:wp.x,y:wp.y,map:wp.map};
 }
 
 Actor.openChest = function(mort,eid){	//need work
@@ -373,49 +375,17 @@ Actor.teleport = function(mort,x,y,map){
 	}
 	
 	var oldmap = List.map[mort.map];
-	for(var i in oldmap.playerLeave) oldmap.playerLeave[i](mort.id,mort.map);
+	for(var i in oldmap.playerLeave) oldmap.playerLeave[i](mort.id,List.map[mort.map]);
 	
 	delete List.map[mort.map].list[mort.id];
 	mort.map = map;	
 	List.map[mort.map].list[mort.id] = mort.id;
 	
 	var newmap = List.map[mort.map];
-	for(var i in newmap.playerEnter) newmap.playerEnter[i](mort.id,mort.map);
+	for(var i in newmap.playerEnter) newmap.playerEnter[i](mort.id,List.map[mort.map]);
 	
 	ActiveList.remove(mort);	
 }
-
-
-
-Actor.teleport.instance = function(mort,x,y,map,signin){
-	if(!map){ Actor.teleport(mort,x,y);  return; }		//regular teleport
-	if(!map.have("@")){	map += "@MAIN"; }
-	if(map.have("@MAIN")){ Actor.teleport(mort,x,y,map);  return; }		//regular teleport
-
-	if(typeof signin === 'object'){
-		mort.mapSignIn = deepClone(signin);
-	} else if(mort.map.have("@MAIN")){
-		mort.mapSignIn = {map:mort.map,x:mort.x,y:mort.y};	//default signin = place b4 going instance
-	}
-	
-	if(map.have('@@')) map += mort.name;	//solo instance
-	else if(map[map.length-1] === '@') map += mort.team;	//team instance
-	//test if need to create instance
-	if(!List.map[map]){
-		var model = map.slice(0,map.indexOf('@'));
-		var version = map.slice(map.indexOf('@')+1);
-		Map.creation(model,version); 
-	}
-	mort.x = x;
-	mort.y = y;
-	delete List.map[mort.map].list[mort.id];
-	mort.map = map;	
-	List.map[mort.map].list[mort.id] = mort.id;
-	
-	
-	ActiveList.remove(mort);
-}
-
 
 Actor.pickDrop = function (mort,id){
 	var inv = List.main[mort.id].invList;
@@ -543,6 +513,12 @@ Actor.death.player = function(mort){
 	
 	mort.dead = 1;
 	mort.respawn = 25;
+	
+	if(mort.deathFunc){	
+		var killers = Actor.death.getKiller(mort);
+		mort.deathFunc(mort.id,killers[0]);	//[0] is most dmg. used for pvp
+	}	
+	
 }
 
 Actor.death.enemy = function(mort){
@@ -662,16 +638,25 @@ Actor.death.exp = function(mort,killers){
 Actor.respawn = {};
 
 Actor.respawn.player = function(mort){
-
-	mort.x = mort.respawnLoc.x;
-	mort.y = mort.respawnLoc.y;
-	mort.map = List.map[mort.respawnLoc.map] ? mort.respawnLoc.map : 'test@MAIN';
+	var rec = mort.respawnLoc.recent;
 	
-	for(var i in mort.resource){
-		mort[i] = mort.resource[i].max;
+	if(!rec.x) rec = rec[rec.randomAttribute()];	//aka when multi possible spawn aka pvp
+	
+	if(List.map[rec.map]){
+		mort.x = rec.x;
+		mort.y = rec.y;
+		mort.map = rec.map;
+	} else {
+		var safe = mort.respawnLoc.safe;
+		mort.x = safe.x;
+		mort.y = safe.y;
+		mort.map = safe.map;
 	}
+	
+	for(var i in mort.resource)
+		mort[i] = mort.resource[i].max;
+	
 	mort.dead = 0;
-	console.log(1);
 }
 //ts("Plan.creation({'rarity':0,'quality':0,'piece':'melee','lvl':10,'category':'equip',});")
 

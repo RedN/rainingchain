@@ -7,6 +7,7 @@ Init.db.map = function(){
 		'test':[0,0],
 		'ryve':[2,0],
 		'tutorial':[1,1],
+		'pvpF4A':[0,0],
 	}
 
 
