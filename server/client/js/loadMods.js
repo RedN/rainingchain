@@ -18,11 +18,9 @@ readFiles = function(files) {
 }
 
 readFiles.image = function(e) {  
-	var image = new Image();
-	image.src = this.result;
-	
 	var name = this.fileName.slice(0,this.fileName.indexOf('.'));
-	var array = name.split(' ');
+	name = name.replaceAll(' ','_');
+	var array = name.split('_');
 	
 	if(array[0] === 'sprite'){
 		if(!Db.sprite[array[1]]) permConsoleLog('Wrong Name',this.fileName);
@@ -35,7 +33,10 @@ readFiles.image = function(e) {
 	if(array[0] === 'icon')
 		Img.icon.src = this.result;
 	
-	
+	var image = new Image();
+	image.src = this.result;
+	image.id = this.fileName;
+	Db.customImg[this.fileName] = image;
 }
 
 
@@ -50,18 +51,22 @@ readFiles.script = function(e) {
 	
 	var id = this.fileName + checksum;
 	socket.emit('uploadMod', {name:this.fileName,id:id});
+	
+	Db.customMod[id] = {
+		name:this.fileName,
+		id:id,
+		text:text,
+	}
 
 }
 //{name:,author:,adler32:,code:}
 
-socket.on('queryMod', function (d) {
-	
 
 
 
 io.sockets.on('connection', function (socket) {
 	socket.on('uploadMod', function (d) {
-		db.playerMod.find({id:d.id},{},function(err,res){ if(err) throw err;
+		db.customMod.find({id:d.id},{},function(err,res){ if(err) throw err;
 			//if dont exist in db, ask for it
 			if(!res[0]){
 				if(!d.text)	//aka just want to test if exist
@@ -69,8 +74,10 @@ io.sockets.on('connection', function (socket) {
 				else { 	//aka want to add to db
 					var mort = List.all[socket.key];
 					//if(!mort || mort.lvl < 0) return;	//aka requirement to post new script
-
-					db.playerMod.insert(d,function(err){ if(err) throw err;});
+					
+					d.creationDate = Date.now();
+					d.author = mort.name || '$unknown';
+					db.customMod.insert(d,function(err){ if(err) throw err;});
 			
 				}
 			}				
@@ -81,8 +88,8 @@ io.sockets.on('connection', function (socket) {
 
 
 socket.on('queryMod', function (d) {
-	
-
+	var mod = Db.customMod[d.id];
+	if(mod)	socket.emit('uploadMod', mod);
 })
 
 
