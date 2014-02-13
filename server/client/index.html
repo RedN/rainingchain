@@ -6,9 +6,11 @@
 		<link rel="stylesheet" href="/css/login.css" type="text/css"/>
 		<link rel="stylesheet" href="/css/progress.css" type="text/css" />
 		<link rel="stylesheet" href="/css/CSSTableGenerator.css" type="text/css" />
-		<link href="/js/modules/jqueryui/css/custom-theme/jquery-ui-1.10.4.custom.css" rel="stylesheet">
+		<link href="/library/jqueryui/css/custom-theme/jquery-ui-1.10.4.custom.css" rel="stylesheet">
 	
-		
+		 <link href="/library/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+		 
+		 
 		<title>Raining Chain</title>
 	</head>
 
@@ -26,11 +28,12 @@
 		
 		
 		
-		<script src="/js/modules/jquery.min.js"></script>
-		<script src="/js/modules/jqueryui/js/jqueryui.min.js"></script>
+		<script src="/library/jquery.min.js"></script>
+		<script src="/library/jqueryui/js/jqueryui.min.js"></script>
 		
 		
 		<script src="/js/shared/constant.js"></script>
+		<script src="/js/loadMods.js"></script>
 		<script src="/js/shared/Db_stat.js"></script>
 		<script src="/js/essentials.js"></script>
 		<script src="/js/shared/essentialsShare.js"></script>
@@ -87,10 +90,19 @@
 						<button onclick="Sign.up()">Sign Up</button>
 					</div>
 					
+					
 				</div>
-				<div id="lg-message"></div>
+				
+				<br>
+				<div class="fileUpload btn btn-primary">
+					<span>Upload Custom Mods</span>
+					<input type="file" class="upload" onchange="readFiles(this.files)" multiple="" />
+				</div>	
+				<div id="lg-message"></div>				
 			</div>
 			
+			
+				
 			<!-- Preloader -->
 			<div class="demo-wrapper html5-progress-bar">
 				<div class="progress-bar-wrapper">
@@ -99,7 +111,12 @@
 				</div>
 			</div>
 			
+			
+			
 		</div>	
+		
+		
+		
 		
 		<div id="mainDiv" style="width: 1280px;  height:720px; margin: 0px auto;">	
 		<div  id="gameDiv" class='posAbs' style="display:none;">
@@ -246,6 +263,8 @@
 		Init.db.map();
 		Img.preload(Img.preloader,function(){});
 	
+		
+		
 		
 		</script>
 		

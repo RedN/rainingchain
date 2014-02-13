@@ -16,23 +16,6 @@ safespot: combat = 0;
 
 
 
-Is there a way to allow the user to look in his personal drive for an image and create a variable in the current webpage out of it? (All this without having to send the image to the server.)
-
-For example, the user select pictures from his drive. He can then move them around in a canvas.
-
-Note: The problem is selecting the image and putting them into variables. I already know how to display them.
-
-Something like `<img src="smiley.gif">` will obviously not work.
-
-
-
-
-
-
-
-
-
-
 
 in hotspot, info about map
 so use xy:{x,y,map}
