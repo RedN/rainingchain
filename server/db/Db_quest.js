@@ -40,8 +40,8 @@ Init.db.quest = function(){
 					'option':[
 						{'text':"Sure.",
 							'next':{'node':'yes'},
-							'func':function(key){ Db.quest['questId'].giveDevice(key); },
-							'param':[],
+							//'func':function(key){ Db.quest['questId'].giveDevice(key); },
+							//'param':[],
 						},
 						{'text':"No. I got other things to do.",
 							'next':{'node':'no'}},
@@ -59,8 +59,8 @@ Init.db.quest = function(){
 						
 				'gratz':{
 					'text':'Thanks you so much for your help. I can now unlock the barrier.',
-					'func':function(key){ Db.quest['questId'].giveReward(key); },
-					'param':[],
+					//'func':function(key){ Db.quest['questId'].giveReward(key); },
+					//'param':[],
 					},
 				'gratz2':{
 					'text':'Thanks again.',
@@ -126,10 +126,14 @@ Init.db.quest = function(){
 		q.map['test'] = {};
 		q.map['test'].load = function(map){
 			Actor.creation.group({'x':1060,'y':1900,'map':map},[
-				{"category":"neutral","variant":"julie",'extra':{
+				{"category":"neutral","variant":"jenny",'extra':{
 					'dialogue':{'func':(function(key){
 						var player = List.main[key];
 						var quest = player.quest['questId'];
+						Dialogue.start(key,{'name':'questId','convo':'Jenny','node':'intro'});
+						
+						return;
+						
 						quest.started = 1;
 						if(quest.bossKilled){
 							if(quest.receivedReward){

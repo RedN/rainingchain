@@ -150,9 +150,9 @@ Init.db.enemy = function(){
 	
 	
 	a["neutral"] = {}; //{
-	a["neutral"]["julie"] = {  //{
+	a["neutral"]["jenny"] = {  //{
 		"name":"Jenny",
-		"sprite":{'name':"julie",'sizeMod':1},
+		"sprite":{'name':"jenny",'sizeMod':1},
 		'nevercombat':1,
 		"acc":0.5,
 		"maxSpd":3,

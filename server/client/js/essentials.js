@@ -2,6 +2,7 @@
 
 
 //Disable Text Select
+/*
 (function($){
     $.fn.disableSelection = function() {
         return this
@@ -10,6 +11,7 @@
                  .on('selectstart', false);
     };
 })(jQuery);
+*/
 
 /* Close Browser
 window.onbeforeunload = function(){

@@ -100,6 +100,8 @@ Input.add = function(text,focus,add){
 	if(add) {html.chat.input.value += text;}
 	else {html.chat.input.value = text;}
 	
+	console.log(+$("#chatBoxInput").is(":focus"));
+	
 	if(focus !== false){ html.chat.input.focus(); }
 }
 
@@ -108,6 +110,7 @@ Input.event.key = function(code,dir,event){
 	var start = +$("#chatBoxInput").is(":focus");
 	var num = dir === 'down' ? 1 : 0;
 	
+	console.log(+$("#chatBoxInput").is(":focus"));
 	
 	for(var i in Input.key.move){
 		for(var j = start ; j < Input.key.move[i].length; j++){
@@ -168,6 +171,9 @@ Input.event.combo = function(){
 Input.event.mouse = {};
 Input.event.mouse.click = function(code,dir){
 	var start = +$("#chatBoxInput").is(":focus");
+	
+	console.log(start);
+	
 	var num = dir === 'down' ? 1 : 0;
 	if(code === 1) Input.mouse.left = num; 
 	if(code === 3) Input.mouse.right = num; 
@@ -252,11 +258,13 @@ $(window).keydown(function(e) { if(e.ctrlKey) { e.preventDefault();}});	//Disabl
 
 //Send
 Input.send = function(){
+	
 	if($("#chatBoxInput").is(":focus") && Input.press.move.toString() !== "0,0,0,0"){ 
+		//so he moves fast
 		Input.mouse.x = Cst.WIDTH2 + 10*Input.press.move[0] - 10*Input.press.move[2];
 		Input.mouse.y = Cst.HEIGHT2 + 10*Input.press.move[1] - 10*Input.press.move[3];		
 	}
-
+	
 	var d = {};
 	var newKey = Input.press.move.join('') + Input.press.ability.join('');
 	var newMouse = [Math.round(Input.mouse.x),Math.round(Input.mouse.y)];

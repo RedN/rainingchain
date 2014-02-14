@@ -8,6 +8,7 @@ Draw.loop = function (){
 		if(i === 'warning') continue;
 		//if(i === 'command') continue;
 		//if(i === 'context') continue;
+		if(i === 'chat') continue;
 		html[i].div.style.visibility = 'hidden';
 	}
 	List.btn = [];
@@ -211,6 +212,7 @@ Draw.chat.main = function(){
 	
 	//PM
 	html.pm.div.style.visibility = 'visible';
+	html.dialogue.div.style.visibility = "hidden";
 	html.pm.div.style.left = (s.x + s.divX) + 'px'; 
 	html.pm.div.style.top = (s.y + s.divY - s.pmY - s.pmDivY - s.disPmY) + 'px'; 
 	
@@ -269,6 +271,7 @@ Draw.chat.dialogue = function(){
 	if(dia.option){ var nY = s.y+s.h-10-dia.option.length*20; }	
 			
 	html.dialogue.div.style.visibility = "visible";
+	html.chat.div.style.visibility = "hidden"; //dunno if useful
 	html.dialogue.text.style.width = s.w - 2*s.textBorder + 'px';
 	html.dialogue.text.innerHTML = dia.text;		
 	
