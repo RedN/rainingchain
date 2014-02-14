@@ -52,7 +52,6 @@ require('./server/chat');
 require('./server/dialogue');
 require('./server/craft');
 require('./server/drop');
-require('./server/trade');
 require('./server/Skill');
 require('./server/Test');
 require('./server/Draw');
@@ -68,9 +67,8 @@ require('./server/db/Db_material');
 require('./server/db/Db_map');
 
 require('./server/db/Db_quest');
-require('./server/db/quest/tutorial');
+Db.quest['Qtutorial'] = require('./server/db/quest/Qtutorial').quest;
 require('./server/Quest');
-
 
 require('./' + clientPath + 'client/js/shared/customMod');
 require('./' + clientPath + 'client/js/shared/Collision');

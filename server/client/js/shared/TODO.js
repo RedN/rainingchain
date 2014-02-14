@@ -5,14 +5,6 @@ strike test path
 
 when map removed cuz not active, BUG
 
-nova weird
-
-pvp:
-create map
-create bonus (onNewPlayerLog)
-remove bonus (onPlayerLeave)
-set respawn
-
 
 
 
@@ -24,8 +16,6 @@ remake tileset
 
 draw passive weird block for special balancedAtk
 protect db, list, itemlist
-
-upload own graphics real time
 
 
 select boost algo is weird?
@@ -63,6 +53,5 @@ no download.
 changeable graphics
 dark souls dodge
 enemy different with lvl
-
 
 

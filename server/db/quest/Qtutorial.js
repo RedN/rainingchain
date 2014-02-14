@@ -1,5 +1,4 @@
 var q = {};
-Db.quest['Qtutorial'] = q;
 		
 q.id = 'Qtutorial';
 q.name = 'Tutorial';
@@ -121,6 +120,7 @@ tut.variable = {
 };
 		
 tut.load = function(map,hotspot,variable,cst){
+	console.log(db);
 	//grave
 	Actor.creation({'xymm':hotspot.h,
 		"category":"system","variant":"grave"
@@ -263,5 +263,12 @@ tut.playerLeave = function(key,map,hotspot,variable,cst){
 	
 
 }	
-//}	
-	
+
+
+exports.quest = q;
+
+
+
+
+
+
