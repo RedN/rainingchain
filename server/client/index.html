@@ -8,8 +8,9 @@
 		<link rel="stylesheet" href="/css/CSSTableGenerator.css" type="text/css" />
 		<link href="/library/jqueryui/css/custom-theme/jquery-ui-1.10.4.custom.css" rel="stylesheet">
 	
+		 <!--
 		 <link href="/library/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-		 
+		 -->
 		 
 		<title>Raining Chain</title>
 	</head>
@@ -33,7 +34,7 @@
 		
 		
 		<script src="/js/shared/constant.js"></script>
-		<script src="/js/loadMods.js"></script>
+		<script src="/js/shared/customMod.js"></script>
 		<script src="/js/shared/Db_stat.js"></script>
 		<script src="/js/essentials.js"></script>
 		<script src="/js/shared/essentialsShare.js"></script>
@@ -94,10 +95,7 @@
 				</div>
 				
 				<br>
-				<div class="fileUpload btn btn-primary">
-					<span>Upload Custom Mods</span>
-					<input type="file" class="upload" onchange="readFiles(this.files)" multiple="" />
-				</div>	
+				
 				<div id="lg-message"></div>				
 			</div>
 			
@@ -200,7 +198,34 @@
 		</div>
 	
 		<div id="help" title="Raining Chain Documentation"></div>
-
+		<!--
+		<div id="customMod" title="Use Custom Mods">
+			<font size="5"> You can use custom images and scripts (mods) to play this game. </font>			
+			<br>
+			<div class="fileUpload btn btn-primary">
+				<span>Load Custom Mods</span>
+				<input type="file" class="upload" onchange="readFiles(this.files)" multiple="" />
+			</div>	
+			<br>
+			<h2>List of Mods Currently Active:</h2>
+			<div id="customModList"></div>
+			<br>
+			<h2>Image:</h2>
+			Loading a image named "sprite [name].png" will modify all actors using the sprite with same name. (Check Db.sprite)<br>
+			Loading a image named "anim [name].png" will modify animations with same name. (Check Db.anim)<br>
+			Loading a image named "icon.png" will modify the appearance of all icons.<br>
+			Ex: "sprite bee.png", "anim fire1.png",<br>
+			The game only supports ".png" images. (No ".jpeg", No ".gif").<br>
+			Make sure that your custom image size is the same than the original.<br>
+			<br>
+			<h2>Script:</h2>
+			This loader can also be used to load custom scripts. Format is ".js" or ".txt".<br>
+			Scripts are directly evaluated via "eval()". Only use scripts you trust.<br>	
+			You ABSOLUTELY need to load custom scripts via this loader. Failure to do so will result in an automatic BAN.<br>
+			For more information about what is allowed, click here.<br>	
+			To remove mods, simply refresh the page.<br>	
+		</div>
+		-->
 			
 		<script>
 		/*Jquery 101:
@@ -213,6 +238,9 @@
 		$.get('/js/help.html').success(function(data){
 			$('#help').html(Init.help(data));
 		});
+		
+		
+		//$( "#customMod" ).dialog({autoOpen: false,width: 1000});
 		
 		
 		$('#chatForm').submit(function(e) {

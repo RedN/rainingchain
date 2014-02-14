@@ -3,8 +3,7 @@ server = true;
 
 Db = {};
 Db.dialogue = {};
-Db.customMod = {};
-Db.customImg = {};
+
 
 List = {
 	all:{},		//EVERYTHING (player id refers to actor)

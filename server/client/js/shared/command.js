@@ -511,7 +511,7 @@ Command.list['pvp'].doc = {
 
 
 //{CLIENT SIDE: Pref. many different preference values can be changed. check Command.pref.verify for more detail.
-Command.client = ['pref','music,next','music,info','help'];
+Command.client = ['pref','music,next','music,info','help','mod'];
 
 Command.list['help'] = function(lvl){
 	lvl = typeof lvl === 'undefined' ? lvl : 1;
@@ -522,12 +522,20 @@ Command.list['help'] = function(lvl){
 		}
 	}
 }
-
-
 Command.list['help'].doc = {
 	'description':"Show List of Commands.",
 	'help':1,'param':[
 		{type:'Number',name:'Show ALL Options (Not Recommended)',optional:1},
+	],
+}
+
+Command.list['mod'] = function(lvl){
+	readFiles.open();
+}
+Command.list['mod'].doc = {
+	'description':"Open the Mod Window.",
+	'help':1,'param':[
+	
 	],
 }
 

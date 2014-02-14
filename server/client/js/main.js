@@ -26,6 +26,8 @@ Db.ability = {};
 Db.item = {};
 Db.plan = {};
 Db.quest = {};
+Db.customMod = {};
+Db.customImg = {};
 /*
 Db = {
 	equip:{},

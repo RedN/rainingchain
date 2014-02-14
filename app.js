@@ -72,6 +72,7 @@ require('./server/db/quest/tutorial');
 require('./server/Quest');
 
 
+require('./' + clientPath + 'client/js/shared/customMod');
 require('./' + clientPath + 'client/js/shared/Collision');
 require('./' + clientPath + 'client/js/shared/Db_stat');
 require('./' + clientPath + 'client/js/shared/constant');
