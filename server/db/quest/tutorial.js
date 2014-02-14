@@ -122,16 +122,16 @@ tut.variable = {
 		
 tut.load = function(map,hotspot,variable,cst){
 	//grave
-	Actor.creation({'xy':hotspot.h,'map':map,
+	Actor.creation({'xymm':hotspot.h,
 		"category":"system","variant":"grave"
 	});
 	
-	Actor.creation({'xy':hotspot.q,'map':map,
+	Actor.creation({'xym':hotspot.q,
 		"category":"system","variant":"grave"
 	});
 	
 	//chest
-	Actor.creation({'xy':hotspot.m,'map':map,
+	Actor.creation({'xym':hotspot.m,
 		"category":"system","variant":"chest",extra:{
 			'treasure':function(key){
 				Itemlist.add(List.main[key].invList,'Qtutorial-Aiceshard',1);
@@ -141,28 +141,28 @@ tut.load = function(map,hotspot,variable,cst){
 	});
 	
 	//tree
-	Actor.creation({'xy':hotspot.e,'map':map,
+	Actor.creation({'xym':hotspot.e,
 		"category":"tree","variant":"red"
 	});
 	
 	
 	
 	//drop staff
-	Drop.creation({'xy':hotspot.o,'map':map,
+	Drop.creation({'xym':hotspot.o,
 		"item":"Qtutorial-Pstaff","amount":1,'timer':1/0
 	});
 	
 	//block for switch
-	Actor.creation({'xy':hotspot.b,'map':map,
+	Actor.creation({'xym':hotspot.b,
 		"category":"block","variant":"2x2"
 	});
 	//Block to block arrow
-	Actor.creation({'xy':hotspot.f,'map':map,
+	Actor.creation({'xym':hotspot.f,
 		"category":"block","variant":"2x2"
 	});
 	
 	//Block that disppear when bee dead
-	Actor.creation({'xy':hotspot.j,'map':map,
+	Actor.creation({'xym':hotspot.j,
 		"category":"block","variant":"2x2Fix",extra:{
 			'viewedIf':function(key){
 				if(List.all[key].type !== 'player') return true;
@@ -172,7 +172,7 @@ tut.load = function(map,hotspot,variable,cst){
 	});
 	
 	//First monster
-	Actor.creation({'xy':hotspot.i,'map':map,
+	Actor.creation({'xym':hotspot.i,
 		"category":"Qtutorial","variant":"bee",extra:{
 			'deathFunc':function(key){
 				List.main[key].quest['Qtutorial'].beeDead = true;						
@@ -181,12 +181,12 @@ tut.load = function(map,hotspot,variable,cst){
 	});
 	
 	//Bees Near Chest
-	Actor.creation.group({'xy':hotspot.l,'map':map,'respawn':25*100},[
+	Actor.creation.group({'xym':hotspot.l,'respawn':25*100},[
 		{'amount':3,"category":"Qtutorial","variant":"bee","lvl":0,'modAmount':0}
 	]);
 	
 	//Boss Fire
-	Actor.creation({'xy':hotspot.k,'map':map,
+	Actor.creation({'xym':hotspot.k,
 		"category":"Qtutorial","variant":"demon",extra:{
 			deathFunc:function(key){
 				List.main[key].quest.Qtutorial.bossDead = true;
@@ -195,7 +195,7 @@ tut.load = function(map,hotspot,variable,cst){
 	});
 	
 	//Switch
-	Actor.creation({'xy':hotspot.c,'map':map,
+	Actor.creation({'xym':hotspot.c,
 		"category":"system","variant":"switch",extra:function(mort){
 			mort.switch = {
 				on:function(key,mortid,map){
@@ -223,7 +223,7 @@ tut.loop =  function(map,hotspot,variable,cst){
 	if(Loop.interval(6)){
 		//Arrow
 		Attack.creation(
-			{hitIf:'player-simple',xy:hotspot.a,map:map,angle:Math.randomML()*2},
+			{hitIf:'player-simple',xym:hotspot.a,angle:Math.randomML()*2},
 			useTemplate(Attack.template(),cst.arrow)
 		);
 	}
@@ -233,17 +233,17 @@ tut.loop =  function(map,hotspot,variable,cst){
 		variable.angle += variable.rotation;
 		variable.angle = variable.angle+360;
 		Attack.creation(
-			{hitIf:'player-simple',xy:hotspot.d,map:map,angle:variable.angle},
+			{hitIf:'player-simple',xym:hotspot.d,angle:variable.angle},
 			useTemplate(Attack.template(),cst.fireball)
 		);
 		
 		Attack.creation(
-			{hitIf:'player-simple',xy:hotspot.d,map:map,angle:variable.angle+120},
+			{hitIf:'player-simple',xym:hotspot.d,angle:variable.angle+120},
 			useTemplate(Attack.template(),cst.fireball)
 		);
 		
 		Attack.creation(
-			{hitIf:'player-simple',xy:hotspot.d,map:map,angle:variable.angle+240},
+			{hitIf:'player-simple',xym:hotspot.d,angle:variable.angle+240},
 			useTemplate(Attack.template(),cst.fireball)
 		);
 		

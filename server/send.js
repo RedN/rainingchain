@@ -139,7 +139,7 @@ Change.send.init.bullet = function(bullet){	//For Init
 		'b',
 		Math.round(bullet.x),
 		Math.round(bullet.y),
-		Math.round(bullet.angle),
+		Math.round(bullet.moveAngle),
 		bullet.sprite.name,
 		bullet.sprite.sizeMod,
 	];

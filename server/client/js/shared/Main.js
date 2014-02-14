@@ -24,6 +24,9 @@ Main.template = function(key){
 		
 		'screenEffect':null,
 		
+		'pvpScore':[],
+		
+		
 		'help':'',
 		'passivePt':0,
 		'passive':Passive.template(),

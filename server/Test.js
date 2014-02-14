@@ -55,9 +55,10 @@ Test.playerStart = function(key){
 	var mort = List.all[key];
     
 	
-	/*
+	
 	Itemlist.add(inv,'gold');
-    Itemlist.add(inv,'teleport');
+    /*
+	Itemlist.add(inv,'teleport');
 	*/
 	
 	var al = {

@@ -79,12 +79,13 @@ Attack.template = function(){
 
 
 Attack.creation = function(player,attack,extra){
-	if(player.xy){ player.x = player.xy.x; player.y = player.xy.y; delete player.xy; }
+	if(player.xym){ player.x = player.xym.x; player.y = player.xym.y; player.map = player.xym.map; delete player.xym;}
 	
 	var s = attack;
 	s = Attack.creation.info(player,s);
 	
 	s.id = Math.randomId();
+	s.publicId = Math.randomId();
 	s.hitId = Math.randomId();
 	
 	attack = useTemplate(attack,extra); //need here so angle isnt always player angle

@@ -333,7 +333,7 @@ Init.db.ability = function(cb){
 	a['bulletMulti-sin'] = {'type':'attack','name':'sin','icon':'attackMagic.fireball',
 		'spd':{'main':0.8,'support':0.2},'period':{'own':20,'global':10},
 		'action':{'func':'Combat.action.attack','param':{
-			'type':"bullet",'angle':15,'amount':10,
+			'type':"bullet",'angle':0,'amount':1,
 			'objImg':{'name':"arrow",'sizeMod':1},'hitImg':{'name':"thunder2",'sizeMod':0.5},
 			'dmg':{'main':100,'ratio':{'melee':0,'range':10,'magic':80,'fire':10,'cold':0,'lightning':0}},
 			

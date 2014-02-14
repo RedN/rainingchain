@@ -100,6 +100,22 @@ Draw.state.status = function(s){ ctxrestore();
 }
 //}
 
+//{Pvp
+Draw.pvpScore = function(){
+	var pv = main.pvpScore;
+	ctx.font = '20px Monaco';
+	ctx.fillStyle = 'white';
+	for(var i in pv){
+		var str = 1+(+i) + ':  ' + pv[i].name + '  (' + pv[i].point + ')';
+		var numX = 10;
+		var numY = 75 + 22*i;
+		ctx.fillText(str,numX,numY);
+	}	
+	//main.pvpScore = [{name:'asdasd','point':123},{name:'asdasd','point':123}]
+}
+
+//}
+
 //{Minimap
 Draw.minimap = function (){ ctxrestore();
 	ctx = List.ctx.minimap;

@@ -130,6 +130,7 @@ Change.update.init = function(){
 				
 				{'array':['passivePt']},
 				{'array':['passive']},	
+				{'array':['pvpScore']},	
 			]
 			},	
 		'exist':{

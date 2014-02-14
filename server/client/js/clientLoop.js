@@ -33,8 +33,8 @@ Loop.actor = function(){
 Loop.player = function(){
 	Actor.loop(player);
 	if(Loop.player.old.permBoost !== player.permBoost){
+		Loop.player.old.permBoost = player.permBoost;
 		Actor.update.permBoost(player);	
-		Loop.player.old.permBoost = player.permBoost
 	}
 	if(Loop.player.old.map !== player.map){
 		Actor.update.permBoost(player);	

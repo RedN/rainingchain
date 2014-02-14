@@ -12,16 +12,11 @@ create map
 create bonus (onNewPlayerLog)
 remove bonus (onPlayerLeave)
 set respawn
-safespot: combat = 0; 
 
 
 
 
-in hotspot, info about map
-so use xy:{x,y,map}
 
-
-respawnLoc: {safe:(@MAIN),active:(ANY)}. if array, select random
 
 
 

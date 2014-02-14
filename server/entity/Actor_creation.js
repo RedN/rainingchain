@@ -1,7 +1,7 @@
 Actor = typeof Actor !== 'undefined' ? Actor : {};
 
 Actor.creation = function(data){
-	if(data.xy){ data.x = data.xy.x; data.y = data.xy.y; delete data.xy;}
+	if(data.xym){ data.x = data.xym.x; data.y = data.xym.y; data.map = data.xym.map; delete data.xym;}
 	//data: x  y  map category variant lvl modAmount extra
 
 	var e = Actor.template('enemy');
@@ -38,7 +38,7 @@ Actor.creation.group = function(gr,el){
 	var id = Math.randomId();
 	var enemyIdList = [];
 	
-	if(gr.xy){ gr.x = gr.xy.x; gr.y = gr.xy.y; delete gr.xy;}
+	if(gr.xym){ gr.x = gr.xym.x; gr.y = gr.xym.y; gr.map = gr.xym.map; delete gr.xym;}
 	gr = useTemplate(Actor.creation.group.template(),gr);	
 	
 	List.group[id] = {
@@ -82,7 +82,7 @@ Actor.creation.db = function(e,d){
 	for(var i in Db.enemy[d.category][d.variant]) e[i] = Db.enemy[d.category][d.variant][i];	//cuz of function (globalDmg)
 	
 	e.id = Math.randomId();
-	e.publicId = Math.random().toString(36).substring(13);
+	e.publicId = Math.randomId(6);
 	e.frameCount = Math.floor(Math.random()*100);
 	
 	e.globalDef = typeof e.globalDef === 'function' ? e.globalDef(e.lvl) : e.globalDef * Actor.creation.db.globalLvlMod(e.lvl).globalDef

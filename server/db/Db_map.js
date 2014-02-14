@@ -32,8 +32,7 @@ Db.map['test'] = function(){	//'test' = mapId
 	m.load.main = function(map,hotspot,variable,cst){	//main: loadId, map:instancedName, hotspot = map.hotspot[loadId], variable = map.variable[loadId], cst = map.cst[loadId],
 		//######################
 		Actor.creation({				//create 1 enemy that cant respawn
-			'xy':hotspot.c,				//location
-			'map':map,					//always put 'map':map.
+			'xym':hotspot.c,				//location
 			"category":"system",		
 			"variant":"switch",
 			"extra":{},
@@ -149,7 +148,7 @@ Db.map['test'] = function(){	//'test' = mapId
 		//######################
 		Actor.creation.group(			//create a group of monsters that respawns
 			{
-				'x':1060,				//or 'xy':hotspot.a
+				'x':1060,				//or 'xym':hotspot.a
 				'y':1900,
 				'map':map,				//always put 'map':map.
 				'respawn':100			//frames before enemy group respawns. (timer starts when every members is dead)
@@ -168,7 +167,7 @@ Db.map['test'] = function(){	//'test' = mapId
 		
 		//######################
 		Drop.creation({						//create a drop on the ground
-			'xy':hotspot.o,
+			'xym':hotspot.o,
 			'map':map,
 			"item":"gold",		//itemId
 			"amount":1,						//item amount
@@ -285,7 +284,7 @@ Init.db.map = function (){
 		m.playerEnter.main = function(key,map){
 			var mort = List.all[key];
 			Actor.permBoost(mort,'pvp',[
-				{stat:'bullet-spd',value:1.5,type:'*'}
+				{stat:'bullet-spd',value:1,type:'+'}
 			]);		
 			mort.hitIf = 'player';
 			
@@ -306,8 +305,46 @@ Init.db.map = function (){
 			pvpKill:function(key,killer){
 				Chat.add(killer,"You have killed " + List.all[key].name + ".");
 				Chat.add(key,"You have been killed by " + List.all[killer].name + ".");
+				
+				List.map[List.all[key].map].variable.main.pvpKill.push({'killer':killer,'killed':key,'time':Date.now()});
+				
 			}
+		}
 		
+		m.loop.main = function(map,hotspot,variable,cst){
+			if(Loop.interval(100)){
+				var lowest = Date.now()-60*1000;	//remove kill if older than 1min
+				for(var i = variable.pvpKill.length-1; i>= 0; i--){
+					if(variable.pvpKill[i].time < lowest) variable.pvpKill = variable.pvpKill.slice(i+1);
+				}
+				
+				
+				var vp = variable.pvpScorePerPlayer;
+				vp = {};
+				
+				for(var i in variable.pvpKill){
+					var killer = variable.pvpKill[i].killer;
+					vp[killer] = vp[killer] || 0;
+					vp[killer]++;
+				}
+				variable.pvpScore = [];
+				for(var i in vp) variable.pvpScore.push({name:List.all[i].name,point:vp[i]});
+				variable.pvpScore.sort(function(a,b){
+					return b.point-a.point;
+				});
+				
+				for(var i in List.map[map].list){
+					if(List.main[i]) List.main[i].pvpScore = variable.pvpScore;
+				}
+			}
+			
+		
+		}
+		
+		m.variable.main = {
+			pvpKill:[],
+			pvpScore:[],
+			pvpScorePerPlayer:{},
 		}
 		
 		return m;

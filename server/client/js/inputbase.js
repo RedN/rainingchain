@@ -99,9 +99,6 @@ Input.save = function(){
 Input.add = function(text,focus,add){
 	if(add) {html.chat.input.value += text;}
 	else {html.chat.input.value = text;}
-	
-	console.log(+$("#chatBoxInput").is(":focus"));
-	
 	if(focus !== false){ html.chat.input.focus(); }
 }
 
@@ -109,9 +106,7 @@ Input.event = {}
 Input.event.key = function(code,dir,event){
 	var start = +$("#chatBoxInput").is(":focus");
 	var num = dir === 'down' ? 1 : 0;
-	
-	console.log(+$("#chatBoxInput").is(":focus"));
-	
+
 	for(var i in Input.key.move){
 		for(var j = start ; j < Input.key.move[i].length; j++){
 			if(code === Input.key.move[i][j]){
@@ -171,9 +166,6 @@ Input.event.combo = function(){
 Input.event.mouse = {};
 Input.event.mouse.click = function(code,dir){
 	var start = +$("#chatBoxInput").is(":focus");
-	
-	console.log(start);
-	
 	var num = dir === 'down' ? 1 : 0;
 	if(code === 1) Input.mouse.left = num; 
 	if(code === 3) Input.mouse.right = num; 

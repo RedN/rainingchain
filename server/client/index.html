@@ -88,6 +88,9 @@
 					<div>				
 						<button onclick="Sign.in()">Sign In</button> <br>
 						<button onclick="Sign.up()">Sign Up</button>
+						<br>
+						<br>
+						<button onclick="readFiles.open()">Mods</button>
 					</div>
 					
 					
@@ -95,7 +98,7 @@
 				
 				<br>
 				
-				<div id="lg-message"></div>				
+				<div id="lg-message"></div>	
 			</div>
 			
 			
@@ -117,7 +120,7 @@
 		<input id="asd" class='onlyText' type="text">
 		<div id="mainDiv" style="width: 1280px;  height:720px; margin: 0px auto;">	
 		<div  id="gameDiv" class='posAbs' style="display:none;">
-			<div id="canvasDiv" class='posAbs' onclick='canvasBlur();'></div>
+			<div id="canvasDiv" class='posAbs'></div>
 			
 			<div id="contextDiv" style="white-space: nowrap; width:auto; padding:3px; z-index:100;" class='posAbs gradientBoxesWithOuterShadows'></div>
 			<div id="commandDiv" style="white-space: nowrap; width:auto; padding:3px; z-index:100;" class='posAbs gradientBoxesWithOuterShadows'></div>
@@ -200,6 +203,7 @@
 		
 		<div id="customMod" title="Use Custom Mods">
 			<font size="5"> You can use custom images and scripts (mods) to play this game. </font>			
+			<font size="2">Type $mod while playing to open this window. </font>		
 			<br>
 			<div class="fileUpload btn btn-primary">
 				<span>Load Custom Mods</span>
@@ -208,6 +212,7 @@
 			<br>
 			<h2>List of Mods Currently Active:</h2>
 			<div id="customModList"></div>
+			<br>
 			<br>
 			<h2>Image:</h2>
 			Loading a image named "sprite [name].png" will modify all actors using the sprite with same name. (Check Db.sprite)<br>
@@ -237,11 +242,6 @@
 		$.get('/js/help.html').success(function(data){
 			$('#help').html(Init.help(data));
 		});
-		
-		canvasBlur = function(){
-			console.log(100);
-			//document.activeElement.blur();
-		}
 		
 		$( "#customMod" ).dialog({autoOpen: false,width: 1000});
 		

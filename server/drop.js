@@ -61,7 +61,7 @@ Drop.getCategoryList = function(drop,lvl,qu){
 }
 
 Drop.creation = function(d){
-	if(d.xy){ d.x = d.xy.x; d.y = d.xy.y; delete d.xy;}
+	if(d.xym){ d.x = d.xym.x; d.y = d.xym.y; d.map = d.xym.map; delete d.xym;}
 	
 	var drop = useTemplate(Drop.template(),d);
 	
@@ -78,7 +78,7 @@ Drop.template = function(){
 	return {
 		vx:25,
 		id:Math.randomId(),
-		publicId:Math.random().toString(36).substring(13),
+		publicId:Math.randomId(6),
 		type:'drop',
 		change:{},
 		old:{},

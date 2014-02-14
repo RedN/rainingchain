@@ -500,10 +500,15 @@ Command.list['team,join'].doc = {
 
 Command.list['pvp'] = function(key,slot){
 	var mort = List.all[key];
-	Actor.teleport(mort,250,250,'pvpF4A');
+	if(mort.map.have('pvpF4A')){
+		Actor.teleport(mort,mort.respawnLoc.safe.x,mort.respawnLoc.safe.y,mort.respawnLoc.safe.map);
+		Chat.add(key,"You can no longer attack or be attacked by other players.");
+	}
+	
+	else Actor.teleport(mort,250,250,'pvpF4A');
 }
 Command.list['pvp'].doc = {
-	'description':"Teleport to PvP Zone.",
+	'description':"Teleport/Quit to PvP Zone.",
 	'help':1,'param':[
 		{type:'Number',name:'0:Free For All. 1:Ranked. 2:Custom',optional:1},
 	],

@@ -42,7 +42,7 @@ Sign.up.create = function(user,pass,email,salt,socket){
 	p.name = user; 
 	p.context = user;
 	p.id = Math.randomId();
-	p.publicId = Math.random().toString(36).substring(13);
+	p.publicId = Math.randomId(6);
 	
     var m = Main.template(key); m.name = user;
 	

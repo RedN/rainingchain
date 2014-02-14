@@ -100,9 +100,9 @@ Actor.swapWeapon = function(mort,piece){
 
 //{Update
 Actor.update = {};
-Actor.update.mastery = function(player){
-	//Note: mod is applied in Combat.action.attack.mod.player
-	var mas = player.mastery;
+Actor.update.mastery = function(mort){
+	//Note: mod is applied in Combat.action.attack.mod.mort
+	var mas = mort.mastery;
 	for(var i in mas){
 		for(var j in mas[i]){
 			mas[i][j].sum = Math.pow(mas[i][j]['x'] * mas[i][j]['*'],mas[i][j]['^']) + mas[i][j]['+'];
@@ -110,10 +110,8 @@ Actor.update.mastery = function(player){
 	}
 }
 
-Actor.update.permBoost = function(player){
-	player = typeof player === 'object' ? player : List.all[player];
-	
-	var pb = player.boost;
+Actor.update.permBoost = function(mort){
+	var pb = mort.boost;
 	
 	//Reset to PermBase
 	pb.custom = [];
@@ -128,9 +126,9 @@ Actor.update.permBoost = function(player){
 	}
 	
 	//Update Value
-	for(var i in player.permBoost){	//i = Source (item)	
-		for(var j in player.permBoost[i]){	//each indidual boost boost
-			var b = player.permBoost[i][j];
+	for(var i in mort.permBoost){	//i = Source (item)	
+		for(var j in mort.permBoost[i]){	//each indidual boost boost
+			var b = mort.permBoost[i][j];
 			
 			if(b.type === '+' || b.type === 'base'){pb.list[b.stat].p += b.value;}
 			else if(b.type === '*'){pb.list[b.stat].t += b.value;}
@@ -154,20 +152,26 @@ Actor.update.permBoost = function(player){
 		pb.list[i].base = Math.min(pb.list[i].base,pb.list[i].max);	
 	}
 	
-	for(var j in pb.custom){ Db.customBoost[j].function(pb,player.id);}
+	for(var j in pb.custom){ Db.customBoost[j].function(pb,mort.id);}
+	
+	Actor.update.boost(mort,'all');
 }
 
-Actor.update.boost = function(player,stat){
-	viaArray.set({'origin':player,'array':player.boost.list[stat].stat,'value':player.boost.list[stat].base});
-	for(var i in player.boost.list[stat].name){
-		var boost = player.boost.list[stat].name[i];
+Actor.update.boost = function(mort,stat){
+	if(stat === 'all'){ for(var i in mort.boost.list) Actor.update.boost(mort,i); return; }
+	
+	
+	var stat = mort.boost.list[stat];
+	viaArray.set({'origin':mort,'array':stat.stat,'value':stat.base});
+	for(var i in stat.name){
+		var boost = stat.name[i];
 				
-		if(boost.type === '+'){	viaArray.add({'origin':player,'array':player.boost.list[stat].stat,'value':boost.value}); }
-		else if(boost.type === '*'){	viaArray.add({'origin':player,'array':player.boost.list[stat].stat,'value':(boost.value-1)*player.boost.list[stat].base}); }
+		if(boost.type === '+'){	viaArray.add({'origin':mort,'array':stat.stat,'value':boost.value}); }
+		else if(boost.type === '*'){	viaArray.add({'origin':mort,'array':stat.stat,'value':(boost.value-1)*stat.base}); }
 	}
 }
 
-Actor.boost = function(player, boost){
+Actor.boost = function(mort, boost){
 	//Add a boost to a actor
 
 	//list[i]: i = stat
@@ -180,7 +184,7 @@ Actor.boost = function(player, boost){
 	boost = arrayfy(boost);
 	for(var i in boost){ 
 		var b = boost[i];
-		if(typeof player === 'string'){ player = List.all[player]; }
+		if(typeof mort === 'string'){ mort = List.all[mort]; }
 		var name = b.name || 'Im dumb.';
 		var id = b.stat + '@' + name;
 		b.time = b.time || 1/0;
@@ -191,9 +195,9 @@ Actor.boost = function(player, boost){
 		if(b.time > 250){ b.spd = 'slow'; }
 		if(b.time < 25){ b.spd = 'fast'; }
 		
-		player.boost[b.spd][b.stat + '@' + name] = b;
-		player.boost.list[b.stat].name[name] = b;
-		player.boost.toUpdate[b.stat] = 1;
+		mort.boost[b.spd][b.stat + '@' + name] = b;
+		mort.boost.list[b.stat].name[name] = b;
+		mort.boost.toUpdate[b.stat] = 1;
 	}
 	
 }
@@ -330,6 +334,7 @@ Actor.activateSwitch = function(mort,eid){
 
 
 }
+
 Actor.removeOnClick = function(mort,side){
 	for(var i in mort.optionList.option){
 		if(mort.optionList.option[i] === mort.onclick[side]){
@@ -384,7 +389,9 @@ Actor.teleport = function(mort,x,y,map){
 	var newmap = List.map[mort.map];
 	for(var i in newmap.playerEnter) newmap.playerEnter[i](mort.id,List.map[mort.map]);
 	
-	ActiveList.remove(mort);	
+	ActiveList.remove(mort);
+
+	Chat.add(mort.id,"You leave " + oldmap.name + " and you enter " + newmap.name + '.');
 }
 
 Actor.pickDrop = function (mort,id){
@@ -469,7 +476,7 @@ Actor.swapAbility = function(mort,name,position){
 
 Actor.learnAbility = function(mort,name){
 	if(!Db.ability[name]) return;
-	Chat.add(mort.id,"You have learnt a new ability.");
+	Chat.add(mort.id,"You have learnt a new ability: \"" + Db.ability[name].name + '".');
 	mort.abilityList[name] = 1;
 }
 

@@ -51,7 +51,6 @@ readFiles.script = function(e) {
 	eval(text);
 	
 	var id = this.fileName + checksum;
-	console.log(text);
 	socket.emit('uploadMod', {name:this.fileName,id:id});
 	
 	Db.customMod[id] = {
@@ -122,7 +121,6 @@ io.sockets.on('connection', function (socket) {
 					
 					d.creationDate = Date.now();
 					//d.author = mort.name || '$unknown';
-					console.log(d);
 					db.customMod.insert(d,function(err){ if(err) throw err;});
 			
 				}
