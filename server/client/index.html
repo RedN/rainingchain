@@ -20,8 +20,8 @@
 		
 		<script>
 		var server = false;
-		//var socket = io.connect();
-        var socket = io.connect('http://localhost:3000');
+		var socket = io.connect();
+        //var socket = io.connect('http://localhost:3000');
 		Init = {};
 		Init.db = {};
 		</script>
@@ -59,7 +59,7 @@
 		<script src="/js/Draw_popup.js"></script>
 		<script src="/js/Draw_entity.js"></script>
 		<script src="/js/Draw_upper.js"></script>
-		<script src="/js/shared/Command.js"></script>
+		<script src="/js/shared/command.js"></script>
 		<script src="/js/shared/Button.js"></script>
 		<script src="/js/shared/passiveGrid.js"></script>
 		<script src="/js/shared/Db_customboost.js"></script>
@@ -72,7 +72,7 @@
 		<div id="startDiv">
 			<!-- Login -->
 			<div class="lg-container">
-				<h1 id="lg-title">Raining Chain</h1>
+				<h1 id="lg-title">Raining Chain (BETA)</h1>
 				<div id="lg-form" name="lg-form">
 					
 					<div>
@@ -91,6 +91,9 @@
 						<br>
 						<br>
 						<button onclick="readFiles.open()">Mods</button>
+						<br>
+						<br>
+						You need Google Chrome to play this game.
 					</div>
 					
 					

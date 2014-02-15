@@ -241,7 +241,7 @@ Command.list['win,trade,click'] = function(key,side,slot){
 	Itemlist.click.trade(m.tradeList,side,+slot);
 }
 Command.list['win,trade,click'].doc = {
-	'description':"Withdraw Itms from Trade.",
+	'description':"Withdraw Items from Trade.",
 	'help':0,'param':[
 		{type:'Letters',name:'Mouse Button',optional:0},
 		{type:'Number',name:'Trade Slot',optional:0},

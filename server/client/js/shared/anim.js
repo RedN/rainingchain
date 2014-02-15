@@ -36,7 +36,7 @@ Init.db.anim = function(){
 			"light2":{'frame':30},
 			"spear1":{'frame':9},
 			"spear2":{'frame':11},
-			"special1":{'frame':16},
+			"special1":{'frame':16,'layer':'b'},
 			"special2":{'frame':15},
 			"special3":{'frame':25},
 			"special4":{'frame':11},
@@ -66,7 +66,8 @@ Init.db.anim = function(){
 			"wind2":{'frame':10},
 			
 			"fire_explosion":{'frame':40,'frameX':40,'spd':2},
-			'invincibility':{'spd':1/4,'layer':'b','frame':7,'link':'http://fc09.deviantart.net/fs70/f/2011/305/3/8/aura_sprites_by_gohanxdaichimiura-d4ep0i5.png'},
+			"special1Red":{'frame':16,'layer':'b',spd:1.5,size:0.8},
+			'invincibility':{'spd':1/2,'layer':'b','frame':7,'link':'http://fc09.deviantart.net/fs70/f/2011/305/3/8/aura_sprites_by_gohanxdaichimiura-d4ep0i5.png'},
 		}
 		
 			
@@ -103,10 +104,11 @@ Anim.loop = function (anim){
 }
 
 Anim.creation = function(name,target,sizeMod){	//server side
-	//Add animation to the game. target can be a string to specific an actor, or an obj x:1,y:1,map:1
+	//Add animation to the game. target = actor id OR an obj x,y,map,viewedIf
 	sizeMod = sizeMod || 1;
 	var id = 'a'+Math.randomId(5);
 	List.anim[id] = {'sizeMod':sizeMod,'name':name,'target':target,'id':id};
+	return id;
 }
 
 

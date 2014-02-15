@@ -1,12 +1,53 @@
 Init = {};
-Init.db = function(dbpsw,deleteDb){
-	//var databaseURI = 'mongodb://test:' + dbpsw + '@widmore.mongohq.com:10010/RainingChain_copy';  
-	var databaseURI = "localhost:27017/test";
+
+
+
+
+
+Init.db = function(dbpsw,deleteDb,whatDb){
 	
+	var MONGO = {
+		username: "test",
+		password: dbpsw,
+		server: 'widmore.mongohq.com',
+		port: '10010',
+		db: 'RainingChain_copy',
+		connectionString: function(){
+			return 'mongodb://'+this.username+':'+this.password+'@'+this.server+':'+this.port+'/'+this.db;
+		},
+		options: {
+			server:{
+				auto_reconnect: true,
+				socketOptions:{
+					connectTimeoutMS:3600000,
+					keepAlive:3600000,
+					socketTimeoutMS:3600000
+				}
+			}
+		}
+	};
+	
+	var databaseURI = whatDb ? "localhost:27017/test" : MONGO.connectionString();  
 	var collections = ["customMod","player","main","ability","equip","account","clan",'plan'];
-
-	db = require("mongojs").connect(databaseURI, collections);
-
+	
+	db = require("mongojs").connect(databaseURI, collections, MONGO.options);
+	
+	setInterval(function(){
+		db = require("mongojs").connect(databaseURI, collections, MONGO.options);
+	},60*1000);
+	
+	db.on('error', function(err) {
+		console.log("DB connection Error: "+err);
+	});
+	db.on('open', function() {
+		console.log("DB connected");
+	});
+	db.on('close', function(str) {
+		console.log("DB disconnected: "+str);
+	});
+	
+	
+	
 	//delete everything in db
 	db.deleteAll = function(){
 		for(var i in collections){

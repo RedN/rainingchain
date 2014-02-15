@@ -10,6 +10,15 @@ Loop = function(){
 	Draw.loop();
 	Loop.warning();
 	Loop.frameCount++;
+	
+	if(+$("#chatBoxInput").is(":focus")){
+		Input.press = {'move':[0,0,0,0],'ability':[0,0,0,0,0,0],'combo':[0,0]};	
+	}
+	window.onblur = function(){
+		Input.press = {'move':[0,0,0,0],'ability':[0,0,0,0,0,0],'combo':[0,0]}; 	
+	}
+	
+	
 }
 Loop.frameCount = 0;
 

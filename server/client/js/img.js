@@ -73,7 +73,7 @@ Img.icon = newImage("img/img/iconSheet.png");
 	'dodge':{'y':ability+5,'x':['start','ninja','stand','footprint','wing','stop']},
 	'heal':{'y':ability+6,'x':['plus','pill','open','pills','fixed','sink','pot','tower','mix','tree','vial','cake','dropplet','flower']},
 	'summon':{'y':ability+7,'x':['wolf','moon','cat','bird','fang','head','peck','fish','dino','ram','gull','dragon','duo','rex','lion']},
-	'heal':{'y':ability+8,'x':['teleport','circle','hourglass','timebomb','forward','disync','clock','invisible']},
+	'misc':{'y':ability+8,'x':['teleport','circle','hourglass','timebomb','forward','disync','clock','invisible']},
 	
 	//Equip
 	'melee':{'y':equip+0,'x':['mace','spear','sword']},

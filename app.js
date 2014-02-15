@@ -21,8 +21,19 @@ io = socketio.listen(serv); io.set('log level', 1); io.set('heartbeat timeout', 
 if(cloud9){ serv.listen(process.env.PORT, process.env.IP);}	//if using cloud9
 else {serv.listen(3000);}	//if using on own PC, go http://localhost:3000/ 
 
-var clientPath = 'server/';
+var clientPath = ''; //'server/';
 router.use(express.static(path.resolve(__dirname, clientPath + 'client')));
+
+
+
+
+DEBUG = function(text){
+	this['conso'+'le'].log(text);
+}
+
+
+
+
 
 //Require
 require('./' + clientPath + 'client/js/shared/essentialsShare');
@@ -78,7 +89,7 @@ require('./' + clientPath + 'client/js/shared/Button');
 require('./' + clientPath + 'client/js/shared/Db_sprite');
 require('./' + clientPath + 'client/js/shared/anim');
 require('./' + clientPath + 'client/js/shared/Actor_init');
-require('./' + clientPath + 'client/js/shared/Command');
+require('./' + clientPath + 'client/js/shared/command');
 require('./' + clientPath + 'client/js/shared/Combat_sub');
 require('./' + clientPath + 'client/js/shared/passiveGrid');
 require('./' + clientPath + 'client/js/shared/queryShare');
@@ -86,9 +97,12 @@ require('./' + clientPath + 'client/js/shared/clanShare');
 require('./' + clientPath + 'client/js/shared/Db_customboost');
 
 
-Init.db('test',process.argv[2]);	//if(process.argv[2]) => delete db
+Init.db('test',+process.argv[2],process.argv[3]);	//if(process.argv[2]) => delete db
 Init.email('mailmailmail');
 main.initServer(); 	
+
+
+
 /*	
 io.sockets.on('connection', function (socket) {
 	socket.on('initServer', function (data) {

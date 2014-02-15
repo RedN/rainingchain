@@ -6,10 +6,15 @@ strike test path
 when map removed cuz not active, BUG
 
 
+//patch for release
+socket.on('uploadMod', function (d) { (set to always true)
+Actor.creation.optionList
+Actor.teleport = function(mort,x,y,map){
+Test.bandwidth.display
+Loop
 
 
-
-
+safe disconnect is List.main but not List.socket
 
 
 remake tileset

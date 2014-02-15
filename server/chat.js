@@ -37,6 +37,7 @@ Chat.parse = function(data){
 
 //add text to chat of player.
 Chat.add = function(key,text,type,extra){
+	if(!List.main[key]) return;
 	List.main[key].social.message.chat = List.main[key].social.message.chat || [];
 	type = type || 'game';
 	extra = extra || {};
@@ -50,7 +51,9 @@ Chat.add = function(key,text,type,extra){
 //when a player wants to send a text
 Chat.send = function(data){
 	var key = data.key;									//source (key)
-	var from = List.all[key].name;                      //source (name)
+	var mort = List.all[key];
+	if(!mort) return;
+	var from = mort.name;                      //source (name)
 	var to = escape.quote(data.to);                     //destination (name)
 	var text = Chat.parse(escape.quote(data.text));      //text
 	var type = escape.quote(data.type);                 //clan || pm || public

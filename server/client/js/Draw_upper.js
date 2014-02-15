@@ -6,10 +6,12 @@ Draw.state = function(){
 	var s = Draw.state.constant();
 	
 	Draw.state.resource(s);
-	s.h += 30;
+	s.y += 5;
+	Draw.state.ability(s);
+	s.y += 30;
 	Draw.state.status(s);
-	
-	//Draw.state.ability(s);
+	s.y += 30;
+	Draw.pvpScore(s);
 }
 
 Draw.state.constant = function(){
@@ -60,16 +62,18 @@ Draw.state.resource.bar = function(numX,numY,w,h,name){	ctxrestore();
 Draw.state.ability = function(s){ ctxrestore();
 	ctx = List.ctx.stage;
 	
-	var size = 30;
+	var size = 25;
 	
 	for(var i in player.ability){
 		if(!player.ability[i]) continue;
-		var numX = s.x + 5 + (+i * (size + 10));
+		var ab =  Db.query('ability',player.ability[i]);
+		if(!ab) continue;
+		var numX = s.x + 5 + (+i * (size + 5));
 		var numY = s.y;
 		var charge = player.abilityChange.chargeClient[i];
 		
 		if(charge !== 1) ctx.globalAlpha = 0.5;
-		Draw.icon(player.ability[i].icon,[numX,numY],size);
+		Draw.icon(ab.icon,[numX,numY],size);
 		ctx.globalAlpha = 1;
 		
 		if(charge !== 1){	//loading circle
@@ -101,14 +105,14 @@ Draw.state.status = function(s){ ctxrestore();
 //}
 
 //{Pvp
-Draw.pvpScore = function(){
+Draw.pvpScore = function(s){
 	var pv = main.pvpScore;
 	ctx.font = '20px Monaco';
 	ctx.fillStyle = 'white';
 	for(var i in pv){
 		var str = 1+(+i) + ':  ' + pv[i].name + '  (' + pv[i].point + ')';
-		var numX = 10;
-		var numY = 75 + 22*i;
+		var numX = s.x+10;	
+		var numY = s.y + 22*i;
 		ctx.fillText(str,numX,numY);
 	}	
 	//main.pvpScore = [{name:'asdasd','point':123},{name:'asdasd','point':123}]

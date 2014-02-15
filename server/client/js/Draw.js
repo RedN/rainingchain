@@ -25,7 +25,6 @@ Draw.loop = function (){
 	
 
 	Draw.screenEffect(main.screenEffect);
-	Draw.pvpScore();
 	
 	Draw.tab();     //bottom right
 	Draw.chat();    //bottom left

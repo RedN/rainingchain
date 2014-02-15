@@ -1,4 +1,5 @@
 Loop = function(){
+	try {
 	Loop.frameCount++;	
     Test.loop();
     
@@ -13,7 +14,7 @@ Loop = function(){
 	Change.send();
 	
 	Loop.logOut();
-	
+	} catch(err){ logError(err); }
 }
 Loop.frameCount = 0; 
 
@@ -108,14 +109,18 @@ Loop.logOut = function(){
 	for(var key in List.socket){
 		var socket = List.socket[key];
 		socket.timer += 40;		
-		if((socket.timer >= 10*60*1000 || socket.toRemove) && !socket.beingRemoved){
+		if(socket.toRemove && !socket.beingRemoved){
 			Sign.off(key,'Disconnected due to inactivity.');
 		}
 		if(socket.removed)	Sign.off.remove(key);
 	}
 }
-
-
+/*
+socket.timer += 40;		
+		if((socket.timer >= 10*60*1000 || socket.toRemove) && !socket.beingRemoved){
+			Sign.off(key,'Disconnected due to inactivity.');
+		}
+*/
 ActiveList = {};
 ActiveList.test = function(mort,obj){
 	//Test used to know if obj should be in activeList of mort.

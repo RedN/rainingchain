@@ -5,7 +5,7 @@ Init.db.map = function(){
 	
 	var mapDb = {
 		'test':[0,0],
-		'ryve':[2,0],
+		//'ryve':[2,0],
 		'tutorial':[1,1],
 		'pvpF4A':[0,0],
 	}
@@ -27,7 +27,7 @@ Map.creation = function(name,info){
 		for(var i = 0 ; i <= info[0]; i++){
 			m.img[layer][i] = [];
 			for(var j = 0 ; j <= info[1]; j++){
-				var str = "img/Map/" + name + "/" + name + layer.capitalize() + '_(' + i + ',' + j + ')' + '.png';
+				var str = "img/map/" + name + "/" + name + layer.capitalize() + '_(' + i + ',' + j + ')' + '.png';
 				var im = newImage(str);
 				Img.preloader.push(str);
 				m.img[layer][i].push(im);

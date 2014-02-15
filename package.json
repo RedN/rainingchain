@@ -1,13 +1,25 @@
 {
-  "name": "chat-example",
-  "version": "0.0.0",
-  "description": "A chat example to showcase how to use `socket.io` with a static `express` server",
-  "main": "server.js",
-  "repository": "",
-  "author": "Mostafa Eweda <mostafa@c9.io>",
-  "dependencies": {
-    "async": "~0.2.8",
-    "express": "~3.2.4",
-    "socket.io": "~0.9.14"
-  }
+	"name": "rainingchain",
+	"subdomain": "rainingchain",
+	"scripts": {
+		"start": "app.js"
+	},
+	"version": "0.10.11-20",
+	"engines": {
+		"node": "0.10.x"
+	},
+	"domains": [
+		"rainingchain.com",
+		"www.rainingchain.com"
+	],
+	"dependencies": {
+		"astar": "0.0.x",
+		"async": "0.2.x",
+		"crypto": "0.0.x",
+		"express": "3.2.x",
+		"mongojs": "0.9.x",
+		"nodemailer": "0.6.x",
+		"socket.io": "0.9.x",
+		"request": "2.21.x"
+	}
 }

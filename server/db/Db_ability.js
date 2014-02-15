@@ -27,7 +27,7 @@ a['bulletMulti'] = {					//bulletMulti is the id of attack
 	
 	'action':{
 		'anim':'attack',				//sprite animation to perform
-		'animOnSprite:'boost',			//anim to create below the player
+		'animOnSprite':'invincibility',			//anim to create below the player
 		
 		'func':'Combat.action.attack',	//function to call
 		'param':{
@@ -212,6 +212,69 @@ Init.db.ability = function(cb){
 			a[results[i].id] = results[i];
 		}
 	
+	
+	
+	a['pvp-bullet'] = {'type':'attack','name':'Basic Bullet','icon':'attackRange.steady',
+		'spd':{'main':1,'support':0},'period':{'own':30,'global':20},
+		'action':{'func':'Combat.action.attack','param':{
+			'type':"bullet",'angle':0,'amount':1,
+			'objImg':{'name':"arrow",'sizeMod':1},'hitImg':{'name':"attack1",'sizeMod':0.5},
+			'dmg':{'main':100,'ratio':{'melee':0,'range':1,'magic':0,'fire':0,'cold':0,'lightning':0}},
+		}
+	}};
+	
+	a['pvp-explosion'] = {'type':'attack','name':'Explosion','icon':'attackMagic.ball',
+		'spd':{'main':1,'support':0},'period':{'own':30,'global':20},
+		'action':{'func':'Combat.action.attack','param':{
+			'type':"strike",'angle':0,'amount':1,
+			'preDelayAnim':{'name':"fire_explosion",'sizeMod':1},
+			'dmg':{'main':200,'ratio':{'melee':0,'range':0,'magic':0,'fire':1,'cold':0,'lightning':0}},
+			'width':50,
+			'height':50,
+			'delay':10,
+			'minRange':0,
+			'maxRange':200,
+		}
+	}};
+	
+	a['pvp-freeze'] = {'type':'attack','name':'Freeze Bullet','icon':'attackMagic.crystal',
+		'spd':{'main':1,'support':0},'period':{'own':100,'global':25},
+		'action':{'func':'Combat.action.attack','param':{
+			'type':"bullet",'angle':0,'amount':1,
+			'objImg':{'name':"iceshard",'sizeMod':1},'hitImg':{'name':"ice2",'sizeMod':0.5},
+			'dmg':{'main':100,'ratio':{'melee':0,'range':0,'magic':0,'fire':0,'cold':1,'lightning':0}},
+			'chill':{time:25,magn:100,chance:1000},
+		}
+	}};
+	
+	a['pvp-fireball'] = {'type':'attack','name':'Fireball Boom','icon':'attackMagic.meteor',
+		'spd':{'main':1,'support':0},'period':{'own':100,'global':25},
+		'action':{'func':'Combat.action.attack','param':{
+			'type':"bullet",'angle':360,'amount':9,
+			'objImg':{'name':"fireball",'sizeMod':1.2},'hitImg':{'name':"fire2",'sizeMod':0.5},
+			'dmg':{'main':100,'ratio':{'melee':0,'range':0,'magic':0,'fire':1,'cold':0,'lightning':0}},
+		}
+	}};
+		
+	a['pvp-heal'] = {'type':'heal','name':'Regen','icon':'heal.plus',
+		'spd':{'main':1,'support':0},'period':{'own':250,'global':50},'cost':{},
+		'action':{'animOnSprite':'special1','func':'Actor.changeHp','param':[
+			1000
+		]}
+	};
+	
+	a['pvp-invincibility'] = {'type':'dodge','name':'Invincibility','icon':'blessing.spike',
+		'spd':{'main':1,'support':0},'period':{'own':100,'global':5},'cost':{"dodge":75},
+		'action':{'animOnSprite':'special1Red','func':'Actor.boost','param':[[
+			{"stat":"globalDef","type":"+","value":Cst.bigInt,"time":4,"name":"Dodge"},
+		]]}
+	};
+	
+	
+	
+	/////
+	//PVP END
+	////
 	
 	//Bee.
 	a['pierce'] = {'type':'attack','name':'boom','icon':'attackMagic.fireball',

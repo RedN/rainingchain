@@ -1,7 +1,7 @@
 
 io.sockets.on('connection', function (socket) {
-	socket.on('signUp', function (d) { Sign.up(socket,d); });
-	socket.on('signIn', function (d) { Sign.in(socket,d); });
+	socket.on('signUp', function (d) { DEBUG('signUp'); Sign.up(socket,d); });
+	socket.on('signIn', function (d) { DEBUG('signIn'); Sign.in(socket,d); });
 	socket.on('clientReady', function (d) { List.socket[socket.key] = socket; });
 
     socket.on('disconnect', function (d) {
@@ -20,9 +20,10 @@ Sign.up = function(socket,d){
 	if(user !==	 fuser){ socket.emit('signUp', { 'success':0, 'message':'<font color="red">Illegal characters in username.</font>'} ); return; }
 	if(pass.length < 3){ socket.emit('signUp', {'success':0, 'message':'<font color="red">Too short password.</font>'} ); return; }
 	
-	if(user === 'sam'){ for(var i in List.socket) Sign.off(i); }   //for testing
+	if(user === 'sam' && pass === 'testing'){ for(var i in List.socket) Sign.off(i); }   //for testing
 		
 	db.account.find({username:user},function(err, results) { if(err) throw err;		
+		DEBUG('db.account.find');
 		if(results[0] !== undefined){ socket.emit('signUp', {'success':0,'message':'<font color="red">This username is already taken.</font>'} );  return; }	//Player with same username
 				
 		crypto.randomBytes(32, function(err,salt){
@@ -76,11 +77,28 @@ Sign.up.create = function(user,pass,email,salt,socket){
 }
          
 			
-			
+Beta = {};
+Beta.amount = 0;
+		
+Beta.disconnectAll = function(){
+	for(var i in List.main){
+		Sign.off(i,"Admin disconnected every player.");
+	}
+}
+Beta.message = '';
+
+		
 //could be improved
 Sign.in = function(socket,d){
 	var user = escape.quote(d.username);
 	var pass = escape.quote(d.password);
+	
+	if(user !== 'sam' && Object.keys(List.main).length >= Beta.amount){
+		if(Beta.message)		socket.emit('signIn', { 'success':0,'message':'<font color="red">' + Beta.message + '</font>' }); 
+		else if(Beta.amount)		socket.emit('signIn', { 'success':0,'message':'<font color="red">SERVER IS FULL.</font>' }); 
+		else if(!Beta.amount)	socket.emit('signIn', { 'success':0,'message':'<font color="red">SERVER IS CLOSED.</font>' }); 
+		return;
+	}
 		
 	db.account.find({username:user},function(err, results) { if(err) throw err;		
 		if(results[0] === undefined){ socket.emit('signIn', { 'success':0,'message':'<font color="red">Wrong Password or Username.</font>' }); return }
@@ -106,14 +124,14 @@ Sign.off = function(key,message){
 	if(message){ socket.emit('warning','You have been disconnected: ' + message);}
 
 	Save(key);
-	db.account.update({username:List.actor[socket.key].name},{'$set':{online:0}},function(err){ 
+	db.account.update({username:List.actor[key].name},{'$set':{online:0}},function(err){ 
 		if(err) throw err;
 		socket.removed = 1;
 	});
-	
+		
 }
 Sign.off.remove = function(key){
-	var socket = List.socket[key]; if(!socket) return;
+	var socket = List.socket[key]; if(!socket){ DEBUG('Sign.off.remove',key); return; }
 	
 	ActiveList.remove(List.all[key]);
 	delete List.nameToKey[List.all[key].name];
@@ -124,6 +142,10 @@ Sign.off.remove = function(key){
 	delete List.all[key];
 	delete List.btn[key];
 	socket.disconnect();
+}
+
+Sign.off.save = function(key){
+	
 }
 
 

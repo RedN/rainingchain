@@ -309,7 +309,7 @@ Combat.hitIf = {};
 
 Combat.targetIf.global = function(atk,def){
 	//Used first in every target if test
-	return atk.id !== def.id 
+	return atk && def && atk.id !== def.id 
 	&& atk.parent !== def.id 
 	&& !def.dead 
 	&& def.combat 
@@ -373,6 +373,15 @@ Combat.hitIf.global = Combat.targetIf.global;
 
 
 
+
+/*
+Beta.resetAll = function(){
+
+
+
+
+
+*/
 
 
 

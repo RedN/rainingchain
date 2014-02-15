@@ -284,7 +284,8 @@ Init.db.map = function (){
 		m.playerEnter.main = function(key,map){
 			var mort = List.all[key];
 			Actor.permBoost(mort,'pvp',[
-				{stat:'bullet-spd',value:1,type:'+'}
+				{stat:'bullet-spd',value:1,type:'+'},
+				{stat:'globalDmg',value:9,type:'+'},
 			]);		
 			mort.hitIf = 'player';
 			
@@ -313,6 +314,7 @@ Init.db.map = function (){
 		
 		m.loop.main = function(map,hotspot,variable,cst){
 			if(Loop.interval(100)){
+				try {
 				var lowest = Date.now()-60*1000;	//remove kill if older than 1min
 				for(var i = variable.pvpKill.length-1; i>= 0; i--){
 					if(variable.pvpKill[i].time < lowest) variable.pvpKill = variable.pvpKill.slice(i+1);
@@ -336,6 +338,9 @@ Init.db.map = function (){
 				for(var i in List.map[map].list){
 					if(List.main[i]) List.main[i].pvpScore = variable.pvpScore;
 				}
+				
+				
+				} catch(err){ logError(err)}
 			}
 			
 		

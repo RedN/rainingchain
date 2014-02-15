@@ -230,7 +230,47 @@ Actor.permBoost.compile = function(b){
 
 //}
 
-//{Map Interaction
+//{Map Interaction	
+Actor.teleport = function(mort,x,y,map){
+	//Teleport player. if no map specified, stay in same map.
+	mort.x = x;
+	mort.y = y;
+	
+	if(!map){ //regular teleport
+		ActiveList.remove(mort);
+		return; 
+	}		
+	
+	if(!map.have("@"))	map += '@MAIN'; 			//main instance
+	if(map[map.length-1] === '@') map += mort.team;	//team instance
+	if(map.have("@@"))	map += mort.name; 			//alone instance
+	
+	if(mort.map === map){ //regular teleport
+		ActiveList.remove(mort);
+		return; 
+	}
+	
+	if(!List.map[map]){	//test if need to create instance
+		var model = map.slice(0,map.indexOf('@'));
+		var version = map.slice(map.indexOf('@')+1);
+		Map.creation(model,version); 
+	}
+	
+	var oldmap = List.map[mort.map];
+	for(var i in oldmap.playerLeave) oldmap.playerLeave[i](mort.id,List.map[mort.map]);
+	
+	delete List.map[mort.map].list[mort.id];
+	mort.map = map;	
+	List.map[mort.map].list[mort.id] = mort.id;
+	
+	var newmap = List.map[mort.map];
+	for(var i in newmap.playerEnter) newmap.playerEnter[i](mort.id,List.map[mort.map]);
+	
+	ActiveList.remove(mort);
+
+	//Chat.add(mort.id,"You leave " + oldmap.name + " and you enter " + newmap.name + '.');
+}
+
 Actor.talk = function(mort,enemyId){
 	if(List.all[enemyId].dialogue){
 		List.all[enemyId].dialogue.func(mort.id);
@@ -353,46 +393,6 @@ Actor.removeOption = function(mort,option){	//option is object or name
 		}
 	}
 }	
-	
-Actor.teleport = function(mort,x,y,map){
-	//Teleport player. if no map specified, stay in same map.
-	mort.x = x;
-	mort.y = y;
-	
-	if(!map){ //regular teleport
-		ActiveList.remove(mort);
-		return; 
-	}		
-	
-	if(!map.have("@"))	map += '@MAIN'; 			//main instance
-	if(map[map.length-1] === '@') map += mort.team;	//team instance
-	if(map.have("@@"))	map += mort.name; 			//alone instance
-	
-	if(mort.map === map){ //regular teleport
-		ActiveList.remove(mort);
-		return; 
-	}
-	
-	if(!List.map[map]){	//test if need to create instance
-		var model = map.slice(0,map.indexOf('@'));
-		var version = map.slice(map.indexOf('@')+1);
-		Map.creation(model,version); 
-	}
-	
-	var oldmap = List.map[mort.map];
-	for(var i in oldmap.playerLeave) oldmap.playerLeave[i](mort.id,List.map[mort.map]);
-	
-	delete List.map[mort.map].list[mort.id];
-	mort.map = map;	
-	List.map[mort.map].list[mort.id] = mort.id;
-	
-	var newmap = List.map[mort.map];
-	for(var i in newmap.playerEnter) newmap.playerEnter[i](mort.id,List.map[mort.map]);
-	
-	ActiveList.remove(mort);
-
-	Chat.add(mort.id,"You leave " + oldmap.name + " and you enter " + newmap.name + '.');
-}
 
 Actor.pickDrop = function (mort,id){
 	var inv = List.main[mort.id].invList;

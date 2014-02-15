@@ -39,20 +39,20 @@ Change.send = function(){
 		
 		//Anim
 		//note: remove map and viewedif from .target and slot?
+		//ts("Anim.creation('fire2',{x:p.x,y:p.y,map:p.map,viewedIf:'true'})")	
 		for(var i in List.anim){
-			
-			var anim = List.anim[i];
+			var anim = deepClone(List.anim[i]);
 			var testTarget = anim.target;
 			if(typeof testTarget === 'string'){ testTarget = List.all[testTarget]; }	//aka target is an obj
 			//else target is already in form {x:1,y:1,map:1}
 			
-			if(testTarget && ActiveList.test(player,testTarget)){
-				if(typeof anim.target === 'string'){ anim.target = testTarget.publicId; }
-				
+			if(!testTarget) continue;
+			
+			if(player.id === testTarget.id || ActiveList.test(player,testTarget)){
+				if(typeof anim.target === 'string'){ anim.target = testTarget.publicId; }				
 				anim = Change.send.init.anim(anim);
 				sa.a.push(anim); 
 			}	
-		//ts("Anim.creation('fire2',{x:p.x,y:p.y,map:p.map})")	
 		}
 		
 		
@@ -180,7 +180,7 @@ Change.send.init.anim = function(anim){
 	delete anim.target.viewedIf;
 	anim.target.x = Math.round(anim.target.x);
 	anim.target.y = Math.round(anim.target.y);
-	return anim;
+	return anim;		//otherwise fuck anim for 2nd+ player
 };
 
 //########################################
@@ -245,9 +245,8 @@ Change.send.convert.ability = function(list){
 
 Change.send.convert.abilityChangeClient = function(info){
 	var tmp = '';
-	for(var i in info){
+	for(var i in info)
 		tmp += info[i] === 1 ? 'R' : Math.round(info[i]*35).toString(36).slice(0,1);
-	}
 	return tmp;	
 }
 

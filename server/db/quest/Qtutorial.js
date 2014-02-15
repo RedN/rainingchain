@@ -120,7 +120,6 @@ tut.variable = {
 };
 		
 tut.load = function(map,hotspot,variable,cst){
-	console.log(db);
 	//grave
 	Actor.creation({'xymm':hotspot.h,
 		"category":"system","variant":"grave"
@@ -251,18 +250,7 @@ tut.loop =  function(map,hotspot,variable,cst){
 	
 }
 
-tut.playerEnter = function(key,map,hotspot,variable,cst){
-	Chat.add(key,"you entered" + map);
-	
 
-}	
-	
-tut.playerLeave = function(key,map,hotspot,variable,cst){
-	Chat.add(key,"you leave" + map);
-	
-	
-
-}	
 
 
 exports.quest = q;

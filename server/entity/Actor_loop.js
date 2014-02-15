@@ -68,7 +68,7 @@ Actor.loop.ability = function(m){
 		}
 		
 		//Client
-		//m.abilityChange.chargeClient[i] = (charge[id] >= s.period.own) ? 1 : (charge[id] / s.period.own);
+		m.abilityChange.chargeClient[i] = (charge[id] >= s.period.own) ? 1 : (charge[id] / s.period.own);
 	
 		//Perform
 		if(press && charge[id] >= s.period.own && m.abilityChange.globalCooldown <= 0){
@@ -89,7 +89,9 @@ Actor.performAbility = function(mort,ab,mana,reset){
 	
 	//Anim
 	if(ab.action.anim) Sprite.change(mort,{'anim':ab.action.anim});
-	if(ab.action.animOnSprite)	Anim.creation(ab.action.animOnSprite,mort,1);
+	if(ab.action.animOnSprite){
+		Anim.creation(ab.action.animOnSprite,mort.id,1);
+	}
 	
 	//Do Ability Action (ex: Combat.action.attack)
 	applyFunc.key(mort.id,ab.action.func,ab.action.param);
@@ -101,6 +103,7 @@ Actor.performAbility.resetCharge = function(mort,ab){
 	mort.abilityChange.globalCooldown =  ab.period.global * (ab.spd.main / mort.atkSpd.main.mm(0.01) + ab.spd.support / mort.atkSpd.support.mm(0.01));
 	
 	//Reset the ability and related abilities
+	return;
 	for(var j in ab.reset){	//'attack':0,'summon':1
 		for(var k in mort.ability){
 			if(!mort.ability[k]) continue;
@@ -161,6 +164,14 @@ Actor.loop.status = function(mort){
 	Actor.loop.status.burn(mort);
 	Actor.loop.status.bleed(mort);
 	Actor.loop.status.confuse(mort);
+	Actor.loop.status.chill(mort);
+}
+
+Actor.loop.status.chill = function(mort){
+	var status = mort.status.chill.active;
+	if(status.time > 0){ 
+		status.time--;	//the actual effect is a boost
+	}
 }
 
 Actor.loop.status.knock = function(mort){
