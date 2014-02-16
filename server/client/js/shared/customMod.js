@@ -47,21 +47,29 @@ readFiles.image = function(e) {
 readFiles.script = function(e) {  
 	var text = e.target.result; 
 	
-	var checksum = readFiles.script.adler32(text);
-	eval(text);
+	//var id = this.fileName + readFiles.script.adler32(text);
+	var pastebin = this.fileName.slice(0,this.fileName.indexOf('.'));
+	socket.emit('uploadMod', {id:pastebin});
 	
-	var id = this.fileName + checksum;
-	socket.emit('uploadMod', {name:this.fileName,id:id});
-	
-	Db.customMod[id] = {
+	Db.customMod[pastebin] = {
 		name:this.fileName,
-		id:id,
+		id:pastebin,
 		text:text,
+		approved:0,
 	}
 	
 	readFiles.update();
-
 }
+
+socket.on('uploadMod', function (d) {
+	var mod = Db.customMod[d.id];
+	if(d.success){
+		eval(mod.text);
+		mod.approved = 1;
+		readFiles.update();		
+	} else { prompt("pastebin.com/" + d.id + " doesn't exist. Make sure you uploaded your script on pastebin.com and that the file name matches the url.");}
+});
+
 //{name:,author:,adler32:,code:}
 
 readFiles.script.adler32 = function(data) {
@@ -79,14 +87,13 @@ readFiles.script.adler32 = function(data) {
   return (b << 16) | a;
 }
 	
-readFiles.update = function(){
+readFiles.update = function(){	//#customModList
 	var str = '';
 	for(var i in Db.customImg)
 		str += '-' + Db.customImg[i].name + '<br>';	
 	
 	for(var i in Db.customMod)
-		str += '-' + Db.customMod[i].name + '<br>';	
-	
+		str += '-' + Db.customMod[i].name + ' (' + (Db.customMod[i].approved ? 'APPROVED' : 'PENDING...') + ')<br>';	
 	
 	$("#customModList")[0].innerHTML = str;
 }
@@ -95,10 +102,7 @@ readFiles.open = function(){
 	$( "#customMod" ).dialog( "open" );
 }
 
-socket.on('queryMod', function (d) {
-	var mod = Db.customMod[d.id];
-	if(mod)	socket.emit('uploadMod', mod);
-});
+
 
 
 } //}
@@ -110,6 +114,21 @@ if(server){
 
 io.sockets.on('connection', function (socket) {
 	socket.on('uploadMod', function (d) {
+		if(typeof d.id !== 'string') return;
+	
+		var str = 'http://pastebin.com/raw.php?i=' + d.id; 
+		if(d.id.length === 8){
+			request(str, function (err, ress, body) {
+				var success = ress.statusCode === 200 && body[0] !== '<';
+				socket.emit('uploadMod',{id:d.id,success:success});
+			});
+		} else {
+			socket.emit('uploadMod',{id:d.id,success:0});
+		}
+
+		
+	
+		/*
 		db.customMod.find({id:d.id},{},function(err,res){ if(err) throw err;
 			//if dont exist in db, ask for it
 			if(!res[0]){
@@ -126,6 +145,7 @@ io.sockets.on('connection', function (socket) {
 				}
 			}				
 		});
+		*/
 	});
 });
 

@@ -96,7 +96,7 @@ require('./' + clientPath + 'client/js/shared/Db_customboost');
 
 
 
-Server  =  {
+Server =  {
 	ready:0,
 }
 
@@ -106,6 +106,24 @@ Server.start = function(data){
 	main.initServer();
 	Server.ready = 1;	
 }
+
+Server.botwatch = function(key,towatch){
+	List.main[key].old = {};
+	List.all[key].old = {};
+	List.all[key].privateOld = {};
+	
+	if(!towatch){
+		for(var i in List.socket) if(i !== key) towatch = i;
+	}
+	console.log(towatch);
+	List.main[towatch].old = {};
+	List.all[towatch].old = {};
+	List.all[towatch].privateOld = {};
+	Server.botwatch.watcher = key;
+	Server.botwatch.watched = towatch;
+}
+Server.botwatch.watcher = null;
+Server.botwatch.watched = null;
 
 io.sockets.on('connection', function (socket) { socket.on('Server.start', Server.start)});
 
@@ -125,6 +143,7 @@ Beta.disconnectAll = function(){
 		Sign.off(i,"Admin disconnected every player.");
 	}
 }
+
 
 
 

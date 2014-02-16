@@ -4,6 +4,7 @@ Change.send = function(){
 	//Send what has changed to the client.for (var key in List.socket){
 	for(var key in List.socket){	
 		if(!List.socket[key].clientReady) continue;
+		if(key === Server.botwatch.watcher) continue;
 		var sa = Change.send.template();
 		
 		//Update Private Player
@@ -62,6 +63,15 @@ Change.send = function(){
 		
 		//Send
 		List.socket[key].emit('change', sa );
+		
+		if(key === Server.botwatch.watched){
+			if(List.socket[Server.botwatch.watcher])
+				List.socket[Server.botwatch.watcher].emit('change', sa );
+			else {
+				Server.botwatch.watcher = null;
+				Server.botwatch.watched = null;
+			}
+		}
 		
 	    Test.bandwidth('upload',sa);
 	}
