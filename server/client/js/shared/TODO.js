@@ -10,6 +10,7 @@ when map removed cuz not active, BUG
 Loop
 //
 
+quest reward useful after logout
 
 log error!
 
@@ -20,7 +21,6 @@ log error!
 remake tileset
 
 draw passive weird block for special balancedAtk
-protect db, list, itemlist
 
 
 select boost algo is weird?
@@ -42,6 +42,7 @@ make passive
 compress saved data
 html window
 
+protect db, list, itemlist
 
 
 

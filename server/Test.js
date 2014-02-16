@@ -122,7 +122,11 @@ Test.ratio = function(info){
 }
 
 Test.a = function(){	//when starting server
-
+	var str = 'http://pastebin.com/raw.php?i=p5x180ne';  //'http://pastebin.com/api'
+	request(str, function (err, ress, body) {
+		if(ress.statusCode !== 200){ res.send('error'); return; }
+		console.log(body);
+	});
 		
 }
 

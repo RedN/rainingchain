@@ -480,8 +480,7 @@ Draw.context = function (){ ctxrestore();
 		if(!top){
 			hc.innerHTML = text;
 			hc.style.left = (Input.mouse.x + 25).mm(0,Cst.WIDTH-hc.offsetWidth) + 'px';
-			hc.style.top = (Input.mouse.y + 25).mm(0,Cst.HEIGHT-25) + 'px';
-			console.log(hc.offsetWidth);
+			hc.style.top = (Input.mouse.y + 25).mm(0,Cst.HEIGHT-hc.offsetHeight) + 'px';
 		} else {
 			hc.style.left = Cst.WIDTH/2-150 + 'px'
 			hc.style.top = "25px"

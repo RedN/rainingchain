@@ -12,6 +12,8 @@ var http = require('http');
 var path = require('path');
 var socketio = require('socket.io');
 var express = require('express');
+request = require('request');
+	
 crypto = require('crypto');
 astar = require('astar');
 
