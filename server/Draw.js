@@ -24,7 +24,7 @@ Draw.actor = function (key){
 				'textTop':1,
 			};
 			
-			if(mort.optionList){
+			if(mort.optionList && !mort.combat){
 				info['right'] = {'func':'Button.optionList','param':mort.optionList};
 			}
 			for(var i in mort.onclick){

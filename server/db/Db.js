@@ -94,8 +94,9 @@ Init.db = function(data){
 }
 
 
-Init.email = function(mailpsw){
-	nodemailer = require("nodemailer").createTransport("SMTP",{service: "Gmail",auth: {user: "rainingchainmail@gmail.com",pass: mailpsw}});
+Init.email = function(data){
+	if(!data.email) return;
+	nodemailer = require("nodemailer").createTransport("SMTP",{service: "Gmail",auth: {user: "rainingchainmail@gmail.com",pass: data.email}});
 
 	nodemailer.email = function(to,subj,text){
 		db.account.find({username:to},function(err, res) { if(err) throw err;

@@ -53,7 +53,10 @@ Sign = {};
 Sign.in = function(){
 	var user = $("#lg-username")[0].value;
 	var pass = $("#lg-password")[0].value;
-	socket.emit('signIn', { 'username': user,'password': pass });
+	if(!window.chrome) Sign.log("This game is only compatible with Google Chrome.<br>"+
+	"You are currently using " + navigator.browserVersion + '.<br>' +
+	'You can download Google Chrome at <a href="https://www.google.com/chrome/">www.google.com/chrome/</a>');
+	else socket.emit('signIn', { 'username': user,'password': pass });
 }
 
 Sign.up = function (){

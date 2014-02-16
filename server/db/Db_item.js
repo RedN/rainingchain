@@ -52,7 +52,7 @@ Init.db.item = function (cb){
 					{'name':'Tele Alone','func':'Actor.teleport','param':[1241*2,1111*2,'test@@']},
 			]};
 		
-	a['bugged-drop'] = {'name':'I AM ERROR','icon':'system.square'};
+	a['bugged-drop'] = {'name':'I AM ERR0R','icon':'system.square'};
 	
 	a['lobster'] = {'name':'Lobster','icon':'system.square'};
 	a['wood'] = {'name':'wood','icon':'system.square'};	

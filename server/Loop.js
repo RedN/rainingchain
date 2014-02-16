@@ -106,21 +106,19 @@ Loop.Group = function(){
 
 Loop.logOut = function(){
 	//Check inactivity of players 
-	for(var key in List.socket){
-		var socket = List.socket[key];
+	for(var i in List.socket){
+		var socket = List.socket[i];
 		socket.timer += 40;		
-		if(socket.toRemove && !socket.beingRemoved){
-			Sign.off(key,'Disconnected due to inactivity.');
+		if((socket.timer >= 10*60*1000 || socket.toRemove) && !socket.beingRemoved){
+			Sign.off(i,'Disconnected due to inactivity.');
 		}
-		if(socket.removed)	Sign.off.remove(key);
+		if(socket.removed)	Sign.off.remove(i);
+	}
+	for(var i in List.main)	if(!List.socket[i]){
+		Sign.off.remove.safe(i);
 	}
 }
-/*
-socket.timer += 40;		
-		if((socket.timer >= 10*60*1000 || socket.toRemove) && !socket.beingRemoved){
-			Sign.off(key,'Disconnected due to inactivity.');
-		}
-*/
+
 ActiveList = {};
 ActiveList.test = function(mort,obj){
 	//Test used to know if obj should be in activeList of mort.

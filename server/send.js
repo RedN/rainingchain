@@ -3,7 +3,7 @@ Change = {};
 Change.send = function(){
 	//Send what has changed to the client.for (var key in List.socket){
 	for(var key in List.socket){	
-		
+		if(!List.socket[key].clientReady) continue;
 		var sa = Change.send.template();
 		
 		//Update Private Player

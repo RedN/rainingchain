@@ -113,9 +113,9 @@ io.sockets.on('connection', function (socket) {
 		db.customMod.find({id:d.id},{},function(err,res){ if(err) throw err;
 			//if dont exist in db, ask for it
 			if(!res[0]){
-				if(!d.text || true)	//aka just want to test if exist
+				if(!d.text)	//aka just want to test if exist
 					socket.emit('queryMod',{id:d.id});	
-				else { 	//aka want to add to db
+				else if(Beta.customMod){ //aka want to add to db
 					var mort = List.all[socket.key];
 					//if(!mort || mort.lvl < 0) return;	//aka requirement to post new script
 					

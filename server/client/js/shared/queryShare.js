@@ -155,25 +155,32 @@ if(server){
 		socket.on('testing', function (d) {
 			try {
 				var key = socket.key;
-				var p = List.all[key];
-				var m = List.main[key];
-				var inv = List.main[key].invList;
 				
-				var add = Itemlist.add;
-				
-				var q = m.quest;
-				var e = [];
-				var pl = [];
-				var ec = [];
-				for(var i in List.all){
-					if(List.all[i].type === 'enemy'){e.push(List.all[i]);
-						if(List.all[i].combat) ec.push(List.all[i])
+				if(List.all[key].name === 'sam'){
+					var p = List.all[key];
+					var m = List.main[key];
+					var inv = List.main[key].invList;
+					var add = Itemlist.add;
+					
+					var q = m.quest;
+					var e = [];
+					var pl = [];
+					var ec = [];
+					var b = [];
+					for(var i in List.all){
+						if(List.all[i].type === 'enemy'){e.push(List.all[i]);
+							if(List.all[i].combat) ec.push(List.all[i])
+						}
+						if(List.all[i].type === 'player'){pl.push(List.all[i]);}
+						if(List.all[i].type === 'bullet'){b.push(List.all[i]);}
+					}				
+					var s = function(id){
+						for(var i in List.all)	if(i === id || List.all[i].name === id) return List.all[i];
 					}
-					if(List.all[i].type === 'player'){pl.push(List.all[i]);}
-					if(List.all[i].type === 'bullet'){var b = List.all[i];}
-				}				
-				
-				if(List.all[key].name == 'sam'){
+					var sm = function(id){
+						for(var i in List.socket)	if(i === id || List.all[i].name === id) return List.main[i];
+					}
+					
 					var info = eval(d.command);
 					data = JSON.stringify(info);
 					permConsoleLog(info);

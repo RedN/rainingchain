@@ -7,7 +7,8 @@ io.sockets.on('connection', function (socket) {
 		if(Server.ready) Sign.in(socket,d); 
 	});
 	socket.on('clientReady', function (d) { 
-		List.socket[socket.key] = socket; 
+		if(!List.socket[socket.key]) return;
+		List.socket[socket.key].clientReady = 1; 
 	});
 
     socket.on('disconnect', function (d) {
@@ -126,8 +127,9 @@ Sign.off = function(key,message){
 	});
 		
 }
+
 Sign.off.remove = function(key){
-	var socket = List.socket[key]; if(!socket){ DEBUG('Sign.off.remove',key); return; }
+	var socket = List.socket[key]; if(!socket){ Sign.off.remove.safe(key); return; }
 	
 	ActiveList.remove(List.all[key]);
 	delete List.nameToKey[List.all[key].name];
@@ -140,8 +142,17 @@ Sign.off.remove = function(key){
 	socket.disconnect();
 }
 
-Sign.off.save = function(key){
+Sign.off.remove.safe = function(key){
+	var mort = List.all[key];
+	if(mort) delete List.nameToKey[List.all[key].name];
 	
+	if(mort && List.map[mort.map]) delete List.map[mort.map].list[key];
+	
+	delete List.actor[key];
+	delete List.socket[key];
+	delete List.main[key];
+	delete List.all[key];
+	delete List.btn[key];
 }
 
 
@@ -200,13 +211,17 @@ Load = function (key,user,socket){
 			//Main
 			Actor.permBoost(player,'Passive',Passive.convert(main.passive));
 			List.main[key] = main;
-			
+			List.btn[key] = [];
+		
 			//Init Socket
 			socket.key = key;
 			socket.toRemove = 0;
 			socket.timer = 0;
 			socket.beingRemoved = 0;
 			socket.removed = 0;
+			socket.clientReady = 0;
+			List.socket[key] = socket;
+			
 			Test.playerStart(key);
 
 			db.account.update({username:player.name},{'$set':{online:1,key:key}},function(err, res) { if(err) throw err
@@ -221,7 +236,6 @@ Load.main = function(key,user,cb){
 		db = db[0];
 		var main = useTemplate(Main.template(key),Load.main.uncompress(db,key));
 		main.name = main.username;
-		List.btn[key] = [];
 		cb(main);
 	});
 }

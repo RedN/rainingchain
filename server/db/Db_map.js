@@ -305,7 +305,7 @@ Init.db.map = function (){
 		m.cst.main = {
 			pvpKill:function(key,killer){
 				Chat.add(killer,"You have killed " + List.all[key].name + ".");
-				Chat.add(key,"You have been killed by " + List.all[killer].name + ".");
+				if(List.all[killer]) Chat.add(key,"You have been killed by " + List.all[killer].name + ".");
 				
 				List.map[List.all[key].map].variable.main.pvpKill.push({'killer':killer,'killed':key,'time':Date.now()});
 				

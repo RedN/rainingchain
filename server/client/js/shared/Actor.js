@@ -268,7 +268,7 @@ Actor.teleport = function(mort,x,y,map){
 	
 	ActiveList.remove(mort);
 
-	//Chat.add(mort.id,"You leave " + oldmap.name + " and you enter " + newmap.name + '.');
+		Chat.add(mort.id,"You leave " + oldmap.name + " and you enter " + newmap.name + '.');
 }
 
 Actor.talk = function(mort,enemyId){

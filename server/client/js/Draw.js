@@ -34,9 +34,10 @@ Draw.loop = function (){
 	
 	Draw.minimap();
 	Draw.state();
-	
+
+	Draw.logout();
 	Draw.optionList();    //option when right-click
-	
+
 	Button.context();	//update for client buttons only
 	Draw.context();     //top left
 	Draw.command();
@@ -70,7 +71,6 @@ Draw.map = function (layer){ ctxrestore();
 	ctx.drawImage(mapXY, startX,startY,tailleX,tailleY,(startX-numX)*SIZEFACT,(startY-numY)*SIZEFACT,tailleX*SIZEFACT,tailleY*SIZEFACT);	
 }
 
-
 Draw.screenEffect = function(fx){
 	if(!fx || fx.time < 0) return;
 	if(fx.name === 'fadeout'){
@@ -85,7 +85,16 @@ Draw.screenEffect = function(fx){
 	fx.time--;
 }
 
-
+Draw.logout = function(){
+	ctx = List.ctx.pop;
+	var size = 24;
+	Draw.icon('system.close',[Cst.WIDTH-size,0],size);
+	Button.creation(0,{
+		'rect':[Cst.WIDTH-size,Cst.WIDTH,0,size],
+		"shiftLeft":{'func':Chat.send.command,'param':['$logout,' + i]},
+		'text':"Shift-Left Click to safely leave the game.",
+	});	
+}
 
 //Option
 Draw.optionList = function(){ ctxrestore();
@@ -469,15 +478,18 @@ Draw.context = function (){ ctxrestore();
 	
 	if(!hc.innerHTML || hc.innerHTML !== text){
 		if(!top){
-			hc.style.left = (Input.mouse.x + 25).mm(0,Cst.WIDTH-25) + 'px';
+			hc.innerHTML = text;
+			hc.style.left = (Input.mouse.x + 25).mm(0,Cst.WIDTH-hc.offsetWidth) + 'px';
 			hc.style.top = (Input.mouse.y + 25).mm(0,Cst.HEIGHT-25) + 'px';
+			console.log(hc.offsetWidth);
 		} else {
 			hc.style.left = Cst.WIDTH/2-150 + 'px'
 			hc.style.top = "25px"
 			text = '<font size="5">' + text + '</font>'
+			hc.innerHTML = text;
 		}
 	}
-	hc.innerHTML = text;
+	
 	if(hc.innerHTML){
 		hc.style.visibility = 'visible';
 	}

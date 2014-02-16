@@ -438,6 +438,15 @@ Command.list['cc,leave'].doc = {
 }
 //}
 
+Command.list['logout'] = function(key){
+	Sign.off(key,"You safely quit the game.");
+}
+Command.list['logout'].doc = {
+	'description':"Safe way to Log Out of the game",
+	'help':0,'param':[
+	],
+}
+
 
 Command.list['dia,option'] = function(key,slot){
 	var main = List.main[key];
