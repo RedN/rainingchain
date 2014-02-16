@@ -1,7 +1,6 @@
 
 real tree/skilling plot
 
-strike test path
 
 when map removed cuz not active, BUG
 
@@ -21,9 +20,9 @@ log error!
 remake tileset
 
 draw passive weird block for special balancedAtk
+make passive
 
-
-select boost algo is weird?
+compress saved data
 
 init drawing css client
 
@@ -37,13 +36,12 @@ easy mode
 cycle system
 
 revamp a*
-make passive
 
-compress saved data
+
 html window
 
 protect db, list, itemlist
-
+contact ppl for music
 
 
 Selling points:

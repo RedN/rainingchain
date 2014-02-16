@@ -164,9 +164,14 @@ Attack.creation.strike = function(s){
 		s.middleX = s.middleX * s.minRange / dist;
 		s.middleY = s.middleY * s.minRange / dist
 	}
+	var pos = Collision.StrikeMap(s,{x:s.x + s.middleX,y:s.y + s.middleY});
+	s.middleX = pos.x*32-s.x;
+	s.middleY = pos.y*32-s.y;
 	
-	//s.crX: where attack for created (player position)
-	//s.middleX : when the strike is. after that, we place 9 points around this middleX. exact position depends on width and height of strike
+	//s.crX: where attack created (player position)
+	//s.middleX : when the strike is depending on mouseX. 
+	//then we check how far we can go in that direction until we face wall.
+	//after that, we place 9 points around this middleX. exact position depends on width and height of strike
 	
 	
 	var w = s.width; var h = s.height;

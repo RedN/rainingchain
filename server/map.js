@@ -46,7 +46,7 @@ Map.creation = function(namemodel,version){
 	
 	List.map[newid] = map;
 	
-	Map.load(namemodel,newid);
+	Map.load(newid);
 	return newid;
 }
 
@@ -81,18 +81,19 @@ Map.creation.all = function(){
 	}
 }
 
-Map.mapMod = {};
+
+
 
 Map.getModel = function(name){
 	return List.map[name].model;
 }	
 
-Map.load = function(modelId,loadedmapId){
-	var map = List.map[loadedmapId];
+Map.load = function(map){
+	var map = List.map[map];
 	
 	for(var i in map.load){
 		map.load[i](
-			loadedmapId,
+			map.id,
 			map.hotspot[i],
 			map.variable[i],
 			map.cst[i]
@@ -103,22 +104,23 @@ Map.load = function(modelId,loadedmapId){
 
 
 Map.instance = {};
-Map.instance.list = function(name){
+Map.instance.list = function(model){
 	var list = [];
 	for(var i in List.map){
-		if(List.map[i].model === name){
+		if(List.map[i].model === model){
 			list.push(List.map[i].id);
 		}
 	}
 	return list;
 }
 
-Map.instance.player = function(name){
-	//return list of players that are in a certain model of instance
-	var list = [];
-	for(var i in List.main){
-		if(List.map[List.all[i].map].name === name){
-			list.push(List.all[i].name);
+Map.instance.player = function(id){
+	//return list of players names that are in a certain model of instance
+	var plist = [];
+	var list = List.map[id].list;
+	for(var i in list){
+		if(List.all[i] && List.all[i].type === 'player'){
+			plist.push(List.all[i].name);
 		}
 	}
 	return list;
@@ -126,18 +128,15 @@ Map.instance.player = function(name){
 
 Map.remove = function(map){
 	if(map.id === map.model) return; //cant delete main maps
-	var id = map.id;
-	for(var i in List.all){
-		if(List.all[i].map === id){
-			removeAny(List.all[i]);
-		}
+	for(var i in map.list){
+		removeAny(List.all[i]);
 	}
-	delete List.map[id];
+	delete List.map[map.id];
 }
 
 
-Map.collisionRect = function(map,rect,type,cb){	//used in map loop
-	var list = List.map[map].list;
+Map.collisionRect = function(id,rect,type,cb){	//used in map loop. return array is no cb, else call func foreach
+	var list = List.map[id].list;
 	var array = [];
 	for(var i in list){
 		var mort = List.all[i];
@@ -146,10 +145,7 @@ Map.collisionRect = function(map,rect,type,cb){	//used in map loop
 		}
 	}
 	if(!cb) return array;
-	
-	for(var i in array){
-		cb(array[i]);	
-	}
+	for(var i in array)	cb(array[i]);	
 }
 
 

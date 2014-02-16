@@ -1,5 +1,6 @@
 
-if(!server){	//{
+if(!server){
+	
 readFiles = function(files) {
 	for (var i in files) { //for multiple files          
 		(function(file) {
@@ -67,7 +68,7 @@ socket.on('uploadMod', function (d) {
 		eval(mod.text);
 		mod.approved = 1;
 		readFiles.update();		
-	} else { prompt("pastebin.com/" + d.id + " doesn't exist. Make sure you uploaded your script on pastebin.com and that the file name matches the url.");}
+	} else { alert("pastebin.com/" + d.id + " doesn't exist. Make sure you uploaded your script on pastebin.com and that the file name matches the url.");}
 });
 
 //{name:,author:,adler32:,code:}
@@ -105,7 +106,7 @@ readFiles.open = function(){
 
 
 
-} //}
+}
 
 //###################################
 //###################################

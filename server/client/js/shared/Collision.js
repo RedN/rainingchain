@@ -181,6 +181,15 @@ Collision.getPath = function(pos1,pos2){	//straight forward path (linear)
 }
 
 
+Collision.StrikeMap = function(strike,target){	//gets farthest position with no collision
+	var end = Collision.getPos(target);
+	var path = Collision.getPath(Collision.getPos(strike),end);
+	
+	for(var i in path){
+		if(Collision.PosMap(path[i],strike.map,'bullet')) return path[i];	
+	}
 
+	return end;
+}
 
 
