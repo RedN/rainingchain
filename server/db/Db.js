@@ -1,51 +1,51 @@
 Init = {};
 
 
+/*
+if at home 
+node app.js : connect to local db
+node app.js 1 : connect mongohq
+node app.js x 1: deleteDb
+
+if using nodejitsu: 
+if try login with rc: connect to public
+for real: need to emit info
 
 
 
-Init.db = function(dbpsw,deleteDb,whatDb){
-	
+
+*/
+
+
+
+
+
+Init.db = function(data){
+	data = data || {};
 	var MONGO = {
-		username: "test",
-		password: dbpsw,
+		username: "public",
+		password: "public",
 		server: 'widmore.mongohq.com',
-		port: '10010',
-		db: 'RainingChain_copy',
-		connectionString: function(){
-			return 'mongodb://'+this.username+':'+this.password+'@'+this.server+':'+this.port+'/'+this.db;
-		},
-		options: {
-			server:{
-				auto_reconnect: true,
-				socketOptions:{
-					connectTimeoutMS:3600000,
-					keepAlive:3600000,
-					socketTimeoutMS:3600000
-				}
-			}
-		}
+		port: '10000',
+		db: 'public',
+		connectionString: function(){return 'mongodb://'+this.username+':'+this.password+'@'+this.server+':'+this.port+'/'+this.db;},
+		options: {server:{auto_reconnect: true,socketOptions:{connectTimeoutMS:3600000,keepAlive:3600000,socketTimeoutMS:3600000}}}
 	};
 	
-	var databaseURI = whatDb ? "localhost:27017/test" : MONGO.connectionString();  
+	
+	var databaseURI;
+	if(!data.db && !data.mongohq) databaseURI = "localhost:27017/test";
+	if(!data.db && data.mongohq) databaseURI = MONGO.connectionString();
+	if(data.db){
+		databaseURI = data.db;
+	}
+	
+	
+
 	var collections = ["customMod","player","main","ability","equip","account","clan",'plan'];
 	
 	db = require("mongojs").connect(databaseURI, collections, MONGO.options);
-	
-	setInterval(function(){
-		db = require("mongojs").connect(databaseURI, collections, MONGO.options);
-	},60*1000);
-	
-	db.on('error', function(err) {
-		console.log("DB connection Error: "+err);
-	});
-	db.on('open', function() {
-		console.log("DB connected");
-	});
-	db.on('close', function(str) {
-		console.log("DB disconnected: "+str);
-	});
-	
+	setInterval(function(){	db = require("mongojs").connect(databaseURI, collections, MONGO.options);},60*1000);	//refresh connection
 	
 	
 	//delete everything in db
@@ -86,7 +86,7 @@ Init.db = function(dbpsw,deleteDb,whatDb){
 
 	db.err = function(err){ if (err) throw err; }
 	
-	if(deleteDb) db.deleteAll();
+	if(data.deletedb) db.deleteAll();
 	//db.deleteAll();
 	//db.filterDb();
 	

@@ -18,8 +18,7 @@ Test.performance = function(){
         Test.performance.oldtime = d;
     }
 };
-Test.performance.active = true;
-Test.performance.active = true;
+Test.performance.active = false;
 Test.performance.oldtime = Date.now();
 Test.performance.frequence = 10*1000/40;
 
@@ -32,8 +31,9 @@ Test.bandwidth = function(type,data){
     }
 	
 }
-Test.bandwidth.upload = {'active':true,log:false,'size':0,logString:""};
-Test.bandwidth.download = {'active':true,log:false,'size':0,logString:""};
+Test.playerAmount = false;
+Test.bandwidth.upload = {'active':false,log:false,'size':0,logString:""};
+Test.bandwidth.download = {'active':false,log:false,'size':0,logString:""};
 Test.bandwidth.frequence = 10*1000/40;
 Test.bandwidth.getSize = function(obj){
     return stringify(obj).length * 2;   //in bytes
@@ -42,7 +42,7 @@ Test.bandwidth.display = function(){
     if(Loop.frameCount % Test.bandwidth.frequence === 0){
         if(Test.bandwidth.upload.active) permConsoleLog('Upload: ' + Math.round(Test.bandwidth.upload.size/1000) + ' K bytes');
         if(Test.bandwidth.download.active) permConsoleLog('Download: ' + Math.round(Test.bandwidth.download.size/1000) + ' K bytes');
-		permConsoleLog("Player Count: " + Object.keys(List.main).length);
+		if(Test.playerAmount)	permConsoleLog("Player Count: " + Object.keys(List.main).length);		
 	}
 }
 

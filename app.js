@@ -2,12 +2,13 @@
 //git push -u origin master
 
 cloud9 = typeof process.env.PORT !== 'undefined';
+nodejitsu = typeof process.env.NODEJITSU !== 'undefined';
 
 //Create Server
-http = require('http');
-path = require('path');
-socketio = require('socket.io');
-express = require('express');
+var http = require('http');
+var path = require('path');
+var socketio = require('socket.io');
+var express = require('express');
 crypto = require('crypto');
 astar = require('astar');
 
@@ -21,19 +22,11 @@ io = socketio.listen(serv); io.set('log level', 1); io.set('heartbeat timeout', 
 if(cloud9){ serv.listen(process.env.PORT, process.env.IP);}	//if using cloud9
 else {serv.listen(3000);}	//if using on own PC, go http://localhost:3000/ 
 
-var clientPath = ''; //'server/';
+var clientPath = 'server/';
 router.use(express.static(path.resolve(__dirname, clientPath + 'client')));
 
 
-
-
-DEBUG = function(text){
-	this['conso'+'le'].log(text);
-}
-
-
-
-
+DEBUG = function(text){ permConsoleLog(text); }
 
 //Require
 require('./' + clientPath + 'client/js/shared/essentialsShare');
@@ -97,18 +90,42 @@ require('./' + clientPath + 'client/js/shared/clanShare');
 require('./' + clientPath + 'client/js/shared/Db_customboost');
 
 
+/*
 Init.db('test',+process.argv[2],process.argv[3]);	//if(process.argv[2]) => delete db
 Init.email('mailmailmail');
 main.initServer(); 	
-
-
-
-/*	
-io.sockets.on('connection', function (socket) {
-	socket.on('initServer', function (data) {
-		Init.db(data.db);
-		Init.email(data.mail);
-		main.initServer(); 	
-	});
-});
 */
+
+Server  =  {
+	ready:0,
+}
+
+Server.start = function(data){
+	Init.db(data);
+	//Init.email(data.mail);
+	main.initServer();
+	Server.ready = 1;	
+}
+
+io.sockets.on('connection', function (socket) { socket.on('Server.start', Server.start)});
+//socket.emit('Server.start',{db:'mongodb://test:test@widmore.mongohq.com:10010/RainingChain_copy'});
+
+
+if(!nodejitsu && !process.argv[4])	Server.start({
+	db:false,
+	mongohq:+process.argv[2],
+	deletedb:process.argv[3],
+});
+
+Beta = {};
+Beta.amount = nodejitsu ? 0 : 64;
+
+Beta.disconnectAll = function(){
+	for(var i in List.main){
+		Sign.off(i,"Admin disconnected every player.");
+	}
+}
+Beta.message = '';
+
+
+
