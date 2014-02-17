@@ -131,7 +131,7 @@ Draw.optionList = function(){ ctxrestore();
 	ctx.strokeStyle="black";
 	ctx.strokeRect(sx,sy,w,nameY);
 	
-	ctx.font="15px Monaco";
+	ctx.font="15px Geo";
 	ctx.fillStyle = "white";
 	ctx.fillText(name,sx+nameX,sy);
 		
@@ -147,7 +147,7 @@ Draw.optionList = function(){ ctxrestore();
 
 
 	//Text + Button
-	ctx.font="14px Monaco";
+	ctx.font="14px Geo";
 	ctx.fillStyle = "yellow";
 		
 	for(var i = 0 ; i < option.length ; i++){
@@ -224,7 +224,7 @@ Draw.chat.main = function(){
 	html.pm.div.style.left = (s.x + s.divX) + 'px'; 
 	html.pm.div.style.top = (s.y + s.divY - s.pmY - s.pmDivY - s.disPmY) + 'px'; 
 	
-	html.pm.text.style.font = s.pmcharY + 'px Monaco';
+	html.pm.text.style.font = s.pmcharY + 'px Geo';
 	html.pm.text.style.width = (s.w - 2*s.divX) + 'px';
 	html.pm.text.style.height = (s.pmY) + 'px'
 	html.pm.text.style.left = s.divX + 'px'; 
@@ -233,7 +233,7 @@ Draw.chat.main = function(){
 	//Clan
 	var str = 'Clan: ';
 	for(var i in main.social.list.clan){ str += main.social.list.clan[i] + '  '; }
-	ctx.font = '15px Monaco';
+	ctx.font = '15px Geo';
 	ctx.fillStyle = 'white';
 	ctx.fillText(str,(s.x + s.divX),(s.y - s.disPmY));
 	
@@ -242,17 +242,17 @@ Draw.chat.main = function(){
 	html.chat.div.style.left = (s.x + s.divX) + 'px'; 
 	html.chat.div.style.top = (s.y + s.divY) + 'px'; 
 	
-	html.chat.text.style.font = s.chatcharY + 'px Monaco';
+	html.chat.text.style.font = s.chatcharY + 'px Geo';
 	html.chat.text.style.width = (s.w - 2*s.divX) + 'px';
 	html.chat.text.style.height = (s.h - 2*s.divY - s.personalChatY) + 'px'
 	html.chat.text.style.left = s.divX + 'px'; 
 	html.chat.text.style.top = s.divY + 'px'; 
 	
-	chatUserName.style.font = s.personalChatY + 'px Monaco';
+	chatUserName.style.font = s.personalChatY + 'px Geo';
 	
 	html.chat.input.size=(50-player.name.length).toString();
 	html.chat.input.maxlength="150";	
-	html.chat.input.style.font = s.personalChatY + 'px Monaco';
+	html.chat.input.style.font = s.personalChatY + 'px Geo';
 	html.chat.input.style.height = s.personalChatY + 'px'
 		
 	html.dialogue.div.style.width = (s.w - 2*s.divX) + 'px';
@@ -287,7 +287,7 @@ Draw.chat.dialogue = function(){
 		html.dialogue.text.style.width = s.w - 2*s.textBorder-s.faceX + 'px';
 		html.dialogue.div.style.left = (s.x + s.divX + s.textBorder + s.faceX) + 'px';
 		ctx.drawImage(Img.face,0,0,96,96,s.facesX,s.y+s.facesY,96,96);
-		ctx.font="20px Monaco";
+		ctx.font="20px Geo";
 		ctx.textAlign = 'center';
 		ctx.fillText(dia.face.name,s.facesX+96/2,s.y+s.facesY+96+5);
 		ctx.textAlign = 'left';
@@ -295,7 +295,7 @@ Draw.chat.dialogue = function(){
 	
 	//Options
 	if(dia.option){
-		ctx.font = s.optionY + 'px Monaco';
+		ctx.font = s.optionY + 'px Geo';
 		for(var i in dia.option){
 			ctx.fillText('-' + dia.option[i].text,s.numX,nY+i*s.optionY);
 			
@@ -367,7 +367,7 @@ Draw.item = function(info,xy,size){
 		
 				
 		ctx.fillStyle = "yellow";
-		ctx.font= size/32*13 + "px Monaco";
+		ctx.font= size/32*13 + "px Geo";
 		ctx.fillText(amount,xy[0],xy[1]+size-2);
 	}
 	

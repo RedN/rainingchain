@@ -1,4 +1,5 @@
 
+
 real tree/skilling plot
 
 
@@ -9,7 +10,6 @@ when map removed cuz not active, BUG
 Loop
 //
 
-quest reward useful after logout
 
 log error!
 

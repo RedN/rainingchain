@@ -68,19 +68,19 @@ Draw.popup.equip.top = function(s){
 	Draw.icon(s.equip.icon,[s.x+2,s.y+2],48);
 	
 	//Draw Name
-	ctx.font="25px Monaco";
+	ctx.font="25px Geo";
 	ctx.fillStyle = s.equip.color;
 	ctx.textAlign = 'center';
 	ctx.fillTextU(s.equip.name,s.x + 150,s.y);
 	ctx.textAlign = 'left';
 	ctx.fillStyle = 'white';
 	
-	ctx.font="15px Monaco";
+	ctx.font="15px Geo";
 	var string = 'Lv:' + s.equip.lvl + '  Orb: +' + round(s.equip.orb.upgrade.bonus*100-100,2) + '% | ' + s.equip.orb.upgrade.amount;
 	ctx.fillText(string,s.x+50+5,s.y+28);
 	
 	//Draw Def/Dmg
-	ctx.font="25px Monaco";
+	ctx.font="25px Geo";
 	ctx.textAlign = 'center';
 	var bar = s.equip.category === 'armor' ? s.equip.def.ratio  : s.equip.dmg.ratio;
 	var num = s.equip.category === 'armor' ? s.equip.def.main :  s.equip.dmg.main;
@@ -99,7 +99,7 @@ Draw.popup.equip.top = function(s){
 
 Draw.popup.equip.boost = function(s){
 	//Boost
-	ctx.font="20px Monaco";
+	ctx.font="20px Geo";
 	ctx.textAlign = 'left';
 	var numY = s.y+80;
 	var sum = 0;
@@ -162,18 +162,18 @@ Draw.popup.plan.top = function(s){
 	
 	//Draw Name
 	ctx.fillStyle = s.equip.color;
-	ctx.font="25px Monaco";
+	ctx.font="25px Geo";
 	ctx.textAlign = 'center';
 	ctx.fillTextU(s.equip.name,s.x+ 150,s.y);
 	ctx.textAlign = 'left';
 	ctx.fillStyle = 'white';
 	
-	ctx.font="15px Monaco";
+	ctx.font="15px Geo";
 	var str = 'Lv:' + s.equip.lvl + ', Rar.: ' + round(s.equip.rarity*100,0) + '%, Qual.:' + round(s.equip.quality*100,0) + '%';
 	ctx.fillText(str,s.x+50+5,s.y+28);
 	
 	//Piece Type
-	ctx.font="25px Monaco";
+	ctx.font="25px Geo";
 	var str = s.equip.piece.capitalize(); 
 	if(s.equip.type) str += ' - ' + s.equip.type.capitalize();
 	ctx.textAlign = 'center';
@@ -192,7 +192,7 @@ Draw.popup.plan.req = function(s){
 	//Skill
 	var fontSize = 20;
 	
-	ctx.font= fontSize + "px Monaco";
+	ctx.font= fontSize + "px Geo";
 	ctx.textAlign = 'left';
 	
 	var count = 0;

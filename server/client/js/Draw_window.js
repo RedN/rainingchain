@@ -28,7 +28,7 @@ Draw.window.main = function(title){ ctxrestore();
 	t.style.textDecoration = 'underline';
 	t.style.width = s.w + 'px';
 	t.style.height = titlesize + 'px';
-	t.style.font = titlesize + 'px Monaco';
+	t.style.font = titlesize + 'px Geo';
 	
 	if(typeof title === 'string'){ t.innerHTML = title; } else {
 		t.style.textDecoration = 'none';
@@ -96,7 +96,7 @@ Draw.window.bank = function (){ ctxrestore();
 	var prefAmount = main.pref.bankTransferAmount;
 	var string = 'Shift-Left Click Amount: ' + prefAmount;
 	
-	ctx.font = '25px Monaco';
+	ctx.font = '25px Geo';
 	ctx.fillText(string,numX-150,numY);
 	Button.creation(0,{
 		"rect":[numX,numX+ctx.measureText(string).width,numY,numY+25],
@@ -140,7 +140,7 @@ Draw.window.stat = function(type){ ctxrestore();
 	ctx = List.ctx.win;
 	if(server){ return; }
 	
-	ctx.font = '22px Monaco';
+	ctx.font = '22px Geo';
 
 	//Content
 	for(var i = 0 ; i < Draw.window.stat.list[type].length ; i++){
@@ -169,7 +169,7 @@ Draw.window.stat = function(type){ ctxrestore();
 		str += Db.customBoost[i].name + ' - ';
 	}
 	str = str.slice(0,-3);
-	ctx.font = '30px Monaco';
+	ctx.font = '30px Geo';
 	ctx.fillText(str,numX,numY);
 	
 	
@@ -279,10 +279,10 @@ Draw.window.stat.hover = function(hover,type){ ctxrestore();
 	var info = Draw.window.stat.list[type][hover];  
 	ctx.fillStyle = 'black';
 	ctx.textAlign = 'center';
-	ctx.font = '25px Monaco';
+	ctx.font = '25px Geo';
 	ctx.fillText(info.name + ':',numX + 200,numY+10);
 	ctx.textAlign = 'left';
-	ctx.font = '25px Monaco';
+	ctx.font = '25px Geo';
 	Draw.icon(info.icon,[numX+50,numY],48);	//not working ?
 	Draw.icon(info.icon,[numX+400-100,numY],48);
 	
@@ -345,7 +345,7 @@ Draw.window.ability.leftSide = function(){ ctxrestore();
 		var numX = s.x + 15;
 		var numY = s.y + 60 + 30 * i;
 		
-		ctx.font = '25px Monaco';
+		ctx.font = '25px Geo';
 		ctx.fillText(Input.key.ability[i][0].toString().keyCodeToName(),numX,numY);
 		
 		var ability = Db.query('ability',player.ability[i]);
@@ -378,7 +378,7 @@ Draw.window.ability.abilityList = function(diffX){ ctxrestore();
 	//Subtitle
 	ha.subtitle.style.left = diffX + 'px'; 
 	ha.subtitle.style.top = 0 + 'px'; 
-	ha.subtitle.style.font = charY + 'px Monaco';
+	ha.subtitle.style.font = charY + 'px Geo';
 	ha.subtitle.style.width = 200 + 'px';
 	ha.subtitle.style.height = charY*1.2 + 'px';
 	
@@ -452,12 +452,12 @@ Draw.window.ability.generalInfo = function(diffX,diffY){ ctxrestore();
 	var charY = 20;
 	gi.style.left = diffX + icon + 10 + 'px'; 
 	gi.style.top = diffY + 'px'; 
-	gi.style.font = charY + 'px Monaco';
+	gi.style.font = charY + 'px Geo';
 	gi.style.width = 500 + 'px';
 	gi.style.height = 100 + 'px';
 	
 	var	str = 
-	'<span style="font:30px Monaco">' + ab.name + '</span>' +	
+	'<span style="font:30px Geo">' + ab.name + '</span>' +	
 	' - Level ' + (ab.lvl || 1) + ' - ( ' + round(25/ab.period.own,2) + ' Cast/S ';
 	if(ab.cost){
 		if(ab.cost.mana){ str += ' - ' + ab.cost.mana + ' Mana'; }
@@ -509,7 +509,7 @@ Draw.window.ability.upgrade = function(diffX,diffY){
 	hu.style.top = diffY + 'px'; 
 	hu.style.width = '400px';
 	hu.style.height = '400px';
-	hu.style.font = 30 + 'px Monaco';
+	hu.style.font = 30 + 'px Geo';
 	
 	var str = 
 	'<span ' + 
@@ -591,7 +591,7 @@ Draw.window.ability.action.attack = function(diffX,diffY){  ctxrestore();
 	var atk = Combat.action.attack.mod(player,deepClone(preatk));
 	
 	var fontSize = 25;	
-	ctx.font = fontSize + 'px Monaco';
+	ctx.font = fontSize + 'px Geo';
 	
 	//Ratio
 	if(atk.dmg.main){
@@ -691,7 +691,7 @@ Draw.window.ability.action.boost = function(diffX,diffY){  ctxrestore();
 	
 	var fontSize = 40;
 	
-	ctx.font = fontSize + 'px Monaco';
+	ctx.font = fontSize + 'px Geo';
 	for(var i in boost[0]){
 		Draw.icon(Db.stat[boost[0][i].stat].icon,[s.zx,s.zy],fontSize);
 		var value = round(boost[0][i].value,2);
@@ -711,7 +711,7 @@ Draw.window.ability.action.summon = function(diffX,diffY){  ctxrestore();
 	s.zy += diffY;
 	var ab = Draw.old.abilityShowed;
 	var info = ab.action.param;
-	ctx.font = '30px Monaco';
+	ctx.font = '30px Geo';
 	
 	var str = 'Summon a ' + info[1].variant + ' ' + info[1].category + ' Level ' + info[1].lvl + ' for ' + round(info[0].time/25,2) + 's. (Up to ' + info[0].maxChild + ')';
 	ctx.fillText(str,s.zx,s.zy);
@@ -752,7 +752,7 @@ Draw.window.quest.upper = function(s,charY,q,mq,hq){
 	hq.info.style.left = icon + 5 + 'px'; 
 	hq.info.style.top = 0 + 'px'; 
 	
-	hq.info.style.font = charY + 'px Monaco';
+	hq.info.style.font = charY + 'px Geo';
 	hq.info.style.width = s.dw/2 - icon - 5 + 'px';
 	hq.info.style.height = charY*4*1.2 + 'px';
 
@@ -775,14 +775,14 @@ Draw.window.quest.hint = function(s,charY,q,mq,hq){
 	//Hint
 	var diffY = 10 + hq.info.style.top.numberOnly(1) + hq.info.style.height.numberOnly(1);
 	
-	ctx.font = charY-2 + 'px Monaco';
+	ctx.font = charY-2 + 'px Geo';
 	ctx.fillStyle = 'black';
 	
 	ctx.fillTextU('Hint:',s.zx-2,s.zy+diffY);
 	hq.hint.style.left = 0 + 'px'; 
 	hq.hint.style.top = diffY + charY + 'px'; 
 	
-	hq.hint.style.font = charY + 'px Monaco';
+	hq.hint.style.font = charY + 'px Geo';
 	hq.hint.style.width = s.dw/2 -10 + 'px'
 	hq.hint.style.height = charY*2*1.2 + 'px'
 	
@@ -794,14 +794,14 @@ Draw.window.quest.description = function(s,charY,q,mq,hq){
 	//Description
 	var diffY = 30 + hq.hint.style.top.numberOnly(1) + hq.hint.style.height.numberOnly(1);
 	
-	ctx.font = charY-2 + 'px Monaco';
+	ctx.font = charY-2 + 'px Geo';
 	ctx.fillStyle = 'black';
 	
 	ctx.fillTextU('Description:',s.zx-2,s.zy+diffY);
 	hq.description.style.left = 0 + 'px'; 
 	hq.description.style.top = diffY + charY + 'px'; 
 	
-	hq.description.style.font = charY + 'px Monaco';
+	hq.description.style.font = charY + 'px Geo';
 	hq.description.style.width = s.dw/2 -10 + 'px'
 	hq.description.style.height = charY*5*1.2 + 'px'
 	
@@ -810,14 +810,14 @@ Draw.window.quest.description = function(s,charY,q,mq,hq){
 
 Draw.window.quest.req = function(s,charY,q,mq,hq){
 	//Requirements	
-	ctx.font = charY-2 + 'px Monaco';
+	ctx.font = charY-2 + 'px Geo';
 	ctx.fillStyle = 'black';
 	ctx.textAlign = 'left';
 	ctx.fillTextU('Requirements:',s.mcx,s.zy);
 	hq.requirement.style.left = s.mdx + 'px'; 
 	hq.requirement.style.top = charY + 'px'; 
 	
-	hq.requirement.style.font = charY + 'px Monaco';
+	hq.requirement.style.font = charY + 'px Geo';
 	hq.requirement.style.width = s.dw/2 + 'px'
 	hq.requirement.style.height = charY*q.requirement.length*1.2 + 'px'
 	
@@ -843,14 +843,14 @@ Draw.window.quest.bonus = function(s,charY,q,mq,hq){
 	//Bonus	
 	var diffY = 30 + hq.requirement.style.top.numberOnly(1) + hq.requirement.style.height.numberOnly(1);
 	
-	ctx.font = charY-2 + 'px Monaco';
+	ctx.font = charY-2 + 'px Geo';
 	ctx.fillStyle = 'black';
 	ctx.textAlign = 'left';
 	
 	hq.bonus.style.left = s.mdx + 'px'; 
 	hq.bonus.style.top = diffY + charY + 'px'; 
 	
-	hq.bonus.style.font = charY + 'px Monaco';
+	hq.bonus.style.font = charY + 'px Geo';
 	hq.bonus.style.width = s.dw/2 + 'px'
 	hq.bonus.style.height = charY*Object.keys(q.bonus).length*1.2 + 'px'
 	
@@ -892,7 +892,7 @@ Draw.window.trade = function (){ ctxrestore();
 	var prefAmount = main.pref.bankTransferAmount;
 	var string = 'X-Amount: ' + prefAmount;
 	
-	ctx.font = '25px Monaco';
+	ctx.font = '25px Geo';
 	ctx.fillText(string,numX,numY);
 	
 	//##################################
@@ -952,7 +952,7 @@ Draw.window.trade = function (){ ctxrestore();
 	
 	
 	ctx.textAlign = "center";
-	ctx.font = "25px Monaco";
+	ctx.font = "25px Geo";
 	ctx.fillStyle = "yellow";
 	ctx.strokeStyle = 'yellow';
 	
@@ -1057,7 +1057,7 @@ Draw.window.passive = function (){ ctxrestore();
 	var s = Draw.window.main({'offensive':0,'defensive':0,'ability':0,'passive':1});	
 	ctx = List.ctx.win;
 	
-	ctx.font = '25px Monaco';
+	ctx.font = '25px Geo';
 	ctx.fillStyle = 'black';
 	
 	var hp = html.passiveWin;
@@ -1069,7 +1069,7 @@ Draw.window.passive = function (){ ctxrestore();
 	var charY = 25;
 	hp.text.style.left = 15 + 'px'; 
 	hp.text.style.top = 5 + 'px'; 
-	hp.text.style.font = 25 + 'px Monaco';
+	hp.text.style.font = 25 + 'px Geo';
 	hp.text.style.width = '125px';
 	hp.text.style.height = 'auto';
 	hp.text.style.backgroundColor = 'white';
@@ -1219,7 +1219,7 @@ Draw.window.passive.hover = function(over){ ctxrestore();
 		var value = 'Value: +' + round(over.value,5);
 		ctx.fillText(value,ssx + 5,ssy+1+25*2);
 	} else {
-		ctx.font = '20px Monaco';
+		ctx.font = '20px Geo';
 		ctx.fillText(st.description,ssx + 5,ssy+1+25*1);
 	}
 }

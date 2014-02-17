@@ -1,5 +1,4 @@
 //Skill
-//testing github
 Skill = {};
 
 Skill.addExp = function(key,skill,amount,bonus){
@@ -15,7 +14,6 @@ Skill.addExp.bulk = function(key,array,bonus){
 		Skill.addExp(key,array[i][0],array[i][0],bonus);
 	}
 }
-
 
 Skill.updateLvl = function(key,sk){
 	var player = List.all[key];

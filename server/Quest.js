@@ -88,7 +88,14 @@ Quest.complete = function(key,id){
 	qp.deathCount = 0;
 }
 
-
+Quest.convert = function(mq){
+	var temp = [];
+	for(var i in mq){
+		if(mq[i].reward) temp.push(mq[i].reward);
+	}
+	temp = Actor.permBoost.compile(temp);
+	return temp;
+}
 
 
 

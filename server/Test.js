@@ -78,12 +78,12 @@ Test.playerStart = function(key){
 	Actor.swapAbility(mort,'pvp-heal',4);
 	Actor.swapAbility(mort,'pvp-invincibility',5);
 	
-	//Actor.teleport(mort,56*32,101*32,"tutorial@MAIN");
-	//mort.respawnLoc = {safe:{x:56*32,y:101*32,map:"tutorial@MAIN"},recent:{x:56*32,y:101*32,map:"tutorial@MAIN"}};
+	Actor.teleport(mort,56*32,101*32,"tutorial@MAIN");
+	mort.respawnLoc = {safe:{x:56*32,y:101*32,map:"tutorial@MAIN"},recent:{x:56*32,y:101*32,map:"tutorial@MAIN"}};
 	
-	mort.respawnLoc = {safe:{x:1000,y:1000,map:"pvpF4A@MAIN"},recent:{x:1000,y:1000,map:"pvpF4A@MAIN"}};
-	Actor.teleport(mort,1000,1000,"tutorial@MAIN");
-	Actor.teleport(mort,1000,1000,"pvpF4A@MAIN");
+	//mort.respawnLoc = {safe:{x:1000,y:1000,map:"pvpF4A@MAIN"},recent:{x:1000,y:1000,map:"pvpF4A@MAIN"}};
+	//Actor.teleport(mort,1000,1000,"tutorial@MAIN");
+	//Actor.teleport(mort,1000,1000,"pvpF4A@MAIN");
 	
 	Chat.add(mort.id,"Note: This is a very early beta. Expect things to change... A LOT.");
 	Chat.add(mort.id,"Control: WADS. (For AZERTY users, change key binding via Pref Tab)");

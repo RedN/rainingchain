@@ -210,6 +210,7 @@ Load = function (key,user,socket){
 			
 			//Main
 			Actor.permBoost(player,'Passive',Passive.convert(main.passive));
+			Actor.permBoost(player,'Quest',Quest.convert(main.quest));
 			List.main[key] = main;
 			List.btn[key] = [];
 		

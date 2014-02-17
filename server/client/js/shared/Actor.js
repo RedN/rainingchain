@@ -212,7 +212,7 @@ Actor.permBoost = function(mort,source,boost){
 	Actor.update.mastery(mort);
 }
 
-Actor.permBoost.compile = function(b){
+Actor.permBoost.compile = function(b){	//if boost same thing, add values
 	var tmp = {};	var temp = [];
 	
 	for(var i in b){

@@ -160,7 +160,7 @@ Draw.tab.equip = function (){ ctxrestore();
 	var vy = 25;
 		
 	ctx.fillStyle = 'white';
-	ctx.font = '18px Monaco';
+	ctx.font = '18px Geo';
 	
 	var array = [
 		['offensive','element.melee'],
@@ -261,7 +261,7 @@ Draw.tab.friend = function(){ ctxrestore();
 	hf.div.style.top = numY + 'px'; 
 	
 	
-	hf.text.style.font = charY + 'px Monaco';
+	hf.text.style.font = charY + 'px Geo';
 	hf.text.style.width = (s.w - 2*divX) + 'px'
 	hf.text.style.height = (s.h - iconY- 2*divY) + 'px'
 	
@@ -383,7 +383,7 @@ Draw.tab.quest = function(){ ctxrestore();
 	html.questTab.div.style.top = numY + 'px'; 
 	html.questTab.div.style.visibility = 'visible';
 	
-	html.questTab.text.style.font = charY + 'px Monaco';
+	html.questTab.text.style.font = charY + 'px Geo';
 	html.questTab.text.style.width = (s.w - 2*divX) + 'px'
 	html.questTab.text.style.height = (s.h - iconY- 2*divX) + 'px'
 	
@@ -432,7 +432,7 @@ Draw.tab.pref = function(){
 	hf.div.style.top = numY + 'px'; 
 	
 	
-	hf.text.style.font = charY + 'px Monaco';
+	hf.text.style.font = charY + 'px Geo';
 	hf.text.style.width = (s.w - 2*divX) + 'px'
 	hf.text.style.height = (s.h - iconY- 2*divY) + 'px'
 	
