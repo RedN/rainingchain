@@ -53,24 +53,7 @@ Loop.Drop = function(){
 
 Loop.Map = function(){
 	for(var i in List.map){
-		//Time Out Instance
-		if(Loop.frameCount % (60*1000/40) === 0){		//each min
-			if(Map.instance.player(i).length === 0){
-				List.map[i].timer -= 60*1000/25;
-				if(List.map[i].timer <= 0){
-					Map.remove(List.map[i]);
-				}
-			}	
-		}
-		
-		for(var j in List.map[i].loop){
-			List.map[i].loop[j](
-				i,
-				List.map[i].hotspot[j],
-				List.map[i].variable[j],
-				List.map[i].cst[j]
-			);
-		}
+		Map.loop(List.map[i]);		
 	}
 }
 
@@ -124,8 +107,8 @@ ActiveList.test = function(mort,obj){
 	//Test used to know if obj should be in activeList of mort.
 	if(!obj){ return false; }
 	if(!obj.viewedIf){ return false; }
-	if(typeof obj.viewedIf === 'function' && !obj.viewedIf(mort.id)){ return false; }
 	if(obj.viewedIf === 'false'){ return false; }
+	if(typeof obj.viewedIf === 'function' && !obj.viewedIf(mort.id)){ return false; }
 	if(typeof obj.viewedIf === 'object' && obj.viewedIf.indexOf(mort.id) === -1){ return false; }
 	if(mort.map !== obj.map){ return false; }
 	if(obj.dead){ return false; }

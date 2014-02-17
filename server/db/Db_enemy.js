@@ -227,7 +227,7 @@ Init.db.enemy = function(){
 		"sprite":{'name':"tree-red",'sizeMod':1},
 		'nevercombat':1,
 		'nevermove':1,
-		'tree':'red',
+		'skillPlot':'tree-red',
 	}; //}
 	//}
 	

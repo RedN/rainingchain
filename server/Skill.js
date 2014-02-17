@@ -58,4 +58,25 @@ Skill.testLvl = function(key,sk,lvl){
 
 
 
+Skill.plot = {
+	'tree-red':{
+		lvl:0,
+		skill:'woodcutting',
+		chance:function(lvl){
+			return 1;			
+		},
+		item:{
+			'wood-0':0.5,
+			'leaf-0':0.5,			
+		}
+	},
+}
+
+
+
+
+
+
+
+
 

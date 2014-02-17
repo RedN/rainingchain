@@ -53,6 +53,13 @@ Test.playerStart = function(key){
 	var inv = List.main[key].invList;
 	var mort = List.all[key];
     
+
+}
+
+Test.firstLog = function(key){
+	var inv = List.main[key].invList;
+	var mort = List.all[key];
+    
 	
 	/*
 	Itemlist.add(inv,'gold');
@@ -78,11 +85,11 @@ Test.playerStart = function(key){
 	Actor.swapAbility(mort,'pvp-heal',4);
 	Actor.swapAbility(mort,'pvp-invincibility',5);
 	
-	Actor.teleport(mort,56*32,101*32,"tutorial@MAIN");
-	mort.respawnLoc = {safe:{x:56*32,y:101*32,map:"tutorial@MAIN"},recent:{x:56*32,y:101*32,map:"tutorial@MAIN"}};
+	//Actor.teleport(mort,56*32,101*32,"tutorial@MAIN");
+	//mort.respawnLoc = {safe:{x:56*32,y:101*32,map:"tutorial@MAIN"},recent:{x:56*32,y:101*32,map:"tutorial@MAIN"}};
 	
 	//mort.respawnLoc = {safe:{x:1000,y:1000,map:"pvpF4A@MAIN"},recent:{x:1000,y:1000,map:"pvpF4A@MAIN"}};
-	//Actor.teleport(mort,1000,1000,"tutorial@MAIN");
+	Actor.teleport(mort,1000,1000,"tutorial@MAIN");
 	//Actor.teleport(mort,1000,1000,"pvpF4A@MAIN");
 	
 	Chat.add(mort.id,"Note: This is a very early beta. Expect things to change... A LOT.");
@@ -95,6 +102,9 @@ Test.playerStart = function(key){
 	Chat.add(mort.id,"Shift + Right Click: x9 Fireball.");
 	Chat.add(mort.id,"F: Instant 100% Healing.");
 	Chat.add(mort.id,"Space: Invincibility for 4 frames.");
+	
+
+
 }
 
 //Call every frame for every actor

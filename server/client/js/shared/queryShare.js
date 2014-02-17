@@ -174,12 +174,19 @@ if(server){
 						if(List.all[i].type === 'player'){pl.push(List.all[i]);}
 						if(List.all[i].type === 'bullet'){b.push(List.all[i]);}
 					}				
-					var s = function(id){
+					var S = function(id){
 						for(var i in List.all)	if(i === id || List.all[i].name === id) return List.all[i];
 					}
 					var sm = function(id){
 						for(var i in List.socket)	if(i === id || List.all[i].name === id) return List.main[i];
 					}
+					var a = function(id){
+						for(var i in List.actor)	
+							if(List.actor[i].map !== p.map) continue;
+							if(i === id || List.actor[i].name.have(id)) return List.actor[i];
+					}
+					
+					
 					
 					var info = eval(d.command);
 					data = JSON.stringify(info);

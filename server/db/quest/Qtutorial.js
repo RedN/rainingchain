@@ -140,11 +140,7 @@ tut.load = function(map,hotspot,variable,cst){
 	});
 	
 	//tree
-	Actor.creation({'xym':hotspot.e,
-		"category":"tree","variant":"red"
-	});
-	
-	
+
 	
 	//drop staff
 	Drop.creation({'xym':hotspot.o,
@@ -205,6 +201,25 @@ tut.load = function(map,hotspot,variable,cst){
 	});
 	
 };
+tut.playerEnter = function(key,m){
+	Actor.creation({'xym':m.hotspot.Qtutorial.e,
+		"category":"tree","variant":"red",extra:{
+			viewedIf:[key],		
+		}
+	});
+	
+	Actor.creation({'xym':m.hotspot.Qtutorial.h,
+		"category":"tree","variant":"red",extra:{
+			viewedIf:[key],		
+		}
+	});
+	Actor.creation({'xym':m.hotspot.Qtutorial.q,
+		"category":"tree","variant":"red",extra:{
+			viewedIf:[key],		
+		}
+	});
+	console.log(1);
+}
 
 tut.loop =  function(map,hotspot,variable,cst){
 	if(Loop.interval(25)){

@@ -206,7 +206,10 @@ Actor.creation.optionList = function(e){
 		e.treasure = {func:e.treasure,list:[]}
 	}
 	
-	if(e.tree)	ol.option.push({'name':'Cut Tree',"func":'Actor.cutTree',"param":[e.id]});
+	if(e.skillPlot){
+		ol.option.push({'name':'Harvest',"func":'Actor.harvest',"param":[e.id]});
+	}	
+	
 	if(e.switch){
 		ol.option.push({'name':'Pull Switch',"func":'Actor.activateSwitch',"param":[e.id]});
 		e.switch.state = e.switch.state || 'off';

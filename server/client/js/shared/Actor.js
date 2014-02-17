@@ -317,15 +317,27 @@ Actor.pushing = function(pusher,beingPushed){
 	
 }
 
-Actor.cutTree = function(mort,tree){	//quick fix...
-	if(Collision.distancePtPt(mort,List.all[tree]) > 100){ Chat.add(mort.id,"You're too far away."); return;}
-	
-	Itemlist.add(List.main[mort.id].invList,'wood-0',1);
-	Sprite.change(List.all[tree],{'initAnim':'cut'});
-	Chat.add(mort.id,"You manage to cut a branch off this Red Tree.");
-	Actor.removeOption(List.all[tree],'Cut Tree');
 
+Actor.harvest = function(mort,eid){	
+	var e = List.all[eid];
+	var plot = Skill.plot[e.skillPlot];
+	if(!plot) return;
+	
+	var inv = List.main[mort.id].invList;
+	var lvl = mort.skill.lvl[plot.skill];
+	
+	if(Collision.distancePtPt(mort,e) > 150){ Chat.add(mort.id,"You're too far away."); return;}
+	if(!Itemlist.empty(inv,1)){ Chat.add(mort.id,"Your inventory is full."); return;}
+	if(lvl < plot.lvl) {Chat.add(mort.id,"You need at least level " + plot.lvl + ' ' + plot.skill.capitalize() + " to harvest this resource."); return;}
+	if(Math.random() > plot.chance(lvl)) {Chat.add(mort.id,"You failed to harvest this resource."); return;}
+	
+	var item = plot.item.random();
+	Itemlist.add(inv,item,1);
+	Sprite.change(e,{'initAnim':'off'});
+	Chat.add(mort.id,"You manage to harvest this resource.");
+	Actor.removeOption(e,'Harvest');
 }
+
 
 Actor.setRespawn = function(mort,wp){
 	Chat.add(mort.id,"You have changed your respawn point. Upon dying, you will now be teleported here.");

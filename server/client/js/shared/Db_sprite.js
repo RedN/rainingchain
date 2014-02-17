@@ -197,11 +197,10 @@ Init.db.sprite = function(){
     	}},
 		
 		"tree-red":{"src":"picture/red_tree.png","size":2,"side":[0],
-    	"preBumperBox":[ -32,32,-40,40 ],"preHitBox":[ -32,32,-40,40 ],'defaultAnim':'ready',
+    	"preBumperBox":[ -32,32,-40,40 ],"preHitBox":[ -32,32,-40,40 ],'defaultAnim':'on',
 		"anim": {
-    		"walk":{"startY":0,"frame":1,"sizeX":64,"sizeY":80,"dir":1,"spd":0,"next":"walk"}, 
-			"ready":{"startY":0,"frame":1,"sizeX":64,"sizeY":80,"dir":1,"spd":0,"next":"ready"},
-			"cut":{"startY":80,"frame":1,"sizeX":64,"sizeY":80,"dir":1,"spd":0,"next":"cut"},  		  			
+    		"on":{"startY":0,"frame":1,"sizeX":64,"sizeY":80,"dir":1,"spd":0,"next":"on"},
+			"off":{"startY":80,"frame":1,"sizeX":64,"sizeY":80,"dir":1,"spd":0,"next":"off"},  		  			
     	}},
 		
 		"switchBox":{"src":"picture/switch.png","size":2,"side":[0],

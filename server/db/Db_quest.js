@@ -205,8 +205,9 @@ Quest.creation = function(q){
 	for(var i in q.map)	for(var j in q.map[i])	Db.map[i][j][q.id] = q.map[i][j];
 	
 	Db.enemy[q.id] = {};
-	for(var i in q.enemy) Db.enemy[q.id][i] = q.enemy[i];
-	
+	for(var i in q.enemy){
+		Db.enemy[q.id][i] = q.enemy[i];
+	}
 	for(var i in q.item){
 		q.item[i].id = q.id+'-'+i;
 		Item.creation(q.item[i]);

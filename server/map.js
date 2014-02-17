@@ -82,7 +82,24 @@ Map.creation.all = function(){
 }
 
 
-
+Map.loop = function(map){
+	//Time Out Instance
+	if(Loop.frameCount % (60*1000/40) === 0){		//each min
+		if(Map.instance.player(map.id).length === 0){
+			map.timer -= 60*1000/25;
+			if(map.timer <= 0)	Map.remove(map);
+		}	
+	}
+	
+	for(var j in map.loop){
+		map.loop[j](
+			map.id,
+			map.hotspot[j],
+			map.variable[j],
+			map.cst[j]
+		);
+	}
+}
 
 Map.getModel = function(name){
 	return List.map[name].model;

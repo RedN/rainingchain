@@ -281,7 +281,7 @@ Init.db.map = function (){
 		m.hotspot.pvpRespawn = {"a":{"x":368,"y":336},"b":{"x":1264,"y":336},"c":{"x":880,"y":752},"d":{"x":336,"y":1264},"e":{"x":1072,"y":1328}} 
 
 		
-		m.playerEnter.main = function(key,map){
+		m.playerEnter.main = function(key,m){
 			var mort = List.all[key];
 			Actor.permBoost(mort,'pvp',[
 				{stat:'bullet-spd',value:1,type:'+'},
@@ -289,9 +289,9 @@ Init.db.map = function (){
 			]);		
 			mort.hitIf = 'player';
 			
-			mort.respawnLoc.recent = map.hotspot.pvpRespawn;
+			mort.respawnLoc.recent = m.hotspot.pvpRespawn;
 			
-			mort.deathFunc = map.cst.main.pvpKill;
+			mort.deathFunc = m.cst.main.pvpKill;
 		}
 		
 		m.playerLeave.main = function(key){
