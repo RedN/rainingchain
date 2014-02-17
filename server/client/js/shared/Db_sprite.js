@@ -183,11 +183,10 @@ Init.db.sprite = function(){
     	}},
 		
 		"chest":{"src":"picture/chest.png","size":2,"side":[0],
-    	"preBumperBox":[ -16,16,-16,16 ],"preHitBox":[ -16,16,-16,16 ],
+    	"preBumperBox":[ -16,16,-16,16 ],"preHitBox":[ -16,16,-16,16 ],'defaultAnim':'off',
 		"anim": {
-    		"walk":{"startY":0,"frame":1,"sizeX":32,"sizeY":32,"dir":1,"spd":0,"next":"walk"},  
-			"close":{"startY":0,"frame":1,"sizeX":32,"sizeY":32,"dir":1,"spd":0,"next":"close"},
-			"open":{"startY":32,"frame":1,"sizeX":32,"sizeY":32,"dir":1,"spd":0,"next":"open"},			
+    		"on":{"startY":32,"frame":1,"sizeX":32,"sizeY":32,"dir":1,"spd":0,"next":"on"},
+			"off":{"startY":0,"frame":1,"sizeX":32,"sizeY":32,"dir":1,"spd":0,"next":"off"},			
     	}},
 		
 		"block1x1-black":{"src":"picture/block2x2Fix.png","size":0.5,"side":[0],

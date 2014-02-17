@@ -202,7 +202,7 @@ Quest.creation = function(q){
 	
 	Db.dialogue[q.id] = {};
 	for(var i in q.dialogue) Db.dialogue[q.id][i] = q.dialogue[i];		
-	for(var i in q.map)	for(var j in q.map[i])	Db.map[i][j][q.id] = q.map[i][j];
+	for(var i in q.map)	Db.map[i].addon[q.id] = q.map[i];
 	
 	Db.enemy[q.id] = {};
 	for(var i in q.enemy){

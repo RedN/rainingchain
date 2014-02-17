@@ -257,15 +257,19 @@ Actor.teleport = function(mort,x,y,map){
 	}
 	
 	var oldmap = List.map[mort.map];
-	for(var i in oldmap.playerLeave) oldmap.playerLeave[i](mort.id,List.map[mort.map]);
+	for(var i in oldmap.addon)
+		if(oldmap.addon[i].playerLeave)
+			oldmap.addon[i].playerLeave(mort.id,mort.map,oldmap.addon[i].spot,oldmap.addon[i].variable,oldmap);
 	
 	delete List.map[mort.map].list[mort.id];
 	mort.map = map;	
 	List.map[mort.map].list[mort.id] = mort.id;
 	
 	var newmap = List.map[mort.map];
-	for(var i in newmap.playerEnter) newmap.playerEnter[i](mort.id,List.map[mort.map]);
-	
+	for(var i in newmap.addon)
+		if(newmap.addon[i].playerEnter)
+			newmap.addon[i].playerEnter(mort.id,mort.map,newmap.addon[i].spot,newmap.addon[i].variable,newmap);
+			
 	ActiveList.remove(mort);
 
 		Chat.add(mort.id,"You leave " + oldmap.name + " and you enter " + newmap.name + '.');
@@ -360,7 +364,7 @@ Actor.openChest = function(mort,eid){	//need work
 	Chat.add(mort.id,"You opened the chest.");
 		
 	if(chest.func(mort.id) !== false){
-		Sprite.change(e,{'initAnim':'open'});
+		Sprite.change(e,{'initAnim':'on'});
 		chest.list.push(mort.id);
 	};
 }
@@ -372,16 +376,16 @@ Actor.activateSwitch = function(mort,eid){
 	
 	var sw = e.switch;
 	if(!sw) return;
-	var oldstate = e.switch.state;
-	e.switch.state = e.switch.state === 'off' ? 'on' : 'off';
+	var oldstate = sw.state;
+	sw.state = sw.state === 'off' ? 'on' : 'off';
 	
-	if(e.switch[e.switch.state]) e.switch[e.switch.state](mort.id,e,List.map[e.map]);
+	if(sw[sw.state]) sw[sw.state](mort.id,e,List.map[e.map]);
 	
-	Sprite.change(e,{'initAnim':e.switch.state});
-	Chat.add(mort.id,"You turned the switch " + e.switch.state + '.');
+	Sprite.change(e,{'initAnim':sw.state});
+	Chat.add(mort.id,"You turned the switch " + sw.state + '.');
 		
-	if(!e.switch[oldstate]){
-		Actor.removeOnClick(mort,'Pull Switch');
+	if(!sw[oldstate]){
+		Actor.removeOption(e,'Pull Switch');
 	}
 
 

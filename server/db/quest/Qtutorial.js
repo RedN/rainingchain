@@ -105,32 +105,30 @@ q.enemy["demon"] = {  //{
 q.map.tutorial = {};
 var tut = q.map.tutorial;
 
-tut.hotspot = {"m":{"x":1904,"y":272},"n":[864,1024,352,384],"l":{"x":1840,"y":464},"k":{"x":944,"y":656},"q":{"x":1056,"y":1184},"e":{"x":576,"y":1680},"j":{"x":992,"y":1696},"i":{"x":976,"y":1872},"a":{"x":240,"y":1904},"f":{"x":544,"y":1968},"o":{"x":912,"y":2288},"b":{"x":2176,"y":2464},"c":{"x":2080,"y":2496},"d":{"x":1552,"y":2544},"g":{"x":1760,"y":2880},"h":{"x":1824,"y":3136},"p":{"x":1808,"y":3248}};
-
-tut.cst = {
-	arrow:{'type':"bullet",'angle':15,'amount':1,'objImg':{'name':"arrow",'sizeMod':1},'hitImg':{'name':"ice2",'sizeMod':0.5},
-		'dmg':{'main':10000,'ratio':{'melee':100,'range':0,'magic':0,'fire':0,'cold':0,'lightning':0}}},	
-	fireball:{maxTimer:20,'type':"bullet",'angle':0,'amount':1,'objImg':{'name':"fireball",'sizeMod':1},'hitImg':{'name':"ice2",'sizeMod':0.5},
-		'dmg':{'main':10000,'ratio':{'melee':100,'range':0,'magic':0,'fire':0,'cold':0,'lightning':0}}},		
-};
+tut.spot = {"m":{"x":1904,"y":272},"n":[864,1024,352,384],"l":{"x":1840,"y":464},"k":{"x":944,"y":656},"q":{"x":1056,"y":1184},"e":{"x":576,"y":1680},"j":{"x":992,"y":1696},"i":{"x":976,"y":1872},"a":{"x":240,"y":1904},"f":{"x":544,"y":1968},"o":{"x":912,"y":2288},"b":{"x":2176,"y":2464},"c":{"x":2080,"y":2496},"d":{"x":1552,"y":2544},"g":{"x":1760,"y":2880},"h":{"x":1824,"y":3136},"p":{"x":1808,"y":3248}};
 
 tut.variable = {
 	rotation: -9,
 	angle:0,
+	arrow:{'type':"bullet",'angle':15,'amount':1,'objImg':{'name':"arrow",'sizeMod':1},'hitImg':{'name':"ice2",'sizeMod':0.5},
+		'dmg':{'main':10000,'ratio':{'melee':100,'range':0,'magic':0,'fire':0,'cold':0,'lightning':0}}},	
+	fireball:{maxTimer:20,'type':"bullet",'angle':0,'amount':1,'objImg':{'name':"fireball",'sizeMod':1},'hitImg':{'name':"ice2",'sizeMod':0.5},
+		'dmg':{'main':10000,'ratio':{'melee':100,'range':0,'magic':0,'fire':0,'cold':0,'lightning':0}}},		
+
 };
 		
-tut.load = function(map,hotspot,variable,cst){
+tut.load = function(map,spot,v,m){
 	//grave
-	Actor.creation({'xymm':hotspot.h,
+	Actor.creation({'xymm':spot.h,
 		"category":"system","variant":"grave"
 	});
 	
-	Actor.creation({'xym':hotspot.q,
+	Actor.creation({'xym':spot.q,
 		"category":"system","variant":"grave"
 	});
 	
 	//chest
-	Actor.creation({'xym':hotspot.m,
+	Actor.creation({'xym':spot.m,
 		"category":"system","variant":"chest",extra:{
 			'treasure':function(key){
 				Itemlist.add(List.main[key].invList,'Qtutorial-Aiceshard',1);
@@ -139,25 +137,22 @@ tut.load = function(map,hotspot,variable,cst){
 		}
 	});
 	
-	//tree
-
-	
 	//drop staff
-	Drop.creation({'xym':hotspot.o,
+	Drop.creation({'xym':spot.o,
 		"item":"Qtutorial-Pstaff","amount":1,'timer':1/0
 	});
 	
 	//block for switch
-	Actor.creation({'xym':hotspot.b,
+	Actor.creation({'xym':spot.b,
 		"category":"block","variant":"2x2"
 	});
 	//Block to block arrow
-	Actor.creation({'xym':hotspot.f,
+	Actor.creation({'xym':spot.f,
 		"category":"block","variant":"2x2"
 	});
 	
 	//Block that disppear when bee dead
-	Actor.creation({'xym':hotspot.j,
+	Actor.creation({'xym':spot.j,
 		"category":"block","variant":"2x2Fix",extra:{
 			'viewedIf':function(key){
 				if(List.all[key].type !== 'player') return true;
@@ -167,7 +162,7 @@ tut.load = function(map,hotspot,variable,cst){
 	});
 	
 	//First monster
-	Actor.creation({'xym':hotspot.i,
+	Actor.creation({'xym':spot.i,
 		"category":"Qtutorial","variant":"bee",extra:{
 			'deathFunc':function(key){
 				List.main[key].quest['Qtutorial'].beeDead = true;						
@@ -176,12 +171,12 @@ tut.load = function(map,hotspot,variable,cst){
 	});
 	
 	//Bees Near Chest
-	Actor.creation.group({'xym':hotspot.l,'respawn':25*100},[
+	Actor.creation.group({'xym':spot.l,'respawn':25*100},[
 		{'amount':3,"category":"Qtutorial","variant":"bee","lvl":0,'modAmount':0}
 	]);
 	
 	//Boss Fire
-	Actor.creation({'xym':hotspot.k,
+	Actor.creation({'xym':spot.k,
 		"category":"Qtutorial","variant":"demon",extra:{
 			deathFunc:function(key){
 				List.main[key].quest.Qtutorial.bossDead = true;
@@ -190,30 +185,30 @@ tut.load = function(map,hotspot,variable,cst){
 	});
 	
 	//Switch
-	Actor.creation({'xym':hotspot.c,
+	Actor.creation({'xym':spot.c,
 		"category":"system","variant":"switch",extra:function(mort){
 			mort.switch = {
 				on:function(key,mortid,map){
-					map.variable.Qtutorial.rotation *= -1;		
+					map.addon.Qtutorial.variable.rotation *= -1;		
 				}
 			};
 		}
 	});
 	
 };
-tut.playerEnter = function(key,m){
-	Actor.creation({'xym':m.hotspot.Qtutorial.e,
+tut.playerEnter = function(key,map,spot,v,m){
+	Actor.creation({'xym':spot.e,
 		"category":"tree","variant":"red",extra:{
 			viewedIf:[key],		
 		}
 	});
 	
-	Actor.creation({'xym':m.hotspot.Qtutorial.h,
+	Actor.creation({'xym':spot.h,
 		"category":"tree","variant":"red",extra:{
 			viewedIf:[key],		
 		}
 	});
-	Actor.creation({'xym':m.hotspot.Qtutorial.q,
+	Actor.creation({'xym':spot.q,
 		"category":"tree","variant":"red",extra:{
 			viewedIf:[key],		
 		}
@@ -221,9 +216,9 @@ tut.playerEnter = function(key,m){
 	console.log(1);
 }
 
-tut.loop =  function(map,hotspot,variable,cst){
+tut.loop =  function(map,spot,v,m){
 	if(Loop.interval(25)){
-		Map.collisionRect(map,hotspot.n,'player',function(key){
+		Map.collisionRect(map,spot.n,'player',function(key){
 			var mort = List.all[key];
 			if(List.main[key].quest.Qtutorial.bossDead){
 				Chat.add(key,'Congratz! You have beaten the tutorial!.');
@@ -237,28 +232,28 @@ tut.loop =  function(map,hotspot,variable,cst){
 	if(Loop.interval(6)){
 		//Arrow
 		Attack.creation(
-			{hitIf:'player-simple',xym:hotspot.a,angle:Math.randomML()*2},
-			useTemplate(Attack.template(),cst.arrow)
+			{hitIf:'player-simple',xym:spot.a,angle:Math.randomML()*2},
+			useTemplate(Attack.template(),v.arrow)
 		);
 	}
 
 	if(Loop.interval(4)){
 		//Fireball
-		variable.angle += variable.rotation;
-		variable.angle = variable.angle+360;
+		v.angle += v.rotation;
+		v.angle = v.angle+360;
 		Attack.creation(
-			{hitIf:'player-simple',xym:hotspot.d,angle:variable.angle},
-			useTemplate(Attack.template(),cst.fireball)
+			{hitIf:'player-simple',xym:spot.d,angle:v.angle},
+			useTemplate(Attack.template(),v.fireball)
 		);
 		
 		Attack.creation(
-			{hitIf:'player-simple',xym:hotspot.d,angle:variable.angle+120},
-			useTemplate(Attack.template(),cst.fireball)
+			{hitIf:'player-simple',xym:spot.d,angle:v.angle+120},
+			useTemplate(Attack.template(),v.fireball)
 		);
 		
 		Attack.creation(
-			{hitIf:'player-simple',xym:hotspot.d,angle:variable.angle+240},
-			useTemplate(Attack.template(),cst.fireball)
+			{hitIf:'player-simple',xym:spot.d,angle:v.angle+240},
+			useTemplate(Attack.template(),v.fireball)
 		);
 		
 	}

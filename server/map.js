@@ -22,8 +22,12 @@ Map.creation = function(namemodel,version){
 	var newid = namemodel + '@' + version;
 	var model = Db.map[namemodel];
 	
-	var hs = deepClone(model.hotspot);
-	for(var i in hs) for(var j in hs[i]) hs[i][j].map = newid;
+	var newaddon = deepClone(model.addon);
+	for(var i in newaddon){
+		for(var j in newaddon[i].spot)
+			newaddon[i].spot[j].map = newid;
+	}
+	
 	
 	var map = {
 		id:newid,
@@ -34,14 +38,7 @@ Map.creation = function(namemodel,version){
 		timer:version === 'MAIN' ? 1/0 : 5*60*1000/25,
 		list:{},		//acts like List.all (for faster activeList)
 		
-		loop:model.loop,
-		load:model.load,
-		hotspot:hs,
-		variable:deepClone(model.variable),
-		cst:model.cst,
-		
-		playerLeave:model.playerLeave,
-		playerEnter:model.playerEnter,
+		addon:newaddon,
 	};
 	
 	List.map[newid] = map;
@@ -65,13 +62,7 @@ Map.creation.model = function(map){	//create the model that will be in Db.map | 
 	map.grid.actor = JSON.parse(strGrid.replaceAll('0','a').replaceAll('1','0').replaceAll('2','0').replaceAll('a','1'));
 	map.grid.bullet = JSON.parse(strGrid.replaceAll('0','a').replaceAll('1','0').replaceAll('2','1').replaceAll('a','1'));
 	
-	map.variable = map.variable || {};
-	map.cst = map.cst || {};
-	map.hotspot = map.hotspot || {};
-	map.load = map.load || {};
-	map.loop = map.loop || {};
-	map.playerEnter = map.playerEnter || {};
-	map.playerLeave = map.playerLeave || {};
+	map.addon = map.addon || {};
 	return map;
 }
 
@@ -91,13 +82,14 @@ Map.loop = function(map){
 		}	
 	}
 	
-	for(var j in map.loop){
-		map.loop[j](
-			map.id,
-			map.hotspot[j],
-			map.variable[j],
-			map.cst[j]
-		);
+	for(var j in map.addon){
+		if(map.addon[j].loop)
+			map.addon[j].loop(
+				map.id,
+				map.addon[j].spot,
+				map.addon[j].variable,
+				map.addon[j]
+			);
 	}
 }
 
@@ -108,13 +100,14 @@ Map.getModel = function(name){
 Map.load = function(map){
 	var map = List.map[map];
 	
-	for(var i in map.load){
-		map.load[i](
-			map.id,
-			map.hotspot[i],
-			map.variable[i],
-			map.cst[i]
-		);
+	for(var j in map.addon){
+		if(map.addon[j].load)
+			map.addon[j].load(
+				map.id,
+				map.addon[j].spot,
+				map.addon[j].variable,
+				map.addon[j]
+			);
 	}
 	
 }
