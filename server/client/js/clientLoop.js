@@ -101,10 +101,9 @@ removeAny = function(i){
 Help = {};
 Help.open = function(elID){
 	main.help = '';
-	var el = document.getElementById('HELP' + elID);
-	if(!el) return
 	$( "#help" ).dialog( "open" );
-	el.scrollIntoView(true);
+	var el = document.getElementById('HELP' + elID);
+	if(el) el.scrollIntoView(true);
 	document.getElementById('gameDiv').scrollIntoView(true);		
 }
 

@@ -176,6 +176,11 @@ socket.on('warning', function (message) {
 });
 
 Init.help = function(data){
+	data = data.replaceAll('<<<','<h3>');
+	data = data.replaceAll('>>>','</h3>');
+	data = data.replaceAll('<<','<h2>');
+	data = data.replaceAll('>>','</h2>');
+
 	//Help aka documentation. Called once at start of game. wiki-like parser	
 	for(var i = 0 ; i < data.length ; i++){
 		
@@ -203,7 +208,9 @@ Init.help = function(data){
 					var tag = data.slice(start+2,end-1);
 					data = data.replaceAll(
 					'\\{\\{' + tag + '\\}\\}',
-					'<br><span class="helpTag" id="HELP' + tag + '" >' + tag + '</span><br><br>'
+					'<div data-role="collapsible"' + 
+					'<span class="helpTag" id="HELP' + tag + '" >' + tag + '</span>'
+					+ '</div>'
 					);
 					break;
 				}

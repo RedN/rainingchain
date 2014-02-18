@@ -49,15 +49,49 @@ div{
 }
 
 /*HELP*/
+.help h2 {
+	font-size:40px;
+}
+
+.help h3 {
+	font-size:30px;
+}
+
 .helpLink{
 	text-decoration:underline; 
 }
 
 .helpTag{
 	font-family:"Geo";
-	font-size:40px;
+	font-size:20px;
 	font-weight:100;
 }
+summary::-webkit-details-marker {
+ color: #00ACF3;
+ font-size: 125%;
+ margin-right: 2px;
+}
+summary:focus {
+	outline-style: none;
+}
+article > details > summary {
+	font-size: 28px;
+	margin-top: 16px;
+}
+details > p {
+	margin-left: 24px;
+}
+details details {
+	margin-left: 36px;
+}
+details details summary {
+	font-size: 16px;
+}
+
+/*End Help*/
+
+
+
 
 .onlyText{
 	background-color:transparent;

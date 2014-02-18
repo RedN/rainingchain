@@ -249,7 +249,7 @@ Combat.collision.pierce = function(b){
 	b.globalDmg *= b.pierce.dmgReduc;
 }
 
-Combat.collision.leech = function(mort,b,element){
+Combat.collision.leech = function(mort,b){
 	var info = b.leech;
 	
 	var player = List.all[b.parent]; if(!player) return;

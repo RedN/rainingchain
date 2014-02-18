@@ -268,19 +268,19 @@ Init.db.stat = function(){
 		},		
 	'drain-time':{
 		'icon':'status.drain',
-		'name':'Bleed Time',
+		'name':'Drain Time',
 		'boost':{'base':1,'stat':['bonus','drain','time'],},
 		'playerOnly':1,
 		},
 	'drain-magn':{
 		'icon':'status.drain',
-		'name':'Bleed Magn',
+		'name':'Drain Magn',
 		'boost':{'base':0.05,'stat':['bonus','drain','magn'],},
 		'playerOnly':1,
 		},	
 	'drain-chance':{
 		'icon':'status.drain',
-		'name':'Bleed Chance',
+		'name':'Drain Chance',
 		'boost':{'base':1,'stat':['bonus','drain','chance'],},
 		'playerOnly':1,
 		},	
@@ -315,7 +315,7 @@ Init.db.stat = function(){
 		},	
 	'resist-drain':{
 		'icon':'status.drain',
-		'name':'Chill Resist',
+		'name':'Drain Resist',
 		'boost':{'stat':['status','drain','resist'],},
 		},	
 	'resist-confuse':{
