@@ -147,52 +147,94 @@
 				</i>
 		</i>
 		
-		
-		
-		
-		
-		
-		
-		
-		
-		
+		<i>
+			<t>Ability</t>
+			<i>
+				<t>Check/Select Ability Known.</t>
+				Click on A-B-C-D-H-S to display a series of ability icons.<br>
+				Click on an ability icon to select it.
+			</i>
+			<i>
+				<t>Check/Change Ability Bar.</t>
+				Click on a key to the left to assign the active ability to it.
+			</i>
+			<i>
+				<t>Check Ability Info.</t>
+				Need work......
+			</i>
+			<i>
+				<t>Change %Dmg Dealt Preference</t>
+				Click on the "Assume xx% Damage Dealth per attack" button.<br>
+				% Damage Dealth per attack impacts chance to trigger Status Effects.
+			</i>
+		</i>
+		<i>
+			<t>Passive</t>
+			<i>
+				<t>Check Passives.</t>
+				If normal view mode:<br>
+				Green: Unlocked.<br>
+				Yellow: Unlockable.<br>
+				Red: Not unlockable.<br>
+				<br>
+				If heat view mode:<br>
+				Green: Not Popular. (Boosted passive)<br>
+				Red: Popular. (Nerfed passive)<br>
+				<br>
+				Mouse Over: Popularity: How frequently players use this ability. (% Relative to other similar abilities.)
+			</i>
+			<i>
+				<t>Select New Passive.</t>
+				Right-Click. Require a Passive Point. Passive needs to be unlockable (yellow).
+			</i>
+			<i>
+				<t>Drag and Zoom.</t>
+				Drag: Left-Click and move while holding.<br>
+				Zoom: Mous-Wheel.
+			</i>
+			<i>
+				<t>Change View Mode</t>
+				Click on "View Mode". Enter 0 for Normal, 1 for Heat.
+			</i>
+		</i>
 		<i>
 			<t>Key Binding</t>
-				<i>
-					<t>Change Key Binds.</t>
-					Click on Row to change then press the key/mouse button you want. A and Shift-A are different.<br>
-					Click Default Binding to use common Bindings.
-				</i>
-				<i>
-					<t>Check Key Binds.</t>
-					l: Left Mouse Click.<br>
-					r: Right Mouse Click.<br>
-					sl: Shift-Left Mouse Click.<br>
-					sr: Shift-Right Mouse Click.<br>
-					_: Space.
-				</i>
+			<i>
+				<t>Change Key Binds.</t>
+				Click on Row to change then press the key/mouse button you want.<br> 
+				Holding Shift makes a difference. (A and Shift-A are different.)<br>
+				Click Default Binding to use common Bindings.
+			</i>
+			<i>
+				<t>Check Key Binds.</t>
+				l: Left Mouse Click.<br>
+				r: Right Mouse Click.<br>
+				sl: Shift-Left Mouse Click.<br>
+				sr: Shift-Right Mouse Click.<br>
+				_: Space.
+			</i>
 		</i>
 		<i>
 			<t>Bank</t>
-				<i>
-					<t>Withdraw Items.</t>
-					Left-Click: Withdraw 1.<br>
-					Right-Click: Show Option List: 5,25,100,1000.<br>
-					Shift-Left-Click: Withdraw custom amount. (Check Preference).
-				</i>
-				<i>
+			<i>
+				<t>Withdraw Items.</t>
+				Left-Click: Withdraw 1.<br>
+				Right-Click: Show Option List: 5,25,100,1000.<br>
+				Shift-Left-Click: Withdraw custom amount. (Check Preference).
+			</i>
+			<i>
 					<t>Change Bank Amount Transfer Preference.</t>
 					Click on X-Amount icon then write the new value and send the command.
 				</i>
 		</i>
 		<i>
 			<t>Trade</t>
-				<i>
-					<t>Withdraw Items put in Trade.</t>
-					Left-Click: Withdraw 1.<br>
-					Right-Click: Show Option List: 5,25,100,1000.
-				</i>
-				<i>
+			<i>
+				<t>Withdraw Items put in Trade.</t>
+				Left-Click: Withdraw 1.<br>
+				Right-Click: Show Option List: 5,25,100,1000.
+			</i>
+			<i>
 					<t>Accept/Decline Trade.</t>
 					Click on bottom icon. Modifying something in trade will turn Trade Status to pending.<br>
 					If Trade Status of both players are "accept", trade takes place.
@@ -202,157 +244,268 @@
 </i>
 
 
+
+	<i>
+		<t>Upper Interface</t>
+		<i>
+			<t>Minimap</t>
+				<i>
+					<t>Change Zoom</t>
+					Click on xxx%.
+				</i>
+				<i>
+					<t>Change Minimap Size</t>
+					Open Pref Tab and change preference for Minimap Size.
+				</i>
+		</i>
+		<i>
+			<t>Resource Bars</t>
+				Reserve in HP, Mana, Fury, Heal. If HP = 0, you die.
+		</i>
+		<i>
+			<t>Ability Bar</t>
+				If semi-transparent with red-circle: Ability is under cooldown/not ready.
+		</i>
+		<i>
+			<t>Status Bar</t>
+				Show status icon if affected by a status effect.
+		</i>
+	</i>
 		
+	<i>
+		<t>Chat Box</t>
+		<i>
+			<t>Talk with other players</t>
+				Write text and press enter.<br>
+				Note: Press Shift-Left-Click on item to display item in chat.
+		</i>
+		<i>
+			<t>Send commands to server</t>
+				Commands are used to send a request to the server. (Ex: Change preference. Add new friend.)<br>
+				They are typed in the same textfield than regular message.<br>
+				They always start with $ sign and parameters are separated by , commas.<br>
+				The full list of commands can be shown by typing $help. <br>
+				While typing a valid command, a box should appear showing the command info and possible parameters.
+		</i>
+		<i>
+			<t>Send Private Message (PM)</t>
+				@[player name],[message]-------(Ex: @bob532563,hey)<br>
+				<br>
+				If the player is in your Friend list:<br>
+				@[friend nickname],[message]-------(Ex: @bob,hey -- sends message to your friend nicknamed bob)<br>
+				<br>
+				If you have a friend nicknamed bob and you want to send a message to the player bob:<br>
+				@@[player name],[message]	(Ex: @@bob,hey -- sends message to the player named bob)
+		</i>
+		<i>
+			<t>Add/Mute Player</t>
+				Right-Click player name to the left.
+		</i>
+		<i>
+			<t>Select Dialogue Options (While talking to NPC)</t>
+				Left-Click the option.<br>
+				To end dialogue, move away from NPC.
+		</i>
+	</i>
+
+
+	
+</i>
+
+<i>
+	<t>Combat Mechanisms</t>
+	<i>
+		<t>Stats</t>
+		<i>
+			<t>Offensive</t>
+				<u>Atk Spd Main:</u>&emsp; Affect how fast your character can use abilities. Greater impact on main attacks.<br>
+				<u>Atk Spd Support:</u>&emsp; Affect how fast your character can use abilities. Greater impact on support attacks.<br>
+				<u>Crit Chance:</u>&emsp; Affect chance to do a Critical Hit. <br>
+				<u>Crit Magn:</u>&emsp; Affect Additional Damage when doing a Critical Hit. <br>
+				<u>Proj. Amount:</u>&emsp; Shoot x times additional bullets.  If the number isn't whole, it is rounded up or down randomly.  <br>
+				<u>Proj. Spd:</u>&emsp; Affect speed at which your bullet travels. <br>
+				<u>Strike Range:</u>&emsp; Affect the minimum and maximum distance where you can strike. <br>
+				<u>AoE Size:</u>&emsp; Affect the width and height of your strike. <br>
+				<u>AoE Max Target:</u>&emsp; Affect the maximum amount of target that can be hit by the same strike. <br>
+				<u>Burn Time:</u>&emsp; Affect Burn Duration. <br>
+				<u>Burn Magn:</u>&emsp; Affect damage dealt to a burnt enemy. <br>
+				<u>Burn Chance:</u>&emsp; Affect chance to burn enemy. <br>
+				<u>Chill Time:</u>&emsp; Affect Chill Duration. <br>
+				<u>Chill Magn:</u>&emsp; Affect how much speed and attack speed with be reduced. FACTOR<br>
+				<u>Chill Chance:</u>&emsp; Affect chance to chill enemy. <br>
+				<u>Confuse Time:</u>&emsp; Affect Confuse Duration. <br>
+				<u>Confuse Magn:</u>&emsp; Affect how reduced the sight of view of confused enemy is. <br>
+				<u>Confuse Chance:</u>&emsp; Affect chance to confuse enemy. <br>
+				<u>Bleed Time:</u>&emsp; Affect Bleed Duration. <br>
+				<u>Bleed Magn:</u>&emsp; Affect how much damage will be lost by bleeding enemy. <br>
+				<u>Bleed Chance:</u>&emsp; Affect chance to bleed enemy. <br>
+				<u>Drain Time:</u>&emsp; USELESS. Affect how long the enemy will be drained. <br>
+				<u>Drain Magn:</u>&emsp; Affect how much mana is drained from enemy. <br>
+				<u>Drain Chance:</u>&emsp; Affect chance to drain enemy. <br>
+				<u>Knock Time:</u>&emsp; Affect how long the enemy will be pushed back. <br>
+				<u>Knock Magn:</u>&emsp; Affect how far away the enemy will be pushed. <br>
+				<u>Knock Chance:</u>&emsp; Affect chance to push enemy with your attack. <br>
+		</i>
+		<i>
+			<t>Defensive</t>
+				<u>Aim:</u>&emsp; How precise your attacks are. Only affect direction. (Still same chance to deal damage.)<br>
+				<u>Regen Dodge:</u>&emsp; Dodge Regeneration per frame.<br>
+				<u>Regen Life:</u>&emsp; Life Regeneration per frame.<br>
+				<u>Regen Mana:</u>&emsp; Mana Regeneration per frame.<br>
+				<u>Regen Fury:</u>&emsp; Fury Regeneration per frame.<br>
+				<u>Regen Heal:</u>&emsp; Heal Regeneration per frame.<br>
+				<u>Max Dodge:</u>&emsp; Maximum Dodge Points.<br>
+				<u>Max Life:</u>&emsp; Maximum Life Points.<br>
+				<u>Max Mana:</u>&emsp; Maximum Mana Points.<br>
+				<u>Max Fury:</u>&emsp; Maximum Fury Points.<br>
+				<u>Max Heal:</u>&emsp; Maximum Heal Points.<br>
+				<u>Leech Life Magn.:</u>&emsp; Affect %Life recovered if the Life Leech is successful. Leech is not affected by damage dealt.  Formula:</u>&emsp; (Max Hp-Current Hp)*0.01*Life Leech Magn = Hp Recovered.<br>
+				<u>Leech Life Chance:</u>&emsp; Affect Chance to Life Leech when hitting an enemy. <br>
+				
+		</i>
+		<i>
+			<t>Misc</t>
+				<u>Max Speed:</u>&emsp; Movement Speed. If facing and moving at opposite direction, your Max Speed is reduced.<br>
+				<u>Acceleration:</u>&emsp; Movement Acceleration.<br>
+				<u>Summon Amount:</u>&emsp; Affect how many summons you can have at once. <br>
+				<u>Summon Time:</u>&emsp; Affect how long your summons last.<br>
+				<u>Summon Atk:</u>&emsp; Affect the overall damage of your summons. <br>
+				<u>Summon Def:</u>&emsp; Affect the overall defence of your summons. <br>
+				<u>Pick Radius:</u>&emsp; Maximum distance that you can still pick items on the ground.<br>
+				<u>Item Quantity:</u>&emsp; Chance to receive more drops from enemies. Quantity impacts chance that an enemy will drop something.<br>
+				<u>Item Quality:</u>&emsp; Chance to receive higher quality plans from enemies. Quality impacts chance to roll top-bracket stats.<br>
+				<u>Item Rarity:</u>&emsp; Chance to receive higher rarity plans from enemies. Rarity impacts chance to have additional boost on crafted equip.<br>
+				<u>[SKILL] Exp:</u>&emsp; Increase exp received in this skill. There are some exceptions where the boost isn't applied.<br>
+		</i>
+	</i>
+	<i>
+		<t>Boost</t>
+		Boosts modify the stats of your character. (In a good or bad way.) <br>
+		Boosts can modify a stat in different ways: "+","++","*","**","min","max".<br>
+		Final value = [ base * SUM("*") + SUM("+") ] * SUM("**") + SUM("++")<br>
+		<br>
+		Some boosts can also affect your character in very special ways. <br>
+		Those boosts are called Custom Boosts.<br>
+		<br>
+		Boosts can come from:<br>
+		<i>
+			<t>Equipment</t>
+			Stackable. Permanent. <br>
+			Source: Every piece of armors.<br>
+			Source: The active weapon.<br>
+			Using an Orb of Boost will grant an additional boost to an equip.<br>
+		</i>
+		<i>
+			<t>Passive</t>
+			Stackable. Permanent. <br>
+			Source: Unlocked Passives. <br>
+			Value of passive boost will fluctuate over time depending on the passive popularity.
+		</i>
+		<i>
+			<t>Quest Reward</t>
+			Stackable. Permanent. <br>
+			Source: Completing a quest. <br>
+			Completing the quest again will will reroll/modify the quest boost.
+		</i>
+		<i>
+			<t>Ability Boost</t>
+			Not Stackable. Not Permanent. <br>
+			Source: Boost player when using the ability. <br>
+		</i>
+		<i>
+			<t>Ability Curse</t>
+			Not Stackable. Not Permanent. <br>
+			Source: When hit by a particular type of attack. <br>
+		</i>
+		<i>
+			<t>Map/Quest</t>
+			Not Stackable. Permanent while in zone. <br>
+			Activating Quest Bonus can add boosts to your character.<br>
+			Certain maps also boost the player.
+		</i>
+	</i>
+	<i>
+		<t>Equipment</t>
+			Impacts defence and damage. There are 9 armor pieces and 3 weapon pieces.<br>
+			You can equip 1 weapon of each piece but you can only receive the bonus of the active weapon.<br>
+			<br>
+			Each piece comes in 3 different types. Different types have a different possible boost list.<br>
+			For the list of possible Boost for each type and piece, check Db.craft.js .
+			<br>
+			Armor Pieces: Amulet, Helm, Ring, Gloves, Body, Shield, Bracelet, Pants, Boots.<br>
+			Weapon Pieces: Melee, Range, Magic.<br>
+			<br>
+	</i>	
+	<i>
+		<t>Attack Creation Phases</t>
+		<i>
+			<i>
+				<t>1. Remove Resources</t>
+			</i>
+			<i>
+				<t>2. Apply Cooldown</t>
+					Own Cooldown: Time before uing same ability again.<br>
+					Global Cooldown: Time before uing any other ability again.<br>
+			</i>
+			<i>
+				<t>3. Update Attack Stats</t>
+					Dmg Factor = Weapon Dmg Global * Ability Dmg Global * Dmg Mastery I * Dmg Global <br>
+					Melee Dmg = MIN(Melee Weapon Ratior, Melee Ability Ratio) <br>
+					Final Melee Dmg = Melee Dmg * Dmg Factor.<br>
+					---<br>
+					Same goes for Melee, Range, Magic, Fire, Cold, Lightning.<br>
+					<br>
+					<i>
+						<t>Example</t>
+							Weapon: 50% Melee. 50% Magic. 100 Dmg Global.<br>
+							Ability: 25% Melee. 50% Magic. 25% Fire. 10 Dmg Global.<br>
+							Mastery: Melee:x1.5, Range:x1, Magic:x1, Fire:x2...<br>
+							Dmg Global: x0.9.<br>
+							---<br>
+							Dmg Factor = 100 * 10 * 1.5 * 0.9 = 1350<br>
+							<br>
+							Melee Dmg = MIN(50%,25%) = 25%<br>
+							Range Dmg = MIN(0%,0%) = 0%<br>
+							Magic Dmg = MIN(50%,50%) = 50%<br>
+							...<br>
+							Final Melee Dmg = 25% * 1350 = 338<br>
+							Final Range Dmg = 0% * 1350 = 0<br>
+							Final Magic Dmg = 50% * 1350 = 675<br>
+							...<br>
+					</i>
+			</i>
+			
+	</i>
+</i>
+
+This is what happens when you perform an ability attack:
+
+1- Removes Resource
+2- Applies Global and Own Cooldown
+3- Check your Attack
+Dmg for Element I = MIN(Weapon Dmg I, Ability Dmg I) * Weapon Dmg Global * Ability Dmg Global * Dmg Mastery I * Dmg Global
+
+Ex: 
+Weapon: 50% Melee. 50% Magic. 100 Dmg Global.
+Ability: 25% Melee. 50% Magic. 25% Fire. 10 Dmg Global.
+Mastery: Melee:x1.5, Range:x1, Magic:x1, Fire:x2...
+Dmg Global: x0.8.
+
+Melee Dmg = MIN(50%,25%) * 100 * 10 * 1.5 * 0.9 = 337
+Range Dmg = MIN(0%,0%) * 100 * 10 * 1 * 0.9 = 0
+Magic Dmg = MIN(50%,50%) * 100 * 10 * 1 * 0.9 = 450
+...
+
+4- Applies Player Bonus on the ability. 
+Ex: Proj. Amount, Burn Chance, Chill Magn,
+
+5- Generate the bullet or strike.
+
 	<!--
 		
-		{{Ability}}
-Action:
--Check the list of all abilities usable by your character.
--Assign an ability to a key bind.
--Check the stats of an ability.
-
-{{Passive}}
-Action:
--Check the passive you already have.
--Unlock new passives.
-
-		
-		
-		
-<<<Minimap>>>
-Actions:
--Check the minimap.
--Change minimap zoom.
-
-
-<<<Resource>>>
-Actions:
--Check your reserve in Hp, Mana, Fury and Heal.
-
-<<<Ability Bar>>>
-Actions:
--Check your active abilities.
--Check the cooldown of your abilities.
-
-<<<Status Bar>>>
-Actions:
--Check your status problems.
-
-<<<Chat>>>
-Actions:
--Talk with other players.
--Read what other players say.
--Send commands to the server.
--Send a Private Message (PM).
--Add/Mute a player.
-
-<<<Dialogue>>>
-Actions:
--Read dialogue text (with NPC).
--Choose dialogue options.
 
 
 
-
-<<Combat Mechanics>>
-Raining Chain combat mechanics easy to use but hard to master.
--Stats
--Boost
--Equipment
--Ability
--Attack Creation Phase
--Attack Damage Phase
-
-
-<<<Stats>>> 
-Max Speed: Speed at switch your character moves. If facing and moving at opposite direction, your Max Speed is reduced.
-Acceleration: Affect how long it takes to reach max speed.
-Aim: How precise your attacks are. Only affect direction. (Still same chance to deal damage.)
-Regen Dodge: How fast your Dodge resource regenerates per frame.
-Regen Life: How fast your Hp resource regenerates per frame.
-Regen Mana: How fast your Mana resource regenerates per frame.
-Regen Fury: How fast your Fury resource regenerates per frame.
-Regen Heal: How fast your Heal resource regenerates per frame.
-Max Dodge: Maximum amount of Dodge resource you can have.
-Max Life: Maximum amount of Hp resource you can have.
-Max Mana: Maximum amount of Mana resource you can have.
-Max Fury: Maximum amount of Fury resource you can have.
-Max Heal: Maximum amount of Heal resource you can have.
-Leech Life Magn.: %Life you will recover if the Life Leech is succesful. Leech is not affected by damage dealt. FACTOR. Formula: (Max Hp-Current Hp)*0.01*Life Leech Magn = Hp Recovered.
-Leech Life Chance: Chance to proc Life Leech when hitting an enemy. FACTOR.
-Pick Radius: Maximum distance that you can still pick items on the ground.
-Item Quantity: Increase chance to receive more drops from enemies. Quantity impacts the chance that an enemy will drop something.
-Item Quality: Increase chance to receive higher quality drops from enemies. Quality only affects plans. Higher quality plans have more chance to roll top-bracket stats.
-Item Rarity: Increase chance to receive higher rarity drops from enemies. Rarity only affects plans. Higher rarity plans have more chance to have additional boost.
-Atk Spd Main: Impact how fast your character can use abilities. Greater impact on main attacks.
-Atk Spd Support: Impact how fast your character can use abilities. Greater impact on support attacks.
-Crit Chance: Chance to proc a Critical Hit. FACTOR.
-Crit Magn: Additional Damage dealt when doing a Critical Hit. FACTOR.
-Proj. Amount: Shoot x times additional bullets. FACTOR. If the number of bullets isn't whole, it is rounded up or down randomly.  
-Proj. Spd: Affect speed at which your bullet travels. FACTOR.
-Strike Range: Affect the minimum and maximum distance where you can strike. FACTOR.
-AoE Size: Affect the width and height of your strike. FACTOR.
-AoE Max Target: Affect the maximum amount of target that can be hit by the same strike. FACTOR.
-Burn Time: Affect how long the enemy will burn. FACTOR.
-Burn Magn: Affect how much damage will be dealt per second to a burnt enemy. FACTOR.
-Burn Chance: Affect chance to burn enemy. FACTOR.
-Chill Time: Affect how long the enemy will be chilled. FACTOR.
-Chill Magn: Affect how much speed and attack speed with be reduced. FACTOR
-Chill Chance: Affect chance to chille enemy. FACTOR.
-Confuse Time: Affect how long the enemy will be confused. FACTOR.
-Confuse Magn: Affect how reduced sight of view of confused enemy is. FACTOR.
-Confuse Chance: Affect chance to confuse enemy. FACTOR.
-Bleed Time: Affect how long the enemy will bleed. FACTOR.
-Bleed Magn: Affect how much damage will be lost by bleeding enemy. FACTOR.
-Bleed Chance: Affect chance to bleed enemy. FACTOR.
-Drain Time: USELESS. Affect how long the enemy will be drained. FACTOR.
-Drain Magn: Affect how much mana is drained from enemy. FACTOR.
-Drain Chance: Affect chance to drain enemy. FACTOR.
-Knock Time: Affect how long the enemy will be pushed back. FACTOR.
-Knock Magn: Affect how far away the enemy will be pushed. FACTOR.
-Knock Chance: Affect chance to push enemy with your attack. FACTOR.
-Summon Amount: Affect how many summons you can have at once. FACTOR.
-Summon Time: Affect how long your summons last.FACTOR.
-Summon Atk: Affect the overall damage of your summons. FACTOR.
-Summon Def: Affect the overall defence of your summons. FACTOR.
-[SKILL] Exp: Increase exp received in this skill. There are some exceptions where the boost isn't applied.
-Dmg [ELEMENT] +: Affect Damage dealth with this element. See ... for more info.
-Dmg [ELEMENT] *: Affect Damage dealth with this element.
-Dmg [ELEMENT] ^: Affect Damage dealth with this element.
-Dmg [ELEMENT] x: Affect Damage dealth with this element.
-Def [ELEMENT] +: Affect your defence against this element. See ... for more info.
-Def [ELEMENT] *: Affect your defence against this element. See ... for more info.
-Def [ELEMENT] ^: Affect your defence against this element. See ... for more info.
-Def [ELEMENT] x: Affect your defence against this element. See ... for more info.
-Dmg [WEAPON]: Affect Damage dealt when wielding this weapon.
-
-
-Dmg [ELEMENT] Mod:  Affect your defence agains this element.
-Friction: Affect how long it takes to become immobile.
-Burn Resist: ENEMY ONLY. Reduce Burn Magn.
-Chill Resist: ENEMY ONLY. Reduce Chill Magn.
-Drain Resist: ENEMY ONLY. Reduce Drain Magn.
-Confuse Resist: ENEMY ONLY. Reduce Confuse Magn.
-Knock Resist: ENEMY ONLY. Reduce Knock Magn.
-Bleed Resist: ENEMY ONLY. Reduce Bleed Magn.
-
-
-
-
-
-<<<Boost>>>
-Boosts are effects that modifies the stats of your character. Some boosts last forever, others for specific amount of time.
-Some boosts can also affect your character in very special ways. Those boosts are called Custom Boosts.
-Boosts can modify an stats by different ways: "+","++","*","**","min","max".
-Final value = [ base * SUM("*") + SUM("+") ] * SUM("**") + SUM("++")	then make sure value is inside min and max brackets.
-
-Boost can come from:
--Equipment 
--Passive
--Quest Reward
--Ability Boost
--Ability Curse
--Map/Quest Boost
 
 
 
@@ -383,28 +536,7 @@ An ability is the actions you can perform by pressing keys. There are different 
 
 
 <<<Attack Creation Phase>>>
-This is what happens when you perform an ability attack:
 
-1- Removes Resource
-2- Applies Global and Own Cooldown
-3- Check your Attack
-Dmg for Element I = MIN(Weapon Dmg I, Ability Dmg I) * Weapon Dmg Global * Ability Dmg Global * Dmg Mastery I * Dmg Global
-
-Ex: 
-Weapon: 50% Melee. 50% Magic. 100 Dmg Global.
-Ability: 25% Melee. 50% Magic. 25% Fire. 10 Dmg Global.
-Mastery: Melee:x1.5, Range:x1, Magic:x1, Fire:x2...
-Dmg Global: x0.8.
-
-Melee Dmg = MIN(50%,25%) * 100 * 10 * 1.5 * 0.9 = 337
-Range Dmg = MIN(0%,0%) * 100 * 10 * 1 * 0.9 = 0
-Magic Dmg = MIN(50%,50%) * 100 * 10 * 1 * 0.9 = 450
-...
-
-4- Applies Player Bonus on the ability. 
-Ex: Proj. Amount, Burn Chance, Chill Magn,
-
-5- Generate the bullet or strike.
 
 
 <<<Attack Damage Phase>>>
@@ -427,6 +559,36 @@ Chance = Math.probability(Math.pow(dmg[i] / target.resource.hp.max,1.5),baseChan
 
 
 
+
+<<Combat Mechanics>>
+Raining Chain combat mechanics easy to use but hard to master.
+-Equipment
+-Ability
+-Attack Creation Phase
+-Attack Damage Phase
+
+
+<<<Stats>>> 
+
+<u>Dmg [ELEMENT] +:</u>&emsp; Affect Damage dealth with this element. See ... for more info.
+<u>Dmg [ELEMENT] *:</u>&emsp; Affect Damage dealth with this element.
+<u>Dmg [ELEMENT] ^:</u>&emsp; Affect Damage dealth with this element.
+<u>Dmg [ELEMENT] x:</u>&emsp; Affect Damage dealth with this element.
+<u>Def [ELEMENT] +:</u>&emsp; Affect your defence against this element. See ... for more info.
+<u>Def [ELEMENT] *:</u>&emsp; Affect your defence against this element. See ... for more info.
+<u>Def [ELEMENT] ^:</u>&emsp; Affect your defence against this element. See ... for more info.
+<u>Def [ELEMENT] x:</u>&emsp; Affect your defence against this element. See ... for more info.
+<u>Dmg [WEAPON]:</u>&emsp; Affect Damage dealt when wielding this weapon.
+<u>
+<u>
+<u>Dmg [ELEMENT] Mod:</u>&emsp;  Affect your defence agains this element.
+<u>Friction:</u>&emsp; Affect how long it takes to become immobile.
+<u>Burn Resist:</u>&emsp; ENEMY ONLY. Reduce Burn Magn.
+<u>Chill Resist:</u>&emsp; ENEMY ONLY. Reduce Chill Magn.
+<u>Drain Resist:</u>&emsp; ENEMY ONLY. Reduce Drain Magn.
+<u>Confuse Resist:</u>&emsp; ENEMY ONLY. Reduce Confuse Magn.
+<u>Knock Resist:</u>&emsp; ENEMY ONLY. Reduce Knock Magn.
+<u>Bleed Resist:</u>&emsp; ENEMY ONLY. Reduce Bleed Magn.
 
 -->
 

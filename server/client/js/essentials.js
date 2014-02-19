@@ -49,7 +49,7 @@ $(function(){
 
 ctxrestore = function(){
 	for(var i in List.ctx){
-		List.ctx[i].font = '20px Geo';
+		List.ctx[i].font = '20px Kelly Slab';
 		List.ctx[i].fillStyle = 'black';
 		List.ctx[i].strokeStyle = 'black';
 		List.ctx[i].globalAlpha = 1; 

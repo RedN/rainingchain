@@ -107,7 +107,7 @@ Draw.state.status = function(s){ ctxrestore();
 //{Pvp
 Draw.pvpScore = function(s){
 	var pv = main.pvpScore;
-	ctx.font = '20px Geo';
+	ctx.font = '20px Kelly Slab';
 	ctx.fillStyle = 'white';
 	for(var i in pv){
 		var str = 1+(+i) + ':  ' + pv[i].name + '  (' + pv[i].point + ')';

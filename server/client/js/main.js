@@ -162,7 +162,7 @@ Init.game.addCanvas = function(name,id,z){
 	
 	List.ctx[name] = cv.getContext("2d");
 	List.ctx[name].name = name;
-	List.ctx[name].font = '20px Geo';
+	List.ctx[name].font = '20px Kelly Slab';
 	List.ctx[name].fillStyle = 'black';
 	List.ctx[name].textAlign = 'left';
 	List.ctx[name].textBaseline = 'top';
