@@ -136,7 +136,6 @@ Init.game.main = function(data){
 }
 Init.game.player = function(data){    //use data sent from server and default to create the player
 	player = useTemplate(Actor.template('player'),data.player);	
-	player.status = '000000';
 	$("#chatUserName")[0].innerHTML = player.name + ': '; 
 }
 Init.game.other = function(data){    //use data sent from server and default to create the player
@@ -176,10 +175,10 @@ socket.on('warning', function (message) {
 });
 
 Init.help = function(data){
-	data = data.replaceAll('<<<','<h3>');
-	data = data.replaceAll('>>>','</h3>');
-	data = data.replaceAll('<<','<h2>');
-	data = data.replaceAll('>>','</h2>');
+	data = data.replaceAll('<i>','<details>');
+	data = data.replaceAll('</i>','</details>');
+	data = data.replaceAll('<t>','<summary>');
+	data = data.replaceAll('</t>','</summary>');
 
 	//Help aka documentation. Called once at start of game. wiki-like parser	
 	for(var i = 0 ; i < data.length ; i++){

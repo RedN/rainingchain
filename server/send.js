@@ -224,13 +224,6 @@ Change.send.convert.itemlist = function(inv){
 	return draw;
 }
 
-Change.send.convert.status = function(info){
-	var str = '';
-	for(var i in Cst.status.list){
-		str += info[Cst.status.list[i]].active.time > 0 ? '1' : '0';
-	}
-	return str;
-}
 
 Change.send.convert.windowList = function(data){
 	if(data.trade)	data.trade = Change.send.convert.windowList.trade(deepClone(data.trade));

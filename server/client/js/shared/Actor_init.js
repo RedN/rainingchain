@@ -42,6 +42,7 @@ Init.actor = function(){
 			'chill':{'active':{"time":0,"magn":0,"atk":0},'resist':0},			//slower move
 			'confuse':{'active':{"time":0,"magn":0,"input":[0,1,2,3]},'resist':0},	//change key moves binding
 		}
+		mort.statusClient = '000000';
 		mort.pushed = {"time":0,"magn":0,"angle":0};							//same than knock but no combat related
 		mort.block = 0; 						//{direction:4,distance:0};
 			

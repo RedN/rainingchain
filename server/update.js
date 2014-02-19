@@ -171,7 +171,7 @@ Change.update.init = function(){
 				{'array':['abilityChange','chargeClient'],'filter':Change.send.convert.abilityChangeClient},
 				
 				
-				{'array':['status'],'filter':Change.send.convert.status},
+				{'array':['statusClient']},
 				
 				
 				{'array':['equip','piece']},

@@ -165,6 +165,9 @@ Actor.loop.status = function(mort){
 	Actor.loop.status.bleed(mort);
 	Actor.loop.status.confuse(mort);
 	Actor.loop.status.chill(mort);
+	
+	mort.statusClient = '';
+	for(var i in Cst.status.list)	mort.statusClient += mort.status[Cst.status.list[i]].active.time > 0 ? '1' : '0';
 }
 
 Actor.loop.status.chill = function(mort){

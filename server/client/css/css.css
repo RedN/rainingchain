@@ -74,18 +74,15 @@ summary::-webkit-details-marker {
 summary:focus {
 	outline-style: none;
 }
-article > details > summary {
-	font-size: 28px;
-	margin-top: 16px;
+details summary {	/* Affect Interface */
+	font-size: 30px;
 }
-details > p {
-	margin-left: 24px;
+details details {	
+	font-size: 20px;	/* Click to withdraw */
+	margin-left: 30px;	/*Tabs AND Equip*/
 }
-details details {
-	margin-left: 36px;
-}
-details details summary {
-	font-size: 16px;
+details details summary {	
+	font-size: 25px;	/*Tabs AND Equip*/
 }
 
 /*End Help*/

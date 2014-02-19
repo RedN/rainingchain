@@ -68,7 +68,7 @@ Draw.state.ability = function(s){ ctxrestore();
 		if(!player.ability[i]) continue;
 		var ab =  Db.query('ability',player.ability[i]);
 		if(!ab) continue;
-		var numX = s.x + 5 + (+i * (size + 5));
+		var numX = s.x + 10 + (+i * (size + 5));
 		var numY = s.y;
 		var charge = player.abilityChange.chargeClient[i];
 		
@@ -95,8 +95,8 @@ Draw.state.ability = function(s){ ctxrestore();
 Draw.state.status = function(s){ ctxrestore();
 	ctx = List.ctx.stage;
 	var numX = s.x+10;		
-	for(var i in player.status){
-		if(+player.status[i]){
+	for(var i in player.statusClient){
+		if(+player.statusClient[i]){
 			Draw.icon('status.' + Cst.status.list[i],[numX,s.y],24);
 			numX += 30			
 		}

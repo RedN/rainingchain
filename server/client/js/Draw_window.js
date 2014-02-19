@@ -341,11 +341,17 @@ Draw.window.ability = function (){ ctxrestore();
 Draw.window.ability.leftSide = function(){ ctxrestore();
 	var s = Draw.window.main.constant(); 
 	
+	
+	ctx.font = '25px Geo';
+	ctx.fillText('Active',s.x + 12,s.y + 100-65);
+	ctx.fillText('Abilities',s.x + 12,s.y + 100-35);
+
+		
 	for(var i = 0 ; i < Input.key.ability.length ; i++){
 		var numX = s.x + 15;
-		var numY = s.y + 60 + 30 * i;
+		var numY = s.y + 100 + 30 * i;
 		
-		ctx.font = '25px Geo';
+		
 		ctx.fillText(Input.key.ability[i][0].toString().keyCodeToName(),numX,numY);
 		
 		var ability = Db.query('ability',player.ability[i]);
@@ -359,10 +365,18 @@ Draw.window.ability.leftSide = function(){ ctxrestore();
 		var text = '';
 		if(ability){ text = ability.name; }
 		
+		
+		var button = ('' + Input.key.ability[i][0]).keyCodeToName();
+		if(button === 'l') button = 'Left Click'; 
+		if(button === 'r') button = 'Right Click';
+		if(button === 'sl') button = 'Shift-Left Click'; 
+		if(button === 'sr') button = 'Shift-Right Click';
+		if(button === '_') button = 'Space';
+		
 		Button.creation(0,{
 			"rect":[numX, numX+45 + 32, numY, numY + 32 ],
 			"left":{"func":Chat.send.command,"param":['$win,ability,swap,' + Draw.old.abilityShowed.id + ',' + i ]},
-			'text':text + ' => ' + Draw.old.abilityShowed.name
+			'text':"Assign " + Draw.old.abilityShowed.name + " to " + button
 			});	
 	}
 }
@@ -379,7 +393,7 @@ Draw.window.ability.abilityList = function(diffX){ ctxrestore();
 	ha.subtitle.style.left = diffX + 'px'; 
 	ha.subtitle.style.top = 0 + 'px'; 
 	ha.subtitle.style.font = charY + 'px Geo';
-	ha.subtitle.style.width = 200 + 'px';
+	ha.subtitle.style.width = 400 + 'px';
 	ha.subtitle.style.height = charY*1.2 + 'px';
 	
 	var obj = {'attack':[],'blessing':[],'curse':[],'dodge':[],'heal':[],'summon':[]};
@@ -388,7 +402,7 @@ Draw.window.ability.abilityList = function(diffX){ ctxrestore();
 		if(ability) obj[ability.type].push(ability);
 	}	
 	
-	var str = '';
+	var str = 'List of Abilities: ';
 	for(var j in obj){
 		var numX = s.x + 50;
 		var numY = s.y;
@@ -397,7 +411,7 @@ Draw.window.ability.abilityList = function(diffX){ ctxrestore();
 		'<span ' + 
 		'style="text-decoration:' + (j === ats ? 'underline' : 'none') + '" ' +
 		'onclick="Draw.old.abilityTypeShowed = \'' + j +  '\';' + '" ' + 
-		'onmouseover="main.permContext.text = \'' + j.capitalize() + '\';' + '" ' + 
+		'onmouseover="main.permContext.text = \'' + 'Display ' + j.capitalize() + ' Abilities' + '\';' + '" ' + 
 		'onmouseout="main.permContext.text = null;' + '" ' + 
 		'>' + j.capitalize().slice(0,1) + 
 		'</span>';
@@ -1015,7 +1029,7 @@ Draw.window.binding = function (){ ctxrestore();
 					'onmouseover="main.permContext.text = \'' + str2 + '\';' + '" ' + 
 					'onmouseout="main.permContext.text = null;' + '" ' + 
 					'>'
-			str += '<td>Move ' + info.list[i] + '</td>'
+			str += '<td>' + info.name + ' ' + info.list[i] + '</td>'
 			str += '<td>' + id + '</td>'
 			str += '<td>' + name + '</td>'
 			str += '</tr>';
