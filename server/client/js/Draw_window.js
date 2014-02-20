@@ -34,12 +34,12 @@ Draw.window.main = function(title){ ctxrestore();
 		t.style.textDecoration = 'none';
 		var str = '';
 		for(var i in title){
+			var title = 'Open ' + i.capitalize() + ' Window';
 			str += 
 			'<span ' + 
 			'style="text-decoration:' + (title[i] ? 'underline' : 'none') + '" ' +
 			'onclick="' + "main.sfx='menu'; " + 'Chat.send.command(\'' + '$win,open,' + i + '\')' + '" ' + 
-			'onmouseover="main.permContext.text = \'' + 'Open ' + i.capitalize() + ' Window' + '\';' + '" ' + 
-			'onmouseout="main.permContext.text = null;' + '" ' + 
+			'title="' + title + '"' +
 			'>' + i.capitalize() + 
 			'</span>';
 			str += ' - ';
@@ -406,13 +406,12 @@ Draw.window.ability.abilityList = function(diffX){ ctxrestore();
 	for(var j in obj){
 		var numX = s.x + 50;
 		var numY = s.y;
-		
+		var title = 'Display ' + j.capitalize() + ' Abilities';
 		str += 
 		'<span ' + 
 		'style="text-decoration:' + (j === ats ? 'underline' : 'none') + '" ' +
 		'onclick="Draw.old.abilityTypeShowed = \'' + j +  '\';' + '" ' + 
-		'onmouseover="main.permContext.text = \'' + 'Display ' + j.capitalize() + ' Abilities' + '\';' + '" ' + 
-		'onmouseout="main.permContext.text = null;' + '" ' + 
+		'title="' + title + '"' +
 		'>' + j.capitalize().slice(0,1) + 
 		'</span>';
 		str += ' - '
@@ -879,8 +878,7 @@ Draw.window.quest.bonus = function(s,charY,q,mq,hq){
 			'class="shadow" ' + 
 			'style="color:' + color + '" ' +
 			'onclick="Chat.send.command(\'' + '$win,quest,toggleBonus,' + q.id + ',' + i + '\')' + '" ' + 
-			'onmouseover=\"main.permContext.text = \'Toggle Bonus\'\" ' +
-			'onmouseout="main.permContext.text = null;' + '" ' + 
+			'title="Toggle Bonus"' +
 			'>' + b.info + ' - (x' + b.bonus + ')' +
 			'</span><br>';
 	}
@@ -1026,8 +1024,7 @@ Draw.window.binding = function (){ ctxrestore();
 			
 			str += '<tr ' +
 					'onclick="Input.binding.' + info.id + ' = ' + i + ';" ' + 
-					'onmouseover="main.permContext.text = \'' + str2 + '\';' + '" ' + 
-					'onmouseout="main.permContext.text = null;' + '" ' + 
+					'title="' + str2 + '"' +
 					'>'
 			str += '<td>' + info.name + ' ' + info.list[i] + '</td>'
 			str += '<td>' + id + '</td>'
@@ -1091,16 +1088,14 @@ Draw.window.passive = function (){ ctxrestore();
 	
 	var str = '<span ' + 
 	'onclick="Draw.window.passive.grid.info.toggleFullscreen();' + '" ' + 
-	'onmouseover="main.permContext.text = \'' + 'Reset Position and Zoom\' " ' + 
-	'onmouseout="main.permContext.text = null;' + '" ' + 
+	'title="Toggle Fullscreen"' + 
 	'>' + 'Fullscreen' + 
 	'</span>';
 	str += '<br>'
 	str += 
 	'<span ' + 
 	'onclick="Draw.window.passive.grid.info.reset();' + '" ' + 
-	'onmouseover="main.permContext.text = \'' + 'Reset Position and Zoom\' " ' + 
-	'onmouseout="main.permContext.text = null;' + '" ' + 
+	'title="Reset Position and Zoom"' +
 	'>' + 'Reset View' + 
 	'</span>';
 	str += '<br>'

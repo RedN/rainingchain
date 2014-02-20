@@ -33,7 +33,7 @@
 		
 		
 		<script src="/library/jquery.min.js"></script>
-		<script src="/library/jqueryui/js/jqueryui.min.js"></script>
+		<script src="/library/jqueryui/js/jquery-ui-1.10.4.custom.min.js"></script>
 		
 		
 		<script src="/js/shared/constant.js"></script>
@@ -244,7 +244,9 @@
 		$( "div:visible" );
 		$( "div.foo" ).has( "p" );         // div.foo elements that contain <p> tags*/
 		
-	
+		$( document ).tooltip();
+		$( document ).tooltip('option','show',100);
+		
 		$( "#help" ).dialog({autoOpen: false,width: 1000});
 		$.get('/js/help.html').success(function(data){
 			$('#help').html(Init.help(data));

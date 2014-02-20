@@ -283,8 +283,7 @@ Draw.tab.friend = function(){ ctxrestore();
 			'style="color:' + color + '" ' +
 			'onclick="Input.add(\'' + str2 + '\')' + '" ' + 
 			'oncontextmenu="Draw.tab.friend.rightClick(\'' + i + '\')' + '" ' + 
-			'onmouseover="main.permContext.text = \'' + str + '\';' + '" ' + 
-			'onmouseout="main.permContext.text = null;' + '" ' + 
+			'title="'+ str + '" ' + 
 			'>' + i + 
 			'</span>';
 			
@@ -403,9 +402,8 @@ Draw.tab.quest = function(){ ctxrestore();
 			'class="shadow" ' + 
 			'style="color:' + color + '" ' +
 			'onclick="Chat.send.command(\'' + '$win,open,quest,' + i + '\')' + '" ' + 
-			'onmouseover="main.permContext.text = \'' + i + '\';' + '" ' + 
-			'onmouseout="main.permContext.text = null;' + '" ' + 
-			'>' + i + 
+			'title="'+ i + '" ' 
+			+ '>' + i + 
 			'</span>';
 			
 		}
@@ -447,8 +445,7 @@ Draw.tab.pref = function(){
 		'class="shadow" ' + 
 		'style="color:' + 'white' + '" ' +
 		'onclick="Chat.send.command(\'' + '$win,open,binding' + '\')' + '" ' + 
-		'onmouseover="main.permContext.text = \'' + 'Change Key Bindings' + '\';' + '" ' + 
-		'onmouseout="main.permContext.text = null;' + '" ' + 
+		'title="Change Key Bindings"' +
 		'>' +
 		'<font size="4">' +			
 		'*Key Bindings*' +
@@ -472,8 +469,7 @@ Draw.tab.pref = function(){
 			'class="shadow" ' + 
 			'style="color:' + 'white' + '" ' +
 			'onclick="Input.add(\'' + str2 + '\')' + '" ' + 
-			'onmouseover="main.permContext.text = \'' + str + '\';' + '" ' + 
-			'onmouseout="main.permContext.text = null;' + '" ' + 
+			'title="'+ str + '" ' + 
 			'>' +
 			'<font size="3">' +			
 			name + ' : ' + value + 
