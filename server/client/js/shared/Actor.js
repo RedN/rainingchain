@@ -3,7 +3,7 @@ Actor = typeof Actor !== 'undefined' ? Actor : {};
 
 Actor.remove = function(mort){
 	ActiveList.remove(mort);
-	
+	DEBUG(5,mort.id);
 	delete List.actor[mort.id];
 	delete List.all[mort.id]
 	if(List.map[mort.map])	delete List.map[mort.map].list[mort.id];
@@ -48,9 +48,11 @@ Actor.updateEquip = function(mort){
 		}
 		mort.equip.def[i] = sum || 1;
 	}
+	DEBUG(5,mort.id);
 }
 
 Actor.switchEquip = function(mort,name,piece){
+	DEBUG(5,mort.id,name,piece);
 	//the player can have nothing in the equip.piece[i]
 	//however, he must have something in the player.weapon
 	//if equip.piece[weapon] is '', player.weapon becomes 'unarmed'
@@ -88,6 +90,7 @@ Actor.switchEquip.req = function(mort,equip){
 }
 
 Actor.swapWeapon = function(mort,piece){
+	DEBUG(5,mort.id,piece);
 	//Equip a weapon already present in the weaponList
 	mort.weapon = mort.equip.piece[piece] || 'unarmed';
 	
@@ -111,6 +114,8 @@ Actor.update.mastery = function(mort){
 }
 
 Actor.update.permBoost = function(mort){
+	DEBUG(15,mort.id);
+	
 	var pb = mort.boost;
 	
 	//Reset to PermBase
@@ -172,6 +177,7 @@ Actor.update.boost = function(mort,stat){
 }
 
 Actor.boost = function(mort, boost){
+	DEBUG(15,mort.id,boost);
 	//Add a boost to a actor
 
 	//list[i]: i = stat
@@ -203,6 +209,7 @@ Actor.boost = function(mort, boost){
 }
 
 Actor.permBoost = function(mort,source,boost){
+	DEBUG(5,mort.id,source,boost);
 	//remove permBoost with boost undefined
 	if(boost){
 		mort.permBoost[source] = arrayfy(boost);
@@ -232,6 +239,7 @@ Actor.permBoost.compile = function(b){	//if boost same thing, add values
 
 //{Map Interaction	
 Actor.teleport = function(mort,x,y,map){
+	DEBUG(3,mort.id,x,y,map);
 	//Teleport player. if no map specified, stay in same map.
 	mort.x = x;
 	mort.y = y;
@@ -276,12 +284,14 @@ Actor.teleport = function(mort,x,y,map){
 }
 
 Actor.talk = function(mort,enemyId){
+	DEBUG(5,mort.id,enemyId);
 	if(List.all[enemyId].dialogue){
 		List.all[enemyId].dialogue.func(mort.id);
 	}
 }
 
 Actor.pushing = function(pusher,beingPushed){
+	DEBUG(5,pusher.id,beingPushed);
 	var mort = List.all[beingPushed];
 	if(!mort.block || !mort.block.pushable) return
 	
@@ -323,6 +333,7 @@ Actor.pushing = function(pusher,beingPushed){
 
 
 Actor.harvest = function(mort,eid){	
+	DEBUG(4,mort.id,eid);
 	var e = List.all[eid];
 	var plot = Skill.plot[e.skillPlot];
 	if(!plot) return;
@@ -344,6 +355,7 @@ Actor.harvest = function(mort,eid){
 
 
 Actor.setRespawn = function(mort,wp){
+	DEBUG(5,mort.id,wp);
 	Chat.add(mort.id,"You have changed your respawn point. Upon dying, you will now be teleported here.");
 
 	mort.respawnLoc.recent = {x:wp.x,y:wp.y,map:wp.map};
@@ -351,6 +363,7 @@ Actor.setRespawn = function(mort,wp){
 }
 
 Actor.openChest = function(mort,eid){	//need work
+	DEBUG(4,mort.id,eid);
 	var e = List.all[eid];
 	
 	if(Collision.distancePtPt(mort,e) > 100){ Chat.add(mort.id,"You're too far away."); return;}
@@ -370,6 +383,7 @@ Actor.openChest = function(mort,eid){	//need work
 }
 
 Actor.activateSwitch = function(mort,eid){
+	DEBUG(5,mort.id,eid);
 	var e = List.all[eid];
 	
 	if(Collision.distancePtPt(mort,e) > 100){ Chat.add(mort.id,"You're too far away."); return;}
@@ -392,6 +406,7 @@ Actor.activateSwitch = function(mort,eid){
 }
 
 Actor.removeOnClick = function(mort,side){
+	DEBUG(5,mort.id,side);
 	for(var i in mort.optionList.option){
 		if(mort.optionList.option[i] === mort.onclick[side]){
 			mort.optionList.option.splice(i,1);
@@ -402,6 +417,7 @@ Actor.removeOnClick = function(mort,side){
 }	
 
 Actor.removeOption = function(mort,option){	//option is object or name
+	DEBUG(5,mort.id,option);
 	for(var i in mort.optionList.option){
 		if(mort.optionList.option[i] === option || mort.optionList.option[i].name === option){
 			mort.optionList.option.splice(i,1);
@@ -411,6 +427,7 @@ Actor.removeOption = function(mort,option){	//option is object or name
 }	
 
 Actor.pickDrop = function (mort,id){
+	DEBUG(4,mort.id,id);
 	var inv = List.main[mort.id].invList;
 	var drop = List.drop[id];
 		
@@ -447,6 +464,7 @@ Actor.rightClickDrop = function(mort,rect){
 }
 	
 Actor.dropInv = function(mort,id){
+	DEBUG(4,mort.id,id);
 	var inv = List.main[mort.id].invList;
 	var amount = Math.min(1,Itemlist.have(inv,id,0,'amount'));
 	
@@ -463,6 +481,7 @@ Actor.dropInv = function(mort,id){
 
 //{Ability
 Actor.removeAbility = function(mort,name){
+	DEBUG(3,mort.id,name);
 	delete mort.abilityList[name];
 	for(var i in mort.ability){
 		if(mort.ability[i] && mort.ability[i].id === name){

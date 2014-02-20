@@ -44,7 +44,7 @@ Chat.add = function(key,text,type,extra){
 	
 	extra.text = text;
 	extra.type = type;
-	
+	DEBUG(5,key,extra);
 	List.main[key].social.message.chat.push(extra);	
 }
 
@@ -61,6 +61,7 @@ Chat.send = function(data){
 	if(!type || !text || !to || !from){ return; }
 	if(to === from){ Chat.add(key,"Ever heard of thinking in your head?"); return; }
 	
+	DEBUG(5,key,text,to,type,from,data);
 	if(type === 'public') Chat.send.public(key,text,to,type,from,data); 
 	else if(type === 'pm') Chat.send.pm(key,text,to,type,from,data); 
 	else if(type === 'clan') Chat.send.clan(key,text,to,type,from,data); 

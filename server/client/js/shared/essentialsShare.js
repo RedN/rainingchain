@@ -1,5 +1,79 @@
 //List of handy functions.
 
+DEBUG = function(lvl,message){
+	/*
+	0:CRASH
+	1:ERR
+	2:NOT GOOD
+	3:IMPORTANT ACTION
+	4:NOT IMPORTANT ACTION	
+	*/
+	
+	if(lvl > DEBUG.level) return;
+	
+	var arg = '';
+	for (var i=1; i<arguments.length; i++) 
+		if(typeof arg !== 'undefined') 
+			arg += JSON.stringify(arguments[i]) + ',';
+	arg = arg.slice(0,-1);
+	
+	
+	var trace = new Error().stack;
+	if(!DEBUG.minify){
+		console.log(arg,trace);
+		return;
+	}
+	
+	var array = trace.split('\n    at ');		//put in array
+	array.splice(0,2);					//remove first 2 line (Error. and info about DEBUG)
+	
+	var func = [];
+	for(var i = 0 ; i < DEBUG.stackSize && i < array.length; i++){
+		if(array[i].have("Object"))	//Object.[Actor.updateEquip] (C:\\r
+			func.push(array[i].slice(7,array[i].indexOf(' (C:')));
+		else if(array[i].have("Function"))	//Function.Load.player.uncompress (C:
+			func.push(array[i].slice(9,array[i].indexOf(' (C:')));
+		else 
+			func.push(array[i].slice(0,array[i].indexOf(' (C:'))); 
+			//func.push(array[i].slice(array[i].lastIndexOf('\\')+1));
+	}
+	var str = func[0];
+	str += '(' + arg + '); ';
+	for(var i =1;i<func.length;i++) str += ' *** ' + func[i];
+	console.log(str);
+	
+		//console.trace(message);
+	
+		
+}
+/*
+  'Object.Actor.updateEquip (C:\\rc\\rainingchain\\server\\client\\js\\shared\\Actor.js:51:2)\n   ',
+  'Function.Load.player.uncompress (C:\\rc\\rainingchain\\server\\logIn.js:293:8)\n   ',
+  'C:\\rc\\rainingchain\\server\\logIn.js:256:20\n   ',
+  'C:\\rc\\rainingchain\\node_modules\\mongojs\\node_modules\\mongodb\\lib\\mongodb\\cursor.js:158:16\n
+  'commandHandler (C:\\rc\\rainingchain\\node_modules\\mongojs\\node_modules\\mongodb\\lib\\mongodb\\curso
+  'C:\\rc\\rainingchain\\node_modules\\mongojs\\node_modules\\mongodb\\lib\\mongodb\\db.js:1670:9\n   ',
+  'Server.Base._callHandler (C:\\rc\\rainingchain\\node_modules\\mongojs\\node_modules\\mongodb\\lib\\mong
+  'C:\\rc\\rainingchain\\node_modules\\mongojs\\node_modules\\mongodb\\lib\\mongodb\\connection\\server.js
+  'MongoReply.parseBody (C:\\rc\\rainingchain\\node_modules\\mongojs\\node_modules\\mongodb\\lib\\mongodb\
+  
+  */
+  
+
+DEBUG.level = 10;
+DEBUG.stackSize = 3;
+DEBUG.minify = true;
+
+
+
+function getParamNames(func) {
+	var STRIP_COMMENTS = /((\/\/.*$)|(\/\*[\s\S]*?\*\/))/mg;
+	var fnStr = func.toString().replace(STRIP_COMMENTS, '')
+	var result = fnStr.slice(fnStr.indexOf('(')+1, fnStr.indexOf(')')).match(/([^\s,]+)/g)
+	if(result === null)  result = []
+  return result
+}
+
 //Math
 sin = function (number){
 	return (Math.sin(number/180*Math.PI))
