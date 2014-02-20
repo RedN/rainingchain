@@ -524,8 +524,9 @@ Command.list['pvp'].doc = {
 }
 
 
+
 //{CLIENT SIDE: Pref. many different preference values can be changed. check Command.pref.verify for more detail.
-Command.client = ['pref','music,next','music,info','help','mod'];
+Command.client = ['pref','music,next','music,info','help','mod','doc'];
 
 Command.list['help'] = function(lvl){
 	lvl = typeof lvl === 'undefined' ? lvl : 1;
@@ -553,6 +554,14 @@ Command.list['mod'].doc = {
 	],
 }
 
+Command.list['doc'] = function(key){
+	Help.open();
+}
+Command.list['doc'].doc = {
+	'description':"Open the Help Documentation",
+	'help':1,'param':[
+	],
+}
 
 Command.list['pref'] = function(name,value){
 	if(name === 'reset'){

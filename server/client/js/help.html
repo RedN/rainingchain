@@ -430,22 +430,93 @@
 			You can equip 1 weapon of each piece but you can only receive the bonus of the active weapon.<br>
 			<br>
 			Each piece comes in 3 different types. Different types have a different possible boost list.<br>
-			For the list of possible Boost for each type and piece, check Db.craft.js .
+			For the list of possible Boost for each type and piece, check Db.craft.js .<br>
 			<br>
 			Armor Pieces: Amulet, Helm, Ring, Gloves, Body, Shield, Bracelet, Pants, Boots.<br>
 			Weapon Pieces: Melee, Range, Magic.<br>
 			<br>
 	</i>	
 	<i>
+		<t>Ability</t>
+			Every action you can assign to a key is an ability.<br>
+			Own Cooldown: Time before uing same ability again.<br>
+			Global Cooldown: Time before uing any other ability again.<br>
+			Mana: Resources that will be spent after using the ability.<br>
+			<br>
+			Ability Type:
+			<i>
+				<t>Attack</t>
+				<u>Type:</u>  <br>
+				&emsp;Bullet: Move Over Time (No Area of Effect)<br>
+				&emsp;Strike: Last 1 frame (With Area of Effect)<br>
+				<u>Dmg:</u> <br>
+				&emsp;Main: How much damage the ability deals.<br>
+				&emsp;Ratio: What ratio of each element the ability deals. (Sum of ratios = 100%)<br>
+				<u>Angle:</u>&emsp; Angle between the first and last attack.<br>
+				
+				<i>
+					<t>Additional Parameters</t>
+					<u>Critical Hit:</u>&emsp; Chance, Magn.<br>
+					<u>Status Factor:</u>&emsp; Chance, Magn, Time.<br>
+					<u>Spd:</u>&emsp; Bullet traveling speed.<br>
+					<u>Pierce:</u>&emsp; Chance, Amount and DmgReduc<br>
+					<u>Ghost:</u>&emsp; Pass throught walls.
+					<br>
+					<u>Parabole:</u>&emsp; Bullets move toward where you clicked.<br>
+					<u>Boomerang:</u>&emsp; Bullets come back to you midway. <br>
+					<u>Sin:</u>&emsp; Bullets wave when traveling.<br>
+					<u>Nova:</u>&emsp; Bullets shoot other bullets.<br>			
+				</i>
+			</i>
+			<i>
+				<t>Boost</t>
+				Increase/Decrease a stat.<br>
+				<u>Stat:</u>&emsp; Stat Affected or Custom.
+				<u>Type:</u>&emsp;"+","++","*","**","Custom",<br>
+				<u>Time:</u>&emsp;Duration of the effect.<br>
+			</i>
+			<i>
+				<t>Curse</t>
+				Afflict touched enemies with a bad boost.<br>
+				Chance: Chance to proc the curse.
+			</i>
+			<i>
+				<t>Dodge</t>
+				Grants immunity to all attacks for small amount of time.
+			</i>
+			<i>
+				<t>Healing</t>
+				Restore Resource. (Most of the time HP)
+			</i>
+			<i>
+				<t>Summon</t>
+				Summon creatures that will follow you and defend you.<br>
+				<u>Name:</u>&emsp; Name of the summon.<br>
+				<u>Max:</u>&emsp; Maximum amount of the same summon you can have at once.<br>
+				<u>Time:</u>&emsp; How long before they disappear.<br>
+				<u>Distance:</u>&emsp; If the summon is farther than this distance, it will teleport on top of you.<br>
+			</i>
+	</i>
+		
+	<i>
 		<t>Attack Creation Phases</t>
-		<i>
 			<i>
 				<t>1. Remove Resources</t>
+				If you don't have enough resource, you can't use the ability.
 			</i>
 			<i>
 				<t>2. Apply Cooldown</t>
-					Own Cooldown: Time before uing same ability again.<br>
-					Global Cooldown: Time before uing any other ability again.<br>
+					Cooldown: Affected by Atk Spd Main and Support. <br>
+					<br>
+					<i>
+						<t>Example</t>
+						Ability: 50 frames cooldown. 25% Main, 75% Support. <br>
+						Character: 1.5 Atk Spd Main. 1.2 Atk Spd Support.<br>
+						Cooldow = 50*25%/1.5 + 50*75%/1.2 = 39.6<br> 
+						=> 39.6 frames before using same ability again.<br>
+						<br>
+						Global Cooldown: Time before uing any other ability again.<br>
+					</i>
 			</i>
 			<i>
 				<t>3. Update Attack Stats</t>
@@ -474,70 +545,33 @@
 							...<br>
 					</i>
 			</i>
-			
+			<i>
+				<t>4. Apply Player Bonus</t>
+					Proj. Amount<br>
+					Proj. Spd<br>
+					Strike Range<br>
+					AoE Size<br>
+					AoE Max Target<br>
+					Crit Chance<br>
+					Crit Magn.<br>
+					[Status] Chance (Ex: Burn Chance)<br>
+					[Status] Magn.<br>
+					[Status] Time<br>
+			</i>
+			<i>
+				<t>5. Generate the attack.</t>
+					Attacks can be either bullets or strikes depending on ability used.<br>
+					Bullets spawn exactly on top of the player.<br>
+					Strike position depends on mouse position.<br>
+					There is a maximum and minimum distance between a strike and player.<br>
+			</i>
 	</i>
 </i>
 
-This is what happens when you perform an ability attack:
 
-1- Removes Resource
-2- Applies Global and Own Cooldown
-3- Check your Attack
-Dmg for Element I = MIN(Weapon Dmg I, Ability Dmg I) * Weapon Dmg Global * Ability Dmg Global * Dmg Mastery I * Dmg Global
 
-Ex: 
-Weapon: 50% Melee. 50% Magic. 100 Dmg Global.
-Ability: 25% Melee. 50% Magic. 25% Fire. 10 Dmg Global.
-Mastery: Melee:x1.5, Range:x1, Magic:x1, Fire:x2...
-Dmg Global: x0.8.
-
-Melee Dmg = MIN(50%,25%) * 100 * 10 * 1.5 * 0.9 = 337
-Range Dmg = MIN(0%,0%) * 100 * 10 * 1 * 0.9 = 0
-Magic Dmg = MIN(50%,50%) * 100 * 10 * 1 * 0.9 = 450
-...
-
-4- Applies Player Bonus on the ability. 
-Ex: Proj. Amount, Burn Chance, Chill Magn,
-
-5- Generate the bullet or strike.
 
 	<!--
-		
-
-
-
-
-
-
-
-
-<<<Equipment>>>
-Your equipment impacts your defence and damage. There are 9 armor pieces and 3 weapon pieces.
-You can equip 1 weapon of each piece but you can only receive the bonus of the active weapon.
-Each piece also comes in 3 different types.
-
-Armor Pieces: Amulet, Helm, Ring, Gloves, Body, Shield, Bracelet, Pants, Boots.
-Weapon Pieces: Melee, Range, Magic.
-
-For the list of possible Boost for each type, check Db.craft.js .
-
-
-
-<<<Ability>>>
-An ability is the actions you can perform by pressing keys. There are different types of abilities:
--Attack (A)
--Boost (B)
--Curse (C)
--Dodge (D)
--Healing (H)
--Summon
-
-
-
-
-<<<Attack Creation Phase>>>
-
-
 
 <<<Attack Damage Phase>>>
 This is what happens when an attack hits you:

@@ -1081,21 +1081,26 @@ Draw.window.passive = function (){ ctxrestore();
 	
 	//Subtitle
 	var charY = 25;
-	hp.text.style.left = 15 + 'px'; 
+	hp.text.style.left = 10 + 'px'; 
 	hp.text.style.top = 5 + 'px'; 
-	hp.text.style.font = 25 + 'px Kelly Slab';
-	hp.text.style.width = '125px';
+	hp.text.style.font = 20 + 'px Kelly Slab';
+	hp.text.style.width = 'auto';
 	hp.text.style.height = 'auto';
+	hp.text.style.whiteSpace = 'nowrap';
 	hp.text.style.backgroundColor = 'white';
 	
 	var str = '<span ' + 
 	'onclick="Draw.window.passive.grid.info.toggleFullscreen();' + '" ' + 
+	'onmouseover="main.permContext.text = \'' + 'Reset Position and Zoom\' " ' + 
+	'onmouseout="main.permContext.text = null;' + '" ' + 
 	'>' + 'Fullscreen' + 
 	'</span>';
 	str += '<br>'
 	str += 
 	'<span ' + 
 	'onclick="Draw.window.passive.grid.info.reset();' + '" ' + 
+	'onmouseover="main.permContext.text = \'' + 'Reset Position and Zoom\' " ' + 
+	'onmouseout="main.permContext.text = null;' + '" ' + 
 	'>' + 'Reset View' + 
 	'</span>';
 	str += '<br>'
@@ -1109,7 +1114,7 @@ Draw.window.passive = function (){ ctxrestore();
 	Draw.window.passive.grid();
 }
 
-Draw.window.passive.grid = function(key){ ctxrestore();
+Draw.window.passive.grid = function(){ ctxrestore();
 	var s = Draw.window.main.constant();	
 	ctx = List.ctx.passiveGrid;
 	
@@ -1203,6 +1208,7 @@ Draw.window.passive.grid.info = {
 		Draw.window.passive.grid.info.fullscreen = !Draw.window.passive.grid.info.fullscreen;
 	}),
 }
+
 
 Draw.window.passive.hover = function(over){ ctxrestore();
 	var s = Draw.window.main.constant(); 
