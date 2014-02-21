@@ -35,7 +35,7 @@ Map.creation = function(namemodel,version){
 		version:version,
 		grid:model.grid,
 		model:model.id,
-		timer:version === 'MAIN' ? 1/0 : 5*60*1000/25,
+		timer:version === 'MAIN' ? 1/0 : 1000,// 5*60*1000/25,
 		list:{},		//acts like List.all (for faster activeList)
 		
 		addon:newaddon,
@@ -75,10 +75,13 @@ Map.creation.all = function(){
 
 Map.loop = function(map){
 	//Time Out Instance
-	if(Loop.frameCount % (60*1000/40) === 0){		//each min
+	if(Loop.interval(60*1000/40)){		//each min
 		if(Map.instance.player(map.id).length === 0){
 			map.timer -= 60*1000/25;
-			if(map.timer <= 0)	Map.remove(map);
+			if(map.timer <= 0){
+				Map.remove(map);
+				return;
+			}
 		}	
 	}
 	
@@ -127,13 +130,12 @@ Map.instance.list = function(model){
 Map.instance.player = function(id){
 	//return list of players names that are in a certain model of instance
 	var plist = [];
-	var list = List.map[id].list;
-	for(var i in list){
+	for(var i in List.map[id].list){
 		if(List.all[i] && List.all[i].type === 'player'){
 			plist.push(List.all[i].name);
 		}
 	}
-	return list;
+	return plist;
 }
 
 Map.remove = function(map){

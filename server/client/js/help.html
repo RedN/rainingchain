@@ -477,8 +477,7 @@
 			</i>
 			<i>
 				<t>Curse</t>
-				Afflict touched enemies with a bad boost.<br>
-				Chance: Chance to proc the curse.
+				Afflict touched enemies with a negative boost.<br>
 			</i>
 			<i>
 				<t>Dodge</t>
@@ -520,7 +519,7 @@
 			</i>
 			<i>
 				<t>3. Update Attack Stats</t>
-					Dmg Factor = Weapon Dmg Global * Ability Dmg Global * Dmg Mastery I * Dmg Global <br>
+					Dmg Factor = Weapon Dmg Global * Ability Dmg Global * Dmg Mastery I * Dmg Global Factor <br>
 					Melee Dmg = MIN(Melee Weapon Ratior, Melee Ability Ratio) <br>
 					Final Melee Dmg = Melee Dmg * Dmg Factor.<br>
 					---<br>
@@ -531,7 +530,7 @@
 							Weapon: 50% Melee. 50% Magic. 100 Dmg Global.<br>
 							Ability: 25% Melee. 50% Magic. 25% Fire. 10 Dmg Global.<br>
 							Mastery: Melee:x1.5, Range:x1, Magic:x1, Fire:x2...<br>
-							Dmg Global: x0.9.<br>
+							Dmg Global Factor: x0.9.<br>
 							---<br>
 							Dmg Factor = 100 * 10 * 1.5 * 0.9 = 1350<br>
 							<br>
@@ -566,10 +565,34 @@
 					There is a maximum and minimum distance between a strike and player.<br>
 			</i>
 	</i>
+	
+	<i>
+		<t>Attack Creation Phases</t>
+			<i>
+				<t>1. Update Defence</t>
+				Def Total = Def Equip * Def Mastery * Def Global Factor 	(for each element).
+				
+				<i>
+					<t>Example</t>
+						Helm: 50% Melee. 50% Magic. 10 Def Global.<br>
+						Body: 25% Melee. 50% Magic. 25% Fire. 100 Def Global.<br>
+						Def Mastery: Melee:x1.5, Range:x1, Magic:x1, Fire:x2...<br>
+						Def Global Factor: x0.9.<br>
+						---<br>
+						Dmg Factor = 100 * 10 * 1.5 * 0.9 = 1350<br>
+						<br>
+						Melee Dmg = MIN(50%,25%) = 25%<br>
+						Range Dmg = MIN(0%,0%) = 0%<br>
+						Magic Dmg = MIN(50%,50%) = 50%<br>
+						...<br>
+						Final Melee Dmg = 25% * 1350 = 338<br>
+						Final Range Dmg = 0% * 1350 = 0<br>
+						Final Magic Dmg = 50% * 1350 = 675<br>
+						...<br>
+				</i>
+				
+	
 </i>
-
-
-
 
 	<!--
 
@@ -624,6 +647,15 @@ Raining Chain combat mechanics easy to use but hard to master.
 <u>Knock Resist:</u>&emsp; ENEMY ONLY. Reduce Knock Magn.
 <u>Bleed Resist:</u>&emsp; ENEMY ONLY. Reduce Bleed Magn.
 
+<i>
+	<t>Crafting</t>
+	<i>
+		<t>Stats</t>
+		<i>
+			<t>Offensive</t>
+			
+			
+			
 -->
 
 

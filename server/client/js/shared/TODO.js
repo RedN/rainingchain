@@ -1,10 +1,16 @@
 
 
 
-when map removed cuz not active, BUG
-
-
 map lvl
+DEBUG: track someone in particular
+compress db
+db fake
+finish doc
+draw passive weird block for special balancedAtk
+make passive
+
+quest bonus in a object
+
 
 
 //patch for release
@@ -20,10 +26,7 @@ log error!
 
 remake tileset
 
-draw passive weird block for special balancedAtk
-make passive
 
-compress saved data
 
 init drawing css client
 
