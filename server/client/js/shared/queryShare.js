@@ -163,24 +163,52 @@ if(server){
 					var add = Itemlist.add;
 					
 					var q = m.quest;
-					var e = [];
-					var pl = [];
-					var ec = [];
-					var b = [];
+					
+					
+					var le = {}; //all enemy
+					var lp = {}; //all player
+					var lc = {}; //all combat
+					var lb = []; //all bullet
+					
+					
+					var e = {};	//all enemy nearby
+					var c = {}; //all combat enemy nearby
+					var pl = {}; //all player nearby 
+					var b = [];	//all bullet nearby
+					
+
 					for(var i in List.all){
-						if(List.all[i].type === 'enemy'){e.push(List.all[i]);
-							if(List.all[i].combat) ec.push(List.all[i])
+						var mort = List.all[i];
+						if(mort.type === 'enemy'){
+							var id = mort.name + ' ' + mort.id;
+							le[id] = mort;
+							if(mort.combat) lc[id] = mort;
+							
+							if(Activelist.test(p,mort)){
+								e[id] = mort;
+								if(mort.combat) c[id] = mort;
+							}
+						}						
+						if(mort.type === 'player'){
+							var id = mort.name + ' ' + mort.id;
+							lp[id] = mort;
+							if(Activelist.test(p,mort)) pl[id] = mort;
 						}
-						if(List.all[i].type === 'player'){pl.push(List.all[i]);}
-						if(List.all[i].type === 'bullet'){b.push(List.all[i]);}
+						if(List.all[i].type === 'bullet'){
+							lb.push(mort);
+							if(Activelist.test(p,mort)) b[id] = mort;
+						}
 					}				
-					var S = function(id){
+					
+					
+					
+					var S = function(id){	//select a actor via name or id
 						for(var i in List.all)	if(i === id || List.all[i].name === id) return List.all[i];
 					}
-					var sm = function(id){
+					var sm = function(id){	//select main via id or name
 						for(var i in List.socket)	if(i === id || List.all[i].name === id) return List.main[i];
 					}
-					var a = function(id){
+					var a = function(id){	//select actor via partially name or id. same map 
 						for(var i in List.actor)	
 							if(List.actor[i].map !== p.map) continue;
 							if(i === id || List.actor[i].name.have(id)) return List.actor[i];

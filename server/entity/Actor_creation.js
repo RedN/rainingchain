@@ -120,11 +120,24 @@ Actor.creation.info = function(e,cr){
 	e.crY = cr.y;
 	e.category = cr.category || 'slime'; 
 	e.variant = cr.variant || 'Regular'; 
-	e.lvl = cr.lvl || 0; 
 	e.modAmount = cr.modAmount !== undefined ?  cr.modAmount : 1;
 	e.extra = cr.extra || {};
+	
+	e.lvl = Actor.creation.info.lvl(List.map[e.map].lvl,cr.lvl); 
 	return e;
 }
+
+Actor.creation.info.lvl = function(lvl,mod){
+	if(!mod) return lvl;
+	if(typeof mod === 'number') return mod;
+	if(typeof mod === 'function') return mod(lvl);
+	
+	if(mod[0] === '+' || mod[0] === '-') return lvl + +mod;
+	if(mod[0] === '*') return lvl * +mod.slice(1);
+	
+	return lvl;	
+}
+
 
 Actor.creation.mod = function(e,d){
 	var list = Object.keys(Actor.creation.mod.list);

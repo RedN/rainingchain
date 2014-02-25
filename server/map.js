@@ -16,7 +16,7 @@ Map MAIN created
 
 Map = {};
 
-Map.creation = function(namemodel,version){
+Map.creation = function(namemodel,version,lvl){
 	//create a copy of a default map. used for instanced map. version is usually the player name
 	version = version || 'MAIN';
 	var newid = namemodel + '@' + version;
@@ -37,7 +37,7 @@ Map.creation = function(namemodel,version){
 		model:model.id,
 		timer:version === 'MAIN' ? 1/0 : 1000,// 5*60*1000/25,
 		list:{},		//acts like List.all (for faster activeList)
-		
+		lvl:lvl || model.lvl,
 		addon:newaddon,
 	};
 	

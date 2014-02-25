@@ -163,7 +163,7 @@ tut.load = function(map,spot,v,m){
 	
 	//First monster
 	Actor.creation({'xym':spot.i,
-		"category":"Qtutorial","variant":"bee",extra:{
+		"category":"Qtutorial","variant":"bee",lvl:'+100',extra:{
 			'deathFunc':function(key){
 				List.main[key].quest['Qtutorial'].beeDead = true;						
 			}		
@@ -172,12 +172,12 @@ tut.load = function(map,spot,v,m){
 	
 	//Bees Near Chest
 	Actor.creation.group({'xym':spot.l,'respawn':25*100},[
-		{'amount':3,"category":"Qtutorial","variant":"bee","lvl":0,'modAmount':0}
+		{'amount':3,"category":"Qtutorial","variant":"bee",'modAmount':0}
 	]);
 	
 	//Boss Fire
 	Actor.creation({'xym':spot.k,
-		"category":"Qtutorial","variant":"demon",extra:{
+		"category":"Qtutorial","variant":"demon",lvl:'+100',extra:{
 			deathFunc:function(key){
 				List.main[key].quest.Qtutorial.bossDead = true;
 			}
