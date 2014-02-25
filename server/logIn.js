@@ -189,14 +189,6 @@ Save.main = function(key,updateDb){
     } else { return save; } //when sign up
 }
 
-Save.main.compress = function(main){
-	//could compress invlist and banklist
-	
-	
-	
-    return main;
-}
-
 
 //Load Account
 Load = function (key,user,socket){
@@ -241,10 +233,50 @@ Load.main = function(key,user,cb){
 	});
 }
 
+Save.main.compress = function(main){
+	delete main.tradeList;
+	
+	main.invList = main.invList.data;
+	for(var i = main.invList.length-1; i>=0; i--){
+		if(!main.invList[i].length) main.invList.splice(i,1);
+	}
+	
+	main.bankList = main.bankList.data;
+	for(var i = main.bankList.length-1; i>=0; i--){
+		if(!main.bankList[i].length) main.bankList.splice(i,1);
+	}
+	
+	main.social = {
+		friend:main.social.list.friend,
+		mute:main.social.list.mute,
+		message:main.social.message,
+	}
+
+    return main;
+}
+
 Load.main.uncompress = function(main,key){
+	main.invList = Itemlist.template('inventory', main.invList);
+	main.bankList = Itemlist.template('bank', main.bankList);
+	main.tradeList = Itemlist.template('inventory');
+	
     main.invList.key = key;
     main.bankList.key = key;
     main.tradeList.key = key;
+	
+	
+	main.social = {
+		message: main.social.message,
+		list: {
+		  friend: main.social.friend,
+		  mute: main.social.mute,
+		  clan: [ ]
+		},
+		status: "on"
+	};
+	
+	
+	
     return main;
 }
 
@@ -268,8 +300,6 @@ Load.player = function(key,user,cb){
 }
 
 Save.player.compress = function(player){
-    //player.equip = {piece:player.equip.piece};
-	
 	for(var i in player.ability)	player.ability[i] = player.ability[i] ? player.ability[i].id : 0;
 
 	if(!player.map.have("@MAIN")){	//then need to modify xymap
@@ -278,19 +308,39 @@ Save.player.compress = function(player){
 		player.map = player.respawnLoc.safe.map || 'test@MAIN';
 	}
 	
+	player.x = Math.round(player.x);
+	player.y = Math.round(player.y);
+	
+	//Skill
+	player.skill = player.skill.exp;
+	var tmp = [];
+	for(var i in Cst.skill.list) tmp.push(player.skill[Cst.skill.list[i]]);
+	player.skill = tmp;
+	
+	//Equip
+	player.equip = player.equip.piece;
+	var tmp = [];
+	for(var i in Cst.equip.piece) tmp.push(player.equip[Cst.equip.piece[i]]);
+	player.equip = tmp;
+	
     return player;
 }
 
-
 Load.player.uncompress = function(player){
-	//Equip
-	/*
-	var model = Actor.template.equip('player');
-	model.piece = player.equip.piece;
-	player.equip = model;
+	//Skill
+	player.skill = {exp:player.skill,lvl:{}};
+	var tmp = {};
+	for(var i in Cst.skill.list) tmp[Cst.skill.list[i]] = player.skill.exp[i];
+	player.skill.exp = tmp;
+	for(var i in player.skill.exp) player.skill.lvl[i] = Skill.getLvlViaExp(player.skill.exp[i]);
 	
-	*/
+	//Equip
+	player.equip = {piece:player.equip,dmg:Cst.element.template(1),def:Cst.element.template(1)};
+	var tmp = {};
+	for(var i in Cst.equip.piece) tmp[Cst.equip.piece[i]] = player.equip.piece[i];
+	player.equip.piece = tmp;
 	Actor.updateEquip(player);
+	
 	
 	player.respawnLoc = {safe:{x:player.x,y:player.y,map:player.map},
 							recent:{x:player.x,y:player.y,map:player.map}};

@@ -6,7 +6,7 @@ Init.db.equip = function (cb){
 	var pre = Db.equip;
 
 	db.equip.find({},{'_id':0},function(err, results) { if(err) throw err
-		for(var i in results)	pre[results[i].id] = results[i];
+		for(var i in results)	pre[results[i].id] = Equip.uncompress(results[i]);
 			
 	pre['unarmed'] = {		//DONT TOUCH
 		'piece': 'melee','type': 'mace','icon':'melee.mace',
@@ -234,7 +234,7 @@ Equip.creation = function(equip){
 	Item.creation(item);
 		
 	
-	db.equip.update( {'id':equip.id}, equip, { upsert: true }, db.err);
+	db.equip.update( {'id':equip.id}, Equip.compress(equip), { upsert: true }, db.err);
 
 }
 
@@ -244,6 +244,39 @@ Equip.creation.color = function(w){
 	return 'yellow';  
 }
 
+Equip.compress = function(e){
+	e = deepClone(e);
+	e.dmg = Equip.compress.element(e.dmg);
+	e.def = Equip.compress.element(e.def);
+	return e;
+}
+
+Equip.uncompress = function(e){
+	e.dmg = Equip.uncompress.element(e.dmg);
+	e.def = Equip.uncompress.element(e.def);
+	return e;
+}
+
+Equip.compress.element = function(e){
+	for(var i in e.ratio) e.ratio[i] = round(e.ratio[i],4);
+	e.main = round(e.main,4);
+	var r = e.ratio;
+	return [e.main,r.melee,r.range,r.magic,r.fire,r.cold,r.lightning];	
+}
+
+Equip.uncompress.element = function(r){
+	return {
+		main:r[0],
+		ratio:{
+			melee:r[1],
+			range:r[2],
+			magic:r[3],
+			fire:r[4],
+			cold:r[5],
+			lightning:r[6],	
+		}
+	}
+}
 
 //Add Default Weapon elements and init weapon
 	

@@ -192,7 +192,7 @@ Itemlist.transfer.bulk = function(inv,other,array_items,allornothing){
 
 
 //Inventory
-Itemlist.template = function(type){
+Itemlist.template = function(type,data){
 	var tmp = {};
 	tmp.type = type;
 	tmp.key = 'not_set';
@@ -206,6 +206,8 @@ Itemlist.template = function(type){
 	}
 	tmp.data = Array(size);	
     for(var i = 0 ; i < tmp.data.length ; i++) tmp.data[i] = [];
+	
+	if(data) for(var i in data) tmp.data[i] = data[i];
 	
     return tmp;
 }

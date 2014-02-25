@@ -38,6 +38,11 @@ Skill.updateLvl = function(key,sk){
 	}
 }
 
+Skill.getLvlViaExp = function(exp){
+	return binarySearch(Cst.exp.list,exp)
+}
+
+
 Skill.lvlUp = function(key,skill){
 	Chat.add(key,'You are level ' + List.all[key].skill.lvl[skill] + ' in ' + skill.capitalize() + '!');
 	LOG(0,key,'Skill.lvlUp',skill,List.all[key].skill.lvl[skill]);

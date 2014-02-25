@@ -53,7 +53,7 @@ Test.playerStart = function(key){
 	var inv = List.main[key].invList;
 	var mort = List.all[key];
     
-
+	Test.firstLog(key);
 }
 
 Test.firstLog = function(key){

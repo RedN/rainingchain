@@ -2,7 +2,7 @@
 
 
 map lvl
-DEBUG: track someone in particular
+
 compress db
 db fake
 finish doc
@@ -12,6 +12,11 @@ make passive
 quest bonus in a object
 
 
+simply game:
+-atkspd
+-resource
+
+revamp ability window
 
 //patch for release
 Loop
