@@ -113,9 +113,11 @@ Main.openPopup = function(main,name,id){
 Main.examineEquip = function(main, id){
 	Main.openPopup(main,'equip',id);
 }
+
 Main.examinePlan = function(main, id){
 	Main.openPopup(main,'plan',id);
 }
+
 Main.selectInv = function(main,obj){
 	main.temp.selectInv = obj;
 	main.temp.reset.selectInv = 1;
@@ -127,8 +129,7 @@ Main.abilityModClick = function(main,id){
 		return;
 	} else {
 		main.chatInput = ['$win,ability,addMod,' + id + ','   ,   0];
-	}
-	
+	}	
 }
 
 

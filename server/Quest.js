@@ -86,6 +86,7 @@ Quest.complete = function(key,id){
 	qp.reward =	tmp[1];
 	qp.complete = tmp[2];
 	qp.deathCount = 0;
+	LOG(0,key,'Quest.complete',id);
 }
 
 Quest.convert = function(mq){

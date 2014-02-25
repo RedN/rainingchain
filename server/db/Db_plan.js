@@ -186,11 +186,15 @@ Plan.use = function(key,id){	//when player tries to use plan
 	if(Plan.test(key,plan.req)){ //meet req
 		Itemlist.remove.bulk(inv,plan.req.item);
 		
-		if(plan.unique){ Itemlist.add(inv, plan.unique); return;}	//unique items
-
 		
-		if(plan.category === 'equip') Itemlist.add(inv, Craft.equip(plan)); 
-		if(plan.category === 'ability') Itemlist.add(inv, Craft.ability(plan)); 
+		var itemid;
+		if(plan.unique){ itemid = plan.unique }	//always give same items		
+		if(plan.category === 'equip') itemid = Craft.equip(plan); 
+		if(plan.category === 'ability') itemid = Craft.ability(plan); 
+		
+		Itemlist.add(inv, itemid);
+		LOG(1,key,'Plan.use',id,itemid);
+		
 	} else { //dont meet
 		Chat.add(key,"You don't meet the requirements to use this plan.");
 	}
@@ -201,39 +205,8 @@ Plan.use.ability = function(key,seed){		//quickfix...
 	var id = Craft.ability(seed);
 	Actor.learnAbility(List.all[key],id);
 	Itemlist.remove(List.main[key].invList,seed.item);
+	LOG(1,key,'Plan.use.ability',id);
 }
-
-/*
-Plan.examine.chat = function(key,seed,req){	
-	var inv = List.main[key].invList;
-	var lvl = List.all[key].skill.lvl;
-	
-	var color = 'green';
-	
-	var str = 'Plan Information: ';
-	str += '<br>&emsp;Level:' + seed.lvl;
-	if(seed.piece) str += ', Piece:' + seed.piece;
-	if(seed.type) str += ', Type:' + seed.type;
-	str += '<br>&emsp;Rarity:' + round(seed.rarity || 0,2) + ', Quality:' + round(seed.quality || 0,2);
-	
-	str += '<br>&emsp;Items: ';
-	for(var i in req.item){
-		color = Cst.color.test(Itemlist.have(inv,req.item[i][0],req.item[i][1]));
-		str += '<span style="color:' + color + '"> ';
-		str += 'x' + req.item[i][1] + ' ' + Db.item[req.item[i][0]].name + ', ';
-		str += '</span>';
-	}
-	str += '<br>&emsp;Skills: ';
-	for(var i in req.skill){
-		color = Cst.color.test(lvl[i] >= req.skill[i]);
-		str += '<span style="color:' + color + '">';
-		str += 'Level ' + req.skill[i] + ' ' + i.capitalize() + ', ';
-		str += '</span>';
-	}
-
-	Chat.add(key,str); 
-}
-*/
 
 Plan.test = function(key,req){	//test requirement
 	var inv = List.main[key].invList;
@@ -244,6 +217,7 @@ Plan.test = function(key,req){	//test requirement
 	
 	return true
 }
+
 Plan.upgrade = function(){
 	//need to add stuff
 	//x2 more req but +0.5 rarity

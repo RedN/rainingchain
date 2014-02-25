@@ -1,5 +1,44 @@
 //List of handy functions.
 
+
+LOG = function(lvl,key,name,param){
+	/*
+	0:Very important
+	1:important (saved)
+	2:NOT really important (not saved)
+	*/
+	var mort = List.all[key];
+	var id = mort ? mort.name : key;
+	
+	if(lvl > LOG.level) return;
+	
+	var param = '';
+	for(var i = 3; i < arguments.length; i++)	param += arguments[i];
+	
+	LOG.data.push({
+		time:Date.now(),
+		id:id,
+		name:name,
+		param:param,
+	});
+}
+
+LOG.display = function(key){
+	if(!key){ console.log(LOG.data); return; }
+	
+	for(var i in LOG.data){
+		if(LOG.data[i].id === key){
+			var date = new Date(LOG.data[i].time).toLocaleString();
+			console.log(date,LOG.data[i].name,LOG.data[i].param);
+		}
+	}
+	
+}
+LOG.data = [];
+LOG.level = 2;
+
+
+
 DEBUG = function(lvl,message){
 	/*
 	0:CRASH
@@ -34,31 +73,14 @@ DEBUG = function(lvl,message){
 		else if(array[i].have("Function"))	//Function.Load.player.uncompress (C:
 			func.push(array[i].slice(9,array[i].indexOf(' (C:')));
 		else 
-			func.push(array[i].slice(0,array[i].indexOf(' (C:'))); 
-			//func.push(array[i].slice(array[i].lastIndexOf('\\')+1));
+			func.push(array[i].slice(0,array[i].indexOf(' (C:')));
 	}
 	var str = func[0];
 	str += '(' + arg + '); ';
 	for(var i =1;i<func.length;i++) str += ' *** ' + func[i];
 	console.log(str);
-	
-		//console.trace(message);
-	
 		
-}
-/*
-  'Object.Actor.updateEquip (C:\\rc\\rainingchain\\server\\client\\js\\shared\\Actor.js:51:2)\n   ',
-  'Function.Load.player.uncompress (C:\\rc\\rainingchain\\server\\logIn.js:293:8)\n   ',
-  'C:\\rc\\rainingchain\\server\\logIn.js:256:20\n   ',
-  'C:\\rc\\rainingchain\\node_modules\\mongojs\\node_modules\\mongodb\\lib\\mongodb\\cursor.js:158:16\n
-  'commandHandler (C:\\rc\\rainingchain\\node_modules\\mongojs\\node_modules\\mongodb\\lib\\mongodb\\curso
-  'C:\\rc\\rainingchain\\node_modules\\mongojs\\node_modules\\mongodb\\lib\\mongodb\\db.js:1670:9\n   ',
-  'Server.Base._callHandler (C:\\rc\\rainingchain\\node_modules\\mongojs\\node_modules\\mongodb\\lib\\mong
-  'C:\\rc\\rainingchain\\node_modules\\mongojs\\node_modules\\mongodb\\lib\\mongodb\\connection\\server.js
-  'MongoReply.parseBody (C:\\rc\\rainingchain\\node_modules\\mongojs\\node_modules\\mongodb\\lib\\mongodb\
-  
-  */
-  
+}  
 
 DEBUG.level = 10;
 DEBUG.stackSize = 3;
