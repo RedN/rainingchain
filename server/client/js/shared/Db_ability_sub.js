@@ -42,6 +42,7 @@ Init.db.ability.orb = function(){
 	//defined here or directly inside Db.ability.template if unique
 	Db.abilityOrb = {
 		'dmg':{
+			'name':'+Dmg',
 			'info':'Increases Damage',		
 			'func':(function(ab,orb,log){
 				var atk = ab.action.param;
@@ -50,6 +51,7 @@ Init.db.ability.orb = function(){
 			}),
 		},
 		'none':{
+			'name':'Nothing',
 			'info':'Does Nothing',		
 			'func':(function(ab,orb,log){
 				return ab;

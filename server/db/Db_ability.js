@@ -264,7 +264,7 @@ Init.db.ability = function(cb){
 	};
 	
 	a['pvp-invincibility'] = {'type':'dodge','name':'Invincibility','icon':'blessing.spike',
-		'spd':{'main':1,'support':0},'period':{'own':100,'global':5},'cost':{"dodge":75},
+		'spd':{'main':1,'support':0},'period':{'own':25,'global':25},'cost':{"mana":50},
 		'action':{'animOnSprite':'special1Red','func':'Actor.boost','param':[[
 			{"stat":"globalDef","type":"+","value":Cst.bigInt,"time":4,"name":"Dodge"},
 		]]}
@@ -622,7 +622,7 @@ Ability.uncompress.mod = function(ab){
 	return ab;
 }
 
-Ability.template = function(){	//unused
+Ability.template = function(){	//unused OLD AND BAD
 	return {
 		'name':'Fire','icon':'melee.mace',
 		'cost':{"dodge":0},'reset':{'attack':0},
@@ -636,7 +636,7 @@ Ability.template = function(){	//unused
 	};
 }
 
-Ability.template.attack = function(){	//unused
+Ability.template.attack = function(){	//unused OLD AND BAD
 	return {
 		'type':"bullet",'angle':5,'amount':1, 'aim': 0,
 		'objImg':{'name':"fireball",'sizeMod':1},'hitImg':{'name':"fire2",'sizeMod':0.5},

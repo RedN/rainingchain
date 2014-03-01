@@ -9,7 +9,7 @@ Draw.state = function(){
 	s.y += 5;
 	Draw.state.ability(s);
 	s.y += 30;
-	Draw.state.status(s);
+	Draw.state.status(s,player.statusClient);
 	s.y += 30;
 	Draw.pvpScore(s);
 }
@@ -28,9 +28,9 @@ Draw.state.resource = function (s){ ctxrestore();
 		
 	var array = [
 		{'name':'hp','height':20,'width':s.w},
-		{'name':'heal','height':10,'width':s.w},
 		{'name':'mana','height':10,'width':s.w},
-		{'name':'fury','height':10,'width':s.w},
+		//{'name':'heal','height':10,'width':s.w},
+		//{'name':'fury','height':10,'width':s.w},
 	];
 	
 	for(var i in array){
@@ -38,9 +38,9 @@ Draw.state.resource = function (s){ ctxrestore();
 		Draw.state.resource.bar(s.x+5,s.y+5,res.width,res.height,res.name);
 		
 		Button.creation(0,{
-				'rect':[s.x+5,s.x+5+res.width,s.y+5,s.y+5+res.height],
-				'text':res.name.capitalize() + ': ' + player[res.name] + '/' + player.resource[res.name].max,
-				});		
+			'rect':[s.x+5,s.x+5+res.width,s.y+5,s.y+5+res.height],
+			'text':res.name.capitalize() + ': ' + player[res.name] + '/' + player.resource[res.name].max,
+		});		
 		s.y += res.height + 3;
 						
 	}	
@@ -92,13 +92,14 @@ Draw.state.ability = function(s){ ctxrestore();
 	}
 }
 
-Draw.state.status = function(s){ ctxrestore();
+Draw.state.status = function(s,status){ ctxrestore();
 	ctx = List.ctx.stage;
 	var numX = s.x+10;		
-	for(var i in player.statusClient){
-		if(+player.statusClient[i]){
-			Draw.icon('status.' + Cst.status.list[i],[numX,s.y],24);
-			numX += 30			
+	for(var i in status){
+		if(+status[i]){
+			var text = status !== player.statusClient ? '' : Cst.status.list[i].capitalize();
+			Draw.icon('status.' + Cst.status.list[i],[numX,s.y],24,text);
+			numX += 30;			
 		}
 	}
 }

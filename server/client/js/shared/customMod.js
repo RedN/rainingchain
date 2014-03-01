@@ -135,7 +135,7 @@ io.sockets.on('connection', function (socket) {
 			if(!res[0]){
 				if(!d.text)	//aka just want to test if exist
 					socket.emit('queryMod',{id:d.id});	
-				else if(Beta.customMod){ //aka want to add to db
+				else if(Server.customMod){ //aka want to add to db
 					var mort = List.all[socket.key];
 					//if(!mort || mort.lvl < 0) return;	//aka requirement to post new script
 					

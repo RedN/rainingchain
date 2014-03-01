@@ -90,14 +90,14 @@ Sign.in = function(socket,d){
 	var user = escape.quote(d.username);
 	var pass = escape.quote(d.password);
 	
-	if(user !== 'sam' && Object.keys(List.main).length >= Beta.amount){
-		if(Beta.message)		socket.emit('signIn', { 'success':0,'message':'<font color="red">' + Beta.message + '</font>' }); 
-		else if(Beta.amount)		socket.emit('signIn', { 'success':0,'message':'<font color="red">SERVER IS FULL.</font>' }); 
-		else if(!Beta.amount)	socket.emit('signIn', { 'success':0,'message':'<font color="red">SERVER IS CLOSED.</font>' }); 
+	if(!Server.admin.have(user) && Object.keys(List.main).length >= Server.maxPlayerAmount){
+		if(Server.loginMessage)		socket.emit('signIn', { 'success':0,'message':'<font color="red">' + Server.loginMessage + '</font>' }); 
+		else if(Server.maxPlayerAmount !== 0)		socket.emit('signIn', { 'success':0,'message':'<font color="red">SERVER IS FULL.</font>' }); 
+		else if(Server.maxPlayerAmount === 0)	socket.emit('signIn', { 'success':0,'message':'<font color="red">SERVER IS CLOSED.</font>' }); 
 		return;
 	}
-		
-	db.account.find({username:user},function(err, results) { if(err) throw err;		
+	
+	db.account.find({username:user},function(err, results) { if(err) throw err;	
 		if(results[0] === undefined){ socket.emit('signIn', { 'success':0,'message':'<font color="red">Wrong Password or Username.</font>' }); return }
 		if(results[0].online) {	socket.emit('signIn', { 'success':0, 'message':'<font color="red">This account is already online.</font>' }); return; }
 		

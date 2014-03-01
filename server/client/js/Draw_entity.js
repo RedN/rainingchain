@@ -3,7 +3,9 @@ Draw.actor = function (){
 	for(var i = 0 ; i < array.length ; i ++){
 		var mort = array[i];
 		Draw.sprite(mort);
-		if(mort.combat && mort !== player) Draw.actor.hpBar(mort); 
+		if(mort.combat && mort !== player){
+			Draw.actor.status(mort); 
+		}
 		if(mort.chatHead) Draw.actor.chatHead(mort); 
 	}
 }	
@@ -45,7 +47,7 @@ Draw.actor.chatHead = function(mort){
 	ctx.fillStyle="black";
 }		
 
-Draw.actor.hpBar = function(mort){
+Draw.actor.status = function(mort){	//hp + status
 	ctx = List.ctx.stage;
 	
 	var spriteServer = mort.sprite;
@@ -56,15 +58,19 @@ Draw.actor.hpBar = function(mort){
 	var numX = Cst.WIDTH2+mort.x-player.x-50;
 	var numY = Cst.HEIGHT2+mort.y-player.y + spriteFromDb.hpBar*sizeMod;
 
-	if(mort.type == 'enemy'){ ctx.fillStyle="red"; }
-	if(mort.type == 'player'){ ctx.fillStyle="green"; }
-
-	ctx.fillRect(numX,numY,Math.max(mort.hp/mort.resource.hp.max*100,0),5);
-	ctx.globalAlpha=1;
-	ctx.strokeStyle="black";
-	ctx.strokeRect(numX,numY,100,5);
+	//hp
+	ctx.strokeStyle = "black";
+	ctx.roundRect(numX,numY,100,5);
+	ctx.fillStyle = mort.type === 'enemy' ? 'red' : 'green';
+	ctx.roundRect(numX,numY,Math.max(mort.hp/mort.resource.hp.max*100,0),5,1);	
 	ctx.fillStyle="black";
+	
+	Draw.state.status({
+		x:numX,
+		y:numY - 30,
+	},mort.statusClient);
 }
+
 
 Draw.bullet = function(){
 	for(var i in List.bullet){

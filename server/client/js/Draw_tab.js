@@ -268,7 +268,7 @@ Draw.tab.friend = function(){ ctxrestore();
 	if(stringify(Draw.old.tab.friend) != stringify(list)){
 		Draw.old.tab.friend = list;
 		
-		hf.text.innerHTML = '<span style="color:white">' + '----Friend List----' + '</span>';
+		hf.text.innerHTML = '<span style="color:white">' + 'Friend List' + '</span>';
 		
 		for(var i in list){
 			var color = '#FF4D49';
@@ -389,7 +389,7 @@ Draw.tab.quest = function(){ ctxrestore();
 	if(Draw.old.tab.quest !== stringify(main.quest)){
 		Draw.old.tab.quest = stringify(main.quest);
 		
-		html.questTab.text.innerHTML = '<span style="color:white">' + '----Quest List----' + '</span>';
+		html.questTab.text.innerHTML = '<span style="color:white">' + 'Quest List' + '</span>';
 		
 		for(var i in main.quest){
 			var q = main.quest[i];
@@ -437,7 +437,7 @@ Draw.tab.pref = function(){
 	if(Draw.old.tab.pref !== stringify(main.pref)){
 		Draw.old.tab.pref = stringify(main.pref);
 		
-		hf.text.innerHTML = '<span style="color:white">' + '----Preferences----' + '</span>';
+		hf.text.innerHTML = '<span style="color:white">' + 'Preferences' + '</span>';
 		
 		//Key Binding
 		hf.text.innerHTML += 

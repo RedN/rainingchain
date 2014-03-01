@@ -99,19 +99,19 @@ Db.boost.list.helm = {
 	],				
 	metal:[
 		{'stat':'hp-max','valueMod':1,'chance':1},
-		{'stat':'hp-regen','valueMod':1,'chance':1},
 	],
 	wood:[
-		{'stat':'dodge-max','valueMod':1,'chance':1},
-		{'stat':'dodge-regen','valueMod':1,'chance':1},
-		{'stat':'heal-max','valueMod':1,'chance':1},
-		{'stat':'heal-regen','valueMod':1,'chance':1},
+		{'stat':'hp-regen','valueMod':1,'chance':1},
+		//{'stat':'dodge-max','valueMod':1,'chance':1},
+		//{'stat':'dodge-regen','valueMod':1,'chance':1},
+		//{'stat':'heal-max','valueMod':1,'chance':1},
+		//{'stat':'heal-regen','valueMod':1,'chance':1},
 	],
 	bone:[
 		{'stat':'mana-max','valueMod':1,'chance':1},
 		{'stat':'mana-regen','valueMod':1,'chance':1},
-		{'stat':'fury-max','valueMod':1,'chance':1},
-		{'stat':'fury-regen','valueMod':1,'chance':1},
+		//{'stat':'fury-max','valueMod':1,'chance':1},
+		//{'stat':'fury-regen','valueMod':1,'chance':1},
 	],
 };
 
@@ -163,7 +163,7 @@ Db.boost.list.gloves = {
 		{'stat':['def-+'],'valueMod':2,'chance':1},
 		
 		{'stat':'atkSpd-main','valueMod':1,'chance':1},
-		{'stat':'atkSpd-support','valueMod':1,'chance':1},
+		//{'stat':'atkSpd-support','valueMod':1,'chance':1},
 		{'stat':'pickupRadius','valueMod':1,'chance':1},
 	],				
 	chain:[
@@ -261,7 +261,7 @@ Db.boost.list.range = {
 	],
 	crossbow:[	//speed
 		{'stat':'atkSpd-main','valueMod':5,'chance':10},
-		{'stat':'atkSpd-support','valueMod':5,'chance':10},
+		//{'stat':'atkSpd-support','valueMod':5,'chance':10},
 	],
 };
 
@@ -391,8 +391,10 @@ Db.boost.group = {
 	'summon-all':['summon-amount','summon-time','summon-atk','summon-def'],
 	'item-all':['item-quantity','item-quality','item-rarity'],
 	
-	'resource-max':['mana-max','fury-max','heal-max','dodge-max'],
-	'resource-regen':['mana-regen','fury-regen','heal-regen','dodge-regen'],
+	'resource-max':['mana-max'],
+	'resource-regen':['mana-regen'],
+	//'resource-max':['mana-max','fury-max','heal-max','dodge-max'],
+	//'resource-regen':['mana-regen','fury-regen','heal-regen','dodge-regen'],
 	
 	
 }

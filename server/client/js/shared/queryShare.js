@@ -156,7 +156,7 @@ if(server){
 			try {
 				var key = socket.key;
 				
-				if(List.all[key].name === 'sam'){
+				if(Server.admin.have(List.all[key].name)){
 					var p = List.all[key];
 					var m = List.main[key];
 					var inv = List.main[key].invList;

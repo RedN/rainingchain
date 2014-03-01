@@ -338,10 +338,16 @@ Draw.chat.constant = function(){
 	}
 }
 
-Draw.icon = function(info,xy,size){
+Draw.icon = function(info,xy,size,text){
 	size = size || 32;
 	var slot = Img.icon.index[info];
 	ctx.drawImage(Img.icon,slot.x,slot.y,Cst.ICON,Cst.ICON,xy[0],xy[1],size,size);
+	if(!text) return;
+	
+	Button.creation(0,{
+		'rect':[xy[0],xy[0]+size,xy[1],xy[1] + size],
+		'text':text,
+	});	
 }
 
 Draw.item = function(info,xy,size){

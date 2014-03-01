@@ -374,17 +374,6 @@ Combat.hitIf.global = Combat.targetIf.global;
 
 
 
-/*
-Beta.resetAll = function(){
-
-
-
-
-
-*/
-
-
-
 
 
 

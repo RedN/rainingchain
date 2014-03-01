@@ -1,31 +1,42 @@
 
 
 
-map lvl
-
-compress db
+DEBUG: track someone in particular
 db fake
 finish doc
-draw passive weird block for special balancedAtk
-make passive
+
 
 quest bonus in a object
 
 
-simply game:
--atkspd
--resource
+passive:
+multipage
+change pts system
+draw passive for special balancedAtk
+remove passive
 
-revamp ability window
+
+fall collision map
+
+simplify:
+bonus from ability mod
+
+
+
+plan revamp:
+already know what min and max mods are
+
+ability window
+
+add knockback on close range melee
+
+
+add lvl to unlock stuff (act like tutorial)
+
 
 //patch for release
 Loop
 //
-
-
-log error!
-
-
 
 
 
@@ -33,7 +44,6 @@ remake tileset
 
 
 
-init drawing css client
 
 #Priority 2:
 -Crafting System with White
@@ -53,6 +63,34 @@ protect db, list, itemlist
 contact ppl for music
 
 
+
+
+
+$$$$$$$$$$$
+
+upgrade weapon
+upgrade equip
+upgrade ability
+
+unlocked full formula for element dmg def
+
+unlock passive
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 Selling points:
 no generic quest: fetch, kill X,  => puzzle, unique boss
 no p2w
@@ -66,5 +104,41 @@ no download.
 changeable graphics
 dark souls dodge
 enemy different with lvl
+
+reduce traveling time.
+dialogue less
+
+encourage team play
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 

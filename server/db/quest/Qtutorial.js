@@ -85,7 +85,9 @@ q.enemy["bee"] = {  //{
 q.enemy["demon"] = {  //{
 	"name":"Demon Immune To Fireballs.",
 	"sprite":{'name':"demon",'sizeMod':1},
-	"abilityList":{'fireNova':0.4,fireCircle:0.7},
+	"abilityList":{
+	//'fireNova':0.4,
+	fireCircle:0.7},
 	'resource':{'hp':{'max':100,'regen':0.3},'mana':{'max':100,'regen':1}},
 	'immune':{'fire':1},
 	'globalDef':1,

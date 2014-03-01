@@ -36,6 +36,7 @@ DEBUG = function(text){ permConsoleLog(text); }
 //Require
 require('./' + clientPath + 'client/js/shared/essentialsShare');
 
+require('./server/Server');
 require('./server/db/Db');
 main = require('./server/main');
 
@@ -96,34 +97,7 @@ require('./' + clientPath + 'client/js/shared/Db_customboost');
 
 
 
-Server =  {
-	ready:0,
-}
 
-Server.start = function(data){
-	Init.db(data);
-	Init.email(data);
-	main.initServer();
-	Server.ready = 1;	
-}
-
-Server.botwatch = function(key,towatch){
-	List.main[key].old = {};
-	List.all[key].old = {};
-	List.all[key].privateOld = {};
-	
-	if(!towatch){
-		for(var i in List.socket) if(i !== key) towatch = i;
-	}
-	console.log(towatch);
-	List.main[towatch].old = {};
-	List.all[towatch].old = {};
-	List.all[towatch].privateOld = {};
-	Server.botwatch.watcher = key;
-	Server.botwatch.watched = towatch;
-}
-Server.botwatch.watcher = null;
-Server.botwatch.watched = null;
 
 io.sockets.on('connection', function (socket) { socket.on('Server.start', Server.start)});
 
@@ -132,17 +106,6 @@ if(!nodejitsu && !process.argv[4])	Server.start({
 	mongohq:+process.argv[2],
 	deletedb:process.argv[3],
 });
-
-Beta = {};
-Beta.amount = nodejitsu ? 0 : 64;
-Beta.customMod = false;
-
-
-Beta.disconnectAll = function(){
-	for(var i in List.main){
-		Sign.off(i,"Admin disconnected every player.");
-	}
-}
 
 
 

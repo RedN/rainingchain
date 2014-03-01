@@ -58,6 +58,7 @@ Change.update.init = function(){
 				{'array':['resource','hp','max'],'filter':Math.round,'condition':(function(e){ return !e.nevercombat; })},
 				{'array':['spdX'],'filter':Math.round,'condition':(function(e){ return !e.nevermove; })},
 				{'array':['spdY'],'filter':Math.round,'condition':(function(e){ return !e.nevermove; })},
+				{'array':['statusClient'],'condition':(function(e){ return e.combat; })},
 			],
 			'slow':[
 				{'array':['combat']},
@@ -88,7 +89,7 @@ Change.update.init = function(){
 				{'array':['spdX'],'filter':Math.round},
 				{'array':['spdY'],'filter':Math.round},
 				{'array':['hp'],'filter':Math.round},
-				
+				{'array':['statusClient']},
 			],
 			'slow':[
 				{'array':['resource','hp','max'],'filter':Math.round},
@@ -163,9 +164,6 @@ Change.update.init = function(){
 				{'array':['map'],'filter':Change.send.convert.map},
 				{'array':['hp'],'filter':Math.round},
 				{'array':['mana'],'filter':Math.round},
-				{'array':['dodge'],'filter':Math.round},
-				{'array':['fury'],'filter':Math.round},
-				{'array':['heal'],'filter':Math.round},
 				{'array':['sprite','name']},
 				{'array':['sprite','sizeMod']},
 				{'array':['abilityChange','chargeClient'],'filter':Change.send.convert.abilityChangeClient},
@@ -222,6 +220,11 @@ Change.update.init = function(){
 	}
 	
 }
+/*
+{'array':['dodge'],'filter':Math.round},
+{'array':['fury'],'filter':Math.round},
+{'array':['heal'],'filter':Math.round},
+*/
 
 Change.update.watch = function(mort,info,priv){
 	//Test condition to test
