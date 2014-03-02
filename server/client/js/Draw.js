@@ -42,6 +42,7 @@ Draw.loop = function (){
 	Draw.context();     //top left
 	Draw.command();
 	//clientContext = '';		
+	
 }
 
 Draw.map = function (layer){ ctxrestore();

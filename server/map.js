@@ -48,18 +48,22 @@ Map.creation = function(namemodel,version,lvl){
 }
 
 Map.creation.model = function(map){	//create the model that will be in Db.map | Model will then be modded by quest
-	var grid = [];
+	var grid = [];	//for astart
 	for(var i = 0 ; i < map.grid.length; i++){	
 		grid[i] = [];
 		for(var j = 0 ; j < map.grid[i].length; j++){
-			grid[i][j] = +!+map.grid[i][j];
+			grid[i][j] = +!+map.grid[i][j];	//opposite
 		}
 	}
 	
 	var strGrid = stringify(map.grid);
 	map.grid = {};
 	map.grid.astar = new astar.Graph(grid);
-	map.grid.actor = JSON.parse(strGrid.replaceAll('0','a').replaceAll('1','0').replaceAll('2','0').replaceAll('a','1'));
+	
+	//PRE: 0 => can walk, 1 => cant; 2 => bullet only can walk; 3 => fall close; 4 => fall
+	//POST: 0 => cant walk, 1 => can walk; 3 => fall close 4=> fall
+	map.grid.player = JSON.parse(strGrid.replaceAll('0','a').replaceAll('1','0').replaceAll('2','0').replaceAll('a','1'));
+	map.grid.enemy = JSON.parse(strGrid.replaceAll('0','a').replaceAll('1','0').replaceAll('2','0').replaceAll('a','1').replaceAll('4','0'));
 	map.grid.bullet = JSON.parse(strGrid.replaceAll('0','a').replaceAll('1','0').replaceAll('2','1').replaceAll('a','1'));
 	
 	map.addon = map.addon || {};

@@ -16,11 +16,6 @@ draw passive for special balancedAtk
 remove passive
 
 
-fall collision map
-
-simplify:
-bonus from ability mod
-
 
 
 plan revamp:

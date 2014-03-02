@@ -21,7 +21,7 @@ Collision.PosMap = function(pos,map,type){
 	//Test Collision between pt and map
 	
 	var grid = Db.map[Map.getModel(map)].grid[type];
-	return !grid[pos.y] || !+grid[pos.y][pos.x];
+	return !grid[pos.y] || !+grid[pos.y][pos.x];		//return 1 if collision
 }
 
 Collision.ActorMap = function(pos,map,player){
@@ -30,8 +30,15 @@ Collision.ActorMap = function(pos,map,player){
 	if(player.mapMod && player.mapMod[pos.x + '-' + pos.y]){
 		return player.mapMod[pos.x + '-' + pos.y];
 	}
-	return Collision.PosMap(pos,map,'actor');
+	return Collision.PosMap(pos,map,player.type || 'enemy');
 };
+
+Collision.getSquareValue = function(pos,map,type){
+	var grid = Db.map[Map.getModel(map)].grid[type];
+	if(!grid[pos.y]) return null;
+	return grid[pos.y][pos.x];		//return if in a falling zone
+}
+
 
 Collision.getHitBox = function(player){
 	return [player.x + player.hitBox[2].x,player.x + player.hitBox[0].x,player.y + player.hitBox[3].y,player.y + player.hitBox[1].y];

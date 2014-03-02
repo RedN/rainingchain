@@ -35,6 +35,8 @@ Actor.loop = function(mort){
 		Actor.loop.move(mort);  	//move the actor
 	}
 	if(mort.type === 'player'){
+		Actor.loop.fall(mort);	//test if fall
+		
 		var i = mort.id;
 		if(mort.frameCount % 2 === 0){ Draw.loop(i); }    //draw everything and add button
 		if(mort.frameCount % 25 === 0){ Actor.loop.friendList(mort); }    //check if any change in friend list
@@ -71,7 +73,7 @@ Actor.loop.ability = function(m){
 		m.abilityChange.chargeClient[i] = (charge[id] >= s.period.own) ? 1 : (charge[id] / s.period.own);
 	
 		//Perform
-		if(press && charge[id] >= s.period.own && m.abilityChange.globalCooldown <= 0){
+		if(press && charge[id] >= s.period.own && (s.period.bypassGlobalCooldown || m.abilityChange.globalCooldown <= 0)){
 			Actor.performAbility(m,s);
 			break;	//1 ability per frame max
 		}
@@ -100,7 +102,8 @@ Actor.performAbility = function(mort,ab,mana,reset){
 Actor.performAbility.resetCharge = function(mort,ab){
 	var charge = mort.abilityChange.charge;
 	charge[ab.id] = Math.min(charge[ab.id] % ab.period.own,1);
-	mort.abilityChange.globalCooldown =  ab.period.global * (ab.spd.main / mort.atkSpd.main.mm(0.01) + ab.spd.support / mort.atkSpd.support.mm(0.01));
+	mort.abilityChange.globalCooldown = mort.abilityChange.globalCooldown < 0 ? 0 : mort.abilityChange.globalCooldown;	//incase bypassing Global
+	mort.abilityChange.globalCooldown +=  ab.period.global * (ab.spd.main / mort.atkSpd.main.mm(0.01) + ab.spd.support / mort.atkSpd.support.mm(0.01));
 	
 	//Reset the ability and related abilities
 	return;
@@ -152,9 +155,9 @@ Actor.loop.pushed = function(mort){
 		mort.spdX = cos(status.angle)*status.magn;
 		mort.spdY = sin(status.angle)*status.magn;
 		status.time--;
-	} else {
-		status.spdX = 0;
-		status.spdY = 0;
+	} else if(mort.type !== 'player'){
+		mort.spdX = 0;
+		mort.spdY = 0;
 	}
 }
 
@@ -276,9 +279,9 @@ Actor.loop.summon = function(mort){
 Actor.loop.bumper = function(mort){	//test collision with map
 	//test global limit
 	mort.x = Math.max(mort.x,50);
-	mort.x = Math.min(mort.x,Db.map[Map.getModel(mort.map)].grid.actor[0].length*32-50);
+	mort.x = Math.min(mort.x,Db.map[Map.getModel(mort.map)].grid.bullet[0].length*32-50);
 	mort.y = Math.max(mort.y,50);
-	mort.y = Math.min(mort.y,Db.map[Map.getModel(mort.map)].grid.actor.length*32-50);
+	mort.y = Math.min(mort.y,Db.map[Map.getModel(mort.map)].grid.bullet.length*32-50);
 	
 	//test bumpers
 	for(var i = 0 ; i < 4 ; i ++){
@@ -286,6 +289,46 @@ Actor.loop.bumper = function(mort){	//test collision with map
 		mort.bumper[i] = Collision.ActorMap(pos,mort.map,mort);
 	}
 }
+
+Actor.loop.fall = function(mort){
+	var xy = {x: mort.x +mort.bumperBox[1].x,y:mort.y + mort.bumperBox[0].y};	//center of bumper
+	xy = Collision.getPos(xy);
+	var value = Collision.getSquareValue(xy,mort.map,'player');
+	
+	if(value === '4'){ Actor.fall(mort); return; }
+	if(value === '3'){ 
+		var angle = [
+			[270-45,270,270+45],
+			[180,0,0],
+			[90+45,90,90-45],
+		];
+	
+		dance:
+		for(var i = -1 ; i < 2 ; i++){
+			for(var j = -1 ; j < 2 ; j++){
+				if(Collision.getSquareValue({x:xy.x+j,y:xy.y+i},mort.map,'player') === '4'){
+					mort.pushed = {time:1,magn:2,angle:angle[i+1][j+1]};
+					break dance;
+				}
+			}
+		}
+	}
+	
+	
+	
+	
+	
+	
+	
+	//var xy2 = {x: mort.x +mort.bumperBox[1].x,y:mort.y + (mort.bumperBox[1].y + mort.bumperBox[0].y)/2};	//x = middle, y = 3/4 below
+	//&& !Collision.ActorMap.fall(Collision.getPos(xy2),mort.map,mort)
+}
+
+Actor.fall = function(mort){
+	mort.hp = -1;
+
+}
+
 
 Actor.loop.move = function(mort){
 	if(mort.status && mort.status.confuse.active.time > 0){ var bind = mort.status.confuse.active.input;} else { var bind = [0,1,2,3]; }

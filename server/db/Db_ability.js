@@ -264,7 +264,7 @@ Init.db.ability = function(cb){
 	};
 	
 	a['pvp-invincibility'] = {'type':'dodge','name':'Invincibility','icon':'blessing.spike',
-		'spd':{'main':1,'support':0},'period':{'own':25,'global':25},'cost':{"mana":50},
+		'spd':{'main':1,'support':0},'period':{'own':25,'global':25,'bypassGlobalCooldown':true},'cost':{"mana":50},
 		'action':{'animOnSprite':'special1Red','func':'Actor.boost','param':[[
 			{"stat":"globalDef","type":"+","value":Cst.bigInt,"time":4,"name":"Dodge"},
 		]]}
@@ -514,7 +514,7 @@ Init.db.ability.template = function(){
 	Db.abilityTemplate = {}; var a = Db.abilityTemplate;
 	
 	a['fireball'] = {'type':'attack','name':'Fireball','icon':'attackMagic.fireball',
-		'spd':{'main':0.8,'support':0.2},'period':{'own':[10,20],'global':[10,20]},'orb':'dmg',		
+		'spd':{'main':0.8,'support':0.2},'period':{'own':[10,20],'global':[10,20],'bypassGlobalCooldown':false},'orb':'dmg',		
 		'action':{'func':'Combat.action.attack','param':{	
 			'type':"bullet",'angle':0,'amount':1,
 			'objImg':{'name':"arrow",'sizeMod':1},'hitImg':{'name':"fire_explosion",'sizeMod':0.5},
@@ -559,6 +559,7 @@ Ability.creation = function(a){
 	a.period = a.period  || {};
 	a.period.own = a.period.own  || 50;
 	a.period.global = a.period.global  || 50;
+	a.period.bypassGlobalCooldown = a.period.bypassGlobalCooldown === undefined ? false : a.period.bypassGlobalCooldown;
 	a.modList = a.modList || {};
 	a.orb = a.orb || {'upgrade':{'amount':0,'bonus':'none'}};	//dunno if should be more complete
 	a.action = a.action || {};
