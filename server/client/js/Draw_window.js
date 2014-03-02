@@ -34,12 +34,12 @@ Draw.window.main = function(title){ ctxrestore();
 		t.style.textDecoration = 'none';
 		var str = '';
 		for(var i in title){
-			var title = 'Open ' + i.capitalize() + ' Window';
+			var text = 'Open ' + i.capitalize() + ' Window';
 			str += 
 			'<span ' + 
 			'style="text-decoration:' + (title[i] ? 'underline' : 'none') + '" ' +
 			'onclick="' + "main.sfx='menu'; " + 'Chat.send.command(\'' + '$win,open,' + i + '\')' + '" ' + 
-			'title="' + title + '"' +
+			'title="' + text + '"' +
 			'>' + i.capitalize() + 
 			'</span>';
 			str += ' - ';
@@ -627,29 +627,47 @@ Draw.window.ability.action.attack = function(diffX,diffY){  ctxrestore();
 	var preatk = deepClone(ab.action.param);
 	var atk = Combat.action.attack.mod(player,deepClone(preatk));
 	
-	var fontSize = 10;	
+	var fontSize = 20;	
 	ctx.font = fontSize + 'px Kelly Slab';
 	
-	//Ratio
-	if(atk.dmg.main){
-		helper = function(atk,name,length){
-			var str = name + ':';
-			ctx.fillText(str,s.zx,s.zy);
-			var dist = 125;
-			Draw.element(s.zx+dist,s.zy,length,fontSize,atk.dmg.ratio);
-			
-			ctx.fillText('x' + round(atk.dmg.main,1),s.zx+300+dist+25,s.zy);
-		}
-		
-		helper(preatk,'Ability',300);
-		s.zy += fontSize;
-		helper(weapon,'Weapon',300);
-		ctx.fillText('Compability: ' + round(atk.weaponCompability*100,1,1) + '%',s.zx+575,s.zy);
-		s.zy += fontSize;
-		helper(atk,'*Final*',300*atk.weaponCompability);
-		s.zy += fontSize*1.5;
+	//Weapon, Ability Combined
+	var helper = function(atk,name,length){
+		var str = name + ':';
+		ctx.fillText(str,s.zx,s.zy);
+		var dist = 125;	
+		Draw.element(s.zx+dist,s.zy,length,fontSize,atk.dmg.ratio);
+		ctx.fillText('x' + round(atk.dmg.main,1),s.zx+150+dist+15,s.zy);
 	}
 	
+	helper(preatk,'Ability',150);
+	s.zy += fontSize;
+	helper(weapon,'Weapon',150);
+	s.zy += fontSize;
+	helper(atk,'Combined',150*atk.weaponCompability);
+	
+	//Final
+	s.zy -= 2*fontSize;
+	s.zx += 500;
+	ctx.fillTextU("Final Damage",s.zx+20,s.zy-10);
+	s.zy += fontSize;
+	
+	var count = 0;
+	for(var i in atk.dmg.ratio){
+		var numX = s.zx + (count%3)*125-100;
+		var numY = s.zy + Math.floor(count/3)*fontSize*1.1;
+		ctx.fillStyle = Cst.element.toColor[i];
+		ctx.roundRect(numX-5,numY,125,fontSize*1.1);
+		ctx.fillStyle = 'black';
+		ctx.fillText(i.capitalize() + ': ' + round(atk.dmg.ratio[i]*atk.dmg.main),numX,numY);		
+		count++;
+	}
+	ctx.fillStyle = 'black';
+	
+	s.zx -= 500;
+	s.zy += fontSize*2.5;
+	
+	
+
 	//General Info
 	var dmg = 0;	for(var i in atk.dmg.ratio){ dmg += atk.dmg.ratio[i]; } dmg *= atk.dmg.main;
 	str = 'x' + atk.amount + ' Bullet' + (atk.amount > 1 ? 's' : '') + ' @ ' + atk.angle + '°';
@@ -659,25 +677,47 @@ Draw.window.ability.action.attack = function(diffX,diffY){  ctxrestore();
 	
 	
 	//Mods
+	s.zy += fontSize;
+	ctx.fillText('Special Effects on Hit:',s.zx,s.zy);
+	s.zy += fontSize/4;
+		
 	for(var i in atk){
-		if(atk[i]){
-			if(Draw.window.ability.action.attack.modTo[i]){
-				var tmp = atk[i];
-				
-				//Status
-				if(Cst.status.list.have(i)){ 
-					var mod = tmp.chance * player.bonus[i].chance;
-					var base = Math.pow(main.pref.abilityDmgStatusTrigger/100*atk.dmg.ratio[Cst.status.toElement[i]],1.5);
-					tmp.chance = Math.probability(base,mod);
-				}	
-				if(tmp.chance !== undefined && tmp.chance <= 0.01){ continue;}
-				Draw.icon(Draw.window.ability.action.attack.modTo[i].icon,[s.zx,s.zy+30],20);
-				ctx.fillText('=> ' + Draw.window.ability.action.attack.modTo[i].text(tmp),s.zx+30,s.zy+30);
-				s.zy += fontSize;
-				
-			}
+		if(atk[i] && Draw.window.ability.action.attack.modTo[i]){
+			var tmp = atk[i];
+
+			
+			//Status
+			if(Cst.status.list.have(i)){ 
+				var mod = tmp.chance * player.bonus[i].chance;
+				var base = Math.pow(main.pref.abilityDmgStatusTrigger/100*atk.dmg.ratio[Cst.status.toElement[i]],1.5);
+				tmp.chance = Math.probability(base,mod);
+			}	
+			if(tmp.chance !== undefined && tmp.chance <= 0.01){ continue;}
+			Draw.icon(Draw.window.ability.action.attack.modTo[i].icon,[s.zx,s.zy+30],20);
+			ctx.fillText('=> ' + Draw.window.ability.action.attack.modTo[i].text(tmp),s.zx+30,s.zy+30);
+			s.zy += fontSize;
+			
 		}
 	}
+	
+	//%Dmg
+		
+	var hd = html.abilityWin.dmgTrigger;
+	hd.style.left = s.zx + 'px'; 
+	hd.style.top = s.zy + 'px'; 
+	hd.style.font = fontSize + 'px Kelly Slab';
+	//hd.style.width = 500 + 'px';
+	//hd.style.height = 100 + 'px';
+	
+	hd.innerHTML = 'Assuming <span ' + 
+		'style="color:' + 'white' + '" ' +
+		'onclick="Input.add(\'' + '$pref,abilityDmgStatusTrigger,' + '\')' + '" ' + 
+		'title="Change Default %Dmg Dealt"' +
+		'>' +
+		main.pref.abilityDmgStatusTrigger/100 + '%' +
+		'</span>'
+		+ ' Dealt';
+		
 }
 
 Draw.window.ability.action.attack.modTo = {
@@ -729,6 +769,7 @@ Draw.window.ability.action.boost = function(diffX,diffY){  ctxrestore();
 	var fontSize = 40;
 	
 	ctx.font = fontSize + 'px Kelly Slab';
+
 	for(var i in boost[0]){
 		Draw.icon(Db.stat[boost[0][i].stat].icon,[s.zx,s.zy],fontSize);
 		var value = round(boost[0][i].value,2);

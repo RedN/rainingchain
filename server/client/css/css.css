@@ -7,6 +7,8 @@ nothing => directly what u use inside <>
 html {
 	overflow: auto;
 	cursor:default;
+	
+	white-space:nowrap;
 }
 
 a {
@@ -33,6 +35,8 @@ canvas{
 }
 
 div{
+	white-space:nowrap;
+	
 	draggable:false;
 	readonly:readonly;
 	disabled:disabled;
@@ -46,6 +50,7 @@ div{
 	-moz-user-select: none;
 	-ms-user-select: none;
 	user-select: none;
+	
 }
 
 /*HELP*/
