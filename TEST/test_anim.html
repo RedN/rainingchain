@@ -1,0 +1,149 @@
+<canvas id="ctx" width="500" height="300" style="border:1px solid #000000;"></canvas>
+<br>
+<input type="file" class="upload" onchange="readFiles(this.files)" multiple="" />
+<br>
+<input type="button" value="Test" onclick="Test()"><br>
+x <input type="number" id="x" value="250"/><br>
+y <input type="number" id="y" value="150"/><br>
+spdMod <input type="number" id="spdMod" value="1"/><br>
+sizeMod <input type="number" id="sizeMod" value="1"/><br>
+
+<script>
+/* Anim */
+  
+var ctx = document.getElementById("ctx").getContext("2d"); 
+ctx.font = '30px Arial';
+
+setInterval(function(){
+	ctx.clearRect(0,0,1000,1000);
+	for(var i in List.anim){
+		Anim.loop(List.anim[i]);
+	}
+},25);
+
+Db = {anim:{}};
+List = {anim:{}};
+
+
+Anim = {};
+Anim.loop = function (anim){
+	console.log(1);
+	var animFromDb = Db.anim[anim.name];
+	anim.timer += animFromDb.spd * anim.spdMod;
+	anim.slot = Math.floor(anim.timer);
+	if(anim.slot > animFromDb.frame){
+		delete List.anim[anim.id];
+	}
+	Draw.anim(anim);
+}
+
+Anim.creation = function(a){	//client side
+	a.id = Math.random();
+	a.timer = 0;
+	a.sizeMod = a.sizeMod || 1;
+	a.spdMod = a.spdMod || 1;
+	a.x = a.x;
+	a.y = a.y;
+	
+	a.slot = 0;			
+	List.anim[a.id] = a;
+	
+	/*
+	var sfx = a.sfx || Db.anim[a.name].sfx;
+	if(sfx && a.sfx !== false){	
+		sfx.volume = sfx.volume || 1;
+		sfx.volume *= Math.max(0.1,1 - 0.2*Math.floor(Collision.distancePtPt(player,a)/50));	
+		Sfx.play(sfx);
+	}	
+	*/
+}
+
+	
+Draw = {};
+Draw.anim = function (anim){
+	var animFromDb = Db.anim[anim.name];
+	var image = animFromDb.img;
+	var height = image.height;
+	var width = image.width;
+	var sizeX = image.width / animFromDb.frameX;
+	var slotX = anim.slot % animFromDb.frameX;
+	var slotY = Math.floor(anim.slot / animFromDb.frameX);
+	var sizeY = height / Math.ceil(animFromDb.frame / animFromDb.frameX);
+	var size = animFromDb.size*anim.sizeMod;
+	var startY = animFromDb.startY;
+			
+	ctx.drawImage(image,
+		sizeX*slotX,sizeY*slotY+startY,
+		sizeX,sizeY,
+		anim.x-sizeX/2*size,anim.y-sizeY/2*size,
+		sizeX*size,sizeY*size
+	);
+}
+	
+readFiles = function(files) {
+	for (var i in files) { //for multiple files          
+		(function(file) {
+			var reader = new FileReader();  
+			
+			reader.fileName = file.name;
+			if(file.type === "image/png"){
+				reader.onload = readFiles.image;
+				reader.readAsDataURL(file, "UTF-8");
+			}
+			if(file.type === "text/plain" || file.type === "application/javascript"){
+				reader.onload = readFiles.script;
+				reader.readAsText(file, "UTF-8");
+			}
+		})(files[i]);
+	}
+}
+
+readFiles.image = function(e) {  
+	var name = this.fileName.slice(0,this.fileName.indexOf('.'));
+	loadedImage = new Image();
+	loadedImage.src = this.result;
+	loadedImage.id = name;
+}
+
+
+readFiles.script = function(e) {  
+	var name = this.fileName.slice(0,this.fileName.indexOf('.'));
+	var content = JSON.parse(e.target.result); 
+	
+	if(name === 'code'){
+		Db.anim[content.id] = content;
+		
+		var anim = content;
+		anim.layer = anim.layer || 'a';
+		anim.frameX = anim.frameX || Math.min(anim.frame,5);
+		anim.spd = anim.spd || 1;
+		anim.size = anim.size || 1;
+		anim.startY = anim.startY || 0;
+		
+		anim.src = loadedImage;	//loaded from readFiles.image
+		anim.name = loadedImage.id;
+		anim.img = loadedImage;
+		
+
+		Test();
+	}
+}
+
+Test = function(){
+	Anim.creation({
+		name:loadedImage.id,
+		x:+document.getElementById('x').value,
+		y:+document.getElementById('y').value,
+		sizeMod:+document.getElementById('sizeMod').value,
+		spdMod:+document.getElementById('spdMod').value		
+	});
+}
+
+
+
+	
+</script>
+
+
+
+

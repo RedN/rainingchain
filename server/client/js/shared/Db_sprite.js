@@ -303,9 +303,8 @@ Sprite.template = function(){
     	sizeMod : 1,
     	oldAnim:'walk',				//client stuff
 		startX : 0,
-    	spdBoost : 1,
     	timer : 0,
-    	walk : 0,
+    	walk : 0,	//??
 		alpha: 1,
 		dead: 0,
 	}
@@ -320,7 +319,6 @@ Sprite.change = function(mort,info){
 		mort.sprite.anim = info.initAnim || info.anim;
 		
 		mort.sprite.startX = 0;
-		mort.sprite.spdBoost = 1;
 		mort.sprite.timer = 0;
 	}
 	mort.sprite.name = info.name || mort.sprite.name || 'mace';
