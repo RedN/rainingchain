@@ -1,5 +1,21 @@
 
 
+modify icon sdk
+simulate submission
+tester for
+	anim
+	sprite (with default map for collision and bullet)
+	map
+	quest environment
+
+
+
+displayname
+
+link plot with quest
+
+
+
 
 DEBUG: track someone in particular
 db fake
@@ -109,6 +125,22 @@ encourage team play
 
 
 
+
+
+
+lets face it, we are currently in a mmorpg crisis. the p2w model is invading our beloved games.
+its because of that that i decided to start my own open-source mmorpg raining chain.
+
+ill be honest with you guys, raining chain isnt meant for everyone
+if youre looking for fancy graphics, youre probably better off with genereic 3d mmorpg already on the market
+if you want a casual game that can be played with a hand and the other one on your balls while watching a movie, youll be disppaointed.
+
+raining chain is meant for hardcore gamers.
+you will die. you will die alot actually.
+unlike regular mmorpg that can be beaten by any casual player
+
+
+the game is based on the fact that u can dodge any attack at any time, similiar to dodging in dark souls
 
 
 
