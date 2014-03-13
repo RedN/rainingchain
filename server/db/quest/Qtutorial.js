@@ -1,4 +1,4 @@
-var q = {};
+var q = Quest.template();
 		
 q.id = 'Qtutorial';
 q.name = 'Tutorial';
@@ -7,25 +7,11 @@ q.reward = {'stat':'dmg-fire-+','value':[0.05,0.10]};
 q.rewardMod = 0.5;
 q.description = "Raining Chain Tutorial";
 
-q.requirement = [];
-q.hintGiver = function(key,mq){	return 'None.';};
-
-q.dialogue = {};
-q.bonus = {};
-
 
 q.variable = {
 	beeDead:false,
 	bossDead:false,
 };
-
-
-q.ability = {};
-q.equip = {};
-q.item = {};
-q.plan = {};
-q.enemy = {};
-q.map = {};
 
 q.ability['Aiceshard'] = {'type':'attack','name':'Ice Shard','icon':'attackMagic.crystal',
 	'spd':{'main':1,'support':0},'period':{'own':25,'global':25},
@@ -104,7 +90,7 @@ q.enemy["demon"] = {  //{
 
 
 //{Map
-var tut = q.map.tutorial = {};
+var tut = q.mapAddOn.tutorial = {};
 
 tut.spot = {"m":{"x":1904,"y":272},"n":[864,1024,352,384],"l":{"x":1840,"y":464},"k":{"x":944,"y":656},"q":{"x":1056,"y":1184},"e":{"x":576,"y":1680},"j":{"x":992,"y":1696},"i":{"x":976,"y":1872},"a":{"x":240,"y":1904},"f":{"x":544,"y":1968},"o":{"x":912,"y":2288},"b":{"x":2176,"y":2464},"c":{"x":2080,"y":2496},"d":{"x":1552,"y":2544},"g":{"x":1760,"y":2880},"h":{"x":1824,"y":3136},"p":{"x":1808,"y":3248}};
 
@@ -261,7 +247,7 @@ tut.loop =  function(map,spot,v,m){
 	
 }
 
-
+//}
 
 
 exports.quest = q;

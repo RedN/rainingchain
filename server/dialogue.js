@@ -41,7 +41,7 @@ Dialogue.option = function(key,option){
 
 Init.db.dialogue = function(){
 	/*
-	Db.dialogue.questId = {
+	Db.dialogue.QquestId = {
 		'Jenny' :{
 			'face':'Jenny',
 			'intro':{
@@ -50,7 +50,7 @@ Init.db.dialogue = function(){
 				'option':[
 					{'text':"Sure.",
 						'next':{'node':'yes'},
-						'func':function(key){ Db.quest['questId'].giveDevice(key); },
+						'func':function(key){ Db.quest['QquestId'].giveDevice(key); },
 						'param':[],
 					},
 					{'text':"No. I got other things to do.",
@@ -69,7 +69,7 @@ Init.db.dialogue = function(){
 					
 			'gratz':{
 				'text':'Thanks you so much for your help. I can now unlock the barrier.',
-				'func':function(key){ Db.quest['questId'].giveReward(key); },
+				'func':function(key){ Db.quest['QquestId'].giveReward(key); },
 				'param':[],
 				},
 			'gratz2':{

@@ -77,7 +77,6 @@ require('./server/db/Db_material');
 require('./server/db/Db_map');
 
 require('./server/db/Db_quest');
-Db.quest['Qtutorial'] = require('./server/db/quest/Qtutorial').quest;
 require('./server/Quest');
 
 require('./' + clientPath + 'client/js/shared/customMod');

@@ -1,180 +1,16 @@
 if(typeof Db === 'undefined') Db = {};
 Db.quest = {};
+var questList = [
+	'Qtutorial',
+	'QquestId',
+];
+
 Init.db.quest = function(){
 	
-	//Model
-	//{questId
-	Db.quest['questId'] = function(){
-		var q = {};
-		q.id = 'questId';
-		q.name = 'Default Quest';
-		q.icon = 'skill.melee';
-		q.reward = {'stat':'dmg-fire-+','value':[0.05,0.10]};
-		q.rewardMod = 0.5;
-		q.description = "Everything you level up, you get a passive point that can be attributed to one of the many passives in the passive grid.The bonus from each passive is dynamic and depends on the current popularity of the passive.Popular passives values, most often used in Overpowered builds, are decreased while unpopular ones are boosted. In other games, nerfs make OP builds become unviable builds brutally while my system allows a smooth transition and auto-balancement. But more importantly, it assures a true and fair character customization, encouraging people to play home-made builds."
-		
-		q.variable = {
-            receivedDevice:false,
-            bossKilled:false,
-            receivedReward:false,
-		};
-		
-		q.requirement = [
-			{'text':'Level 0 Magic','func':(function(key){ return List.all[key].skill.lvl.magic >= 0; })},
-		];
-		
-		q.hintGiver = function(key,mq){
-			if(mq.receivedDevice){
-				return 'Vas tuer le boss';
-			} 
-			return 'You can start this quest by talking to God.';
-		};
-		
-		//{Dialogue
-		q.dialogue = { 
-			'Jenny' :{
-				'face':'Jenny',
-				'intro':{
-					'text':'Do you want to help me out?',
-					'face':'Jenny',
-					'option':[
-						{'text':"Sure.",
-							'next':{'node':'yes'},
-							//'func':function(key){ Db.quest['questId'].giveDevice(key); },
-							//'param':[],
-						},
-						{'text':"No. I got other things to do.",
-							'next':{'node':'no'}},
-					]},
-				'yes':{
-					'text':"Thank you so much! Take this magical shield and teleport to the Fire Monster Lair. Kill him and give me the key he will drop.",
-					},
-				'no':{
-					'text':"What a jerk!",
-					},
-					
-				'intro2':{
-					'text':"What are you waiting for? Go kill the boss!",
-					},	
-						
-				'gratz':{
-					'text':'Thanks you so much for your help. I can now unlock the barrier.',
-					//'func':function(key){ Db.quest['questId'].giveReward(key); },
-					//'param':[],
-					},
-				'gratz2':{
-					'text':'Thanks again.',
-					},
-			},
-		};
-		//}
-		
-		//{Bonus
-		q.bonus = {
-			'halfHp':{
-				'name':'Half Life',
-				'info':'Your hp is halved during this quest.',
-				'bonus':1.5,
-				'add':(function(key){
-					Quest.bonus.update(key, 'questId', 'halfHp',[
-						{'stat':'hp-max','value':-500,'type':'base'}
-					]);
-				}),
-				'remove':(function(key){
-					Quest.bonus.update(key, 'questId', 'halfHp',[
-						{'stat':'hp-max','value':-500,'type':'base'}
-					]);
-				}),
-			},
-			'daemonSpd':{
-				'name':'Daemon Speed',
-				'info':'Complete this quest in less than 1 hour.',
-				'bonus':1.2,
-				'add':(function(key){
-					Quest.bonus.update(key, 'questId', 'daemonSpd',[
-						
-					]);
-				}),
-				'remove':(function(key){
-					Quest.bonus.update(key, 'questId', 'daemonSpd',[
-						
-					]);
-				}),
-			}
-		};
-		//}
-		
-		//{ Functions
-		q.giveDevice = function(key){
-		    Itemlist.add(List.main[key].invList,'Q-questId-teleport');
-		    List.main[key].quest['questId'].receivedDevice = true;
-		};
-		
-		q.giveReward = function(key){
-		    List.main[key].invList.add('gold',1000);
-		    List.main[key].quest['questId'].receivedReward = true;
-		};
-		
-		q.bossKilled = function(key){
-		    List.main[key].quest['questId'].bossKilled = true;
-		    Chat.add(key,"Congratz! You have slain the demon. Come back to town for reward.");
-		};	
-		//}
-		
-		//{Map
-		q.map = {};
-		q.map['test'] = {};
-		q.map['test'].load = function(map){
-			Actor.creation.group({'x':1060,'y':1900,'map':map},[
-				{"category":"neutral","variant":"jenny",'extra':{
-					'dialogue':{'func':(function(key){
-						var player = List.main[key];
-						var quest = player.quest['questId'];
-						Dialogue.start(key,{'name':'questId','convo':'Jenny','node':'intro'});
-						
-						return;
-						
-						quest.started = 1;
-						if(quest.bossKilled){
-							if(quest.receivedReward){
-								Dialogue.start(key,{'name':'questId','convo':'Jenny','node':'gratz2'});
-							} else { Dialogue.start(key,{'name':'questId','convo':'Jenny','node':'gratz'}); }
-						} else {
-							if(quest.receivedDevice){	
-								Quest.complete(key,'questId');
-								Dialogue.start(key,{'name':'questId','convo':'Jenny','node':'intro2'});
-							} else { Dialogue.start(key,{'name':'questId','convo':'Jenny','node':'intro'}); }
-						}
-					})},
-					'viaArray':[
-						{'array':['target','sub','period'],'value':{first:100,renew:100}},
-					]
-					
-					}
-				},
-			]);
-		}
-		//}
-		
-		//{Item
-		q.item = {	
-			'teleport' :{'name':'Teleport','icon':'plan.ability','option':[
-					{'name':'Tele To Demon','func':'Actor.teleport','param':[1230,1230,'ryve']},
-					{'name':'Tele Back','func':'Actor.teleport','param':[1100,1230,'test']},
-					{'name':'Boost','func':'addBoost','param':[{stat:'globalDmg',value:1000,type:'*',time:10000,name:'quest'}]},
-				]},
-				
-		
-		}
-		//}
-		
-		return q;
-	}();
-	//}
-	
-	
-	
-	
+	//Quest are added from the quest folder
+	for(var i in questList){
+		Db.quest[questList[i]] = require('./quest/'+questList[i]).quest;
+	}
 	
 	//Note: List.main[key].quest[id] only has variable
 	var questVar = {};
@@ -201,25 +37,34 @@ Quest.creation = function(q){
 	if(!server) return q 
 	
 	Db.dialogue[q.id] = {};
-	for(var i in q.dialogue) Db.dialogue[q.id][i] = q.dialogue[i];		
-	for(var i in q.map)	Db.map[i].addon[q.id] = q.map[i];
+	for(var i in q.dialogue){
+		Db.dialogue[q.id][i] = q.dialogue[i];		
+	}
+	
+	for(var i in q.mapAddOn){
+		Db.map[i].addon[q.id] = q.mapAddOn[i];
+	}
 	
 	Db.enemy[q.id] = {};
 	for(var i in q.enemy){
 		Db.enemy[q.id][i] = q.enemy[i];
 	}
+	
 	for(var i in q.item){
 		q.item[i].id = q.id+'-'+i;
 		Item.creation(q.item[i]);
 	}
+	
 	for(var i in q.equip){
 		q.equip[i].id = q.id+'-'+i;
 		Equip.creation(q.equip[i]);
 	}
+	
 	for(var i in q.ability){
 		q.ability[i].id = q.id+'-'+i;
 		Ability.creation(q.ability[i]);
 	}
+	
 	for(var i in q.plan){
 		q.plan[i].id = q.id+'-'+i;
 		Plan.creation(q.plan[i]);
@@ -237,16 +82,16 @@ Quest.template = function(){
 		description:"Default Description",
 		variable:{},
 		requirement:[],		
-		hintGiver:function(key,mq){ return 'Default Hint';},
+		hintGiver:function(key,mq){ return 'None';},
 		dialogue:{},
 		bonus:{},
-		mapMod:{},
+		mapAddOn:{},
 		map:{},
 		item:{}, 
 		equip:{},
 		enemy:{},
 		ability:{},
-		
+		plan:{},
 	};
 }
 

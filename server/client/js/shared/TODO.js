@@ -1,23 +1,12 @@
 
 
-modify icon sdk
-simulate submission
-tester for
-	anim
-	sprite (with default map for collision and bullet)
-	map
-	quest environment
-
-
-
+add map to quest
 displayname
-
 link plot with quest
 
 
 
-
-DEBUG: track someone in particular
+DEBUG: log everything that should be saved
 db fake
 finish doc
 
