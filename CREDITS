@@ -1,19 +1,39 @@
-Icons: http://game-icons.net/ (Lorc, Delapouite & contributors) http://creativecommons.org/licenses/by/3.0/
-Spritesheet: Universal-LPC-Spritesheet-Character-Generator
-Background: subtlepatterns.com
-Node Modules: Check their LICENCE file.
+########################
+########Credits#########
+########################
 
+Game Engine: 
+	Samuel Magnan (Idk Whats Rc)
+	
+Icons:	
+	http://game-icons.net/ (Lorc, Delapouite & contributors) http://creativecommons.org/licenses/by/3.0/
+	
+Sprite:
+	http://charas-project.net/charas2/index.php
+
+Background: 
+	http://subtlepatterns.com
+	
+
+Node Modules: 
+	Check their LICENCE file.
+	
 Software:
     Tiled:  http://www.mapeditor.org/
 	MP3 Quality Modifier: http://www.inspire-soft.net/software/mp3-quality-modifier
-
+	ImageMagick: http://www.imagemagick.org/script/binary-releases.php
+	Nodejs: http://nodejs.org/download/
+	Pngquant: http://pngquant.org/
+	
 Songs:
+	Check song.js file.
+
+Sfx: 
+	http://www.soundjay.com/
 
 
-Sfx: http://www.soundjay.com/
 
-	The rest: Samuel Magnan (aka IdkWhatsRc)
-
+Last Update: 2014-12-03
 
 
 

@@ -17,6 +17,7 @@ Collision.PtRect = function(pt,rect){
 	return (pt.x >= rect[0] && pt.x <= rect[1] && pt.y >= rect[2] && pt.y <= rect[3])
 }
 
+
 Collision.PosMap = function(pos,map,type){
 	//Test Collision between pt and map
 	
