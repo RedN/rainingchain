@@ -46,11 +46,12 @@ Sign.up.create = function(user,pass,email,salt,socket){
     var key = Math.random().toString(36).substring(7);
     var p = Actor.template('player'); 
 	p.name = user; 
+	p.username = user; 
 	p.context = user;
 	p.id = Math.randomId();
 	p.publicId = Math.randomId(6);
 	
-    var m = Main.template(key); m.name = user;
+    var m = Main.template(key); m.name = user; m.username = user;
 	
 	var activationKey = Math.randomId();
     var obj = {
@@ -120,7 +121,7 @@ Sign.off = function(key,message){
 	if(message){ socket.emit('warning','You have been disconnected: ' + message);}
 
 	Save(key);
-	db.update('account',{username:List.actor[key].name},{'$set':{online:0}},function(err){ 
+	db.update('account',{username:List.main[key].username},{'$set':{online:0}},function(err){ 
 		if(err) throw err;
 		socket.removed = 1;
 	});
@@ -130,11 +131,12 @@ Sign.off = function(key,message){
 Sign.off.remove = function(key){
 	var socket = List.socket[key]; if(!socket){ Sign.off.remove.safe(key); return; }
 	
+	var mort = List.all[key];
+	if(mort && List.map[mort.map]) delete List.map[mort.map].list[key];
 	ActiveList.remove(List.all[key]);
 	delete List.nameToKey[List.all[key].name];
 	delete List.actor[key];
 	delete List.socket[key];
-	if(List.all[key] && List.map[List.all[key].map]) delete List.map[List.all[key].map].list[key];
 	delete List.main[key];
 	delete List.all[key];
 	delete List.btn[key];
@@ -145,7 +147,7 @@ Sign.off.remove.safe = function(key){
 	var mort = List.all[key];
 	if(mort) delete List.nameToKey[List.all[key].name];
 	
-	if(mort && List.map[mort.map]) delete List.map[mort.map].list[key];
+	if(mort && List.map[mort.map])	delete List.map[mort.map].list[key];
 	
 	delete List.actor[key];
 	delete List.socket[key];
@@ -164,9 +166,8 @@ Save = function(key){
 Save.player = function(key,updateDb){
 	var player = typeof key === 'string' ? List.all[key] : key;
 	player = Save.player.compress(player);
-	player.username = player.username || player.name;
 	var save = {};
-    var toSave = ['x','y','map','username','weapon','equip','skill','ability','abilityList'];
+    var toSave = ['x','y','map','username','name','weapon','equip','skill','ability','abilityList'];
     for(var i in toSave){	save[toSave[i]] = player[toSave[i]]; }
 	
     if(updateDb !== false){
@@ -178,9 +179,8 @@ Save.player = function(key,updateDb){
 Save.main = function(key,updateDb){
 	var main = typeof key === 'string' ? List.main[key] : key;
     main = Save.main.compress(main);
-	main.username = main.username || main.name;
     var save = {};
-    var toSave = ['invList','bankList','tradeList','quest','username','social','passive','passivePt'];
+    var toSave = ['invList','bankList','tradeList','quest','username','name','social','passive','passivePt'];
     for(var i in toSave){ save[toSave[i]] = main[toSave[i]]; }
 
     if(updateDb !== false){
@@ -216,7 +216,7 @@ Load = function (key,user,socket){
 			
 			Test.playerStart(key);
 
-			db.update('account',{username:player.name},{'$set':{online:1,key:key}},function(err, res) { if(err) throw err
+			db.update('account',{username:player.username},{'$set':{online:1,key:key}},function(err, res) { if(err) throw err
 				socket.emit('signIn', { cloud9:cloud9, success:1, key:key, data:Load.initData(key,player,main)});
 			});
 		});	
@@ -227,7 +227,6 @@ Load.main = function(key,user,cb){
     db.find('main',{username:user},{_id:0},function(err, db) { if(err) throw err;	
 		db = db[0];
 		var main = useTemplate(Main.template(key),Load.main.uncompress(db,key));
-		main.name = main.username;
 		cb(main);
 	});
 }
@@ -287,8 +286,7 @@ Load.player = function(key,user,cb){
 		db = Load.player.uncompress(db);      //use info from the db
 
 		for (var i in db) { player[i] = db[i]; }
-		player.name = player.username;
-		player.context = player.username;
+		player.context = player.name;
 		player.id = key;
 		player.publicId = player.name;
 		player.team = player.name;

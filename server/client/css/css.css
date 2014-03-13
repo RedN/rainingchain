@@ -54,6 +54,15 @@ div{
 }
 
 /*HELP*/
+.help td{
+	margin: 12px 12px 12px 12px;
+	padding: 12px 12px 12px 12px;
+}
+.help table {
+	border-collapse: separate;
+	border-spacing: 10px;
+	*border-collapse: expression('separate', cellSpacing = '10px');
+}
 .help h2 {
 	font-size:40px;
 }
@@ -140,7 +149,7 @@ details details summary {
 	position:absolute;
 }
 
-	
+
 	
 /*Dialogue*/
 #dialogueBoxText{

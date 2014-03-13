@@ -567,7 +567,7 @@
 	</i>
 	
 	<i>
-		<t>Attack Creation Phases</t>
+		<t>Attack Collisions Phases</t>
 			<i>
 				<t>1. Update Defence</t>
 				Def Total = Def Equip * Def Mastery * Def Global Factor 	(for each element).
@@ -590,28 +590,55 @@
 						Final Magic Dmg = 50% * 1350 = 675<br>
 						...<br>
 				</i>
+			</i>
+			
+			<i>
+				<t>2. Calculate Raw Damage</t>
+					Dmg Total = AtkMelee/DefMelee + AtkRange/DefRange + AtkMagic/DefMagic + AtkFire/DefFire + AtkCold/DefCold + AtkLightning/DefLightning <br>
+			</i>
+			<i>
+				<t>3. Apply Critical Hit</t>
+					If Crit is successful:<br>
+					Dmg Total = Dmg Total * Crit Magn
+			</i>
+			<i>
+				<t>4. Apply Reflect Damage</t>
+					Reflect Total = AtkMelee/DefMelee * ReflectMelee% + AtkRange/DefRange * ReflectRange% + ...<br>
+					Hp is removed from attacker.
+			</i>
+			<i>
+				<t>5. Apply Leech Life</t>
+					If Leech is successful:<br>
+					Hp Regen = Attacker Max Hp / Attack Hp * 0.01 * Leech Life Magn
+			</i>
+			<i>
+				<t>6. Remove Hp from defender</t>
+			</i>
+			<i>
+				<t>7. Apply Status Effect</t>
+				Chance to trigger status effect depends on the % amount of life the defender lost.<br>
+				Each element is treated separately.<br>
+				<br>
+				%dmgMelee = dmgMelee / Defender Max Hp<br>
+				baseChance = abilityBleedChance * attackerBleedChance
+				<br>
+				% chance to trigger Melee status (bleed) = <br>
+				1 - (1-%dmgMelee ^ 1.5) ^ baseChance
 				
-	
+				<i>
+					<t>Chart</t>
+					<table class="help"><tr>  <td></td>  <td>0.8</td>   <td>0.9</td>  <td>1.0</td>  <td>1.1</td>  <td>1.2</td>  <td>1.3</td>  <td>1.4</td>  <td>1.5</td></tr><tr><td>5%</td><td>0.9%</td><td>1%</td><td>1.1%</td><td>1.2%</td><td>1.3%</td><td>1.5%</td><td>1.6%</td><td>1.7%</td></tr><tr><td>15%</td><td>4.7%</td><td>5.2%</td><td>5.8%</td><td>6.4%</td><td>6.9%</td><td>7.5%</td><td>8%</td><td>8.6%</td></tr><tr><td>25%</td><td>10.1%</td><td>11.3%</td><td>12.5%</td><td>13.7%</td><td>14.8%</td><td>15.9%</td><td>17.1%</td><td>18.2%</td></tr><tr><td>35%</td><td>16.9%</td><td>18.8%</td><td>20.7%</td><td>22.5%</td><td>24.3%</td><td>26%</td><td>27.7%</td><td>29.4%</td></tr><tr><td>45%</td><td>25%</td><td>27.6%</td><td>30.2%</td><td>32.7%</td><td>35%</td><td>37.3%</td><td>39.5%</td><td>41.7%</td></tr><tr><td>55%</td><td>34.2%</td><td>37.6%</td><td>40.8%</td><td>43.8%</td><td>46.7%</td><td>49.4%</td><td>52%</td><td>54.4%</td></tr><tr><td>65%</td><td>44.8%</td><td>48.7%</td><td>52.4%</td><td>55.8%</td><td>59%</td><td>61.9%</td><td>64.6%</td><td>67.2%</td></tr><tr><td>75%</td><td>56.8%</td><td>61.1%</td><td>65%</td><td>68.4%</td><td>71.6%</td><td>74.4%</td><td>77%</td><td>79.3%</td></tr><tr><td>85%</td><td>70.6%</td><td>74.8%</td><td>78.4%</td><td>81.4%</td><td>84.1%</td><td>86.3%</td><td>88.3%</td><td>89.9%</td></tr><tr><td>95%</td><td>87.5%</td><td>90.4%</td><td>92.6%</td><td>94.3%</td><td>95.6%</td><td>96.6%</td><td>97.4%</td><td>98%</td></tr></table>	
+				</i>
+			</i>
 </i>
 
 	<!--
 
 <<<Attack Damage Phase>>>
-This is what happens when an attack hits you:
-1-Check your defence: 
-Def Total = Def Equip * Def Mastery * Def Global 	(for each element).
 
-2-Calculate Raw Damage
-Dmg Total = AtkFire/DefFire + AtkCold/DefCold + AtkLightning/DefLightning + AtkMelee/DefMelee + AtkRange/DefRange + AtkMagic/DefMagic
-
-3-Apply Critical Hit if successful
-4-Apply Reflect Damage if successful
-5-Apply Leech Hp if successful
 6-Remove Hp
 
 7-Apply Status Effects for each element if successful
-Chance = Math.probability(Math.pow(dmg[i] / target.resource.hp.max,1.5),baseChance);
-		= depends on % Life that you lost and depends on enemy base chance to proc the status.
 
 
 

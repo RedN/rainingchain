@@ -242,7 +242,10 @@ if(server){
 	}
 	
 	socket.on('testing', function (d) { 
-		if(d && d.data){ try { permConsoleLog(JSON.parse(d.data)); } catch (err){ }	}
+		if(d && d.data){ 
+			try { 
+				ts.a = JSON.parse(d.data);
+				permConsoleLog(ts.a); } catch (err){ }	}
 	});
 }
 

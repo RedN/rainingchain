@@ -57,7 +57,6 @@ exports.initServer = function (){
 		
 		Init.db.passive();
 		Init.db.clan();
-		//initAbiConsDb();
 		Test.serverStart();
 		setInterval(Loop,40);
 		
