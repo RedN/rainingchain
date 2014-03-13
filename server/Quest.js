@@ -48,7 +48,7 @@ Quest.reward = function(key,id){
 		Chat.add(key,"Congratulations! Your character grows stronger.");
 		Actor.permBoost(List.all[key],'Q-'+id,boost);
 		qp.reward = boost;
-		qp.rewardTier = round(boost.tier*100,1) + '%';
+		qp.rewardTier = boost.tier;
 	} else {	
 		Chat.add(key,"Unfortunately, your last reward for this quest was better. This means you will keep your old reward.");
 	} 

@@ -84,7 +84,7 @@ Chat.send.pm = function(key,text,to,type,from,data){
 	if(res === null) Chat.add(key,"This player doesn't exist.");
 }
 
-Chat.send.pm.test = function(from,to,cb){
+Chat.send.pm.test = function(from,to){
 	//test if player can send pm to another. check for online but also mute list
 	var main = List.main[List.nameToKey[to]];
 	if(!main) return null;

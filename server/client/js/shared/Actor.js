@@ -325,24 +325,32 @@ Actor.pushing = function(pusher,beingPushed){
 
 Actor.harvest = function(mort,eid){	
 	var e = List.all[eid];
-	var plot = Skill.plot[e.skillPlot];
-	if(!plot) return;
+	if(!e.skillPlot){ DEBUG(2,'trying to harvest not harvestable',eid); return; }
+	var type = e.skillPlot.type;
+	if(type === 'down'){
+		Chat.add(mort.id,'This plot is down. Completing the quest ' + Db.quest[e.skillPlot.quest].name + ' will revive this plot.');
+		return;
+	}
+	var plot = Db.skillPlot[type];
 	
-	var inv = List.main[mort.id].invList;
+	var key = mort.id;
+	var main = List.main[key]
+	var inv = main.invList;
 	var lvl = mort.skill.lvl[plot.skill];
 	
-	if(Collision.distancePtPt(mort,e) > 150){ Chat.add(mort.id,"You're too far away."); return;}
-	if(!Itemlist.empty(inv,1)){ Chat.add(mort.id,"Your inventory is full."); return;}
-	if(lvl < plot.lvl) {Chat.add(mort.id,"You need at least level " + plot.lvl + ' ' + plot.skill.capitalize() + " to harvest this resource."); return;}
-	if(Math.random() > plot.chance(lvl)) {Chat.add(mort.id,"You failed to harvest this resource."); return;}
+	if(Collision.distancePtPt(mort,e) > 150){ Chat.add(key,"You're too far away."); return;}
+	if(!Itemlist.empty(inv,1)){ Chat.add(key,"Your inventory is full."); return;}
+	if(lvl < plot.lvl) {Chat.add(key,"You need at least level " + plot.lvl + ' ' + plot.skill.capitalize() + " to harvest this resource."); return;}
+	if(Math.random() > plot.chance(lvl)) {Chat.add(key,"You failed to harvest this resource."); return;}
 	
 	var item = plot.item.random();
 	Itemlist.add(inv,item,1);
-	Sprite.change(e,{'initAnim':'off'});
-	Chat.add(mort.id,"You manage to harvest this resource.");
-	Actor.removeOption(e,'Harvest');
 	
-	LOG(2,mort.id,'harvest',item);
+	main.quest[e.skillPlot.quest].skillPlot[e.skillPlot.num] = 1;
+	
+	Chat.add(key,"You manage to harvest this resource.");
+	
+	LOG(2,key,'harvest',item);
 }
 
 

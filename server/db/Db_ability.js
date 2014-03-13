@@ -207,7 +207,7 @@ a['bulletMulti'] = {					//bulletMulti is the id of attack
 Init.db.ability = function(cb){
 	Db.ability = {}; var abilityPreDb = {}; var a = abilityPreDb;
 	
-	db.ability.find({},{'_id':0},function(err, results) { if(err) throw err
+	db.find('ability',{},{'_id':0},function(err, results) { if(err) throw err
 		for(var i in results){
 			a[results[i].id] = results[i];
 		}
@@ -551,7 +551,7 @@ Init.db.ability.template = function(){
 Ability = {};
 Ability.creation = function(a){
 	//Setting Ability
-	db.ability.update( {'id':a.id}, a, { upsert: true }, db.err);	
+	db.update('ability',{'id':a.id}, a, { upsert: true }, db.err);	
 	
 	a.spd = convertRatio(a.spd);
 	a.cost = a.cost || {};

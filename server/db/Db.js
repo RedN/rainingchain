@@ -16,7 +16,7 @@ for real: need to emit info
 
 */
 
-
+var DB;
 
 
 
@@ -34,8 +34,8 @@ Init.db = function(data){
 	
 	
 	var databaseURI;
-	if(!data.db && !data.mongohq) databaseURI = "localhost:27017/test";
-	if(!data.db && data.mongohq) databaseURI = MONGO.connectionString();
+	if(!data.db && data.localdb) databaseURI = "localhost:27017/test";
+	if(!data.db && !data.localdb) databaseURI = MONGO.connectionString();
 	if(data.db){
 		databaseURI = data.db;
 	}
@@ -44,42 +44,66 @@ Init.db = function(data){
 
 	var collections = ["customMod","player","main","ability","equip","account","clan",'plan'];
 	
-	db = require("mongojs").connect(databaseURI, collections, MONGO.options);
-	setInterval(function(){	db = require("mongojs").connect(databaseURI, collections, MONGO.options);},60*1000);	//refresh connection
+	//real direct db
+	DB = require("mongojs").connect(databaseURI, collections, MONGO.options);
+	setInterval(function(){	DB = require("mongojs").connect(databaseURI, collections, MONGO.options);},60*1000);	//refresh connection
 	
+	
+	//intermediare db
+	db = {};
+	db.find = function(name,searchInfo,wantedData,cb){
+		if(arguments.length === 3) DB[name].find(searchInfo,wantedData);
+		else DB[name].find(searchInfo,wantedData,cb);
+	}
+	db.save = function(name,info,cb){
+		DB[name].save(info,cb);
+	}
+	db.update = function(name,searchInfo,updateInfo,cb){
+		if(arguments.length === 3) DB[name].find(searchInfo,updateInfo);
+		else DB[name].update(searchInfo,updateInfo,cb);
+	}
+	db.insert = function(name,updateInfo,cb){
+		DB[name].insert(updateInfo,cb);
+	}
+	db.remove = function(name,searchInfo,cb){
+		DB[name].remove(searchInfo,cb);
+	}
 	
 	//delete everything in db
 	db.deleteAll = function(){
 		for(var i in collections){
-			db[collections[i]].remove();
+			DB[collections[i]].remove();
 		}
 		permConsoleLog('DELETED EVERYTHING IN DATABASE!');
 	}
 
 	//Clear Db of useless info. ex: weapon dropped by player
+	//BROKEN
 	db.filterDb = function(){
-		db.account.find(function(er,res){ if(er) throw er;
-			var account = res;
-			var bigList = {};
-			
-			for(var i in account){
-				var a = account[i];
-				var list = [];
-				for(var j in a.main.invList.data){list.push(a.main.invList.data[i][0]);}
-				for(var j in a.main.bankList.data){list.push(a.main.bankList.data[i][0]);}
-				for(var j in a.player.equip.piece){list.push(a.player.equip.piece[j].id);}
-				for(var j in list){	bigList[list[j]] = true;}
+		//fill bigList
+		var bigList = {};	//list of all equip used
+		db.find('main',{},function(er,main){ if(er) throw er;
+			for(var i in main){
+				for(var j in main[i].invList) bigList[main[i].invList[j][0]] = 1;
+				for(var j in main[i].bankList) bigList[main[i].bankList[j][0]] = 1;
 			}
-			permConsoleLog('list of items exisiting:\n',Object.keys(bigList));
-				
-			db.equip.find(function(er,res){ if(er) throw er;
-				var equipList = {};
-				for(var i in res){equipList[res[i].id] = true;	}
-				for(var i in bigList){	delete equipList[i];}
-				permConsoleLog(Object.keys(equipList).length + 'unused weapon\n',Object.keys(equipList));
-				for(var i in equipList){db.equip.remove({'id':i});}
-			});
+			db.find('player',{},function(er,mort){ if(er) throw er;
+				for(var i in mort){
+					for(var j in mort[i].equip) bigList[mort[i].equip[j]] = 1;
+				}
 			
+				permConsoleLog('list of used equip:\n',Object.keys(bigList));
+				
+				//fill equipList
+				var equipList = {};	//list of all equip
+				db.find('equip',{},function(er,res){ if(er) throw er;
+					for(var i in res)	equipList[res[i].id] = 1;
+					for(var i in bigList)	delete equipList[i];
+					
+					permConsoleLog(Object.keys(equipList).length + 'unused equip\n',Object.keys(equipList));
+					for(var i in equipList) db.remove('equip',{'id':i});
+				});
+			});
 		});
 
 	}
@@ -99,7 +123,7 @@ Init.email = function(data){
 	nodemailer = require("nodemailer").createTransport("SMTP",{service: "Gmail",auth: {user: "rainingchainmail@gmail.com",pass: data.email}});
 
 	nodemailer.email = function(to,subj,text){
-		db.account.find({username:to},function(err, res) { if(err) throw err;
+		db.find('account',{username:to},function(err, res) { if(err) throw err;
 			if(res[0] && res[0].email){
 				nodemailer.sendMail({
 					from: "Raining Chain <rainingchainmail@gmail.com>",

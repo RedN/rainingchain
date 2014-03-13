@@ -38,7 +38,7 @@ Command.list['fl,add'] = function(key,user,nick,comment,color){
 	
 	
 	if(!List.main[key].social.list.mute[user] && !List.main[key].social.list.friend[user]){
-		db.account.find({username:user},function(err, results) {
+		db.find('account',{username:user},function(err, results) {
 			if(results[0]){
 				List.main[key].social.list.friend[user] = {'nick':nick,'comment':comment, 'color':color};
 				Chat.add(key,"Friend added.");
@@ -144,7 +144,7 @@ Command.list['fl,offlinepm'] = function(key,to,text){
 	if(!text || !to || !from){ return; }	
 	if(to === from){ Chat.add(key,"Ever heard of thinking in your head?"); }
 	
-	db.main.find({username:to},function(err, res) { if(err) throw err;
+	db.find('main',{username:to},function(err, res) { if(err) throw err;
 		if(res[0]){
 			var main = Load.main.uncompress(res[0]);
 			
@@ -178,7 +178,7 @@ Command.list['mute'] = function(key,user){
 	if(List.main[key].social.list.mute[user]){ Chat.add(key,"This player is alraedy in your Mute List."); }
 		
 	if(!List.main[key].social.list.friend[user] && !List.main[key].social.list.mute[user]){
-		db.account.find({username:user},function(err, results) {
+		db.find('account',{username:user},function(err, results) {
 			if(results[0]){
 				List.main[key].social.list.mute[user] = {};
 				Chat.add(key,"Player muted.");
@@ -480,9 +480,9 @@ Command.list['option'].doc = {
 }
 Command.list['email,activate'] = function(key,str){
 	var name = List.all[key].name;
-	db.account.find({username:name},{activationKey:1},function(err,res){	if(err) throw err
+	db.find('account',{username:name},{activationKey:1},function(err,res){	if(err) throw err
 		if(res[0] && res[0].activationKey === str){
-			db.account.update({username:name},{ $set:{emailActivated:1}},function(err){	if(err) throw err
+			db.update('account',{username:name},{ $set:{emailActivated:1}},function(err){	if(err) throw err
 				Chat.add(key, 'Your account is now activated.');
 			});
 		} else {Chat.add(key, 'Wrong Activation Key.');}	

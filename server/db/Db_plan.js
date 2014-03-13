@@ -3,7 +3,7 @@ Init.db.plan = function(cb){
 	Db.plan = {};
 	var a = Db.plan;
 
-	db.plan.find({},{'_id':0},function(err, results) { if(err) throw err
+	db.find('plan',{},{'_id':0},function(err, results) { if(err) throw err
 		for(var i in results)	a[results[i].id] = results[i];
 	
 	
@@ -62,7 +62,7 @@ Plan.creation = function(preplan){
 		]
 	});
 		
-	db.plan.update( {'id':plan.id}, plan, { upsert: true }, db.err);
+	db.update('plan',{'id':plan.id}, plan, { upsert: true }, db.err);
 	
 	if(plan.definitive) return plan.id;
 	

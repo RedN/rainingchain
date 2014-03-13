@@ -113,7 +113,7 @@ Actor.creation.db.globalLvlMod = function(lvl){
 }
 
 Actor.creation.info = function(e,cr){
-    e.map = cr.map || 'test@MAIN';
+	e.map = cr.map || 'test@MAIN';
 	e.x = cr.x + Math.randomML() * (cr.v || 0); 
 	e.y = cr.y + Math.randomML() * (cr.v || 0); 
 	e.crX = cr.x;
@@ -217,12 +217,10 @@ Actor.creation.optionList = function(e){
 	if(e.treasure){
 		ol.option.push({'name':'Open Chest',"func":'Actor.openChest',"param":[e.id]});
 		e.treasure = {func:e.treasure,list:[]}
-	}
-	
+	}	
 	if(e.skillPlot){
 		ol.option.push({'name':'Harvest',"func":'Actor.harvest',"param":[e.id]});
-	}	
-	
+	}
 	if(e.switch){
 		ol.option.push({'name':'Pull Switch',"func":'Actor.activateSwitch',"param":[e.id]});
 		e.switch.state = e.switch.state || 'off';

@@ -65,8 +65,10 @@ Skill.testLvl = function(key,sk,lvl){
 
 
 
-Skill.plot = {
+Db.skillPlot = {
 	'tree-red':{
+		category:'tree',
+		variant:'red',
 		lvl:0,
 		skill:'woodcutting',
 		chance:function(lvl){
@@ -75,11 +77,49 @@ Skill.plot = {
 		item:{
 			'wood-0':0.5,
 			'leaf-0':0.5,			
-		}
+		},
 	},
 }
 
 
+SkillPlot = {};
+SkillPlot.creation = function(data){	//xym, type, num, quest
+	var plot = Db.skillPlot[data.type];
+	var num = Db.quest[data.quest].skillPlot.length;
+	
+	var id = Actor.creation({'xym':data.xym,
+		"category":plot.category,"variant":plot.variant,"extra":{
+			skillPlot:{
+				quest:data.quest,
+				num:num,
+				type:data.type,
+			},
+			viewedIf:function(key,eid){
+				if(List.all[key].type !== 'player') return true;
+				var plot = List.all[eid].skillPlot;
+				return List.main[key].quest[plot.quest].skillPlot[plot.num] == 0;			
+			}		
+		}
+	});
+	Db.quest[data.quest].skillPlot.push(id);
+	
+	Actor.creation({'xym':data.xym,
+		"category":plot.category,"variant":"down","extra":{
+			skillPlot:{
+				quest:data.quest,
+				num:num,
+				type:'down',
+			},
+			viewedIf:function(key,eid){
+				if(List.all[key].type !== 'player') return true;
+				var plot = List.all[eid].skillPlot;
+				return List.main[key].quest[plot.quest].skillPlot[plot.num] == 1;			
+			},
+			
+		}
+	});
+
+}
 
 
 

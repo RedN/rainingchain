@@ -28,7 +28,7 @@ Sign.up = function(socket,d){
 	if(user !==	 fuser){ socket.emit('signUp', { 'success':0, 'message':'<font color="red">Illegal characters in username.</font>'} ); return; }
 	if(pass.length < 3){ socket.emit('signUp', {'success':0, 'message':'<font color="red">Too short password.</font>'} ); return; }
 	
-	db.account.find({username:user},{},function(err, results) { if(err) throw err;		
+	db.find('account',{username:user},{},function(err, results) { if(err) throw err;		
 		if(results[0] !== undefined){ socket.emit('signUp', {'success':0,'message':'<font color="red">This username is already taken.</font>'} );  return; }	//Player with same username
 				
 		crypto.randomBytes(32, function(err,salt){
@@ -67,9 +67,9 @@ Sign.up.create = function(user,pass,email,salt,socket){
 	
 	
 	
-    db.account.insert(obj, function(err) { 	if (err) throw err;
-		db.player.insert(Save.player(p,false), function(err) { 	if (err) throw err;
-			db.main.insert(Save.main(m,false), function(err) { 	if (err) throw err;
+    db.insert('account',obj, function(err) { 	if (err) throw err;
+		db.insert('player',Save.player(p,false), function(err) { 	if (err) throw err;
+			db.insert('main',Save.main(m,false), function(err) { 	if (err) throw err;
 				socket.emit('signUp', {'success':1,'message':'<font color="green">New Account Created.</font>'} );
 				
 				var str = 'Welcome to Raining Chain! This is your activation key for your account "' + user + '": ' + activationKey;
@@ -96,8 +96,7 @@ Sign.in = function(socket,d){
 		else if(Server.maxPlayerAmount === 0)	socket.emit('signIn', { 'success':0,'message':'<font color="red">SERVER IS CLOSED.</font>' }); 
 		return;
 	}
-	
-	db.account.find({username:user},function(err, results) { if(err) throw err;	
+	db.find('account',{username:user},function(err, results) { if(err) throw err;	
 		if(results[0] === undefined){ socket.emit('signIn', { 'success':0,'message':'<font color="red">Wrong Password or Username.</font>' }); return }
 		if(results[0].online) {	socket.emit('signIn', { 'success':0, 'message':'<font color="red">This account is already online.</font>' }); return; }
 		
@@ -121,7 +120,7 @@ Sign.off = function(key,message){
 	if(message){ socket.emit('warning','You have been disconnected: ' + message);}
 
 	Save(key);
-	db.account.update({username:List.actor[key].name},{'$set':{online:0}},function(err){ 
+	db.update('account',{username:List.actor[key].name},{'$set':{online:0}},function(err){ 
 		if(err) throw err;
 		socket.removed = 1;
 	});
@@ -171,7 +170,7 @@ Save.player = function(key,updateDb){
     for(var i in toSave){	save[toSave[i]] = player[toSave[i]]; }
 	
     if(updateDb !== false){
-        db.player.update({username:player.username},save,db.err);
+        db.update('player',{username:player.username},save,db.err);
     } else { return save; }	//when sign up
 }
 
@@ -185,7 +184,7 @@ Save.main = function(key,updateDb){
     for(var i in toSave){ save[toSave[i]] = main[toSave[i]]; }
 
     if(updateDb !== false){
-        db.main.update({username:main.username},save,db.err);
+        db.update('main',{username:main.username},save,db.err);
     } else { return save; } //when sign up
 }
 
@@ -217,7 +216,7 @@ Load = function (key,user,socket){
 			
 			Test.playerStart(key);
 
-			db.account.update({username:player.name},{'$set':{online:1,key:key}},function(err, res) { if(err) throw err
+			db.update('account',{username:player.name},{'$set':{online:1,key:key}},function(err, res) { if(err) throw err
 				socket.emit('signIn', { cloud9:cloud9, success:1, key:key, data:Load.initData(key,player,main)});
 			});
 		});	
@@ -225,7 +224,7 @@ Load = function (key,user,socket){
 }
 
 Load.main = function(key,user,cb){
-    db.main.find({username:user},{_id:0},function(err, db) { if(err) throw err;	
+    db.find('main',{username:user},{_id:0},function(err, db) { if(err) throw err;	
 		db = db[0];
 		var main = useTemplate(Main.template(key),Load.main.uncompress(db,key));
 		main.name = main.username;
@@ -281,7 +280,7 @@ Load.main.uncompress = function(main,key){
 }
 
 Load.player = function(key,user,cb){
-   db.player.find({username:user},{_id:0},function(err, db) { if(err) throw err;
+   db.find('player',{username:user},{_id:0},function(err, db) { if(err) throw err;
 		db = db[0];
 		
 		var player = Actor.template('player');   //set default player

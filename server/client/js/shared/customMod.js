@@ -130,7 +130,7 @@ io.sockets.on('connection', function (socket) {
 		
 	
 		/*
-		db.customMod.find({id:d.id},{},function(err,res){ if(err) throw err;
+		db.find('customMod',{id:d.id},{},function(err,res){ if(err) throw err;
 			//if dont exist in db, ask for it
 			if(!res[0]){
 				if(!d.text)	//aka just want to test if exist
@@ -141,7 +141,7 @@ io.sockets.on('connection', function (socket) {
 					
 					d.creationDate = Date.now();
 					//d.author = mort.name || '$unknown';
-					db.customMod.insert(d,function(err){ if(err) throw err;});
+					d.insert('customMod',d,function(err){ if(err) throw err;});
 			
 				}
 			}				

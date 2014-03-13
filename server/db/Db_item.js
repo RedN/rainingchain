@@ -142,8 +142,8 @@ Item.template = function(){
 }
 
 Item.remove = function(id){	//need fix
-	db.equip.remove({id:id});
-	db.ability.remove({id:id});
+	db.remove('equip',{id:id});
+	db.remove('ability',{id:id});
 }
 
 

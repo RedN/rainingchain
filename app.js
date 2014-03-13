@@ -102,7 +102,7 @@ io.sockets.on('connection', function (socket) { socket.on('Server.start', Server
 
 if(!nodejitsu && !process.argv[4])	Server.start({
 	db:false,
-	mongohq:+process.argv[2],
+	localdb:+process.argv[2],
 	deletedb:process.argv[3],
 });
 

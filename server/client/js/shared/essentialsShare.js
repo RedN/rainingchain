@@ -1,6 +1,7 @@
 //List of handy functions.
 
 
+
 LOG = function(lvl,key,name,param){
 	/*
 	0:Very important
@@ -24,12 +25,12 @@ LOG = function(lvl,key,name,param){
 }
 
 LOG.display = function(key){
-	if(!key){ console.log(LOG.data); return; }
+	if(!key){ permConsoleLog(LOG.data); return; }
 	
 	for(var i in LOG.data){
 		if(LOG.data[i].id === key){
 			var date = new Date(LOG.data[i].time).toLocaleString();
-			console.log(date,LOG.data[i].name,LOG.data[i].param);
+			permConsoleLog(date,LOG.data[i].name,LOG.data[i].param);
 		}
 	}
 	
@@ -59,7 +60,7 @@ DEBUG = function(lvl,message){
 	
 	var trace = new Error().stack;
 	if(!DEBUG.minify){
-		console.log(arg,trace);
+		permConsoleLog(arg,trace);
 		return;
 	}
 	
@@ -78,7 +79,7 @@ DEBUG = function(lvl,message){
 	var str = func[0];
 	str += '(' + arg + '); ';
 	for(var i =1;i<func.length;i++) str += ' *** ' + func[i];
-	console.log(str);
+	permConsoleLog(str);
 		
 }  
 
@@ -182,6 +183,13 @@ Object.defineProperty(Number.prototype, "mm", {
 		if(min === undefined){ return this; }
 		if(max === undefined){ return Math.max(min,this); }
 		return Math.min(max,Math.max(min,this));
+	}
+});	
+
+Object.defineProperty(Number.prototype, "toPercent", {
+    enumerable: false,
+    value: function(num) {
+		return round(this*100,num || 0) + '%';
 	}
 });	
 	

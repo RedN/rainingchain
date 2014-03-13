@@ -5,7 +5,7 @@ Db.equip = {};
 Init.db.equip = function (cb){
 	var pre = Db.equip;
 
-	db.equip.find({},{'_id':0},function(err, results) { if(err) throw err
+	db.find('equip',{},{'_id':0},function(err, results) { if(err) throw err
 		for(var i in results)	pre[results[i].id] = Equip.uncompress(results[i]);
 			
 	pre['unarmed'] = {		//DONT TOUCH
@@ -234,7 +234,7 @@ Equip.creation = function(equip){
 	Item.creation(item);
 		
 	
-	db.equip.update( {'id':equip.id}, Equip.compress(equip), { upsert: true }, db.err);
+	db.update('equip',{'id':equip.id}, Equip.compress(equip), { upsert: true }, db.err);
 
 }
 

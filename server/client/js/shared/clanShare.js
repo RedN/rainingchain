@@ -1,7 +1,7 @@
 Db.clan = {};
 
 Init.db.clan = function(){
-	db.clan.find({},{'_id':0},function(err,data){
+	db.find('clan',{},{'_id':0},function(err,data){
 		for(var i = 0 ; i < data.length ; i++){
 			Db.clan[data[i].id] = data[i];
 			delete Db.clan[data[i].id]._id
@@ -22,7 +22,7 @@ Clan.creation = function(key,name){
 	Chat.add(key,'Clan created.');
 	Clan.enter(key,name);
 	
-	db.clan.save(Db.clan[name]);
+	db.save('clan',Db.clan[name]);
 }
 
 

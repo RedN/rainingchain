@@ -37,6 +37,7 @@ exports.initServer = function (){
 		//initAbilityModDb();
 		
 		Init.db.sprite();
+		Init.db.quest.map();
 		Init.db.map();
 		
 		Init.db.drop();
@@ -64,10 +65,9 @@ exports.initServer = function (){
 		var tmp = Object.keys(this); for(var i in ObjectKeys) tmp.splice(tmp.indexOf(ObjectKeys[i]),1);
 		//permConsoleLog(tmp);
     
-			
 	})})})});
 	
-	db.account.update({},{'$set':{online:0}},{multi:true},function(err, results) { if(err) throw err });   //set all players offline
+	db.update('account',{},{'$set':{online:0}},{multi:true},function(err, results) { if(err) throw err });   //set all players offline
 }
 
 

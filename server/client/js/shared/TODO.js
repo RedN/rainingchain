@@ -1,13 +1,8 @@
 
 
-add map to quest
 displayname
-link plot with quest
 
 
-
-DEBUG: log everything that should be saved
-db fake
 finish doc
 
 
@@ -132,216 +127,28 @@ unlike regular mmorpg that can be beaten by any casual player
 the game is based on the fact that u can dodge any attack at any time, similiar to dodging in dark souls
 
 
+on logout
+Message: Cannot read property 'friend' of undefined
+TypeError: Cannot read property 'friend' of undefined
+    at Function.Actor.loop.friendList (C:\rc\rainingchain\server\entity\Actor_loop.js:435:37)
+    at Object.Actor.loop (C:\rc\rainingchain\server\entity\Actor_loop.js:42:46)
+    at Function.Loop.Actor (C:\rc\rainingchain\server\Loop.js:27:12)
+    at Loop (C:\rc\rainingchain\server\Loop.js:9:7)
+    at wrapper [as _onTimeout] (timers.js:252:14)
+    at Timer.listOnTimeout [as ontimeout] (timers.js:110:15)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<canvas id="ctx" width="500" height="500" style="border:1px solid #000000;"></canvas>
-
-<script>
-/* Anim */
-  
-var ctx = document.getElementById("ctx").getContext("2d"); 
-ctx.font = '30px Arial';
-
-
-Anim = {};
-Anim.loop = function (anim){
-	var animFromDb = Db.anim[anim.name];
-	anim.timer += animFromDb.spd * anim.spdMod;
-	
-	anim.x = anim.target.x;
-	anim.y = anim.target.y;
-	
-	anim.slot = Math.floor(anim.timer);
-	if(anim.slot > animFromDb.frame){
-		delete List.anim[anim.id];
-	}	
-}
-
-Anim.creation = function(name,target,sizeMod){	//server side
-	//Add animation to the game. target = actor id OR an obj x,y,map,viewedIf
-	sizeMod = sizeMod || 1;
-	var id = 'a'+Math.randomId(5);
-	List.anim[id] = {'sizeMod':sizeMod,'name':name,'target':target,'id':id};
-	return id;
-}
-
-Anim.creation = function(a){	//client side
-		if(typeof a.target === 'string'){
-			if(a.target === player.name){	a.target = player;
-			} else {a.target = List.all[a.target];}
-		}
-		
-		a.id = Math.randomId();
-		a.timer = 0;
-		a.sizeMod = a.sizeMod || 1;
-		a.spdMod = a.spdMod || 1;
-		if(a.target){  
-			a.x = a.target.x;
-			a.y = a.target.y;
-			a.slot = 0;			
-			List.anim[a.id] = a;
-		}
-		
-		var sfx = a.sfx || Db.anim[a.name].sfx;
-		if(sfx && a.sfx !== false){	
-			sfx.volume = sfx.volume || 1;
-			sfx.volume *= Math.max(0.1,1 - 0.2*Math.floor(Collision.distancePtPt(player,a)/50));	
-			Sfx.play(sfx);
-		}	
-	}
-
-	
-Draw = {};
-Draw.anim = function (layer){
-	var anim = List.anim[i];
-	var animFromDb = Db.anim[anim.name];
-	var image = animFromDb.img;
-	var height = image.height;
-	var width = image.width;
-	var sizeX = image.width / animFromDb.frameX;
-	var slotX = anim.slot % animFromDb.frameX;
-	var slotY = Math.floor(anim.slot / animFromDb.frameX);
-	var sizeY = height / Math.ceil(animFromDb.frame / animFromDb.frameX);
-	var size = animFromDb.size*anim.sizeMod;
-	var startY = animFromDb.startY;
-			
-	ctx.drawImage(image,
-		sizeX*slotX,sizeY*slotY+startY,
-		sizeX,sizeY,
-		Cst.WIDTH2+anim.x-player.x-sizeX/2*size,Cst.HEIGHT2+anim.y-player.y-sizeY/2*size,
-		sizeX*size,sizeY*size
-		);
-}
-}
-}
-	
-readFiles = function(files) {
-	for (var i in files) { //for multiple files          
-		(function(file) {
-			var reader = new FileReader();  
-			
-			reader.fileName = file.name;
-			if(file.type === "image/png"){
-				reader.onload = readFiles.image;
-				reader.readAsDataURL(file, "UTF-8");
-			}
-			if(file.type === "text/plain" || file.type === "application/javascript"){
-				reader.onload = readFiles.script;
-				reader.readAsText(file, "UTF-8");
-			}
-		})(files[i]);
-	}
-}
-
-readFiles.image = function(e) {  
-	var name = this.fileName.slice(0,this.fileName.indexOf('.'));
-	name = name.replaceAll(' ','_');
-	var array = name.split('_');
-	
-	if(array[0] === 'sprite'){
-		if(!Db.sprite[array[1]]) permConsoleLog('Wrong Name',this.fileName);
-		else Db.sprite[array[1]].img.src = this.result;
-	}
-	if(array[0] === 'anim'){
-		if(!Db.anim[array[1]]) permConsoleLog('Wrong Name',this.fileName);
-		else Db.anim[array[1]].img.src = this.result;
-	}
-	if(array[0] === 'icon')
-		Img.icon.src = this.result;
-		
-		
-	var image = new Image();
-	image.src = this.result;
-	image.id = this.fileName;
-	image.name = this.fileName;
-	Db.customImg[this.fileName] = image;
-	readFiles.update();
-}
-
-
-readFiles.script = function(e) {  
-	var text = e.target.result; 
-	
-	//var id = this.fileName + readFiles.script.adler32(text);
-	var pastebin = this.fileName.slice(0,this.fileName.indexOf('.'));
-	socket.emit('uploadMod', {id:pastebin});
-	
-	Db.customMod[pastebin] = {
-		name:this.fileName,
-		id:pastebin,
-		text:text,
-		approved:0,
-	}
-	
-	readFiles.update();
-}
-
-socket.on('uploadMod', function (d) {
-	var mod = Db.customMod[d.id];
-	if(d.success){
-		eval(mod.text);
-		mod.approved = 1;
-		readFiles.update();		
-	} else { alert("pastebin.com/" + d.id + " doesn't exist. Make sure you uploaded your script on pastebin.com and that the file name matches the url.");}
-});
-
-//{name:,author:,adler32:,code:}
-
-readFiles.script.adler32 = function(data) {
-  var MOD_ADLER = 65521;
-  var a = 1, b = 0;
-
-  for (var i = 0; i < data.length; i++) {
-    a += data.charCodeAt(i);
-    b += a;
-  }
-
-  a %= MOD_ADLER;
-  b %= MOD_ADLER;
-
-  return (b << 16) | a;
-}
-	
-readFiles.update = function(){	//#customModList
-	var str = '';
-	for(var i in Db.customImg)
-		str += '-' + Db.customImg[i].name + '<br>';	
-	
-	for(var i in Db.customMod)
-		str += '-' + Db.customMod[i].name + ' (' + (Db.customMod[i].approved ? 'APPROVED' : 'PENDING...') + ')<br>';	
-	
-	$("#customModList")[0].innerHTML = str;
-}
-
-readFiles.open = function(){
-	$( "#customMod" ).dialog( "open" );
-}
-
-</script>
-
-
-
-
-
-
-
-
-
-
-
+Message: Cannot read property 'melee' of undefined
+TypeError: Cannot read property 'melee' of undefined
+    at Function.Combat.collision.damage.calculate (C:\rc\rainingchain\server\combat.js:296:41)
+    at Function.Combat.collision.damage (C:\rc\rainingchain\server\combat.js:279:40)
+    at Object.Combat.collision (C:\rc\rainingchain\server\combat.js:141:29)
+    at Object.Collision.BulletActor (C:\rc\rainingchain\server\client\js\shared\Collision.js:100:10)
+    at Function.Bullet.loop.collision (C:\rc\rainingchain\server\entity\Attack_loop.js:106:12)
+    at Object.Bullet.loop (C:\rc\rainingchain\server\entity\Attack_loop.js:13:14)
+    at Function.Loop.Bullet (C:\rc\rainingchain\server\Loop.js:33:10)
+    at Loop (C:\rc\rainingchain\server\Loop.js:6:7)
+    at wrapper [as _onTimeout] (timers.js:252:14)
+    at Timer.listOnTimeout [as ontimeout] (timers.js:110:15)
 
 
 

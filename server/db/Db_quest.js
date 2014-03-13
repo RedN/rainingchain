@@ -7,11 +7,6 @@ var questList = [
 
 Init.db.quest = function(){
 	
-	//Quest are added from the quest folder
-	for(var i in questList){
-		Db.quest[questList[i]] = require('./quest/'+questList[i]).quest;
-	}
-	
 	//Note: List.main[key].quest[id] only has variable
 	var questVar = {};
 	for(var i in Db.quest){
@@ -23,7 +18,18 @@ Init.db.quest = function(){
 	for(var i in questVar)	Main.template.quest[i] = new Function('return ' + stringify(questVar[i]));	
 		
 }
-
+Init.db.quest.map = function(){
+	//Quest are added from the quest folder
+	for(var i in questList){
+		Db.quest[questList[i]] = require('./quest/'+questList[i]).quest;
+	}
+	
+	for(var i in Db.quest){
+		for(var j in Db.quest[i].map){
+			Db.map[j] = Db.quest[i].map[j];
+		}
+	}
+}
 Quest = {};
 
 Quest.creation = function(q){
@@ -40,7 +46,7 @@ Quest.creation = function(q){
 	for(var i in q.dialogue){
 		Db.dialogue[q.id][i] = q.dialogue[i];		
 	}
-	
+	//load map via Init.db.quest.map
 	for(var i in q.mapAddOn){
 		Db.map[i].addon[q.id] = q.mapAddOn[i];
 	}
@@ -92,20 +98,23 @@ Quest.template = function(){
 		enemy:{},
 		ability:{},
 		plan:{},
+		func:{},
+		skillPlot:[],
 	};
 }
 
 Quest.template.variable = function(){
 	return {
-		hint:'There is no hint.',
-		rewardTier:'0%',
+		hint:'None.',
+		rewardTier:0,
 		reward:null,
 		complete:0,
 		started:0,
 		bonusSum:1,
 		deathCount:0,
 		bonus:{},
-		requirement:''
+		requirement:'',
+		skillPlot:[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
 	};
 }
 

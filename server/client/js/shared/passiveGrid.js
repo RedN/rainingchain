@@ -49,7 +49,7 @@ Init.db.passive = function(){
 	}
 	
 	//increase count depending on player popularity
-	db.main.find({},{_id:0,passive:1},function(err,info){ if(err) throw err;
+	db.find('main',{},{_id:0,passive:1},function(err,info){ if(err) throw err;
 		for(var i = 0 ; i < info.length ; i++){
 			for(var j = 0 ; j < info[i].passive.length ; j++){
 				for(var k = 0 ; k < info[i].passive[j].length ; k++){

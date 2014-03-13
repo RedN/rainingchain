@@ -842,7 +842,7 @@ Draw.window.quest.upper = function(s,charY,q,mq,hq){
 	str += 'Reward: ' + round(q.reward.value[0],3,1) + ' - ' + round(q.reward.value[1],3,1) + ' in ' + Db.stat[q.reward.stat].name + '<br>';
 	if(mq.complete){
 		var boost = Draw.convert.boost(mq.reward);
-		str += 'Current Reward: ' + boost[1] + ' in ' + boost[0] + '(' + mq.rewardTier + ')' + '<br>';
+		str += 'Current Reward: ' + boost[1] + ' in ' + boost[0] + '(' + mq.rewardTier.toPercent(1) + ')' + '<br>';
 	}
 	
 	hq.info.innerHTML = str;
