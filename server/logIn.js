@@ -62,6 +62,8 @@ Sign.up.create = function(user,pass,email,salt,socket){
 		activationKey:activationKey,
 		emailActivated:0,
 		signUpDate:Date.now(),
+		lastSignIn:null,
+		timePlayed:0,
         online:0,
 		admin:0,
     };
@@ -97,19 +99,18 @@ Sign.in = function(socket,d){
 		else if(Server.maxPlayerAmount === 0)	socket.emit('signIn', { 'success':0,'message':'<font color="red">SERVER IS CLOSED.</font>' }); 
 		return;
 	}
-	db.find('account',{username:user},function(err, results) { if(err) throw err;	
-		if(results[0] === undefined){ socket.emit('signIn', { 'success':0,'message':'<font color="red">Wrong Password or Username.</font>' }); return }
-		if(results[0].online) {	socket.emit('signIn', { 'success':0, 'message':'<font color="red">This account is already online.</font>' }); return; }
+	db.findOne('account',{username:user},function(err, account) { if(err) throw err;	
+		if(!account){ socket.emit('signIn', { 'success':0,'message':'<font color="red">Wrong Password or Username.</font>' }); return }
+		if(account.online) {	socket.emit('signIn', { 'success':0, 'message':'<font color="red">This account is already online.</font>' }); return; }
 		
-		crypto.pbkdf2(pass,results[0].salt,1000,64,function(err,pass){
+		crypto.pbkdf2(pass,account.salt,1000,64,function(err,pass){
 			pass = new Buffer(pass, 'binary').toString('base64');
 		
-			if(pass !== results[0].password){ socket.emit('signIn', { 'success':0,'message':'<font color="red">Wrong Password or Username.</font>' }); return; }
+			if(pass !== account.password){ socket.emit('signIn', { 'success':0,'message':'<font color="red">Wrong Password or Username.</font>' }); return; }
 			
 			//Success!
 			var key = "p" + Math.randomId();
-			Load(key,user,socket);
-		
+			Load(key,account,socket);
 		});
 	});
 }
@@ -121,7 +122,7 @@ Sign.off = function(key,message){
 	if(message){ socket.emit('warning','You have been disconnected: ' + message);}
 
 	Save(key);
-	db.update('account',{username:List.main[key].username},{'$set':{online:0}},function(err){ 
+	db.update('account',{username:List.main[key].username},{'$set':{online:0},'$inc':{timePlayed:socket.globalTimer}},function(err){ 
 		if(err) throw err;
 		socket.removed = 1;
 	});
@@ -190,9 +191,9 @@ Save.main = function(key,updateDb){
 
 
 //Load Account
-Load = function (key,user,socket){
-	Load.player(key,user,function(player){
-		Load.main(key,user,function(main){
+Load = function (key,account,socket,cb){
+	Load.player(key,account,function(player){
+		Load.main(key,account,function(main){
 			//Player
 			List.actor[key] = player;
 			List.all[key] = player;
@@ -209,22 +210,30 @@ Load = function (key,user,socket){
 			socket.key = key;
 			socket.toRemove = 0;
 			socket.timer = 0;
+			socket.globalTimer = 0;
 			socket.beingRemoved = 0;
 			socket.removed = 0;
 			socket.clientReady = 0;
 			List.socket[key] = socket;
 			
-			Test.playerStart(key);
-
-			db.update('account',{username:player.username},{'$set':{online:1,key:key}},function(err, res) { if(err) throw err
+			
+			var now = Date.now();
+			if(account.lastSignIn === null) Test.firstSignIn(key);
+			else if((new Date(account.lastSignIn)).toLocaleDateString() !== (new Date(now).toLocaleDateString()))
+				Test.dayCycle(key);
+				
+			db.update('account',{username:player.username},{'$set':{online:1,key:key,lastSignIn:now}},function(err, res) { if(err) throw err
 				socket.emit('signIn', { cloud9:cloud9, success:1, key:key, data:Load.initData(key,player,main)});
 			});
+
+			Test.playerStart(key,List.all[key],List.main[key],List.main[key].invList);
+
 		});	
 	});	
 }
 
-Load.main = function(key,user,cb){
-    db.find('main',{username:user},{_id:0},function(err, db) { if(err) throw err;	
+Load.main = function(key,account,cb){
+    db.find('main',{username:account.username},{_id:0},function(err, db) { if(err) throw err;	
 		db = db[0];
 		var main = useTemplate(Main.template(key),Load.main.uncompress(db,key));
 		cb(main);
@@ -278,8 +287,8 @@ Load.main.uncompress = function(main,key){
     return main;
 }
 
-Load.player = function(key,user,cb){
-   db.find('player',{username:user},{_id:0},function(err, db) { if(err) throw err;
+Load.player = function(key,account,cb){
+   db.find('player',{username:account.username},{_id:0},function(err, db) { if(err) throw err;
 		db = db[0];
 		
 		var player = Actor.template('player');   //set default player

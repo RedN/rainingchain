@@ -111,10 +111,8 @@ q.map.tutorial = function(){
 			
 	tut.load = function(map,spot,v,m){
 		SkillPlot.creation({'xym':spot.e,
-			"quest":"Qtutorial","type":"tree-red"
+			"quest":"Qtutorial",'num':0,"type":"tree-red"
 		});
-		
-		
 		
 		//grave
 		Actor.creation({'xym':spot.h,

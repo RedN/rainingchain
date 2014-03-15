@@ -12,6 +12,7 @@ change pts system
 draw passive for special balancedAtk
 remove passive
 
+soulbound
 
 
 

@@ -85,13 +85,12 @@ Db.skillPlot = {
 SkillPlot = {};
 SkillPlot.creation = function(data){	//xym, type, num, quest
 	var plot = Db.skillPlot[data.type];
-	var num = Db.quest[data.quest].skillPlot.length;
 	
 	var id = Actor.creation({'xym':data.xym,
 		"category":plot.category,"variant":plot.variant,"extra":{
 			skillPlot:{
 				quest:data.quest,
-				num:num,
+				num:data.num,
 				type:data.type,
 			},
 			viewedIf:function(key,eid){
@@ -107,7 +106,7 @@ SkillPlot.creation = function(data){	//xym, type, num, quest
 		"category":plot.category,"variant":"down","extra":{
 			skillPlot:{
 				quest:data.quest,
-				num:num,
+				num:data.num,
 				type:'down',
 			},
 			viewedIf:function(key,eid){

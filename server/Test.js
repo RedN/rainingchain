@@ -49,14 +49,21 @@ Test.serverStart = function(){
 }
 
 //Called when player logs in
-Test.playerStart = function(key){	
-	var inv = List.main[key].invList;
-	var mort = List.all[key];
-    
-	Test.firstLog(key);
+Test.playerStart = function(key,mort,main,inv){	
+	
+	
 }
 
-Test.firstLog = function(key){
+Test.dayCycle = function(key){
+	
+	
+	
+	
+	
+}
+
+Test.firstSignIn = function(key){
+	console.log('first');
 	var inv = List.main[key].invList;
 	var mort = List.all[key];
     
