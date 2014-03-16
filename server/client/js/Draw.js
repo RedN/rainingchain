@@ -26,14 +26,14 @@ Draw.loop = function (){
 
 	Draw.screenEffect(main.screenEffect);
 	
-	Draw.tab();     //bottom right
-	Draw.chat();    //bottom left
+	if(!main.hideHUD.tab) Draw.tab();     //bottom right
+	if(!main.hideHUD.chat) Draw.chat();    //bottom left
 
-	Draw.window();
-	Draw.popup();
+	if(!main.hideHUD.window) Draw.window();
+	if(!main.hideHUD.popup) Draw.popup();
 	
-	Draw.minimap();
-	Draw.state();
+	if(!main.hideHUD.minimap) Draw.minimap();
+	if(!main.hideHUD.state) Draw.state();
 
 	Draw.logout();
 	Draw.optionList();    //option when right-click

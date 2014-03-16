@@ -15,6 +15,18 @@ Quest.challenge.toggle = function(key,qid,bid){
 	
 	Quest.challenge.update(key,qid);	
 }
+Quest.challenge.signIn = function(key){
+	var mq = List.main[key].quest;
+	for(var i in mq){
+		for(var j in mq[i].challenge){
+			if(mq[i].challenge[j]){
+				Db.quest[i].challenge[j].add(key);
+			}		
+		}
+	}
+
+}
+
 Quest.challenge.update = function(key,qid){
 	var mq = List.main[key].quest[qid];
 	

@@ -1,6 +1,4 @@
 
-display
-
 
 passive:
 multipage

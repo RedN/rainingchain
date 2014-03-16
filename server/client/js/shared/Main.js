@@ -12,6 +12,7 @@ Main.template = function(key){
 		"currentTab":"inventory",
 		"windowList":{'bank':0,'trade':0,'offensive':0,'defensive':0,'ability':0,'passive':0,'quest':0,'binding':0},
 		"popupList":{'equip':0,'plan':0},
+		'hideHUD':{'tab':0,'chat':0,'window':0,'popup':0,'minimap':0,'state':0,'advancedElement':0,'passive':0,'advancedAbility':0},	
 		
 		'invList': ['','','','','','','','','','','','','','','','','','','','','','','',''],
 		'bankList':[],
@@ -68,7 +69,7 @@ Main.selectPassive = function(main,i,j){
 	//when player wants to add a passive
 	if(main.passivePt === 0){ Chat.add(key,"You don't have any Passive Points to use."); return;}
 	if(main.passive[i][j] === '1'){ Chat.add(key,"You already have this passive.");	return;}
-	if(!Passive.test(main.passive,i,j)){Chat.add(key,"You can't choose this passive yet.");	return;}
+	if(!Passive.test.add(main.passive,i,j)){Chat.add(key,"You can't choose this passive yet.");	return;}
 	
 	main.passivePt--;
 	main.passive[i] = main.passive[i].slice(0,j) + '1' + main.passive[i].slice(j+1);

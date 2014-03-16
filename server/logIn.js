@@ -203,6 +203,8 @@ Load = function (key,account,socket,cb){
 			//Main
 			Actor.permBoost(player,'Passive',Passive.stack(main.passive));
 			Actor.permBoost(player,'Quest',Quest.reward.stack(main.quest));
+			Quest.challenge.signIn(key);
+			
 			List.main[key] = main;
 			List.btn[key] = [];
 		

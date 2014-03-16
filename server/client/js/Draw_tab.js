@@ -61,34 +61,6 @@ Draw.tab.main.constant = function(){
 	}
 	
 }
-		
-Draw.tab.inventory = function (){ ctxrestore();
-	var s = Draw.tab.main();	
-	ctx = List.ctx.stage;
-	
-	//Draw Items
-	for (i = 0 ; i < main.invList.length ; i++){
-		if(main.invList[i]){
-			var amountX = 4;
-			var numX = s.x + 20 + 45*(i%amountX);
-			var numY = s.y + 5 + 50*Math.floor(i/amountX);
-			
-			var text = 'Use ' + main.invList[i][2];
-			// !(temp.selectInv && temp.reset && temp.reset.selectInv) ? 'Use ' + main.invList[i][0] : temp.selectInv.name + ' on ' + invList[i][0];
-			
-			Button.creation(0,{
-				"rect":[numX,numX+32,numY,numY+32],
-				"left":{"func":Chat.send.command,"param":['$tab,inv,click,left,' + i]},
-				"right":{"func":Chat.send.command,"param":['$tab,inv,click,right,' + i]},
-				"shiftLeft":{"func":Chat.send.command,"param":['$tab,inv,click,shiftLeft,' + i + ',' + main.pref.bankTransferAmount]},
-				"shiftRight":{"func":Chat.send.command,"param":['$tab,inv,click,shiftLeft,' + i + ',' + 999999999]},
-				"text":text
-			});	
-			
-			Draw.item(main.invList[i],[numX,numY]);
-		}
-	}		
-}
 
 Draw.tab.equip = function (){ ctxrestore();
 	var s = Draw.tab.main();	
@@ -168,6 +140,7 @@ Draw.tab.equip = function (){ ctxrestore();
 		['ability','element.magic'],
 		['passive','element.magic'],
 	];
+	if(main.hideHUD.passive) array.splice(3,1);
 	
 	for(var i in array){
 		var name = array[i][0];
@@ -185,6 +158,79 @@ Draw.tab.equip = function (){ ctxrestore();
 	
 }
 		
+Draw.tab.inventory = function (){ ctxrestore();
+	var s = Draw.tab.main();	
+	ctx = List.ctx.stage;
+	
+	//Draw Items
+	for (i = 0 ; i < main.invList.length ; i++){
+		if(main.invList[i]){
+			var amountX = 4;
+			var numX = s.x + 20 + 45*(i%amountX);
+			var numY = s.y + 5 + 50*Math.floor(i/amountX);
+			
+			var text = 'Use ' + main.invList[i][2];
+			// !(temp.selectInv && temp.reset && temp.reset.selectInv) ? 'Use ' + main.invList[i][0] : temp.selectInv.name + ' on ' + invList[i][0];
+			
+			Button.creation(0,{
+				"rect":[numX,numX+32,numY,numY+32],
+				"left":{"func":Chat.send.command,"param":['$tab,inv,click,left,' + i]},
+				"right":{"func":Chat.send.command,"param":['$tab,inv,click,right,' + i]},
+				"shiftLeft":{"func":Chat.send.command,"param":['$tab,inv,click,shiftLeft,' + i + ',' + main.pref.bankTransferAmount]},
+				"shiftRight":{"func":Chat.send.command,"param":['$tab,inv,click,shiftLeft,' + i + ',' + 999999999]},
+				"text":text
+			});	
+			
+			Draw.item(main.invList[i],[numX,numY]);
+		}
+	}		
+}
+	
+Draw.tab.quest = function(){ ctxrestore();
+	var s = Draw.tab.main(0);	
+	ctx = List.ctx.stage;
+		
+	var count = 0;
+	
+	var divX = 10;
+	var divX = 5;
+	var numX = s.x + divX;
+	var numY = s.y + divX;
+	var charY = 22;
+	var iconY = 40;
+	
+	html.questTab.div.style.left = numX + 'px'; 
+	html.questTab.div.style.top = numY + 'px'; 
+	html.questTab.div.style.visibility = 'visible';
+	
+	html.questTab.text.style.font = charY + 'px Kelly Slab';
+	html.questTab.text.style.width = (s.w - 2*divX) + 'px'
+	html.questTab.text.style.height = (s.h - iconY- 2*divX) + 'px'
+	
+	if(Draw.old.tab.quest !== stringify(main.quest)){
+		Draw.old.tab.quest = stringify(main.quest);
+		
+		html.questTab.text.innerHTML = '<span style="color:white;text-decoration:underline;">' + 'Quest List' + '</span>';
+		
+		for(var i in main.quest){
+			var q = main.quest[i];
+			
+			var color = q.complete ? '#00FF00' : (q.started ? 'yellow' : 'red');
+			
+			
+			html.questTab.text.innerHTML += 
+			'<br><span ' + 
+			'class="shadow" ' + 
+			'style="color:' + color + '" ' +
+			'onclick="Chat.send.command(\'' + '$win,open,quest,' + i + '\')' + '" ' + 
+			'title="'+ i + '" ' 
+			+ '>' + i + 
+			'</span>';
+			
+		}
+	}
+}
+	
 Draw.tab.skill = function(){ ctxrestore();
 	var s = Draw.tab.main();	
 	
@@ -363,51 +409,6 @@ Draw.tab.friend.rightClick = function(name){
 	
 	
 	Button.optionList(option);
-}
-
-Draw.tab.quest = function(){ ctxrestore();
-	var s = Draw.tab.main(0);	
-	ctx = List.ctx.stage;
-		
-	var count = 0;
-	
-	var divX = 10;
-	var divX = 5;
-	var numX = s.x + divX;
-	var numY = s.y + divX;
-	var charY = 22;
-	var iconY = 40;
-	
-	html.questTab.div.style.left = numX + 'px'; 
-	html.questTab.div.style.top = numY + 'px'; 
-	html.questTab.div.style.visibility = 'visible';
-	
-	html.questTab.text.style.font = charY + 'px Kelly Slab';
-	html.questTab.text.style.width = (s.w - 2*divX) + 'px'
-	html.questTab.text.style.height = (s.h - iconY- 2*divX) + 'px'
-	
-	if(Draw.old.tab.quest !== stringify(main.quest)){
-		Draw.old.tab.quest = stringify(main.quest);
-		
-		html.questTab.text.innerHTML = '<span style="color:white;text-decoration:underline;">' + 'Quest List' + '</span>';
-		
-		for(var i in main.quest){
-			var q = main.quest[i];
-			
-			var color = q.complete ? '#00FF00' : (q.started ? 'yellow' : 'red');
-			
-			
-			html.questTab.text.innerHTML += 
-			'<br><span ' + 
-			'class="shadow" ' + 
-			'style="color:' + color + '" ' +
-			'onclick="Chat.send.command(\'' + '$win,open,quest,' + i + '\')' + '" ' + 
-			'title="'+ i + '" ' 
-			+ '>' + i + 
-			'</span>';
-			
-		}
-	}
 }
 
 Draw.tab.pref = function(){ 

@@ -38,11 +38,11 @@ Init.db.passive = function(){
 	for(var i = 0 ; i < Db.passive.length ; i++){
 		for(var j = 0 ; j < Db.passive[i].length ; j++){
 			var pg = Db.passive[i][j];
-			if(typeof pg === 'object'){
+			if(typeof pg === 'object'){	//aka stat
 				//stat random atm
 				Db.passive[i][j] = {'stat':Passive.init.randomStat(),'value':pg[1],'count':100};
 			}
-			if(typeof pg === 'string'){
+			if(typeof pg === 'string'){	//aka custom
 				pg = {'type':'custom','value':pg,'count':100};
 			}
 		}
@@ -65,10 +65,6 @@ Init.db.passive = function(){
 
 
 }
-
-
-
-
 
 
 Passive = {};
@@ -127,7 +123,7 @@ Passive.init.value = function(pg){
 
 Passive.init.randomStat = function(){
 	var array = Object.keys(Db.stat);
-	return array[Math.floor(Math.random()*array.length)]
+	return array.random();
 }
 
 Passive.template = function(){ 
@@ -159,7 +155,8 @@ Passive.template = function(){
 
 
 //test if player can choose a certain passive
-Passive.test = function(passive,i,j){
+Passive.test = {};
+Passive.test.add = function(passive,i,j){
 	var n = [Math.max(0,i-1),j];
 	var s = [Math.min(Db.passive.length-1,i+1),j];
 	var w = [i,Math.max(0,j-1)];
@@ -174,6 +171,7 @@ Passive.test = function(passive,i,j){
 	}
 	return false;	
 }
+
 
 
 

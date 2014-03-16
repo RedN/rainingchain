@@ -227,10 +227,13 @@ Equip.creation = function(equip){
 		'option':[	
 			{'name':'Examine Equip','func':'Main.examineEquip','param':[equip.id]},
 			{'name':'Change Equip','func':'Actor.switchEquip','param':[equip.id]},
-			{'name':'Account Bound','func':'Equip.accountBound','param':[equip.id]},
-			{'name':'Salvage','func':'Craft.equip.salvage','param':[equip.id]},
 		],
 	};
+	if(!equip.accountBound && equip.creator !== null)
+		item.option.push({'name':'Account Bound','func':'Equip.accountBound','param':[equip.id]});
+	if(equip.salvagable)
+		item.option.push({'name':'Salvage','func':'Craft.equip.salvage','param':[equip.id]});
+			
 	
 	Item.creation(item);
 		
@@ -298,15 +301,15 @@ Equip.template = function(){
 		'creator':null,
 		'accountBound':0,
 		'color':'white',
+		'salvagable':1,
 	}
 }
 
 
 Equip.accountBound = function(key,eid){
-	console.log(1);
 	var equip = Db.equip[eid];
 	
-	if(equip.accountBound){
+	if(equip.accountBound){	//shouldnt happen
 		Chat.add(key,'This equip is already account bound.');
 		return;
 	}

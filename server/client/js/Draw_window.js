@@ -31,6 +31,8 @@ Draw.window.main = function(title){ ctxrestore();
 	t.style.font = titlesize + 'px Kelly Slab';
 	
 	if(typeof title === 'string'){ t.innerHTML = title; } else {
+		if(main.hideHUD.passive) delete title.passive;
+	
 		t.style.textDecoration = 'none';
 		var str = '';
 		for(var i in title){
@@ -198,8 +200,6 @@ Draw.window.stat = function(type){ ctxrestore();
 	
 }
 
-	
-
 Draw.window.stat.list = {
 'offensive':[
 	{'name':'Melee','icon':'element.melee','stat':[{'name':'x','stat':'dmg-melee-x'},{'name':'*','stat':'dmg-melee-*'},{'name':'^','stat':'dmg-melee-^'},{'name':'+','stat':'dmg-melee-+'}],'string':(function(){ return Draw.window.stat.list.element('dmg','melee')})},
@@ -268,7 +268,6 @@ Draw.window.stat.list = {
 
 };
 
-
 Draw.window.stat.list.element = function(type,name){
 	type += '-';
 	var b0 = round(player.boost.list[type + name + '-x'].base,2,1);
@@ -277,6 +276,7 @@ Draw.window.stat.list.element = function(type,name){
 	var b3 = round(player.boost.list[type + name + '-+'].base,2,1);
 	var sum = round(Math.pow(player.boost.list[type + name + '-x'].base*player.boost.list[type + name + '-*'].base,player.boost.list[type + name + '-^'].base) + player.boost.list[type + name + '-+'].base,3);
 	var string = '( ' + b0 + ' * ' + b1 + ' ) ^ ' + b2 + ' + ' + b3 + ' = ' + sum;
+	if(main.hideHUD.advancedElement) string = sum;
 	return string
 }
 
@@ -409,8 +409,16 @@ Draw.window.ability.leftSide = function(){ ctxrestore();
 			'text':"Assign " + Draw.old.abilityShowed.name + " to " + button
 			});	
 	}
+	
+	ctx.fillText('Change',s.x + 12,s.y + 100-65+250);
+	ctx.fillText('Binding',s.x + 12,s.y + 100-35+250);
+	
+	Button.creation(0,{
+		"rect":[s.x + 12, s.x + 12+90, s.y + 100-65+250, s.y + 100-65+250+60 ],
+		"left":{"func":Chat.send.command,"param":['$win,open,binding']},
+		'text':"Open Key Bindings Window"
+		});	
 }
-
 Draw.window.ability.abilityList = function(diffX){ ctxrestore();
 	var s = Draw.window.main.constant();
 	s.mx += diffX; 
@@ -503,21 +511,25 @@ Draw.window.ability.generalInfo = function(diffX,diffY){ ctxrestore();
 	if(ab.cost.mana){ str += round(ab.cost.mana,1) + ' Mana'; }
 	if(ab.cost.hp){ str += ' + ' + round(ab.cost.hp,1) + ' Life'; }
 	if(!ab.cost.mana && !ab.cost.hp) str += 'None';
-	str += '<br>' +
+	
+	//Orb
+	var orb = Db.abilityOrb[ab.orb.upgrade.bonus];
+	var str2 = '<br>' +
 	' - Orbs: ' + ab.orb.upgrade.amount + ' | ' + 'Effect: ';
 	
-	var orb = Db.abilityOrb[ab.orb.upgrade.bonus];
-	str += '<span ' + 
+	str2 += '<span ' + 
 	'title="' + orb.info + '"' + 
 	'>' + orb.name + 
 	'</span>';
 	
-	str += ' | ' + '<span ' + 
+	str2 += ' | ' + '<span ' + 
 	'onclick="Draw.window.ability.generalInfo.upgrade();' + '" ' + 
 	'oncontextmenu="Draw.window.ability.generalInfo.upgrade();' + '" ' + 
 	'title="Click to upgrade this ability (requires Orbs of Upgrade)"' + 
 	'>' + '[UPGRADE]' + 
 	'</span>';
+	
+	if(!main.hideHUD.advancedAbility) str += str2;
 	
 	/*	no longer used
 	str += '<br><table>';
@@ -1228,7 +1240,7 @@ Draw.window.passive.grid = function(){ ctxrestore();
 			
 			//Border
 			ctx.globalAlpha = 0.5;
-			if(main.pref.passiveView === 0){ ctx.fillStyle =	+main.passive[i][j] ? 'green' : (Passive.test(main.passive,i,j) ? '#FFFF00': 'red');}
+			if(main.pref.passiveView === 0){ ctx.fillStyle =	+main.passive[i][j] ? 'green' : (Passive.test.add(main.passive,i,j) ? '#FFFF00': 'red');}
 			if(main.pref.passiveView === 1){ var n = (Db.passive[i][j].count-Db.passive.min) / (Db.passive.max-Db.passive.min);	ctx.fillStyle =	Draw.gradientRG(n);}
 			ctx.fillRect(numX,numY,ic,ic);
 		
