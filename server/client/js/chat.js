@@ -139,7 +139,7 @@ Chat.receive = function(pack){
 		html.chat.text.innerHTML += '<br>' + text; 
 	}
 	if(pack.type === 'question'){
-		Chat.question(pack.text);
+		Chat.question(pack.text,pack.option);
 	}
 	
 	html.chat.text.scrollTop += 50;
@@ -179,10 +179,32 @@ Chat.add = function(text,txt){
 	html.chat.text.innerHTML += '<br>' + (txt || text); 	//incase passing key as first param
 }
 
-Chat.question = function(text){
+Chat.question = function(text,option){
 	$( "#questionDiv" ).dialog( "open" );
 	$("#questionText")[0].innerHTML = text;
-	$("#questionInput").focus();
+	
+	var ho = $("#questionOption")[0];
+	ho.innerHTML = '';
+	
+	if(option){
+		var str = '';
+		for(var i in option){
+			str += 
+			'<button ' +
+			'onclick="Chat.send.command(\'$question,' + option[i] + '\'); $( \'#questionDiv\' ).dialog(\'close\')' + '" ' +
+			'> ' + option[i] +
+			'</button>';
+		}
+		ho.innerHTML = str;
+		
+		$("#questionInput").prop('disabled', true);
+	} else {
+		$("#questionInput").focus();
+		$("#questionInput").prop('disabled', false);
+	}
+	
+	
+	
 }
 
 

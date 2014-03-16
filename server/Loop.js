@@ -93,7 +93,7 @@ Loop.logOut = function(){
 		var socket = List.socket[i];
 		socket.timer += 40;		
 		socket.globalTimer += 40;		
-		if((socket.timer >= 10*60*1000 || socket.globalTimer >= 6*60*60*1000 || socket.toRemove) && !socket.beingRemoved){
+		if((socket.timer >= Server.frequence.inactivity || socket.globalTimer >= Server.frequence.disconnect || socket.toRemove) && !socket.beingRemoved){
 			Sign.off(i,'Disconnected due to inactivity.');
 		}
 		if(socket.removed)	Sign.off.remove(i);

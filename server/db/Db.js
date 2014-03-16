@@ -46,7 +46,7 @@ Init.db = function(data){
 	
 	//real direct db
 	DB = require("mongojs").connect(databaseURI, collections, MONGO.options);
-	setInterval(function(){	DB = require("mongojs").connect(databaseURI, collections, MONGO.options);},60*1000);	//refresh connection
+	setInterval(function(){	DB = require("mongojs").connect(databaseURI, collections, MONGO.options);},Server.frequence.db);	//refresh connection
 	
 	
 	//intermediare db

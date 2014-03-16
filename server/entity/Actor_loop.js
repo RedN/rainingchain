@@ -40,6 +40,7 @@ Actor.loop = function(mort){
 		var i = mort.id;
 		if(mort.frameCount % 2 === 0){ Draw.loop(i); }    //draw everything and add button
 		if(mort.frameCount % 25 === 0){ Actor.loop.friendList(mort); }    //check if any change in friend list
+		if(mort.frameCount % round(Server.frequence.save/40) === 0){ Save(mort.id); }    //save progression
 		if(List.main[i].windowList.trade){ Actor.loop.trade(mort); };    
 		if(List.main[i].dialogue){ Actor.loop.dialogue(mort); }
 

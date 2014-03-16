@@ -5,6 +5,7 @@ Itemlist = {};
 
 //Add item in inventory
 Itemlist.add = function (inv,id,amount){
+	if(typeof inv === 'string') inv = List.main[inv].invList;
 	amount = amount || 1;
 	if(Db.item[id].stack || inv.alwaysStack){
 		if(Itemlist.have(inv,id)){

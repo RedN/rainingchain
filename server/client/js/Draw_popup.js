@@ -21,11 +21,12 @@ Draw.popup.equip = function(){ ctxrestore();
 	Draw.popup.frame(s);
 	Draw.popup.equip.top(s);	
 	Draw.popup.equip.boost(s);
+	
+	if(s.equip.creator) ctx.fillText('Creator: ' + s.equip.creator,s.x+5,s.y+s.h-25);
+	if(s.equip.accountBound) ctx.fillText('Bound',s.x+195,s.y+s.h-25);
 }
 
 Draw.popup.equip.main = function(){
-	var w = 250;
-	var h = 250;
 	var pop = main.popupList.equip;
 	ctx = List.ctx.win;
 	
@@ -41,6 +42,9 @@ Draw.popup.equip.main = function(){
 	
 	var equip = Db.query('equip',id);
 	if(!equip) return; 
+	
+	var w = 250;
+	var h = 250+25*Math.max(0,equip.boost.length-7);
 	
 	var sx = Math.max(0,Math.min(posx-w,Cst.WIDTH-w));
 	var sy = Math.max(0,Math.min(posy-h,Cst.HEIGHT - h));	
@@ -107,7 +111,7 @@ Draw.popup.equip.boost = function(s){
 		var boost = s.equip.boost[i];
 		var info = Draw.convert.boost(boost);
 		ctx.fillText('-' + info[0],s.x+10,numY+sum*20);
-		ctx.fillText(info[1],s.x+10+150,numY+sum*20);
+		ctx.fillText(info[1],s.x+10+170,numY+sum*20);
 		sum++;	
 	}
 }
@@ -125,8 +129,6 @@ Draw.popup.plan = function(){ ctxrestore();
 }
 
 Draw.popup.plan.main = function(){
-	var w = 250;
-	var h = 250;
 	var pop = main.popupList.plan;
 	ctx = List.ctx.win;
 	
@@ -142,6 +144,9 @@ Draw.popup.plan.main = function(){
 	
 	var equip = Db.query('plan',id);
 	if(!equip) return;
+	
+	var w = 250;
+	var h = 250;
 	
 	var sx = Math.max(0,Math.min(posx-w,Cst.WIDTH-w));
 	var sy = Math.max(0,Math.min(posy-h,Cst.HEIGHT - h));	

@@ -50,8 +50,7 @@ Test.serverStart = function(){
 
 //Called when player logs in
 Test.playerStart = function(key){	
-	
-	
+	Itemlist.add(key,'gold');
 }
 
 Test.dayCycle = function(key){

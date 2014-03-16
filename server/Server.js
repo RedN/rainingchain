@@ -1,5 +1,11 @@
 
 Server =  {
+	frequence:{
+		save:10*1000,
+		disconnect:10*60*1000,
+		inactivity:6*60*60*1000,
+		db:60*1000,
+	},	
 	ready:0,
 	maxPlayerAmount:nodejitsu ? 0 : 64,
 	customMod:false,

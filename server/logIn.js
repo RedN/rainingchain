@@ -241,7 +241,8 @@ Load.main = function(key,account,cb){
 	});
 }
 
-Save.main.compress = function(main){
+Save.main.compress = function(mainn){
+	var main = deepClone(mainn);
 	delete main.tradeList;
 	
 	main.invList = main.invList.data;
@@ -306,7 +307,8 @@ Load.player = function(key,account,cb){
 	});
 }
 
-Save.player.compress = function(player){
+Save.player.compress = function(playerr){
+	var player = deepClone(playerr);
 	for(var i in player.ability)	player.ability[i] = player.ability[i] ? player.ability[i].id : 0;
 
 	if(!player.map.have("@MAIN")){	//then need to modify xymap

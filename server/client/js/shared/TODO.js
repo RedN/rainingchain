@@ -1,8 +1,5 @@
 
-new system for question
-
-
-
+display
 
 
 passive:
@@ -10,8 +7,6 @@ multipage
 change pts system
 draw passive for special balancedAtk
 remove passive
-
-soulbound
 
 
 
@@ -42,14 +37,13 @@ finish doc
 
 
 easy mode
-cycle system
 
 revamp a*
 
 
 html window
 
-protect db, list, itemlist
+
 contact ppl for music
 
 

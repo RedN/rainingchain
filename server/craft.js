@@ -40,6 +40,7 @@ Craft.equip = function(plan){
 	equip.lvl = plan.lvl;
 	equip.plan = plan;
 	equip.req = Craft.equip.req(plan);
+	equip.creator = plan.creator || null;
 	
 	plan.amount = Craft.equip.amount(plan);
 	equip.boost = Craft.equip.boost(plan,equip.boost);
@@ -228,7 +229,10 @@ Craft.orb = function(key,orb,amount,wId,mod){	//would be better if split in mult
 	
 	//Set amount of orbs used
 	amount = amount.mm(0,Itemlist.have(inv,orb + '_orb',0,'amount'));
-	if(!amount) return;
+	if(!amount){
+		Chat.add(key,"You don't have any orbs to use.");
+		return;
+	}
 	
 	//Know if ability or equip
 	var equip; var category;
@@ -247,8 +251,8 @@ Craft.orb = function(key,orb,amount,wId,mod){	//would be better if split in mult
 	
 
 	//Save the changes
-	Item.remove(equip.id);
 	Itemlist.remove(inv,orb + '_orb',amount);
+	Item.remove(equip.id);
 	Chat.add(key,amount + ' Orbs used on ' + equip.name);
 	equip.id = Math.randomId();
 	
@@ -268,7 +272,7 @@ Craft.orb = function(key,orb,amount,wId,mod){	//would be better if split in mult
 Craft.orb.boost = function(key,equip,amount){
 	//need to change so amount makes impact
 	amount = amount || 1;
-	equip.boost = Craft.equip.boost(equip.seed,equip.boost,1);
+	equip.boost = Craft.equip.boost({piece:equip.piece,type:equip.type},equip.boost,1);
 	equip.orb.boost.history.push([Date.now(),equip.boost[equip.boost.length-1]]);
 }
 
@@ -296,6 +300,11 @@ Craft.orb.upgrade = function(key,equip,amount,mod){
 
 Craft.orb.upgrade.formula = function(x){
 	return 0.9+0.1*Math.log10(10+x);
+}
+
+Craft.orb.save = function(){
+
+
 }
 //}
 

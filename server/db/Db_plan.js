@@ -186,7 +186,7 @@ Plan.use = function(key,id){	//when player tries to use plan
 	if(Plan.test(key,plan.req)){ //meet req
 		Itemlist.remove.bulk(inv,plan.req.item);
 		
-		
+		plan.creator = List.all[key].username;
 		var itemid;
 		if(plan.unique){ itemid = plan.unique }	//always give same items		
 		if(plan.category === 'equip') itemid = Craft.equip(plan); 

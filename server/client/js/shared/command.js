@@ -338,7 +338,7 @@ Command.list['win,ability,swap'].doc = {
 Command.list['win,ability,upgrade'] = function(key,abid,amount){
 	amount = +amount;
 	if(!amount || !List.all[key].abilityList[abid] || amount < 1){ Chat.add(key,'Wrong'); return;}
-	Craft.orb(key,'upgrade',amount,abid);	
+	Craft.orb(key,'upgrade',amount,abid);
 }
 Command.list['win,ability,upgrade'].doc = {
 	'description':"Upgrade an Ability",

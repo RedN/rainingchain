@@ -227,6 +227,7 @@ Equip.creation = function(equip){
 		'option':[	
 			{'name':'Examine Equip','func':'Main.examineEquip','param':[equip.id]},
 			{'name':'Change Equip','func':'Actor.switchEquip','param':[equip.id]},
+			{'name':'Account Bound','func':'Equip.accountBound','param':[equip.id]},
 			{'name':'Salvage','func':'Craft.equip.salvage','param':[equip.id]},
 		],
 	};
@@ -299,11 +300,39 @@ Equip.template = function(){
 		'color':'white',
 	}
 }
+
+
+Equip.accountBound = function(key,eid){
+	console.log(1);
+	var equip = Db.equip[eid];
 	
+	if(equip.accountBound){
+		Chat.add(key,'This equip is already account bound.');
+		return;
+	}
+	
+	Craft.orb.boost(key,equip,1);
+	
+	if(equip.creator === List.all[key].username){
+		for(var i in equip.boost)
+			equip.boost[i].value *= 1.2;	
+	}
+	
+	
+	Item.remove(equip.id);
+	Itemlist.remove(List.main[key].invList,equip.id);
+	Chat.add(key,'Equip succesfully account bound.');
+	equip.id = Math.randomId();
+	equip.accountBound = 1;
+	
+	Equip.creation(equip);
+	Itemlist.add(List.main[key].invList,equip.id);
+	
+}
 
 /*
 when account bound =>add 1 bonus
-if self found => all boost become *1.1
+if self found => all boost become *1.2
 */
 	
 
