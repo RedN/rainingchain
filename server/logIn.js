@@ -200,14 +200,15 @@ Load = function (key,account,socket,cb){
 			List.map[player.map].list[player.id] = key;
 			List.nameToKey[player.name] = key;
 			
+			List.main[key] = main;
+			List.btn[key] = [];
+		
 			//Main
 			Actor.permBoost(player,'Passive',Passive.stack(main.passive));
 			Actor.permBoost(player,'Quest',Quest.reward.stack(main.quest));
 			Quest.challenge.signIn(key);
 			
-			List.main[key] = main;
-			List.btn[key] = [];
-		
+			
 			//Init Socket
 			socket.key = key;
 			socket.toRemove = 0;

@@ -72,8 +72,9 @@ Main.selectPassive = function(main,i,j){
 	if(!Passive.test.add(main.passive,i,j)){Chat.add(key,"You can't choose this passive yet.");	return;}
 	
 	main.passivePt--;
-	main.passive[i] = main.passive[i].slice(0,j) + '1' + main.passive[i].slice(j+1);
-	Actor.permBoost(List.all[key],'Passive',Passive.convert(main.passive));
+	main.passive[i] = main.passive[i].set(j,'1');
+	
+	Actor.permBoost(List.all[key],'Passive',Passive.stack(main.passive));
 }
 
 Main.closeAllWindow = function(main){

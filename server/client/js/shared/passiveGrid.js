@@ -172,7 +172,59 @@ Passive.test.add = function(passive,i,j){
 	return false;	
 }
 
+Passive.test.remove = function(passive,yy,xx){
+	if(passive[yy][xx] === '2') return false;
 
+	var pass = deepClone(passive);
+	pass[yy] = pass[yy].set(xx,'0');
+	
+	var listValid = {};
+	var listTested = {};	//list where i already checked the pts around and added they to listValid
+	var listToTest = {'8-8':1};
+	var listNeedToBeValid = {};
+	
+	for(var i =0; i < pass.length; i++)
+		for(var j =0; j < pass[i].length; j++)
+			if(pass[i][j] !== '0')
+				listNeedToBeValid[i+'-'+j] = 1;
+	
+
+	while(Object.keys(listToTest).length){
+		console.log(1);
+		for(var i in listToTest){
+			var y = +i.slice(0,i.indexOf('-'));
+			var x = +i.slice(i.indexOf('-')+1);
+			
+			var n = [Math.max(0,y-1),x];
+			var s = [Math.min(Db.passive.length-1,y+1),x];
+			var w = [y,Math.max(0,x-1)];
+			var e = [y,Math.min(Db.passive[y].length-1,x+1)];
+			
+			var pos = [n,s,w,e];
+			
+			for(var k in pos){
+				var p = pass[pos[k][0]][pos[k][1]];	
+				var str = pos[k][0] + '-' + pos[k][1];
+				if(p === '1' || p === '2'){
+					if(str === '1-0') console.log(2222,p)
+					if(!listTested[str])	listToTest[str] = 1;
+				}
+				if(str === '0-0') console.log(10000,i);
+				listValid[str] = 1;
+			}
+			
+			listTested[i] = 1;
+			delete listToTest[i];
+		}
+	}	
+	
+	for(var i in listValid){
+		delete listNeedToBeValid[i];
+	}
+	return !Object.keys(listNeedToBeValid).length
+	
+	
+}
 
 
 

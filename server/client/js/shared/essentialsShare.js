@@ -429,6 +429,12 @@ String.prototype.have = function(name){
 	return this.indexOf(name) !== -1;
 }
 
+String.prototype.set = function(pos,value){
+	return this.slice(0,pos) + value + this.slice(pos+1);
+}
+
+
+
 //Testing
 eval('permCo' + 'nsoleLog = function(){ co' + 'nsole.log.apply(co' + 'nsole,arguments); }');
 logError = function(err) {
