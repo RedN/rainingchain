@@ -143,6 +143,7 @@ details details summary {
 
 .container { 
 	-moz-appearance: textfield-multiline;
+	white-space:normal;
 }
 .hover:hover{
 	text-decoration:underline; 

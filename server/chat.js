@@ -47,6 +47,13 @@ Chat.add = function(key,text,type,extra){
 	List.main[key].social.message.chat.push(extra);	
 }
 
+
+Chat.question = function(key,q){
+	List.main[key].question = q;
+	Chat.add(key,q.text || '','question');
+}
+
+
 //when a player wants to send a text
 Chat.send = function(data){
 	var key = data.key;									//source (key)

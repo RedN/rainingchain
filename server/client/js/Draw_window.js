@@ -952,8 +952,8 @@ Draw.window.quest.bonus = function(s,charY,q,mq,hq){
 	hq.bonus.style.width = s.dw/2 + 'px'
 	hq.bonus.style.height = charY*(1+Object.keys(q.bonus).length*1.2) + 'px'
 	
-	var title = 'Challenge:' + mq.bonus.challenge + ' * Orb:' + mq.bonus.orb + ' * Cycle:' + (1+mq.bonus.cycle) + ' + Complete:' + (0.01*mq.complete);
-	var sum = mq.bonus.challenge*mq.bonus.orb*(1+mq.bonus.cycle)+(0.01*mq.complete);
+	var title = 'Challenge:' + mq.bonus.challenge + ' * Orb:' + mq.bonus.orb + ' * Cycle:' + mq.bonus.cycle + ' + Complete:' + (0.01*mq.complete);
+	var sum = mq.bonus.challenge*mq.bonus.orb*mq.bonus.cycle+(0.01*mq.complete);
 	var str = '<span class="u" title="' + title + '"> Bonus: x' + round(sum,3) + '</span><br>';
 	
 	for(var i in q.challenge){

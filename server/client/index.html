@@ -124,7 +124,7 @@
 		
 		
 		
-		<input id="asd" class='onlyText' type="text">
+		
 		<div id="mainDiv" style="width: 1280px;  height:720px; margin: 0px auto;">	
 		<div  id="gameDiv" class='posAbs' style="display:none;">
 			<div id="canvasDiv" class='posAbs'></div>
@@ -135,8 +135,8 @@
 			<div id="chatBoxDiv" class="posAbs"> 
 				<div id="chatBoxText" class='taJust onlyTextScroll'></div>
 				<form id='chatForm'>
-				<span id="chatUserName" class='onlyText'></span>
-				<input id="chatBoxInput" class='onlyText' type="text">
+					<span id="chatUserName" class='onlyText'></span>
+					<input id="chatBoxInput" class='onlyText' type="text">
 				</form>
 			</div>		
 			
@@ -208,6 +208,12 @@
 		</div>
 	
 		<div id="help" title="Raining Chain Documentation"></div>
+		<div id="questionDiv" title="Server Question">
+			<div id="questionText" class='onlyText'></div>
+			<form id='questionForm'>
+				<input id="questionInput" class='onlyText' placeholder="answer" type="text">
+			</form>		
+		</div>
 		
 		<div id="customMod" title="Use Custom Mods">
 			<font size="5"> You can use custom images and scripts (mods) to play this game. </font>			
@@ -248,11 +254,20 @@
 		$( document ).tooltip();
 		$( document ).tooltip('option','show',100);
 		
-		$( "#help" ).dialog({autoOpen: false,width: 1000});
+		$( "#help" ).dialog({autoOpen: false,width: 1200});
 		$.get('/js/help.html').success(function(data){
 			$('#help').html(Init.help(data));
 		});
 		
+		$( "#questionDiv" ).dialog({autoOpen: false,width: 400});
+		$('#questionForm').submit(function(e,q,w) {
+			var txt = $("#questionInput")[0].value;
+			$("#questionInput")[0].value = '';
+			Chat.send.command('$question,' + txt);
+			$( "#questionDiv" ).dialog('close');
+			e.preventDefault();
+		});
+		//ts('Chat.question(key,{text:"asdkjasdas asd ahjd asd asjhd",func:function(){return false},repeat:1})')
 		$( "#customMod" ).dialog({autoOpen: false,width: 1000});
 		
 		

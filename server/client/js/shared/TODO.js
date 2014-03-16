@@ -1,7 +1,7 @@
 
 new system for question
 
-finish doc
+
 
 
 
@@ -13,15 +13,11 @@ remove passive
 
 soulbound
 
-quest reward stat boost stack on login
 
 
 plan revamp:
 already know what min and max mods are
 
-ability window
-
-add knockback on close range melee
 
 
 add lvl to unlock stuff (act like tutorial)
@@ -40,6 +36,7 @@ remake tileset
 
 #Priority 2:
 -Crafting System with White
+finish doc
 
 #Priority 3:
 

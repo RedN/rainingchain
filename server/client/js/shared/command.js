@@ -461,11 +461,31 @@ Command.list['cc,leave'].doc = {
 }
 //}
 
+Command.list['question'] = function(key){
+	var q = List.main[key].question;
+	if(!q) return;
+
+	var success = applyFunc(q.func,arguments);
+	if(!success && q.repeat){
+		Chat.add(key,'Invalid answer to server question.');
+		Chat.question(key,q);
+	} else List.main[key].question = null;
+	
+	
+	
+}
+Command.list['question'].doc = {
+	'description':"Answer custom questions from server",
+	'help':0,'param':[
+	],
+}
+
+
 Command.list['logout'] = function(key){
 	Sign.off(key,"You safely quit the game.");
 }
 Command.list['logout'].doc = {
-	'description':"Safe way to Log Out of the game",
+	'description':"Safe way to log uut of the game",
 	'help':0,'param':[
 	],
 }

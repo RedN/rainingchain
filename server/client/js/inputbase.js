@@ -104,7 +104,7 @@ Input.add = function(text,focus,add){
 
 Input.event = {}
 Input.event.key = function(code,dir,event){
-	var start = +$("#chatBoxInput").is(":focus");
+	var start = +$("#chatBoxInput").is(":focus") || +$("#questionInput").is(":focus");
 	var num = dir === 'down' ? 1 : 0;
 
 	for(var i in Input.key.move){
@@ -165,7 +165,7 @@ Input.event.combo = function(){
 
 Input.event.mouse = {};
 Input.event.mouse.click = function(code,dir){
-	var start = +$("#chatBoxInput").is(":focus");
+	var start = +$("#chatBoxInput").is(":focus") || +$("#questionInput").is(":focus");
 	var num = dir === 'down' ? 1 : 0;
 	if(code === 1) Input.mouse.left = num; 
 	if(code === 3) Input.mouse.right = num; 

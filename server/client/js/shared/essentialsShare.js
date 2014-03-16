@@ -206,10 +206,10 @@ applyFunc = function(func,param){
 		}
 	}
 	
-	func.apply(this, param);
+	return func.apply(this, param);
 }
 applyFunc.key = function(key,func,param){
-	applyFunc(func,[key].concat(param));
+	return applyFunc(func,[key].concat(param));
 }
 
 

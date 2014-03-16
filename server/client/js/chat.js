@@ -135,11 +135,13 @@ Chat.receive = function(pack){
 	}
 	
 	if(pack.type === 'public'){	
-		var id = Math.random();
-		var text = '<span id="' + id + '" oncontextmenu="Chat.click.name(\'' + pack.from + '\')">' + pack.from + "</span>" + ': ' + '<span style="color:blue">' + pack.text + "</span>";
+		var text = '<span oncontextmenu="Chat.click.name(\'' + pack.from + '\')">' + pack.from + "</span>" + ': ' + '<span style="color:blue">' + pack.text + "</span>";
 		html.chat.text.innerHTML += '<br>' + text; 
-	
 	}
+	if(pack.type === 'question'){
+		Chat.question(pack.text);
+	}
+	
 	html.chat.text.scrollTop += 50;
 	html.pm.text.scrollTop += 50;
 	//html.chat.text.scrollTop = html.chat.text.scrollHeight;
@@ -177,6 +179,11 @@ Chat.add = function(text,txt){
 	html.chat.text.innerHTML += '<br>' + (txt || text); 	//incase passing key as first param
 }
 
+Chat.question = function(text){
+	$( "#questionDiv" ).dialog( "open" );
+	$("#questionText")[0].innerHTML = text;
+	$("#questionInput").focus();
+}
 
 
 		

@@ -30,11 +30,11 @@ Quest.reward = function(key,id){
 	var mq = List.main[key].quest[id];
 	var q = Db.quest[id];
 	
-	var bonusSum = mq.bonus.challenge * mq.bonus.orb + mq.bonus.cycle;
+	var bonusSum = mq.bonus.challenge * mq.bonus.orb * mq.bonus.cycle;
 	
 	//Stat
 	var seed = {
-		'quality':(bonusSum + 0.01*mq.complete) * q.reward.stat.mod ,
+		'quality':(bonusSum + 0.01*mq.complete-1)* q.reward.stat.mod ,
 		'cap':Math.max(0.75,1-0.01*mq.deathCount)
 	};
 	
@@ -55,8 +55,6 @@ Quest.reward = function(key,id){
 	var exp = deepClone(q.reward.exp);
 	for(var i in exp) exp[i] *= bonusSum;
 	Skill.addExp.bulk(key,exp,false);
-	
-	
 }
 	
 Quest.reward.stack = function(mq){
