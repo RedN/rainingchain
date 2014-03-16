@@ -201,8 +201,8 @@ Load = function (key,account,socket,cb){
 			List.nameToKey[player.name] = key;
 			
 			//Main
-			Actor.permBoost(player,'Passive',Passive.convert(main.passive));
-			Actor.permBoost(player,'Quest',Quest.convert(main.quest));
+			Actor.permBoost(player,'Passive',Passive.stack(main.passive));
+			Actor.permBoost(player,'Quest',Quest.reward.stack(main.quest));
 			List.main[key] = main;
 			List.btn[key] = [];
 		
@@ -217,6 +217,7 @@ Load = function (key,account,socket,cb){
 			List.socket[key] = socket;
 			
 			
+			//Cycle
 			var now = Date.now();
 			if(account.lastSignIn === null) Test.firstSignIn(key);
 			else if((new Date(account.lastSignIn)).toLocaleDateString() !== (new Date(now).toLocaleDateString()))
@@ -226,7 +227,7 @@ Load = function (key,account,socket,cb){
 				socket.emit('signIn', { cloud9:cloud9, success:1, key:key, data:Load.initData(key,player,main)});
 			});
 
-			Test.playerStart(key,List.all[key],List.main[key],List.main[key].invList);
+			Test.playerStart(key);
 
 		});	
 	});	

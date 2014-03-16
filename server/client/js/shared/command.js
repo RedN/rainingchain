@@ -219,6 +219,7 @@ Command.list['win,open'].doc = {
 		{type:'Letters',name:'Window Name',optional:0},
 	],
 }
+
 Command.list['win,bank,click'] = function(key,side,slot,amount){
 	var m = List.main[key];
 	if(!m.windowList.bank){ Chat.add(key,'Access denied.'); return;}
@@ -235,6 +236,7 @@ Command.list['win,bank,click'].doc = {
 		{type:'Number',name:'Amount to withdraw',optional:1},
 	],
 }
+
 Command.list['win,trade,click'] = function(key,side,slot){
 	var m = List.main[key];
 	if(!m.windowList.trade){ Chat.add(key,'Access denied.'); return;}
@@ -263,21 +265,46 @@ Command.list['win,trade,toggle'].doc = {
 	'help':0,'param':[
 	],
 }
-Command.list['win,quest,toggleBonus'] = function(key,id,bonus){
+
+Command.list['win,quest,toggleChallenge'] = function(key,id,challenge){
+	var mq = List.main[key].quest[id];
+	if(!mq){ Chat.add(key,'Wrong Input.'); return; }	
+	var q = Db.quest[id].challenge[challenge];
+	if(!q){ Chat.add(key,'Wrong Input.'); return; }
+	
+	if(mq.started){
+		Chat.add(key,'You have already started this quest. You can\'t change challenges anymore.');
+		return;
+	}
+	
+	Quest.challenge.toggle(key,id,challenge);
+}
+Command.list['win,quest,toggleChallenge'].doc = {
+	'description':"Toggle a Quest Challenge. Only possible before starting the quest.",
+	'help':0,'param':[
+		{type:'Letters',name:'Quest Id',optional:0},
+		{type:'Letters',name:'Bonus Id',optional:0},
+	],
+}
+
+Command.list['win,quest,orb'] = function(key,id,amount){
 	var mq = List.main[key].quest[id];
 	if(!mq){ Chat.add(key,'Wrong Input.'); return; }	
 	var q = Db.quest[id].bonus[bonus];
 	if(!q){ Chat.add(key,'Wrong Input.'); return; }
 	
-	Quest.bonus.toggle(key,id,bonus);
+	amount = Math.min(Itemlist.have(List.main[key].invList,'orb-quest',0,'amount'),amount);
+	if(!amount){ Chat.add(key,'You have no orb.'); return; }
+	Quest.orb(key,id,amount);
 }
-Command.list['win,quest,toggleBonus'].doc = {
+Command.list['win,quest,toggleChallenge'].doc = {
 	'description':"Toggle a Quest Bonus.",
 	'help':0,'param':[
 		{type:'Letters',name:'Quest Id',optional:0},
 		{type:'Letters',name:'Bonus Id',optional:0},
 	],
 }
+
 Command.list['win,passive,select'] = function(key,i,j){
 	i = Math.floor(+i); j = Math.floor(+j);
 	if(!Db.passive[i] || !Db.passive[i][j]){ return; }
@@ -308,7 +335,6 @@ Command.list['win,ability,swap'].doc = {
 		{type:'Number',name:'Key Position (0-6)',optional:0},
 	],
 }
-
 Command.list['win,ability,upgrade'] = function(key,abid,amount){
 	amount = +amount;
 	if(!amount || !List.all[key].abilityList[abid] || amount < 1){ Chat.add(key,'Wrong'); return;}
@@ -321,7 +347,6 @@ Command.list['win,ability,upgrade'].doc = {
 		{type:'Number',name:'Amount of Orbs Used',optional:0},
 	],
 }
-
 Command.list['win,ability,addMod'] = function(key,mod,abid){
 	if(!List.all[key].abilityList[abid] || !Db.abilityMod[mod]){ Chat.add(key,'Wrong Input.'); return; }
 	if(!Itemlist.have(List.main[key].invList,Db.abilityMod[mod].item)){ Chat.add(key,'You don\'t have this mod.'); return; }
@@ -335,8 +360,6 @@ Command.list['win,ability,addMod'].doc = {
 		{type:'Letters',name:'Ability Id',optional:0},
 	],
 }
-
-
 Command.list['win,ability,upMod'] = function(key,abid,mod,amount){	//cant be named upgradeMod cuz inteference with ability,upgrade
 	amount = +amount;
 	if(!amount || !List.all[key].abilityList[abid] || amount < 1){ Chat.add(key,'Wrong'); return;}

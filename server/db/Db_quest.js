@@ -6,7 +6,6 @@ var questList = [
 ];
 
 Init.db.quest = function(){
-	
 	//Note: List.main[key].quest[id] only has variable
 	var questVar = {};
 	for(var i in Db.quest){
@@ -37,7 +36,7 @@ Quest.creation = function(q){
 
 	//Variable
 	q.variable = useTemplate(Quest.template.variable(),q.variable);
-	for(var j in q.bonus){ q.variable.bonus[j] = 0; }	//0:non-active, 1:active
+	for(var j in q.challenge){ q.variable.challenge[j] = 0; }	//0:non-active, 1:active
 	for(var j in q.requirement){ q.variable.requirement += '0'; }	//0:non-met, 1:met
 	
 	if(!server) return q 
@@ -84,13 +83,12 @@ Quest.template = function(){
 		name:'Default Quest',
 		icon:'skill.melee',
 		reward:{'stat':'dmg-fire-+','value':[0.05,0.10]},
-		rewardMod:0.5,
 		description:"Default Description",
 		variable:{},
 		requirement:[],		
 		hintGiver:function(key,mq){ return 'None';},
 		dialogue:{},
-		bonus:{},
+		challenge:{},
 		mapAddOn:{},
 		map:{},
 		item:{}, 
@@ -110,9 +108,13 @@ Quest.template.variable = function(){
 		reward:null,
 		complete:0,
 		started:0,
-		bonusSum:1,
 		deathCount:0,
-		bonus:{},
+		bonus:{
+			challenge:1,
+			orb:1,
+			cycle:1
+		},
+		challenge:{},
 		requirement:'',
 		skillPlot:[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
 	};

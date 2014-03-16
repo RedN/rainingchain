@@ -3,8 +3,13 @@ var q = Quest.template();
 q.id = 'Qtutorial';
 q.name = 'Tutorial';
 q.icon = 'skill.melee';
-q.reward = {'stat':'dmg-fire-+','value':[0.05,0.10]};
-q.rewardMod = 0.5;
+q.reward = {
+	stat:{'stat':'dmg-fire-+','value':[0.05,0.10],mod:0.5},
+	exp:{
+		melee:100
+	}
+}
+
 q.description = "Raining Chain Tutorial";
 
 

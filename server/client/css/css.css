@@ -80,6 +80,13 @@ div{
 	font-size:20px;
 	font-weight:100;
 }
+
+.u{
+	text-decoration:underline; 
+}
+div.ui-tooltip {
+    max-width: 1000px;
+}
 summary::-webkit-details-marker {
  color: #00ACF3;
  font-size: 125%;

@@ -45,10 +45,7 @@ Draw.window.main = function(title){ ctxrestore();
 			str += ' - ';
 		}
 		str = str.slice(0,-3);
-		if(Draw.old.winTitle !== str){
-			Draw.old.winTitle = str
-			t.innerHTML = str;
-		}
+		Draw.setInnerHTML(t,str);
 	}
 	
 	//Close
@@ -425,10 +422,7 @@ Draw.window.ability.abilityList = function(diffX){ ctxrestore();
 	}	
 	str = str.slice(0,-3);
 	
-	if(Draw.old.abilitySub !== str){	
-		Draw.old.abilitySub = str;
-		ha.subtitle.innerHTML = str;
-	}
+	Draw.setInnerHTML(ha.subtitle,str);
 		
 		
 	//Drawing
@@ -526,10 +520,7 @@ Draw.window.ability.generalInfo = function(diffX,diffY){ ctxrestore();
 	str += '</table>';
 	*/
 	
-	if(Draw.old.abilityMod !== str){
-		Draw.old.abilityMod = str;
-		gi.innerHTML = str;
-	}
+	Draw.setInnerHTML(gi,str);
 }
 
 Draw.window.ability.upgrade = function(diffX,diffY){ //not longer used
@@ -561,10 +552,7 @@ Draw.window.ability.upgrade = function(diffX,diffY){ //not longer used
 	'>' + 'Upgrade' + 
 	'</span>';
 	
-	if(Draw.old.abilityUpgrade !== str){
-		hu.innerHTML = str;
-		Draw.old.abilityUpgrade = str;
-	}
+	Draw.setInnerHTML(hu,str);
 }
 
 Draw.window.ability.generalInfo.mod = function(){
@@ -709,14 +697,16 @@ Draw.window.ability.action.attack = function(diffX,diffY){  ctxrestore();
 	//hd.style.width = 500 + 'px';
 	//hd.style.height = 100 + 'px';
 	
-	hd.innerHTML = 'Assuming <span ' + 
+	var str = 'Assuming <span ' + 
 		'style="color:' + 'white' + '" ' +
 		'onclick="Input.add(\'' + '$pref,abilityDmgStatusTrigger,' + '\')' + '" ' + 
 		'title="Change Default %Dmg Dealt"' +
 		'>' +
-		main.pref.abilityDmgStatusTrigger/100 + '%' +
+		main.pref.abilityDmgStatusTrigger + '%' +
 		'</span>'
 		+ ' Dealt';
+	
+	Draw.setInnerHTML(hd,str);
 		
 }
 
@@ -832,18 +822,25 @@ Draw.window.quest.upper = function(s,charY,q,mq,hq){
 	
 	hq.info.style.font = charY + 'px Kelly Slab';
 	hq.info.style.width = s.dw/2 - icon - 5 + 'px';
-	hq.info.style.height = charY*4*1.2 + 'px';
+	hq.info.style.height = charY*5*1.2 + 'px';
 
 	
 	var str = '';
 	str += 'Name: ' + q.name + '<br>';
 	var state = mq.complete ? 'Complete (x' + mq.complete + ')' : (mq.started ? 'Started' : 'Not Started');
 	str += 'State: ' + state + '<br>';
-	str += 'Reward: ' + round(q.reward.value[0],3,1) + ' - ' + round(q.reward.value[1],3,1) + ' in ' + Db.stat[q.reward.stat].name + '<br>';
-	if(mq.complete){
+	var rewardstat = round(q.reward.stat.value[0],3,1) + ' - ' + round(q.reward.stat.value[1],3,1) + ' in ' + Db.stat[q.reward.stat.stat].name;
+	str += 'Reward: ' + rewardstat + '<br>';
+	if(mq.reward){
 		var boost = Draw.convert.boost(mq.reward);
-		str += 'Current Reward: ' + boost[1] + ' in ' + boost[0] + '(' + mq.rewardTier.toPercent(1) + ')' + '<br>';
+		str += 'Current: ' + boost[1] + ' in ' + boost[0] + '(' + mq.rewardTier.toPercent(1) + ')' + '<br>';
 	}
+	var str2 = '';
+	for(var i in q.reward.exp) str2 += q.reward.exp[i] + ' ' + i.capitalize() + ' Exp,';
+	str2 = str2.slice(0,-1);
+	if(!str2) str2 = 'None';
+	str += 'Exp Reward: <span class="u" title="' + str2 + '">List<span> <br>'
+	
 	
 	hq.info.innerHTML = str;
 
@@ -930,30 +927,30 @@ Draw.window.quest.bonus = function(s,charY,q,mq,hq){
 	
 	hq.bonus.style.font = charY + 'px Kelly Slab';
 	hq.bonus.style.width = s.dw/2 + 'px'
-	hq.bonus.style.height = charY*Object.keys(q.bonus).length*1.2 + 'px'
+	hq.bonus.style.height = charY*(1+Object.keys(q.bonus).length*1.2) + 'px'
 	
-	var str = '';
-	for(var i in q.bonus){
-		var b = q.bonus[i];
+	var title = 'Challenge:' + mq.bonus.challenge + ' * Orb:' + mq.bonus.orb + ' * Cycle:' + (1+mq.bonus.cycle) + ' + Complete:' + (0.01*mq.complete);
+	var sum = mq.bonus.challenge*mq.bonus.orb*(1+mq.bonus.cycle)+(0.01*mq.complete);
+	var str = '<span class="u" title="' + title + '"> Bonus: x' + round(sum,3) + '</span><br>';
+	
+	for(var i in q.challenge){
+		var b = q.challenge[i];
 		
-		var color = mq.bonus[i] ? '#00FF00' : '#FF0000';
+		var color = mq.challenge[i] ? '#00FF00' : '#FF0000';
 		
 		str += 
 			'<span ' + 
 			'class="shadow" ' + 
 			'style="color:' + color + '" ' +
-			'onclick="Chat.send.command(\'' + '$win,quest,toggleBonus,' + q.id + ',' + i + '\')' + '" ' + 
-			'title="Toggle Bonus"' +
+			'onclick="Chat.send.command(\'' + '$win,quest,toggleChallenge,' + q.id + ',' + i + '\')' + '" ' + 
+			'title="Toggle Challenge"' +
 			'>' + b.info + ' - (x' + b.bonus + ')' +
 			'</span><br>';
+		
 	}
 	str = str.slice(0,-4);
-	if(Draw.old.questWin !== str){	
-		Draw.old.questWin = str;
-		hq.bonus.innerHTML = str;
-	}
-	
-	ctx.fillTextU('Bonus:  x' + round(mq.bonusSum + 0.01*mq.complete,3),s.mcx,s.zy+diffY);
+	Draw.setInnerHTML(hq.bonus,str);	
+		
 }
 //}
 
@@ -1099,11 +1096,8 @@ Draw.window.binding = function (){ ctxrestore();
 	}
 	str += '</table>';
 	
-	if(Draw.old.binding !== str){
-		Draw.old.binding = str
-		hq.table.innerHTML = str;	
-	}
-
+	Draw.setInnerHTML(hq.table,str);
+	
 	//Template
 	var array = ['QWERTY','AZERTY','NUMBER'];
 	var str = '<font size="6">Default Bindings</font>';
@@ -1111,14 +1105,12 @@ Draw.window.binding = function (){ ctxrestore();
 		str  += '<div ' +
 				'onclick="Input.init(' + i + ');" ' +
 				'style="width=auto"' + 
+				'title="Change for ' + array[i] + '"' + 
 				'>' +
 				'<font size="4"> -' + array[i] + '</font>' +
 				'</div>';	
 	}
-	if(Draw.old.bindingInit !== str){
-		Draw.old.bindingInit = str
-		hq.template.innerHTML = str;	
-	}
+	Draw.setInnerHTML(hq.template,str);
 	
 	hq.template.style.left = 600 + 'px'; 
 	hq.template.style.top = 25 + 'px'; 
@@ -1166,11 +1158,7 @@ Draw.window.passive = function (){ ctxrestore();
 	str += '<br>'
 	str += 'Points: ' + main.passivePt + '<br>';
 	
-	if(Draw.old.passiveText !== str){
-		Draw.old.passiveText = str
-		hp.text.innerHTML = str;
-	}
-	
+	Draw.setInnerHTML(hp.text,str);
 	Draw.window.passive.grid();
 }
 

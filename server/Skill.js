@@ -10,9 +10,9 @@ Skill.addExp = function(key,skill,amount,bonus){
 	LOG(2,key,'addExp',skill,amount);
 }
 
-Skill.addExp.bulk = function(key,array,bonus){
-	for(var i in array){
-		Skill.addExp(key,array[i][0],array[i][0],bonus);
+Skill.addExp.bulk = function(key,obj,bonus){
+	for(var i in obj){
+		Skill.addExp(key,i,obj[i],bonus);
 	}
 }
 

@@ -74,7 +74,7 @@ Init.db.passive = function(){
 Passive = {};
 
 //convert the list of passive owned by player into actual boost.
-Passive.convert = function(p){
+Passive.stack = function(p){
 	var temp = [];
 	for(var i = 0 ; i < Db.passive.length ; i++){
 		for(var j = 0 ; j < Db.passive[i].length ; j++){
@@ -88,7 +88,7 @@ Passive.convert = function(p){
 			}
 		}
 	}
-	temp = Actor.permBoost.compile(temp);
+	temp = Actor.permBoost.stack(temp);
 	return temp;
 }
 

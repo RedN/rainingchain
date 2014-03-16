@@ -70,9 +70,9 @@ Input.init = function(setup,save){
 		{'key':17,'boost':10000,'symbol':'c'}	//ctrl
 	];
 	Input.key.custom = [
-		{'keyCode':[9],'func':(function(){ Chat.send.message.reply(); })},
-		{'keyCode':[27],'func':(function(){ Input.add('',false); })},
-		{'keyCode':[38],'func':(function(){ $('#gameDiv')[0].scrollIntoView(true); })},
+		{'keyCode':[9],'func':(function(){ Chat.send.message.reply(); })},	//tab
+		{'keyCode':[27],'func':(function(){ Input.add('',false); $(".ui-tooltip-content").parents('div').remove(); })}, //esc
+		{'keyCode':[38],'func':(function(){ $('#gameDiv')[0].scrollIntoView(true); })}, //up
 	];
 	
 	Input.press = {'move':[0,0,0,0],'ability':[],'combo':[]}; 

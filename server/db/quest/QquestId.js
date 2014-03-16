@@ -3,8 +3,12 @@ var q = Quest.template();
 q.id = 'QquestId';
 q.name = 'Default Quest';
 q.icon = 'skill.melee';
-q.reward = {'stat':'dmg-fire-+','value':[0.05,0.10]};
-q.rewardMod = 0.5;
+q.reward = {
+	stat:{'stat':'dmg-fire-+','value':[0.05,0.10],mod:0.5},
+	exp:{
+		melee:100
+	}
+}
 q.description = "Everything you level up, you get a passive point that can be attributed to one of the many passives in the passive grid.The bonus from each passive is dynamic and depends on the current popularity of the passive.Popular passives values, most often used in Overpowered builds, are decreased while unpopular ones are boosted. In other games, nerfs make OP builds become unviable builds brutally while my system allows a smooth transition and auto-balancement. But more importantly, it assures a true and fair character customization, encouraging people to play home-made builds."
 
 q.variable = {
@@ -63,20 +67,20 @@ q.dialogue = {
 };
 //}
 
-//{Bonus
-q.bonus = {
+//{challenge
+q.challenge = {
 	'halfHp':{
 		'name':'Half Life',
 		'info':'Your hp is halved during this quest.',
 		'bonus':1.5,
 		'add':(function(key){
-			Quest.bonus.update(key, 'QquestId', 'halfHp',[
+			Actor.permBoost(List.all[key],'QquestId-halfHp',[
 				{'stat':'hp-max','value':-500,'type':'base'}
 			]);
 		}),
 		'remove':(function(key){
-			Quest.bonus.update(key, 'QquestId', 'halfHp',[
-				{'stat':'hp-max','value':-500,'type':'base'}
+			Actor.permBoost(List.all[key],'QquestId-halfHp',[
+			
 			]);
 		}),
 	},
@@ -85,14 +89,12 @@ q.bonus = {
 		'info':'Complete this quest in less than 1 hour.',
 		'bonus':1.2,
 		'add':(function(key){
-			Quest.bonus.update(key, 'QquestId', 'daemonSpd',[
-				
-			]);
+			
+			
 		}),
 		'remove':(function(key){
-			Quest.bonus.update(key, 'QquestId', 'daemonSpd',[
-				
-			]);
+			
+			
 		}),
 	}
 };

@@ -1,9 +1,9 @@
 
+new system for question
 
 finish doc
 
-
-quest bonus in a object
+show defense
 
 
 passive:
@@ -14,6 +14,7 @@ remove passive
 
 soulbound
 
+quest reward stat boost stack on login
 
 
 plan revamp:
