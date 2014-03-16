@@ -3,7 +3,6 @@ new system for question
 
 finish doc
 
-show defense
 
 
 passive:

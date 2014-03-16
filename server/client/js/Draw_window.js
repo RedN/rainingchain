@@ -129,6 +129,29 @@ Draw.window.offensive = function (){ ctxrestore();
 
 Draw.window.defensive = function (){ ctxrestore();
 	Draw.window.stat('defensive');	
+	
+	
+	//Final (RUSHED)
+	var def = Actor.getDef(player);
+	var fontSize = 20;
+	ctx.setFont(fontSize);
+	var s = {zx:700,zy:400};
+	ctx.fillTextU("Overall Defence",s.zx+20,s.zy-10);
+	s.zy += fontSize;
+	
+	var count = 0;
+	for(var i in def.ratio){
+		var numX = s.zx + (count%3)*125-100;
+		var numY = s.zy + Math.floor(count/3)*fontSize*1.1;
+		ctx.fillStyle = Cst.element.toColor[i];
+		ctx.roundRect(numX-5,numY,125,fontSize*1.1);
+		ctx.fillStyle = 'black';
+		ctx.fillText(i.capitalize() + ': ' + round(def.ratio[i]*def.main),numX,numY);		
+		count++;
+	}
+	ctx.fillStyle = 'black';
+	
+	
 }
 
 Draw.window.stat = function(type){ ctxrestore();
@@ -137,8 +160,8 @@ Draw.window.stat = function(type){ ctxrestore();
 	ctx = List.ctx.win;
 	if(server){ return; }
 	
-	ctx.font = '22px Kelly Slab';
-
+	ctx.setFont(22);
+	
 	//Content
 	for(var i = 0 ; i < Draw.window.stat.list[type].length ; i++){
 		
@@ -161,11 +184,12 @@ Draw.window.stat = function(type){ ctxrestore();
 	//Bottom, custom effects
 	var numX = s.x + 10;
 	var numY = s.y + 60 + 30* 15;
-	var str = 'Custom Effects: ';
+	var str = '';
 	for(var i in player.boost.custom){
-		str += Db.customBoost[i].name + ' - ';
+		str += Db.customBoost[i].name + ', ';
 	}
-	str = str.slice(0,-3);
+	str = str.slice(0,-2);
+	str = 'Custom Effects: ' + str;
 	ctx.font = '30px Kelly Slab';
 	ctx.fillText(str,numX,numY);
 	
@@ -173,6 +197,8 @@ Draw.window.stat = function(type){ ctxrestore();
 	if(hover !== undefined){ Draw.window.stat.hover(hover,type); }
 	
 }
+
+	
 
 Draw.window.stat.list = {
 'offensive':[
@@ -283,10 +309,10 @@ Draw.window.stat.hover = function(hover,type){ ctxrestore();
 	var info = Draw.window.stat.list[type][hover];  
 	ctx.fillStyle = 'black';
 	ctx.textAlign = 'center';
-	ctx.font = '25px Kelly Slab';
+	ctx.setFont(25);
 	ctx.fillText(info.name + ':',numX + 200,numY+10);
 	ctx.textAlign = 'left';
-	ctx.font = '25px Kelly Slab';
+	ctx.setFont(25);
 	Draw.icon(info.icon,[numX+50,numY],48);	//not working ?
 	Draw.icon(info.icon,[numX+400-100,numY],48);
 	
@@ -346,7 +372,7 @@ Draw.window.ability.leftSide = function(){ ctxrestore();
 	var s = Draw.window.main.constant(); 
 	
 	
-	ctx.font = '25px Kelly Slab';
+	ctx.setFont(25);
 	ctx.fillText('Active',s.x + 12,s.y + 100-65);
 	ctx.fillText('Abilities',s.x + 12,s.y + 100-35);
 
@@ -588,9 +614,6 @@ Draw.window.ability.generalInfo.upMod = function(mod){	//unused
 	Button.optionList(option);
 }
 
-
-
-
 Draw.window.ability.action = function(diffX,diffY){ ctxrestore();
 	var ab = Draw.old.abilityShowed;
 	if(ab.action.func === 'Combat.action.attack'){ Draw.window.ability.action.attack(diffX,diffY);}
@@ -779,7 +802,7 @@ Draw.window.ability.action.summon = function(diffX,diffY){  ctxrestore();
 	s.zy += diffY;
 	var ab = Draw.old.abilityShowed;
 	var info = ab.action.param;
-	ctx.font = '30px Kelly Slab';
+	ctx.setFont(30);
 	
 	var str = 'Summon a ' + info[1].variant + ' ' + info[1].category + ' Level ' + info[1].lvl + ' for ' + round(info[0].time/25,2) + 's. (Up to ' + info[0].maxChild + ')';
 	ctx.fillText(str,s.zx,s.zy);
@@ -966,7 +989,7 @@ Draw.window.trade = function (){ ctxrestore();
 	var prefAmount = main.pref.bankTransferAmount;
 	var string = 'X-Amount: ' + prefAmount;
 	
-	ctx.font = '25px Kelly Slab';
+	ctx.setFont(25);
 	ctx.fillText(string,numX,numY);
 	
 	//##################################
@@ -1026,7 +1049,7 @@ Draw.window.trade = function (){ ctxrestore();
 	
 	
 	ctx.textAlign = "center";
-	ctx.font = "25px Kelly Slab";
+	ctx.setFont(25);
 	ctx.fillStyle = "yellow";
 	ctx.strokeStyle = 'yellow';
 	
@@ -1125,7 +1148,7 @@ Draw.window.passive = function (){ ctxrestore();
 	var s = Draw.window.main({'offensive':0,'defensive':0,'ability':0,'passive':1});	
 	ctx = List.ctx.win;
 	
-	ctx.font = '25px Kelly Slab';
+	ctx.setFont(25);
 	ctx.fillStyle = 'black';
 	
 	var hp = html.passiveWin;
@@ -1287,7 +1310,7 @@ Draw.window.passive.hover = function(over){ ctxrestore();
 		var value = 'Value: +' + round(over.value,5);
 		ctx.fillText(value,ssx + 5,ssy+1+25*2);
 	} else {
-		ctx.font = '20px Kelly Slab';
+		ctx.setFont(20);
 		ctx.fillText(st.description,ssx + 5,ssy+1+25*1);
 	}
 }

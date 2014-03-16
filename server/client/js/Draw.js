@@ -132,7 +132,7 @@ Draw.optionList = function(){ ctxrestore();
 	ctx.strokeStyle="black";
 	ctx.strokeRect(sx,sy,w,nameY);
 	
-	ctx.font="15px Kelly Slab";
+	ctx.setFont(15);
 	ctx.fillStyle = "white";
 	ctx.fillText(name,sx+nameX,sy);
 		
@@ -148,7 +148,7 @@ Draw.optionList = function(){ ctxrestore();
 
 
 	//Text + Button
-	ctx.font="14px Kelly Slab";
+	ctx.setFont(14);
 	ctx.fillStyle = "yellow";
 		
 	for(var i = 0 ; i < option.length ; i++){
@@ -234,7 +234,7 @@ Draw.chat.main = function(){
 	//Clan
 	var str = 'Clan: ';
 	for(var i in main.social.list.clan){ str += main.social.list.clan[i] + '  '; }
-	ctx.font = '15px Kelly Slab';
+	ctx.setFont(15);
 	ctx.fillStyle = 'white';
 	ctx.fillText(str,(s.x + s.divX),(s.y - s.disPmY));
 	
@@ -288,7 +288,7 @@ Draw.chat.dialogue = function(){
 		html.dialogue.text.style.width = s.w - 2*s.textBorder-s.faceX + 'px';
 		html.dialogue.div.style.left = (s.x + s.divX + s.textBorder + s.faceX) + 'px';
 		ctx.drawImage(Img.face,0,0,96,96,s.facesX,s.y+s.facesY,96,96);
-		ctx.font="20px Kelly Slab";
+		ctx.setFont(20);	
 		ctx.textAlign = 'center';
 		ctx.fillText(dia.face.name,s.facesX+96/2,s.y+s.facesY+96+5);
 		ctx.textAlign = 'left';
@@ -296,7 +296,7 @@ Draw.chat.dialogue = function(){
 	
 	//Options
 	if(dia.option){
-		ctx.font = s.optionY + 'px Kelly Slab';
+		ctx.setFont(s.optionY);
 		for(var i in dia.option){
 			ctx.fillText('-' + dia.option[i].text,s.numX,nY+i*s.optionY);
 			
@@ -374,7 +374,7 @@ Draw.item = function(info,xy,size){
 		
 				
 		ctx.fillStyle = "yellow";
-		ctx.font= size/32*13 + "px Kelly Slab";
+		ctx.setFont(size/32*13);
 		ctx.fillText(amount,xy[0],xy[1]+size-2);
 	}
 	

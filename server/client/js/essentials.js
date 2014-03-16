@@ -111,16 +111,17 @@ CanvasRenderingContext2D.prototype.fillTextU = function(text, x, y){
 	this.strokeStyle = tmp;
 }
 
-
-
 CanvasRenderingContext2D.prototype.drawRect = function(x,y, vx, vy){
 	ctx.fillRect(x,y, vx, vy);
 	ctx.strokeRect(x,y, vx, vy);
 }
 
-
 CanvasRenderingContext2D.prototype.length = function(a){
 	return this.measureText(a).width;
+}
+
+CanvasRenderingContext2D.prototype.setFont = function(size){
+	this.font = size + 'px Kelly Slab'
 }
 
 
