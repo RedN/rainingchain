@@ -51,10 +51,14 @@ Init.db.passive = function(){
 	//increase count depending on player popularity
 	db.find('main',{},{_id:0,passive:1},function(err,info){ if(err) throw err;
 		for(var i = 0 ; i < info.length ; i++){
-			for(var j = 0 ; j < info[i].passive.length ; j++){
-				for(var k = 0 ; k < info[i].passive[j].length ; k++){
-					if(info[i].passive[j][k] == '1'){
-						Db.passive[j][k].count++;
+			var main = info[i];
+			for(var m in main.passive){
+				var pass = main.passive[m];
+				for(var j = 0 ; j < pass.length ; j++){
+					for(var k = 0 ; k < pass[j].length ; k++){
+						if(pass[j][k] == '1'){
+							Db.passive[j][k].count++;
+						}
 					}
 				}
 			}
@@ -68,6 +72,19 @@ Init.db.passive = function(){
 
 
 Passive = {};
+
+
+Passive.getUnusedPt = function(key,num){
+	var p = List.main[key].passive[num];
+	var used = 0;
+	for(var i in p)
+		for(var j = 0; j < p[i].length;j++)
+			if(p[i][j] === '1') used++;
+	
+	var total = Math.floor(Skill.getTotalLvl(key)/5);
+	
+	return total-used;
+}
 
 //convert the list of passive owned by player into actual boost.
 Passive.stack = function(p){
@@ -128,6 +145,7 @@ Passive.init.randomStat = function(){
 
 Passive.template = function(){ 
 	return [
+	[
 		'00000000000000000000',
 		'00000000000000000000',
 		'00000000000000000000',
@@ -148,10 +166,35 @@ Passive.template = function(){
 		'00000000000000000000',
 		'00000000000000000000',
 		'00000000000000000000',
+	],
+	[
+		'00000000000000000000',
+		'00000000000000000000',
+		'00000000000000000000',
+		'00000000000000000000',
+		'00000000000000000000',
+		'00000000000000000000',
+		'00000000000000000000',
+		'00000000000000000000',
+		'00000000222200000000',
+		'00000000222200000000',
+		'00000000222200000000',
+		'00000000222200000000',
+		'00000000000000000000',
+		'00000000000000000000',
+		'00000000000000000000',
+		'00000000000000000000',
+		'00000000000000000000',
+		'00000000000000000000',
+		'00000000000000000000',
+		'00000000000000000000',
+	]
 	];
 }
 
-
+Passive.updateBoost = function(key){
+	Actor.permBoost(List.all[key],'Passive',Passive.stack(List.main[key].passive[List.main[key].passiveActive]));
+}		
 
 
 //test if player can choose a certain passive
@@ -190,7 +233,6 @@ Passive.test.remove = function(passive,yy,xx){
 	
 
 	while(Object.keys(listToTest).length){
-		console.log(1);
 		for(var i in listToTest){
 			var y = +i.slice(0,i.indexOf('-'));
 			var x = +i.slice(i.indexOf('-')+1);
@@ -206,10 +248,8 @@ Passive.test.remove = function(passive,yy,xx){
 				var p = pass[pos[k][0]][pos[k][1]];	
 				var str = pos[k][0] + '-' + pos[k][1];
 				if(p === '1' || p === '2'){
-					if(str === '1-0') console.log(2222,p)
 					if(!listTested[str])	listToTest[str] = 1;
 				}
-				if(str === '0-0') console.log(10000,i);
 				listValid[str] = 1;
 			}
 			

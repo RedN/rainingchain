@@ -29,8 +29,7 @@ Skill.updateLvl = function(key,sk){
 			var newLvl = binarySearch(Cst.exp.list,player.skill.exp[skill]);
 			
 			var lvlDiff = newLvl-player.skill.lvl[skill];
-			main.passivePt += lvlDiff;
-			
+				
 			player.skill.lvl[skill] = newLvl;
 			Skill.lvlUp(key,skill);
 			
@@ -62,7 +61,12 @@ Skill.testLvl = function(key,sk,lvl){
 }
 
 
-
+Skill.getTotalLvl = function(key){
+	var sum = 0;
+	for(var i in List.all[key].skill.lvl)
+		sum += List.all[key].skill.lvl[i];
+	return sum;
+}
 
 
 Db.skillPlot = {

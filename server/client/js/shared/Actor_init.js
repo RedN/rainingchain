@@ -88,6 +88,7 @@ Init.actor = function(){
 		mort.lvl = 0;
 		mort.deathExp = 1;			//exp given when player kills this enemy
 		mort.name = "Goblin";     //visible name
+		mort.username = "player000";     //id name
 		mort.drop = {
 			"mod":{
 				"quantity":0,

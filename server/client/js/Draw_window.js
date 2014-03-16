@@ -1191,7 +1191,7 @@ Draw.window.passive = function (){ ctxrestore();
 	'>' + 'Reset View' + 
 	'</span>';
 	str += '<br>'
-	str += 'Points: ' + main.passivePt + '<br>';
+	str += 'Remove Points: ' + main.passiveRemovePt + '<br>';
 	
 	Draw.setInnerHTML(hp.text,str);
 	Draw.window.passive.grid();

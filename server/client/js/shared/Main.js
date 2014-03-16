@@ -19,7 +19,7 @@ Main.template = function(key){
 		'tradeList':['','','','','','','','','','','','','','','','','','','','','','','',''],
 		'dialogue':0,
 		'name':'player000',		
-		
+		'username':'player000',	
 		'sfx':'',
 		'song':'',
 		
@@ -29,8 +29,9 @@ Main.template = function(key){
 		
 		
 		'help':'',
-		'passivePt':0,
+		'passiveRemovePt':0,
 		'passive':Passive.template(),
+		'passiveActive':0,
 		'social':{
 			'message':{
 				'chat':[],
@@ -64,18 +65,21 @@ Main.template = function(key){
 	return main;
 }
 
-Main.selectPassive = function(main,i,j){
+Main.selectPassive = function(main,num,i,j){
 	var key = main.id;
 	//when player wants to add a passive
-	if(main.passivePt === 0){ Chat.add(key,"You don't have any Passive Points to use."); return;}
-	if(main.passive[i][j] === '1'){ Chat.add(key,"You already have this passive.");	return;}
-	if(!Passive.test.add(main.passive,i,j)){Chat.add(key,"You can't choose this passive yet.");	return;}
+	if(Passive.getUnusedPt(key,num) === 0){ Chat.add(key,"You don't have any Passive Points to use."); return;}
+	if(main.passive[num][i][j] !== '0'){ Chat.add(key,"You already have this passive.");	return;}
+	if(!Passive.test.add(main.passive[num],i,j)){Chat.add(key,"You can't choose this passive yet.");	return;}
 	
-	main.passivePt--;
-	main.passive[i] = main.passive[i].set(j,'1');
+	main.passive[num][i] = main.passive[num][i].set(j,'1');
 	
-	Actor.permBoost(List.all[key],'Passive',Passive.stack(main.passive));
+	Passive.updateBoost(key);
 }
+
+
+
+
 
 Main.closeAllWindow = function(main){
 	if(main.windowList.trade.trader){ List.main[main.windowList.trade.trader].windowList.trade = 0; }

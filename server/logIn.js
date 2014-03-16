@@ -181,7 +181,7 @@ Save.main = function(key,updateDb){
 	var main = typeof key === 'string' ? List.main[key] : key;
     main = Save.main.compress(main);
     var save = {};
-    var toSave = ['invList','bankList','tradeList','quest','username','name','social','passive','passivePt'];
+    var toSave = ['invList','bankList','tradeList','quest','username','name','social','passive','passiveRemovePt','passiveActive'];
     for(var i in toSave){ save[toSave[i]] = main[toSave[i]]; }
 
     if(updateDb !== false){
@@ -204,7 +204,7 @@ Load = function (key,account,socket,cb){
 			List.btn[key] = [];
 		
 			//Main
-			Actor.permBoost(player,'Passive',Passive.stack(main.passive));
+			Passive.updateBoost(key);
 			Actor.permBoost(player,'Quest',Quest.reward.stack(main.quest));
 			Quest.challenge.signIn(key);
 			
