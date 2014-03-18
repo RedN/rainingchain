@@ -1,12 +1,5 @@
 
-
-passive:
-multipage
-change pts system
-draw passive for special balancedAtk
-remove passive
-
-
+teleport actor
 
 plan revamp:
 already know what min and max mods are
@@ -49,14 +42,19 @@ contact ppl for music
 
 
 $$$$$$$$$$$
+unlock passive 10
+unlocked full formula for element dmg def  15
+upgrade quest challenge 20
+upgrade quest 25
 
-upgrade weapon
-upgrade equip
-upgrade ability
 
-unlocked full formula for element dmg def
+upgrade weapon 30
+upgrade equip 30
+upgrade ability 50
 
-unlock passive
+
+
+
 
 
 

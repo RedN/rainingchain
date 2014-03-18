@@ -72,22 +72,36 @@ Init.db.passive = function(){
 
 
 Passive = {};
-
+Passive.updatePt = function(key){
+	var main = List.main[key];
+	for(var i in main.passive){
+		main.passiveUsedPt[i] = Passive.getUsedPt(main.passive[i]);
+	}
+	main.passiveUsablePt = Passive.getUsablePt(key);
+}
 
 Passive.getUnusedPt = function(key,num){
+	num = num || List.main[key].passiveActive;
 	var p = List.main[key].passive[num];
+	return Passive.getUsablePt(key)-Passive.getUsedPt(p);
+}
+
+Passive.getUsedPt = function(p){
 	var used = 0;
 	for(var i in p)
 		for(var j = 0; j < p[i].length;j++)
 			if(p[i][j] === '1') used++;
-	
-	var total = Math.floor(Skill.getTotalLvl(key)/5);
-	
-	return total-used;
+	return used;
 }
 
-//convert the list of passive owned by player into actual boost.
+Passive.getUsablePt = function(key){
+	var total = Math.floor(Skill.getTotalLvl(key)/5);
+	return total;
+}
+
+
 Passive.stack = function(p){
+	//convert the list of passive owned by player into actual boost.
 	var temp = [];
 	for(var i = 0 ; i < Db.passive.length ; i++){
 		for(var j = 0 ; j < Db.passive[i].length ; j++){

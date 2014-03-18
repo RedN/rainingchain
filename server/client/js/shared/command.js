@@ -305,21 +305,54 @@ Command.list['win,quest,toggleChallenge'].doc = {
 	],
 }
 
-Command.list['win,passive,select'] = function(key,i,j){
-	i = Math.floor(+i); j = Math.floor(+j);
+Command.list['win,passive,add'] = function(key,num,i,j){
+	i = Math.floor(+i); j = Math.floor(+j); num = +num;
 	if(!Db.passive[i] || !Db.passive[i][j]){ return; }
 	
-	if(typeof i !== 'number' || typeof j !== 'number'){ return; }
-	
-	Main.selectPassive(List.main[key],i,j);
+	var pass= List.main[key].passive[num];
+	if(!pass) return;
+		
+	Main.passiveAdd(List.main[key],num,i,j);
 }
-Command.list['win,passive,select'].doc = {
+Command.list['win,passive,add'].doc = {
 	'description':"Select a Passive",
 	'help':0,'param':[
+		{type:'Number',name:'Which Page',optional:0},
 		{type:'Number',name:'Position Y',optional:0},
 		{type:'Number',name:'Position X',optional:0},
 	],
 }
+Command.list['win,passive,remove'] = function(key,num,i,j){
+	i = Math.floor(+i); j = Math.floor(+j); num = +num;
+	if(!Db.passive[i] || !Db.passive[i][j]){ return; }
+	
+	var pass= List.main[key].passive[num];
+	if(!pass) return;
+		
+	Main.passiveRemove(List.main[key],num,i,j);
+}
+Command.list['win,passive,remove'].doc = {
+	'description':"Remove a Passive",
+	'help':0,'param':[
+		{type:'Number',name:'Which Page',optional:0},
+		{type:'Number',name:'Position Y',optional:0},
+		{type:'Number',name:'Position X',optional:0},
+	],
+}
+
+Command.list['win,passive,page'] = function(key,num){
+	num = +num;
+	if(!List.main[key].passive[num]) return;
+	List.main[key].passiveActive = num;
+	Passive.updateBoost(key);
+}
+Command.list['win,passive,page'].doc = {
+	'description':"Change Active Passive Page",
+	'help':0,'param':[
+		{type:'Number',name:'Which Page',optional:0},
+	],
+}
+
 
 Command.list['win,ability,swap'] = function(key,name,position){
 //(key,input,ab){

@@ -276,7 +276,7 @@ Draw.window.stat.list.element = function(type,name){
 	var b3 = round(player.boost.list[type + name + '-+'].base,2,1);
 	var sum = round(Math.pow(player.boost.list[type + name + '-x'].base*player.boost.list[type + name + '-*'].base,player.boost.list[type + name + '-^'].base) + player.boost.list[type + name + '-+'].base,3);
 	var string = '( ' + b0 + ' * ' + b1 + ' ) ^ ' + b2 + ' + ' + b3 + ' = ' + sum;
-	if(main.hideHUD.advancedElement) string = sum;
+	if(main.hideHUD.advancedStat) string = sum;
 	return string
 }
 
@@ -303,7 +303,7 @@ Draw.window.stat.hover = function(hover,type){ ctxrestore();
 	var numY = s.y + 70;
 
 	//Frame
-	var ctx = List.ctx.pop;
+	ctx = List.ctx.pop;
 	ctx.drawImage(Img.frame.postit,0,0,Img.frame.postit.width,Img.frame.postit.height,numX,numY-15,400,500);
 	
 	var info = Draw.window.stat.list[type][hover];  
@@ -1171,27 +1171,37 @@ Draw.window.passive = function (){ ctxrestore();
 	//Subtitle
 	var charY = 25;
 	hp.text.style.left = 10 + 'px'; 
-	hp.text.style.top = 5 + 'px'; 
+	hp.text.style.top = 100 + 'px'; 
 	hp.text.style.font = 20 + 'px Kelly Slab';
 	hp.text.style.width = 'auto';
 	hp.text.style.height = 'auto';
 	hp.text.style.whiteSpace = 'nowrap';
 	hp.text.style.backgroundColor = 'white';
 	
-	var str = '<span ' + 
+	var str = 'Page: ';
+	for(var i in main.passive){
+		str += '<span ' + 
+		'onclick="Chat.send.command(\'$win,passive,page,' + i + '\');'+ '" ' +
+		'style="text-decoration:' + (+i == main.passiveActive ? 'underline' : 'none') + '" ' +
+		'title="Change Active Page ' + i + '" ' + 
+		'>' + i +
+		'</span> ';
+	}
+	str += '<br>';
+	str += '<br>';
+	str += 'Pts: ' + main.passiveUsedPt[main.passiveActive] + '/' + main.passiveUsablePt + '<br>';
+	str += 'Remove Pts: ' + main.passiveRemovePt + '<br>';
+	str += '<br>';
+	str += '<span ' + 
 	'onclick="Draw.window.passive.grid.info.toggleFullscreen();' + '" ' + 
 	'title="Toggle Fullscreen"' + 
 	'>' + 'Fullscreen' + 
-	'</span>';
-	str += '<br>'
-	str += 
-	'<span ' + 
+	'</span><br>';
+	str += 	'<span ' + 
 	'onclick="Draw.window.passive.grid.info.reset();' + '" ' + 
 	'title="Reset Position and Zoom"' +
 	'>' + 'Reset View' + 
-	'</span>';
-	str += '<br>'
-	str += 'Remove Points: ' + main.passiveRemovePt + '<br>';
+	'</span><br>';
 	
 	Draw.setInnerHTML(hp.text,str);
 	Draw.window.passive.grid();
@@ -1222,6 +1232,8 @@ Draw.window.passive.grid = function(){ ctxrestore();
 	var border2 = border/2;
 	var ic = icon + border;
 	
+	var pass = main.passive[main.passiveActive];
+	
 	//Draw Stat	
 	for(var i = 0 ; i < Db.passive.length ; i++){
 		for(var j = 0 ; j < Db.passive[i].length ; j++){
@@ -1231,7 +1243,7 @@ Draw.window.passive.grid = function(){ ctxrestore();
 			ctx.globalAlpha = 1;
 			
 			//Freebies
-			if(typeof Db.passive[i][j] !== 'object'){
+			if(pass[i][j] === '2'){
 				ctx.globalAlpha = 0.5;
 				ctx.fillStyle = 'green';
 				ctx.fillRect(numX,numY,ic,ic);
@@ -1240,14 +1252,14 @@ Draw.window.passive.grid = function(){ ctxrestore();
 			
 			//Border
 			ctx.globalAlpha = 0.5;
-			if(main.pref.passiveView === 0){ ctx.fillStyle =	+main.passive[i][j] ? 'green' : (Passive.test.add(main.passive,i,j) ? '#FFFF00': 'red');}
+			if(main.pref.passiveView === 0){ ctx.fillStyle = +pass[i][j] ? 'green' : (Passive.test.add(pass,i,j) ? '#FFFF00': 'red');}
 			if(main.pref.passiveView === 1){ var n = (Db.passive[i][j].count-Db.passive.min) / (Db.passive.max-Db.passive.min);	ctx.fillStyle =	Draw.gradientRG(n);}
 			ctx.fillRect(numX,numY,ic,ic);
 		
 			//Icon
 			ctx.globalAlpha = 0.5;
-			if(+main.passive[i][j]){ ctx.globalAlpha = 1; }
-			var name = Db.passive[i][j].stat ? Db.stat[Db.passive[i][j].stat].icon : Db.customBoost[Db.passive[i][j].value].icon;
+			if(+pass[i][j]){ ctx.globalAlpha = 1; }
+			var name = Db.passive[i][j].stat ? Db.stat[Db.passive[i][j].stat].icon : Db.customBoost[Db.passive[i][j]].icon;
 			Draw.icon(name,[numX+border2,numY+border2],icon);
 			
 			//Hover
@@ -1257,10 +1269,12 @@ Draw.window.passive.grid = function(){ ctxrestore();
 			
 			//Button
 			if(typeof Db.passive[i][j] === 'object'){
+				var name = Db.passive[i][j].stat ? Db.stat[Db.passive[i][j].stat].name : Db.customBoost[Db.passive[i][j]].name;
 				Button.creation(0,{
 					"rect":[numX,numX+ic,numY,numY+ic],
-					"right":{"func":Chat.send.command,"param":['$win,passive,select,' + i + ',' + j]},
-					'text':'Choose ' + (Db.passive[i][j].stat ? Db.stat[Db.passive[i][j].stat].name : Db.customBoost[Db.passive[i][j].value].name),
+					"right":{"func":Chat.send.command,"param":['$win,passive,add,' + main.passiveActive + ',' + i + ',' + j]},
+					"shiftRight":{"func":Chat.send.command,"param":['$win,passive,remove,' + main.passiveActive + ',' + i + ',' + j]},
+					'text':'Right: Choose ' + name + ' | Shift-Right: Remove',
 				});	
 			}
 			
@@ -1292,12 +1306,11 @@ Draw.window.passive.grid.info = {
 	}),
 }
 
-
 Draw.window.passive.hover = function(over){ ctxrestore();
 	var s = Draw.window.main.constant(); 
-	var ctx = List.ctx.pop;
+	ctx = List.ctx.pop;
 	
-	var st = over.stat ? Db.stat[over.stat] : Db.customBoost[over.value];
+	var st = over.stat ? Db.stat[over.stat] : Db.customBoost[over];
 	
 	var vvx = 300;
 	var vvy = 100;
@@ -1312,7 +1325,10 @@ Draw.window.passive.hover = function(over){ ctxrestore();
 	ctx.fillStyle = 'white';
 	
 	//Info
-	Draw.icon(st.icon,[ssx+5,ssy+1],20);
+
+	Draw.icon(st.icon,[ssx+5,ssy+1],20,'a');
+	
+	
 	ctx.fillTextU(st.name,ssx + 5 + 30,ssy+1);
 	
 	if(over.stat){

@@ -12,7 +12,7 @@ Main.template = function(key){
 		"currentTab":"inventory",
 		"windowList":{'bank':0,'trade':0,'offensive':0,'defensive':0,'ability':0,'passive':0,'quest':0,'binding':0},
 		"popupList":{'equip':0,'plan':0},
-		'hideHUD':{'tab':0,'chat':0,'window':0,'popup':0,'minimap':0,'state':0,'advancedElement':0,'passive':0,'advancedAbility':0},	
+		'hideHUD':{'tab':0,'chat':0,'window':0,'popup':0,'minimap':0,'state':0,'advancedStat':0,'passive':0,'advancedAbility':0},	
 		
 		'invList': ['','','','','','','','','','','','','','','','','','','','','','','',''],
 		'bankList':[],
@@ -29,8 +29,10 @@ Main.template = function(key){
 		
 		
 		'help':'',
-		'passiveRemovePt':0,
 		'passive':Passive.template(),
+		'passiveUsablePt':0,
+		'passiveUsedPt':[0,0],
+		'passiveRemovePt':0,
 		'passiveActive':0,
 		'social':{
 			'message':{
@@ -65,18 +67,30 @@ Main.template = function(key){
 	return main;
 }
 
-Main.selectPassive = function(main,num,i,j){
+Main.passiveAdd = function(main,num,i,j){
 	var key = main.id;
 	//when player wants to add a passive
-	if(Passive.getUnusedPt(key,num) === 0){ Chat.add(key,"You don't have any Passive Points to use."); return;}
+	if(Passive.getUnusedPt(key,num) <= -10){ Chat.add(key,"You don't have any Passive Points to use."); return;}	//TOFIX
 	if(main.passive[num][i][j] !== '0'){ Chat.add(key,"You already have this passive.");	return;}
 	if(!Passive.test.add(main.passive[num],i,j)){Chat.add(key,"You can't choose this passive yet.");	return;}
 	
 	main.passive[num][i] = main.passive[num][i].set(j,'1');
 	
+	Passive.updatePt(key);
 	Passive.updateBoost(key);
 }
-
+Main.passiveRemove = function(main,num,i,j){
+	var key = main.id;
+	//when player wants to add a passive
+	if(main.passiveRemovePt <= 0){ Chat.add(key,"You don't have any Passive Remove Points to use."); return;}
+	if(main.passive[num][i][j] !== '1'){ Chat.add(key,"You don't have this passive.");	return;}
+	if(!Passive.test.remove(main.passive[num],i,j)){Chat.add(key,"You can't remove this passive because it would create 2 subgroups.");	return;}
+	
+	main.passive[num][i] = main.passive[num][i].set(j,'0');
+	
+	Passive.updatePt(key);
+	Passive.updateBoost(key);
+}
 
 
 
