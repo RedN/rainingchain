@@ -134,6 +134,7 @@ Change.update.init = function(){
 				{'array':['passiveUsedPt']},
 				{'array':['passiveUsablePt']},
 				{'array':['passiveActive']},
+				{'array':['hideHUD']},
 				
 				{'array':['pvpScore']},	
 			]

@@ -51,15 +51,17 @@ Skill.unlockableContent = function(key){
 	var total = Skill.getTotalLvl(key);
 	//TOFIX
 	switch (total){
-		case 10: Chat.add(key,"You have unlocked the Passive Grid! You can access it via the Equip Tab. The Passive Grid allows you to customize your character when you level up."; List.main[key].hideHUD.passive = 0;
-		case 15: Chat.add(key,"The offensive and defensive windows now display the complete Elemental Dmg and Def formula! You can access it via the Equip Tab."; List.main[key].hideHUD.advancedStat = 0;
-		case 20: Chat.add(key,"You can now increase the quest difficulty by activating Quest Challenges via the Quest Window."; List.main[key].hideHUD.questChallenge = 0;
-		case 25: Chat.add(key,"You can now increase the quest difficulty by activating Quest Challenges via the Quest Window."; List.main[key].hideHUD.questChallenge = 0;
-	
+		case 10: Chat.add(key,"You have unlocked the Passive Grid! You can access it via the Equip Tab. The Passive Grid allows you to customize your character when you level up."); List.main[key].hideHUD.passive = 0;
+		case 15: Chat.add(key,"The offensive and defensive windows now display the complete Elemental Dmg and Def formula! You can access it via the Equip Tab."); List.main[key].hideHUD.advancedStat = 0;
+		case 20: Chat.add(key,"You can now increase the quest difficulty by activating Quest Challenges via the Quest Window."); List.main[key].hideHUD.questChallenge = 0;
+		case 25: Chat.add(key,"You can now use Quest Orbs to increase your quest reward via the Quest Window."); List.main[key].hideHUD.questOrb = 0;
+		case 30: Chat.add(key,"You can now use Upgrade Orbs to improve your equipment.");
+		case 40: Chat.add(key,"You can now use Upgrade Orbs to improve your abilities."); List.main[key].hideHUD.advancedAbility = 0;
 	}
+		
 	
 	
-
+	
 }
 
 Skill.testLvl = function(key,sk,lvl){

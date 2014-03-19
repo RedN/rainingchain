@@ -1,4 +1,16 @@
 
+
+
+help:
+
+hide orb on equip
+
+what skills do
+
+question mark on window
+
+
+
 teleport actor
 
 plan revamp:
@@ -42,16 +54,6 @@ contact ppl for music
 
 
 $$$$$$$$$$$
-unlock passive 10
-unlocked full formula for element dmg def  15
-upgrade quest challenge 20
-upgrade quest 25
-
-
-upgrade weapon 30
-upgrade equip 30
-upgrade ability 50
-
 
 
 

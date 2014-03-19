@@ -174,50 +174,5 @@ socket.on('warning', function (message) {
 	$("#warningText")[0].innerHTML = '<strong>Alert:</strong> ' + message;
 });
 
-Init.help = function(data){
-	data = data.replaceAll('<i>','<details>');
-	data = data.replaceAll('</i>','</details>');
-	data = data.replaceAll('<t>','<summary>');
-	data = data.replaceAll('</t>','</summary>');
-
-	//Help aka documentation. Called once at start of game. wiki-like parser	
-	for(var i = 0 ; i < data.length ; i++){
-		
-		//Link
-		if(data[i] == '[' && data[i+1] == '['){
-			var start = i;
-			for(var j = start; j < data.length ; j++){
-				if(data[j] == ']' && data[j+1] == ']'){
-					var tag = data.slice(start+2,j);
-					data = data.replaceAll(
-					'\\[\\[' + tag + '\\]\\]',
-					'<span class="helpLink" onclick="Help.open(\'' + tag + '\')" >' + tag + '</span>'
-					);
-					break;
-				}
-			}
-		}
-		
-		//Title 
-		if(data[i] == '{' && data[i+1] == '{'){
-			var start = i;
-			for(var j = start; j < data.length ; j++){
-				if(data[j] == '}' && data[j+1] == '}'){
-					var end = j+1;
-					var tag = data.slice(start+2,end-1);
-					data = data.replaceAll(
-					'\\{\\{' + tag + '\\}\\}',
-					'<div data-role="collapsible"' + 
-					'<span class="helpTag" id="HELP' + tag + '" >' + tag + '</span>'
-					+ '</div>'
-					);
-					break;
-				}
-			}
-		}
-	}
-	return data;
-}
-
 
 

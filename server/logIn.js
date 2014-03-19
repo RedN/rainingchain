@@ -230,7 +230,7 @@ Load = function (key,account,socket,cb){
 				socket.emit('signIn', { cloud9:cloud9, success:1, key:key, data:Load.initData(key,player,main)});
 			});
 
-			Test.playerStart(key);
+			Test.signIn(key);
 
 		});	
 	});	
@@ -385,6 +385,11 @@ Load.initData = function(key,player,main){
 			'invList':Change.send.convert.itemlist,
 			'bankList':Change.send.convert.itemlist,
 			'tradeList':Change.send.convert.itemlist,
+			'hideHUD':0,
+			'passiveUsedPt':0,
+			'passiveRemovePt':0,
+			'passiveUsablePt':0,
+			
         }
     }
     for(var i in array){

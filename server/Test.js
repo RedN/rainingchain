@@ -49,9 +49,22 @@ Test.serverStart = function(){
 }
 
 //Called when player logs in
-Test.playerStart = function(key){	
+Test.signIn = function(key){	
 	Itemlist.add(key,'gold');
+	Test.signIn.hideHUD(key);
+	
+	
 }
+
+Test.signIn.hideHUD = function(key){
+	var total = Skill.getTotalLvl(key);
+	if(total < 40) List.main[key].hideHUD.advancedAbility = 1;
+	if(total < 25) List.main[key].hideHUD.questOrb = 1;
+	if(total < 20) List.main[key].hideHUD.questChallenge = 1;
+	if(total < 15) List.main[key].hideHUD.advancedStat = 1;
+	if(total < 10) List.main[key].hideHUD.passive = 1;
+}
+
 
 Test.dayCycle = function(key){
 	var mq = List.main[key].quest;

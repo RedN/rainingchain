@@ -410,7 +410,22 @@ String.prototype.keyCodeToName = function(){
 	if (charCode == 222) return boost + "'"; // single quote
 
 	return boost + String.fromCharCode(charCode);
- }
+}
+
+String.prototype.keyFullName = function(){
+	console.log(this);
+	if(this == 'l') return 'Left Click'; 
+	if(this == 'r') return 'Right Click';
+	if(this == 'sl') return 'Shift-Left Click'; 
+	if(this == 'sr') return 'Shift-Right Click';
+	if(this == '_') return 'Space';
+	return "";
+}
+
+
+
+
+ 
 String.prototype.capitalize = function() {
 	if(!this.have(' '))    return this.charAt(0).toUpperCase() + this.slice(1);
 	

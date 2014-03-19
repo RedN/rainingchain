@@ -397,6 +397,8 @@ Draw.window.ability.leftSide = function(){ ctxrestore();
 		
 		
 		var button = ('' + Input.key.ability[i][0]).keyCodeToName();
+		button = button.keyFullName() || button;
+		
 		if(button === 'l') button = 'Left Click'; 
 		if(button === 'r') button = 'Right Click';
 		if(button === 'sl') button = 'Shift-Left Click'; 
@@ -732,14 +734,14 @@ Draw.window.ability.action.attack = function(diffX,diffY){  ctxrestore();
 	//hd.style.width = 500 + 'px';
 	//hd.style.height = 100 + 'px';
 	
-	var str = 'Assuming <span ' + 
-		'style="color:' + 'white' + '" ' +
+	var str = 'Assuming Enemy Loses <span ' + 
+		'style="color:' + 'blue' + '" ' +
 		'onclick="Input.add(\'' + '$pref,abilityDmgStatusTrigger,' + '\')' + '" ' + 
 		'title="Change Default %Dmg Dealt"' +
 		'>' +
 		main.pref.abilityDmgStatusTrigger + '%' +
 		'</span>'
-		+ ' Dealt';
+		+ ' Hp';
 	
 	Draw.setInnerHTML(hd,str);
 		
@@ -1112,6 +1114,8 @@ Draw.window.binding = function (){ ctxrestore();
 		for(var i = 0; i < Input.key[info.id].length; i++){
 			var id = Input.key[info.id][i][0];
 			var name = Input.key[info.id][i][0].toString().keyCodeToName();
+			if(name.keyFullName()) name += ' - (' + name.keyFullName() + ')';
+			
 			if(Input.binding[info.id] === i){
 				id = '***';
 				name = '***';

@@ -88,9 +88,9 @@ div.ui-tooltip {
     max-width: 1000px;
 }
 summary::-webkit-details-marker {
- color: #00ACF3;
- font-size: 125%;
- margin-right: 2px;
+	color: #00ACF3;
+	font-size: 125%;
+	margin-right: 2px;
 }
 summary:focus {
 	outline-style: none;
