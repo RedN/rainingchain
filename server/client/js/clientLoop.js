@@ -133,6 +133,7 @@ Init.help = function(data){
 		}
 		
 		//Title 
+		/*
 		if(data[i] == '{' && data[i+1] == '{'){
 			var start = i;
 			for(var j = start; j < data.length ; j++){
@@ -142,13 +143,14 @@ Init.help = function(data){
 					data = data.replaceAll(
 					'\\{\\{' + tag + '\\}\\}',
 					'<div data-role="collapsible"' + 
-					'<span class="helpTag" id="HELP' + tag + '" >' + tag + '</span>'
+					'<span class="helpTag" id="HELP_' + tag + '" >' + tag + '</span>'
 					+ '</div>'
 					);
 					break;
 				}
 			}
 		}
+		*/
 	}
 	return data;
 }
@@ -156,10 +158,35 @@ Init.help = function(data){
 Help = {};
 Help.open = function(elID){
 	main.help = '';
-	$( "#help" ).dialog( "open" );
-	var el = document.getElementById('HELP' + elID);
-	if(el) el.scrollIntoView(true);
+	var help = $( "#help" );
+	help.dialog( "open" );
+	
+	var el = $('#HELP_' + elID)[0];
+	if(!el) return;
+	
+	Help.closeAll();
+	
+	while(el !== help[0]){
+		el.setAttribute('open',true);
+		el = el.parentElement
+	}
+	
+	$('#HELP_' + elID)[0].scrollIntoView(true);	//TOFIX
 	document.getElementById('gameDiv').scrollIntoView(true);		
 }
+Help.closeAll = function(){
+	var a = $( "details" );
+	for(var i in a)
+		if(a[i].removeAttribute)
+			a[i].removeAttribute('open');
+}
 
-
+Help.icon = function(txt,x,y,size){
+	size = size || 20;
+	Draw.icon('system.question',[x,y],20);	
+	Button.creation(0,{
+		"rect":[x,x+size,y,y+size],
+		"left":{"func":Help.open,"param":[txt]},
+		'text':'Open Documentation',
+	});
+}

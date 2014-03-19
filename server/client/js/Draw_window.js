@@ -30,12 +30,14 @@ Draw.window.main = function(title){ ctxrestore();
 	t.style.height = titlesize + 'px';
 	t.style.font = titlesize + 'px Kelly Slab';
 	
+	var titlename = title;
 	if(typeof title === 'string'){ t.innerHTML = title; } else {
 		if(main.hideHUD.passive) delete title.passive;
 	
 		t.style.textDecoration = 'none';
 		var str = '';
 		for(var i in title){
+			if(title[i]) titlename = i;
 			var text = 'Open ' + i.capitalize() + ' Window';
 			str += 
 			'<span ' + 
@@ -50,6 +52,11 @@ Draw.window.main = function(title){ ctxrestore();
 		Draw.setInnerHTML(t,str);
 	}
 	
+	//Help
+	titlename = titlename.toLowerCase()
+	if(titlename === 'offensive' || titlename === 'defensive') titlename = 'stat';
+	Help.icon('window_' + titlename,s.x + s.w -45,s.y);
+		
 	//Close
 	Draw.icon('system.close',[s.x + s.w -20,s.y],20);	
 	Button.creation(0,{
@@ -61,6 +68,9 @@ Draw.window.main = function(title){ ctxrestore();
 		
 	return s;
 }
+
+
+
 
 Draw.window.main.constant = function(){
 	var startX = 20;
@@ -992,7 +1002,7 @@ Draw.window.quest.bonus = function(s,charY,q,mq,hq){
 //}
 
 Draw.window.trade = function (){ ctxrestore();
-	var s = Draw.window.main('Bank');	
+	var s = Draw.window.main('Trade');	
 	ctx = List.ctx.win;
 
 	//change amount:

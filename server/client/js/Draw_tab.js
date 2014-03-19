@@ -25,8 +25,8 @@ Draw.tab.main = function (){ ctxrestore();
 	for(var i = 0 ; i < Cst.tab.list.length ; i++){
 		var vx = 30;
 		var vy = 0;
-		var numX = s.x + 15 + vx * (i%100)  
-		var numY = s.oy + 8  + vy * Math.floor(i/100)
+		var numX = s.x + 15 + vx * i; 
+		var numY = s.oy + 8;
 		
 		Button.creation(0,{
 			"rect":[numX,numX+24,numY,numY+24],
@@ -39,6 +39,10 @@ Draw.tab.main = function (){ ctxrestore();
 		if(main.currentTab === Cst.tab.list[i]){ctx.strokeRect(numX-1,numY-1,24+1,24+1);}
 		
 	}
+	
+	//Help
+	Help.icon('interface_' + main.currentTab,Cst.WIDTH-20,s.oy-20,20);
+	
 	ctxrestore();
 	return s;
 }

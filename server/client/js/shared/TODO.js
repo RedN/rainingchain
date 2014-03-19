@@ -1,14 +1,11 @@
 
 
 
-help:
-
-hide orb on equip
 
 what skills do
 
-question mark on window
 
+stat window
 
 
 teleport actor
@@ -16,9 +13,6 @@ teleport actor
 plan revamp:
 already know what min and max mods are
 
-
-
-add lvl to unlock stuff (act like tutorial)
 
 
 //patch for release

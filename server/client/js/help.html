@@ -19,7 +19,7 @@
 	<t>Interface</t>
 	<i>
 		<t>Tabs</t>
-		<i>
+		<i id="HELP_interface_equip">
 			<t>Equip</t>
 				<i>
 					<t>Check the equip stats</t>
@@ -63,7 +63,7 @@
 				</i>
 		</i>
 		
-		<i>
+		<i id="HELP_interface_quest">
 			<t>Quest</t>
 				<i>
 					<t>Quest Progression Overview</t>
@@ -75,14 +75,14 @@
 					Click on name.
 				</i>
 		</i>
-		<i>
+		<i id="HELP_interface_skill">
 			<t>Skill</t>
 				<i>
 					<t>Check Level/Exp and Exp til next level</t>
 					Move mouse over name.
 				</i>
 		</i>
-		<i>
+		<i id="HELP_interface_friend">
 			<t>Friend</t>
 				<i>
 					<t>Check Friend List</t>
@@ -102,7 +102,7 @@
 					Click on icons to the bottom then send command.
 				</i>
 		</i>
-		<i>
+		<i id="HELP_interface_pref">
 			<t>Pref</t>
 				<i>
 					<t>Check Preference</t>
@@ -122,17 +122,15 @@
 
 
 
-	<i>
+	<i id="HELP_window">
 		<t>Windows</t>
-		<i>
+		<i id="HELP_window_stat">
 			<t>Offensive & Defensive</t>
-				<i>
-					<t>Check character stats</t>
-					Move Over to see the source of the boosts.<br>
-					The first 6 rows are your Element Mastery in the order (x * ^ +).
-				</i>
+				Click [[combat_stat]] for the effects of each stat.<br>
+				Click a stat to see the source of the boosts.<br>
+				The first 6 rows are your Element Mastery in the order (x * ^ +).
 		</i>	
-		<i>
+		<i id="HELP_window_quest">
 			<t>Quest</t>
 				<i>
 					<t>Check Quest Info</t>
@@ -147,7 +145,7 @@
 				</i>
 		</i>
 		
-		<i>
+		<i id="HELP_window_ability">
 			<t>Ability</t>
 			<i>
 				<t>Check/Select Ability Known</t>
@@ -168,7 +166,7 @@
 				% Damage Dealth per attack impacts chance to trigger Status Effects.
 			</i>
 		</i>
-		<i>
+		<i id="HELP_window_passive">
 			<t>Passive</t>
 			<i>
 				<t>Check Passives</t>
@@ -197,7 +195,7 @@
 				Click on "View Mode". Enter 0 for Normal, 1 for Heat.
 			</i>
 		</i>
-		<i>
+		<i id="HELP_window_binding">
 			<t>Key Binding</t>
 			<i>
 				<t>Change Key Binds</t>
@@ -206,7 +204,7 @@
 				Click Default Binding to use common Bindings.
 			</i>
 		</i>
-		<i>
+		<i id="HELP_window_bank">
 			<t>Bank</t>
 			<i>
 				<t>Withdraw Items</t>
@@ -219,7 +217,7 @@
 					Click on X-Amount icon then write the new value and send the command.
 				</i>
 		</i>
-		<i>
+		<i id="HELP_window_trade">
 			<t>Trade</t>
 			<i>
 				<t>Withdraw Items put in Trade</t>
@@ -239,7 +237,7 @@
 
 	<i>
 		<t>Upper Interface</t>
-		<i>
+		<i id="HELP_interface_minimap">
 			<t>Minimap</t>
 				<i>
 					<t>Change Zoom</t>
@@ -250,7 +248,7 @@
 					Open Pref Tab and change preference for Minimap Size.
 				</i>
 		</i>
-		<i>
+		<i id="HELP_interface_state">
 			<t>Resource Bars</t>
 				Reserve in HP, Mana, Fury, Heal. If HP = 0, you die.
 		</i>
@@ -264,7 +262,7 @@
 		</i>
 	</i>
 		
-	<i>
+	<i id="HELP_interface_chatbox">
 		<t>Chat Box</t>
 		<i>
 			<t>Talk with other players</t>
@@ -306,7 +304,7 @@
 
 <i>
 	<t>Combat Mechanisms</t>
-	<i>
+	<i id="HELP_combat_stat">
 		<t>Stats</t>
 		<i>
 			<t>Offensive</t>
@@ -370,7 +368,7 @@
 				<u>[SKILL] Exp:</u>&emsp; Increase exp received in this skill. There are some exceptions where the boost isn't applied.<br>
 		</i>
 	</i>
-	<i>
+	<i id="HELP_combat_boost">
 		<t>Boost</t>
 		Boosts modify the stats of your character. (In a good or bad way.) <br>
 		Boosts can modify a stat in different ways: "+","++","*","**","min","max".<br>
@@ -416,7 +414,7 @@
 			Certain maps also boost the player.
 		</i>
 	</i>
-	<i>
+	<i id="HELP_combat_equip">
 		<t>Equipment</t>
 			Impacts defence and damage. There are 9 armor pieces and 3 weapon pieces.<br>
 			You can equip 1 weapon of each piece but you can only receive the bonus of the active weapon.<br>
@@ -428,7 +426,7 @@
 			Weapon Pieces: Melee, Range, Magic.<br>
 			<br>
 	</i>	
-	<i>
+	<i id="HELP_combat_ability">
 		<t>Ability</t>
 			Every action you can assign to a key is an ability.<br>
 			Own Cooldown: Time before uing same ability again.<br>
@@ -489,7 +487,7 @@
 			</i>
 	</i>
 		
-	<i>
+	<i id="HELP_combat_creation">
 		<t>Attack Creation Phases</t>
 			<i>
 				<t>1. Remove Resources</t>
@@ -558,7 +556,7 @@
 			</i>
 	</i>
 	
-	<i>
+	<i id="HELP_combat_collision">
 		<t>Attack Collisions Phases</t>
 			<i>
 				<t>1. Update Defence</t>
@@ -637,7 +635,7 @@
 
 
 <<Combat Mechanics>>
-Raining Chain combat mechanics easy to use but hard to master.
+
 -Equipment
 -Ability
 -Attack Creation Phase

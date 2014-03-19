@@ -80,7 +80,8 @@ Draw.popup.equip.top = function(s){
 	ctx.fillStyle = 'white';
 	
 	ctx.setFont(15);
-	var string = 'Lv:' + s.equip.lvl + '  Orb: +' + round(s.equip.orb.upgrade.bonus*100-100,2) + '% | ' + s.equip.orb.upgrade.amount;
+	var string = 'Lv:' + s.equip.lvl;
+	if(!main.hideHUD.equipOrb) string += '  Orb: +' + round(s.equip.orb.upgrade.bonus*100-100,2) + '% | ' + s.equip.orb.upgrade.amount;
 	ctx.fillText(string,s.x+50+5,s.y+28);
 	
 	//Draw Def/Dmg

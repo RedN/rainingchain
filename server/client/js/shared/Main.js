@@ -12,7 +12,7 @@ Main.template = function(key){
 		"currentTab":"inventory",
 		"windowList":{'bank':0,'trade':0,'offensive':0,'defensive':0,'ability':0,'passive':0,'quest':0,'binding':0},
 		"popupList":{'equip':0,'plan':0},
-		'hideHUD':{'tab':0,'chat':0,'window':0,'popup':0,'minimap':0,'state':0,'advancedStat':0,'passive':0,'advancedAbility':0},	
+		'hideHUD':{'tab':0,'chat':0,'window':0,'popup':0,'minimap':0,'state':0,'advancedStat':0,'passive':0,'advancedAbility':0,questChallenge:0,questOrb:0,equipOrb:0},	
 		
 		'invList': ['','','','','','','','','','','','','','','','','','','','','','','',''],
 		'bankList':[],

@@ -138,7 +138,6 @@ Actor.creation.info.lvl = function(lvl,mod){
 	return lvl;	
 }
 
-
 Actor.creation.mod = function(e,d){
 	var list = Object.keys(Actor.creation.mod.list);
 	for(var i = 0 ; i < d.modAmount ; i++){
@@ -315,4 +314,10 @@ Actor.creation.nevermove = function(mort){
 	mort.spdY = 0;
 	mort.maxSpd = 1;
 }
+
+
+
+
+
+
 

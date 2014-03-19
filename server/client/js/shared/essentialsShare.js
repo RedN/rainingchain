@@ -413,7 +413,6 @@ String.prototype.keyCodeToName = function(){
 }
 
 String.prototype.keyFullName = function(){
-	console.log(this);
 	if(this == 'l') return 'Left Click'; 
 	if(this == 'r') return 'Right Click';
 	if(this == 'sl') return 'Shift-Left Click'; 

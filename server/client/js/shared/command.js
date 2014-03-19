@@ -607,6 +607,7 @@ Command.client = ['pref','music,next','music,info','help','mod','doc'];
 Command.list['help'] = function(lvl){
 	lvl = typeof lvl === 'undefined' ? lvl : 1;
 	for(var i in Command.list){
+		if(!Command.list[i] || !Command.list[i].doc) continue;
 		if(Command.list[i].doc.help >= lvl){
 			var str = '$' + i + ' :     ' + Command.list[i].doc.description;
 			Chat.add(str);

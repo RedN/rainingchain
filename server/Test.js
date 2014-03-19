@@ -59,6 +59,7 @@ Test.signIn = function(key){
 Test.signIn.hideHUD = function(key){
 	var total = Skill.getTotalLvl(key);
 	if(total < 40) List.main[key].hideHUD.advancedAbility = 1;
+	if(total < 30) List.main[key].hideHUD.equipOrb = 1;
 	if(total < 25) List.main[key].hideHUD.questOrb = 1;
 	if(total < 20) List.main[key].hideHUD.questChallenge = 1;
 	if(total < 15) List.main[key].hideHUD.advancedStat = 1;

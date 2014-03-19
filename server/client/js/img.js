@@ -51,7 +51,7 @@ Img.icon = newImage("img/img/iconSheet.png");
 	Img.icon.index = {};
 	var iconPreIndex = {
 	//System
-	'system':{'y':system+0,'x':['square','close','arrow','heart','gold']},
+	'system':{'y':system+0,'x':['square','close','arrow','heart','gold','question']},
 	'system1':{'y':system+1,'x':['left','right','down','up','more','less']},
 	'tab':{'y':system+2,'x':['equip','inventory','quest','skill','friend','pref']},
 	'element':{'y':system+3,'x':['melee','range','magic','fire','cold','lightning']},
