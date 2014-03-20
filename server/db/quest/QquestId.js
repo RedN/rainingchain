@@ -29,42 +29,8 @@ q.hintGiver = function(key,mq){
 };
 
 //{Dialogue
-q.dialogue = { 
-	'Jenny' :{
-		'face':'Jenny',
-		'intro':{
-			'text':'Do you want to help me out?',
-			'face':'Jenny',
-			'option':[
-				{'text':"Sure.",
-					'next':{'node':'yes'},
-					//'func':function(key){ Db.quest['QquestId'].giveDevice(key); },
-					//'param':[],
-				},
-				{'text':"No. I got other things to do.",
-					'next':{'node':'no'}},
-			]},
-		'yes':{
-			'text':"Thank you so much! Take this magical shield and teleport to the Fire Monster Lair. Kill him and give me the key he will drop.",
-			},
-		'no':{
-			'text':"What a jerk!",
-			},
-			
-		'intro2':{
-			'text':"What are you waiting for? Go kill the boss!",
-			},	
-				
-		'gratz':{
-			'text':'Thanks you so much for your help. I can now unlock the barrier.',
-			//'func':function(key){ Db.quest['QquestId'].giveReward(key); },
-			//'param':[],
-			},
-		'gratz2':{
-			'text':'Thanks again.',
-			},
-	},
-};
+q.dialogue = {}
+
 //}
 
 //{challenge
@@ -125,21 +91,9 @@ test.load = function(map){
 			'dialogue':{'func':(function(key){
 				var player = List.main[key];
 				var quest = player.quest['QquestId'];
-				Dialogue.start(key,{'name':'QquestId','convo':'Jenny','node':'intro'});
+				Dialogue.start(key,{'group':'QquestId','npc':'Jenny','convo':'intro','node':'intro'});
 				
-				return;
 				
-				quest.started = 1;
-				if(quest.bossKilled){
-					if(quest.receivedReward){
-						Dialogue.start(key,{'name':'QquestId','convo':'Jenny','node':'gratz2'});
-					} else { Dialogue.start(key,{'name':'QquestId','convo':'Jenny','node':'gratz'}); }
-				} else {
-					if(quest.receivedDevice){	
-						Quest.complete(key,'QquestId');
-						Dialogue.start(key,{'name':'QquestId','convo':'Jenny','node':'intro2'});
-					} else { Dialogue.start(key,{'name':'QquestId','convo':'Jenny','node':'intro'}); }
-				}
 			})},
 			'viaArray':[
 				{'array':['target','sub','period'],'value':{first:100,renew:100}},

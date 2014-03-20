@@ -64,9 +64,9 @@ Db.map['test'] = function(){	//'test' = mapId
 		dialogue:function(key){
 			if(List.main[key].quest.Qtest.stuff){			
 				Quest.complete(key,'Qtest');
-				Dialogue.start(key,{'name':'Qtest','convo':'Jenny','node':'gratz2'});
+				Dialogue.start(key,{'group':'Qtest','npc':'Jenny','convo':'intro','node':'intro2'});
 			} else {
-				Dialogue.start(key,{'name':'Qtest','convo':'Jenny','node':'first'});
+				Dialogue.start(key,{'group':'Qtest','npc':'Jenny','convo':'intro','node':'intro0'});
 			}		
 		},
 		
@@ -129,7 +129,7 @@ Db.map['test'] = function(){	//'test' = mapId
 		
 		//an enemy that acts as a chest. can only be opened once REQ: enemy needs to have anim:'open' and 'close'. NOTE: will be trasnformed to {func:,list:[]}
 		//must return a boolean about the success of the action (Ex: if enough inventory space)
-		mort.treasure = function(key,eId){
+		mort.chest = function(key,eId){
 			Itemlist.add(List.main[key].invList,'gold',1000);
 			return true;
 		} 

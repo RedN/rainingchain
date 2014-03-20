@@ -18,6 +18,7 @@ Actor.creation = function(data){
 	
 	for(var i in e.immune) e.equip.def[i] = Cst.bigInt;
 	
+	if(typeof e.dialogue === 'function') e.dialogue = {func:e.dialogue};
 	
 	if(e.nevercombat){ Actor.creation.nevercombat(e); }	
 	else {
@@ -201,7 +202,7 @@ Actor.creation.extra = function(mort){
 	for(var i in mort.viaArray){ 
 		mort.viaArray[i].origin = mort;
 		viaArray.set(mort.viaArray[i]);
-	} 
+	}
 	delete mort.extra;
 	delete mort.viaArray;
 	return mort;
@@ -213,9 +214,9 @@ Actor.creation.optionList = function(e){
 	if(e.type === 'player') ol.option.push({'name':'Trade',"func":'Main.openWindow',"param":['trade',e.id]});
 	if(e.dialogue)	ol.option.push({'name':'Talk To',"func":'Actor.talk',"param":[e.id]});
 	if(e.waypoint)	ol.option.push({'name':'Set Respawn',"func":'Actor.setRespawn',"param":[{x:e.x,y:e.y+64,map:e.map}]});
-	if(e.treasure){
+	if(e.chest){
 		ol.option.push({'name':'Open Chest',"func":'Actor.openChest',"param":[e.id]});
-		e.treasure = {func:e.treasure,list:[]}
+		e.chest = {func:e.chest,list:[]}
 	}	
 	if(e.skillPlot){
 		ol.option.push({'name':'Harvest',"func":'Actor.harvest',"param":[e.id]});

@@ -56,6 +56,46 @@ q.plan['Pstaff'] = {
 };
 		
 
+q.dialogue['jenny'] = {'face':'Jenny',
+	'intro':{
+		'intro0':{
+			'text':'Do you want to help me out?',
+			'option':[
+				{'text':"Sure.",
+					'next':{'node':'yes'},
+					//'func':function(key){ Db.quest['QquestId'].giveDevice(key); },
+					//'param':[],
+				},
+				{'text':"No. I got other things to do.",
+					'next':{'node':'no'}
+				},
+			]
+		},
+		'yes':{
+			'text':"Thank you so much! Take this magical shield and teleport to the Fire Monster Lair. Kill him and give me the key he will drop.",
+		},
+		'no':{
+			'text':"What a jerk!",
+		},
+	
+		'intro2':{
+			'text':"What are you waiting for? Go kill the boss!",
+		},	
+	},	
+	'gratz':{
+		'gratz0':{
+			'text':'Thanks you so much for your help. I can now unlock the barrier.',
+			//'func':function(key){ Db.quest['QquestId'].giveReward(key); },
+			//'param':[],
+		},
+		'gratz1':{
+			'text':'Thanks again.',
+		},
+	}
+};
+
+
+
 
 //{Enemy
 q.enemy["bee"] = {  //{
@@ -131,7 +171,7 @@ q.map.tutorial = function(){
 		//chest
 		Actor.creation({'xym':spot.m,
 			"category":"system","variant":"chest",extra:{
-				'treasure':function(key){
+				'chest':function(key){
 					Itemlist.add(List.main[key].invList,'Qtutorial-Aiceshard',1);
 					return true;
 				}
@@ -158,7 +198,10 @@ q.map.tutorial = function(){
 				'viewedIf':function(key){
 					if(List.all[key].type !== 'player') return true;
 					return !List.main[key].quest['Qtutorial'].beeDead;
-				}				
+				},
+				'dialogue':(function(key){
+					Dialogue.start(key,{'group':'Qtutorial','npc':'jenny','convo':'intro','node':'intro0'});
+				}),
 			}
 		});
 		
