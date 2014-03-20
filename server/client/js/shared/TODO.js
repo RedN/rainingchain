@@ -15,9 +15,7 @@ already know what min and max mods are
 
 
 
-//patch for release
-Loop
-//
+
 
 
 
@@ -106,31 +104,6 @@ unlike regular mmorpg that can be beaten by any casual player
 
 
 the game is based on the fact that u can dodge any attack at any time, similiar to dodging in dark souls
-
-
-on logout
-Message: Cannot read property 'friend' of undefined
-TypeError: Cannot read property 'friend' of undefined
-    at Function.Actor.loop.friendList (C:\rc\rainingchain\server\entity\Actor_loop.js:435:37)
-    at Object.Actor.loop (C:\rc\rainingchain\server\entity\Actor_loop.js:42:46)
-    at Function.Loop.Actor (C:\rc\rainingchain\server\Loop.js:27:12)
-    at Loop (C:\rc\rainingchain\server\Loop.js:9:7)
-    at wrapper [as _onTimeout] (timers.js:252:14)
-    at Timer.listOnTimeout [as ontimeout] (timers.js:110:15)
-
-Message: Cannot read property 'melee' of undefined
-TypeError: Cannot read property 'melee' of undefined
-    at Function.Combat.collision.damage.calculate (C:\rc\rainingchain\server\combat.js:296:41)
-    at Function.Combat.collision.damage (C:\rc\rainingchain\server\combat.js:279:40)
-    at Object.Combat.collision (C:\rc\rainingchain\server\combat.js:141:29)
-    at Object.Collision.BulletActor (C:\rc\rainingchain\server\client\js\shared\Collision.js:100:10)
-    at Function.Bullet.loop.collision (C:\rc\rainingchain\server\entity\Attack_loop.js:106:12)
-    at Object.Bullet.loop (C:\rc\rainingchain\server\entity\Attack_loop.js:13:14)
-    at Function.Loop.Bullet (C:\rc\rainingchain\server\Loop.js:33:10)
-    at Loop (C:\rc\rainingchain\server\Loop.js:6:7)
-    at wrapper [as _onTimeout] (timers.js:252:14)
-    at Timer.listOnTimeout [as ontimeout] (timers.js:110:15)
-
 
 
 

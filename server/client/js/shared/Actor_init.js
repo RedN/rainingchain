@@ -145,7 +145,7 @@ Init.actor = function(){
 		mort.targetIf = 'player';  //condition used by monsters to find their target. check targetIfList
 		mort.onclick = {};			
 		mort.waypoint = null; 		//right click = setRespawn
-		mort.treasure = null;		//right click = gives items;
+		mort.chest = null;		//right click = gives items;
 		mort.block = null;			//change map coliision
 		//}	
 		

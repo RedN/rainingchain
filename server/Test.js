@@ -50,10 +50,14 @@ Test.serverStart = function(){
 
 //Called when player logs in
 Test.signIn = function(key){	
-	Itemlist.add(key,'gold');
 	Test.signIn.hideHUD(key);
 	
 	
+	Itemlist.add(key,'gold');
+	
+	
+	
+	TestingQuest(key);
 }
 
 Test.signIn.hideHUD = function(key){

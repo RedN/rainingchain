@@ -231,6 +231,7 @@ Actor.permBoost.stack = function(b){	//if boost same thing, add values
 
 //{Map Interaction	
 Actor.teleport = function(mort,x,y,map){
+	mort = typeof mort === 'string' ? List.all[mort] : mort;
 	LOG(2,mort.id,'teleport',x,y,map);
 	
 	//Teleport player. if no map specified, stay in same map.
@@ -278,7 +279,8 @@ Actor.teleport = function(mort,x,y,map){
 
 Actor.talk = function(mort,enemyId){
 	if(List.all[enemyId].dialogue){
-		List.all[enemyId].dialogue.func(mort.id);
+		List.all[enemyId].dialogue.func(mort.id,List.main[mort.id].quest);
+		//TOFIX not taking into consideration param
 	}
 }
 
@@ -366,17 +368,16 @@ Actor.openChest = function(mort,eid){	//need work
 	
 	if(Collision.distancePtPt(mort,e) > 100){ Chat.add(mort.id,"You're too far away."); return;}
 	
-	var chest = e.treasure;
-	if(!chest) return;
-	if(chest.list.have(mort.id)){
+	if(!e.chest) return;
+	if(e.chest.list.have(mort.id)){
 		Chat.add(mort.id,"You have already opened that chest.");
 		return;
 	}
 	Chat.add(mort.id,"You opened the chest.");
 		
-	if(chest.func(mort.id) !== false){
+	if(e.chest.func(mort.id) !== false){
 		Sprite.change(e,{'initAnim':'on'});
-		chest.list.push(mort.id);
+		e.chest.list.push(mort.id);
 	};
 	LOG(2,mort.id,'openChest',eid);
 }

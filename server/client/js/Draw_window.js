@@ -876,7 +876,7 @@ Draw.window.quest.upper = function(s,charY,q,mq,hq){
 	str += 'Name: ' + q.name + '<br>';
 	var state = mq.complete ? 'Complete (x' + mq.complete + ')' : (mq.started ? 'Started' : 'Not Started');
 	str += 'State: ' + state + '<br>';
-	var rewardstat = round(q.reward.stat.value[0],3,1) + ' - ' + round(q.reward.stat.value[1],3,1) + ' in ' + Db.stat[q.reward.stat.stat].name;
+	var rewardstat = round(q.reward.boost.value[0],3,1) + ' - ' + round(q.reward.boost.value[1],3,1) + ' in ' + Db.stat[q.reward.boost.stat].name;
 	str += 'Reward: ' + rewardstat + '<br>';
 	if(mq.reward){
 		var boost = Draw.convert.boost(mq.reward);

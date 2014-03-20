@@ -37,9 +37,7 @@ Init.db.plan = function(cb){
 	})
 }
 	
-	
 Plan = {};
-
 
 Plan.creation = function(preplan){
 	//seed: lvl, category,[ piece, type, rarity, quality,]
@@ -48,7 +46,8 @@ Plan.creation = function(preplan){
 	var plan = useTemplate(Plan.template(),preplan);
 	if(plan.category === 'equip' || plan.category === 'weapon' || plan.category === 'armor') 
 		plan = Plan.template.equip(plan);
-	if(plan.category === 'ability') plan = Plan.template.ability(plan);	
+	if(plan.category === 'ability') 
+		plan = Plan.template.ability(plan);	
 	
 	Db.plan[plan.id] = plan;
 	
@@ -94,7 +93,6 @@ Plan.creation = function(preplan){
 Plan.creation.req = function(plan){
 	var lvl = plan.lvl;
 	
-	
 	var array = {
 		'melee':['chain','metal'],
 		'range':['leaf','wood'],
@@ -117,16 +115,20 @@ Plan.creation.req = function(plan){
 	var lvlcap = Math.floor(plan.lvl/20);
 	
 	var main = array[plan.piece] ? array[plan.piece].random() : plan.type;
-	for(var i = 0 ; i <= lvlcap; i++)	
+	for(var i = 0 ; i <= lvlcap; i++){	
+		var amount = lvl < 20 ? lvl*5 : 100
 		plan.req.item.push([main + '-' + i*20,100]);
+	}
 	
-	var rare = Math.floor(Math.random()*10)
-	rare = 'rare-' + rare;
+	if(lvl > 20){
+		var rare = Math.floor(Math.random()*10)
+		rare = 'rare-' + rare;
+		plan.req.item.push([rare,1]);
+	}
 	
-	plan.req.item.push([rare,1]);
-
-	plan.req.item.push(['shard-' + plan.color,5]);	
-		
+	if(lvl > 10){
+		plan.req.item.push(['shard-' + plan.color,5]);	
+	}	
 		
 	//Skill
 	var sk = skill[main];

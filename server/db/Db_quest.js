@@ -5,6 +5,12 @@ var questList = [
 	'QquestId',
 ];
 
+TestingQuest = function(key){
+	
+
+
+}
+
 Init.db.quest = function(){
 	//Note: List.main[key].quest[id] only has variable
 	var questVar = {};

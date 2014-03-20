@@ -31,6 +31,8 @@ Itemlist.add.bulk = function (inv,array_items){
 
 //Test if theres enough place for all the items (array of items)
 Itemlist.test = function (inv,array_items){
+	if(typeof inv === 'string') inv = List.main[inv].invList;
+	
 	//Fast Test this
 	if(array_items.length <= Itemlist.empty(inv)){
 		return true;
@@ -61,6 +63,8 @@ Itemlist.firstEmpty = function(inv){
 
 //Remove item in inventory
 Itemlist.remove = function (inv,id,amount){
+	if(typeof inv === 'string') inv = List.main[inv].invList;
+	
 	amount = amount || 1;
 	if(Db.item[id].stack || inv.alwaysStack){
 		for(var i = 0 ; i < inv.data.length ; i ++){
