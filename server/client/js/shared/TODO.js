@@ -1,17 +1,42 @@
 
 
 
+Hi,
 
-what skills do
+I was listening to the songs you have made on your channel and I really liked your song Dark War Epic Music (http://www.newgrounds.com/audio/listen/564123).
+My name is Samuel Magnan and I'm currently making a open-source MMORPG called Raining Chain.
+I was wondering if I could use your song in the commercial project.
+Obviously, your name will be mentionned in the credits.
+Players can also see the compositor name of the song currently playing directly in-game.
+
+Contact me at rainingchain@gmail.com.
+
+Quick Game Presentation:
+https://www.youtube.com/watch?v=XsnMmUY69ws
+
+
+
+
 
 
 stat window
+contact music
+portal team
+cutscene
+contribution pts window
+skill doc
+quest updater on signin
+plan revamp: already know what min and max mods are
+waypoint window
+Crafting System with White
+
+
+
+
 
 
 teleport actor
 
-plan revamp:
-already know what min and max mods are
 
 
 
@@ -20,32 +45,11 @@ already know what min and max mods are
 
 
 remake tileset
+boss documentation
 
-
-
-
-#Priority 2:
--Crafting System with White
-finish doc
-
-#Priority 3:
-
-
-easy mode
 
 revamp a*
 
-
-html window
-
-
-contact ppl for music
-
-
-
-
-
-$$$$$$$$$$$
 
 
 

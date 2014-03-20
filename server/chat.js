@@ -2,7 +2,6 @@
 Chat = {};
 Chat.parse = function(data){
 	//Used to transform [[itemId]] into special mouseover info
-	//Item [[item.id]]
 	for(var i = 0 ; i < data.length ; i++){
 		if(data[i] == '[' && data[i+1] == '['){
 			var start = i;

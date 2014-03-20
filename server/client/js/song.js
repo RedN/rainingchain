@@ -9,7 +9,7 @@ Init.db.song = function(){
         'blast_away':{
 			'link':'http://www.newgrounds.com/audio/listen/561789',
 			'author':{
-				'name':'JesseProper',
+				'name':'sonicsneakers',
 			}
 		},
 		'carol_of_the_balls':{
