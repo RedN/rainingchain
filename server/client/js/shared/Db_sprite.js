@@ -3,8 +3,8 @@
     "src":"img/Sprite/human.png"        //image src
     "size":1.5,                         //size factor
     "side":[2,6,0,4,1,5,3,7],           //side[0] = 2 => the right-facing position is in the 3rd row. 
-    'hpBar':-40,                        //hp bar distance from center (in y)
-    'legs':35,                          //used when sorting draw by y.
+    "hpBar":-40,                        //hp bar distance from center (in y)
+    "legs":35,                          //used when sorting draw by y.
 	"preHitBox":[ -12,12,-35,35 ],      //hitbox before size factor (for dmg collision)
 	"preBumperBox":[ -12,12,0,35 ],     //bumperbox before size factor  (for map collision)
 	"anim": {                           //list of animations
@@ -15,7 +15,7 @@
 	    	"sizeY":70,     //size of 1 frame in y
 	    	"dir":8,        //how many direction can it face? (usually 4 or 8 if diagonal)
 	    	"spd":0.8,      //speed of animation. 1 spd => every game frame, it moves to the next frame
-	    	'walk':1,       //if walk, movement speed will impact frame spd
+	    	"walk":1,       //if walk, movement speed will impact frame spd
 	    	"next":"walk"   //once animation complete, what animation to do?    //default is Walk
 	    },
 		"attack":{"startY":0,"frame":4,"sizeX":70,"sizeY":70,"dir":8,"spd":0.8,"next":"walk"}
@@ -32,117 +32,127 @@ Init.db.sprite = function(){
     
     	//ts("Sprite.change(p,{'anim':'attack'})")
 		/*
-    	"mace":{"src":"actor/mace.png","size":1.5,"side":[3,2,1,0],'hpBar':-40,'legs':20,
+    	"mace":{"src":"actor/mace.png","size":1.5,"side":[3,2,1,0],"hpBar":-40,"legs":20,
     	"preHitBox":[ -20,20,-20,32 ],"preBumperBox":[ -12,12,4,30 ],
     	"anim": {
-    		"walk":{"startY":0,"frame":9,"sizeX":64,"sizeY":64,"dir":4,"spd":1,'walk':1,"next":"walk"},
+    		"walk":{"startY":0,"frame":9,"sizeX":64,"sizeY":64,"dir":4,"spd":1,"walk":1,"next":"walk"},
     		"attack":{"startY":0,"frame":9,"sizeX":64,"sizeY":64,"dir":4,"spd":1,"next":"walk"}
     	}},
 		*/
 		/*
-		"mace":{"src":"actor/mace.png","size":1.5*0.9,"side":[3,2,1,0],'hpBar':-40,'legs':20,
+		"mace":{"src":"actor/mace.png","size":1.5*0.9,"side":[3,2,1,0],"hpBar":-40,"legs":20,
     	"preHitBox":[ -20,20,-20,32 ],"preBumperBox":[ -18,18,4,35 ],
     	"anim": {
-    		"walk":{"startY":0,"frame":9,"sizeX":64,"sizeY":64,"dir":4,"spd":1,'walk':1,"next":"walk"},
+    		"walk":{"startY":0,"frame":9,"sizeX":64,"sizeY":64,"dir":4,"spd":1,"walk":1,"next":"walk"},
     		"attack":{"startY":256,"frame":6,"sizeX":128,"sizeY":64,"dir":4,"spd":1,"next":"walk"}
     	}},
 		*/
-		"mace":{"src":"actor/newMain.png","size":2.5,"side":[1,2,3,0],'hpBar':-50/3,'legs':20,
+		"mace":{"src":"actor/newMain.png","size":2.5,"side":[1,2,3,0],"hpBar":-50/3,"legs":20,
     	"preHitBox":[ -30/3,30/3,-10/3,50/3],"preBumperBox":[ -30/3,30/3,-10/3,50/3 ],
     	"anim": {
-    		"walk":{"startY":0,"frame":4,"sizeX":24,"sizeY":32,"dir":4,"spd":0.4,'walk':1,"next":"walk"},
+    		"walk":{"startY":0,"frame":4,"sizeX":24,"sizeY":32,"dir":4,"spd":0.4,"walk":1,"next":"walk"},
     		"attack":{"startY":0,"frame":4,"sizeX":24,"sizeY":32,"dir":4,"spd":0.4,"next":"walk"}
     	}},
 		
-		"sword":{"src":"actor/mace.png","size":1.5,"side":[3,2,1,0],'hpBar':-40,'legs':20,
+		"sword":{"src":"actor/mace.png","size":1.5,"side":[3,2,1,0],"hpBar":-40,"legs":20,
     	"preHitBox":[ -20,20,-20,32 ],"preBumperBox":[ -12,12,4,30 ],
     	"anim": {
-    		"walk":{"startY":0,"frame":9,"sizeX":64,"sizeY":64,"dir":4,"spd":1,'walk':1,"next":"walk"},
+    		"walk":{"startY":0,"frame":9,"sizeX":64,"sizeY":64,"dir":4,"spd":1,"walk":1,"next":"walk"},
     		"attack":{"startY":0,"frame":9,"sizeX":64,"sizeY":64,"dir":4,"spd":1,"next":"walk"}
     	}},
 		
-		"spear":{"src":"actor/mace.png","size":1.5,"side":[3,2,1,0],'hpBar':-40,'legs':20,
+		"spear":{"src":"actor/mace.png","size":1.5,"side":[3,2,1,0],"hpBar":-40,"legs":20,
     	"preHitBox":[ -20,20,-20,32 ],"preBumperBox":[ -12,12,4,30 ],
     	"anim": {
-    		"walk":{"startY":0,"frame":9,"sizeX":64,"sizeY":64,"dir":4,"spd":1,'walk':1,"next":"walk"},
+    		"walk":{"startY":0,"frame":9,"sizeX":64,"sizeY":64,"dir":4,"spd":1,"walk":1,"next":"walk"},
     		"attack":{"startY":0,"frame":9,"sizeX":64,"sizeY":64,"dir":4,"spd":1,"next":"walk"}
     	}},
 		
-		"bow":{"src":"actor/mace.png","size":1.5,"side":[3,2,1,0],'hpBar':-40,'legs':20,
+		"bow":{"src":"actor/mace.png","size":1.5,"side":[3,2,1,0],"hpBar":-40,"legs":20,
     	"preHitBox":[ -20,20,-20,32 ],"preBumperBox":[ -12,12,4,30 ],
     	"anim": {
-    		"walk":{"startY":0,"frame":9,"sizeX":64,"sizeY":64,"dir":4,"spd":1,'walk':1,"next":"walk"},
+    		"walk":{"startY":0,"frame":9,"sizeX":64,"sizeY":64,"dir":4,"spd":1,"walk":1,"next":"walk"},
     		"attack":{"startY":0,"frame":9,"sizeX":64,"sizeY":64,"dir":4,"spd":1,"next":"walk"}
     	}},
 		
-		"wand":{"src":"actor/mace.png","size":1.5,"side":[3,2,1,0],'hpBar':-40,'legs':20,
+		"wand":{"src":"actor/mace.png","size":1.5,"side":[3,2,1,0],"hpBar":-40,"legs":20,
     	"preHitBox":[ -20,20,-20,32 ],"preBumperBox":[ -12,12,4,30 ],
     	"anim": {
-    		"walk":{"startY":0,"frame":9,"sizeX":64,"sizeY":64,"dir":4,"spd":1,'walk':1,"next":"walk"},
+    		"walk":{"startY":0,"frame":9,"sizeX":64,"sizeY":64,"dir":4,"spd":1,"walk":1,"next":"walk"},
     		"attack":{"startY":0,"frame":9,"sizeX":64,"sizeY":64,"dir":4,"spd":1,"next":"walk"}
     	}},
 		
 		/*
-    	"mace2":{"src":"actor/human.png","size":1.5,"side":[2,6,0,4,1,5,3,7],'hpBar':-40,'legs':35,
+    	"mace2":{"src":"actor/human.png","size":1.5,"side":[2,6,0,4,1,5,3,7],"hpBar":-40,"legs":35,
     	"preHitBox":[ -12,12,-35,35 ],"preBumperBox":[ -12,12,0,35 ],
     	"anim": {
-    		"walk":{"startY":0,"frame":4,"sizeX":70,"sizeY":70,"dir":8,"spd":0.8,'walk':1,"next":"walk"},
+    		"walk":{"startY":0,"frame":4,"sizeX":70,"sizeY":70,"dir":8,"spd":0.8,"walk":1,"next":"walk"},
     		"attack":{"startY":0,"frame":4,"sizeX":70,"sizeY":70,"dir":8,"spd":0.8,"next":"walk"}
     	}},
 		
-    	"spear":{"src":"actor/spear.png","size":1.5,"side":[3,2,1,0],'hpBar':-40,'legs':20,
+    	"spear":{"src":"actor/spear.png","size":1.5,"side":[3,2,1,0],"hpBar":-40,"legs":20,
     	"preHitBox":[ -20,20,-20,32 ],"preBumperBox":[ -12,12,4,30 ],
     	"anim": {
-    		"walk":{"startY":64*8,"frame":9,"sizeX":64,"sizeY":64,"dir":4,"spd":1,'walk':1,"next":"walk"},
+    		"walk":{"startY":64*8,"frame":9,"sizeX":64,"sizeY":64,"dir":4,"spd":1,"walk":1,"next":"walk"},
     		"attack":{"startY":64*21,"frame":8,"sizeX":64*3,"sizeY":64*3,"dir":4,"spd":1,"next":"walk"}
     	}},
     	
-    	"sword":{"src":"actor/sword.png","size":1.5,"side":[3,2,1,0],'hpBar':-40,'legs':20,
+    	"sword":{"src":"actor/sword.png","size":1.5,"side":[3,2,1,0],"hpBar":-40,"legs":20,
     	"preHitBox":[ -20,20,-20,32 ],"preBumperBox":[ -12,12,4,30 ],
     	"anim": {
-    		"walk":{"startY":64*8,"frame":9,"sizeX":64,"sizeY":64,"dir":4,"spd":1,'walk':1,"next":"walk"},
+    		"walk":{"startY":64*8,"frame":9,"sizeX":64,"sizeY":64,"dir":4,"spd":1,"walk":1,"next":"walk"},
     		"attack":{"startY":64*21,"frame":6,"sizeX":64*3,"sizeY":64*3,"dir":4,"spd":1,"next":"walk"}
     	}},
     	
-    	"bow":{"src":"actor/bow.png","size":1.5,"side":[3,2,1,0],'hpBar':-40,'legs':20,
+    	"bow":{"src":"actor/bow.png","size":1.5,"side":[3,2,1,0],"hpBar":-40,"legs":20,
     	"preHitBox":[ -20,20,-20,32 ],"preBumperBox":[ -12,12,4,30 ],
     	"anim": {
-    		"walk":{"startY":64*8,"frame":9,"sizeX":64,"sizeY":64,"dir":4,"spd":1,'walk':1,"next":"walk"},
+    		"walk":{"startY":64*8,"frame":9,"sizeX":64,"sizeY":64,"dir":4,"spd":1,"walk":1,"next":"walk"},
     		"attack":{"startY":64*16,"frame":13,"sizeX":64,"sizeY":64,"dir":4,"spd":1,"next":"walk"}
     	}},
     	
-    	"wand":{"src":"actor/wand.png","size":1.5,"side":[3,2,1,0],'hpBar':-40,'legs':20,
+    	"wand":{"src":"actor/wand.png","size":1.5,"side":[3,2,1,0],"hpBar":-40,"legs":20,
     	"preHitBox":[ -20,20,-20,32 ],"preBumperBox":[ -12,12,4,30 ],
     	"anim": {
-    		"walk":{"startY":64*8,"frame":9,"sizeX":64,"sizeY":64,"dir":4,"spd":1,'walk':1,"next":"walk"},
+    		"walk":{"startY":64*8,"frame":9,"sizeX":64,"sizeY":64,"dir":4,"spd":1,"walk":1,"next":"walk"},
     		"attack":{"startY":64*12,"frame":6,"sizeX":64,"sizeY":64,"dir":4,"spd":1,"next":"walk"}
     	}},
     	*/
     //NPC
-    	"jenny":{"src":"actor/nSprite0.png","size":2,"side":[0,1,2,3],'hpBar':-22,'legs':16,
+    	"jenny":{"src":"actor/nSprite0.png","size":2,"side":[0,1,2,3],"hpBar":-22,"legs":16,
     	"preHitBox":[ -16,16,-16,16 ],"preBumperBox":[ -16,16,-16,16 ],
     	"anim": {
-    		"walk":{"startY":0,"frame":3,"sizeX":32,"sizeY":32,"dir":4,"spd":0.5,'walk':1,"next":"walk"},
+    		"walk":{"startY":0,"frame":3,"sizeX":32,"sizeY":32,"dir":4,"spd":0.5,"walk":1,"next":"walk"},
     	}},
     	
     //ENEMY
-    	"slime":{"src":"actor/slime.png","size":1,"side":[0,1,2,3],'hpBar':-110,'legs':70,
+    	"slime":{"src":"actor/slime.png","size":1,"side":[0,1,2,3],"hpBar":-110,"legs":70,
     	"preHitBox":[ -70,70,-45,90 ],"preBumperBox":[ -55,55,-15,80 ],
     	"anim": {
-    		"walk":{"startY":0,"frame":5,"sizeX":200,"sizeY":200,"dir":4,"spd":0.5,'walk':1,"next":"walk"},
+    		"walk":{"startY":0,"frame":5,"sizeX":200,"sizeY":200,"dir":4,"spd":0.5,"walk":1,"next":"walk"},
     		"attack":{"startY":0,"frame":5,"sizeX":200,"sizeY":200,"dir":4,"spd":0.5,"next":"walk"},
     	}},
     
-    	"troll":{"src":"actor/troll.png","size":1,"side":[0,1,2,3],'hpBar':-70,'legs':35,
+    	"troll":{"src":"actor/troll.png","size":1,"side":[0,1,2,3],"hpBar":-70,"legs":35,
     	"preHitBox":[ -33,33,-30,64 ],"preBumperBox":[ -33,33,-30,64 ],
     	"anim": {
-    		"walk":{"startY":0,"frame":9,"sizeX":128,"sizeY":128,"dir":4,"spd":0.25,'walk':1,"next":"walk"},
+    		"walk":{"startY":0,"frame":9,"sizeX":128,"sizeY":128,"dir":4,"spd":0.25,"walk":1,"next":"walk"},
     		"attack":{"startY":0,"frame":9,"sizeX":128,"sizeY":128,"dir":4,"spd":0.25,"next":"walk"},
     		
     	}},
     	
 		"bee":{"src":"actor/bee.png",rgpvx:1},
 		"demon":{"src":"actor/demon.png",rgpvx:1},
+		
+		"orc-shaman":{"src":"actor/orc-shaman.png","size":1,"side":[1,2,3,0],"hpBar":-30,"legs":25,
+    	"preHitBox":[ -20,20,-10,25 ],"preBumperBox":[ -20,20,-10,25 ],
+    	"anim": {
+    		"walk":{"startY":0,"frame":4,"sizeX":32,"sizeY":48,"dir":4,"spd":0.25,"walk":1,"next":"walk"},
+    		"attack":{"startY":0,"frame":4,"sizeX":32,"sizeY":48,"dir":4,"spd":0.25,"next":"walk"},
+    		
+    	}},
+		
+		
 		
     //BULLET
     	"fireball":{"src":"bullet/fireball.png","size":1,"side":[0,1,2,3],
@@ -218,10 +228,10 @@ Init.db.sprite = function(){
     	
 		if(spr.rgpvx){
 			var src = spr.src;
-			spr = {"size":2,"side":[2,0,1,3],'hpBar':-22,'legs':16,
+			spr = {"size":2,"side":[2,0,1,3],"hpBar":-22,"legs":16,
 			"preHitBox":[ -16,16,-16,16 ],"preBumperBox":[ -16,16,-16,16 ],
 			"anim": {
-				"walk":{"startY":0,"frame":3,"sizeX":32,"sizeY":32,"dir":4,"spd":0.5,'walk':1,"next":"walk"},
+				"walk":{"startY":0,"frame":3,"sizeX":32,"sizeY":32,"dir":4,"spd":0.5,"walk":1,"next":"walk"},
 				"attack":{"startY":0,"frame":3,"sizeX":32,"sizeY":32,"dir":4,"spd":0.5,"next":"attack"},
 			}};
 			spr.src = src;
@@ -240,7 +250,7 @@ Init.db.sprite = function(){
     		var anim = spr.anim[j];
     		anim.startY = anim.startY || 0; 
     		anim.spd = anim.spd || 1; 
-    		anim.next = anim.next || 'walk';
+    		anim.next = anim.next || "walk";
     	}
 		
     
@@ -298,10 +308,10 @@ Sprite.creation = function(player,info){
 Sprite.template = function(){
 	return {
     	name:'mace',
-		initAnim:'walk',			//info about anim sent to client when init. use when anim is constant (ex: switch off)
-    	anim:'walk',				//normally null. change for 1 frame when attack etc... changing initAnim will also change anim
+		initAnim:"walk",			//info about anim sent to client when init. use when anim is constant (ex: switch off)
+    	anim:"walk",				//normally null. change for 1 frame when attack etc... changing initAnim will also change anim
     	sizeMod : 1,
-    	oldAnim:'walk',				//client stuff
+    	oldAnim:"walk",				//client stuff
 		startX : 0,
     	timer : 0,
     	walk : 0,	//??

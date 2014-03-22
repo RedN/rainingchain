@@ -1,24 +1,37 @@
+talk with guy 
+	
+	1:
+	talk with guard
+	kill guard, destory door
+	kill everyone
+
+		1:1
+		grab powder
+		
+		1:2
+		push rock
+
+	2:
+	kill orc
+	go forest get herbs
+	transform
+	kill guard
+	enter grab treasure
+	
 
 
 
-Hi,
-
-I was listening to the songs you have made on your channel and I really liked your song Dark War Epic Music (http://www.newgrounds.com/audio/listen/564123).
-My name is Samuel Magnan and I'm currently making a open-source MMORPG called Raining Chain.
-I was wondering if I could use your song in the commercial project.
-Obviously, your name will be mentionned in the credits.
-Players can also see the compositor name of the song currently playing directly in-game.
-
-Contact me at rainingchain@gmail.com.
-
-Quick Game Presentation:
-https://www.youtube.com/watch?v=XsnMmUY69ws
 
 
 
 
 
 
+
+
+
+
+stat window
 stat window
 contact music
 portal team
@@ -110,6 +123,29 @@ unlike regular mmorpg that can be beaten by any casual player
 the game is based on the fact that u can dodge any attack at any time, similiar to dodging in dark souls
 
 
+
+Hi,
+
+I was listening to the songs you have made on your channel and I really liked your song Super Gourmet Race (http://www.newgrounds.com/audio/listen/540968).
+My name is Samuel Magnan and I'm currently making an open-source MMORPG called Raining Chain.
+I was wondering if I could use your song in the commercial project.
+Obviously, your name will be mentionned in the credits.
+Players can also see the compositor name of the song currently playing directly in-game.
+
+Contact me at rainingchain@gmail.com or via NewGrounds.
+
+Quick Game Presentation:
+https://www.youtube.com/watch?v=XsnMmUY69ws
+
+
+
+
+
+
+Thanks a lot :D
+If you want to get updates about the project, you can check it out directly on Github or via my Youtube Channel.
+https://github.com/RainingChain/rainingchain
+https://www.youtube.com/user/IdkWhatsRc
 
 
 

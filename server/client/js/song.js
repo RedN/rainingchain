@@ -20,14 +20,17 @@ Init.db.song = function(){
 		},
 		'crimson_crisis':{
 			'link':'http://www.newgrounds.com/audio/listen/556797',
+			'permission':true,
 			'author':{
 				'name':'Darknessbreaker',
 			}
 		},
 		'dark_war':{
 			'link':'http://www.newgrounds.com/audio/listen/564123',
+			'permission':true,
 			'author':{
-				'name':'DesideratumOfficial',
+				'name':'Steve Syz',
+				'newgroundsName':'DesideratumOfficial',
 			},
 			'tag':['epic'],
 		},
@@ -39,14 +42,15 @@ Init.db.song = function(){
 		},
 		'final_battle':{
 			'link':'http://www.newgrounds.com/audio/listen/546497',
+			'permission':true,
 			'author':{
 				'name':'K-Pone',
 			}
 		},
-		'frozen_factory':{
+		'frozen_factory':{	//same guy than other
 			'link':'http://www.newgrounds.com/audio/listen/561312',
 			'author':{
-				'name':'JesseProper',
+				'name':'sonicsneakers',
 			}
 		},
 		'jur':{
@@ -64,7 +68,7 @@ Init.db.song = function(){
 		'virus_busting':{
 			'link':'http://www.newgrounds.com/audio/listen/526713',
 			'author':{
-				'name':'EliteFerrex',
+				'name':'eliteferrex',
 			}
 		},
 		
