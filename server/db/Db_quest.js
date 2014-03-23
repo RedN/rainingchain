@@ -88,7 +88,10 @@ Quest.template = function(){
 		id:Math.random(),
 		name:'Default Quest',
 		icon:'skill.melee',
-		reward:{'stat':'dmg-fire-+','value':[0.05,0.10]},
+		reward:{
+			boost:{'stat':'dmg-fire-+','value':[0.05,0.10]},
+			exp:{}
+		},
 		description:"Default Description",
 		variable:{},
 		requirement:[],		

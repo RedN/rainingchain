@@ -4,7 +4,7 @@ q.id = 'Qtutorial';
 q.name = 'Tutorial';
 q.icon = 'skill.melee';
 q.reward = {
-	stat:{'stat':'dmg-fire-+','value':[0.05,0.10],mod:0.5},
+	boost:{'stat':'dmg-fire-+','value':[0.05,0.10],mod:0.5},
 	exp:{
 		melee:100
 	}
@@ -156,7 +156,7 @@ q.map.tutorial = function(){
 			
 	tut.load = function(map,spot,v,m){
 		SkillPlot.creation({'xym':spot.e,
-			"quest":"Qtutorial",'num':0,"type":"tree-red"
+			"quest":"Qtutorial",'num':0,"type":"treeRed"
 		});
 		
 		//grave

@@ -87,7 +87,7 @@ Skill.getTotalLvl = function(key){
 
 
 Db.skillPlot = {
-	'tree-red':{
+	'treeRed':{
 		category:'tree',
 		variant:'red',
 		lvl:0,

@@ -129,12 +129,17 @@ Init.db.enemy = function(){
 	a["troll"]["ice"] = {  //{
 		"name":"Ice Troll",
 		"sprite":{'name':"troll",'sizeMod':1},
-		"abilityList":{'bulletSingle':0.2},
+		"abilityEnemy":{
+			'bullet':{
+					spd:20,
+					dmg,bob:123,
+				}
+			}
+		},
 		'resource':{'hp':{'max':1000,'regen':1},'mana':{'max':100,'regen':1}},
 		
 		'globalDef':1,
-		'globalDmg':function(lvl){ return lvl + 100},
-		'globalMod':function(e,lvl){ e.maxSpd = e.maxSpd + lvl;  return e;},
+		'globalDmg':1,
 		'deathExp':1,
 		
 		"equip":{'def':{'melee':1,'range':1,'magic':1,'fire':1,'cold':1,'lightning':1}},	
@@ -224,7 +229,7 @@ Init.db.enemy = function(){
 	a["tree"] = {}; //{
 	a["tree"]["red"] = {  //{
 		"name":"Red Tree",
-		"sprite":{'name':"tree-red",'sizeMod':1},
+		"sprite":{'name':"treeRed",'sizeMod':1},
 		'nevercombat':1,
 		'nevermove':1,
 	}; //}

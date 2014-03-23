@@ -24,30 +24,54 @@ talk with guy
 
 
 
+attack
+x3 attack
+360 attack x10
+status effect
 
 
 
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+change fall formula
+add all sprite
+make attack template
+create basic attack template + ability
+load map extern and sprite and anim
 
 stat window
-stat window
-contact music
 portal team
 cutscene
 contribution pts window
+hax rewards
 skill doc
 quest updater on signin
 plan revamp: already know what min and max mods are
 waypoint window
 Crafting System with White
 
-
-
-
-
-
+based status effect chance
+orc renamed mage, melee, range
+fall function linked to map
 teleport actor
 
 
@@ -57,7 +81,17 @@ teleport actor
 
 
 
-remake tileset
+
+
+
+remake tileset:
+water big circle like land
+remove useless stuff
+remove back for water deco so useable deep and not
+remove tree weird
+change ladder well cuz too detailed
+
+
 boss documentation
 
 
@@ -66,6 +100,12 @@ revamp a*
 
 
 
+quest tutorial:
+talk give 2 coin
+select yes
+chest with 2 coin
+new item 
+chest + monster
 
 
 

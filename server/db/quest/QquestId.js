@@ -4,7 +4,7 @@ q.id = 'QquestId';
 q.name = 'Default Quest';
 q.icon = 'skill.melee';
 q.reward = {
-	stat:{'stat':'dmg-fire-+','value':[0.05,0.10],mod:0.5},
+	boost:{'stat':'dmg-fire-+','value':[0.05,0.10],mod:0.5},
 	exp:{
 		melee:100
 	}

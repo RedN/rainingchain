@@ -14,6 +14,7 @@ Init.db.song = function(){
 		},
 		'carol_of_the_balls':{
 			'link':'http://www.newgrounds.com/audio/listen/561212',
+			'permission':true,
 			'author':{
 				'name':'Evil-Dog',
 			}
@@ -36,6 +37,7 @@ Init.db.song = function(){
 		},
 		'digital_insanity':{
 			'link':'http://www.newgrounds.com/audio/listen/517360',
+			'permission':true,
 			'author':{
 				'name':'DJM4C',
 			}
@@ -55,6 +57,7 @@ Init.db.song = function(){
 		},
 		'jur':{
 			'link':'http://www.newgrounds.com/audio/listen/488195',
+			'permission':true,
 			'author':{
 				'name':'3kliksphilip',
 			}

@@ -26,201 +26,231 @@
 
 Init.db.sprite = function(){
 	
-    Db.sprite =	{
-    	
+	var a = Db.sprite =	{};
+    //ts('Sprite.change(p,{name:"taurus"});')
     //PLAYER
-    
-    	//ts("Sprite.change(p,{'anim':'attack'})")
-		/*
-    	"mace":{"src":"actor/mace.png","size":1.5,"side":[3,2,1,0],"hpBar":-40,"legs":20,
-    	"preHitBox":[ -20,20,-20,32 ],"preBumperBox":[ -12,12,4,30 ],
-    	"anim": {
-    		"walk":{"startY":0,"frame":9,"sizeX":64,"sizeY":64,"dir":4,"spd":1,"walk":1,"next":"walk"},
-    		"attack":{"startY":0,"frame":9,"sizeX":64,"sizeY":64,"dir":4,"spd":1,"next":"walk"}
-    	}},
-		*/
-		/*
-		"mace":{"src":"actor/mace.png","size":1.5*0.9,"side":[3,2,1,0],"hpBar":-40,"legs":20,
-    	"preHitBox":[ -20,20,-20,32 ],"preBumperBox":[ -18,18,4,35 ],
-    	"anim": {
-    		"walk":{"startY":0,"frame":9,"sizeX":64,"sizeY":64,"dir":4,"spd":1,"walk":1,"next":"walk"},
-    		"attack":{"startY":256,"frame":6,"sizeX":128,"sizeY":64,"dir":4,"spd":1,"next":"walk"}
-    	}},
-		*/
-		"mace":{"src":"actor/newMain.png","size":2.5,"side":[1,2,3,0],"hpBar":-50/3,"legs":20,
-    	"preHitBox":[ -30/3,30/3,-10/3,50/3],"preBumperBox":[ -30/3,30/3,-10/3,50/3 ],
-    	"anim": {
+    a["mace"] = {"src":"actor/main.png","size":2.5,"side":[1,2,3,0],"hpBar":-50/3,"legs":20,
+    	"preHitBox":[ -30/3,30/3,-10/3,50/3],"preBumperBox":[ -30/3,30/3,-10/3,50/3 ],"anim": {
     		"walk":{"startY":0,"frame":4,"sizeX":24,"sizeY":32,"dir":4,"spd":0.4,"walk":1,"next":"walk"},
     		"attack":{"startY":0,"frame":4,"sizeX":24,"sizeY":32,"dir":4,"spd":0.4,"next":"walk"}
-    	}},
+    	}};
 		
-		"sword":{"src":"actor/mace.png","size":1.5,"side":[3,2,1,0],"hpBar":-40,"legs":20,
-    	"preHitBox":[ -20,20,-20,32 ],"preBumperBox":[ -12,12,4,30 ],
-    	"anim": {
+	a["sword"] = {"src":"actor/mace.png","size":1.5,"side":[3,2,1,0],"hpBar":-40,"legs":20,
+    	"preHitBox":[ -20,20,-20,32 ],"preBumperBox":[ -12,12,4,30 ],"anim": {
     		"walk":{"startY":0,"frame":9,"sizeX":64,"sizeY":64,"dir":4,"spd":1,"walk":1,"next":"walk"},
     		"attack":{"startY":0,"frame":9,"sizeX":64,"sizeY":64,"dir":4,"spd":1,"next":"walk"}
-    	}},
+    	}};
 		
-		"spear":{"src":"actor/mace.png","size":1.5,"side":[3,2,1,0],"hpBar":-40,"legs":20,
-    	"preHitBox":[ -20,20,-20,32 ],"preBumperBox":[ -12,12,4,30 ],
-    	"anim": {
+	a["spear"] = {"src":"actor/mace.png","size":1.5,"side":[3,2,1,0],"hpBar":-40,"legs":20,
+    	"preHitBox":[ -20,20,-20,32 ],"preBumperBox":[ -12,12,4,30 ],"anim": {
     		"walk":{"startY":0,"frame":9,"sizeX":64,"sizeY":64,"dir":4,"spd":1,"walk":1,"next":"walk"},
     		"attack":{"startY":0,"frame":9,"sizeX":64,"sizeY":64,"dir":4,"spd":1,"next":"walk"}
-    	}},
+    	}};
 		
-		"bow":{"src":"actor/mace.png","size":1.5,"side":[3,2,1,0],"hpBar":-40,"legs":20,
-    	"preHitBox":[ -20,20,-20,32 ],"preBumperBox":[ -12,12,4,30 ],
-    	"anim": {
+	a["bow"] ={"src":"actor/mace.png","size":1.5,"side":[3,2,1,0],"hpBar":-40,"legs":20,
+    	"preHitBox":[ -20,20,-20,32 ],"preBumperBox":[ -12,12,4,30 ],"anim": {
     		"walk":{"startY":0,"frame":9,"sizeX":64,"sizeY":64,"dir":4,"spd":1,"walk":1,"next":"walk"},
     		"attack":{"startY":0,"frame":9,"sizeX":64,"sizeY":64,"dir":4,"spd":1,"next":"walk"}
-    	}},
+    	}};
 		
-		"wand":{"src":"actor/mace.png","size":1.5,"side":[3,2,1,0],"hpBar":-40,"legs":20,
-    	"preHitBox":[ -20,20,-20,32 ],"preBumperBox":[ -12,12,4,30 ],
-    	"anim": {
+	a["wand"] ={"src":"actor/mace.png","size":1.5,"side":[3,2,1,0],"hpBar":-40,"legs":20,
+    	"preHitBox":[ -20,20,-20,32 ],"preBumperBox":[ -12,12,4,30 ],"anim": {
     		"walk":{"startY":0,"frame":9,"sizeX":64,"sizeY":64,"dir":4,"spd":1,"walk":1,"next":"walk"},
     		"attack":{"startY":0,"frame":9,"sizeX":64,"sizeY":64,"dir":4,"spd":1,"next":"walk"}
-    	}},
+    	}};
 		
-		/*
-    	"mace2":{"src":"actor/human.png","size":1.5,"side":[2,6,0,4,1,5,3,7],"hpBar":-40,"legs":35,
-    	"preHitBox":[ -12,12,-35,35 ],"preBumperBox":[ -12,12,0,35 ],
-    	"anim": {
-    		"walk":{"startY":0,"frame":4,"sizeX":70,"sizeY":70,"dir":8,"spd":0.8,"walk":1,"next":"walk"},
-    		"attack":{"startY":0,"frame":4,"sizeX":70,"sizeY":70,"dir":8,"spd":0.8,"next":"walk"}
-    	}},
-		
-    	"spear":{"src":"actor/spear.png","size":1.5,"side":[3,2,1,0],"hpBar":-40,"legs":20,
-    	"preHitBox":[ -20,20,-20,32 ],"preBumperBox":[ -12,12,4,30 ],
-    	"anim": {
-    		"walk":{"startY":64*8,"frame":9,"sizeX":64,"sizeY":64,"dir":4,"spd":1,"walk":1,"next":"walk"},
-    		"attack":{"startY":64*21,"frame":8,"sizeX":64*3,"sizeY":64*3,"dir":4,"spd":1,"next":"walk"}
-    	}},
-    	
-    	"sword":{"src":"actor/sword.png","size":1.5,"side":[3,2,1,0],"hpBar":-40,"legs":20,
-    	"preHitBox":[ -20,20,-20,32 ],"preBumperBox":[ -12,12,4,30 ],
-    	"anim": {
-    		"walk":{"startY":64*8,"frame":9,"sizeX":64,"sizeY":64,"dir":4,"spd":1,"walk":1,"next":"walk"},
-    		"attack":{"startY":64*21,"frame":6,"sizeX":64*3,"sizeY":64*3,"dir":4,"spd":1,"next":"walk"}
-    	}},
-    	
-    	"bow":{"src":"actor/bow.png","size":1.5,"side":[3,2,1,0],"hpBar":-40,"legs":20,
-    	"preHitBox":[ -20,20,-20,32 ],"preBumperBox":[ -12,12,4,30 ],
-    	"anim": {
-    		"walk":{"startY":64*8,"frame":9,"sizeX":64,"sizeY":64,"dir":4,"spd":1,"walk":1,"next":"walk"},
-    		"attack":{"startY":64*16,"frame":13,"sizeX":64,"sizeY":64,"dir":4,"spd":1,"next":"walk"}
-    	}},
-    	
-    	"wand":{"src":"actor/wand.png","size":1.5,"side":[3,2,1,0],"hpBar":-40,"legs":20,
-    	"preHitBox":[ -20,20,-20,32 ],"preBumperBox":[ -12,12,4,30 ],
-    	"anim": {
-    		"walk":{"startY":64*8,"frame":9,"sizeX":64,"sizeY":64,"dir":4,"spd":1,"walk":1,"next":"walk"},
-    		"attack":{"startY":64*12,"frame":6,"sizeX":64,"sizeY":64,"dir":4,"spd":1,"next":"walk"}
-    	}},
-    	*/
+	
     //NPC
-    	"jenny":{"src":"actor/nSprite0.png","size":2,"side":[0,1,2,3],"hpBar":-22,"legs":16,
-    	"preHitBox":[ -16,16,-16,16 ],"preBumperBox":[ -16,16,-16,16 ],
-    	"anim": {
+    a["jenny"] ={"src":"actor/nSprite0.png","size":2,"side":[0,1,2,3],"hpBar":-22,"legs":16,
+    	"preHitBox":[ -16,16,-16,16 ],"preBumperBox":[ -16,16,-16,16 ],"anim": {
     		"walk":{"startY":0,"frame":3,"sizeX":32,"sizeY":32,"dir":4,"spd":0.5,"walk":1,"next":"walk"},
-    	}},
+    	}};
     	
     //ENEMY
-    	"slime":{"src":"actor/slime.png","size":1,"side":[0,1,2,3],"hpBar":-110,"legs":70,
-    	"preHitBox":[ -70,70,-45,90 ],"preBumperBox":[ -55,55,-15,80 ],
-    	"anim": {
+    a["slime"] ={"src":"actor/slimeJerome.png","size":1,"side":[0,1,2,3],"hpBar":-110,"legs":70,
+    	"preHitBox":[ -70,70,-45,90 ],"preBumperBox":[ -55,55,-15,80 ],"anim": {
     		"walk":{"startY":0,"frame":5,"sizeX":200,"sizeY":200,"dir":4,"spd":0.5,"walk":1,"next":"walk"},
     		"attack":{"startY":0,"frame":5,"sizeX":200,"sizeY":200,"dir":4,"spd":0.5,"next":"walk"},
-    	}},
+    	}};
     
-    	"troll":{"src":"actor/troll.png","size":1,"side":[0,1,2,3],"hpBar":-70,"legs":35,
-    	"preHitBox":[ -33,33,-30,64 ],"preBumperBox":[ -33,33,-30,64 ],
-    	"anim": {
+    a["troll"] ={"src":"actor/troll.png","size":1,"side":[0,1,2,3],"hpBar":-70,"legs":35,
+    	"preHitBox":[ -33,33,-30,64 ],"preBumperBox":[ -33,33,-30,64 ],"anim": {
     		"walk":{"startY":0,"frame":9,"sizeX":128,"sizeY":128,"dir":4,"spd":0.25,"walk":1,"next":"walk"},
     		"attack":{"startY":0,"frame":9,"sizeX":128,"sizeY":128,"dir":4,"spd":0.25,"next":"walk"},
-    		
-    	}},
+    	}};
     	
-		"bee":{"src":"actor/bee.png",rgpvx:1},
-		"demon":{"src":"actor/demon.png",rgpvx:1},
 		
-		"orc-shaman":{"src":"actor/orc-shaman.png","size":1,"side":[1,2,3,0],"hpBar":-30,"legs":25,
-    	"preHitBox":[ -20,20,-10,25 ],"preBumperBox":[ -20,20,-10,25 ],
-    	"anim": {
+	a["orcMagic"] ={"src":"actor/orcMagic.png","size":2,"side":[2,0,1,3],"hpBar":-30,"legs":25,
+    	"preHitBox":[ -20,20,-10,25 ],"preBumperBox":[ -20,20,-10,25 ],"anim": {
     		"walk":{"startY":0,"frame":4,"sizeX":32,"sizeY":48,"dir":4,"spd":0.25,"walk":1,"next":"walk"},
     		"attack":{"startY":0,"frame":4,"sizeX":32,"sizeY":48,"dir":4,"spd":0.25,"next":"walk"},
-    		
-    	}},
+    	}};
+	a["orcMelee"] ={"src":"actor/orcMelee.png","size":2,"side":[2,0,1,3],"hpBar":-30,"legs":25,
+    	"preHitBox":[ -20,20,-10,25 ],"preBumperBox":[ -20,20,-10,25 ],"anim": {
+    		"walk":{"startY":0,"frame":4,"sizeX":32,"sizeY":48,"dir":4,"spd":0.25,"walk":1,"next":"walk"},
+    		"attack":{"startY":0,"frame":4,"sizeX":32,"sizeY":48,"dir":4,"spd":0.25,"next":"walk"},
+    	}};
+	a["orcRange"] ={"src":"actor/orcRange.png","size":2,"side":[2,0,1,3],"hpBar":-30,"legs":25,
+    	"preHitBox":[ -20,20,-10,25 ],"preBumperBox":[ -20,20,-10,25 ],"anim": {
+    		"walk":{"startY":0,"frame":4,"sizeX":32,"sizeY":48,"dir":4,"spd":0.25,"walk":1,"next":"walk"},
+    		"attack":{"startY":0,"frame":4,"sizeX":32,"sizeY":48,"dir":4,"spd":0.25,"next":"walk"},
+    	}};
+	//RPG MAKER
+	a["aquanite"] = {"src":"actor/aquanite.png",rgpvx:1};
+	a["aquagoblin"] ={"src":"actor/aquagoblin.png","size":2,"side":[2,0,1,3],"hpBar":-40,"legs":35,
+    	"preHitBox":[ -15,15,-15,32 ],"preBumperBox":[ -15,15,-15,32 ],"anim": {
+    		"walk":{"startY":0,"frame":4,"sizeX":48,"sizeY":64,"dir":4,"spd":0.5,"walk":1,"next":"walk"},
+    		"attack":{"startY":0,"frame":4,"sizeX":48,"sizeY":64,"dir":4,"spd":0.5,"next":"walk"},
+    	}};
+	
+	a["bat"] = {"src":"actor/bat.png",rgpvx:1};
+	
+	a["basilisk"] ={"src":"actor/basilisk.png","size":1,"side":[2,0,1,3],"hpBar":-40,"legs":35,
+    	"preHitBox":[ -15,15,-15,32 ],"preBumperBox":[ -15,15,-15,32 ],"anim": {
+    		"walk":{"startY":0,"frame":3,"sizeX":64,"sizeY":64,"dir":4,"spd":0.5,"walk":1,"next":"walk"},
+    		"attack":{"startY":0,"frame":3,"sizeX":64,"sizeY":64,"dir":4,"spd":0.5,"next":"walk"},
+    	}};
+	a["bee"] = {"src":"actor/bee.png",rgpvx:1};
+	
+	a["draco"] ={"src":"actor/draco.png","size":1,"side":[2,0,1,3],"hpBar":-55,"legs":50,
+    	"preHitBox":[ -30,30,-30,40 ],"preBumperBox":[ -30,30,-30,40 ],"anim": {
+    		"walk":{"startY":0,"frame":3,"sizeX":96,"sizeY":96,"dir":4,"spd":0.5,"next":"walk"},
+    		"attack":{"startY":0,"frame":3,"sizeX":96,"sizeY":96,"dir":4,"spd":0.5,"next":"walk"},
+    	}};
+	a["demon"] = {"src":"actor/demon.png",rgpvx:1};
+	a["dragon"] = {"src":"actor/dragon.png",rgpvx:1};
+	a["dragonBaby"] = {"src":"actor/dragonBaby.png",rgpvx:1};
+	a["death"] = {"src":"actor/death.png",rgpvx:1};
+	
+	a["dragonKing"] ={"src":"actor/dragonKing.png","size":1,"side":[2,0,1,3],"hpBar":-55,"legs":50,
+    	"preHitBox":[ -30,30,-30,40 ],"preBumperBox":[ -30,30,-30,40 ],"anim": {
+    		"walk":{"startY":0,"frame":3,"sizeX":96,"sizeY":96,"dir":4,"spd":0.5,"walk":1,"next":"walk"},
+    		"attack":{"startY":0,"frame":3,"sizeX":96,"sizeY":96,"dir":4,"spd":0.5,"next":"walk"},
+    	}};
+		
+	a["larva"] = {"src":"actor/larva.png",rgpvx:1};
+	a["gargoyle"] = {"src":"actor/gargoyle.png",rgpvx:1};
+	a["ghost"] = {"src":"actor/ghost.png",rgpvx:1};
+	a["goblin"] = {"src":"actor/goblin.png",rgpvx:1};
+	a["goddessFire"] = {"src":"actor/goddessFire.png",rgpvx:1};
+	a["goddessIce"] = {"src":"actor/goddessIce.png",rgpvx:1};
+	
+	a["plant"] = {"src":"actor/plant.png",rgpvx:1};
+	a["mushroom"] = {"src":"actor/mushroom.png",rgpvx:1};
+	a["skeleton"] = {"src":"actor/skeleton.png",rgpvx:1};
+	a["mosquito"] = {"src":"actor/mosquito.png",rgpvx:1};
+	
+	
+	a["scorpion"] ={"src":"actor/scorpion.png","size":2,"side":[2,0,1,3],"hpBar":-30,"legs":50,
+    	"preHitBox":[ -15,15,-15,20 ],"preBumperBox":[ -15,15,-15,20 ],"anim": {
+    		"walk":{"startY":0,"frame":3,"sizeX":64,"sizeY":64,"dir":4,"spd":0.5,"walk":1,"next":"walk"},
+    		"attack":{"startY":0,"frame":3,"sizeX":64,"sizeY":64,"dir":4,"spd":0.5,"next":"walk"},
+    	}};
+	a["mummy"] ={"src":"actor/mummy.png","size":1.5,"side":[2,0,1,3],"hpBar":-40,"legs":40,
+    	"preHitBox":[ -30,30,-20,40 ],"preBumperBox":[ -30,30,-20,40 ],"anim": {
+    		"walk":{"startY":0,"frame":4,"sizeX":80,"sizeY":80,"dir":4,"spd":0.5,"walk":1,"next":"walk"},
+    		"attack":{"startY":0,"frame":4,"sizeX":80,"sizeY":80,"dir":4,"spd":0.5,"next":"walk"},
+    	}};
+	a["birdBlue"] ={"src":"actor/birdBlue.png","size":1,"side":[2,0,1,3],"hpBar":-50,"legs":50,
+    	"preHitBox":[ -30,30,-20,40 ],"preBumperBox":[ -30,30,-20,40 ],"anim": {
+    		"walk":{"startY":0,"frame":4,"sizeX":96,"sizeY":96,"dir":4,"spd":0.5,"next":"walk"},
+    		"attack":{"startY":0,"frame":4,"sizeX":96,"sizeY":96,"dir":4,"spd":0.5,"next":"walk"},
+    	}};	
 		
 		
+	a["salamander"] ={"src":"actor/salamander.png","size":2,"side":[2,0,1,3],"hpBar":-40,"legs":40,
+    	"preHitBox":[ -30,30,-20,30 ],"preBumperBox":[ -30,30,-20,30 ],"anim": {
+    		"walk":{"startY":0,"frame":3,"sizeX":64,"sizeY":48,"dir":4,"spd":0.5,"walk":1,"next":"walk"},
+    		"attack":{"startY":0,"frame":3,"sizeX":64,"sizeY":48,"dir":4,"spd":0.5,"next":"walk"},
+    	}};	
+		
+	a["spirit"] = {"src":"actor/spirit.png",rgpvx:1};
+	
+	a["slime"] ={"src":"actor/slime.png","size":1,"side":[2,0,1,3],"hpBar":-30,"legs":30,
+    	"preHitBox":[ -20,20,-10,20 ],"preBumperBox":[ -20,20,-10,20 ],"anim": {
+    		"walk":{"startY":0,"frame":3,"sizeX":48,"sizeY":48,"dir":4,"spd":0.5,"walk":1,"next":"walk"},
+    		"attack":{"startY":0,"frame":3,"sizeX":48,"sizeY":48,"dir":4,"spd":0.5,"next":"walk"},
+    	}};	
+		
+	a["snake"] ={"src":"actor/snake.png","size":1,"side":[2,0,1,3],"hpBar":-30,"legs":30,
+    	"preHitBox":[ -20,20,-10,20 ],"preBumperBox":[ -20,20,-10,20 ],"anim": {
+    		"walk":{"startY":0,"frame":3,"sizeX":48,"sizeY":48,"dir":4,"spd":0.5,"walk":1,"next":"walk"},
+    		"attack":{"startY":0,"frame":3,"sizeX":48,"sizeY":48,"dir":4,"spd":0.5,"next":"walk"},
+    	}};	
+		
+	a["birdRed"] ={"src":"actor/birdRed.png","size":1,"side":[2,0,1,3],"hpBar":-50,"legs":50,
+    	"preHitBox":[ -40,40,-30,40 ],"preBumperBox":[ -40,40,-30,40 ],"anim": {
+    		"walk":{"startY":0,"frame":3,"sizeX":96,"sizeY":96,"dir":4,"spd":0.5,"next":"walk"},
+    		"attack":{"startY":0,"frame":3,"sizeX":96,"sizeY":96,"dir":4,"spd":0.5,"next":"walk"},
+    	}};
+		
+	a["taurus"] ={"src":"actor/taurus.png","size":1,"side":[2,0,1,3],"hpBar":-55,"legs":50,
+    	"preHitBox":[ -60,60,-40,60 ],"preBumperBox":[ -60,60,-40,60 ],"anim": {
+    		"walk":{"startY":0,"frame":3,"sizeX":96,"sizeY":96,"dir":4,"spd":0.5,"walk":1,"next":"walk"},
+    		"attack":{"startY":0,"frame":3,"sizeX":96,"sizeY":96,"dir":4,"spd":0.5,"next":"walk"},
+    	}};	
+	
+	a["werewolf"] ={"src":"actor/werewolf.png","size":2,"side":[2,0,1,3],"hpBar":-40,"legs":32,
+    	"preHitBox":[ -30,30,-20,30 ],"preBumperBox":[ -30,30,-20,30 ],"anim": {
+    		"walk":{"startY":0,"frame":4,"sizeX":64,"sizeY":48,"dir":4,"spd":0.5,"walk":1,"next":"walk"},
+    		"attack":{"startY":0,"frame":4,"sizeX":64,"sizeY":48,"dir":4,"spd":0.5,"next":"walk"}
+    	}};		
 		
     //BULLET
-    	"fireball":{"src":"bullet/fireball.png","size":1,"side":[0,1,2,3],
-    	"anim": {
-    		"travel":{"startY":0,"frame":3,"sizeX":32,"sizeY":32,"dir":4,"spd":0.2,"next":"travel"},
-    	}},
+    a["fireball"] ={"src":"bullet/fireball.png","size":1,"side":[0,1,2,3],"anim": {
+    		"travel":{"startY":0,"frame":1,"sizeX":32,"sizeY":32,"dir":4,"spd":0.2,"next":"travel"},
+    	}};
     			
-    	"iceshard":{"src":"bullet/iceshard.png","size":1,"side":[0,1,2,3,4,5,6,7],
-    	"anim": {
+    a["iceshard"] ={"src":"bullet/iceshard.png","size":1,"side":[0,1,2,3,4,5,6,7],"anim": {
     		"travel":{"startY":0,"frame":1,"sizeX":54,"sizeY":54,"dir":8,"spd":0,"next":"travel"},
-    	}},
-    	"lightningball":{"src":"bullet/lightningball.png","size":1,"side":[0],
-    	"anim": {
+    	}};
+    a["lightningball"] ={"src":"bullet/lightningball.png","size":1,"side":[0],"anim": {
     		"travel":{"startY":0,"frame":1,"sizeX":32,"sizeY":32,"dir":1,"spd":0,"next":"travel"},
-    	}},
+    	}};
     	
-    	"arrow":{"src":"bullet/arrow.png","size":1,"side":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15],
-    	"anim": {
+    a["arrow"] ={"src":"bullet/arrow.png","size":1,"side":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15],"anim": {
     		"travel":{"startY":0,"frame":1,"sizeX":42,"sizeY":42,"dir":16,"spd":0,"next":"travel"},
-    	}},
+    	}};
     	
-    	"boomerang":{"src":"bullet/boomerang.png","size":1,"side":[0],
-    	"anim": {
+    a["boomerang"] ={"src":"bullet/boomerang.png","size":1,"side":[0],"anim": {
     		"travel":{"startY":0,"frame":8,"sizeX":52,"sizeY":52,"dir":1,"spd":1,"next":"travel"},
-    	}},
+    	}};
     	
     //System
-		"block1x1":{"src":"picture/block2x2.png","size":0.5,"side":[0],
-    	"preBumperBox":[ -26,26,-26,26 ],"preHitBox":[ -26,26,-26,26 ],
-		"anim": {
+	a["block1x1"] ={"src":"picture/block2x2.png","size":0.5,"side":[0],
+		"preBumperBox":[ -26,26,-26,26 ],"preHitBox":[ -26,26,-26,26 ],"anim": {
     		"walk":{"startY":0,"frame":1,"sizeX":64,"sizeY":64,"dir":1,"spd":0,"next":"walk"},    	
-    	}},
+    	}};
 		
-		"grave":{"src":"picture/grave.png","size":2,"side":[0],
-    	"preBumperBox":[ -16,16,-16,16 ],"preHitBox":[ -16,16,-16,16 ],
-		"anim": {
+	a["grave"] ={"src":"picture/grave.png","size":2,"side":[0],
+    	"preBumperBox":[ -16,16,-16,16 ],"preHitBox":[ -16,16,-16,16 ],"anim": {
     		"walk":{"startY":0,"frame":1,"sizeX":32,"sizeY":32,"dir":1,"spd":0,"next":"walk"},    	
-    	}},
+    	}};
 		
-		"chest":{"src":"picture/chest.png","size":2,"side":[0],
-    	"preBumperBox":[ -16,16,-16,16 ],"preHitBox":[ -16,16,-16,16 ],'defaultAnim':'off',
-		"anim": {
+	a["chest"] ={"src":"picture/chest.png","size":2,"side":[0],
+    	"preBumperBox":[ -16,16,-16,16 ],"preHitBox":[ -16,16,-16,16 ],'defaultAnim':'off',"anim": {
     		"on":{"startY":32,"frame":1,"sizeX":32,"sizeY":32,"dir":1,"spd":0,"next":"on"},
 			"off":{"startY":0,"frame":1,"sizeX":32,"sizeY":32,"dir":1,"spd":0,"next":"off"},			
-    	}},
+    	}};
 		
-		"block1x1-black":{"src":"picture/block2x2Fix.png","size":0.5,"side":[0],
-    	"preBumperBox":[ -26,26,-26,26 ],"preHitBox":[ -26,26,-26,26 ],
-		"anim": {
+	a["block1x1-black"] ={"src":"picture/block2x2Fix.png","size":0.5,"side":[0],
+    	"preBumperBox":[ -26,26,-26,26 ],"preHitBox":[ -26,26,-26,26 ],"anim": {
     		"walk":{"startY":0,"frame":1,"sizeX":64,"sizeY":64,"dir":1,"spd":0,"next":"walk"},    	
-    	}},
+    	}};
 		
-		"tree-red":{"src":"picture/red_tree.png","size":2,"side":[0],
-    	"preBumperBox":[ -32,32,-40,40 ],"preHitBox":[ -32,32,-40,40 ],'defaultAnim':'on',
-		"anim": {
+	a["treeRed"] ={"src":"picture/treeRed.png","size":2,"side":[0],
+    	"preBumperBox":[ -32,32,-40,40 ],"preHitBox":[ -32,32,-40,40 ],'defaultAnim':'on',"anim": {
     		"on":{"startY":0,"frame":1,"sizeX":64,"sizeY":80,"dir":1,"spd":0,"next":"on"},
 			"off":{"startY":80,"frame":1,"sizeX":64,"sizeY":80,"dir":1,"spd":0,"next":"off"},  		  			
-    	}},
+    	}};
 		
-		"switchBox":{"src":"picture/switch.png","size":2,"side":[0],
-    	"preBumperBox":[ -16,16,-16,16 ],"preHitBox":[ -16,16,-16,16 ],'defaultAnim':'off',
-		"anim": {
+	a["switchBox"] ={"src":"picture/switch.png","size":2,"side":[0],
+    	"preBumperBox":[ -16,16,-16,16 ],"preHitBox":[ -16,16,-16,16 ],'defaultAnim':'off',"anim": {
     		//"walk":{"startY":64,"frame":1,"sizeX":32,"sizeY":32,"dir":1,"spd":0,"next":"walk"},  
 			"off":{"startY":0,"frame":1,"sizeX":32,"sizeY":32,"dir":1,"spd":0,"next":"off"},	
 			"on":{"startY":64,"frame":1,"sizeX":32,"sizeY":32,"dir":1,"spd":0,"next":"on"},							
-    	}},
-    	
-    }
+    	}};
+
     
     
     for(var i in Db.sprite){
@@ -393,7 +423,59 @@ Sprite.update = function (mort){	//client side only
 
 
 
-
+/*
+    	"mace":{"src":"actor/mace.png","size":1.5,"side":[3,2,1,0],"hpBar":-40,"legs":20,
+    	"preHitBox":[ -20,20,-20,32 ],"preBumperBox":[ -12,12,4,30 ],
+    	"anim": {
+    		"walk":{"startY":0,"frame":9,"sizeX":64,"sizeY":64,"dir":4,"spd":1,"walk":1,"next":"walk"},
+    		"attack":{"startY":0,"frame":9,"sizeX":64,"sizeY":64,"dir":4,"spd":1,"next":"walk"}
+    	}},
+		*/
+		/*
+		"mace":{"src":"actor/mace.png","size":1.5*0.9,"side":[3,2,1,0],"hpBar":-40,"legs":20,
+    	"preHitBox":[ -20,20,-20,32 ],"preBumperBox":[ -18,18,4,35 ],
+    	"anim": {
+    		"walk":{"startY":0,"frame":9,"sizeX":64,"sizeY":64,"dir":4,"spd":1,"walk":1,"next":"walk"},
+    		"attack":{"startY":256,"frame":6,"sizeX":128,"sizeY":64,"dir":4,"spd":1,"next":"walk"}
+    	}},
+		
+		
+		"mace2":{"src":"actor/human.png","size":1.5,"side":[2,6,0,4,1,5,3,7],"hpBar":-40,"legs":35,
+    	"preHitBox":[ -12,12,-35,35 ],"preBumperBox":[ -12,12,0,35 ],
+    	"anim": {
+    		"walk":{"startY":0,"frame":4,"sizeX":70,"sizeY":70,"dir":8,"spd":0.8,"walk":1,"next":"walk"},
+    		"attack":{"startY":0,"frame":4,"sizeX":70,"sizeY":70,"dir":8,"spd":0.8,"next":"walk"}
+    	}},
+		
+    	"spear":{"src":"actor/spear.png","size":1.5,"side":[3,2,1,0],"hpBar":-40,"legs":20,
+    	"preHitBox":[ -20,20,-20,32 ],"preBumperBox":[ -12,12,4,30 ],
+    	"anim": {
+    		"walk":{"startY":64*8,"frame":9,"sizeX":64,"sizeY":64,"dir":4,"spd":1,"walk":1,"next":"walk"},
+    		"attack":{"startY":64*21,"frame":8,"sizeX":64*3,"sizeY":64*3,"dir":4,"spd":1,"next":"walk"}
+    	}},
+    	
+    	"sword":{"src":"actor/sword.png","size":1.5,"side":[3,2,1,0],"hpBar":-40,"legs":20,
+    	"preHitBox":[ -20,20,-20,32 ],"preBumperBox":[ -12,12,4,30 ],
+    	"anim": {
+    		"walk":{"startY":64*8,"frame":9,"sizeX":64,"sizeY":64,"dir":4,"spd":1,"walk":1,"next":"walk"},
+    		"attack":{"startY":64*21,"frame":6,"sizeX":64*3,"sizeY":64*3,"dir":4,"spd":1,"next":"walk"}
+    	}},
+    	
+    	"bow":{"src":"actor/bow.png","size":1.5,"side":[3,2,1,0],"hpBar":-40,"legs":20,
+    	"preHitBox":[ -20,20,-20,32 ],"preBumperBox":[ -12,12,4,30 ],
+    	"anim": {
+    		"walk":{"startY":64*8,"frame":9,"sizeX":64,"sizeY":64,"dir":4,"spd":1,"walk":1,"next":"walk"},
+    		"attack":{"startY":64*16,"frame":13,"sizeX":64,"sizeY":64,"dir":4,"spd":1,"next":"walk"}
+    	}},
+    	
+    	"wand":{"src":"actor/wand.png","size":1.5,"side":[3,2,1,0],"hpBar":-40,"legs":20,
+    	"preHitBox":[ -20,20,-20,32 ],"preBumperBox":[ -12,12,4,30 ],
+    	"anim": {
+    		"walk":{"startY":64*8,"frame":9,"sizeX":64,"sizeY":64,"dir":4,"spd":1,"walk":1,"next":"walk"},
+    		"attack":{"startY":64*12,"frame":6,"sizeX":64,"sizeY":64,"dir":4,"spd":1,"next":"walk"}
+    	}},
+		
+		*/
 
 
 
