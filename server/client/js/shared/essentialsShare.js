@@ -484,9 +484,15 @@ changeVisibility = function(id){
 	var el = document.getElementById(id);
 	el.style.visibility = el.style.visibility === 'hidden' ? 'visible' : 'hidden';
 }
-useTemplate = function(temp,obj,deep){
-	if(deep !== 0){ obj = deepClone(obj); }
-	for(var i in obj){	temp[i] = obj[i];	}
+useTemplate = function(temp,obj,deep,viaarray){
+	if(deep !== 0) obj = deepClone(obj); 
+	
+	if(viaarray){
+		for(var i in obj) viaArray.set({origin:temp,array:i.split(','),value:obj[i]});
+		return temp;
+	}
+	
+	for(var i in obj)	temp[i] = obj[i];	
 	return temp;
 }
 

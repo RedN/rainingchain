@@ -101,7 +101,9 @@ q.dialogue['jenny'] = {'face':'Jenny',
 q.enemy["bee"] = {  //{
 	"name":"Bee",
 	"sprite":{'name':"bee",'sizeMod':1},
-	"abilityList":{'pierce':0.8},
+	"abilityList":[
+		{'template':'pierce','aiChance':0.5,'extra':{}}	
+	],
 	'resource':{'hp':{'max':1,'regen':1},'mana':{'max':100,'regen':1}},
 	
 	'globalDef':1,
@@ -116,9 +118,12 @@ q.enemy["bee"] = {  //{
 q.enemy["demon"] = {  //{
 	"name":"Demon Immune To Fireballs.",
 	"sprite":{'name':"demon",'sizeMod':1},
-	"abilityList":{
-	//'fireNova':0.4,
-	fireCircle:0.7},
+	"abilityList":[
+		//{'template':'fireNova','aiChance':0.5,'extra':{}},
+		{'template':'fireCircle','aiChance':0.5,'extra':{
+			'amount':10,'burn,baseChance':1}},
+		
+	],
 	'resource':{'hp':{'max':100,'regen':0.3},'mana':{'max':100,'regen':1}},
 	'immune':{'fire':1},
 	'globalDef':1,

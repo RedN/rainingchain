@@ -167,8 +167,9 @@ Combat.collision.status = function(dmg,b,target){
 	}
 	for(var i in ar){
 		var maxToRoll = Math.probability(Math.pow(dmg[i] / target.resource.hp.max,1.5),b[ar[i]].chance);
-				
-		if(0.001 <= maxToRoll && Math.random() <= maxToRoll){ 
+		console.log(b[ar[i]].baseChance);
+		if(Math.random() <= maxToRoll || Math.random() <= b[ar[i]].baseChance){ 
+			console.log(112);
 			Combat.collision.status[ar[i]](target,b,dmg);
 		}
 	}	
@@ -177,7 +178,7 @@ Combat.collision.status = function(dmg,b,target){
 Combat.collision.status.burn = function(mort,b){	
 	var info = b.burn;
 	var burn = mort.status.burn;
-	burn.active.time = info.time*(1-burn.resist); 
+	burn.active.time = 25*info.time*(1-burn.resist); 
 	burn.active.magn = info.magn*(1-burn.resist); 
 	burn.active.type = info.type || 'hp'; 
 }
@@ -186,7 +187,7 @@ Combat.collision.status.confuse = function(mort,b){
 	var info = b.confuse;
 	var confuse = mort.status.confuse;
 	
-	confuse.active.time = info.time*(1-confuse.resist);
+	confuse.active.time = 25*info.time*(1-confuse.resist);
 	confuse.active.magn = info.magn*(1-confuse.resist);
 	var left = Math.floor(Math.random()*4);
 	confuse.active.input = [left%4,(left+3)%4,(left+2)%4,(left+1)%4];
@@ -197,7 +198,7 @@ Combat.collision.status.bleed = function(mort,b,dmg){
 	var info = b.bleed;
 	var bleed = mort.status.bleed;
 	
-	bleed.active.list.push({'time':info.time,'magn':dmg.melee * info.magn/info.time *(1-bleed.resist)});
+	bleed.active.list.push({'time':25*info.time,'magn':dmg.melee * info.magn/info.time *(1-bleed.resist)});
 	bleed.active.time = bleed.active.list.length;
 }
 
@@ -214,7 +215,7 @@ Combat.collision.status.knock = function(mort,b){
 	var info = b.knock;
 	var knock = mort.status.knock;
 	
-	knock.active.time = info.time*(1-knock.resist); 
+	knock.active.time = 25*info.time*(1-knock.resist); 
 	knock.active.magn = info.magn*(1-knock.resist);	
 	knock.active.angle = b.moveAngle;
 }

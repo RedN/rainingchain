@@ -95,9 +95,9 @@ test.load = function(map){
 				
 				
 			})},
-			'viaArray':[
-				{'array':['target','sub','period'],'value':{first:100,renew:100}},
-			]
+			'viaArray':{
+				'target,sub,period':{first:100,renew:100},
+			}
 			
 			}
 		},

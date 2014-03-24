@@ -79,8 +79,10 @@ Actor.creation.boost = function(e){
 }
 
 Actor.creation.db = function(e,d){
-	e = Db.enemy[d.category][d.variant]();
-	for(var i in Db.enemy[d.category][d.variant]) e[i] = Db.enemy[d.category][d.variant][i];	//cuz of function (globalDmg)
+	var f = Db.enemy[d.category][d.variant];
+	e = f();
+	for(var i in f.ability) e.ability[i].action.param = f.ability[i];
+	for(var i in f) if(i !== 'ability') e[i] = f[i];	//cuz of function (globalDmg)
 	
 	e.id = Math.randomId();
 	e.publicId = Math.randomId(6);
@@ -95,11 +97,7 @@ Actor.creation.db = function(e,d){
 		e.boss = Boss.creation(e.boss);
 		e.boss.parent = e.id; 
 	}
-	var position = 0;
-	for(var i in e.abilityList){ 
-		Actor.swapAbility(e,i,position);
-		position++;
-	}
+	
 	Sprite.creation(e,e.sprite);		//To set hitbox and bumper
 		
 	return e;
@@ -195,16 +193,13 @@ Actor.creation.mod.list = {
 }
 
 Actor.creation.extra = function(mort){
-	if(typeof mort.extra === 'function'){
-		mort.extra(mort);
-	} else mort = useTemplate(mort,mort.extra,2);	//deep clone of function
-
-	for(var i in mort.viaArray){ 
-		mort.viaArray[i].origin = mort;
-		viaArray.set(mort.viaArray[i]);
-	}
-	delete mort.extra;
+	mort = useTemplate(mort,mort.viaArray,1,1);
 	delete mort.viaArray;
+	
+	if(typeof mort.extra === 'function')	mort.extra(mort);
+	else mort = useTemplate(mort,mort.extra);	
+	
+	delete mort.extra;
 	return mort;
 }
 

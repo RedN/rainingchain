@@ -85,6 +85,12 @@ Actor.loop.input.ability = function(mort){
 	}
 }
 
+
+
+
+
+
+
 Actor.loop.setTarget = function(mort){
 	if(mort.type !== 'enemy') return;
 	var tar = mort.target;

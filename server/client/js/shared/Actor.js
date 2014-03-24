@@ -495,7 +495,7 @@ Actor.swapAbility = function(mort,name,position){
 		if(abPos === 5 && mort.abilityList[abListPost].type !== 'dodge'){Chat.add(mort.id,'This ability slot can only support Dodge abilities.'); return;}	
 	}
 	*/
-	if(!mort.abilityList[name]) return; 		//dont have access to this ability
+	if(mort.type === 'player' && !mort.abilityList[name]) return; 		//dont have access to this ability
 	var ability = Ability.uncompress(name);
 	
 	mort.ability[position] = ability;

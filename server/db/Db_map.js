@@ -45,9 +45,9 @@ Db.map['test'] = function(){	//'test' = mapId
 		//#####
 		//Via Array: If you want to access a sub-attribute, use viaArray
 		extra:{
-			'viaArray':[
-				{'array':['target','sub','period','first'],'value':100},
-			],
+			'viaArray':{
+				'target,sub,period,first':100,,
+			},
 			'normalAtt':value,
 		},
 		//#####

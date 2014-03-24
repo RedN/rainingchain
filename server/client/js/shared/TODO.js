@@ -50,7 +50,7 @@ status effect
 
 
 
-
+revamp status
 
 change fall formula
 add all sprite

@@ -79,12 +79,12 @@ a['bulletMulti'] = {					//bulletMulti is the id of attack
 				}]
 			},
 			
-			bleed : {'chance':1,'magn':1,'time':1},		//they are MODIFIER (chance = 2 => x2 more chance that the burn effect will trigger)
-			knock : {'chance':1,'magn':1,'time':1},
-			drain : {'chance':1,'magn':1,'time':1},	
-			burn : {'chance':1,'magn':1,'time':1},
-			chill : {'chance':1,'magn':1,'time':1},
-			confuse : {'chance':1,'magn':1,'time':1},
+			bleed : {'baseChance':0,'chance':1,'magn':1,'time':1},		//they are MODIFIER (chance = 2 => x2 more chance that the burn effect will trigger) (except for baseChance)
+			knock : {'baseChance':0,'chance':1,'magn':1,'time':1},
+			drain : {'baseChance':0,'chance':1,'magn':1,'time':1},	
+			burn : {'baseChance':0,'chance':1,'magn':1,'time':1},
+			chill : {'baseChance':0,'chance':1,'magn':1,'time':1},
+			confuse : {'baseChance':0,'chance':1,'magn':1,'time':1},
 			leech : {'chance':1,'magn':1},			
 			crit : {'chance':1,'magn':1},
 			
@@ -218,7 +218,7 @@ Init.db.ability = function(cb){
 		'spd':{'main':1,'support':0},'period':{'own':30,'global':20},
 		'action':{'func':'Combat.action.attack','param':{
 			'type':"bullet",'angle':0,'amount':1,
-			'objImg':{'name':"arrow",'sizeMod':1},'hitImg':{'name':"attack1",'sizeMod':0.5},
+			'objImg':{'name':"arrow",'sizeMod':1},'hitImg':{'name':"strikeHit",'sizeMod':0.5},
 			'dmg':{'main':100,'ratio':{'melee':0,'range':1,'magic':0,'fire':0,'cold':0,'lightning':0}},
 		}
 	}};
@@ -227,7 +227,7 @@ Init.db.ability = function(cb){
 		'spd':{'main':1,'support':0},'period':{'own':30,'global':20},
 		'action':{'func':'Combat.action.attack','param':{
 			'type':"strike",'angle':0,'amount':1,
-			'preDelayAnim':{'name':"fire_explosion",'sizeMod':1},
+			'preDelayAnim':{'name':"fireBomb",'sizeMod':1},
 			'dmg':{'main':200,'ratio':{'melee':0,'range':0,'magic':0,'fire':1,'cold':0,'lightning':0}},
 			'width':50,
 			'height':50,
@@ -241,7 +241,7 @@ Init.db.ability = function(cb){
 		'spd':{'main':1,'support':0},'period':{'own':100,'global':25},
 		'action':{'func':'Combat.action.attack','param':{
 			'type':"bullet",'angle':0,'amount':1,
-			'objImg':{'name':"iceshard",'sizeMod':1},'hitImg':{'name':"ice2",'sizeMod':0.5},
+			'objImg':{'name':"iceshard",'sizeMod':1},'hitImg':{'name':"iceHit",'sizeMod':0.5},
 			'dmg':{'main':100,'ratio':{'melee':0,'range':0,'magic':0,'fire':0,'cold':1,'lightning':0}},
 			'chill':{time:25,magn:100,chance:1000},
 		}
@@ -251,7 +251,7 @@ Init.db.ability = function(cb){
 		'spd':{'main':1,'support':0},'period':{'own':100,'global':25},
 		'action':{'func':'Combat.action.attack','param':{
 			'type':"bullet",'angle':360,'amount':9,
-			'objImg':{'name':"fireball",'sizeMod':1.2},'hitImg':{'name':"fire2",'sizeMod':0.5},
+			'objImg':{'name':"fireball",'sizeMod':1.2},'hitImg':{'name':"fireHit",'sizeMod':0.5},
 			'dmg':{'main':100,'ratio':{'melee':0,'range':0,'magic':0,'fire':1,'cold':0,'lightning':0}},
 		}
 	}};
@@ -281,7 +281,7 @@ Init.db.ability = function(cb){
 		'spd':{'main':1,'support':0},'period':{'own':25,'global':25},
 		'action':{'func':'Combat.action.attack','param':{
 			'type':"strike",'angle':0,'amount':1,
-			'delayAnim':{'name':"attack1",'sizeMod':0.5},
+			'delayAnim':{'name':"scratch",'sizeMod':0.5},
 			'dmg':{'main':100,'ratio':{'melee':0,'range':10,'magic':80,'fire':10,'cold':0,'lightning':0}},
 			'width':50,
 			'height':50,
@@ -293,41 +293,57 @@ Init.db.ability = function(cb){
 	
 
 	
-	//Demon
-	a['fireNova'] = {'type':'attack','name':'sin','icon':'attackMagic.fireball',
+	//Fire Nova
+	a['fireNova'] = {'type':'attack','name':'Fire Nova','icon':'attackMagic.fireball',
 		'spd':{'main':1,'support':0},'period':{'own':25,'global':25},
 		'action':{'func':'Combat.action.attack','param':{
 			'type':"bullet",'angle':0,'amount':1,
-			'objImg':{'name':"fireball",'sizeMod':1},'hitImg':{'name':"fire2",'sizeMod':0.5},
-			'dmg':{'main':100,'ratio':{'melee':0,'range':10,'magic':80,'fire':10,'cold':0,'lightning':0}},
+			'objImg':{'name':"fireball",'sizeMod':1},'hitImg':{'name':"fireHit",'sizeMod':0.5},
+			'dmg':{'main':100,'ratio':{'melee':0,'range':0,'magic':0,'fire':100,'cold':0,'lightning':0}},
 			
 			spd:4,
 			nova:{					
 				period:1,				
 				rotation:3,
 				attack:{		//attack info
-					'type':"bullet",'angle':360,'amount':1,
-					'objImg':{'name':"fireball",'sizeMod':0.5},'hitImg':{'name':"fire2",'sizeMod':0.3},
-					'dmg':{'main':25,'ratio':{'melee':0,'range':10,'magic':80,'fire':10,'cold':0,'lightning':0}},
+					'type':"bullet",'angle':0,'amount':1,
+					'objImg':{'name':"fireball",'sizeMod':0.5},'hitImg':{'name':"fireHit",'sizeMod':0.3},
+					'dmg':{'main':25,'ratio':{'melee':0,'range':0,'magic':0,'fire':100,'cold':0,'lightning':0}},
 				},		
 			},
 		}
 	}};
-	a['fireCircle'] = {'type':'attack','name':'sin','icon':'attackMagic.fireball',
+	
+	
+	
+	a['fireBasic'] = {'type':'attack','name':'Fire Basic','icon':'attackMagic.fireball',
 		'spd':{'main':1,'support':0},'period':{'own':25,'global':25},
 		'action':{'func':'Combat.action.attack','param':{
-			'type':"bullet",'angle':360,'amount':9,
-			'objImg':{'name':"fireball",'sizeMod':1.2},'hitImg':{'name':"fire2",'sizeMod':0.5},
-			'dmg':{'main':100,'ratio':{'melee':0,'range':10,'magic':80,'fire':10,'cold':0,'lightning':0}},
+			'type':"bullet",'angle':0,'amount':1,
+			'objImg':{'name':"lightningball",'sizeMod':1.2},'hitImg':{'name':"fireHit",'sizeMod':0.5},
+			'dmg':{'main':200,'ratio':{'melee':0,'range':0,'magic':0,'fire':0,'cold':0,'lightning':100}},
 		}
 	}};
+	
+	a['fireBasic'] = {'type':'attack','name':'Fire Basic','icon':'attackMagic.fireball',
+		'spd':{'main':1,'support':0},'period':{'own':25,'global':25},
+		'action':{'func':'Combat.action.attack','param':{
+			'type':"bullet",'angle':0,'amount':1,
+			'objImg':{'name':"fireball",'sizeMod':1.2},'hitImg':{'name':"fireHit",'sizeMod':0.5},
+			'dmg':{'main':200,'ratio':{'melee':0,'range':0,'magic':0,'fire':100,'cold':0,'lightning':0}},
+		}
+	}};
+	
+	
+	
+	
 	
 	a['fireExplosion'] = {'type':'attack','name':'sin','icon':'attackMagic.fireball',
 		'spd':{'main':1,'support':0},'period':{'own':25,'global':25},
 		'action':{'func':'Combat.action.attack','param':{
 			'type':"strike",'angle':0,'amount':1,
-			'hitImg':{'name':"fire2",'sizeMod':0.5},
-			'preDelayAnim':{'name':"fire3",'sizeMod':2},
+			'hitImg':{'name':"fireHit",'sizeMod':0.5},
+			'preDelayAnim':{'name':"fireBomb2",'sizeMod':2},
 			'dmg':{'main':10000,'ratio':{'melee':50,'range':0,'magic':50,'fire':0,'cold':0,'lightning':0}},
 			'width':200,
 			'height':200,
@@ -342,7 +358,7 @@ Init.db.ability = function(cb){
 		'spd':{'main':1,'support':0},'period':{'own':25,'global':25},
 		'action':{'func':'Combat.action.attack','param':{
 			'type':"bullet",'angle':0,'amount':1,
-			'objImg':{'name':"fireball",'sizeMod':1},'hitImg':{'name':"fire2",'sizeMod':0.5},
+			'objImg':{'name':"fireball",'sizeMod':1},'hitImg':{'name':"fireHit",'sizeMod':0.5},
 			'dmg':{'main':100,'ratio':{'melee':0,'range':0,'magic':0,'fire':100,'cold':0,'lightning':0}},
 		}
 	}};
@@ -354,7 +370,7 @@ Init.db.ability = function(cb){
 		'spd':{'main':0.8,'support':0.2},'period':{'own':20,'global':10},
 		'action':{'func':'Combat.action.attack','param':{
 			'type':"bullet",'angle':15,'amount':1,
-			'objImg':{'name':"arrow",'sizeMod':1},'hitImg':{'name':"thunder2",'sizeMod':0.5},
+			'objImg':{'name':"arrow",'sizeMod':1},'hitImg':{'name':"lightningHit",'sizeMod':0.5},
 			'dmg':{'main':100,'ratio':{'melee':0,'range':10,'magic':80,'fire':10,'cold':0,'lightning':0}},
 		}
 	}};
@@ -363,14 +379,14 @@ Init.db.ability = function(cb){
 		'spd':{'main':0.8,'support':0.2},'period':{'own':20,'global':10},
 		'action':{'func':'Combat.action.attack','param':{
 			'type':"bullet",'angle':15,'amount':1,
-			'objImg':{'name':"arrow",'sizeMod':1},'hitImg':{'name':"thunder2",'sizeMod':0.5},
+			'objImg':{'name':"arrow",'sizeMod':1},'hitImg':{'name':"lightningHit",'sizeMod':0.5},
 			'dmg':{'main':100,'ratio':{'melee':0,'range':10,'magic':80,'fire':10,'cold':0,'lightning':0}},
 			
 			onHit:{					//When attack will hit the enemy, it will create another attack 
 				chance:1,				//chance of doing another attack
 				attack:{		//attack info
 					'type':"bullet",'angle':360,'amount':360,
-					'objImg':{'name':"arrow",'sizeMod':1},'hitImg':{'name':"thunder2",'sizeMod':0.5},
+					'objImg':{'name':"arrow",'sizeMod':1},'hitImg':{'name':"lightningHit",'sizeMod':0.5},
 					'dmg':{'main':100,'ratio':{'melee':0,'range':10,'magic':80,'fire':10,'cold':0,'lightning':0}},
 				},		
 			},
@@ -383,7 +399,7 @@ Init.db.ability = function(cb){
 		'spd':{'main':0.8,'support':0.2},'period':{'own':20,'global':10},
 		'action':{'func':'Combat.action.attack','param':{
 			'type':"bullet",'angle':15,'amount':1,
-			'objImg':{'name':"arrow",'sizeMod':1},'hitImg':{'name':"thunder2",'sizeMod':0.5},
+			'objImg':{'name':"arrow",'sizeMod':1},'hitImg':{'name':"lightningHit",'sizeMod':0.5},
 			'dmg':{'main':100,'ratio':{'melee':0,'range':10,'magic':80,'fire':10,'cold':0,'lightning':0}},
 			
 			'hitIfMod':1,'ghost':1,	
@@ -397,7 +413,7 @@ Init.db.ability = function(cb){
 		'spd':{'main':0.8,'support':0.2},'period':{'own':20,'global':10},
 		'action':{'func':'Combat.action.attack','param':{
 			'type':"bullet",'angle':0,'amount':1,
-			'objImg':{'name':"arrow",'sizeMod':1},'hitImg':{'name':"thunder2",'sizeMod':0.5},
+			'objImg':{'name':"arrow",'sizeMod':1},'hitImg':{'name':"lightningHit",'sizeMod':0.5},
 			'dmg':{'main':100,'ratio':{'melee':0,'range':10,'magic':80,'fire':10,'cold':0,'lightning':0}},
 			
 			spd:4,
@@ -406,7 +422,7 @@ Init.db.ability = function(cb){
 				rotation:10,
 				attack:{		//attack info
 					'type':"bullet",'angle':360,'amount':4,
-					'objImg':{'name':"arrow",'sizeMod':1},'hitImg':{'name':"thunder2",'sizeMod':0.5},
+					'objImg':{'name':"arrow",'sizeMod':1},'hitImg':{'name':"lightningHit",'sizeMod':0.5},
 					'dmg':{'main':100,'ratio':{'melee':0,'range':10,'magic':80,'fire':10,'cold':0,'lightning':0}},
 				},		
 			},
@@ -419,7 +435,7 @@ Init.db.ability = function(cb){
 		'spd':{'main':0.8,'support':0.2},'period':{'own':20,'global':10},
 		'action':{'func':'Combat.action.attack','param':{
 			'type':"bullet",'angle':15,'amount':10,
-			'objImg':{'name':"arrow",'sizeMod':1},'hitImg':{'name':"thunder2",'sizeMod':0.5},
+			'objImg':{'name':"arrow",'sizeMod':1},'hitImg':{'name':"lightningHit",'sizeMod':0.5},
 			'dmg':{'main':100,'ratio':{'melee':0,'range':10,'magic':80,'fire':10,'cold':0,'lightning':0}},
 			"parabole":{
 				'height':10,			//height of parabole (distance from middle)
@@ -433,13 +449,14 @@ Init.db.ability = function(cb){
 	
 	
 	//is now a strike
+	
 	a['bulletMulti-boom'] = {'type':'attack','name':'boom','icon':'attackMagic.fireball',
 		'spd':{'main':0.8,'support':0.2},'period':{'own':20,'global':10},
 		'action':{'func':'Combat.action.attack','param':{
 			'type':"strike",'angle':0,'amount':1,
-			'delayAnim':{'name':"fire1",'sizeMod':0.5},
-			'hitImg':{'name':"fire2",'sizeMod':0.2},
-			'preDelayAnim':{'name':"fire2",'sizeMod':0.5},
+			'delayAnim':{'name':"lightningHit",'sizeMod':0.5},
+			'hitImg':{'name':"lightningHit",'sizeMod':0.2},
+			'preDelayAnim':{'name':"lightningHit",'sizeMod':0.5},
 			'dmg':{'main':100,'ratio':{'melee':0,'range':10,'magic':80,'fire':10,'cold':0,'lightning':0}},
 			'width':100,
 			'height':100,
@@ -457,7 +474,7 @@ Init.db.ability = function(cb){
 		'spd':{'main':0.8,'support':0.2},'period':{'own':20,'global':10},'cost':{'mana':50},
 		'action':{'func':'Combat.action.attack','param':{
 			'type':"bullet",'angle':360,'amount':9,
-			'objImg':{'name':"fireball",'sizeMod':1},'hitImg':{'name':"fire_explosion",'sizeMod':0.5},
+			'objImg':{'name':"fireball",'sizeMod':1},'hitImg':{'name':"fireBomb",'sizeMod':0.5},
 			'dmg':{'main':100,'ratio':{'melee':0,'range':10,'magic':80,'fire':10,'cold':0,'lightning':0}},
 		}
 	}};	
@@ -466,7 +483,7 @@ Init.db.ability = function(cb){
 		'spd':{'main':0.8,'support':0.2},'period':{'own':20,'global':10},
 		'action':{'func':'Combat.action.attack','param':{
 			'type':"bullet",'angle':15,'amount':1,
-			'objImg':{'name':"iceshard",'sizeMod':1},'hitImg':{'name':"ice2",'sizeMod':0.5},
+			'objImg':{'name':"iceshard",'sizeMod':1},'hitImg':{'name':"iceHit",'sizeMod':0.5},
 			'dmg':{'main':100,'ratio':{'melee':0,'range':10,'magic':80,'fire':10,'cold':0,'lightning':0}},
 		}
 	}};
@@ -475,7 +492,7 @@ Init.db.ability = function(cb){
 		'spd':{'main':0.8,'support':0.2},'period':{'own':20,'global':10},
 		'action':{'func':'Combat.action.attack','param':{
 			'type':"strike",'angle':0,'amount':1,'delay':2,'maxHit':1,'width':1,'height':1,'minRange':5,'maxRange':50,
-			'hitImg':{'name':"attack1",'sizeMod':0.5},'objImg':{'name':"attack1",'sizeMod':0.5},
+			'hitImg':{'name':"strikeHit",'sizeMod':0.5},'objImg':{'name':"strikeHit",'sizeMod':0.5},
 			'dmg':{'main':100,'ratio':{'melee':0,'range':10,'magic':80,'fire':10,'cold':0,'lightning':0}},
 			'hitIfMod':0,'heal':{'hp':100}
 		}	
@@ -519,7 +536,7 @@ Init.db.ability.template = function(){
 			'type':"bullet",'angle':0,'amount':1,
 			'objImg':{'name':"arrow",'sizeMod':1},'hitImg':{'name':"fire_explosion",'sizeMod':0.5},
 			'dmg':{'main':[1,1.2],'ratio':{'melee':0,'range':[25,50],'magic':[25,50],'fire':[25,50],'cold':0,'lightning':0}},
-			'burn':{'chance':[1.5,2],'magn':[1,1.2],'time':1}
+			'burn':{'baseChance':0,'chance':[1.5,2],'magn':[1,1.2],'time':1}
 		}
 	}};
 		
@@ -585,7 +602,7 @@ Ability.creation = function(a){
 		icon:'plan.ability',
 		option:[	
 			{'name':'Learn Ability','func':'Actor.useAbilityPlan','param':[a.id]},
-			//{'name':'Examine Ability','func':'Actor.examineAbility','param':[a.id]},
+			// {'name':'Examine Ability','func':'Actor.examineAbility','param':[a.id]},
 		],
 		type:'ability',
 		id:a.id,
@@ -593,9 +610,9 @@ Ability.creation = function(a){
 	return a.id;
 }
 
-Ability.uncompress = function(name){	
+Ability.uncompress = function(name){	//turn ability into function. called when swapAbility
 	var ab = typeof name === 'object' ? name : deepClone(Db.ability[name]);
-	if(!ab) return 0;
+	if(!ab) return null;
 	
 	ab = Ability.uncompress.mod(ab);
 	

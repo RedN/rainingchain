@@ -129,13 +129,8 @@ Init.db.enemy = function(){
 	a["troll"]["ice"] = {  //{
 		"name":"Ice Troll",
 		"sprite":{'name':"troll",'sizeMod':1},
-		"abilityEnemy":{
-			'bullet':{
-					spd:20,
-					dmg,bob:123,
-				}
-			}
-		},
+		
+		
 		'resource':{'hp':{'max':1000,'regen':1},'mana':{'max':100,'regen':1}},
 		
 		'globalDef':1,
@@ -282,10 +277,27 @@ Init.db.enemy.creation = function(e){
 		
 	}
 	
-	Db.enemy[e.category][e.variant] = new Function('return ' + stringify(e));
-	Db.enemy[e.category][e.variant].globalDmg = e.globalDmg;	//cuz cant stringify function
-	Db.enemy[e.category][e.variant].globalDef = e.globalDef;
-	Db.enemy[e.category][e.variant].globalMod = e.globalMod;
+	var position = 0;
+	for(var i in e.abilityList){ 
+		var a = deepClone(Db.ability[e.abilityList[i].template]);
+		console.log(e.abilityList[i].extra);
+		a.action.param = useTemplate(a.action.param,e.abilityList[i].extra,1,1);	//TOFIX if want to change something other then attack
+				
+		e.abilityList[i] = e.abilityList[i].aiChance || 0.5;
+		Actor.swapAbility(e,a,position++);
+	}
+		
+	var a = Db.enemy[e.category][e.variant] = new Function('return ' + stringify(e));
+	
+	//things cant stringify cuz function
+	a.globalDmg = e.globalDmg;	
+	a.globalDef = e.globalDef;
+	a.globalMod = e.globalMod;
+	
+	a.ability = [];	
+	for(var i in e.ability)
+		a.ability.push(e.ability[i].action.param);
+		
 	return e;
 }
 
