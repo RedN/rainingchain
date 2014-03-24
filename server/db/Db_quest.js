@@ -5,6 +5,11 @@ var questList = [
 	'QquestId',
 ];
 
+if(Server.testing){
+	questList.push('QtestEnemy');
+}
+
+
 TestingQuest = function(key){
 	
 

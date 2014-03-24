@@ -1,6 +1,6 @@
 
 Server =  {
-	testing:true,		//will trigger special testing func
+	testing:!nodejitsu,		//will trigger special testing func
 	frequence:{
 		save:10*1000,
 		disconnect:10*60*1000,

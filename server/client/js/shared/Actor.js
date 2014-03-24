@@ -683,17 +683,12 @@ Actor.respawn.player = function(mort){
 	
 	if(!rec.x) rec = rec[rec.randomAttribute()];	//aka when multi possible spawn aka pvp
 	
-	if(List.map[rec.map]){
-		mort.x = rec.x;
-		mort.y = rec.y;
-		mort.map = rec.map;
-	} else {
-		var safe = mort.respawnLoc.safe;
-		mort.x = safe.x;
-		mort.y = safe.y;
-		mort.map = safe.map;
-	}
+	var good = List.map[rec.map] ? rec : mort.respawnLoc.safe;
 	
+	mort.x = good.x;
+	mort.y = good.y;
+	mort.map = good.map;
+		
 	for(var i in mort.resource)
 		mort[i] = mort.resource[i].max;
 	

@@ -81,51 +81,17 @@ Test.firstSignIn = function(key){
 	var inv = List.main[key].invList;
 	var mort = List.all[key];
 
-	Itemlist.add(inv,'gold');
-	Itemlist.add(inv,'teleport');
+	if(Server.testing){
+		Itemlist.add(inv,'gold');
+		Itemlist.add(inv,'teleport');
+	}
 	
 	Actor.teleport(mort,56*32,101*32,"tutorial@MAIN");
 	mort.respawnLoc = {safe:{x:56*32,y:101*32,map:"tutorial@MAIN"},recent:{x:56*32,y:101*32,map:"tutorial@MAIN"}};
 	
-	//mort.respawnLoc = {safe:{x:1000,y:1000,map:"pvpF4A@MAIN"},recent:{x:1000,y:1000,map:"pvpF4A@MAIN"}};
-	//Actor.teleport(mort,1000,1000,"tutorial@MAIN");
-	//Actor.teleport(mort,1000,1000,"pvpF4A@MAIN");
-	
+		
 	Chat.add(mort.id,"Note: This is a very early beta. Expect things to change... A LOT.");
 	Chat.add(mort.id,"Control: WADS. (For AZERTY users, change key binding via Pref Tab)");
-	Chat.add(mort.id," ");
-	
-
-	
-	
-	//PVP
-	mort.abilityList = {
-		'pvp-bullet':1,
-		'pvp-fireball':1,
-		'pvp-freeze':1,
-		'pvp-explosion':1,
-		'pvp-invincibility':1,
-		'pvp-heal':1,
-	};
-
-	Actor.swapAbility(mort,'pvp-bullet',0);
-	Actor.swapAbility(mort,'pvp-explosion',1);
-	Actor.swapAbility(mort,'pvp-freeze',2);
-	Actor.swapAbility(mort,'pvp-fireball',3);
-	Actor.swapAbility(mort,'pvp-heal',4);
-	Actor.swapAbility(mort,'pvp-invincibility',5);
-	
-	
-	
-	Chat.add(mort.id,"====Attacks:=====");
-	Chat.add(mort.id,"Left Click: Arrow.");
-	Chat.add(mort.id,"Right Click: Explosion.");
-	Chat.add(mort.id,"Shift + Left Click: Iceshard that freezes enemy.");
-	Chat.add(mort.id,"Shift + Right Click: x9 Fireball.");
-	Chat.add(mort.id,"F: Instant 100% Healing.");
-	Chat.add(mort.id,"Space: Invincibility for 4 frames.");
-
-
 
 }
 
@@ -150,19 +116,19 @@ Test.a = function(){	//when starting server
 
 Test.spawnEnemy = function(key,info){
 	var player = List.all[key];
-	
+	info = info || ["bat","normal"];
 	Actor.creation({
 		'xym':{x:player.x,y:player.y,map:player.map},
-		"category":info[0] || "bat",		
-		"variant":info[1] || "normal",		
+		"category":info[0],		
+		"variant":info[1],		
 		"extra":{},
 	});
 }
 
 Test.enemy = function(key){
-	return;
-	console.log(List.map);
 	Actor.teleport(List.all[key],250,250,"testEnemy");
+	mort.respawnLoc = {safe:{x:250,y:250,map:"testEnemy@MAIN"},recent:{x:250,y:250,map:"testEnemy@MAIN"}};
+	
 	Itemlist.add(key,'QtestEnemy-enemyGenerator');
 	Test.generateEquip(key,0,5);
 }

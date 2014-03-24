@@ -12,17 +12,13 @@ q.variable = {
 
 
 	
-q.item['enemyGenerator'] = {'name':'Enemy Gen','icon':'magic.staff','option':[		
+q.item['enemyGenerator'] = {'name':'Enemy Gen','icon':'magic.staff','stack':1,'option':[		
 	{'name':'Enemy 0','param':[q.variable.enemy[0]],'func':Test.spawnEnemy},
 	{'name':'Enemy 1','param':[q.variable.enemy[1]],'func':Test.spawnEnemy},
 	{'name':'Enemy 2','param':[q.variable.enemy[2]],'func':Test.spawnEnemy},
 	{'name':'Enemy 3','param':[q.variable.enemy[3]],'func':Test.spawnEnemy},
 	{'name':'Enemy 4','param':[q.variable.enemy[4]],'func':Test.spawnEnemy},
-]};	
-q.item['equipGenerator'] = {'name':'Equip Gen','icon':'magic.staff','option':[		
-	{'name':'Equip','param':[],'func':function(key){
-		Test.generateEquip(key,0);
-	}},
+	{'name':'Equip','param':[],'func':Test.generateEquip},
 ]};	
 
 
