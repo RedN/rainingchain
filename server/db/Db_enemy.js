@@ -242,7 +242,6 @@ Init.db.enemy = function(){
 		for(var j in a[i]){
 			a[i][j].category = i;
 			a[i][j].variant = j;
-			console.log(i,j);
 			Init.db.enemy.creation(a[i][j]);			
 		}
 	}
@@ -279,15 +278,19 @@ Init.db.enemy.creation = function(e){
 	}
 	
 	var position = 0;
-	for(var i in e.abilityList){ 
-	
+	for(var i in e.abilityList){
+		if(typeof e.abilityList[i] !== 'object') continue;
 		var a = deepClone(Db.ability[e.abilityList[i].template]);
 		a.action.param = useTemplate(a.action.param,e.abilityList[i].extra,1,1);	//TOFIX if want to change something other then attack
 				
 		e.abilityList[i] = e.abilityList[i].aiChance || 0.5;
 		Actor.swapAbility(e,a,position++);
 	}
-		
+	console.log(e.abilityList);
+	e.abilityList.normalize();
+
+
+	
 	var a = Db.enemy[e.category][e.variant] = new Function('return ' + stringify(e));
 	
 	//things cant stringify cuz function

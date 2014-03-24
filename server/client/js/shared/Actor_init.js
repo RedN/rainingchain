@@ -62,7 +62,7 @@ Init.actor = function(){
 		mort.fury = 100;	
 		mort.heal = 100;
 		
-		mort.abilityList = {};
+		mort.abilityList = [];
 		mort.abilityChange = Actor.template.abilityChange();	
 		
 		mort.friction = 0.9;
@@ -237,7 +237,7 @@ Actor.template.mastery = function(type){
 };
 
 Actor.template.abilityList = function(){
-	return {};	//check Test
+	return {};	//check Test	for player only. enemy has []
 }
 Actor.template.ability = function(){
 	return [0,0,0,0,0,0];

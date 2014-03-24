@@ -167,9 +167,7 @@ Combat.collision.status = function(dmg,b,target){
 	}
 	for(var i in ar){
 		var maxToRoll = Math.probability(Math.pow(dmg[i] / target.resource.hp.max,1.5),b[ar[i]].chance);
-		console.log(b[ar[i]].baseChance);
 		if(Math.random() <= maxToRoll || Math.random() <= b[ar[i]].baseChance){ 
-			console.log(112);
 			Combat.collision.status[ar[i]](target,b,dmg);
 		}
 	}	

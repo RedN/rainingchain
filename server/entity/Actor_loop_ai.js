@@ -79,10 +79,17 @@ Actor.loop.input.ability = function(mort){
 	if(!mort.target.main.list[0]){
 		mort.abilityChange.press = '0000000000000000000000'; return;
 	}
-	mort.abilityChange.press = '';
+	
+	mort.abilityChange.press = '0000000000000000000000';
+	
+	var a = Math.random();
 	for(var i in mort.abilityList){
-		mort.abilityChange.press += mort.abilityList[i] >= Math.random() ? '1' : '0';	
-	}
+		if(mort.abilityList[i] >= a){
+			mort.abilityChange.press = mort.abilityChange.press.set(+i,'1');
+		}
+		a -= mort.abilityList[i];
+	}	
+	
 }
 
 

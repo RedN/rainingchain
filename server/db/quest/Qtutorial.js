@@ -119,7 +119,7 @@ q.enemy["demon"] = {  //{
 	"name":"Demon Immune To Fireballs.",
 	"sprite":{'name':"demon",'sizeMod':1},
 	"abilityList":[
-		//{'template':'fireNova','aiChance':0.5,'extra':{}},
+		{'template':'fireNova','aiChance':0.5,'extra':{}},
 		{'template':'fireCircle','aiChance':0.5,'extra':{
 			'amount':10,'burn,baseChance':1}},
 		

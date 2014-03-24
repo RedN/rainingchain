@@ -510,7 +510,7 @@ newImage = function(src){
 }
 
 
-Object.defineProperty(Array.prototype, "random", {
+Object.defineProperty(Array.prototype, "random", {	// !name: return random element || name:  [{name:10},{name:1}] and return obj
     enumerable: false,
     value: function(name){
 		if(!this.length) return null;
@@ -523,7 +523,20 @@ Object.defineProperty(Array.prototype, "random", {
 	}
 });
 
-Object.defineProperty(Object.prototype, "random", {
+Object.defineProperty(Array.prototype, "normalize", {	// convertRatio for array
+    enumerable: false,
+    value: function(){
+		var sum = 0;
+		for(var i in this)
+			sum += this[i];
+		for(var i in this)
+			this[i] /= sum;
+	}
+});
+
+
+
+Object.defineProperty(Object.prototype, "random", {	//return attribute
     enumerable: false,
     value: function(name){
 		if(!Object.keys(this).length) return null;
@@ -543,7 +556,7 @@ Object.defineProperty(Object.prototype, "random", {
 	}
 });
 
-Object.defineProperty(Object.prototype, "randomAttribute", {
+Object.defineProperty(Object.prototype, "randomAttribute", {	//return random attribute
     enumerable: false,
     value: function(){
 		return Object.keys(this).random();
