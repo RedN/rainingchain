@@ -114,8 +114,20 @@ chest + monster
 
 
 
+finir interface pour ajouter/edit/delete jeu
+interface rendre
+doc
+interface louer
+interface recherche
+comparable
+db
 
 
+
+
+-ajoute stuff
+-valider (verifier si in stock)
+-afficher cost
 
 
 

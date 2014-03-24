@@ -48,7 +48,7 @@ a['bulletMulti'] = {					//bulletMulti is the id of attack
 				'sizeMod':0.5
 			},
 			'preDelayAnim':{			//Anim.creation when delay is over (STRIKE ONLY)
-				'name':"fire2",
+				'name':"fireHit",
 				'sizeMod':0.5
 			},
 			
@@ -325,7 +325,7 @@ Init.db.ability = function(cb){
 		}
 	}};
 	
-	a['fireBasic'] = {'type':'attack','name':'Fire Basic','icon':'attackMagic.fireball',
+	a['fireCircle'] = {'type':'attack','name':'Fire Basic','icon':'attackMagic.fireball',
 		'spd':{'main':1,'support':0},'period':{'own':25,'global':25},
 		'action':{'func':'Combat.action.attack','param':{
 			'type':"bullet",'angle':0,'amount':1,
@@ -647,7 +647,7 @@ Ability.template = function(){	//unused OLD AND BAD
 		'spd':{'main':0.8,'support':0.2},'period':{'cooldown':50,'perform':50},
 		'action':{'func':'Combat.action.attack','param':{
 				'type':"bullet",'angle':5,'amount':1, 'aim': 0,
-				'objImg':{'name':"fireball",'sizeMod':1},'hitImg':{'name':"fire2",'sizeMod':0.5},
+				'objImg':{'name':"fireball",'sizeMod':1},'hitImg':{'name':"fireHit",'sizeMod':0.5},
 				'dmg':{'main':10,'ratio':{'melee':0,'range':10,'magic':80,'fire':10,'cold':0,'lightning':0}},
 			}
 		}
@@ -657,7 +657,7 @@ Ability.template = function(){	//unused OLD AND BAD
 Ability.template.attack = function(){	//unused OLD AND BAD
 	return {
 		'type':"bullet",'angle':5,'amount':1, 'aim': 0,
-		'objImg':{'name':"fireball",'sizeMod':1},'hitImg':{'name':"fire2",'sizeMod':0.5},
+		'objImg':{'name':"fireball",'sizeMod':1},'hitImg':{'name':"fireHit",'sizeMod':0.5},
 		'dmg':{'main':10,'ratio':{'melee':0,'range':10,'magic':80,'fire':10,'cold':0,'lightning':0}},
 	};
 }
