@@ -288,9 +288,9 @@ Actor.loop.summon = function(mort){
 Actor.loop.bumper = function(mort){	//test collision with map
 	//test global limit
 	mort.x = Math.max(mort.x,50);
-	mort.x = Math.min(mort.x,Db.map[Map.getModel(mort.map)].grid.bullet[0].length*32-50);
+	mort.x = Math.min(mort.x,10000);
 	mort.y = Math.max(mort.y,50);
-	mort.y = Math.min(mort.y,Db.map[Map.getModel(mort.map)].grid.bullet.length*32-50);
+	mort.y = Math.min(mort.y,10000);
 	
 	//test bumpers
 	for(var i = 0 ; i < 4 ; i ++){

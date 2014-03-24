@@ -160,6 +160,8 @@ Test.spawnEnemy = function(key,info){
 }
 
 Test.enemy = function(key){
+	return;
+	console.log(List.map);
 	Actor.teleport(List.all[key],250,250,"testEnemy");
 	Itemlist.add(key,'QtestEnemy-enemyGenerator');
 	Test.generateEquip(key,0,5);

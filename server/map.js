@@ -28,11 +28,11 @@ Map.creation = function(namemodel,version,lvl){
 			newaddon[i].spot[j].map = newid;
 	}
 	
-	
 	var map = {
 		id:newid,
 		name:model.name,
 		version:version,
+		graphic:model.graphic,
 		grid:model.grid,
 		model:model.id,
 		timer:version === 'MAIN' ? 1/0 : 1000,// 5*60*1000/25,
@@ -67,6 +67,7 @@ Map.creation.model = function(map){	//create the model that will be in Db.map | 
 	map.grid.bullet = JSON.parse(strGrid.replaceAll('0','a').replaceAll('1','0').replaceAll('2','1').replaceAll('a','1'));
 	
 	map.addon = map.addon || {};
+	map.graphic = map.graphic || map.id;
 	return map;
 }
 

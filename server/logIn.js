@@ -371,7 +371,7 @@ Load.initData = function(key,player,main){
             'name':0,
             'x':0,
             'y':0,
-            'map':Map.getModel,
+            'map':Change.send.convert.map,
             'equip':0,
             'weapon':0,
             'skill':0,
