@@ -8,11 +8,10 @@ Init.db.plan = function(cb){
 	
 	
 		a['randomArmor'] = {
-			category:'equip',
-			piece:'helm',	
-			type:'metal',	
+			category:'armor',
 			req:{item:[],skill:{}},
 		};
+		
 		
 		a['randomWeapon'] = {
 			category:'equip',
@@ -180,7 +179,7 @@ Plan.template.ability = function(plan){
 }
 
 Plan.use = function(key,id){	//when player tries to use plan
-	var plan = Db.plan[id];
+	var plan = typeof id === 'string' ? Db.plan[id] : id;
 	if(!plan) return;
 	
 	var inv = List.main[key].invList;
@@ -196,7 +195,7 @@ Plan.use = function(key,id){	//when player tries to use plan
 		
 		Itemlist.add(inv, itemid);
 		LOG(1,key,'Plan.use',id,itemid);
-		
+		return itemid;
 	} else { //dont meet
 		Chat.add(key,"You don't meet the requirements to use this plan.");
 	}

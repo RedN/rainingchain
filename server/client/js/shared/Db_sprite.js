@@ -28,7 +28,7 @@ Init.db.sprite = function(){
 	
 	var a = Db.sprite =	{};
     //ts('Sprite.change(p,{name:"taurus"});')
-    //PLAYER
+    //{ PLAYER
     a["mace"] = {"src":"actor/main.png","size":2.5,"side":[1,2,3,0],"hpBar":-50/3,"legs":20,
     	"preHitBox":[ -30/3,30/3,-10/3,50/3],"preBumperBox":[ -30/3,30/3,-10/3,50/3 ],"anim": {
     		"walk":{"startY":0,"frame":4,"sizeX":24,"sizeY":32,"dir":4,"spd":0.4,"walk":1,"next":"walk"},
@@ -59,14 +59,14 @@ Init.db.sprite = function(){
     		"attack":{"startY":0,"frame":9,"sizeX":64,"sizeY":64,"dir":4,"spd":1,"next":"walk"}
     	}};
 		
-	
-    //NPC
+	//}
+    //{ NPC
     a["jenny"] ={"src":"actor/nSprite0.png","size":2,"side":[0,1,2,3],"hpBar":-22,"legs":16,
     	"preHitBox":[ -16,16,-16,16 ],"preBumperBox":[ -16,16,-16,16 ],"anim": {
     		"walk":{"startY":0,"frame":3,"sizeX":32,"sizeY":32,"dir":4,"spd":0.5,"walk":1,"next":"walk"},
     	}};
-    	
-    //ENEMY
+    //}	
+    //{ ENEMY
     a["slime"] ={"src":"actor/slimeJerome.png","size":1,"side":[0,1,2,3],"hpBar":-110,"legs":70,
     	"preHitBox":[ -70,70,-45,90 ],"preBumperBox":[ -55,55,-15,80 ],"anim": {
     		"walk":{"startY":0,"frame":5,"sizeX":200,"sizeY":200,"dir":4,"spd":0.5,"walk":1,"next":"walk"},
@@ -95,7 +95,8 @@ Init.db.sprite = function(){
     		"walk":{"startY":0,"frame":4,"sizeX":32,"sizeY":48,"dir":4,"spd":0.25,"walk":1,"next":"walk"},
     		"attack":{"startY":0,"frame":4,"sizeX":32,"sizeY":48,"dir":4,"spd":0.25,"next":"walk"},
     	}};
-	//RPG MAKER
+	//}
+	//{ RPG MAKER
 	a["aquanite"] = {"src":"actor/aquanite.png",rgpvx:1};
 	a["aquagoblin"] ={"src":"actor/aquagoblin.png","size":2,"side":[2,0,1,3],"hpBar":-40,"legs":35,
     	"preHitBox":[ -15,15,-15,32 ],"preBumperBox":[ -15,15,-15,32 ],"anim": {
@@ -195,8 +196,8 @@ Init.db.sprite = function(){
     		"walk":{"startY":0,"frame":4,"sizeX":64,"sizeY":48,"dir":4,"spd":0.5,"walk":1,"next":"walk"},
     		"attack":{"startY":0,"frame":4,"sizeX":64,"sizeY":48,"dir":4,"spd":0.5,"next":"walk"}
     	}};		
-		
-    //BULLET
+	//}	
+    //{ BULLET
     a["fireball"] ={"src":"bullet/fireball.png","size":1,"side":[0,1,2,3],"anim": {
     		"travel":{"startY":0,"frame":1,"sizeX":32,"sizeY":32,"dir":4,"spd":0.2,"next":"travel"},
     	}};
@@ -211,12 +212,17 @@ Init.db.sprite = function(){
     a["arrow"] ={"src":"bullet/arrow.png","size":1,"side":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15],"anim": {
     		"travel":{"startY":0,"frame":1,"sizeX":42,"sizeY":42,"dir":16,"spd":0,"next":"travel"},
     	}};
-    	
+     a["dart"] ={"src":"bullet/dart.png","size":2,"side":[0,1,2,3,4],"anim": {
+    		"travel":{"startY":0,"frame":1,"sizeX":16,"sizeY":16,"dir":4,"spd":0,"next":"travel"},
+    	}};	
     a["boomerang"] ={"src":"bullet/boomerang.png","size":1,"side":[0],"anim": {
     		"travel":{"startY":0,"frame":8,"sizeX":52,"sizeY":52,"dir":1,"spd":1,"next":"travel"},
     	}};
-    	
-    //System
+	a["bone"] ={"src":"bullet/bone.png","size":1,"side":[0],"anim": {
+    		"travel":{"startY":0,"frame":8,"sizeX":48,"sizeY":48,"dir":1,"spd":1,"next":"travel"},
+    	}};
+    //}	
+    //{ System
 	a["block1x1"] ={"src":"picture/block2x2.png","size":0.5,"side":[0],
 		"preBumperBox":[ -26,26,-26,26 ],"preHitBox":[ -26,26,-26,26 ],"anim": {
     		"walk":{"startY":0,"frame":1,"sizeX":64,"sizeY":64,"dir":1,"spd":0,"next":"walk"},    	
@@ -250,7 +256,7 @@ Init.db.sprite = function(){
 			"off":{"startY":0,"frame":1,"sizeX":32,"sizeY":32,"dir":1,"spd":0,"next":"off"},	
 			"on":{"startY":64,"frame":1,"sizeX":32,"sizeY":32,"dir":1,"spd":0,"next":"on"},							
     	}};
-
+	//}
     
     
     for(var i in Db.sprite){

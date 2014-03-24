@@ -225,7 +225,7 @@ Draw.window.stat.list = {
 	
 	{'name':'Burn','icon':'status.burn','stat':[{'name':'Chance','stat':'burn-chance'},{'name':'Magn','stat':'burn-magn'},{'name':'Time','stat':'burn-time'}],'string':(function(){ return Draw.window.stat.list.status('off','burn')})},
 	{'name':'Chill','icon':'status.chill','stat':[{'name':'Chance','stat':'chill-chance'},{'name':'Magn','stat':'chill-magn'},{'name':'Time','stat':'chill-time'}],'string':(function(){ return Draw.window.stat.list.status('off','chill')})},
-	{'name':'Confuse','icon':'status.confuse','stat':[{'name':'Chance','stat':'confuse-chance'},{'name':'Magn','stat':'confuse-magn'},{'name':'Time','stat':'confuse-time'}],'string':(function(){ return Draw.window.stat.list.status('off','confuse')})},
+	{'name':'Confuse','icon':'status.stun','stat':[{'name':'Chance','stat':'stun-chance'},{'name':'Magn','stat':'stun-magn'},{'name':'Time','stat':'stun-time'}],'string':(function(){ return Draw.window.stat.list.status('off','stun')})},
 	{'name':'Knockback','icon':'status.knock','stat':[{'name':'Chance','stat':'knock-chance'},{'name':'Magn','stat':'knock-magn'},{'name':'Time','stat':'knock-time'}],'string':(function(){ return Draw.window.stat.list.status('off','knock')})},
 	{'name':'Bleed','icon':'status.bleed','stat':[{'name':'Chance','stat':'bleed-chance'},{'name':'Magn','stat':'bleed-magn'},{'name':'Time','stat':'bleed-time'}],'string':(function(){ return Draw.window.stat.list.status('off','bleed')})},
 	{'name':'Drain','icon':'status.drain','stat':[{'name':'Chance','stat':'drain-chance'},{'name':'Magn','stat':'drain-magn'},{'name':'Time','stat':'drain-time'}],'string':(function(){ return Draw.window.stat.list.status('off','drain')})},
@@ -252,7 +252,7 @@ Draw.window.stat.list = {
 		
 	{'name':'Burn','icon':'status.burn','stat':[{'name':'Resist','stat':'resist-burn'}],'string':(function(){ return Draw.window.stat.list.status('def','burn')})},
 	{'name':'Chill','icon':'status.chill','stat':[{'name':'Resist','stat':'resist-chill'}],'string':(function(){ return Draw.window.stat.list.status('def','chill')})},
-	{'name':'Confuse','icon':'status.confuse','stat':[{'name':'Resist','stat':'resist-confuse'}],'string':(function(){ return Draw.window.stat.list.status('def','confuse')})},
+	{'name':'Confuse','icon':'status.stun','stat':[{'name':'Resist','stat':'resist-stun'}],'string':(function(){ return Draw.window.stat.list.status('def','stun')})},
 	{'name':'Knockback','icon':'status.knock','stat':[{'name':'Resist','stat':'resist-knock'}],'string':(function(){ return Draw.window.stat.list.status('def','knock')})},
 	{'name':'Bleed','icon':'status.bleed','stat':[{'name':'Resist','stat':'resist-bleed'}],'string':(function(){ return Draw.window.stat.list.status('def','bleed')})},
 	{'name':'Drain','icon':'status.drain','stat':[{'name':'Resist','stat':'resist-drain'}],'string':(function(){ return Draw.window.stat.list.status('def','drain')})},
@@ -762,7 +762,7 @@ Draw.window.ability.action.attack.modTo = {
 			text:(function(a){ return round(a.chance*100,2) + '% Chance to Burn for ' + round(a.magn*100*a.time,2) + '% Hp of Monster\'s Remaining Hp over ' + round(a.time/25,2) + 's.'; }),},
 	'chill':{icon:'status.chill',
 			text:(function(a){ return round(a.chance*100,2) + '% Chance to Chill, reducing Speed by -' + round(a.magn*100,2) + '% for ' + round(a.time/25,2) + 's.'; })},
-	'confuse':{icon:'status.confuse',
+	'stun':{icon:'status.stun',
 			text:(function(a){ return round(a.chance*100,2) + '% Chance to Confuse for ' + round(a.time/25,2) + 's.'; })},
 	'bleed':{icon:'status.bleed',
 			text:(function(a){ return round(a.chance*100,2) + '% Chance to Bleed for ' + round(a.magn*100*a.time,2) + '% Initial Dmg over ' + round(a.time/25,2) + 's.'; })},

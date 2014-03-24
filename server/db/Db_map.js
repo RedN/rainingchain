@@ -16,7 +16,7 @@ Db.map['test'] = function(){	//'test' = mapId
 	
 								
 	a.variable = {		//list of custom variable used by map to remember stuff. each map has its own copy
-		atk:{'type':"bullet",'angle':15,'amount':1, 'aim': 0,'objImg':{'name':"iceshard",'sizeMod':1},'hitImg':{'name':"ice2",'sizeMod':0.5},
+		atk:{'type':"bullet",'angle':15,'amount':1, 'aim': 0,'objImg':{'name':"iceshard",'sizeMod':1},'hitImg':{'name':"iceHit",'sizeMod':0.5},
 			'dmg':{'main':1,'ratio':{'melee':0,'range':10,'magic':80,'fire':10,'cold':0,'lightning':0}}},	
 		anything:'youwant',
 		rotation:-1
@@ -241,7 +241,7 @@ Init.db.map = function (){
 		
 		
 		a.variable = {
-			atk:{'type':"bullet",'angle':15,'amount':1, 'aim': 0,'objImg':{'name':"iceshard",'sizeMod':1},'hitImg':{'name':"ice2",'sizeMod':0.5},
+			atk:{'type':"bullet",'angle':15,'amount':1, 'aim': 0,'objImg':{'name':"iceshard",'sizeMod':1},'hitImg':{'name':"iceHit",'sizeMod':0.5},
 				'dmg':{'main':1,'ratio':{'melee':0,'range':10,'magic':80,'fire':10,'cold':0,'lightning':0}}},	
 		};
 		return m;

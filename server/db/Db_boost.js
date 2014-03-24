@@ -36,8 +36,8 @@ Db.boost.list.amulet = {
 	
 	],
 	topaz:[
-		{'stat':['confuse-all'],'valueMod':1,'chance':1},
-		{'stat':'confuse-chance','valueMod':2,'chance':1},
+		{'stat':['stun-all'],'valueMod':1,'chance':1},
+		{'stat':'stun-chance','valueMod':2,'chance':1},
 	
 	],
 };
@@ -60,8 +60,8 @@ Db.boost.list.ring = {
 	
 	],
 	topaz:[
-		{'stat':['confuse-all'],'valueMod':1,'chance':1},
-		{'stat':'confuse-magn','valueMod':2,'chance':1},
+		{'stat':['stun-all'],'valueMod':1,'chance':1},
+		{'stat':'stun-magn','valueMod':2,'chance':1},
 	
 	],
 };
@@ -84,8 +84,8 @@ Db.boost.list.bracelet = {
 	
 	],
 	topaz:[
-		{'stat':['confuse-all'],'valueMod':1,'chance':1},
-		{'stat':'confuse-time','valueMod':2,'chance':1},
+		{'stat':['stun-all'],'valueMod':1,'chance':1},
+		{'stat':'stun-time','valueMod':2,'chance':1},
 	
 	],
 };
@@ -102,16 +102,11 @@ Db.boost.list.helm = {
 	],
 	wood:[
 		{'stat':'hp-regen','valueMod':1,'chance':1},
-		//{'stat':'dodge-max','valueMod':1,'chance':1},
-		//{'stat':'dodge-regen','valueMod':1,'chance':1},
-		//{'stat':'heal-max','valueMod':1,'chance':1},
-		//{'stat':'heal-regen','valueMod':1,'chance':1},
+		
 	],
 	bone:[
 		{'stat':'mana-max','valueMod':1,'chance':1},
 		{'stat':'mana-regen','valueMod':1,'chance':1},
-		//{'stat':'fury-max','valueMod':1,'chance':1},
-		//{'stat':'fury-regen','valueMod':1,'chance':1},
 	],
 };
 
@@ -163,8 +158,7 @@ Db.boost.list.gloves = {
 		{'stat':['def-+'],'valueMod':2,'chance':1},
 		
 		{'stat':'atkSpd-main','valueMod':1,'chance':1},
-		//{'stat':'atkSpd-support','valueMod':1,'chance':1},
-		{'stat':'pickupRadius','valueMod':1,'chance':1},
+		{'stat':'pickRadius','valueMod':1,'chance':1},
 	],				
 	chain:[
 		{'stat':'leech-magn','valueMod':1,'chance':1},
@@ -377,13 +371,13 @@ Db.boost.group = {
 	'weapon-magic':['weapon-wand','weapon-staff','weapon-orb'],
 	
 	//Status
-	'status-all':['burn-magn','burn-chance','burn-time','chill-magn','chill-chance','chill-time','confuse-magn','confuse-chance','confuse-time','bleed-magn','bleed-chance','bleed-time','knock-magn','knock-chance','knock-time','drain-magn','drain-chance','drain-time'],
-	'status-magn':['burn-magn','chill-magn','confuse-magn','bleed-magn','knock-magn','drain-magn'],
-	'status-chance':['burn-chance','chill-chance','confuse-chance','bleed-chance','knock-chance','drain-chance'],
-	'status-time':['burn-time','chill-time','confuse-time','bleed-time','knock-time','drain-time'],
+	'status-all':['burn-magn','burn-chance','burn-time','chill-magn','chill-chance','chill-time','stun-magn','stun-chance','stun-time','bleed-magn','bleed-chance','bleed-time','knock-magn','knock-chance','knock-time','drain-magn','drain-chance','drain-time'],
+	'status-magn':['burn-magn','chill-magn','stun-magn','bleed-magn','knock-magn','drain-magn'],
+	'status-chance':['burn-chance','chill-chance','stun-chance','bleed-chance','knock-chance','drain-chance'],
+	'status-time':['burn-time','chill-time','stun-time','bleed-time','knock-time','drain-time'],
 	'burn-all':['burn-magn','burn-chance','burn-time'],
 	'chill-all':['chill-magn','chill-chance','chill-time'],
-	'confuse-all':['confuse-magn','confuse-chance','confuse-time'],
+	'stun-all':['stun-magn','stun-chance','stun-time'],
 	'bleed-all':['bleed-magn','bleed-chance','bleed-time'],
 	'knock-all':['knock-magn','knock-chance','knock-time'],
 	'drain-all':['drain-magn','drain-chance','drain-time'],

@@ -84,7 +84,7 @@ a['bulletMulti'] = {					//bulletMulti is the id of attack
 			drain : {'baseChance':0,'chance':1,'magn':1,'time':1},	
 			burn : {'baseChance':0,'chance':1,'magn':1,'time':1},
 			chill : {'baseChance':0,'chance':1,'magn':1,'time':1},
-			confuse : {'baseChance':0,'chance':1,'magn':1,'time':1},
+			stun : {'baseChance':0,'chance':1,'magn':1,'time':1},
 			leech : {'chance':1,'magn':1},			
 			crit : {'chance':1,'magn':1},
 			
@@ -102,6 +102,7 @@ a['bulletMulti'] = {					//bulletMulti is the id of attack
 		//Bullet Only
 		
 			spd:15, 					//bullet travelling speed
+			maxTimer:25,				//how many frame it stays
 			ghost: 0,					//does bullet goes thru wall?
 			pierce : {
 				'chance':0.5,			//chance to pierce
@@ -213,7 +214,7 @@ Init.db.ability = function(cb){
 		}
 	
 	
-	
+	//{ Pvp
 	a['pvp-bullet'] = {'type':'attack','name':'Basic Bullet','icon':'attackRange.steady',
 		'spd':{'main':1,'support':0},'period':{'own':30,'global':20},
 		'action':{'func':'Combat.action.attack','param':{
@@ -258,23 +259,93 @@ Init.db.ability = function(cb){
 		
 	a['pvp-heal'] = {'type':'heal','name':'Regen','icon':'heal.plus',
 		'spd':{'main':1,'support':0},'period':{'own':250,'global':50},'cost':{},
-		'action':{'animOnSprite':'special1','func':'Actor.changeHp','param':[
+		'action':{'animOnSprite':'boostRed','func':'Actor.changeHp','param':[
 			1000
 		]}
 	};
 	
 	a['pvp-invincibility'] = {'type':'dodge','name':'Invincibility','icon':'blessing.spike',
 		'spd':{'main':1,'support':0},'period':{'own':25,'global':25,'bypassGlobalCooldown':true},'cost':{"mana":50},
-		'action':{'animOnSprite':'special1Red','func':'Actor.boost','param':[[
+		'action':{'animOnSprite':'boostWhie','func':'Actor.boost','param':[[
 			{"stat":"globalDef","type":"+","value":Cst.bigInt,"time":4,"name":"Dodge"},
 		]]}
 	};
+	//}
+	
+
+	a['scratch'] = {'type':'attack','name':'Scratch','icon':'attackMelee.scar',
+		'spd':{'main':1,'support':0},'period':{'own':25,'global':25},
+		'action':{'func':'Combat.action.attack','param':{
+			'type':"strike",'angle':0,'amount':1,
+			'delayAnim':{'name':"scratch",'sizeMod':0.5},
+			'hitImg':{'name':"strikeHit",'sizeMod':0.25},
+			'dmg':{'main':100,'ratio':{'melee':100,'range':0,'magic':0,'fire':0,'cold':0,'lightning':0}},
+			'width':50,
+			'height':50,
+			'delay':0,
+			'minRange':0,
+			'maxRange':50,
+		}
+	}};	
+	a['scratchBig'] = {'type':'attack','name':'Multi Scratch','icon':'attackMelee.scar',
+		'spd':{'main':1,'support':0},'period':{'own':25,'global':25},
+		'action':{'func':'Combat.action.attack','param':{
+			'type':"strike",'angle':0,'amount':1,
+			'delayAnim':{'name':"scratch2",'sizeMod':0.5},
+			'hitImg':{'name':"strikeHit",'sizeMod':0.25},
+			'dmg':{'main':200,'ratio':{'melee':100,'range':0,'magic':0,'fire':0,'cold':0,'lightning':0}},
+			'width':100,
+			'height':100,
+			'delay':0,
+			'maxHit':5,
+			'minRange':0,
+			'maxRange':100,
+		}
+	}};	
+	
+	a['dart'] = {'type':'attack','name':'Dart','icon':'attackRange.head',
+		'spd':{'main':1,'support':0},'period':{'own':25,'global':25},
+		'action':{'func':'Combat.action.attack','param':{
+			'type':"bullet",'angle':0,'amount':1,
+			'objImg':{'name':"dart",'sizeMod':1},'hitImg':{'name':"strikeHit",'sizeMod':0.5},
+			'dmg':{'main':100,'ratio':{'melee':0,'range':100,'magic':0,'fire':0,'cold':0,'lightning':0}},
+		}
+	}};	
+	
+	
+	a['bind'] = {'type':'attack','name':'Binding','icon':'curse.stumble',
+		'spd':{'main':1,'support':0},'period':{'own':50,'global':50},
+		'action':{'func':'Combat.action.attack','param':{
+			'type':"strike",'angle':0,'amount':1,
+			'hitImg':{'name':"bind",'sizeMod':0.25},
+			'dmg':{'main':100,'ratio':{'melee':0,'range':0,'magic':0,'fire':0,'cold':100,'lightning':0}},
+			'preDelayAnim':{
+				'name':"bind",
+				'sizeMod':1
+			},
+			'chill':{'baseChance':1,'chance':1,'time':1,'magn':1},
+			'width':25,
+			'height':25,
+			'delay':10,
+			'minRange':0,
+			'maxRange':100,
+		}
+	}};	
+	
+	
+	a['mine'] = {'type':'attack','name':'Mine','icon':'attackRange.head',
+		'spd':{'main':1,'support':0},'period':{'own':25,'global':25},
+		'action':{'func':'Combat.action.attack','param':{
+			'type':"bullet",'angle':0,'amount':1,'spd':0,'maxTimer':250,
+			'objImg':{'name':"dart",'sizeMod':1},'hitImg':{'name':"curseGreen",'sizeMod':0.5},
+			'dmg':{'main':100,'ratio':{'melee':0,'range':0,'magic':100,'fire':0,'cold':0,'lightning':0}},
+		}
+	}};	
 	
 	
 	
-	/////
-	//PVP END
-	////
+	
+	
 	
 	//Bee.
 	a['pierce'] = {'type':'attack','name':'boom','icon':'attackMagic.fireball',

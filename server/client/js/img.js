@@ -55,7 +55,7 @@ Img.icon = newImage("img/img/iconSheet.png");
 	'system1':{'y':system+1,'x':['left','right','down','up','more','less']},
 	'tab':{'y':system+2,'x':['equip','inventory','quest','skill','friend','pref']},
 	'element':{'y':system+3,'x':['melee','range','magic','fire','cold','lightning']},
-	'status':{'y':system+4,'x':['bleed','knock','drain','burn','chill','confuse']},
+	'status':{'y':system+4,'x':['bleed','knock','drain','burn','chill','stun']},
 	'resource':{'y':system+5,'x':['hp','mana','fury','dodge','heal']},
 	'skill':{'y':system+6,'x':['melee','range','magic','metalwork','woodwork','leatherwork','geology','metallurgy','trapping']},
 	'friend':{'y':system+7,'x':['friend','mute','add','remove']},

@@ -35,12 +35,12 @@ Init.actor = function(){
 		mort.mastery = Actor.template.mastery(type);
 		
 		mort.status = {
-			'bleed':{'active':{"time":0,"list":[]},'resist':0,},				//fixed dmg per frame
+			'bleed':{'active':{"time":0,"list":[]},'resist':0,},				//fixed dmg per frame, fast but short
 			'knock':{'active':{"time":0,"magn":0,"angle":0},'resist':0},		//push
 			'drain':{'active':{"time":0,"magn":0},'resist':0},					//leech mana
-			'burn':{'active':{"time":0,"magn":0},'resist':0},					//dmg pre frame depending on hp
-			'chill':{'active':{"time":0,"magn":0,"atk":0},'resist':0},			//slower move
-			'confuse':{'active':{"time":0,"magn":0,"input":[0,1,2,3]},'resist':0},	//change key moves binding
+			'burn':{'active':{"time":0,"magn":0},'resist':0},					//dmg/frame depending on hp, long but slow
+			'chill':{'active':{"time":0,"magn":0},'resist':0},					//slower move
+			'stun':{'active':{"time":0,"magn":0},'resist':0},					//stun, remove attack charge
 		}
 		mort.statusClient = '000000';
 		mort.pushed = {"time":0,"magn":0,"angle":0};							//same than knock but no combat related

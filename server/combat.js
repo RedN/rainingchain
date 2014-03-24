@@ -163,7 +163,7 @@ Combat.collision.status = function(dmg,b,target){
 		'magic':'drain',
 		'fire':'burn',
 		'cold':'chill',
-		'lightning':'confuse'
+		'lightning':'stun'
 	}
 	for(var i in ar){
 		var maxToRoll = Math.probability(Math.pow(dmg[i] / target.resource.hp.max,1.5),b[ar[i]].chance);
@@ -176,61 +176,71 @@ Combat.collision.status = function(dmg,b,target){
 Combat.collision.status.burn = function(mort,b){	
 	var info = b.burn;
 	var burn = mort.status.burn;
-	burn.active.time = 25*info.time*(1-burn.resist); 
+	burn.active.time = info.time*(1-burn.resist); 
 	burn.active.magn = info.magn*(1-burn.resist); 
-	burn.active.type = info.type || 'hp'; 
 }
 
-Combat.collision.status.confuse = function(mort,b){
-	var info = b.confuse;
-	var confuse = mort.status.confuse;
+Combat.collision.status.stun = function(mort,b){
+	var info = b.stun;
+	var stun = mort.status.stun;
 	
-	confuse.active.time = 25*info.time*(1-confuse.resist);
-	confuse.active.magn = info.magn*(1-confuse.resist);
-	var left = Math.floor(Math.random()*4);
-	confuse.active.input = [left%4,(left+3)%4,(left+2)%4,(left+1)%4];
-	Actor.boost(mort,{'stat':'aim','type':"+",'value':confuse.active.magn,'time':confuse.active.time,'name':'confuse'});
+	stun.active.time = info.time*(1-stun.resist);
+	stun.active.magn = info.magn*(1-stun.resist);
+	
+	Actor.boost(mort,[
+		{'stat':'maxSpd','type':"*",'value':0,'time':stun.active.time,'name':'stun'},
+		{'stat':'atkSpd-main','type':"*",'value':0,'time':stun.active.time,'name':'stun'}
+	]); 
+	
+	for(var i in mort.abilityChange.charge)
+		mort.abilityChange.charge[i] /= stun.active.magn;
 }
 
 Combat.collision.status.bleed = function(mort,b,dmg){
 	var info = b.bleed;
 	var bleed = mort.status.bleed;
 	
-	bleed.active.list.push({'time':25*info.time,'magn':dmg.melee * info.magn/info.time *(1-bleed.resist)});
-	bleed.active.time = bleed.active.list.length;
+	bleed.active.time = 25/info.time/(1-bleed.resist);	//shorter = better for atker
+	bleed.active.magn = info.magn*(1-bleed.resist) / bleed.active.time;
 }
 
 Combat.collision.status.chill = function(mort,b){
 	var info = b.chill;
 	var chill = mort.status.chill;
 	
-	Actor.boost(mort,{'stat':'maxSpd','type':"*",'value':(1/b.chill.magn)*(1-chill.resist),'time':b.chill.time*(1-chill.resist),'name':'chill'}); 
-	//if(b.chill.atk){ addBoost(mort,{'stat':'atkSpd-0','type':"*",'value':b.chill.magn*(1-mort.resist.chill),'time':b.chill.time*(1-mort.resist.chill),'name':'chill'}); }}
-	chill.active.time = Math.max(chill.active.time,b.chill.time*(1-chill.resist));
+	chill.active.time = b.chill.time*(1-chill.resist);
+	chill.active.magn = (1/b.chill.magn)*(1-chill.resist);
+	
+	Actor.boost(mort,{'stat':'maxSpd','type':"*",'value':chill.active.magn,'time':chill.active.time,'name':'chill'}); 
+	
+	
 }
 
 Combat.collision.status.knock = function(mort,b){
 	var info = b.knock;
 	var knock = mort.status.knock;
 	
-	knock.active.time = 25*info.time*(1-knock.resist); 
+	knock.active.time = info.time*(1-knock.resist); 
 	knock.active.magn = info.magn*(1-knock.resist);	
 	knock.active.angle = b.moveAngle;
 }
 
 Combat.collision.status.drain = function(mort,b){
-	return;
-	//BROKEN
-	
 	var info = b.drain;
+	var drain = mort.status.drain;
 	
 	var player = List.all[b.parent]; if(!player) return;
 	
-	var amount = mort.resource.mana.max * 0.05 * info.magn;
+	
+	drain.active.time = info.time*(1-drain.resist); 
+	drain.active.magn = info.magn*(1-drain.resist);	
 
-	player.mana += amount;
-	mort.mana -= amount;
-	mort.mana = mort.mana.mm(0);
+	Actor.changeResource(player,{mana:amount});
+	Actor.boost(mort,{'stat':'mana-max','type':"+",'value':-drain.active.magn,'time':drain.active.time,'name':'drain'}); 
+	Actor.boost(player,{'stat':'mana-max','type':"+",'value':drain.active.magn,'time':drain.active.time,'name':'drain'}); 
+
+	player.mana = player.resource.mana.max;
+	mort.mana = 0;
 }
 
 
@@ -253,7 +263,7 @@ Combat.collision.leech = function(mort,b){
 	
 	var player = List.all[b.parent]; if(!player) return;
 	
-	var amount = (player.resource.hp.max-player.hp) * 0.01 * info.magn;
+	var amount = (player.resource.hp.max-player.hp) * info.magn;
 	Actor.changeResource(player,{hp:amount});
 	
 }

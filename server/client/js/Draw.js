@@ -430,7 +430,8 @@ Draw.convert = {};
 Draw.convert.boost = function(boost){
 	//Convert a boost object into a string.
 	if(boost.type === 'custom'){ return Db.customBoost[boost.value].name; }
-
+	
+	
 	var name = Db.stat[boost.stat].name;
 	
 	//Round and add %

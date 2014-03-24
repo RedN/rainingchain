@@ -125,6 +125,33 @@ Init.db.enemy = function(){
 	var a = Db.enemy;
 
 	
+	a["bat"] = {}; //{
+	a["bat"]["normal"] = {  //{
+		"name":"Bat",
+		"sprite":{'name':"bat",'sizeMod':1},
+		
+		"abilityList":[
+			{'template':'scratch','aiChance':0.2,'extra':{
+				'leech,chance':1,'leech,magn':0.5,'hitImg,name':'cursePink',			
+			}},
+			{'template':'scratch','aiChance':0.4,'extra':{}},
+			0.3
+		],
+	
+		'deathExp':1,
+		
+		"equip":{'def':{'melee':2,'range':2,'magic':2,'fire':1,'cold':0.5,'lightning':1},
+				'dmg':{'melee':1,'range':1,'magic':1,'fire':1,'cold':1,'lightning':1}},	
+		"acc":2,
+		"maxSpd":15,
+		"moveRange":{'ideal':25,"confort":25,"aggressive":500,"farthest":600},	
+	}; //}
+	//}
+	
+	
+	
+	
+	
 	a["troll"] = {}; //{
 	a["troll"]["ice"] = {  //{
 		"name":"Ice Troll",
@@ -158,7 +185,8 @@ Init.db.enemy = function(){
 		"maxSpd":3,
 	}; //}
 	//}
-	a["system"] = {};
+	
+	a["system"] = {}; //{
 	a["system"]["grave"] = {  //{
 		"name":"Grave",
 		"sprite":{'name':"grave",'sizeMod':1},
@@ -178,6 +206,7 @@ Init.db.enemy = function(){
 		'nevercombat':1,
 		'nevermove':1,
 	}; //}
+	//}
 	
 	a["block"] = {}; //{
 	a["block"]["1x1"] = {  //{
@@ -281,12 +310,13 @@ Init.db.enemy.creation = function(e){
 	for(var i in e.abilityList){
 		if(typeof e.abilityList[i] !== 'object') continue;
 		var a = deepClone(Db.ability[e.abilityList[i].template]);
+		a.action.param = useTemplate(Attack.template(),a.action.param,0);
 		a.action.param = useTemplate(a.action.param,e.abilityList[i].extra,1,1);	//TOFIX if want to change something other then attack
 				
 		e.abilityList[i] = e.abilityList[i].aiChance || 0.5;
+		e.abilityList[i].id = Math.randomId();	//cuz cant have same id
 		Actor.swapAbility(e,a,position++);
 	}
-	console.log(e.abilityList);
 	e.abilityList.normalize();
 
 

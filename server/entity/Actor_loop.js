@@ -167,8 +167,9 @@ Actor.loop.status = function(mort){
 	Actor.loop.status.knock(mort);
 	Actor.loop.status.burn(mort);
 	Actor.loop.status.bleed(mort);
-	Actor.loop.status.confuse(mort);
+	Actor.loop.status.stun(mort);
 	Actor.loop.status.chill(mort);
+	Actor.loop.status.drain(mort);
 	
 	mort.statusClient = '';
 	for(var i in Cst.status.list)	mort.statusClient += mort.status[Cst.status.list[i]].active.time > 0 ? '1' : '0';
@@ -190,8 +191,8 @@ Actor.loop.status.knock = function(mort){
 	}
 }
 
-Actor.loop.status.confuse = function(mort){
-	var status = mort.status.confuse.active;
+Actor.loop.status.stun = function(mort){
+	var status = mort.status.stun.active;
 	if(status.time > 0){
 		status.time--;
 	} 
@@ -200,21 +201,28 @@ Actor.loop.status.confuse = function(mort){
 Actor.loop.status.burn = function(mort){
 	var status = mort.status.burn.active;
 	if(status.time> 0){
-		if(!status.type || status.type === 'hp'){ Actor.changeHp(mort, (1-status.magn) + '%'); }
-		if(status.type === 'maxHp'){ Actor.changeHp(mort,-mort.resource.hp.max*status.magn);}
+		Actor.changeHp(mort, -status.magn*mort.hp);
 		status.time--;
 	}
 }
 
 Actor.loop.status.bleed = function(mort){
-	var list = mort.status.bleed.active.list;
-	for(var i in list){
-		Actor.changeHp(mort,-list[i].magn);
-		list[i].time--;
-		if(list[i].time <= 0){ list.splice(i,1); }
+	var status = mort.status.bleed.active;
+	
+	if(status.time> 0){
+		Actor.changeHp(mort, -status.magn);
+		status.time--;
 	}
-	mort.status.bleed.active.time = list.length;
 }
+
+Actor.loop.status.drain = function(mort){
+	var status = mort.status.drain.active;
+	
+	if(status.time> 0){
+		status.time--;
+	}
+}
+
 
 Actor.loop.regen = function(mort){
 	for(var i in mort.resource){
@@ -332,7 +340,7 @@ Actor.fall = function(mort){
 
 
 Actor.loop.move = function(mort){
-	if(mort.status && mort.status.confuse.active.time > 0){ var bind = mort.status.confuse.active.input;} else { var bind = [0,1,2,3]; }
+	if(mort.status && mort.status.stun.active.time > 0){ var bind = mort.status.stun.active.input;} else { var bind = [0,1,2,3]; }
 	if(mort.bumper[0]){mort.spdX = -Math.abs(mort.spdX*0.5) - 1;} 
 	if(mort.bumper[1]){mort.spdY = -Math.abs(mort.spdY*0.5) - 1;}
 	if(mort.bumper[2]){mort.spdX = Math.abs(mort.spdX*0.5) + 1;} 

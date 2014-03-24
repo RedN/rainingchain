@@ -20,7 +20,7 @@ Init.db.anim = function(){
 		"windBomb":{'frame':10},
 		"waterBomb":{'frame':15},
 		
-		"fireBomb":{'frame':30},
+		"fireBomb":{'frame':30,'size':2},
 		"fireBomb2":{'frame':6},
 		"fireHit":{'frame':12},
 		"iceBomb":{'frame':9},

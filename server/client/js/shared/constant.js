@@ -59,7 +59,7 @@ Cst.skill = {
 
 Cst.element = {
 	'list':["melee","range","magic","fire","cold","lightning"],
-	'toStatus':{"melee":"bleed","range":"knock","magic":"drain","fire":"burn","cold":"chill","lightning":"confuse"},
+	'toStatus':{"melee":"bleed","range":"knock","magic":"drain","fire":"burn","cold":"chill","lightning":"stun"},
 	'toColor':{'melee':'#F97A03','range':'#3EEA31','magic':'#AE52F5','fire':'#FF0000','cold':'#A9F5F2','lightning':'#FFFF00'},
 	'physical':["melee","range","magic"],
 	'elemental':["fire","cold","lightning"],
@@ -78,8 +78,8 @@ Cst.color = {
 
 
 Cst.status = {
-	'list':["bleed","knock","drain","burn","chill","confuse"],
-	'toElement':{"bleed":"melee","knock":"range","drain":"magic","burn":"fire","chill":"cold","confuse":"lightning"},
+	'list':["bleed","knock","drain","burn","chill","stun"],
+	'toElement':{"bleed":"melee","knock":"range","drain":"magic","burn":"fire","chill":"cold","stun":"lightning"},
 }
 
 Cst.resource = {

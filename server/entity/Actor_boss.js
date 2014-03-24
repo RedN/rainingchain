@@ -103,7 +103,7 @@ Init.db.boss = function(){
 		
 		
 		boss.attack['midSpear'] = {
-			'type':"bullet",'angle':15,'amount':1, 'aim': 0,'objImg':{'name':"iceshard",'sizeMod':1},'hitImg':{'name':"ice2",'sizeMod':0.5},
+			'type':"bullet",'angle':15,'amount':1, 'aim': 0,'objImg':{'name':"iceshard",'sizeMod':1},'hitImg':{'name':"iceHit",'sizeMod':0.5},
 			'dmg':{'main':1,'ratio':{'melee':0,'range':10,'magic':80,'fire':10,'cold':0,'lightning':0}},	
 		};
 		

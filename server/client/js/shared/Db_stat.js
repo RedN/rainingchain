@@ -113,14 +113,14 @@ Init.db.stat = function(){
 	'leech-magn':{
 		'icon':'resource.hp',
 		'name':'Leech Life Magn.',
-		'boost':{'stat':['bonus','leech','magn'],},
+		'boost':{'base':0.01,'stat':['bonus','leech','magn'],},
 		'playerOnly':1,
 		'description':"Affect %Life recovered if the Life Leech is successful. Leech is not affected by damage dealt.",
 		},
 	'leech-chance':{
 		'icon':'resource.hp',
 		'name':'Leech Life Chance',
-		'boost':{'stat':['bonus','leech','chance'],},
+		'boost':{'base':0,'stat':['bonus','leech','chance'],},
 		'playerOnly':1,
 		'description':"Affect Chance to Life Leech when hitting an enemy.",
 		},
@@ -228,14 +228,14 @@ Init.db.stat = function(){
 	'burn-time':{
 		'icon':'status.burn',
 		'name':'Burn Time',
-		'boost':{'base':1,'stat':['bonus','burn','time'],},
+		'boost':{'base':100,'stat':['bonus','burn','time'],},
 		'playerOnly':1,
 		'description':"Affect Burn Duration.",
 		},
 	'burn-magn':{
 		'icon':'status.burn',
 		'name':'Burn Magn',
-		'boost':{'base':0.01,'stat':['bonus','burn','magn'],},
+		'boost':{'base':0.002,'stat':['bonus','burn','magn'],},
 		'playerOnly':1,
 		'description':"Affect damage dealt to a burnt enemy.",
 		},	
@@ -249,14 +249,14 @@ Init.db.stat = function(){
 	'chill-time':{
 		'icon':'status.chill',
 		'name':'Chill Time',
-		'boost':{'base':1,'stat':['bonus','chill','time'],},
+		'boost':{'base':50,'stat':['bonus','chill','time'],},
 		'playerOnly':1,
 		'description':"Affect Chill Duration.",
 		},
 	'chill-magn':{
 		'icon':'status.chill',
 		'name':'Chill Magn',
-		'boost':{'base':0.25,'stat':['bonus','chill','magn'],},
+		'boost':{'base':2,'stat':['bonus','chill','magn'],},
 		'playerOnly':1,
 		'description':"Affect how much speed and attack speed with be reduced.",
 		},	
@@ -267,26 +267,26 @@ Init.db.stat = function(){
 		'playerOnly':1,
 		'description':"Affect chance to chill enemy.",
 		},	
-	'confuse-time':{
-		'icon':'status.confuse',
+	'stun-time':{
+		'icon':'status.stun',
 		'name':'Confuse Time',
-		'boost':{'base':1,'stat':['bonus','confuse','time'],},
+		'boost':{'base':10,'stat':['bonus','stun','time'],},
 		'playerOnly':1,
 		'description':"Affect Confuse Duration.",
 		},
-	'confuse-magn':{
-		'icon':'status.confuse',
+	'stun-magn':{
+		'icon':'status.stun',
 		'name':'Confuse Magn',
-		'boost':{'base':1,'stat':['bonus','confuse','magn'],},
+		'boost':{'base':2,'stat':['bonus','stun','magn'],},
 		'playerOnly':1,
-		'description':"Affect how reduced the sight of view of confused enemy is.",
+		'description':"Affect how reduced the sight of view of stund enemy is.",
 		},	
-	'confuse-chance':{
-		'icon':'status.confuse',
+	'stun-chance':{
+		'icon':'status.stun',
 		'name':'Confuse Chance',
-		'boost':{'base':1,'stat':['bonus','confuse','chance'],},
+		'boost':{'base':1,'stat':['bonus','stun','chance'],},
 		'playerOnly':1,
-		'description':"Affect chance to confuse enemy.",
+		'description':"Affect chance to stun enemy.",
 		},		
 	'bleed-time':{
 		'icon':'status.bleed',
@@ -298,7 +298,7 @@ Init.db.stat = function(){
 	'bleed-magn':{
 		'icon':'status.bleed',
 		'name':'Bleed Magn',
-		'boost':{'base':0.25,'stat':['bonus','bleed','magn'],},
+		'boost':{'base':100,'stat':['bonus','bleed','magn'],},
 		'playerOnly':1,
 		'description':"Affect damage dealt by bleeding enemy.",
 		},	
@@ -312,14 +312,14 @@ Init.db.stat = function(){
 	'drain-time':{
 		'icon':'status.drain',
 		'name':'Drain Time',
-		'boost':{'base':1,'stat':['bonus','drain','time'],},
+		'boost':{'base':100,'stat':['bonus','drain','time'],},
 		'playerOnly':1,
 		'description':"USELESS. Affect how long the enemy will be drained.",
 		},
 	'drain-magn':{
 		'icon':'status.drain',
 		'name':'Drain Magn',
-		'boost':{'base':0.05,'stat':['bonus','drain','magn'],},
+		'boost':{'base':10,'stat':['bonus','drain','magn'],},
 		'playerOnly':1,
 		'description':"Affect how much mana is drained from enemy.",
 		},	
@@ -333,7 +333,7 @@ Init.db.stat = function(){
 	'knock-time':{
 		'icon':'status.knock',
 		'name':'Knock Time',
-		'boost':{'base':1,'stat':['bonus','knock','time'],},
+		'boost':{'base':25,'stat':['bonus','knock','time'],},
 		'playerOnly':1,
 		'description':"Affect how long the enemy will be pushed back.",
 		},
@@ -370,10 +370,10 @@ Init.db.stat = function(){
 		'boost':{'stat':['status','drain','resist'],},
 		'description':"",
 		},	
-	'resist-confuse':{
-		'icon':'status.confuse',
+	'resist-stun':{
+		'icon':'status.stun',
 		'name':'Confuse Resist',
-		'boost':{'stat':['status','confuse','resist'],},
+		'boost':{'stat':['status','stun','resist'],},
 		'description':"",
 		},	
 	'resist-knock':{

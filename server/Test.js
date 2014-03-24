@@ -52,12 +52,11 @@ Test.serverStart = function(){
 Test.signIn = function(key){	
 	Test.signIn.hideHUD(key);
 	
-	
-	Itemlist.add(key,'gold');
-	
-	
-	
-	TestingQuest(key);
+	if(Server.testing){
+		Test.enemy(key);
+		Itemlist.add(key,'gold');
+		TestingQuest(key);
+	}
 }
 
 Test.signIn.hideHUD = function(key){
@@ -81,25 +80,34 @@ Test.dayCycle = function(key){
 Test.firstSignIn = function(key){
 	var inv = List.main[key].invList;
 	var mort = List.all[key];
-    
-	
-	/*
+
 	Itemlist.add(inv,'gold');
 	Itemlist.add(inv,'teleport');
-	*/
 	
-	var al = {
+	Actor.teleport(mort,56*32,101*32,"tutorial@MAIN");
+	mort.respawnLoc = {safe:{x:56*32,y:101*32,map:"tutorial@MAIN"},recent:{x:56*32,y:101*32,map:"tutorial@MAIN"}};
+	
+	//mort.respawnLoc = {safe:{x:1000,y:1000,map:"pvpF4A@MAIN"},recent:{x:1000,y:1000,map:"pvpF4A@MAIN"}};
+	//Actor.teleport(mort,1000,1000,"tutorial@MAIN");
+	//Actor.teleport(mort,1000,1000,"pvpF4A@MAIN");
+	
+	Chat.add(mort.id,"Note: This is a very early beta. Expect things to change... A LOT.");
+	Chat.add(mort.id,"Control: WADS. (For AZERTY users, change key binding via Pref Tab)");
+	Chat.add(mort.id," ");
+	
+
+	
+	
+	//PVP
+	mort.abilityList = {
 		'pvp-bullet':1,
 		'pvp-fireball':1,
 		'pvp-freeze':1,
 		'pvp-explosion':1,
 		'pvp-invincibility':1,
 		'pvp-heal':1,
-
 	};
-	for(var i in al) mort.abilityList[i] = al[i];
-	
-	
+
 	Actor.swapAbility(mort,'pvp-bullet',0);
 	Actor.swapAbility(mort,'pvp-explosion',1);
 	Actor.swapAbility(mort,'pvp-freeze',2);
@@ -107,16 +115,8 @@ Test.firstSignIn = function(key){
 	Actor.swapAbility(mort,'pvp-heal',4);
 	Actor.swapAbility(mort,'pvp-invincibility',5);
 	
-	//Actor.teleport(mort,56*32,101*32,"tutorial@MAIN");
-	//mort.respawnLoc = {safe:{x:56*32,y:101*32,map:"tutorial@MAIN"},recent:{x:56*32,y:101*32,map:"tutorial@MAIN"}};
 	
-	//mort.respawnLoc = {safe:{x:1000,y:1000,map:"pvpF4A@MAIN"},recent:{x:1000,y:1000,map:"pvpF4A@MAIN"}};
-	Actor.teleport(mort,1000,1000,"tutorial@MAIN");
-	//Actor.teleport(mort,1000,1000,"pvpF4A@MAIN");
 	
-	Chat.add(mort.id,"Note: This is a very early beta. Expect things to change... A LOT.");
-	Chat.add(mort.id,"Control: WADS. (For AZERTY users, change key binding via Pref Tab)");
-	Chat.add(mort.id," ");
 	Chat.add(mort.id,"====Attacks:=====");
 	Chat.add(mort.id,"Left Click: Arrow.");
 	Chat.add(mort.id,"Right Click: Explosion.");
@@ -124,7 +124,7 @@ Test.firstSignIn = function(key){
 	Chat.add(mort.id,"Shift + Right Click: x9 Fireball.");
 	Chat.add(mort.id,"F: Instant 100% Healing.");
 	Chat.add(mort.id,"Space: Invincibility for 4 frames.");
-	
+
 
 
 }
@@ -142,23 +142,53 @@ Test.loop.player = function(key){
 }
 	
 	
-Test.ratio = function(info){
-	var tmp = deepClone(info);
-	tmp.main = round(tmp.main,2);
-	var array = [];
-	for(var i in tmp.ratio){
-		array.push(round(tmp.ratio[i],2))
-	}
-	tmp.ratio = array;
-	return tmp;
-}
 
 Test.a = function(){	//when starting server
 	
 		
 }
 
-Test.b = function(key,amount){
+Test.spawnEnemy = function(key,info){
+	var player = List.all[key];
+	
+	Actor.creation({
+		'xym':{x:player.x,y:player.y,map:player.map},
+		"category":info[0] || "bat",		
+		"variant":info[1] || "normal",		
+		"extra":{},
+	});
+}
+
+Test.enemy = function(key){
+	Actor.teleport(List.all[key],250,250,"testEnemy");
+	Itemlist.add(key,'QtestEnemy-enemyGenerator');
+	Test.generateEquip(key,0,5);
+}
+
+Test.generateEquip = function(key,lvl,maxAmount){
+	lvl = lvl || 0;
+	maxAmount = maxAmount || 5;
+	
+	var mort = List.all[key];
+	for(var i in mort.equip.piece){
+		var id = Plan.use(key,{
+			piece: i,
+			type: Cst.equip[i].type.random(),
+			lvl: lvl,
+			
+			category: "equip",
+			color: "white",
+			icon: "plan.equip",
+			id: Math.randomId(),
+			maxAmount: maxAmount,
+			minAmount: 0,
+			name: "Equip Plan",
+			quality: 0,
+			rarity: 0,
+			req: {item: [],skill:{}},
+		});
+		Actor.switchEquip(mort,id,i);
+	}
 	
 }
 

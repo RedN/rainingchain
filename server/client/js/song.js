@@ -77,6 +77,10 @@ Init.db.song = function(){
 		
 	}
 	//forest http://www.newgrounds.com/audio/listen/483912
+	//http://www.newgrounds.com/audio/listen/568699
+	
+	//jontron-like http://www.newgrounds.com/audio/listen/476685
+	
 	
 	for(var i in Db.song){
 
@@ -127,3 +131,24 @@ Song.beingPlayed = null;
 
 
 
+
+/*
+Hi,
+
+I was listening to the songs you have made on your channel and I really liked your song ...
+My name is Samuel Magnan and I'm currently making an open-source MMORPG called Raining Chain.
+I was wondering if I could use your song in the commercial project.
+Obviously, your name will be mentionned in the credits.
+Players can also see the compositor name of the song currently playing directly in-game.
+
+Contact me at rainingchain@gmail.com or via NewGrounds.
+
+Quick Game Presentation:
+https://www.youtube.com/watch?v=XsnMmUY69ws
+
+
+Thanks a lot :D
+If you want to get updates about the project, you can check it out directly on Github or via my Youtube Channel.
+https://github.com/RainingChain/rainingchain
+https://www.youtube.com/user/IdkWhatsRc
+*/
