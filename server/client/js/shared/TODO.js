@@ -83,24 +83,20 @@ ENEMY:
 
 
 
-
+remake sub target: if confort, get sub and do sub no matter what
+	
 make attack template
 create basic attack template + ability
 
 stat window
-portal team
 cutscene
 contribution pts window
-hax rewards
-skill doc
-quest updater on signin
 plan revamp: already know what min and max mods are
 waypoint window
 Crafting System with White
+time per week system
+symbol player name and custom look
 
-based status effect chance
-orc renamed mage, melee, range
-fall function linked to map
 teleport actor
 
 
@@ -114,9 +110,7 @@ teleport actor
 
 
 remake tileset:
-water big circle like land
 remove useless stuff
-remove back for water deco so useable deep and not
 remove tree weird
 change ladder well cuz too detailed
 

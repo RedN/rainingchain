@@ -215,35 +215,24 @@
 			</form>		
 		</div>
 		
-		<div id="customMod" title="Use Custom Mods">
-			<font size="5"> You can use custom images and scripts (mods) to play this game. </font>			
-			<font size="2">Type $mod while playing to open this window. </font>		
+		<div id="customMod" title="Use Custom Mods"></div>
+	
+	
+		<div id="hax" title="Hax List"></div>
+		
+		<div id="contactMe" title="Contact Me"> 
+			<select id="contactMeSelect">
+			  <option value="bug">Bug</option>
+			  <option value="hax">Hax</option>
+			  <option value="other">Other</option>
+			</select>
 			<br>
-			<div class="fileUpload btn btn-primary">
-				<span>Load Custom Mods</span>
-				<input type="file" class="upload" onchange="readFiles(this.files)" multiple="" />
-			</div>	
+			Title: <input id="contactMeTitle"></input><br>			
+			Text (Up to 1k Characters): <br>
+			<textarea id="contactMeText" rows="10" cols="50"></textarea>
 			<br>
-			<h2>List of Mods Currently Active:</h2>
-			<div id="customModList"></div>
-			<br>
-			<br>
-			<h2>Image:</h2>
-			Loading a image named "sprite [name].png" will modify all actors using the sprite with same name. (Check Db.sprite)<br>
-			Loading a image named "anim [name].png" will modify animations with same name. (Check Db.anim)<br>
-			Loading a image named "icon.png" will modify the appearance of all icons.<br>
-			Ex: "sprite bee.png", "anim fire1.png",<br>
-			The game only supports ".png" images. (No ".jpeg", No ".gif").<br>
-			Make sure that your custom image size is the same than the original.<br>
-			<br>
-			<h2>Script:</h2>
-			This loader can also be used to load custom scripts. Format is ".js" or ".txt".<br>
-			Scripts are directly evaluated via "eval()". Only use scripts you trust.<br>	
-			You ABSOLUTELY need to load custom scripts via this loader. Failure to do so will result in an automatic BAN.<br>
-			For more information about what is allowed, click here.<br>	
-			To remove mods, simply refresh the page.<br>	
+			<input type="submit" value="Submit" onclick="Chat.report()">
 		</div>
-
 		
 		<script>
 		/*Jquery 101:
@@ -255,9 +244,7 @@
 		$( document ).tooltip('option','show',100);
 		
 		$( "#help" ).dialog({autoOpen: false,width: 1200});
-		$.get('/js/help.html').success(function(data){
-			$('#help').html(Init.help(data));
-		});
+		$.get('/js/help.html').success(function(data){ $('#help').html(Init.help(data));});
 		
 		$( "#questionDiv" ).dialog({autoOpen: false,width: 400});
 		$('#questionForm').submit(function(e) {
@@ -268,8 +255,14 @@
 			e.preventDefault();
 		});
 		//ts('Chat.question(key,{text:"asdkjasdas asd ahjd asd asjhd",func:function(){return false},repeat:1})')
-		$( "#customMod" ).dialog({autoOpen: false,width: 1000});
 		
+		$( "#customMod" ).dialog({autoOpen: false,width: 1000});
+		$.get('/js/customMod.html').success(function(data){	$('#customMod').html(data);	});
+		
+		$( "#hax" ).dialog({autoOpen: false,width: 1000});
+		$.get('/js/hax.html').success(function(data){ $('#hax').html(data);});
+		
+		$( "#contactMe" ).dialog({autoOpen: false,width: 1000});
 		
 		$('#chatForm').submit(function(e) {
 			Chat.send();

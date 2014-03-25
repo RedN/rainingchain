@@ -42,7 +42,7 @@ Init.db = function(data){
 	
 	
 
-	var collections = ["customMod","player","main","ability","equip","account","clan",'plan'];
+	var collections = ["report","customMod","player","main","ability","equip","account","clan",'plan'];
 	
 	//real direct db
 	DB = require("mongojs").connect(databaseURI, collections, MONGO.options);

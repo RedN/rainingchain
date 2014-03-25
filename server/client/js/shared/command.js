@@ -583,6 +583,24 @@ Command.list['team,join'].doc = {
 	],
 }
 
+Command.list['team,tele'] = function(key,name){
+	name = escape.user(name);
+	var mort = List.all[key];
+	var mort2 = List.all[List.nameToKey[name]];
+	if(!mort2){ Chat.add(key, 'This player is not online.'); return; }
+	if(mort2.team !== mort.team){ Chat.add(key, 'You are not in the same team than this player. Note: $team,join,[TEAMNAME]'); return; }
+	if(!Actor.teleport.join(mort,mort2)){
+		Chat.add(key, 'This player is in a solo instance.')
+	}
+}
+Command.list['team,tele'].doc = {
+	'description':"Teleport to a teammate.",
+	'help':1,'param':[
+		{type:'Letters',name:'Player Name',optional:0},
+	],
+}
+
+Actor.teleport.join
 
 Command.list['pvp'] = function(key,slot){
 	var mort = List.all[key];

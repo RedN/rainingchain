@@ -277,6 +277,13 @@ Actor.teleport = function(mort,x,y,map){
 		Chat.add(mort.id,"You leave " + oldmap.name + " and you enter " + newmap.name + '.');
 }
 
+Actor.teleport.join = function(mort,mort2){
+	if(mort2.map.have("@@")) return false;
+	
+	Actor.teleport(mort,mort2.respawnLoc.recent.x,mort2.respawnLoc.recent.y,mort2.respawnLoc.recent.map);
+	return true;
+}
+
 Actor.talk = function(mort,enemyId){
 	if(List.all[enemyId].dialogue){
 		List.all[enemyId].dialogue.func(mort.id,List.main[mort.id].quest);
@@ -315,7 +322,7 @@ Actor.pushing = function(pusher,beingPushed){
 	var posB = {'x':mort.x + blockVarX,'y':mort.y+blockVarY};
 	var posP = {'x':pusher.x + pusherVarX,'y':pusher.y+pusherVarY};
 	
-	if(Collision.distancePtPt(posB,posP) > 64) return
+	if(Collision.distancePtPt(posB,posP) > 64) return;	//toofar
 	//
 	
 	mort.pushed.time = mort.block.time;

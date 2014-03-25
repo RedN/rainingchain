@@ -444,7 +444,7 @@ Actor.loop.friendList = function(mort){
 	var fl = List.main[key].social.list.friend;
     
 	for(var i in fl){
-		fl[i].online = Chat.send.pm.test(List.all[key].name,i);
+		fl[i].online = Chat.receive.pm.test(List.all[key].name,i);
 	}
 }
 

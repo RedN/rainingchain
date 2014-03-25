@@ -54,7 +54,7 @@ Cst.equip = {
 })();
 
 Cst.skill = {
-	'list':['melee','range','magic','metalwork','woodwork','leatherwork','geology','metallurgy','trapping'],
+	'list':['melee','range','magic','metalwork','woodwork','leatherwork','mining','woodcutting','trapping'],
 }
 
 Cst.element = {

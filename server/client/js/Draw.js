@@ -95,6 +95,14 @@ Draw.logout = function(){
 		"shiftLeft":{'func':Chat.send.command,'param':['$logout,' + i]},
 		'text':"Shift-Left Click to safely leave the game.",
 	});	
+	
+	//contact me
+	Draw.icon('system.close',[Cst.WIDTH-size*2,0],size);
+	Button.creation(0,{
+		'rect':[Cst.WIDTH-size*2,Cst.WIDTH-size,0,size],
+		"shiftLeft":{'func':function(){ $("#contactMe").dialog("open"); },'param':[]},
+		'text':"Shift-Left to report a bug/hack/other.",
+	});	
 }
 
 //Option

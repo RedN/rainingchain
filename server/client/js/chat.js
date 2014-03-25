@@ -209,5 +209,21 @@ Chat.question = function(text,option){
 
 
 		
-		
+Chat.report = function(){
+	var text = $("#contactMeText")[0].value;
+	if(text.length > 999){
+		$("#contactMeText")[0].value = "You have " + (text.length-999) + " too many characters.\n" + text;
+		return;
+	}	
+
+	socket.emit('sendChat',{
+		text:$("#contactMeText")[0].value,
+		type:'report',
+		to:"RC",
+		category:$("#contactMeSelect")[0].value,
+		title:$("#contactMeTitle")[0].value,
+	});
+	$("#contactMe").dialog("close");
+	Chat.add(0,"Your report has been sent.");
+}
 		

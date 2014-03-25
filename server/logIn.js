@@ -287,6 +287,16 @@ Load.main.uncompress = function(main,key){
 		status: "on"
 	};
 	
+	//If changes with quest
+	var allQuest = Main.template.quest();
+	for(var i in allQuest){
+		if(!main.quest[i]) main.quest[i] = allQuest[i];
+		for(var j in allQuest[i]){
+			if(typeof main.quest[i][j] === 'undefined')
+				main.quest[i][j] = allQuest[i][j];
+		}
+	}
+	
 	
 	
     return main;

@@ -54,11 +54,11 @@ Chat.question = function(key,q){	//q:{text, func, repeat, [option]}
 
 
 //when a player wants to send a text
-Chat.send = function(data){
+Chat.receive = function(data){
 	var key = data.key;									//source (key)
 	var mort = List.all[key];
 	if(!mort) return;
-	var from = mort.name;                      //source (name)
+	var from = mort.name;                     			 //source (name)
 	var to = escape.quote(data.to);                     //destination (name)
 	var text = Chat.parse(escape.quote(data.text));      //text
 	var type = escape.quote(data.type);                 //clan || pm || public
@@ -66,13 +66,14 @@ Chat.send = function(data){
 	if(!type || !text || !to || !from){ return; }
 	if(to === from){ Chat.add(key,"Ever heard of thinking in your head?"); return; }
 	
-	if(type === 'public') Chat.send.public(key,text,to,type,from,data); 
-	else if(type === 'pm') Chat.send.pm(key,text,to,type,from,data); 
-	else if(type === 'clan') Chat.send.clan(key,text,to,type,from,data); 
+	if(type === 'public') Chat.receive.public(key,text,to,type,from,data); 
+	else if(type === 'pm') Chat.receive.pm(key,text,to,type,from,data); 
+	else if(type === 'clan') Chat.receive.clan(key,text,to,type,from,data); 
+	else if(type === 'report') Chat.receive.report(key,data); 
 		
 };
 
-Chat.send.public = function(key,text,to,type,from,data){
+Chat.receive.public = function(key,text,to,type,from,data){
     if(text === data.text){
 		List.all[key].chatHead = {'text':text,'timer':25*10};
 	}
@@ -80,8 +81,8 @@ Chat.send.public = function(key,text,to,type,from,data){
 	return;
 }
 
-Chat.send.pm = function(key,text,to,type,from,data){
-    var res = Chat.send.pm.test(from,to);
+Chat.receive.pm = function(key,text,to,type,from,data){
+    var res = Chat.receive.pm.test(from,to);
 	if(res){
 		Chat.add(List.nameToKey[to],text,'pm',{'from':from,'to':to});
 		Chat.add(key,text,'pm',{'from':from,'to':to});
@@ -90,7 +91,7 @@ Chat.send.pm = function(key,text,to,type,from,data){
 	if(res === null) Chat.add(key,"This player doesn't exist.");
 }
 
-Chat.send.pm.test = function(from,to){
+Chat.receive.pm.test = function(from,to){
 	//test if player can send pm to another. check for online but also mute list
 	var main = List.main[List.nameToKey[to]];
 	if(!main) return null;
@@ -99,7 +100,7 @@ Chat.send.pm.test = function(from,to){
 	return true;
 }
 
-Chat.send.clan = function(key,text,to,type,from,data){
+Chat.receive.clan = function(key,text,to,type,from,data){
     var clanName = List.main[key].social.list.clan[to];
     		
     if(!clanName){ Chat.add(key,'You typed too many \"/\".'); return; }
@@ -114,11 +115,23 @@ Chat.send.clan = function(key,text,to,type,from,data){
     return;
 }    
 
+Chat.receive.report = function(key,data){
+	if(data.text.length < 1000 && data.title.length < 100){
+		db.insert('report',{
+			date:new Date().toLocaleString(),
+			user:List.all[key].username,
+			text:data.text,
+			title:data.title,
+			category:data.category,			
+		});
+	}
+}
+
 io.sockets.on('connection', function (socket) {
 	//server receives information from client that wishes to send a message
 	socket.on('sendChat', function (data) {
 		data.key = socket.key;
-		Chat.send(data);
+		Chat.receive(data);
 	})
 });
 
