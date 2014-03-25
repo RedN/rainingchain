@@ -136,12 +136,13 @@ Draw.window.bank = function (){ ctxrestore();
 
 //{Stat
 Draw.window.offensive = function (){ ctxrestore();
-	Draw.window.stat('offensive');	
+	var hover = Draw.window.stat('offensive');	
+	if(hover !== undefined){ Draw.window.stat.hover(hover,'offensive'); }
+	
 }
 
 Draw.window.defensive = function (){ ctxrestore();
-	Draw.window.stat('defensive');	
-	
+	var hover = Draw.window.stat('defensive');	
 	
 	//Final (RUSHED)
 	var def = Actor.getDef(player);
@@ -163,6 +164,7 @@ Draw.window.defensive = function (){ ctxrestore();
 	}
 	ctx.fillStyle = 'black';
 	
+	if(hover !== undefined){ Draw.window.stat.hover(hover,'defensive'); }
 	
 }
 
@@ -206,8 +208,7 @@ Draw.window.stat = function(type){ ctxrestore();
 	ctx.fillText(str,numX,numY);
 	
 	
-	if(hover !== undefined){ Draw.window.stat.hover(hover,type); }
-	
+	return hover;
 }
 
 Draw.window.stat.list = {

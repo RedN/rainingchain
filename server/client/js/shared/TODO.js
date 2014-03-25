@@ -98,7 +98,7 @@ Crafting System with White
 time per week system
 symbol player name and custom look
 
-teleport actor
+teleport actor zone
 
 
 
