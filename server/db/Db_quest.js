@@ -85,8 +85,37 @@ Quest.creation = function(q){
 		q.plan[i].id = q.id+'-'+i;
 		Plan.creation(q.plan[i]);
 	}
+	
+	if(Server.testing){
+		Quest.createVariableTester(q);
+	}
+	
+	
+	
 	return q;
 }
+
+Quest.createVariableTester = function(q){
+	var item = {"id":'QuestTester-' + q.id,'name':q.id,'icon':'system.gold','stack':1,'drop':0,
+		'option':[]};
+	
+	for(var i in q.variable){
+		if(["hint", "rewardTier", "reward", "complete", "started", "deathCount", "bonus", "challenge", "requirement", "skillPlot"].have(i)) continue;
+		
+		item.option.push({'name':i,'func':function(key,param){
+			Chat.question(key,{text:q.id + '.' + param,func:(function(){
+				return function(key,value){
+					if(Server.testing) List.main[key].quest[q.id][param] = eval(value);
+					Chat.add(key,"Variable changed");
+				}
+			})()});		
+		},'param':[i]});
+	}
+
+	Item.creation(item);
+
+}
+
 
 Quest.template = function(){
 	return {
@@ -133,7 +162,6 @@ Quest.template.variable = function(){
 		skillPlot:[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
 	};
 }
-
 
 
 

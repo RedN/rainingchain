@@ -47,7 +47,7 @@ Chat.add = function(key,text,type,extra){
 }
 
 
-Chat.question = function(key,q){
+Chat.question = function(key,q){	//q:{text, func, repeat, [option]}
 	List.main[key].question = q;
 	Chat.add(key,q.text || '','question',{option:q.option});
 }

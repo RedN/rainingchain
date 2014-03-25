@@ -81,15 +81,9 @@ ENEMY:
 
 
 
-change enemy ability AI: 3 list of attack aiChance: close, mid, long
-	
-	
-for testing. quest variable modifier
 
 
 
-
-change fall formula
 make attack template
 create basic attack template + ability
 

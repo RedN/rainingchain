@@ -497,13 +497,14 @@ Command.list['cc,leave'].doc = {
 Command.list['question'] = function(key){
 	var q = List.main[key].question;
 	if(!q) return;
-
-	var success = applyFunc(q.func,arguments);
-	if(!success && q.repeat){
-		Chat.add(key,'Invalid answer to server question.');
-		Chat.question(key,q);
-	} else List.main[key].question = null;
 	
+	try {
+		var success = applyFunc(q.func,arguments);
+		if(!success && q.repeat){
+			Chat.add(key,'Invalid answer to server question.');
+			Chat.question(key,q);
+		} else List.main[key].question = null;
+	} catch(err){ }
 	
 	
 }

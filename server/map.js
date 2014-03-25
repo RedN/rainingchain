@@ -35,6 +35,7 @@ Map.creation = function(namemodel,version,lvl){
 		graphic:model.graphic,
 		grid:model.grid,
 		model:model.id,
+		fall:model.fall,
 		timer:version === 'MAIN' ? 1/0 : 1000,// 5*60*1000/25,
 		list:{},		//acts like List.all (for faster activeList)
 		lvl:lvl || model.lvl,

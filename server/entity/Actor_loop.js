@@ -149,8 +149,8 @@ Actor.loop.mapMod = function(mort){
 Actor.loop.pushed = function(mort){
 	var status = mort.pushed;
 	if(status.time > 0){ 
-		mort.spdX = cos(status.angle)*status.magn;
-		mort.spdY = sin(status.angle)*status.magn;
+		mort.spdX += cos(status.angle)*status.magn;
+		mort.spdY += sin(status.angle)*status.magn;
 		status.time--;
 	} else if(mort.type !== 'player'){
 		//TOFIX
@@ -301,19 +301,23 @@ Actor.loop.fall = function(mort){
 	
 	if(value === '4'){ Actor.fall(mort); return; }
 	if(value === '3'){ 
-		var angle = [
-			[270-45,270,270+45],
-			[180,0,0],
-			[90+45,90,90-45],
-		];
+		
+		
+		var list = [
+			[1,0,0],
+			[0,1,90],
+			[-1,0,180],
+			[0,-1,270],
+			[1,1,45],
+			[-1,1,135],
+			[-1,1,225],
+			[1,-1,315],
+		]
 	
-		dance:
-		for(var i = -1 ; i < 2 ; i++){
-			for(var j = -1 ; j < 2 ; j++){
-				if(Collision.getSquareValue({x:xy.x+j,y:xy.y+i},mort.map,'player') === '4'){
-					mort.pushed = {time:1,magn:2,angle:angle[i+1][j+1]};
-					break dance;
-				}
+		for(var i in list){
+			if(Collision.getSquareValue({x:xy.x+list[i][0],y:xy.y+list[i][1]},mort.map,'player') === '4'){
+				mort.pushed = {time:1,magn:1,angle:list[i][2]};
+				break;
 			}
 		}
 	}
@@ -329,8 +333,7 @@ Actor.loop.fall = function(mort){
 }
 
 Actor.fall = function(mort){
-	mort.hp = -1;
-
+	List.map[mort.map].fall(mort.id,mort);
 }
 
 
