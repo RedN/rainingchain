@@ -56,9 +56,9 @@ Chat.question = function(key,q){	//q:{text, func, repeat, [option]}
 //when a player wants to send a text
 Chat.receive = function(data){
 	var key = data.key;									//source (key)
-	var mort = List.all[key];
-	if(!mort) return;
-	var from = mort.name;                     			 //source (name)
+	var act = List.all[key];
+	if(!act) return;
+	var from = act.name;                     			 //source (name)
 	var to = escape.quote(data.to);                     //destination (name)
 	var text = Chat.parse(escape.quote(data.text));      //text
 	var type = escape.quote(data.type);                 //clan || pm || public

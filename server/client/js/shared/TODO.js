@@ -82,6 +82,7 @@ ENEMY:
 
 
 
+add ctrl+v
 
 remake sub target: if confort, get sub and do sub no matter what
 	

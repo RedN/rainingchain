@@ -8,8 +8,8 @@ LOG = function(lvl,key,name,param){
 	1:important (saved)
 	2:NOT really important (not saved)
 	*/
-	var mort = List.all[key];
-	var id = mort ? mort.name : key;
+	var act = List.all[key];
+	var id = act ? act.name : key;
 	
 	if(lvl > LOG.level) return;
 	

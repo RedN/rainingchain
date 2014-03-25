@@ -194,15 +194,15 @@ Actor.creation.mod.list = {
 		'func': (function(e){ e.drop.mod.quantity += 2; e.drop.mod.quality += 2; e.drop.mod.rarity += 2; return e; })},
 }
 
-Actor.creation.extra = function(mort){
-	mort = useTemplate(mort,mort.viaArray,1,1);
-	delete mort.viaArray;
+Actor.creation.extra = function(act){
+	act = useTemplate(act,act.viaArray,1,1);
+	delete act.viaArray;
 	
-	if(typeof mort.extra === 'function')	mort.extra(mort);
-	else mort = useTemplate(mort,mort.extra);	
+	if(typeof act.extra === 'function')	act.extra(act);
+	else act = useTemplate(act,act.extra);	
 	
-	delete mort.extra;
-	return mort;
+	delete act.extra;
+	return act;
 }
 
 Actor.creation.optionList = function(e){
@@ -235,82 +235,82 @@ Actor.creation.optionList = function(e){
 	return e;
 }
 
-Actor.creation.nevercombat = function(mort){
-	mort.combat = 0;
+Actor.creation.nevercombat = function(act){
+	act.combat = 0;
 	
-	delete mort.killed;
+	delete act.killed;
 	
 	
 	
-	delete mort.permBoost;
-	delete mort.boost;
+	delete act.permBoost;
+	delete act.boost;
 	
 	//General
-	delete mort.drop;
-	delete mort.item;
-	delete mort.pickRadius;
+	delete act.drop;
+	delete act.item;
+	delete act.pickRadius;
 	
 	//Combat
-	delete mort.attackReceived;	
-	delete mort.hitIf;
-	delete mort.targetIf;
-	delete mort.boss;
-	delete mort.deleteOnceDead;
-	delete mort.bonus;	
-	delete mort.mastery;
-	delete mort.ability;
-	delete mort.abilityList;
-	delete mort.atkSpd;
+	delete act.attackReceived;	
+	delete act.hitIf;
+	delete act.targetIf;
+	delete act.boss;
+	delete act.deleteOnceDead;
+	delete act.bonus;	
+	delete act.mastery;
+	delete act.ability;
+	delete act.abilityList;
+	delete act.atkSpd;
 	
-	//Def = DefMain * defArmor * mort.mastery.def
-	delete mort.hp;	
-	delete mort.mana;
-	delete mort.dodge;
-	delete mort.fury;
-	delete mort.resource;
+	//Def = DefMain * defArmor * act.mastery.def
+	delete act.hp;	
+	delete act.mana;
+	delete act.dodge;
+	delete act.fury;
+	delete act.resource;
 	
-	delete mort.globalDef;	
-	delete mort.reflect;
+	delete act.globalDef;	
+	delete act.reflect;
 	
 	//Resist
-	delete mort.status;
+	delete act.status;
 	
 	//Atk
-	delete mort.dmg;
-	delete mort.globalDmg;
-	delete mort.aim;
-	delete mort.weapon;
-	delete mort.ability;
-	delete mort.equip;
-	delete mort.moveRange
+	delete act.dmg;
+	delete act.globalDmg;
+	delete act.aim;
+	delete act.weapon;
+	delete act.ability;
+	delete act.equip;
+	delete act.moveRange
 	
 	
-	delete mort.summon
-	delete mort.summmoned;
+	delete act.summon
+	delete act.summmoned;
 	
 	//For update:
-	mort.resource = {'hp':{'max':1}};
-	mort.hp = 1;
+	act.resource = {'hp':{'max':1}};
+	act.hp = 1;
 }
 
-Actor.creation.nevermove = function(mort){
-	mort.move = 0;
+Actor.creation.nevermove = function(act){
+	act.move = 0;
 		
-	delete mort.friction; 
-	delete mort.maxSpd;
-	delete mort.acc;
-	delete mort.mapMod; 
-	delete mort.moveAngle;
-	delete mort.spdX;
-	delete mort.spdY; 
-	delete mort.moveInput; 
-	delete mort.bumper; 
-	delete mort.moveRange;
+	delete act.friction; 
+	delete act.maxSpd;
+	delete act.acc;
+	delete act.mapMod; 
+	delete act.moveAngle;
+	delete act.spdX;
+	delete act.spdY; 
+	delete act.moveInput; 
+	delete act.bumper; 
+	delete act.moveRange;
 	
 	//For update:
-	mort.spdX = 0;
-	mort.spdY = 0;
-	mort.maxSpd = 1;
+	act.spdX = 0;
+	act.spdY = 0;
+	act.maxSpd = 1;
 }
 
 

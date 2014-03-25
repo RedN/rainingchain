@@ -157,8 +157,8 @@ Map.collisionRect = function(id,rect,type,cb){	//used in map loop. return array 
 	var list = List.map[id].list;
 	var array = [];
 	for(var i in list){
-		var mort = List.all[i];
-		if( (!type || mort.type === type) && Collision.PtRect(mort,rect)){
+		var act = List.all[i];
+		if( (!type || act.type === type) && Collision.PtRect(act,rect)){
 			array.push(i);
 		}
 	}

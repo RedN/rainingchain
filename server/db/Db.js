@@ -91,9 +91,9 @@ Init.db = function(data){
 				for(var j in main[i].invList) bigList[main[i].invList[j][0]] = 1;
 				for(var j in main[i].bankList) bigList[main[i].bankList[j][0]] = 1;
 			}
-			db.find('player',{},function(er,mort){ if(er) throw er;
-				for(var i in mort){
-					for(var j in mort[i].equip) bigList[mort[i].equip[j]] = 1;
+			db.find('player',{},function(er,act){ if(er) throw er;
+				for(var i in act){
+					for(var j in act[i].equip) bigList[act[i].equip[j]] = 1;
 				}
 			
 				permConsoleLog('list of used equip:\n',Object.keys(bigList));

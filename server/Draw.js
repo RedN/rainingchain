@@ -11,24 +11,24 @@ Draw.loop = function (key){
 
 Draw.actor = function (key){
 	for(var i in List.all[key].activeList){
-		var mort = List.actor[i];
-		if(mort && !mort.dead && i !== key && mort.hitBox){
+		var act = List.actor[i];
+		if(act && !act.dead && i !== key && act.hitBox){
 			var player = List.actor[key];
 			
-			var x = Cst.WIDTH2 + mort.x - player.x;
-			var y = Cst.HEIGHT2 + mort.y - player.y;
+			var x = Cst.WIDTH2 + act.x - player.x;
+			var y = Cst.HEIGHT2 + act.y - player.y;
 			
 			var info = {
-				"rect":Collision.getHitBox({x:x,y:y,hitBox:mort.hitBox}),
-				"text":mort.context,
+				"rect":Collision.getHitBox({x:x,y:y,hitBox:act.hitBox}),
+				"text":act.context,
 				'textTop':1,
 			};
 			
-			if(mort.optionList && !mort.combat){
-				info['right'] = {'func':'Button.optionList','param':mort.optionList};
+			if(act.optionList && !act.combat){
+				info['right'] = {'func':'Button.optionList','param':act.optionList};
 			}
-			for(var i in mort.onclick){
-				info[i] = {'func':mort.onclick[i].func,'param':mort.onclick[i].param};
+			for(var i in act.onclick){
+				info[i] = {'func':act.onclick[i].func,'param':act.onclick[i].param};
 			}
 			Button.creation(key,info);
 		}

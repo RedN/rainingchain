@@ -225,7 +225,7 @@ Craft.boost.tier = function(mm,value){
 //{Orb
 Craft.orb = function(key,orb,amount,wId,mod){	//would be better if split in multi func
 	var inv = List.main[key].invList;
-	var mort = List.all[key];
+	var act = List.all[key];
 	
 	//Set amount of orbs used
 	amount = amount.mm(0,Itemlist.have(inv,orb + '_orb',0,'amount'));
@@ -264,8 +264,8 @@ Craft.orb = function(key,orb,amount,wId,mod){	//would be better if split in mult
 	}
 	if(category === 'ability'){
 		Ability.creation(equip);
-		Actor.removeAbility(mort,wId);
-		Actor.learnAbility(mort,equip.id);
+		Actor.removeAbility(act,wId);
+		Actor.learnAbility(act,equip.id);
 	}
 }
 

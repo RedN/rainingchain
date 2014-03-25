@@ -41,19 +41,19 @@ Test.dayCycle = function(key){
 
 Test.firstSignIn = function(key){
 	var inv = List.main[key].invList;
-	var mort = List.all[key];
+	var act = List.all[key];
 
 	if(Server.testing){
 		Itemlist.add(inv,'gold');
 		Itemlist.add(inv,'teleport');
 	}
 	
-	Actor.teleport(mort,56*32,101*32,"tutorial@MAIN");
-	mort.respawnLoc = {safe:{x:56*32,y:101*32,map:"tutorial@MAIN"},recent:{x:56*32,y:101*32,map:"tutorial@MAIN"}};
+	Actor.teleport(act,56*32,101*32,"tutorial@MAIN");
+	act.respawnLoc = {safe:{x:56*32,y:101*32,map:"tutorial@MAIN"},recent:{x:56*32,y:101*32,map:"tutorial@MAIN"}};
 	
 		
-	Chat.add(mort.id,"Note: This is a very early beta. Expect things to change... A LOT.");
-	Chat.add(mort.id,"Control: WADS. (For AZERTY users, change key binding via Pref Tab)");
+	Chat.add(act.id,"Note: This is a very early beta. Expect things to change... A LOT.");
+	Chat.add(act.id,"Control: WADS. (For AZERTY users, change key binding via Pref Tab)");
 
 }
 
@@ -74,8 +74,8 @@ Test.generateEquip = function(key,lvl,maxAmount){
 	lvl = lvl || 0;
 	maxAmount = maxAmount || 5;
 	
-	var mort = List.all[key];
-	for(var i in mort.equip.piece){
+	var act = List.all[key];
+	for(var i in act.equip.piece){
 		var id = Plan.use(key,{
 			piece: i,
 			type: Cst.equip[i].type.random(),
@@ -92,7 +92,7 @@ Test.generateEquip = function(key,lvl,maxAmount){
 			rarity: 0,
 			req: {item: [],skill:{}},
 		});
-		Actor.switchEquip(mort,id,i);
+		Actor.switchEquip(act,id,i);
 	}
 	
 }

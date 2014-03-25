@@ -178,25 +178,25 @@ if(server){
 					
 
 					for(var i in List.all){
-						var mort = List.all[i];
-						if(mort.type === 'enemy'){
-							var id = mort.name + ' ' + mort.id;
-							le[id] = mort;
-							if(mort.combat) lc[id] = mort;
+						var act = List.all[i];
+						if(act.type === 'enemy'){
+							var id = act.name + ' ' + act.id;
+							le[id] = act;
+							if(act.combat) lc[id] = act;
 							
-							if(ActiveList.test(p,mort)){
-								e[id] = mort;
-								if(mort.combat) c[id] = mort;
+							if(ActiveList.test(p,act)){
+								e[id] = act;
+								if(act.combat) c[id] = act;
 							}
 						}						
-						if(mort.type === 'player'){
-							var id = mort.name + ' ' + mort.id;
-							lp[id] = mort;
-							if(ActiveList.test(p,mort)) pl[id] = mort;
+						if(act.type === 'player'){
+							var id = act.name + ' ' + act.id;
+							lp[id] = act;
+							if(ActiveList.test(p,act)) pl[id] = act;
 						}
 						if(List.all[i].type === 'bullet'){
-							lb.push(mort);
-							if(ActiveList.test(p,mort)) b[id] = mort;
+							lb.push(act);
+							if(ActiveList.test(p,act)) b[id] = act;
 						}
 					}				
 					

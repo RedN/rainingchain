@@ -25,21 +25,21 @@ m.addon.pvpRespawn.spot = {"a":{"x":368,"y":336},"b":{"x":1264,"y":336},"c":{"x"
 
 
 a.playerEnter = function(key,map,spot,v,m){
-	var mort = List.all[key];
-	Actor.permBoost(mort,'pvp',[
+	var act = List.all[key];
+	Actor.permBoost(act,'pvp',[
 		{stat:'bullet-spd',value:1,type:'+'},
 		{stat:'globalDmg',value:9,type:'+'},
 	]);		
-	mort.hitIf = 'player';
+	act.hitIf = 'player';
 	
-	mort.respawnLoc.recent = m.addon.pvpRespawn.spot;
+	act.respawnLoc.recent = m.addon.pvpRespawn.spot;
 	
-	mort.deathFunc = v.pvpKill;
+	act.deathFunc = v.pvpKill;
 	
 	
 	
 	//PVP
-	mort.abilityList = {
+	act.abilityList = {
 		'pvp-bullet':1,
 		'pvp-fireball':1,
 		'pvp-freeze':1,
@@ -48,30 +48,30 @@ a.playerEnter = function(key,map,spot,v,m){
 		'pvp-heal':1,
 	};
 
-	Actor.swapAbility(mort,'pvp-bullet',0);
-	Actor.swapAbility(mort,'pvp-explosion',1);
-	Actor.swapAbility(mort,'pvp-freeze',2);
-	Actor.swapAbility(mort,'pvp-fireball',3);
-	Actor.swapAbility(mort,'pvp-heal',4);
-	Actor.swapAbility(mort,'pvp-invincibility',5);
+	Actor.swapAbility(act,'pvp-bullet',0);
+	Actor.swapAbility(act,'pvp-explosion',1);
+	Actor.swapAbility(act,'pvp-freeze',2);
+	Actor.swapAbility(act,'pvp-fireball',3);
+	Actor.swapAbility(act,'pvp-heal',4);
+	Actor.swapAbility(act,'pvp-invincibility',5);
 	
 	
 	
-	Chat.add(mort.id,"====Attacks:=====");
-	Chat.add(mort.id,"Left Click: Arrow.");
-	Chat.add(mort.id,"Right Click: Explosion.");
-	Chat.add(mort.id,"Shift + Left Click: Iceshard that freezes enemy.");
-	Chat.add(mort.id,"Shift + Right Click: x9 Fireball.");
-	Chat.add(mort.id,"F: Instant 100% Healing.");
-	Chat.add(mort.id,"Space: Invincibility for 4 frames.");
+	Chat.add(act.id,"====Attacks:=====");
+	Chat.add(act.id,"Left Click: Arrow.");
+	Chat.add(act.id,"Right Click: Explosion.");
+	Chat.add(act.id,"Shift + Left Click: Iceshard that freezes enemy.");
+	Chat.add(act.id,"Shift + Right Click: x9 Fireball.");
+	Chat.add(act.id,"F: Instant 100% Healing.");
+	Chat.add(act.id,"Space: Invincibility for 4 frames.");
 }
 
 a.playerLeave = function(key,map,spot,v,m){
-	var mort = List.all[key];
-	Actor.permBoost(mort,'pvp');	
-	mort.hitIf = 'enemy';	
-	mort.respawnLoc.recent = deepClone(mort.respawnLoc.safe);
-	mort.deathFunc = null;
+	var act = List.all[key];
+	Actor.permBoost(act,'pvp');	
+	act.hitIf = 'enemy';	
+	act.respawnLoc.recent = deepClone(act.respawnLoc.safe);
+	act.deathFunc = null;
 }
 
 a.loop = function(map,spot,v,m){

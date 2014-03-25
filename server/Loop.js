@@ -105,19 +105,19 @@ Loop.logOut = function(){
 }
 
 ActiveList = {};
-ActiveList.test = function(mort,obj){
-	//Test used to know if obj should be in activeList of mort.
+ActiveList.test = function(act,obj){
+	//Test used to know if obj should be in activeList of act.
 	if(!obj){ return false; }
-	if(mort.id === obj.id){ return false; }
+	if(act.id === obj.id){ return false; }
 	if(!obj.viewedIf){ return false; }
 	if(obj.viewedIf === 'false'){ return false; }
-	if(mort.map !== obj.map){ return false; }
+	if(act.map !== obj.map){ return false; }
 	if(obj.dead){ return false; }
-	if(typeof obj.viewedIf === 'function' && !obj.viewedIf(mort.id,obj.id)){ return false; }
-	if(typeof obj.viewedIf === 'object' && obj.viewedIf.indexOf(mort.id) === -1){ return false; }
+	if(typeof obj.viewedIf === 'function' && !obj.viewedIf(act.id,obj.id)){ return false; }
+	if(typeof obj.viewedIf === 'object' && obj.viewedIf.indexOf(act.id) === -1){ return false; }
 	
 	var pt = {'x':obj.x,'y':obj.y};
-	var rect = [mort.x-800,mort.x+800,mort.y-600,mort.y+600];
+	var rect = [act.x-800,act.x+800,act.y-600,act.y+600];
 	
 	return Collision.PtRect(pt,rect);
 }
@@ -145,14 +145,14 @@ ActiveList.remove = function(b){
 	}
 }
 
-removeAny = function(mort){
-	if(!mort) return;
-	if(mort.type === 'bullet') Bullet.remove(mort);
-	else if(mort.type === 'enemy') Actor.remove(mort);
-	else if(mort.type === 'player') Sign.off(mort.id);
-	else if(mort.type === 'drop') Drop.remove(mort);
-	else if(mort.type === 'strike') Strike.remove(mort);
-	else if(mort.type === 'strike') Strike.remove(mort);
+removeAny = function(act){
+	if(!act) return;
+	if(act.type === 'bullet') Bullet.remove(act);
+	else if(act.type === 'enemy') Actor.remove(act);
+	else if(act.type === 'player') Sign.off(act.id);
+	else if(act.type === 'drop') Drop.remove(act);
+	else if(act.type === 'strike') Strike.remove(act);
+	else if(act.type === 'strike') Strike.remove(act);
 }
 
 

@@ -12,11 +12,11 @@ a.load = function(map,spot,v){
 a.loop = function(map,spot,v){
 	if(Loop.interval(10) && false){
 		Map.collisionRect(map,[1000,1400,1000,1400],'player',function(key){
-			var mort = List.all[key];
-			mort.hp -= 100;
+			var act = List.all[key];
+			act.hp -= 100;
 			
 			Attack.creation(
-				{x:mort.x,y:mort.y,map:map,hitIf:'player-simple',angle:mort.angle},
+				{x:act.x,y:act.y,map:map,hitIf:'player-simple',angle:act.angle},
 				useTemplate(Attack.template(),v.atk)
 			);
 			

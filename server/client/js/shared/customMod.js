@@ -136,11 +136,11 @@ io.sockets.on('connection', function (socket) {
 				if(!d.text)	//aka just want to test if exist
 					socket.emit('queryMod',{id:d.id});	
 				else if(Server.customMod){ //aka want to add to db
-					var mort = List.all[socket.key];
-					//if(!mort || mort.lvl < 0) return;	//aka requirement to post new script
+					var act = List.all[socket.key];
+					//if(!act || act.lvl < 0) return;	//aka requirement to post new script
 					
 					d.creationDate = Date.now();
-					//d.author = mort.name || '$unknown';
+					//d.author = act.name || '$unknown';
 					d.insert('customMod',d,function(err){ if(err) throw err;});
 			
 				}

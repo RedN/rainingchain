@@ -8,31 +8,31 @@ var TIMER = {'priority':1,'reg':5,'slow':25};
 Change.update = function(){
 	//Entity
 	for(var i in List.all){
-		var mort = List.all[i];
-		if(!mort.dead && mort.active !== false){
-		    for(var m in Change.update.list[mort.type]){         //m = watch or exist
-    		    for (var k in Change.update.list[mort.type][m]){     //k = priority , reg , slow
+		var act = List.all[i];
+		if(!act.dead && act.active !== false){
+		    for(var m in Change.update.list[act.type]){         //m = watch or exist
+    		    for (var k in Change.update.list[act.type][m]){     //k = priority , reg , slow
     		        if(Loop.frameCount % TIMER[k] === 0){
-		            	for(var j in Change.update.list[mort.type][m][k])
-		            	    Change.update[m](mort,Change.update.list[mort.type][m][k][j]);	
+		            	for(var j in Change.update.list[act.type][m][k])
+		            	    Change.update[m](act,Change.update.list[act.type][m][k][j]);	
     }}}}}
 	//MainList
 	for(var i in List.main){
-		var mort = List.main[i];
+		var act = List.main[i];
 		for(var m in Change.update.list.main){
     		for (var k in Change.update.list.main[m]){
     	        if(Loop.frameCount % TIMER[k] === 0){
 	            	for(var j in Change.update.list.main[m][k])
-			            Change.update[m](mort,Change.update.list.main[m][k][j]);	
+			            Change.update[m](act,Change.update.list.main[m][k][j]);	
     }}}}
 	//Private
 	for(var i in List.main){
-		var mort = List.all[i];
+		var act = List.all[i];
     	for(var m in Change.update.list.priv){		
     	    for (var k in Change.update.list.priv[m]){
     	        if(Loop.frameCount % TIMER[k] === 0){
 	            	for(var j in Change.update.list.priv[m][k])
-			            Change.update[m](mort,Change.update.list.priv[m][k][j],true);	
+			            Change.update[m](act,Change.update.list.priv[m][k][j],true);	
     }}}}
 	
 	
@@ -231,34 +231,34 @@ Change.update.init = function(){
 {'array':['heal'],'filter':Math.round},
 */
 
-Change.update.watch = function(mort,info,priv){
+Change.update.watch = function(act,info,priv){
 	//Test condition to test
-	if(info.condition && !info.condition(mort)) return; 
+	if(info.condition && !info.condition(act)) return; 
 
 	//Get Old and New Value and Set Old = to New
-	var valRaw = viaArray.get({'origin':mort,'array':info.array});
+	var valRaw = viaArray.get({'origin':act,'array':info.array});
 	if(valRaw && info.filter) valRaw = info.filter(valRaw);
 	        
 	var val0 = stringify(valRaw);                                   //Get new
 	
 	
-	if(!priv){ var val1 = mort.old[info.id]; }
-    else { var val1 = mort.privateOld[info.id]; }                      //Get old
+	if(!priv){ var val1 = act.old[info.id]; }
+    else { var val1 = act.privateOld[info.id]; }                      //Get old
 	
 	//Test !=
 	if(!isEqual(val0, val1)){
-		if(!priv){ mort.old[info.id] = val0; }                  //Set Old
-		else { mort.privateOld[info.id] = val0; }
+		if(!priv){ act.old[info.id] = val0; }                  //Set Old
+		else { act.privateOld[info.id] = val0; }
 		
 		
 	    if(info.sendArray){                                                 //Modify array of what to send
-			var valRaw = viaArray.get({'origin':mort,'array':info.sendArray});
+			var valRaw = viaArray.get({'origin':act,'array':info.sendArray});
 			if(info.sendFilter) valRaw = info.sendFilter(valRaw);
 			var val0 = stringify(valRaw);
 		}
 		
-		if(!priv){ mort.change[info.id] = valRaw; }          //Add to change list for send.js know
-		else {	mort.privateChange[info.id] = valRaw; }
+		if(!priv){ act.change[info.id] = valRaw; }          //Add to change list for send.js know
+		else {	act.privateChange[info.id] = valRaw; }
 	}
 }	
 
@@ -266,20 +266,20 @@ Change.update.watch = function(mort,info,priv){
 
 
 
-Change.update.exist = function(mort,info,priv){
+Change.update.exist = function(act,info,priv){
 	//Test condition to test
-	if(info.condition && !info.condition(mort)) return; 
+	if(info.condition && !info.condition(act)) return; 
 
-	var valRaw = viaArray.get({'origin':mort,'array':info.array});
+	var valRaw = viaArray.get({'origin':act,'array':info.array});
 	if(valRaw){
 	    if(Array.isArray(valRaw) && valRaw.length === 0) return;
 	    var val0 = stringify(valRaw); 
 		
-		if(!priv){ mort.change[info.id] = valRaw; }
-		else {	mort.privateChange[info.id] = valRaw; }
+		if(!priv){ act.change[info.id] = valRaw; }
+		else {	act.privateChange[info.id] = valRaw; }
 			
-		if(!info.reset){ viaArray.set({'origin':mort,'array':info.array,'value':null}); }
-		else if(info.reset !== 'noreset'){ viaArray.set({'origin':mort,'array':info.array,'value':deepClone(info.reset)}); }
+		if(!info.reset){ viaArray.set({'origin':act,'array':info.array,'value':null}); }
+		else if(info.reset !== 'noreset'){ viaArray.set({'origin':act,'array':info.array,'value':deepClone(info.reset)}); }
 		
 	}
 }

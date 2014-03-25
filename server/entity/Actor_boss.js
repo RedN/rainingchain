@@ -33,7 +33,7 @@ Init.db.boss = function(){
 		function(){
 		
 			var boss = this;
-			var mort = boss.parent;
+			var act = boss.parent;
 			boss.frame++;
 			
 			Boss.target(boss);
@@ -46,7 +46,7 @@ Init.db.boss = function(){
 					var middleX = cos(angle)*dist;
 					var middleY = sin(angle)*dist;
 						
-					//Attack.creation(mort,boss.attack['explosion'],{'middleX':middleX,'middleY':middleY});    //attack?
+					//Attack.creation(act,boss.attack['explosion'],{'middleX':middleX,'middleY':middleY});    //attack?
 				}
 			}	
 
@@ -65,7 +65,7 @@ Init.db.boss = function(){
 						var middleY = sin(angle)*dist;
 							
 						if(i != boss.hole && i != boss.hole+1){
-							//addStrike(mort,boss.attack['spiral'],{'middleX':middleX,'middleY':middleY});
+							//addStrike(act,boss.attack['spiral'],{'middleX':middleX,'middleY':middleY});
 						}
 					}
 				}
@@ -108,24 +108,24 @@ Init.db.boss = function(){
 		};
 		
 		
-		boss.loop.attack = function(boss,mort){
+		boss.loop.attack = function(boss,act){
 			if(boss.phase === 0){	//if boss on phase 0
 				boss.opening = 30;
 				for(var i in boss.target){	//for each player around the boss
 					if(boss.frame % 4 == 0){	//every 4 frame
 						//to form the V
-						Boss.attack(mort,'midSpear',{'angle':boss.angle[i]+boss.opening});
-						Boss.attack(mort,'midSpear',{'angle':boss.angle[i]-boss.opening});
+						Boss.attack(act,'midSpear',{'angle':boss.angle[i]+boss.opening});
+						Boss.attack(act,'midSpear',{'angle':boss.angle[i]-boss.opening});
 						
 						//random projectiles inside the V
 						if(Math.random() < 0.4){
-							Boss.attack(mort,'midSpear',{'angle':boss.angle[i]+Math.randomML()*boss.opening});
-							Boss.attack(mort,'midSpear',{'angle':boss.angle[i]+Math.randomML()*boss.opening});
+							Boss.attack(act,'midSpear',{'angle':boss.angle[i]+Math.randomML()*boss.opening});
+							Boss.attack(act,'midSpear',{'angle':boss.angle[i]+Math.randomML()*boss.opening});
 						}
 					}
 					break;
 				}
-				if(mort.hp/mort.resource.hp.max <= 3/5){	//if has 3/5 hp, transition to phase 1
+				if(act.hp/act.resource.hp.max <= 3/5){	//if has 3/5 hp, transition to phase 1
 					boss.phase = 1;
 					boss.frame = 1;
 					boss.hole = 6;
@@ -138,7 +138,7 @@ Init.db.boss = function(){
 					boss.center = Math.random()*360;
 					for(var j = 0 ; j < boss.hole ; j++){
 						for(var k = 0 ; k < (360/boss.hole-2*boss.opening) ; k+=4){
-							Boss.attack(mort,'midSpear',{'angle':boss.center+360/boss.hole*j+boss.opening+k});
+							Boss.attack(act,'midSpear',{'angle':boss.center+360/boss.hole*j+boss.opening+k});
 						}	
 					}
 				}		
@@ -196,10 +196,10 @@ Boss.template = function(){
 	}
 }
 
-Boss.target = function(boss,mort){
+Boss.target = function(boss,act){
 	//Update Boss Target. can have multiple targets unlike regular enemy
 	boss.target = {};
-	for(var key in mort.activeList){ 
+	for(var key in act.activeList){ 
 		if(List.all[key].type === 'player'){
 			boss.target[key] = key;	
 		}
@@ -207,14 +207,14 @@ Boss.target = function(boss,mort){
 			
 	for(var i in boss.target){
 		var target = List.all[boss.target[i]];
-		var diffX = target.x - mort.x;
-		var diffY = target.y - mort.y;
+		var diffX = target.x - act.x;
+		var diffY = target.y - act.y;
 		var diff = Math.sqrt(diffX*diffX+diffY*diffY);
 		boss.angle[i] = atan2(diffY,diffX);			
 	}
 }
-Boss.attack = function(mort,name,extra){
-	Combat.action.attack(mort,mort.boss.attack[name],extra);
+Boss.attack = function(act,name,extra){
+	Combat.action.attack(act,act.boss.attack[name],extra);
 }
 
 	

@@ -129,29 +129,29 @@ Combat.action.boost = function(key,info){
 
 
 //COLLISION//
-Combat.collision = function(b,mort){
-	if(mort.attackReceived[b.hitId]) return;    //for pierce
-    mort.attackReceived[b.hitId] = 250;	//last for 10 sec
+Combat.collision = function(b,act){
+	if(act.attackReceived[b.hitId]) return;    //for pierce
+    act.attackReceived[b.hitId] = 250;	//last for 10 sec
 	
-	if(b.hitImg){Anim.creation(b.hitImg.name,mort.id,b.hitImg.sizeMod || 1);}
-	if(b.healing){ Actor.changeResource(mort,b.healing); return; }
+	if(b.hitImg){Anim.creation(b.hitImg.name,act.id,b.hitImg.sizeMod || 1);}
+	if(b.healing){ Actor.changeResource(act,b.healing); return; }
 	
 	if(b.crit.baseChance >= Math.random() || b.crit.chance >= Math.random()){ b = Combat.collision.crit(b) }
 	
-	var dmg = Combat.collision.damage(b,mort); if(!dmg) return;
-	Combat.collision.reflect(dmg,b,mort);
+	var dmg = Combat.collision.damage(b,act); if(!dmg) return;
+	Combat.collision.reflect(dmg,b,act);
 	
 	//Mods
-	if(b.leech.baseChance >= Math.random() || b.leech.chance >= Math.random()){ Combat.collision.leech(mort,b) }
+	if(b.leech.baseChance >= Math.random() || b.leech.chance >= Math.random()){ Combat.collision.leech(act,b) }
 	if(b.pierce.baseChance >= Math.random() || b.pierce.chance >= Math.random()){ Combat.collision.pierce(b) } else {b.toRemove = 1;};
 	
 	if(b.onHit && b.onHit.chance >= Math.random()){	Combat.action.attack(b,useTemplate(Attack.template(),b.onHit.attack));}
 	
 	
-	if(b.curse && b.curse.chance >= Math.random()){ Combat.collision.curse(mort,b.curse); }
+	if(b.curse && b.curse.chance >= Math.random()){ Combat.collision.curse(act,b.curse); }
 	
 	//Apply Status
-	Combat.collision.status(dmg,b,mort);
+	Combat.collision.status(dmg,b,act);
 	
 }
 
@@ -173,61 +173,61 @@ Combat.collision.status = function(dmg,b,target){
 	}	
 }
 	
-Combat.collision.status.burn = function(mort,b){	
+Combat.collision.status.burn = function(act,b){	
 	var info = b.burn;
-	var burn = mort.status.burn;
+	var burn = act.status.burn;
 	burn.active.time = info.time*(1-burn.resist); 
 	burn.active.magn = info.magn*(1-burn.resist); 
 }
 
-Combat.collision.status.stun = function(mort,b){
+Combat.collision.status.stun = function(act,b){
 	var info = b.stun;
-	var stun = mort.status.stun;
+	var stun = act.status.stun;
 	
 	stun.active.time = info.time*(1-stun.resist);
 	stun.active.magn = info.magn*(1-stun.resist);
 	
-	Actor.boost(mort,[
+	Actor.boost(act,[
 		{'stat':'maxSpd','type':"*",'value':0,'time':stun.active.time,'name':'stun'},
 		{'stat':'atkSpd-main','type':"*",'value':0,'time':stun.active.time,'name':'stun'}
 	]); 
 	
-	for(var i in mort.abilityChange.charge)
-		mort.abilityChange.charge[i] /= stun.active.magn;
+	for(var i in act.abilityChange.charge)
+		act.abilityChange.charge[i] /= stun.active.magn;
 }
 
-Combat.collision.status.bleed = function(mort,b,dmg){
+Combat.collision.status.bleed = function(act,b,dmg){
 	var info = b.bleed;
-	var bleed = mort.status.bleed;
+	var bleed = act.status.bleed;
 	
 	bleed.active.time = 25/info.time/(1-bleed.resist);	//shorter = better for atker
 	bleed.active.magn = info.magn*(1-bleed.resist) / bleed.active.time;
 }
 
-Combat.collision.status.chill = function(mort,b){
+Combat.collision.status.chill = function(act,b){
 	var info = b.chill;
-	var chill = mort.status.chill;
+	var chill = act.status.chill;
 	
 	chill.active.time = b.chill.time*(1-chill.resist);
 	chill.active.magn = (1/b.chill.magn)*(1-chill.resist);
 	
-	Actor.boost(mort,{'stat':'maxSpd','type':"*",'value':chill.active.magn,'time':chill.active.time,'name':'chill'}); 
+	Actor.boost(act,{'stat':'maxSpd','type':"*",'value':chill.active.magn,'time':chill.active.time,'name':'chill'}); 
 	
 	
 }
 
-Combat.collision.status.knock = function(mort,b){
+Combat.collision.status.knock = function(act,b){
 	var info = b.knock;
-	var knock = mort.status.knock;
+	var knock = act.status.knock;
 	
 	knock.active.time = info.time*(1-knock.resist); 
 	knock.active.magn = info.magn*(1-knock.resist);	
 	knock.active.angle = b.moveAngle;
 }
 
-Combat.collision.status.drain = function(mort,b){
+Combat.collision.status.drain = function(act,b){
 	var info = b.drain;
-	var drain = mort.status.drain;
+	var drain = act.status.drain;
 	
 	var player = List.all[b.parent]; if(!player) return;
 	
@@ -236,19 +236,19 @@ Combat.collision.status.drain = function(mort,b){
 	drain.active.magn = info.magn*(1-drain.resist);	
 
 	Actor.changeResource(player,{mana:drain.active.magn});
-	Actor.boost(mort,{'stat':'mana-max','type':"+",'value':-drain.active.magn,'time':drain.active.time,'name':'drain'}); 
+	Actor.boost(act,{'stat':'mana-max','type':"+",'value':-drain.active.magn,'time':drain.active.time,'name':'drain'}); 
 	Actor.boost(player,{'stat':'mana-max','type':"+",'value':drain.active.magn,'time':drain.active.time,'name':'drain'}); 
 
 	player.mana = player.resource.mana.max;
-	mort.mana = 0;
+	act.mana = 0;
 }
 
 
 //Apply Mods
-Combat.collision.curse = function(mort,info){
+Combat.collision.curse = function(act,info){
 	for(var i in info.boost){
 		var boost = info.boost[i];
-		Actor.boost(mort,{'stat':boost.stat,'type':boost.type,'value':boost.value,'time':boost.time,'name':'curse'}); 
+		Actor.boost(act,{'stat':boost.stat,'type':boost.type,'value':boost.value,'time':boost.time,'name':'curse'}); 
 	}
 }
 
@@ -258,7 +258,7 @@ Combat.collision.pierce = function(b){
 	b.globalDmg *= b.pierce.dmgReduc;
 }
 
-Combat.collision.leech = function(mort,b){
+Combat.collision.leech = function(act,b){
 	var info = b.leech;
 	
 	var player = List.all[b.parent]; if(!player) return;
@@ -268,11 +268,11 @@ Combat.collision.leech = function(mort,b){
 	
 }
 
-Combat.collision.reflect = function(dmg,bullet,mort){
+Combat.collision.reflect = function(dmg,bullet,act){
 	var attacker = List.all[bullet.parent];
 	if(attacker && attacker.hp){
 		for(var i in Cst.element.list){
-			Actor.changeHp(attacker,-mort.reflect[Cst.element.list[i]]*dmg[Cst.element.list[i]]/attacker.globalDef);
+			Actor.changeHp(attacker,-act.reflect[Cst.element.list[i]]*dmg[Cst.element.list[i]]/attacker.globalDef);
 		}
 	}
 }

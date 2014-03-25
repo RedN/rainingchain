@@ -81,22 +81,22 @@ NOT USED
 	},
 }
 
-Actor.creation.dialogue = function(mort){
-	if(mort.dialogue){
-		mort.dialogue = useTemplate(Actor.template.dialogue,mort.dialogue);
+Actor.creation.dialogue = function(act){
+	if(act.dialogue){
+		act.dialogue = useTemplate(Actor.template.dialogue,act.dialogue);
 	}
-	Actor.creation.dialogue.generic(mort);
-	return mort;	
+	Actor.creation.dialogue.generic(act);
+	return act;	
 }
 
-Actor.creation.dialogue.generic = function(mort){
-	var overwrite = mort.dialogue.option;
-	mort.dialogue.option = {};
-	Actor.creation.dialogue.generic.recursive(mort.dialogue.tag,mort.dialogue.option,Dialogue.generic);
+Actor.creation.dialogue.generic = function(act){
+	var overwrite = act.dialogue.option;
+	act.dialogue.option = {};
+	Actor.creation.dialogue.generic.recursive(act.dialogue.tag,act.dialogue.option,Dialogue.generic);
 	for(var i in overwrite){
-		mort.dialogue.option[i] = overwrite[i];
+		act.dialogue.option[i] = overwrite[i];
 	}
-	return mort;
+	return act;
 }
 
 Actor.creation.dialogue.generic.recursive = function(tag,option,dialogue){

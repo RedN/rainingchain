@@ -1,93 +1,93 @@
 
-Actor.loop.input = function(mort){
-	if(mort.type === 'player') return;
-	if(mort.move && mort.moveSelf) Actor.loop.input.move(mort);
-	if(mort.combat && mort.frameCount % 25 === 0){
-		Actor.loop.input.ability(mort);
+Actor.loop.input = function(act){
+	if(act.type === 'player') return;
+	if(act.move && act.moveSelf) Actor.loop.input.move(act);
+	if(act.combat && act.frameCount % 25 === 0){
+		Actor.loop.input.ability(act);
 	}
 }
 
-Actor.loop.input.move = function(mort){
+Actor.loop.input.move = function(act){
 	//update enemy input for movement.
-	var tar = mort.target;
-	if(tar.main.list.length) Actor.loop.input.move.main(mort);
-	if(tar.sub.list.length && (tar.main.confort || tar.main.isStuck)) Actor.loop.input.move.sub(mort);
-	for(var i in mort.moveInput){	if(Math.random()< 0.05){ mort.moveInput[i] = 1;} }	//Prevent Piling
+	var tar = act.target;
+	if(tar.main.list.length) Actor.loop.input.move.main(act);
+	if(tar.sub.list.length && (tar.main.confort || tar.main.isStuck)) Actor.loop.input.move.sub(act);
+	for(var i in act.moveInput){	if(Math.random()< 0.05){ act.moveInput[i] = 1;} }	//Prevent Piling
 	
 }
 
-Actor.loop.input.move.main = function(mort){
-	var target = List.all[mort.target.main.list[0]];
+Actor.loop.input.move.main = function(act){
+	var target = List.all[act.target.main.list[0]];
 	if(!target) return;
-	var x = target.x - mort.x;
-	var y = target.y - mort.y;
+	var x = target.x - act.x;
+	var y = target.y - act.y;
 	var diff = Math.sqrt(x*x+y*y);
 	
-	mort.angle = atan2(y,x);
+	act.angle = atan2(y,x);
 	
-	var min = mort.moveRange.ideal - mort.moveRange.confort;
-	var max = mort.moveRange.ideal + mort.moveRange.confort;
-	var outofreach = mort.moveRange.farthest;
+	var min = act.moveRange.ideal - act.moveRange.confort;
+	var max = act.moveRange.ideal + act.moveRange.confort;
+	var outofreach = act.moveRange.farthest;
 	
 	if(diff  >= min && diff  <= max){ 	//OK
-		mort.moveInput = [0,0,0,0];
-		mort.target.main.confort = 1;
+		act.moveInput = [0,0,0,0];
+		act.target.main.confort = 1;
 	} else {
-		mort.target.main.confort = 0;
+		act.target.main.confort = 0;
 	}
 	
 	if(diff  >= outofreach){	//Out of Reach
-		if(!mort.status.knock.active.time){mort.active = 0;}	//Otherwise knock stops weird
-		mort.moveInput = [0,0,0,0];
-		mort.target.main.list.shift();
+		if(!act.status.knock.active.time){act.active = 0;}	//Otherwise knock stops weird
+		act.moveInput = [0,0,0,0];
+		act.target.main.list.shift();
 	} else if(diff  >= max){	//Too Far
-		mort.moveInput = [x>0,y>0,x<0,y<0];		
+		act.moveInput = [x>0,y>0,x<0,y<0];		
 	}	
 	
 	if(diff  <= min){	//Too Close
-		mort.moveInput = [x<0,y<0,x>0,y>0];
+		act.moveInput = [x<0,y<0,x>0,y>0];
 	}	
 	
-	mort.mouseX = Cst.WIDTH2+x; 
-	mort.mouseY = Cst.HEIGHT2+y;
+	act.mouseX = Cst.WIDTH2+x; 
+	act.mouseY = Cst.HEIGHT2+y;
 
 }
 
-Actor.loop.input.move.sub = function(mort){
-	var target = mort.target.sub.list[0];
+Actor.loop.input.move.sub = function(act){
+	var target = act.target.sub.list[0];
 	if(!target) return;
-	var x = target.x - mort.x;
-	var y = target.y - mort.y;
+	var x = target.x - act.x;
+	var y = target.y - act.y;
 	var diff = Math.sqrt(x*x+y*y);
 	
 	if(diff  < 36){	//OK
-		mort.moveInput = [0,0,0,0];
-		mort.target.sub.list.shift();
+		act.moveInput = [0,0,0,0];
+		act.target.sub.list.shift();
 	} else { 	//Too Far
-		mort.moveInput = [x>0,y>0,x<0,y<0];		
+		act.moveInput = [x>0,y>0,x<0,y<0];		
 	}
 
 }
 
-Actor.loop.input.ability = function(mort){
-	mort.abilityChange.press = '0000000000000000000000';
-	if(!mort.target.main.list[0]) return;
+Actor.loop.input.ability = function(act){
+	act.abilityChange.press = '0000000000000000000000';
+	if(!act.target.main.list[0]) return;
 
-	var diff = Collision.distancePtPt(mort,List.all[mort.target.main.list[0]]);
+	var diff = Collision.distancePtPt(act,List.all[act.target.main.list[0]]);
 	
 	var range = 'close';
-	if(diff > mort.abilityAi.range[0]) range = 'middle';
-	if(diff > mort.abilityAi.range[1]) range = 'far';
+	if(diff > act.abilityAi.range[0]) range = 'middle';
+	if(diff > act.abilityAi.range[1]) range = 'far';
 	
 	
-	var id = mort.abilityAi[range].random();
+	var id = act.abilityAi[range].random();
 	if(!id || id === 'idle') return;
 	
 	console.log(id);
 	
-	for(var i in mort.ability){
-		if(mort.ability[i].id === id){
-			mort.abilityChange.press = mort.abilityChange.press.set(+i,'1');
+	for(var i in act.ability){
+		if(act.ability[i].id === id){
+			act.abilityChange.press = act.abilityChange.press.set(+i,'1');
 			console.log(id);
 		}
 	}	
@@ -100,77 +100,77 @@ Actor.loop.input.ability = function(mort){
 
 
 
-Actor.loop.setTarget = function(mort){
-	if(mort.type !== 'enemy') return;
-	var tar = mort.target;
+Actor.loop.setTarget = function(act){
+	if(act.type !== 'enemy') return;
+	var tar = act.target;
 	
 	//Main
-	var timemain = mort.frameCount % (tar.main.list.length ? tar.main.period.renew : tar.main.period.first) === 0;
-	if(mort.combat && timemain)	Actor.loop.setTarget.main(mort);
+	var timemain = act.frameCount % (tar.main.list.length ? tar.main.period.renew : tar.main.period.first) === 0;
+	if(act.combat && timemain)	Actor.loop.setTarget.main(act);
 	
 	//Sub
-	var timesub = mort.frameCount % tar.sub.period.first === 0;
-	if(mort.target.sub.list.length === 0 && tar.main.confort && timesub)	Actor.loop.setTarget.sub(mort);
+	var timesub = act.frameCount % tar.sub.period.first === 0;
+	if(act.target.sub.list.length === 0 && tar.main.confort && timesub)	Actor.loop.setTarget.sub(act);
 	
 	//Stuck	
-	if(mort.frameCount % mort.target.main.period.stuck === 0){
-		tar.main.isStuck = Actor.isStuck(mort);
+	if(act.frameCount % act.target.main.period.stuck === 0){
+		tar.main.isStuck = Actor.isStuck(act);
 		if(tar.main.isStuck){
-			Actor.loop.setTarget.stuck(mort);
+			Actor.loop.setTarget.stuck(act);
 		}
 	}
 	
 }
 
-Actor.loop.setTarget.main = function(mort){
+Actor.loop.setTarget.main = function(act){
 	var targetList = {}; 
-	for (var i in mort.activeList){
+	for (var i in act.activeList){
 		var target = List.all[i];
-		var hIf = typeof mort.targetIf === 'function' ? mort.targetIf : Combat.hitIf.list[mort.targetIf];
+		var hIf = typeof act.targetIf === 'function' ? act.targetIf : Combat.hitIf.list[act.targetIf];
 			
-		if(Combat.targetIf.global(mort,target) && hIf(target,mort)){
-			var diff = Collision.distancePtPt(mort,target);
-			if(diff <= mort.moveRange.aggressive){
+		if(Combat.targetIf.global(act,target) && hIf(target,act)){
+			var diff = Collision.distancePtPt(act,target);
+			if(diff <= act.moveRange.aggressive){
 				targetList[i] = 1/(diff+100);
 			}
 		}
 	}
-	mort.target.main.list = Object.keys(targetList).length ? [targetList.random()] : [] ;	
+	act.target.main.list = Object.keys(targetList).length ? [targetList.random()] : [] ;	
 } 
 		
 
 
-Actor.loop.setTarget.sub = function(mort){
-	var maintar = List.all[mort.target.main.list[0]];
+Actor.loop.setTarget.sub = function(act){
+	var maintar = List.all[act.target.main.list[0]];
 	
 	if(maintar){
-		var rayon = (Math.randomML()*mort.moveRange.confort)+mort.moveRange.ideal;
+		var rayon = (Math.randomML()*act.moveRange.confort)+act.moveRange.ideal;
 		var angle = Math.randomML()*360;
-		mort.target.sub.list.push({x:cos(angle)*rayon+maintar.x,y:sin(angle)*rayon+maintar.y});
+		act.target.sub.list.push({x:cos(angle)*rayon+maintar.x,y:sin(angle)*rayon+maintar.y});
 		return;
 	}
 	if(!maintar){
 		var rayon = Math.random()*300;
 		var angle = Math.random()*360;
-		mort.target.sub.list.push({x:cos(angle)*rayon+mort.crX,y:sin(angle)*rayon+mort.crY});
-		mort.angle = Collision.anglePtPt(mort,mort.target.sub.list[0]);
+		act.target.sub.list.push({x:cos(angle)*rayon+act.crX,y:sin(angle)*rayon+act.crY});
+		act.angle = Collision.anglePtPt(act,act.target.sub.list[0]);
 	}
 
 } 
 
-Actor.loop.setTarget.stuck = function(mort){
-	var maintar = List.all[mort.target.main.list[0]];
+Actor.loop.setTarget.stuck = function(act){
+	var maintar = List.all[act.target.main.list[0]];
 	if(!maintar) return;
 	
-	mort.target.sub.list = Actor.getPath(mort,maintar);
+	act.target.sub.list = Actor.getPath(act,maintar);
 } 
 
 
-Actor.getPath = function(mort,target){	//using a*
-	if(mort.map !== target.map) return [];
-	var map = Db.map[Map.getModel(mort.map)].grid.astar.nodes;
+Actor.getPath = function(act,target){	//using a*
+	if(act.map !== target.map) return [];
+	var map = Db.map[Map.getModel(act.map)].grid.astar.nodes;
 	
-	var start = Collision.getPos(mort);
+	var start = Collision.getPos(act);
 	var end = Collision.getPos(target);
 	
 	start = map[start.y][start.x];
@@ -179,13 +179,13 @@ Actor.getPath = function(mort,target){	//using a*
 	return astar.search.parse(astar.search(map,start,end));
 }
 
-Actor.isStuck = function(mort){
-	var maintar = List.all[mort.target.main.list[0]];
+Actor.isStuck = function(act){
+	var maintar = List.all[act.target.main.list[0]];
 	if(!maintar) return 0;
 	
-	var path = Collision.getPath(Collision.getPos(mort),Collision.getPos(maintar));
+	var path = Collision.getPath(Collision.getPos(act),Collision.getPos(maintar));
 	for(var i in path){
-		if(Collision.ActorMap(path[i],mort.map,mort)) return 1;	
+		if(Collision.ActorMap(path[i],act.map,act)) return 1;	
 	}
 	return 0;
 }

@@ -357,20 +357,20 @@ Sprite.template = function(){
 }
 
 
-Sprite.change = function(mort,info){
-    if(!mort || !mort.sprite) return;
+Sprite.change = function(act,info){
+    if(!act || !act.sprite) return;
 
 	if(info.initAnim || info.anim){ 
-		mort.sprite.initAnim = info.initAnim || mort.sprite.initAnim;
-		mort.sprite.anim = info.initAnim || info.anim;
+		act.sprite.initAnim = info.initAnim || act.sprite.initAnim;
+		act.sprite.anim = info.initAnim || info.anim;
 		
-		mort.sprite.startX = 0;
-		mort.sprite.timer = 0;
+		act.sprite.startX = 0;
+		act.sprite.timer = 0;
 	}
-	mort.sprite.name = info.name || mort.sprite.name || 'mace';
-	mort.sprite.sizeMod = info.sizeMod || mort.sprite.sizeMod || 1;
+	act.sprite.name = info.name || act.sprite.name || 'mace';
+	act.sprite.sizeMod = info.sizeMod || act.sprite.sizeMod || 1;
 	
-	if(info.sizeMod || info.name) Sprite.updateBumper(mort);
+	if(info.sizeMod || info.name) Sprite.updateBumper(act);
 	
 }
 
@@ -392,35 +392,35 @@ Sprite.updateBumper = function(player){		//server only
 
 
 
-Sprite.update = function (mort){	//client side only
-	if(!mort.sprite) return;
-	var spriteFromDb = Db.sprite[mort.sprite.name];
+Sprite.update = function (act){	//client side only
+	if(!act.sprite) return;
+	var spriteFromDb = Db.sprite[act.sprite.name];
 	
-	if(mort.sprite.animOld !== mort.sprite.anim){	//otherwise, animation can be cut if timer for walk is high 
-		mort.sprite.animOld = mort.sprite.anim;
-		Sprite.change(mort,{'anim':mort.sprite.anim});
+	if(act.sprite.animOld !== act.sprite.anim){	//otherwise, animation can be cut if timer for walk is high 
+		act.sprite.animOld = act.sprite.anim;
+		Sprite.change(act,{'anim':act.sprite.anim});
 	}
-	var animFromDb = spriteFromDb.anim[mort.sprite.anim];
+	var animFromDb = spriteFromDb.anim[act.sprite.anim];
 	
 	
 	
 	
 	var mod = 1;
 	if(animFromDb.walk){    //if walking, the speed of animation depends on movement speed
-		var spd =  Math.max(Math.abs(mort.spdX),Math.abs(mort.spdY));
-		mod = Math.abs(spd/mort.maxSpd);
+		var spd =  Math.max(Math.abs(act.spdX),Math.abs(act.spdY));
+		mod = Math.abs(spd/act.maxSpd);
 	}
 	
-	mort.sprite.timer += animFromDb.spd * mod;	if(!mort.sprite.timer){mort.sprite.timer = 0;}
-	mort.sprite.startX = Math.floor(mort.sprite.timer);
+	act.sprite.timer += animFromDb.spd * mod;	if(!act.sprite.timer){act.sprite.timer = 0;}
+	act.sprite.startX = Math.floor(act.sprite.timer);
 	
-	if(mort.sprite.startX > animFromDb.frame-1){
-		Sprite.change(mort,{'anim':animFromDb.next});
+	if(act.sprite.startX > animFromDb.frame-1){
+		Sprite.change(act,{'anim':animFromDb.next});
 	}
-	if(mort.sprite.dead){
-		mort.sprite.alpha -= mort.sprite.dead;
-		if(mort.sprite.alpha < 0){
-			removeAny(mort.id);
+	if(act.sprite.dead){
+		act.sprite.alpha -= act.sprite.dead;
+		if(act.sprite.alpha < 0){
+			removeAny(act.id);
 		}
 	}
 	

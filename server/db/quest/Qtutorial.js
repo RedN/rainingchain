@@ -240,8 +240,8 @@ q.map.tutorial = function(){
 		
 		//Switch
 		Actor.creation({'xym':spot.c,
-			"category":"system","variant":"switch",extra:function(mort){
-				mort.switch = {
+			"category":"system","variant":"switch",extra:function(act){
+				act.switch = {
 					on:function(key,mortid,map){
 						map.addon.Qtutorial.variable.rotation *= -1;		
 					}
@@ -255,7 +255,7 @@ q.map.tutorial = function(){
 	tut.loop =  function(map,spot,v,m){
 		if(Loop.interval(25)){
 			Map.collisionRect(map,spot.n,'player',function(key){
-				var mort = List.all[key];
+				var act = List.all[key];
 				if(List.main[key].quest.Qtutorial.bossDead){
 					Chat.add(key,'Congratz! You have beaten the tutorial!.');
 				} else {

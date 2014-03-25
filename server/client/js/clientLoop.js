@@ -94,15 +94,15 @@ removeAny = function(i){
 }
 
 if(typeof Actor === 'undefined') Actor = {};
-Actor.loop = function(mort){
-	Sprite.update(mort);
-	Actor.loop.chatHead(mort);	
+Actor.loop = function(act){
+	Sprite.update(act);
+	Actor.loop.chatHead(act);	
 }
 
-Actor.loop.chatHead = function(mort){	//weird name
-	if(!mort.chatHead) return;
-	if(--mort.chatHead.timer <= 0){
-		mort.chatHead = '';
+Actor.loop.chatHead = function(act){	//weird name
+	if(!act.chatHead) return;
+	if(--act.chatHead.timer <= 0){
+		act.chatHead = '';
 	}
 }
 

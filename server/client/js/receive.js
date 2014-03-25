@@ -44,10 +44,10 @@ try {
 	
 	//Remove Inactive FullList
 	for(var i in List.all){
-		var mort = List.all[i];
-		if(mort){	
-			mort.toRemove++;
-			if(mort.toRemove > 40){ //&& (!mort.sprite || (mort.sprite && mort.sprite.anim && !mort.sprite.anim.remove))){
+		var act = List.all[i];
+		if(act){	
+			act.toRemove++;
+			if(act.toRemove > 40){ //&& (!act.sprite || (act.sprite && act.sprite.anim && !act.sprite.anim.remove))){
 				removeAny(i);
 			}
 		}
@@ -107,11 +107,11 @@ Receive.init = function(obj,id){
 	else if(obj.type === 'drop'){	Receive.init.drop(obj);	}
 }
 
-Receive.init.actor = function(mort){
-	mort.toRemove = 0;
-	Sprite.creation(mort,mort.sprite);
-	List.actor[mort.id] = mort;	
-	List.all[mort.id] = mort;	
+Receive.init.actor = function(act){
+	act.toRemove = 0;
+	Sprite.creation(act,act.sprite);
+	List.actor[act.id] = act;	
+	List.all[act.id] = act;	
 	
 }
 

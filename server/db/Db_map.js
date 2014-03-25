@@ -52,13 +52,13 @@ Db.map['test'] = function(){	//'test' = mapId
 		},
 		//#####
 		//Function: use when needs to know mortId
-		extra:function(mort){		//@param: enemy object
-			mort.hp = 100;
+		extra:function(act){		//@param: enemy object
+			act.hp = 100;
 		}
 		//#####
 		//#####
 		//COMMON EXTRA:		
-		PARAM: key: playerID, | mort:enemy Obj that has this properties, | mortid: enemy Id that has this properties, | map: mapId 
+		PARAM: key: playerID, | act:enemy Obj that has this properties, | mortid: enemy Id that has this properties, | map: mapId 
 		
 		//can right click to talkTo. used to trigger dialogues.
 		dialogue:function(key){
@@ -77,10 +77,10 @@ Db.map['test'] = function(){	//'test' = mapId
 		],
 		
 		//called for each player who dealt 1+ dmg to this monster when this monster dies
-		deathFunc:function(key,mort,map){},		
+		deathFunc:function(key,act,map){},		
 		
 		//called once whe monsters dies. killers is array of playerId. first id is guy who has the drop
-		deathFuncArray:function(killers,mort,map){},	
+		deathFuncArray:function(killers,act,map){},	
 		
 		//delete this enemy when he dies. 
 		deleteOnceDead:1,
@@ -116,11 +116,11 @@ Db.map['test'] = function(){	//'test' = mapId
 		},
 		
 		//an enemy that acts as a switch. REQ: enemy needs to have anim:'off' and 'on'
-		mort.switch = {		
-			on:function(key,mort,map){	//function when player activate the switch. map = map Obj
+		act.switch = {		
+			on:function(key,act,map){	//function when player activate the switch. map = map Obj
 				map.addon.Qtutorial.variable.rotation *= -1;		
 			},
-			off:function(key,mort,map){ //function when player desactivate the switch
+			off:function(key,act,map){ //function when player desactivate the switch
 				map.addon.Qtutorial.variable.rotation *= -1;			
 			}
 			off:null		//once activated, the switch cant be desactivated.
@@ -129,7 +129,7 @@ Db.map['test'] = function(){	//'test' = mapId
 		
 		//an enemy that acts as a chest. can only be opened once REQ: enemy needs to have anim:'open' and 'close'. NOTE: will be trasnformed to {func:,list:[]}
 		//must return a boolean about the success of the action (Ex: if enough inventory space)
-		mort.chest = function(key,eId){
+		act.chest = function(key,eId){
 			Itemlist.add(List.main[key].invList,'gold',1000);
 			return true;
 		} 
@@ -236,7 +236,7 @@ Init.db.map.baseMap = function(){
 		tileset : 'v1.1',
 		grid :[[]],
 		lvl:0,
-		fall:function(key,mort){ mort.hp = -1;},
+		fall:function(key,act){ act.hp = -1;},
 		graphic:null,	//if use same graphic than other map
 	}
 }

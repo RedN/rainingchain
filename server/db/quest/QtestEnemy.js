@@ -10,19 +10,19 @@ q.variable = {
 
 q.func = {
 	start:function(key){
-		var mort = List.all[key];
-		Actor.teleport(mort,250,250,"testEnemy");
-		mort.respawnLoc.recent = {x:250,y:250,map:"testEnemy@MAIN"};
+		var act = List.all[key];
+		Actor.teleport(act,250,250,"testEnemy");
+		act.respawnLoc.recent = {x:250,y:250,map:"testEnemy@MAIN"};
 		
 		Itemlist.add(key,'QtestEnemy-enemyGenerator');
 		Test.generateEquip(key,0,5);
 		
 		
 		Itemlist.add(key,'QtestEnemy-weapon');
-		Actor.switchEquip(mort,'QtestEnemy-weapon',"melee");
+		Actor.switchEquip(act,'QtestEnemy-weapon',"melee");
 		
-		mort.abilityList = {'QtestEnemy-simple':1};
-		Actor.swapAbility(mort,'QtestEnemy-simple',0);
+		act.abilityList = {'QtestEnemy-simple':1};
+		Actor.swapAbility(act,'QtestEnemy-simple',0);
 		
 		for(var i in List.main[key].invList.data){
 			var a = List.main[key].invList.data[i];

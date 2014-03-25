@@ -1,12 +1,12 @@
 Draw.actor = function (){
 	var array = Draw.actor.sort();
 	for(var i = 0 ; i < array.length ; i ++){
-		var mort = array[i];
-		Draw.sprite(mort);
-		if(mort.combat && mort !== player){
-			Draw.actor.status(mort); 
+		var act = array[i];
+		Draw.sprite(act);
+		if(act.combat && act !== player){
+			Draw.actor.status(act); 
 		}
-		if(mort.chatHead) Draw.actor.chatHead(mort); 
+		if(act.chatHead) Draw.actor.chatHead(act); 
 	}
 }	
 	
@@ -16,10 +16,10 @@ Draw.actor.sort = function(){
 		drawSortList.push(List.actor[i]);
 	}
 	drawSortList.push(player);
-	drawSortList.sort(function (mort,mort1){
-		var spriteFromDb = Db.sprite[mort.sprite.name];
-		var sizeMod = spriteFromDb.size* mort.sprite.sizeMod;
-		var y0 = mort.y + spriteFromDb.legs * sizeMod
+	drawSortList.sort(function (act,mort1){
+		var spriteFromDb = Db.sprite[act.sprite.name];
+		var sizeMod = spriteFromDb.size* act.sprite.sizeMod;
+		var y0 = act.y + spriteFromDb.legs * sizeMod
 		
 		var spriteFromDb1 = Db.sprite[mort1.sprite.name];
 		var sizeMod1 = spriteFromDb1.size* mort1.sprite.sizeMod;
@@ -30,45 +30,45 @@ Draw.actor.sort = function(){
 	return drawSortList;	
 }
 
-Draw.actor.chatHead = function(mort){
+Draw.actor.chatHead = function(act){
 	ctx = List.ctx.stage;
 	
-	var spriteServer = mort.sprite;
+	var spriteServer = act.sprite;
 	var spriteFromDb = Db.sprite[spriteServer.name];
 	var sizeMod = spriteFromDb.size* spriteServer.sizeMod;
 	
-	var numX = Cst.WIDTH2+mort.x-player.x;
-	var numY = Cst.HEIGHT2+mort.y-player.y - 35 + spriteFromDb.hpBar*sizeMod;;
+	var numX = Cst.WIDTH2+act.x-player.x;
+	var numY = Cst.HEIGHT2+act.y-player.y - 35 + spriteFromDb.hpBar*sizeMod;;
 	
 	ctx.fillStyle="yellow";
 	ctx.textAlign = 'center';
-	ctx.fillText(mort.chatHead.text,numX,numY);
+	ctx.fillText(act.chatHead.text,numX,numY);
 	ctx.textAlign = 'left';
 	ctx.fillStyle="black";
 }		
 
-Draw.actor.status = function(mort){	//hp + status
+Draw.actor.status = function(act){	//hp + status
 	ctx = List.ctx.stage;
 	
-	var spriteServer = mort.sprite;
+	var spriteServer = act.sprite;
 	var spriteFromDb = Db.sprite[spriteServer.name];
 	var animFromDb = spriteFromDb.anim[spriteServer.anim];
 
 	var sizeMod = spriteFromDb.size* spriteServer.sizeMod;
-	var numX = Cst.WIDTH2+mort.x-player.x-50;
-	var numY = Cst.HEIGHT2+mort.y-player.y + spriteFromDb.hpBar*sizeMod;
+	var numX = Cst.WIDTH2+act.x-player.x-50;
+	var numY = Cst.HEIGHT2+act.y-player.y + spriteFromDb.hpBar*sizeMod;
 
 	//hp
 	ctx.strokeStyle = "black";
 	ctx.roundRect(numX,numY,100,5);
-	ctx.fillStyle = mort.type === 'enemy' ? 'red' : 'green';
-	ctx.roundRect(numX,numY,Math.max(mort.hp/mort.resource.hp.max*100,0),5,1);	
+	ctx.fillStyle = act.type === 'enemy' ? 'red' : 'green';
+	ctx.roundRect(numX,numY,Math.max(act.hp/act.resource.hp.max*100,0),5,1);	
 	ctx.fillStyle="black";
 	
 	Draw.state.status({
 		x:numX,
 		y:numY - 30,
-	},mort.statusClient);
+	},act.statusClient);
 }
 
 
@@ -78,17 +78,17 @@ Draw.bullet = function(){
 	}
 }
 
-Draw.sprite = function (mort){
+Draw.sprite = function (act){
 	ctx = List.ctx.stage;
 	
-	var spriteServer = mort.sprite;
+	var spriteServer = act.sprite;
 	var spriteFromDb = Db.sprite[spriteServer.name];
 	var image = spriteFromDb.img;
 	var animFromDb = spriteFromDb.anim[spriteServer.anim];
 	
-	if(mort.type === 'bullet' && animFromDb === 'attack') animFromDb = 'travel';	//quick fix
+	if(act.type === 'bullet' && animFromDb === 'attack') animFromDb = 'travel';	//quick fix
 	
-	var sideAngle = Math.round(mort.angle/(360/animFromDb.dir)) % animFromDb.dir;
+	var sideAngle = Math.round(act.angle/(360/animFromDb.dir)) % animFromDb.dir;
 	
 	var startX = spriteServer.startX * animFromDb.sizeX;
 	var startY = animFromDb.startY + spriteFromDb.side[sideAngle] * animFromDb.sizeY;
@@ -101,8 +101,8 @@ Draw.sprite = function (mort){
 		startY,
 		animFromDb.sizeX,
 		animFromDb.sizeY,
-		Cst.WIDTH2-animFromDb.sizeX/2*sizeMod + mort.x-player.x,
-		Cst.HEIGHT2-animFromDb.sizeY/2*sizeMod + mort.y-player.y,
+		Cst.WIDTH2-animFromDb.sizeX/2*sizeMod + act.x-player.x,
+		Cst.HEIGHT2-animFromDb.sizeY/2*sizeMod + act.y-player.y,
 		animFromDb.sizeX * sizeMod,
 		animFromDb.sizeY * sizeMod);
 	ctx.globalAlpha = 1;

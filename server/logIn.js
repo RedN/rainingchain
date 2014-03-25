@@ -132,8 +132,8 @@ Sign.off = function(key,message){
 Sign.off.remove = function(key){
 	var socket = List.socket[key]; if(!socket){ Sign.off.remove.safe(key); return; }
 	
-	var mort = List.all[key];
-	if(mort && List.map[mort.map]) delete List.map[mort.map].list[key];
+	var act = List.all[key];
+	if(act && List.map[act.map]) delete List.map[act.map].list[key];
 	ActiveList.remove(List.all[key]);
 	delete List.nameToKey[List.all[key].name];
 	delete List.actor[key];
@@ -145,10 +145,10 @@ Sign.off.remove = function(key){
 }
 
 Sign.off.remove.safe = function(key){
-	var mort = List.all[key];
-	if(mort) delete List.nameToKey[List.all[key].name];
+	var act = List.all[key];
+	if(act) delete List.nameToKey[List.all[key].name];
 	
-	if(mort && List.map[mort.map])	delete List.map[mort.map].list[key];
+	if(act && List.map[act.map])	delete List.map[act.map].list[key];
 	
 	delete List.actor[key];
 	delete List.socket[key];
@@ -188,7 +188,6 @@ Save.main = function(key,updateDb){
         db.update('main',{username:main.username},save,db.err);
     } else { return save; } //when sign up
 }
-
 
 //Load Account
 Load = function (key,account,socket,cb){
