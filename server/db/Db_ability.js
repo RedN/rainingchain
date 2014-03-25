@@ -85,7 +85,7 @@ a['bulletMulti'] = {					//bulletMulti is the id of attack
 			burn : {'baseChance':0,'chance':1,'magn':1,'time':1},
 			chill : {'baseChance':0,'chance':1,'magn':1,'time':1},
 			stun : {'baseChance':0,'chance':1,'magn':1,'time':1},
-			leech : {'chance':1,'magn':1},			
+			leech : {'baseChance':0,'chance':1,'magn':1},			
 			crit : {'chance':1,'magn':1},
 			
 			hitIfMod':0,				//if 0: normal, 1: attack allies

@@ -86,16 +86,17 @@ ENEMY:
 
 
 
+change enemy ability AI: 3 list of attack aiChance: close, mid, long
+	
+	
+for testing. quest variable modifier
 
 
 
-revamp status
 
 change fall formula
-add all sprite
 make attack template
 create basic attack template + ability
-load map extern and sprite and anim
 
 stat window
 portal team

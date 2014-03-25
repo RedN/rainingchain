@@ -73,7 +73,7 @@ Change.send = function(){
 			}
 		}
 		
-	    Test.bandwidth('upload',sa);
+	    Performance.bandwidth('upload',sa);
 	}
 	
 	Change.send.reset();

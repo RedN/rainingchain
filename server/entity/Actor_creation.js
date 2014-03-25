@@ -73,7 +73,8 @@ Actor.creation.group.template = function(){
 
 Actor.creation.boost = function(e){
 	for(var i in e.boost.list){ 
-        e.boost.list[i].base = viaArray.get({'origin':e,'array':e.boost.list[i].stat});	
+		e.boost.list[i].base = viaArray.get({'origin':e,'array':e.boost.list[i].stat});	
+		e.boost.list[i].permBase = e.boost.list[i].base;
 	}
 	return e;
 }

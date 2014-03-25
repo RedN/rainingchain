@@ -5,12 +5,47 @@ q.id = 'QtestEnemy';
 q.variable = {
 	enemy:[
 		["bat","normal"],
-	],
-	
+	]	
 };
-	
+
+q.func = {
+	start:function(key){
+		var mort = List.all[key];
+		Actor.teleport(mort,250,250,"testEnemy");
+		mort.respawnLoc.recent = {x:250,y:250,map:"testEnemy@MAIN"};
+		
+		Itemlist.add(key,'QtestEnemy-enemyGenerator');
+		Test.generateEquip(key,0,5);
+		
+		
+		Itemlist.add(key,'QtestEnemy-weapon');
+		Actor.switchEquip(mort,'QtestEnemy-weapon',"melee");
+		
+		mort.abilityList = {'QtestEnemy-simple':1};
+		Actor.swapAbility(mort,'QtestEnemy-simple',0);
+		
+		for(var i in List.main[key].invList.data){
+			var a = List.main[key].invList.data[i];
+			if(Db.equip[a[0]]) Itemlist.remove(key,a[0]);
+		}
+		
+	}
+}
 
 
+q.equip['weapon'] = {'piece': 'melee','type': 'mace','icon':'melee.mace',
+	'name':"Mace",'sprite':{'name':"mace",'sizeMod':1},
+	'dmg':{'main':10,'ratio':{'melee':1,'range':1,'magic':1,'fire':1,'cold':1,'lightning':1}},
+}
+
+q.ability['simple'] = {'type':'attack','name':'Fire Basic','icon':'attackMagic.fireball',
+	'spd':{'main':1,'support':0},'period':{'own':25,'global':25},
+	'action':{'func':'Combat.action.attack','param':{
+		'type':"bullet",'angle':0,'amount':1,
+		'objImg':{'name':"fireball",'sizeMod':1.2},'hitImg':{'name':"fireHit",'sizeMod':0.5},
+		'dmg':{'main':100,'ratio':{'melee':100,'range':100,'magic':100,'fire':100,'cold':100,'lightning':100}},
+	}
+}};
 	
 q.item['enemyGenerator'] = {'name':'Enemy Gen','icon':'magic.staff','stack':1,'option':[		
 	{'name':'Enemy 0','param':[q.variable.enemy[0]],'func':Test.spawnEnemy},

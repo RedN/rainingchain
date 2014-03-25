@@ -40,9 +40,9 @@ Attack.template = function(){
 	b.burn = {'baseChance':0,'chance':1,'magn':1,'time':1};
 	b.chill = {'baseChance':0,'chance':1,'magn':1,'time':1};
 	b.stun = {'baseChance':0,'chance':1,'magn':1,'time':1};
-	b.crit = {'chance':1,'magn':1};
-	b.leech = {'chance':1,'magn':1,'time':1};	
-	b.pierce = {'chance':0,'dmgReduc':0.5};		//will be overwrite completly
+	b.crit = {'baseChance':0,'chance':1,'magn':1};
+	b.leech = {'baseChance':0,'chance':1,'magn':1,'time':1};	
+	b.pierce = {'baseChance':0,'chance':0,'dmgReduc':0.5};		//will be overwrite completly
 	b.curse = 0;
 	
 	

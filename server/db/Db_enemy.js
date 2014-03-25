@@ -132,7 +132,7 @@ Init.db.enemy = function(){
 		
 		"abilityList":[
 			{'template':'scratch','aiChance':0.2,'extra':{
-				'leech,chance':1,'leech,magn':0.5,'hitImg,name':'cursePink',			
+				'leech,baseChance':1,'leech,magn':50,'hitImg,name':'cursePink',			
 			}},
 			{'template':'scratch','aiChance':0.4,'extra':{}},
 			0.3

@@ -2,7 +2,8 @@ Loop = function(){
 	try {
 	Loop.frameCount++;	
     Test.loop();
-    
+    Performance.loop();
+	
 	Loop.Bullet();
 	Loop.Strike();
 	Loop.Group();

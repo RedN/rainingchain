@@ -1,59 +1,21 @@
 Test = {};
 
-//Main Test Loop
 Test.loop = function(){
-	Test.performance();
-	Test.bandwidth.display();
-}
-	
-		
-//Performance
-Test.performance = function(){
-    if(Test.performance.active && Loop.frameCount % Test.performance.frequence === 0){
-        var d = Date.now();	
-        permConsoleLog('Performance: ' + Math.round(40*Test.performance.frequence/(d - Test.performance.oldtime)*100+15) + '%');	//+15 cuz weird glitch making 85% them max
-        Test.performance.oldtime = d;
-    }
-};
-Test.performance.active = false;
-Test.performance.oldtime = Date.now();
-Test.performance.frequence = 10*1000/40;
 
 
-//Bandwidth
-Test.bandwidth = function(type,data){
-    if(Test.bandwidth[type].active){
-        Test.bandwidth[type].size += Test.bandwidth.getSize(data);
-		if(Test.bandwidth[type].log) Test.bandwidth[type].logString += stringify(data);
-    }
-	
 }
-Test.playerAmount = false;
-Test.bandwidth.upload = {'active':false,log:false,'size':0,logString:""};
-Test.bandwidth.download = {'active':false,log:false,'size':0,logString:""};
-Test.bandwidth.frequence = 10*1000/40;
-Test.bandwidth.getSize = function(obj){
-    return stringify(obj).length * 2;   //in bytes
-}  
-Test.bandwidth.display = function(){
-    if(Loop.frameCount % Test.bandwidth.frequence === 0){
-        if(Test.bandwidth.upload.active) permConsoleLog('Upload: ' + Math.round(Test.bandwidth.upload.size/1000) + ' K bytes');
-        if(Test.bandwidth.download.active) permConsoleLog('Download: ' + Math.round(Test.bandwidth.download.size/1000) + ' K bytes');
-		if(Test.playerAmount)	permConsoleLog("Player Count: " + Object.keys(List.main).length);		
-	}
-}
-
 
 Test.serverStart = function(){
     
 }
 
-//Called when player logs in
+
 Test.signIn = function(key){	
+	//Called when player logs in
 	Test.signIn.hideHUD(key);
 	
 	if(Server.testing){
-		Test.enemy(key);
+		Test.a(key);	//test enemy
 		Itemlist.add(key,'gold');
 		TestingQuest(key);
 	}
@@ -95,24 +57,7 @@ Test.firstSignIn = function(key){
 
 }
 
-//Call every frame for every actor
-Test.loop.actor = function(key){
-    
 
-}
-
-//Call every frame for every player
-Test.loop.player = function(key){
-    
-
-}
-	
-	
-
-Test.a = function(){	//when starting server
-	
-		
-}
 
 Test.spawnEnemy = function(key,info){
 	var player = List.all[key];
@@ -123,14 +68,6 @@ Test.spawnEnemy = function(key,info){
 		"variant":info[1],		
 		"extra":{},
 	});
-}
-
-Test.enemy = function(key){
-	Actor.teleport(List.all[key],250,250,"testEnemy");
-	mort.respawnLoc = {safe:{x:250,y:250,map:"testEnemy@MAIN"},recent:{x:250,y:250,map:"testEnemy@MAIN"}};
-	
-	Itemlist.add(key,'QtestEnemy-enemyGenerator');
-	Test.generateEquip(key,0,5);
 }
 
 Test.generateEquip = function(key,lvl,maxAmount){
@@ -160,14 +97,10 @@ Test.generateEquip = function(key,lvl,maxAmount){
 	
 }
 
-
-Test.c = function(){
-
-}
-
-Test.d = function(){
-
-}
+Test.a = function(key){ Db.quest["QtestEnemy"].func.start(key); }
+Test.b = function(){}
+Test.c = function(){}
+Test.d = function(){}
 
 
 

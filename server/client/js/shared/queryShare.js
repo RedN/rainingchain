@@ -214,7 +214,7 @@ if(server){
 							if(i === id || List.actor[i].name.have(id)) return List.actor[i];
 					}
 					
-					
+					var e1 = e[Object.keys(e)[0]];
 					
 					var info = eval(d.command);
 					data = JSON.stringify(info);

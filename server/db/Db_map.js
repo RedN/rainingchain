@@ -219,12 +219,7 @@ var mapList = [
 Init.db.map = function (){
 	for(var i in mapList){
 		Db.map[mapList[i]] = require('./map/'+mapList[i]).map;
-	}
-	
-	
-	//ts("Actor.creation.group({'x':1060,'y':1900,'map':'test@MAIN','respawn':100},[{'amount':1,'category':'boss','variant':'iceTroll','lvl':0,'modAmount':1},]);")
-			
-			
+	}		
 	
 	for(var m in Db.map){	
 		Db.map[m] = Db.map[m]();

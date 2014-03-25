@@ -2,7 +2,7 @@ io.sockets.on('connection', function (socket) {
 	socket.on('click', function (d) {
         //data format: [side,x,y]
 		try {
-			Test.bandwidth('download',d);
+			Performance.bandwidth('download',d);
 			socket.timer = 0;
 			var key = socket.key;
 			if(List.main[key]){
@@ -19,7 +19,7 @@ io.sockets.on('connection', function (socket) {
 	
 	socket.on('input', function (d) {	
 		try {
-		    Test.bandwidth('download',d);
+		    Performance.bandwidth('download',d);
             socket.timer = 0;
 			var player = List.all[socket.key];
 			

@@ -1,6 +1,5 @@
 //####Update Actor####
 Actor.loop = function(mort){	
-	Test.loop.actor(mort.id);
 	mort.frameCount++;
 	if(mort.frameCount % 25 === 0){ Actor.loop.activeList(mort); }
 	if(!mort.active) return;
@@ -43,9 +42,6 @@ Actor.loop = function(mort){
 		if(mort.frameCount % round(Server.frequence.save/40) === 0){ Save(mort.id); }    //save progression
 		if(List.main[i].windowList.trade){ Actor.loop.trade(mort); };    
 		if(List.main[i].dialogue){ Actor.loop.dialogue(mort); }
-
-		Test.loop.player(i);	
-			
 	}
 		
 }
@@ -157,8 +153,7 @@ Actor.loop.pushed = function(mort){
 		mort.spdY = sin(status.angle)*status.magn;
 		status.time--;
 	} else if(mort.type !== 'player'){
-		mort.spdX = 0;
-		mort.spdY = 0;
+		//TOFIX
 	}
 }
 
@@ -340,16 +335,16 @@ Actor.fall = function(mort){
 
 
 Actor.loop.move = function(mort){
-	if(mort.status && mort.status.stun.active.time > 0){ var bind = mort.status.stun.active.input;} else { var bind = [0,1,2,3]; }
 	if(mort.bumper[0]){mort.spdX = -Math.abs(mort.spdX*0.5) - 1;} 
 	if(mort.bumper[1]){mort.spdY = -Math.abs(mort.spdY*0.5) - 1;}
 	if(mort.bumper[2]){mort.spdX = Math.abs(mort.spdX*0.5) + 1;} 
 	if(mort.bumper[3]){mort.spdY = Math.abs(mort.spdY*0.5) + 1;} 
 
-	if(mort.moveInput[bind[0]] && !mort.bumper[0] && mort.spdX < mort.maxSpd){mort.spdX += mort.acc;}
-	if(mort.moveInput[bind[1]] && !mort.bumper[1] && mort.spdY < mort.maxSpd){mort.spdY += mort.acc;}
-	if(mort.moveInput[bind[2]] && !mort.bumper[2] && mort.spdX > -mort.maxSpd){mort.spdX -= mort.acc;}
-	if(mort.moveInput[bind[3]] && !mort.bumper[3] && mort.spdY > -mort.maxSpd){mort.spdY -= mort.acc;}	
+	if(mort.moveInput[0] && !mort.bumper[0] && mort.spdX < mort.maxSpd){mort.spdX += mort.acc;}
+	if(mort.moveInput[1] && !mort.bumper[1] && mort.spdY < mort.maxSpd){mort.spdY += mort.acc;}
+	if(mort.moveInput[2] && !mort.bumper[2] && mort.spdX > -mort.maxSpd){mort.spdX -= mort.acc;}
+	if(mort.moveInput[3] && !mort.bumper[3] && mort.spdY > -mort.maxSpd){mort.spdY -= mort.acc;}	
+	
 	
 	//Friction + Min Spd
 	mort.spdX *= mort.friction;	
@@ -357,6 +352,8 @@ Actor.loop.move = function(mort){
 	if (Math.abs(mort.spdX) < 0.1){mort.spdX = 0;}	
 	if (Math.abs(mort.spdY) < 0.1){mort.spdY = 0;}
 	if(mort.spdX || mort.spdY){ mort.moveAngle = atan2(mort.spdY,mort.spdX); } 
+	
+	
 	
 	//Calculating New Position
 	var dist = Math.pyt(mort.spdY,mort.spdX);

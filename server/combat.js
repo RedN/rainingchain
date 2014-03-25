@@ -136,14 +136,14 @@ Combat.collision = function(b,mort){
 	if(b.hitImg){Anim.creation(b.hitImg.name,mort.id,b.hitImg.sizeMod || 1);}
 	if(b.healing){ Actor.changeResource(mort,b.healing); return; }
 	
-	if(b.crit.chance >= Math.random()){ b = Combat.collision.crit(b) }
+	if(b.crit.baseChance >= Math.random() || b.crit.chance >= Math.random()){ b = Combat.collision.crit(b) }
 	
 	var dmg = Combat.collision.damage(b,mort); if(!dmg) return;
 	Combat.collision.reflect(dmg,b,mort);
 	
 	//Mods
-	if(b.leech.chance && b.leech.chance >= Math.random()){ Combat.collision.leech(mort,b) }
-	if(b.pierce.chance && b.pierce.chance >= Math.random()){ Combat.collision.pierce(b) } else {b.toRemove = 1;};
+	if(b.leech.baseChance >= Math.random() || b.leech.chance >= Math.random()){ Combat.collision.leech(mort,b) }
+	if(b.pierce.baseChance >= Math.random() || b.pierce.chance >= Math.random()){ Combat.collision.pierce(b) } else {b.toRemove = 1;};
 	
 	if(b.onHit && b.onHit.chance >= Math.random()){	Combat.action.attack(b,useTemplate(Attack.template(),b.onHit.attack));}
 	
