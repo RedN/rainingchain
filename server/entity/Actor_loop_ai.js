@@ -70,24 +70,26 @@ Actor.loop.input.move.sub = function(mort){
 }
 
 Actor.loop.input.ability = function(mort){
-	/*
-	var target = List.all[mort.target];
-	var diffX = target.x - mort.x;
-	var diffY = target.y - mort.y;
-	var diff = Math.sqrt(diffX*diffX+diffY*diffY);
-	*/
-	if(!mort.target.main.list[0]){
-		mort.abilityChange.press = '0000000000000000000000'; return;
-	}
-	
 	mort.abilityChange.press = '0000000000000000000000';
+	if(!mort.target.main.list[0]) return;
+
+	var diff = Collision.distancePtPt(mort,List.all[mort.target.main.list[0]]);
 	
-	var a = Math.random();
-	for(var i in mort.abilityList){
-		if(mort.abilityList[i] >= a){
+	var range = 'close';
+	if(diff > mort.abilityAi.range[0]) range = 'middle';
+	if(diff > mort.abilityAi.range[1]) range = 'far';
+	
+	
+	var id = mort.abilityAi[range].random();
+	if(!id || id === 'idle') return;
+	
+	console.log(id);
+	
+	for(var i in mort.ability){
+		if(mort.ability[i].id === id){
 			mort.abilityChange.press = mort.abilityChange.press.set(+i,'1');
+			console.log(id);
 		}
-		a -= mort.abilityList[i];
 	}	
 	
 }

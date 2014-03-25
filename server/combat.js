@@ -235,7 +235,7 @@ Combat.collision.status.drain = function(mort,b){
 	drain.active.time = info.time*(1-drain.resist); 
 	drain.active.magn = info.magn*(1-drain.resist);	
 
-	Actor.changeResource(player,{mana:amount});
+	Actor.changeResource(player,{mana:drain.active.magn});
 	Actor.boost(mort,{'stat':'mana-max','type':"+",'value':-drain.active.magn,'time':drain.active.time,'name':'drain'}); 
 	Actor.boost(player,{'stat':'mana-max','type':"+",'value':drain.active.magn,'time':drain.active.time,'name':'drain'}); 
 

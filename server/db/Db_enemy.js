@@ -131,12 +131,14 @@ Init.db.enemy = function(){
 		"sprite":{'name':"bat",'sizeMod':1},
 		
 		"abilityList":[
-			{'template':'scratch','aiChance':0.2,'extra':{
+			{'template':'scratch','aiChance':[0.2,0.2,0.2],'extra':{
 				'leech,baseChance':1,'leech,magn':50,'hitImg,name':'cursePink',			
 			}},
-			{'template':'scratch','aiChance':0.4,'extra':{}},
-			0.3
+			{'template':'scratch','aiChance':[0.4,0.4,0.4],'extra':{}},
+			[0.4,0.4,0.4]
 		],
+	
+		
 	
 		'deathExp':1,
 		
@@ -306,21 +308,36 @@ Init.db.enemy.creation = function(e){
 		
 	}
 	
+	//Ability
 	var position = 0;
 	for(var i in e.abilityList){
-		if(typeof e.abilityList[i] !== 'object') continue;
+		if(!e.abilityList[i].template){
+			e.abilityAi.close['idle'] = e.abilityList[i][0];
+			e.abilityAi.middle['idle'] = e.abilityList[i][1];
+			e.abilityAi.far['idle'] = e.abilityList[i][2];
+			continue;
+		}	
+				
 		var a = deepClone(Db.ability[e.abilityList[i].template]);
 		a.action.param = useTemplate(Attack.template(),a.action.param,0);
 		a.action.param = useTemplate(a.action.param,e.abilityList[i].extra,1,1);	//TOFIX if want to change something other then attack
 				
-		e.abilityList[i] = e.abilityList[i].aiChance || 0.5;
-		e.abilityList[i].id = Math.randomId();	//cuz cant have same id
+		
+		var id = Math.randomId();
+		e.abilityList[i].id = id;
+		a.id = id;
+		
+		e.abilityAi.close[id] = e.abilityList[i].aiChance[0];
+		e.abilityAi.middle[id] = e.abilityList[i].aiChance[1];
+		e.abilityAi.far[id] = e.abilityList[i].aiChance[2];
+		
 		Actor.swapAbility(e,a,position++);
 	}
-	e.abilityList.normalize();
-
-
 	
+	var a = {};
+	for(var i in e.abilityList)	a[e.abilityList[i].id] = 1;
+	e.abilityList = a;
+		
 	var a = Db.enemy[e.category][e.variant] = new Function('return ' + stringify(e));
 	
 	//things cant stringify cuz function

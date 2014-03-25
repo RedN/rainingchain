@@ -27,6 +27,7 @@ Actor.creation = function(data){
 	}
 	if(e.nevermove){ Actor.creation.nevermove(e); }
 	
+	
 	return e.id;
 }
 

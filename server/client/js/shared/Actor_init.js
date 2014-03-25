@@ -62,8 +62,9 @@ Init.actor = function(){
 		mort.fury = 100;	
 		mort.heal = 100;
 		
-		mort.abilityList = [];
 		mort.abilityChange = Actor.template.abilityChange();	
+		mort.abilityAi = {close:{},middle:{},far:{},range:[60,300]};
+		mort.abilityList = {};		
 		
 		mort.friction = 0.9;
 		mort.move = 1;
@@ -237,7 +238,7 @@ Actor.template.mastery = function(type){
 };
 
 Actor.template.abilityList = function(){
-	return {};	//check Test	for player only. enemy has []
+	return {};	//check Test for added ability
 }
 Actor.template.ability = function(){
 	return [0,0,0,0,0,0];

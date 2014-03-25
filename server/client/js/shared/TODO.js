@@ -81,11 +81,6 @@ ENEMY:
 
 
 
-
-
-
-
-
 change enemy ability AI: 3 list of attack aiChance: close, mid, long
 	
 	
