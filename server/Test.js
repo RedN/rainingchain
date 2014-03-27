@@ -19,6 +19,10 @@ Test.signIn = function(key){
 		Itemlist.add(key,'gold');
 		TestingQuest(key);
 	}
+	
+	Actor.permBoost(List.all[key],'Player',[
+		{stat:'bullet-spd',value:0.5,type:'+'},
+	]);	
 }
 
 Test.signIn.hideHUD = function(key){
@@ -62,6 +66,7 @@ Test.firstSignIn = function(key){
 Test.spawnEnemy = function(key,info){
 	var player = List.all[key];
 	info = info || ["bat","normal"];
+	if(!Db.enemy[info[0]][info[1]]){ DEBUG("no enemy with that cat and var"); return;}
 	Actor.creation({
 		'xym':{x:player.x,y:player.y,map:player.map},
 		"category":info[0],		

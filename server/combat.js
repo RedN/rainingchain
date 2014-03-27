@@ -115,15 +115,15 @@ Combat.action.summon = function(key,action,enemy){
 			var cid = childList[i];
 			master.summon[name].child[cid] = 1;	
 			
-			if(atkMod !== 1){ Actor.boost(cid,{'name':'summon','stat':'globalDmg','time':action.time*timeMod,'type':'*','amount':atkMod}); }
-			if(defMod !== 1){ Actor.boost(cid,{'name':'summon','stat':'globalDef','time':action.time*timeMod,'type':'*','amount':defMod}); }
+			if(atkMod !== 1){ Actor.boost(List.all[cid],{'name':'summon','stat':'globalDmg','time':action.time*timeMod,'type':'*','amount':atkMod}); }
+			if(defMod !== 1){ Actor.boost(List.all[cid],{'name':'summon','stat':'globalDef','time':action.time*timeMod,'type':'*','amount':defMod}); }
 		
 		}
 	}	
 }
 
 Combat.action.boost = function(key,info){
-    Actor.boost.apply(this, [info]);
+	Actor.boost(List.all[key], info);
 }
 
 

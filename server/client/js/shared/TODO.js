@@ -1,6 +1,4 @@
 
-
-
 ENEMY:
 	bat:  			scratch, life leech 50%, weak cold
 	bee: 			scratch, shoot dart, death=big scratch,   weak fire

@@ -209,7 +209,7 @@ Actor.template.weapon = function(){
 
 Actor.template.equip = function(type){
 	if(type === 'enemy')
-		return {"def":Cst.element.template(1),"dmg":Cst.element.template(1)};	
+		return {"def":Cst.element.template(1),"dmg":Cst.element.template(1)};	//equip dmg => mastery sum for enemy
 
 	return {
 		//"piece":{							"bracelet":{"id":"bracelet"},			"helm":{"id":"metalhelm"},			"amulet":{"id":"amulet"},			"gloves":{"id":"gloves"},			"body":{"id":"metalbody"},			"shield":{"id":"metalshield"},			"boots":{"id":"boots"},			"pants":{"id":"pants"},				"ring":{"id":"ring"},			"melee":{'id':"mace"},			"range":{'id':"boomerang"},			"magic":{'id':"wand"},		},

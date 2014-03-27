@@ -1,4 +1,10 @@
 Loop = function(){
+	
+	if(!Db.map[player.map]){
+		permConsoleLog("map not in Db.map in Map.js");
+		Map.creation(player.map,[3,3]);
+	}
+	
 	Loop.actor();
 	Loop.player();
 	Loop.bullet();
@@ -13,12 +19,12 @@ Loop = function(){
 	if(+$("#chatBoxInput").is(":focus")){
 		Input.press = {'move':[0,0,0,0],'ability':[0,0,0,0,0,0],'combo':[0,0]};	
 	}
-	window.onblur = function(){
-		Input.press = {'move':[0,0,0,0],'ability':[0,0,0,0,0,0],'combo':[0,0]}; 	
-	}
-	
 	
 }
+window.onblur = function(){
+	Input.press = {'move':[0,0,0,0],'ability':[0,0,0,0,0,0],'combo':[0,0]}; 	
+}
+	
 Loop.frameCount = 0;
 
 Loop.send = function(){ 

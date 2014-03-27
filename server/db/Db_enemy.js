@@ -32,16 +32,19 @@ ePreDb["troll"]["ice"] = {  //{		//troll is category, ice is variant
 	'globalDmg':function(lvl){ 		//if number, globalDef = globalDef * (lvl + 10)	#RECOMMENDED because easy balance
 		return lvl + 100;			//if function, globalDef = globalDef(lvl)
 	},
-	'deathExp':1,					//same system than other global
+	'deathExp':1,					//same system than other global but for exp given in combat
 	
-	"equip":{
-		'def':{					//only used for ratio (use value between 0-1)
+	"mastery":{
+		'def':{					//used as modifier
 			'melee':1,
 			'range':1,
 			'magic':1,
 			'fire':1,
 			'cold':1,
 			'lightning':1
+		}
+		'dmg':{					//used as modifier
+			'melee':1,'range':1,'magic':1,'fire':1,'cold':1,'lightning':1
 		}
 	},	
 		
@@ -67,7 +70,7 @@ ePreDb["troll"]["ice"] = {  //{		//troll is category, ice is variant
 			}
 		},
 		'mod':{					
-			quantity:1,			//chance to drop something
+			quantity:1,			//chance mod to drop something
 			quality:1,			//plan only: higher chance for high roll
 			rarity:1,			//plan only: higher chance to have more boost
 		}
@@ -97,7 +100,7 @@ ePreDb["troll"]["ice"] = {  //{		//troll is category, ice is variant
 		magn:10,				//when pushed, increase spd by magn
 		time:10,				//when pushed, increase spd for time amount of frame
 	},
-	'waypoint':1,				//palyer can right clikc to set respawnLoc
+	'waypoint':1,				//DONT USE. USE "system" "grave" instead. player can right clikc to set respawnLoc
 	
 	'immune':{					//grants immunity to elements
 		'fire':1,
@@ -129,30 +132,141 @@ Init.db.enemy = function(){
 	a["bat"]["normal"] = {  //{
 		"name":"Bat",
 		"sprite":{'name':"bat",'sizeMod':1},
-		
 		"abilityList":[
-			{'template':'scratch','aiChance':[0.2,0.2,0],'extra':{
-				'leech,baseChance':1,'leech,magn':50,'hitImg,name':'cursePink',			
+			{'template':'scratch','aiChance':[0.2,0,0],'extra':{
+				'leech,baseChance':0.25,'leech,magn':25,'hitImg,name':'cursePink',			
 			}},
-			{'template':'scratch','aiChance':[0.4,0.4,0],'extra':{}},
-			
-			{'template':'fireball','aiChance':[100,100,100],'extra':{}},
+			{'template':'scratch','aiChance':[0.4,0,0],'extra':{}},
+			{'template':'lightningBullet','aiChance':[0.4,0.4,1],'extra':{}},
+			{'template':'blessing','aiChance':[0,0.1,0.2],'extra':{
+				boost:[{'stat':'leech-chance','type':'+','value':1000,'time':50},
+						{'stat':'crit-chance','type':'+','value':1000,'time':50}
+				],
+			}},
+			[0.4,0.4,1]
+		],
+		'deathExp':1,
+		"mastery":{'def':{'melee':2,'range':2,'magic':2,'fire':1,'cold':0.5,'lightning':1},
+					'dmg':{'melee':1,'range':1,'magic':1,'fire':1,'cold':1,'lightning':1}},	
+		"acc":2,
+		"maxSpd":15,
+		"moveRange":{'ideal':50,"confort":25,"aggressive":500,"farthest":600},	
+	}; //}
+	//}
+	
+	a["bee"] = {}; //{
+	a["bee"]["normal"] = {  //{
+		"name":"Bee",
+		"sprite":{'name':"bee",'sizeMod':1},
+		"abilityList":[
+			{'template':'scratch','aiChance':[0.2,0,0],'extra':{}},
+			{'template':'scratchBig','aiChance':[0,0,0],'extra':{	//onDeath
+				'dmg,main':400,'objImg,name':'splashMelee',
+			}},
+			{'template':'dart','aiChance':[0,0.2,0.4],'extra':{
+				'burn,baseChance':0.2,
+			}},
 			
 			[0.4,0.4,1]
 		],
-	
-		
-	
+		'deathAbility':[1],
 		'deathExp':1,
-		
-		"equip":{'def':{'melee':2,'range':2,'magic':2,'fire':1,'cold':0.5,'lightning':1},
-				'dmg':{'melee':1,'range':1,'magic':1,'fire':1,'cold':1,'lightning':1}},	
+		"mastery":{'def':{'melee':2,'range':1.5,'magic':1.5,'fire':0.5,'cold':1,'lightning':2},
+					'dmg':{'melee':1,'range':1,'magic':1,'fire':1,'cold':1,'lightning':1}},	
 		"acc":2,
-		"maxSpd":15,
+		"maxSpd":10,
+		"moveRange":{'ideal':50,"confort":25,"aggressive":500,"farthest":600},	
+	}; //}
+	//}
+	
+	a["mosquito"] = {}; //{
+	a["mosquito"]["normal"] = {  //{
+		"name":"Mosquito",
+		"sprite":{'name':"mosquito",'sizeMod':1},
+		"abilityList":[
+			{'template':'dart','aiChance':[1,0.2,0.4],'extra':{
+				'knock,baseChance':1,
+			}},
+			{'template':'lightningBullet','aiChance':[1,0.2,0.4],'extra':{
+				'amount':5,'angle':30,'knock,baseChance':0.25,'sin':{"amp":2,"freq":2},
+			}},
+			[0.4,0.2,0.2]
+		],
+		'deathExp':1,
+		"mastery":{'def':{'melee':1,'range':1,'magic':1,'fire':1,'cold':1,'lightning':0.1},
+					'dmg':{'melee':1,'range':1,'magic':1,'fire':1,'cold':1,'lightning':1}},	
+		"acc":2,
+		"maxSpd":20,
 		"moveRange":{'ideal':250,"confort":25,"aggressive":500,"farthest":600},	
 	}; //}
 	//}
 	
+	a["mushroom"] = {}; //{
+	a["mushroom"]["normal"] = {  //{
+		"name":"Mushroom",
+		"sprite":{'name':"mushroom",'sizeMod':1},
+		"abilityList":[
+			{'template':'magicBullet','aiChance':[1,1,1],'extra':{
+				'spd':0.1,'maxTimer':250,'stun,baseChance':1,'dmg,main':200,'objImg,name':'spore'
+			}},
+			{'template':'fireBomb','aiChance':[0.3,0.1,0.1],'extra':{
+				'maxRange':0,
+			}},
+			[0.4,0.2,0.2]
+		],
+		'deathExp':1,
+		"mastery":{'def':{'melee':1,'range':1,'magic':1,'fire':1,'cold':1,'lightning':0.1},
+					'dmg':{'melee':1,'range':1,'magic':1,'fire':1,'cold':1,'lightning':1}},	
+		"acc":2,
+		"maxSpd":20,
+		"moveRange":{'ideal':100,"confort":250,"aggressive":500,"farthest":600},	
+	}; //}
+	//}
+	
+	a["larva"] = {}; //{
+	a["larva"]["normal"] = {  //{
+		"name":"Larva",
+		"sprite":{'name':"larva",'sizeMod':1},
+		"abilityList":[
+			{'template':'fireBomb','aiChance':[0,0,0],'extra':{
+				'maxRange':0,'dmg':{main:500,ratio:Cst.element.template(1)},
+			}},
+			[0.4,0.2,0.2]
+		],
+		'deathAbility':[0],
+		'deathExp':1,
+		"mastery":{'def':{'melee':0.01,'range':0.01,'magic':0.01,'fire':0.01,'cold':0.01,'lightning':0.01},
+					'dmg':{'melee':1,'range':1,'magic':1,'fire':1,'cold':1,'lightning':1}},	
+		"acc":2,
+		"maxSpd":5,
+		"moveRange":{'ideal':10,"confort":25,"aggressive":500,"farthest":600},	
+	}; //}
+	//}
+	
+	a["plant"] = {}; //{
+	a["plant"]["normal"] = {  //{
+		"name":"Plant",
+		"sprite":{'name':"plant",'sizeMod':1},
+		"abilityList":[
+			{'template':'scratchBig','aiChance':[1,0,0],'extra':{	//onDeath
+				'dmg,main':300,'objImg,name':'splashMelee','bleed,baseChance':1,
+			}},
+			
+			{'template':'dart','aiChance':[0.2,1,1],'extra':{
+				'bleed,baseChance':0.2,'chill,baseChance':0.4,'amount':5,'angle':25,
+				'dmg,main':50,'parabole':{'height':10,'min':10,'max':500,'timer':50},
+			}},
+			[0.4,0.2,0.2]
+		],
+		'deathAbility':[0],
+		'deathExp':1,
+		"mastery":{'def':{'melee':0.01,'range':0.01,'magic':0.01,'fire':0.01,'cold':0.01,'lightning':0.01},
+					'dmg':{'melee':1,'range':1,'magic':1,'fire':1,'cold':1,'lightning':1}},	
+		"acc":0.5,
+		"maxSpd":2,
+		"moveRange":{'ideal':10,"confort":25,"aggressive":500,"farthest":600},	
+	}; //}
+	//}
 	
 	
 	
@@ -169,7 +283,8 @@ Init.db.enemy = function(){
 		'globalDmg':1,
 		'deathExp':1,
 		
-		"equip":{'def':{'melee':1,'range':1,'magic':1,'fire':1,'cold':1,'lightning':1}},	
+		"mastery":{'def':{'melee':1,'range':1,'magic':1,'fire':1,'cold':1,'lightning':1},
+					'dmg':{'melee':1,'range':1,'magic':1,'fire':1,'cold':1,'lightning':1}},
 
 		"acc":2,
 		"maxSpd":5,
@@ -286,32 +401,55 @@ Init.db.enemy.creation = function(e){
 	e = useTemplate(Actor.template('enemy'),e);
 	
 	e.context = e.name; 
-	if(e.combat && !e.nevercombat){ 
-		e.context += ' | Lvl: ' + e.lvl;
-	}
-	e.hp = e.resource.hp.max;
+	if(e.combat && !e.nevercombat)	e.context += ' | Lvl: ' + e.lvl;
+	for(var i in e.resource)
+		e[i] = e.resource[i].max;
+
+	e = Init.db.enemy.creation.drop(e);	
+	e = Init.db.enemy.creation.ability(e);
 	
-	//Init Drop
-	if(e.drop){
-		e.drop.mod = e.drop.mod || {};
-		e.drop.mod.quantity = e.drop.mod.quantity || 1;
-		e.drop.mod.quality = e.drop.mod.quality || 1;
-		e.drop.mod.rarity = e.drop.mod.rarity || 1;
+	var tmp = {def:{},dmg:{}};
+	for(var i in e.mastery.def){
+		tmp.def[i] = {sum:e.mastery.def[i],mod:1};
+		tmp.dmg[i] = {sum:e.mastery.dmg[i],mod:1};
+	}
+	e.mastery = tmp;
 		
+	
+	//Add to Db.enemy	
+	var a = Db.enemy[e.category][e.variant] = new Function('return ' + stringify(e));
+	
+	//things cant stringify cuz function
+	a.globalDmg = e.globalDmg;	
+	a.globalDef = e.globalDef;
+	a.globalMod = e.globalMod;
+	
+	a.ability = [];	
+	for(var i in e.ability)
+		a.ability.push(e.ability[i].action.param);
 		
-		if(e.drop.plan){
-			for(var k in e.drop.plan){
-				if(typeof e.drop.plan[k] === 'number'){
-					var tmp = e.drop.plan[k];
-					e.drop.plan[k] = {};
-					for(var t in Cst.equip[k].type)	e.drop.plan[k][Cst.equip[k].type[t]] = tmp/3;							
-				}
+	return e;
+}
+
+Init.db.enemy.creation.drop = function(e){ 
+	e.drop.mod = e.drop.mod || {};
+	e.drop.mod.quantity = e.drop.mod.quantity || 0;
+	e.drop.mod.quality = e.drop.mod.quality || 0;
+	e.drop.mod.rarity = e.drop.mod.rarity || 0;
+	
+	if(e.drop.plan){
+		for(var k in e.drop.plan){
+			if(typeof e.drop.plan[k] === 'number'){
+				var tmp = e.drop.plan[k];
+				e.drop.plan[k] = {};
+				for(var t in Cst.equip[k].type)	e.drop.plan[k][Cst.equip[k].type[t]] = tmp/3;							
 			}
 		}
-		
 	}
-	
-	//Ability
+	return e;
+}
+		
+Init.db.enemy.creation.ability = function(e){
 	var position = 0;
 	for(var i in e.abilityList){
 		if(!e.abilityList[i].template){
@@ -322,9 +460,19 @@ Init.db.enemy.creation = function(e){
 		}	
 				
 		var a = deepClone(Db.ability[e.abilityList[i].template]);
-		a.action.param = useTemplate(Attack.template(),a.action.param,0);
-		a.action.param = useTemplate(a.action.param,e.abilityList[i].extra,1,1);	//TOFIX if want to change something other then attack
-				
+		
+		var extra = e.abilityList[i].extra;
+		if(extra.global)
+			a = useTemplate(a,a.action.param.global,1,1);
+		delete extra.global;
+		
+		if(a.action.func === 'Combat.action.attack'){
+			a.action.param = useTemplate(Attack.template(),a.action.param,0);
+			a.action.param = useTemplate(a.action.param,extra,1,1);	//TOFIX if want to change something other then attack
+		}
+		if(a.action.func === 'Combat.action.boost'){		
+			a.action.param = deepClone(extra.boost);
+		}
 		
 		var id = Math.randomId();
 		e.abilityList[i].id = id;
@@ -340,22 +488,8 @@ Init.db.enemy.creation = function(e){
 	var a = {};
 	for(var i in e.abilityList)	a[e.abilityList[i].id] = 1;
 	e.abilityList = a;
-		
-	var a = Db.enemy[e.category][e.variant] = new Function('return ' + stringify(e));
-	
-	//things cant stringify cuz function
-	a.globalDmg = e.globalDmg;	
-	a.globalDef = e.globalDef;
-	a.globalMod = e.globalMod;
-	
-	a.ability = [];	
-	for(var i in e.ability)
-		a.ability.push(e.ability[i].action.param);
-		
 	return e;
 }
-
-
 
 
 

@@ -71,10 +71,7 @@ Db.map['test'] = function(){	//'test' = mapId
 		},
 		
 		//list of abilities the enemy will trigger when dying. ABILITIES NEED TO BE IN .ability . if want only to be cast at death, put 0 chance to trigger for ai
-		deathAbility:[		
-			'fireball',
-			'explosion',
-		],
+		deathAbility:[0,1,3],
 		
 		//called for each player who dealt 1+ dmg to this monster when this monster dies
 		deathFunc:function(key,act,map){},		

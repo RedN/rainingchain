@@ -46,14 +46,12 @@ Init.db.stat = function(){
 		'icon':'resource.hp',
 		'name':'Regen Life',
 		'boost':{'base':1,'stat':['resource','hp','regen'],},
-		'playerOnly':1,
 		'description':"Life Regeneration per frame.",
 		},
 	'mana-regen':{
 		'icon':'resource.mana',
 		'name':'Regen Mana',
 		'boost':{'base':1,'stat':['resource','mana','regen'],},
-		'playerOnly':1,
 		'description':"Mana Regeneration per frame.",
 		},	
 	'fury-regen':{
@@ -83,14 +81,12 @@ Init.db.stat = function(){
 		'icon':'resource.hp',
 		'name':'Max Life',
 		'boost':{'base':1000,'stat':['resource','hp','max'],},
-		'playerOnly':1,
 		'description':"Maximum Life Points.",
 		},
 	'mana-max':{
 		'icon':'resource.mana',
 		'name':'Max Mana',
 		'boost':{'base':100,'stat':['resource','mana','max'],},
-		'playerOnly':1,
 		'description':"Maximum Mana Points.",
 		},	
 	'fury-max':{
@@ -114,14 +110,12 @@ Init.db.stat = function(){
 		'icon':'resource.hp',
 		'name':'Leech Life Magn.',
 		'boost':{'base':0.01,'stat':['bonus','leech','magn'],},
-		'playerOnly':1,
 		'description':"Affect %Life recovered if the Life Leech is successful. Leech is not affected by damage dealt.",
 		},
 	'leech-chance':{
 		'icon':'resource.hp',
 		'name':'Leech Life Chance',
 		'boost':{'base':0,'stat':['bonus','leech','chance'],},
-		'playerOnly':1,
 		'description':"Affect Chance to Life Leech when hitting an enemy.",
 		},
 	
@@ -177,28 +171,24 @@ Init.db.stat = function(){
 		'icon':'offensive.strike',
 		'name':'Crit Chance',
 		'boost':{'base':0.05,'stat':['bonus','crit','chance'],},
-		'playerOnly':1,
 		'description':"Affect chance to do a Critical Hit.",
 		},
 	'crit-magn':{
 		'icon':'offensive.strike',
 		'name':'Crit Magn',
 		'boost':{'base':1.5,'stat':['bonus','crit','magn'],},
-		'playerOnly':1,
 		'description':"Affect Additional Damage when doing a Critical Hit.",
 		},
 	'bullet-amount':{
 		'icon':'offensive.bullet',
 		'name':'Proj. Amount',
 		'boost':{'base':1,'stat':['bonus','bullet','amount'],},
-		'playerOnly':1,
 		'description':"Shoot x times additional bullets.  If amount isn't whole, it is rounded up or down randomly.",
 		},
 	'bullet-spd':{
 		'icon':'offensive.bullet',
 		'name':'Proj. Spd',
 		'boost':{'base':1,'stat':['bonus','bullet','spd'],},
-		'playerOnly':1,
 		'description':"Affect speed at which your bullet travels.",
 		},
 	'strike-range':{

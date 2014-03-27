@@ -102,14 +102,15 @@ q.enemy["bee"] = {  //{
 	"name":"Bee",
 	"sprite":{'name':"bee",'sizeMod':1},
 	"abilityList":[
-		{'template':'pierce','aiChance':[0.4,0.4,0.4],'extra':{}}	
+		{'template':'scratch','aiChance':[0.4,0.4,0.4],'extra':{}}	
 	],
 	'resource':{'hp':{'max':1,'regen':1},'mana':{'max':100,'regen':1}},
 	
 	'globalDef':1,
 	'globalDmg':0.1,
 	'deathExp':1,
-	"equip":{'def':{'melee':1,'range':1,'magic':1,'fire':1,'cold':1,'lightning':1}},	
+	"mastery":{'def':{'melee':1,'range':1,'magic':1,'fire':1,'cold':1,'lightning':1},
+				'dmg':{'melee':1,'range':1,'magic':1,'fire':1,'cold':1,'lightning':1}},	
 	"acc":2,
 	"maxSpd":5,
 	"moveRange":{'ideal':50,"confort":50,"aggressive":200,"farthest":300},	
@@ -129,7 +130,8 @@ q.enemy["demon"] = {  //{
 	'globalDef':1,
 	'globalDmg':0.2,
 	'deathExp':1,
-	"equip":{'def':{'melee':1,'range':1,'magic':1,'fire':1,'cold':1,'lightning':1}},	
+	"mastery":{'def':{'melee':1,'range':1,'magic':1,'fire':1,'cold':1,'lightning':1},
+				'dmg':{'melee':1,'range':1,'magic':1,'fire':1,'cold':1,'lightning':1}},	
 	"acc":2,
 	"maxSpd":5,
 	"moveRange":{'ideal':200,"confort":50,"aggressive":300,"farthest":400},	

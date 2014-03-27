@@ -221,6 +221,9 @@ Init.db.sprite = function(){
 	a["bone"] ={"src":"bullet/bone.png","size":1,"side":[0],"anim": {
     		"travel":{"startY":0,"frame":8,"sizeX":48,"sizeY":48,"dir":1,"spd":1,"next":"travel"},
     	}};
+	a["spore"] ={"src":"bullet/spore.png","size":1,"side":[0],"anim": {
+    		"travel":{"startY":0,"frame":1,"sizeX":48,"sizeY":48,"dir":1,"spd":1,"next":"travel"},
+    	}};
     //}	
     //{ System
 	a["block1x1"] ={"src":"picture/block2x2.png","size":0.5,"side":[0],

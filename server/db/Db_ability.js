@@ -197,11 +197,12 @@ a['bulletMulti'] = {					//bulletMulti is the id of attack
 'func':'Combat.action.boost',
 'param':[	//can add multiple boost in same array.
 	{
-	'stat':'maxSpd',	//stat changed
-	'type':'*',			//type of boost (+ or *)
-	'value':0.1,		//value of the change
-	'time':50			//duration
+		'stat':'maxSpd',	//stat changed
+		'type':'*',			//type of boost (+ or *)
+		'value':0.1,		//value of the change
+		'time':50			//duration
 	},
+	{'stat':'hp-max','type':'+','value':1000,'time':50},
 ]	
 */	
 
@@ -266,7 +267,7 @@ Init.db.ability = function(cb){
 	
 	a['pvp-invincibility'] = {'type':'dodge','name':'Invincibility','icon':'blessing.spike',
 		'spd':{'main':1,'support':0},'period':{'own':25,'global':25,'bypassGlobalCooldown':true},'cost':{"mana":50},
-		'action':{'animOnSprite':'boostWhie','func':'Actor.boost','param':[[
+		'action':{'animOnSprite':'boostWhite','func':'Actor.boost','param':[[
 			{"stat":"globalDef","type":"+","value":Cst.bigInt,"time":4,"name":"Dodge"},
 		]]}
 	};
@@ -287,6 +288,7 @@ Init.db.ability = function(cb){
 			'maxRange':50,
 		}
 	}};	
+	
 	a['scratchBig'] = {'type':'attack','name':'Multi Scratch','icon':'attackMelee.scar',
 		'spd':{'main':1,'support':0},'period':{'own':25,'global':25},
 		'action':{'func':'Combat.action.attack','param':{
@@ -343,26 +345,67 @@ Init.db.ability = function(cb){
 	}};	
 	
 	
-	
-	
-	
-	
-	//Bee.
-	a['pierce'] = {'type':'attack','name':'boom','icon':'attackMagic.fireball',
+	a['blessing'] = {'type':'blessing','name':'Blessing','icon':'blessing.fly',
+		'spd':{'main':1,'support':0},'period':{'own':25,'global':25},
+		'action':{'animOnSprite':'boostWhite','func':'Combat.action.boost','param':[]}
+	};
+
+	//{ Regular Elemental Bullet
+	a['fireBullet'] = {'type':'attack','name':'Fire Bullet','icon':'attackMagic.fireball',
 		'spd':{'main':1,'support':0},'period':{'own':25,'global':25},
 		'action':{'func':'Combat.action.attack','param':{
+			'type':"bullet",'angle':0,'amount':1,
+			'objImg':{'name':"fireball",'sizeMod':1},'hitImg':{'name':"fireHit",'sizeMod':0.5},
+			'dmg':{'main':100,'ratio':{'melee':0,'range':0,'magic':0,'fire':1,'cold':0,'lightning':0}},
+		}
+	}};
+	a['coldBullet'] = {'type':'attack','name':'Cold Bullet','icon':'attackMagic.fireball',
+		'spd':{'main':1,'support':0},'period':{'own':25,'global':25},
+		'action':{'func':'Combat.action.attack','param':{
+			'type':"bullet",'angle':0,'amount':1,
+			'objImg':{'name':"iceshard",'sizeMod':1},'hitImg':{'name':"iceHit",'sizeMod':0.5},
+			'dmg':{'main':100,'ratio':{'melee':0,'range':0,'magic':0,'fire':0,'cold':1,'lightning':0}},
+		}
+	}};
+	a['lightningBullet'] = {'type':'attack','name':'Lightning Bullet','icon':'attackMagic.fireball',
+		'spd':{'main':1,'support':0},'period':{'own':25,'global':25},
+		'action':{'func':'Combat.action.attack','param':{
+			'type':"bullet",'angle':0,'amount':1,
+			'objImg':{'name':"lightningball",'sizeMod':1},'hitImg':{'name':"lightningHit",'sizeMod':0.5},
+			'dmg':{'main':100,'ratio':{'melee':0,'range':0,'magic':0,'fire':0,'cold':0,'lightning':1}},
+		}
+	}};
+	a['magicBullet'] = {'type':'attack','name':'Magic Bullet','icon':'attackMagic.fireball',
+		'spd':{'main':1,'support':0},'period':{'own':25,'global':25},
+		'action':{'func':'Combat.action.attack','param':{
+			'type':"bullet",'angle':0,'amount':1,
+			'objImg':{'name':"lightningball",'sizeMod':1},'hitImg':{'name':"lightningHit",'sizeMod':0.5},
+			'dmg':{'main':100,'ratio':{'melee':0,'range':0,'magic':1,'fire':0,'cold':0,'lightning':0}},
+		}
+	}};
+	a['dart'] = {'type':'attack','name':'Dart','icon':'attackRange.head',
+		'spd':{'main':1,'support':0},'period':{'own':25,'global':25},
+		'action':{'func':'Combat.action.attack','param':{
+			'type':"bullet",'angle':0,'amount':1,
+			'objImg':{'name':"dart",'sizeMod':1},'hitImg':{'name':"strikeHit",'sizeMod':0.5},
+			'dmg':{'main':100,'ratio':{'melee':0,'range':1,'magic':0,'fire':0,'cold':0,'lightning':0}},
+		}
+	}};	
+	//}
+	a['fireBomb'] = {'type':'attack','name':'Fire Explosion','icon':'attackMagic.fireball',
+		'spd':{'main':1,'support':0},'period':{'own':30,'global':20},
+		'action':{'func':'Combat.action.attack','param':{
 			'type':"strike",'angle':0,'amount':1,
-			'delayAnim':{'name':"scratch",'sizeMod':0.5},
-			'dmg':{'main':100,'ratio':{'melee':0,'range':10,'magic':80,'fire':10,'cold':0,'lightning':0}},
+			'preDelayAnim':{'name':"fireBomb",'sizeMod':1},
+			'dmg':{'main':400,'ratio':{'melee':0,'range':0,'magic':0,'fire':1,'cold':0,'lightning':0}},
 			'width':50,
 			'height':50,
-			'delay':0,
+			'delay':10,
 			'minRange':0,
-			'maxRange':50,
+			'maxRange':200,
 		}
 	}};
 	
-
 	
 	//Fire Nova
 	a['fireNova'] = {'type':'attack','name':'Fire Nova','icon':'attackMagic.fireball',
@@ -660,7 +703,7 @@ Ability.creation = function(a){
 			aa.param.dmg.ratio = convertRatio(aa.param.dmg.ratio);
 		}
 		if(aa.func === 'Combat.action.boost'){
-			if(aa.animOnSprite !== false && !aa.animOnSprite) action.animOnSprite = 'boost';
+			if(aa.animOnSprite !== false && !aa.animOnSprite) action.animOnSprite = 'boostWhite';
 		}
 	}
 	

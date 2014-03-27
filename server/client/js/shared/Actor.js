@@ -180,24 +180,28 @@ Actor.boost = function(act, boost){
 	// {stat:'globalDmg',value:1000,type:'*',time:10000,name:'quest'}
 
 	//format: boost { 'stat':'globalDmg','value':1,'type':'*','time':100,'name':'weapon'}
-	boost = arrayfy(boost);
-	for(var i in boost){ 
-		var b = boost[i];
-		if(typeof act === 'string'){ act = List.all[act]; }
-		var name = b.name || 'Im dumb.';
-		var id = b.stat + '@' + name;
-		b.time = b.time || 1/0;
-		b.timer = b.time;		//otherwise, cuz reference, boost cant be used twice cuz time = 0
-		b.type = b.type || '+';
-		
-		b.spd = 'reg';
-		if(b.time > 250){ b.spd = 'slow'; }
-		if(b.time < 25){ b.spd = 'fast'; }
-		
-		act.boost[b.spd][b.stat + '@' + name] = b;
-		act.boost.list[b.stat].name[name] = b;
-		act.boost.toUpdate[b.stat] = 1;
+	
+	if(Array.isArray(boost)){
+		for(var i in boost) Actor.boost(act,boost[i]);
+		return;
 	}
+	
+	var b = deepClone(boost);
+	if(typeof act === 'string'){ act = List.all[act]; }
+	var name = b.name || 'Im dumb.';
+	var id = b.stat + '@' + name;
+	b.time = b.time || 1/0;
+	b.timer = b.time;		//otherwise, cuz reference, boost cant be used twice cuz time = 0
+	b.type = b.type || '+';
+	
+	b.spd = 'reg';
+	if(b.time > 250){ b.spd = 'slow'; }
+	if(b.time < 25){ b.spd = 'fast'; }
+	
+	act.boost[b.spd][b.stat + '@' + name] = b;
+	if(!act.boost.list[b.stat]) console.log(b,b.stat);
+	act.boost.list[b.stat].name[name] = b;
+	act.boost.toUpdate[b.stat] = 1;
 	
 }
 

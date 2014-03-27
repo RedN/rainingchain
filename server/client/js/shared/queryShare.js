@@ -216,6 +216,10 @@ if(server){
 					
 					var e1 = e[Object.keys(e)[0]];
 					
+					var tele = function(x,y,map){
+						Actor.teleport(p,x,y,map);
+					}
+					
 					var info = eval(d.command);
 					data = JSON.stringify(info);
 					permConsoleLog(info);
