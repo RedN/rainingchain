@@ -64,6 +64,7 @@ Sign.up.create = function(user,pass,email,salt,socket){
 		signUpDate:Date.now(),
 		lastSignIn:null,
 		timePlayed:0,
+		timePlayedThisWeek:0,
         online:0,
 		admin:0,
     };
@@ -108,6 +109,10 @@ Sign.in = function(socket,d){
 		
 			if(pass !== account.password){ socket.emit('signIn', { 'success':0,'message':'<font color="red">Wrong Password or Username.</font>' }); return; }
 			
+			
+			if(account.timePlayedThisWeek >= Server.timeLimit.perWeek){ 
+				socket.emit('signIn', { 'success':0,'message':'<font color="red">You have already played over 24 hours this week.</font>' }); return; }
+
 			//Success!
 			var key = "p" + Math.randomId();
 			Load(key,account,socket);
@@ -122,7 +127,7 @@ Sign.off = function(key,message){
 	if(message){ socket.emit('warning','You have been disconnected: ' + message);}
 
 	Save(key);
-	db.update('account',{username:List.main[key].username},{'$set':{online:0},'$inc':{timePlayed:socket.globalTimer}},function(err){ 
+	db.update('account',{username:List.main[key].username},{'$set':{online:0},'$inc':{timePlayed:socket.globalTimer,timePlayedThisWeek:socket.globalTimer}},function(err){ 
 		if(err) throw err;
 		socket.removed = 1;
 	});
@@ -228,9 +233,12 @@ Load = function (key,account,socket,cb){
 			db.update('account',{username:player.username},{'$set':{online:1,key:key,lastSignIn:now}},function(err, res) { if(err) throw err
 				socket.emit('signIn', { cloud9:cloud9, success:1, key:key, data:Load.initData(key,player,main)});
 			});
-
+			
+			var time = Math.floor(account.timePlayedThisWeek/3600000) + 'h ' + Math.floor(account.timePlayedThisWeek%3600000/60000) + 'm';
+			Chat.add(key,"You have played " + time + " this week.");
+			
 			Test.signIn(key);
-
+			
 		});	
 	});	
 }
@@ -261,6 +269,7 @@ Save.main.compress = function(mainn){
 		friend:main.social.list.friend,
 		mute:main.social.list.mute,
 		message:main.social.message,
+		symbol:main.social.symbol,
 	}
 
     return main;
@@ -283,7 +292,8 @@ Load.main.uncompress = function(main,key){
 		  mute: main.social.mute,
 		  clan: [ ]
 		},
-		status: "on"
+		status: "on",
+		symbol:main.social.symbol
 	};
 	
 	//If changes with quest

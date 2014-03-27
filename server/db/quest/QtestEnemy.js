@@ -5,6 +5,7 @@ q.id = 'QtestEnemy';
 q.variable = {
 	enemy:[
 		["bat","normal"],
+		["neutral","jenny"],
 	]	
 };
 

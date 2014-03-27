@@ -125,6 +125,8 @@ Actor.creation.info = function(e,cr){
 	e.extra = cr.extra || {};
 	
 	e.lvl = Actor.creation.info.lvl(List.map[e.map].lvl,cr.lvl); 
+	
+	e.target.main = {x:e.x,y:e.y};
 	return e;
 }
 
@@ -282,7 +284,6 @@ Actor.creation.nevercombat = function(act){
 	delete act.weapon;
 	delete act.ability;
 	delete act.equip;
-	delete act.moveRange
 	
 	
 	delete act.summon

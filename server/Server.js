@@ -2,11 +2,15 @@
 Server =  {
 	testing:!nodejitsu,		//will trigger special testing func
 	frequence:{
-		save:10*1000,
-		disconnect:10*60*1000,
-		inactivity:6*60*60*1000,
+		save:60*1000,
+		inactivity:10*60*1000,
+		disconnect:6*60*60*1000,
 		db:60*1000,
 	},	
+	timeLimit:{
+		perWeek:24*60*60*1000,
+		active:1,	
+	},
 	ready:0,
 	maxPlayerAmount:nodejitsu ? 0 : 64,
 	customMod:false,

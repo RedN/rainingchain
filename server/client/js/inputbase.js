@@ -171,7 +171,7 @@ Input.event.combo = function(){
 
 Input.event.mouse = {};
 Input.event.mouse.click = function(code,dir){
-	var start = +Input.event.typeNormal
+	var start = +Input.event.typeNormal();
 	var num = dir === 'down' ? 1 : 0;
 	if(code === 1) Input.mouse.left = num; 
 	if(code === 3) Input.mouse.right = num; 

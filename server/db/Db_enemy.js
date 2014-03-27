@@ -131,11 +131,14 @@ Init.db.enemy = function(){
 		"sprite":{'name':"bat",'sizeMod':1},
 		
 		"abilityList":[
-			{'template':'scratch','aiChance':[0.2,0.2,0.2],'extra':{
+			{'template':'scratch','aiChance':[0.2,0.2,0],'extra':{
 				'leech,baseChance':1,'leech,magn':50,'hitImg,name':'cursePink',			
 			}},
-			{'template':'scratch','aiChance':[0.4,0.4,0.4],'extra':{}},
-			[0.4,0.4,0.4]
+			{'template':'scratch','aiChance':[0.4,0.4,0],'extra':{}},
+			
+			{'template':'fireball','aiChance':[100,100,100],'extra':{}},
+			
+			[0.4,0.4,1]
 		],
 	
 		
@@ -146,7 +149,7 @@ Init.db.enemy = function(){
 				'dmg':{'melee':1,'range':1,'magic':1,'fire':1,'cold':1,'lightning':1}},	
 		"acc":2,
 		"maxSpd":15,
-		"moveRange":{'ideal':25,"confort":25,"aggressive":500,"farthest":600},	
+		"moveRange":{'ideal':250,"confort":25,"aggressive":500,"farthest":600},	
 	}; //}
 	//}
 	

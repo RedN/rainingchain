@@ -65,38 +65,15 @@ ENEMY:
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-add ctrl+v
-
-remake sub target: if confort, get sub and do sub no matter what
-	
-make attack template
-create basic attack template + ability
-
+add flag for contact me
+chrono ingame
 stat window
 cutscene
 contribution pts window
 plan revamp: already know what min and max mods are
-waypoint window
-Crafting System with White
-time per week system
-symbol player name and custom look
+
+
+custom look
 
 teleport actor zone
 
@@ -137,11 +114,11 @@ chest + monster
 
 
 
-
-
-
-
-
+POST RELEASE:
+add ctrl+v
+talking to npc, stop talking and facing
+Crafting System with White
+waypoint window
 
 
 

@@ -77,8 +77,9 @@ Chat.receive.public = function(key,text,to,type,from,data){
     if(text === data.text){
 		List.all[key].chatHead = {'text':text,'timer':25*10};
 	}
-	for(var i in List.main){	Chat.add(i,text,'public',{'from':from});}
-	return;
+	var from = {'from':from};
+	if(List.main[key].social.symbol) from.symbol = List.main[key].social.symbol;
+	for(var i in List.main){ Chat.add(i,text,'public',from);}
 }
 
 Chat.receive.pm = function(key,text,to,type,from,data){

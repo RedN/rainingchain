@@ -44,7 +44,7 @@ Main.template = function(key){
 				'mute':{},
 				'clan':[],
 			},
-			
+			'symbol':'',
 			'status':'on',
 		}
 		

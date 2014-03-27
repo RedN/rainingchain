@@ -19,11 +19,11 @@ Actor.loop = function(act){
 		Actor.loop.status(act);	
 		Actor.loop.boost(act);
 		Actor.loop.summon(act);
-		if(act.frameCount % 25 === 0){ Actor.loop.attackReceived(act); }
+		if(act.frameCount % 25 === 0){ Actor.loop.attackReceived(act); }	//used to remove attackReceived if too long
 	}
 	if(act.combat || act.move){
 		Actor.loop.setTarget(act);  //update Enemy Target
-		Actor.loop.input(act); //simulate enemy key press depending on target 
+		Actor.loop.input(act); 		//simulate enemy key press depending on target 
 	}
 	if(act.combat && act.move) Actor.loop.move.aim(act); //impact max spd depending on aim
 	
@@ -36,12 +36,11 @@ Actor.loop = function(act){
 	if(act.type === 'player'){
 		Actor.loop.fall(act);	//test if fall
 		
-		var i = act.id;
-		if(act.frameCount % 2 === 0){ Draw.loop(i); }    //draw everything and add button
-		if(act.frameCount % 25 === 0){ Actor.loop.friendList(act); }    //check if any change in friend list
+		if(act.frameCount % 2 === 0){ Draw.loop(act.id); }    						//draw everything and add button
+		if(act.frameCount % 25 === 0){ Actor.loop.friendList(act); }    				//check if any change in friend list
 		if(act.frameCount % round(Server.frequence.save/40) === 0){ Save(act.id); }    //save progression
-		if(List.main[i].windowList.trade){ Actor.loop.trade(act); };    
-		if(List.main[i].dialogue){ Actor.loop.dialogue(act); }
+		if(List.main[act.id].windowList.trade){ Actor.loop.trade(act); };    
+		if(List.main[act.id].dialogue){ Actor.loop.dialogue(act); }
 	}
 		
 }
@@ -283,10 +282,10 @@ Actor.loop.summon = function(act){
 Actor.loop.bumper = function(act){	//test collision with map
 	//test global limit
 	act.x = Math.max(act.x,50);
-	act.x = Math.min(act.x,10000);
+	act.x = Math.min(act.x,Db.map[Map.getModel(act.map)].grid.bullet[0].length*32-50);
 	act.y = Math.max(act.y,50);
-	act.y = Math.min(act.y,10000);
-	
+	act.y = Math.min(act.y,Db.map[Map.getModel(act.map)].grid.bullet.length*32-50);
+
 	//test bumpers
 	for(var i = 0 ; i < 4 ; i ++){
 		var pos = Collision.getPos({x:act.x + act.bumperBox[i].x,y:act.y + act.bumperBox[i].y});
@@ -450,7 +449,7 @@ Actor.loop.friendList = function(act){
 
 Actor.loop.attackReceived = function(act){
 	for(var i in act.attackReceived){
-		act.attackReceived[i] -= 25;
+		act.attackReceived[i] -= 1;
 		if(act.attackReceived[i] <= 0){
 			delete act.attackReceived[i];
 		}

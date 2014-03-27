@@ -135,7 +135,7 @@ Chat.receive = function(pack){
 	}
 	
 	if(pack.type === 'public'){	
-		var text = '<span oncontextmenu="Chat.click.name(\'' + pack.from + '\')">' + pack.from + "</span>" + ': ' + '<span style="color:blue">' + pack.text + "</span>";
+		var text = '<span oncontextmenu="Chat.click.name(\'' + pack.from + '\')">' + Chat.receive.symbol(pack.symbol) + pack.from + "</span>" + ': ' + '<span style="color:blue">' + pack.text + "</span>";
 		html.chat.text.innerHTML += '<br>' + text; 
 	}
 	if(pack.type === 'question'){
@@ -148,27 +148,30 @@ Chat.receive = function(pack){
 	//html.pm.text.scrollTop = html.pm.text.scrollHeight;
 	
 }
-
+Chat.receive.symbol = function(symbol){
+	if(!symbol) return '';
+	else return '✪';
+}
 
 Chat.click = {};
 Chat.click.name = function(name){
-	var option = {'name':name,'option':[],'count':1};
+	var option = {'name':name,'option':[],'count':0};
 			
-	option.option[2] = {
+	option.option[0] = {
 	'name':'Send Message',
-	'func':(function(name){ Input.add('@' + name + ','); }),
+	'func':function(name){ Input.add('@' + name + ','); },
 	'param':[name],	
 	};
 	
 	option.option[1] = {
 	'name':'Add Friend',
-	'func':(function(name) { return function() {  Chat.send.command('$fl,add,' + name); } })(name),
+	'func':function() {  Chat.send.command('$fl,add,' + name); } ,
 	'param':[name],	
 	};
 
 	option.option[2] = {
 	'name':'Mute Player',
-	'func':(function(name) { return function() {  Chat.send.command('$fl,mute,' + name); } })(name),
+	'func':function() {  Chat.send.command('$mute,' + name); },
 	'param':[name],	
 	};
 		

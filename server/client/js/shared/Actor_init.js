@@ -26,10 +26,12 @@ Init.actor = function(){
 		act.killed = 0;        //killed = cant move, 0 hp but visible (aka death animation)
 		act.type = type;
 		act.target = {
-			main:{list:[],period:{first:25,renew:150,stuck:250},confort:1},
-			sub:{list:[],period:{first:25,renew:150}},
-			path:{list:[],period:25},
-		};
+			main:null,sub:{x:0,y:0},	
+			cutscene:{active:0,list:[],func:null},
+			period:{main:90,sub:25,stuck:113},
+			stuck:[],
+			reachedGoal:0,isStuck:0,
+		}
 		
 		act.bonus = Actor.template.bonus();	//Bonus applies on top of ability attack. If effect not on ability, do nothing.
 		act.mastery = Actor.template.mastery(type);
@@ -109,7 +111,7 @@ Init.actor = function(){
 			'aggressive':400,           //attack player if within this range
 			'farthest':400,             //stop follow player if above this range
 		};
-		act.moveSelf = 1; 		//generate its own input
+		act.moveSelf = 1; 		//generate its own input	(ex: block dont but still move)
 		
 		act.reflect = Cst.element.template(); //% reflected
 		act.nevercombat = 0;
