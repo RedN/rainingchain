@@ -161,13 +161,13 @@ Init.db.sprite = function(){
 		
 	a["salamander"] ={"src":"actor/salamander.png","size":2,"side":[2,0,1,3],"hpBar":-40,"legs":40,
     	"preHitBox":[ -30,30,-20,30 ],"preBumperBox":[ -30,30,-20,30 ],"anim": {
-    		"walk":{"startY":0,"frame":3,"sizeX":64,"sizeY":48,"dir":4,"spd":0.5,"walk":1,"next":"walk"},
-    		"attack":{"startY":0,"frame":3,"sizeX":64,"sizeY":48,"dir":4,"spd":0.5,"next":"walk"},
+    		"walk":{"startY":0,"frame":3,"sizeX":64,"sizeY":48,"dir":4,"spd":0.25,"walk":1,"next":"walk"},
+    		"attack":{"startY":0,"frame":3,"sizeX":64,"sizeY":48,"dir":4,"spd":0.25,"next":"walk"},
     	}};	
 		
 	a["spirit"] = {"src":"actor/spirit.png",rgpvx:1};
 	
-	a["slime"] ={"src":"actor/slime.png","size":1,"side":[2,0,1,3],"hpBar":-30,"legs":30,
+	a["slime"] ={"src":"actor/slime.png","size":1.5,"side":[2,0,1,3],"hpBar":-30,"legs":30,
     	"preHitBox":[ -20,20,-10,20 ],"preBumperBox":[ -20,20,-10,20 ],"anim": {
     		"walk":{"startY":0,"frame":3,"sizeX":48,"sizeY":48,"dir":4,"spd":0.5,"walk":1,"next":"walk"},
     		"attack":{"startY":0,"frame":3,"sizeX":48,"sizeY":48,"dir":4,"spd":0.5,"next":"walk"},
@@ -203,7 +203,7 @@ Init.db.sprite = function(){
     	}};
     			
     a["iceshard"] ={"src":"bullet/iceshard.png","size":1,"side":[0,1,2,3,4,5,6,7],"anim": {
-    		"travel":{"startY":0,"frame":1,"sizeX":54,"sizeY":54,"dir":8,"spd":0,"next":"travel"},
+    		"travel":{"startY":0,"frame":1,"sizeX":32,"sizeY":32,"dir":8,"spd":0,"next":"travel"},
     	}};
     a["lightningball"] ={"src":"bullet/lightningball.png","size":1,"side":[0],"anim": {
     		"travel":{"startY":0,"frame":1,"sizeX":32,"sizeY":32,"dir":1,"spd":0,"next":"travel"},
@@ -224,6 +224,13 @@ Init.db.sprite = function(){
 	a["spore"] ={"src":"bullet/spore.png","size":1,"side":[0],"anim": {
     		"travel":{"startY":0,"frame":1,"sizeX":48,"sizeY":48,"dir":1,"spd":1,"next":"travel"},
     	}};
+	a["rock"] ={"src":"bullet/rock.png","size":1,"side":[0],"anim": {
+    		"travel":{"startY":0,"frame":1,"sizeX":48,"sizeY":48,"dir":1,"spd":1,"next":"travel"},
+    	}};
+	a["shadowball"] ={"src":"bullet/shadowball.png","size":1,"side":[0],"anim": {
+    		"travel":{"startY":0,"frame":1,"sizeX":48,"sizeY":48,"dir":1,"spd":1,"next":"travel"},
+    	}};	
+	//http://mohsin-kun.deviantart.com/art/Shadow-Ball-73303663
     //}	
     //{ System
 	a["block1x1"] ={"src":"picture/block2x2.png","size":0.5,"side":[0],
@@ -378,6 +385,7 @@ Sprite.change = function(act,info){
 }
 
 Sprite.updateBumper = function(player){		//server only
+	if(!Db.sprite[player.sprite.name]) console.log(player.sprite.name);
 	//Set the Sprite Bumper Box to fit the sizeMod
 	if(Db.sprite[player.sprite.name].hitBox){	//Attack Dont
 		player.hitBox = deepClone(Db.sprite[player.sprite.name].hitBox);
@@ -398,7 +406,7 @@ Sprite.updateBumper = function(player){		//server only
 Sprite.update = function (act){	//client side only
 	if(!act.sprite) return;
 	var spriteFromDb = Db.sprite[act.sprite.name];
-	
+	if(!spriteFromDb){ DEBUG(0,"sprite dont exist"); return;}
 	if(act.sprite.animOld !== act.sprite.anim){	//otherwise, animation can be cut if timer for walk is high 
 		act.sprite.animOld = act.sprite.anim;
 		Sprite.change(act,{'anim':act.sprite.anim});

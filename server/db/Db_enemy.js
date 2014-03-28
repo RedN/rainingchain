@@ -127,7 +127,7 @@ Db.enemy = {};
 Init.db.enemy = function(){ 
 	var a = Db.enemy;
 
-	
+	//ALT-2
 	a["bat"] = {}; //{
 	a["bat"]["normal"] = {  //{
 		"name":"Bat",
@@ -139,7 +139,7 @@ Init.db.enemy = function(){
 			{'template':'scratch','aiChance':[0.4,0,0],'extra':{}},
 			{'template':'lightningBullet','aiChance':[0.4,0.4,1],'extra':{}},
 			{'template':'blessing','aiChance':[0,0.1,0.2],'extra':{
-				boost:[{'stat':'leech-chance','type':'+','value':1000,'time':50},
+				param:[{'stat':'leech-chance','type':'+','value':1000,'time':50},
 						{'stat':'crit-chance','type':'+','value':1000,'time':50}
 				],
 			}},
@@ -260,13 +260,286 @@ Init.db.enemy = function(){
 		],
 		'deathAbility':[0],
 		'deathExp':1,
-		"mastery":{'def':{'melee':0.01,'range':0.01,'magic':0.01,'fire':0.01,'cold':0.01,'lightning':0.01},
+		"mastery":{'def':{'melee':0.5,'range':2,'magic':2,'fire':0.5,'cold':1,'lightning':1},
 					'dmg':{'melee':1,'range':1,'magic':1,'fire':1,'cold':1,'lightning':1}},	
 		"acc":0.5,
 		"maxSpd":2,
 		"moveRange":{'ideal':10,"confort":25,"aggressive":500,"farthest":600},	
 	}; //}
 	//}
+	
+	a["slime"] = {}; //{
+	a["slime"]["normal"] = {  //{
+		"name":"Slime",
+		"sprite":{'name':"slime",'sizeMod':1},
+		"abilityList":[
+			{'template':'summon','aiChance':[0.4,0.4,0.4],'extra':{'param':[
+				{'name':'slimeChild','maxChild':5,'time':20*25,'distance':500},
+				{"category":"slime","variant":"child","lvl":0,'amount':1,"modAmount":0}
+			]}},
+		
+			{'template':'coldBullet','aiChance':[0.2,0.4,0.4],'extra':{
+				'chill,baseChance':0.2,'amount':5,'angle':25,'dmg,main':50,
+			}},
+			{'template':'healZone','aiChance':[0.1,0.1,0.2],'extra':{
+				'heal':{'hp':200},
+			}},
+			[0.4,0.2,0.2]
+		],
+		'deathAbility':[0],
+		'deathExp':1,
+		"mastery":{'def':{'melee':1,'range':1,'magic':1,'fire':2,'cold':2,'lightning':0.5},
+					'dmg':{'melee':1,'range':1,'magic':1,'fire':1,'cold':1,'lightning':1}},	
+		"acc":0.5,
+		"maxSpd":8,
+		"moveRange":{'ideal':100,"confort":25,"aggressive":500,"farthest":600},	
+	}; //}
+	a["slime"]["child"] = {  //{
+		"name":"Small Slime",
+		"sprite":{'name':"slime",'sizeMod':0.5},
+		"abilityList":[
+			{'template':'coldBullet','aiChance':[1,1,1],'extra':{
+				'dmg,main':25,'objImg,sizeMod':0.5,
+			}},
+			[0.2,0.2,0.2]
+		],
+		'deathAbility':[0],
+		'deathExp':0,
+		"mastery":{'def':{'melee':0.1,'range':0.1,'magic':0.1,'fire':0.2,'cold':0.2,'lightning':0.05},
+					'dmg':{'melee':1,'range':1,'magic':1,'fire':1,'cold':1,'lightning':1}},	
+		"acc":0.5,
+		"maxSpd":10,
+		"moveRange":{'ideal':10,"confort":25,"aggressive":500,"farthest":600},	
+	}; //}
+	//}
+	
+	a["salamander"] = {}; //{
+	a["salamander"]["normal"] = {  //{
+		"name":"Salamander",
+		"sprite":{'name':"salamander",'sizeMod':1},
+		"abilityList":[
+			{'template':'fireBullet','aiChance':[1,1,1],'extra':{
+				'dmg,main':10,'burn,baseChance':1,'burn,magn':5,
+			}},
+			{'template':'coldBullet','aiChance':[1,1,1],'extra':{
+				'dmg,main':10,'chill,baseChance':1,
+			}},
+			{'template':'lightningBullet','aiChance':[1,1,1],'extra':{
+				'dmg,main':10,'stun,baseChance':1,
+			}},
+			{'template':'meleeBullet','aiChance':[1,1,1],'extra':{
+				'dmg,main':10,'bleed,baseChance':1,'bleed,magn':5,
+			}},
+			{'template':'magicBullet','aiChance':[1,1,1],'extra':{
+				'dmg,main':10,'drain,baseChance':1,
+			}},
+			{'template':'rangeBullet','aiChance':[4,1,1],'extra':{
+				'dmg,main':10,'knock,baseChance':1,
+			}},
+			[4,4,4]
+		],
+		'deathExp':1,
+		"mastery":{'def':{'melee':0.5,'range':0.5,'magic':2,'fire':2,'cold':2,'lightning':2},
+					'dmg':{'melee':1,'range':1,'magic':1,'fire':1,'cold':1,'lightning':1}},	
+		"acc":0.5,
+		"maxSpd":8,
+		"moveRange":{'ideal':150,"confort":25,"aggressive":500,"farthest":600},	
+	}; //}
+	//}
+	
+	a["goblin"] = {}; //{
+	a["goblin"]["melee"] = {  //{
+		"name":"Goblin",
+		"sprite":{'name':"goblin",'sizeMod':1},
+		"abilityList":[
+			{'template':'scratch','aiChance':[1,0,0],'extra':{
+				'objImg,name':'slashMelee',
+			}},
+			{'template':'scratchBig','aiChance':[1,0,0],'extra':{
+				'bleed,baseChance':1,'bleed,magn':2,
+			}},
+			{'template':'rangeBullet','aiChance':[0,0,1],'extra':{
+				'stun,baseChance':0.25,
+			}},
+			[1,0,1]
+		],
+		'deathExp':1,
+		"mastery":{'def':{'melee':2,'range':2,'magic':0.5,'fire':2,'cold':0.5,'lightning':0.5},
+					'dmg':{'melee':1,'range':1,'magic':1,'fire':1,'cold':1,'lightning':1}},	
+		"acc":0.5,
+		"maxSpd":10,
+		"moveRange":{'ideal':50,"confort":25,"aggressive":500,"farthest":600},	
+	}; //}
+	a["goblin"]["range"] = {  //{
+		"name":"Goblin",
+		"sprite":{'name':"goblin",'sizeMod':1},
+		"abilityList":[
+			{'template':'arrowBullet','aiChance':[0,0.5,0.5],'extra':{
+				'angle':10,'amount':3,'aim':25,
+			}},
+			{'template':'scratchBig','aiChance':[1,0,0],'extra':{
+				'knock,baseChance':1,'knock,magn':2,'knock,time':1,
+			}},
+			{'template':'rangeBullet','aiChance':[0,0,1],'extra':{
+				'amount':5,'angle':25,'parabole':{'height':10,'min':10,'max':500,'timer':50},
+			}},
+			[1,1,1]
+		],
+		'deathExp':1,
+		"mastery":{'def':{'melee':0.5,'range':2,'magic':2,'fire':1,'cold':1,'lightning':0.5},
+					'dmg':{'melee':1,'range':1,'magic':1,'fire':1,'cold':1,'lightning':1}},	
+		"acc":0.5,
+		"maxSpd":10,
+		"moveRange":{'ideal':150,"confort":25,"aggressive":500,"farthest":600},	
+	}; //}
+	a["goblin"]["magic"] = {  //{
+		"name":"Goblin",
+		"sprite":{'name':"goblin",'sizeMod':1},
+		"abilityList":[
+			{'template':'fireBomb','aiChance':[0,0.5,0.5],'extra':{
+				'burn,baseChance':1,
+			}},
+			{'template':'healZone','aiChance':[0.2,0.2,0.2],'extra':{}},
+			{'template':'coldNova','aiChance':[0.5,0.5,0.5],'extra':{}},
+			{'template':'scratch','aiChance':[1,0,0],'extra':{
+				'dmg,ratio,lightning':1,'objImg':'slashLightning',
+			}},
+			[1,1,1]
+		],
+		'deathExp':1,
+		"mastery":{'def':{'melee':0.5,'range':0.5,'magic':0.5,'fire':2,'cold':2,'lightning':2},
+					'dmg':{'melee':1,'range':1,'magic':1,'fire':1,'cold':1,'lightning':1}},	
+		"acc":0.5,
+		"maxSpd":10,
+		"moveRange":{'ideal':250,"confort":25,"aggressive":500,"farthest":600},	
+	}; //}
+	//}
+	
+	a["orc"] = {}; //{
+	a["orc"]["melee"] = {  //{
+		"name":"Goblin",
+		"sprite":{'name':"orcMelee",'sizeMod':1},
+		"abilityList":[
+			{'template':'scratch','aiChance':[1,0.5,0],'extra':{
+				'objImg,name':'slashMelee',
+			}},
+			{'template':'scratchBig','aiChance':[1,0.5,0],'extra':{
+				'bleed,baseChance':1,'bleed,magn':2,
+			}},
+			{'template':'blessing','aiChance':[0.2,0.4,0.4],'extra':{
+				'global':{'action,animOnSprite':'boostRed'},
+				param:[{'stat':'bleed-chance','type':'+','value':1000,'time':100},
+					{'stat':'dmgMod','type':'*','value':5,'time':100},
+					{'stat':'globalDef','type':'*','value':10,'time':100},
+				],
+			}},
+			{'template':'rangeBullet','aiChance':[0.5,0.5,1],'extra':{
+				'amount':3,'angle':10,
+			}},
+			[0.5,0.5,0.5]
+		],
+		'deathExp':1,
+		"mastery":{'def':{'melee':2,'range':2,'magic':0.5,'fire':2,'cold':0.5,'lightning':0.5},
+					'dmg':{'melee':1,'range':1,'magic':1,'fire':1,'cold':1,'lightning':1}},	
+		"acc":0.5,
+		"maxSpd":10,
+		"moveRange":{'ideal':50,"confort":25,"aggressive":500,"farthest":600},	
+	}; //}
+	a["orc"]["range"] = {  //{
+		"name":"Orc",
+		"sprite":{'name':"orcRange",'sizeMod':1},
+		"abilityList":[
+			{'template':'arrowBullet','aiChance':[0,0.5,0.5],'extra':{
+				'objImg,sizeMod':1.5,'amount':3,'angle':10,'pierce,baseChance':1,'dmg,main':200,
+			}},
+			
+			{'template':'scratch','aiChance':[1,0,0],'extra':{
+				'objImg,name':'slashLightning','stun,baseChance':1,'stun,magn':2,'stun,time':1,
+			}},
+			{'template':'arrowBullet','aiChance':[0.5,1,1],'extra':{
+				'global':{period:{own:10,global:10}},
+				'amount':5,'angle':25,'parabole':{'height':10,'min':10,'max':500,'timer':50},
+			}},
+			[1,1,1]
+		],
+		'deathExp':1,
+		"mastery":{'def':{'melee':0.5,'range':2,'magic':2,'fire':1,'cold':1,'lightning':0.5},
+					'dmg':{'melee':1,'range':1,'magic':1,'fire':1,'cold':1,'lightning':1}},	
+		"acc":0.5,
+		"maxSpd":10,
+		"moveRange":{'ideal':150,"confort":25,"aggressive":500,"farthest":600},	
+	}; //}
+	a["orc"]["magic"] = {  //{ //TODO
+		"name":"Orc",
+		"sprite":{'name':"orcMagic",'sizeMod':1},
+		"abilityList":[
+			{'template':'coldBomb','aiChance':[0,0.5,0.5],'extra':{
+				'chill,baseChance':1,
+			}},
+			{'template':'healZone','aiChance':[0.2,0.2,0.2],'extra':{}},
+			{'template':'lightningNova','aiChance':[0.5,0.5,0.5],'extra':{}},
+			{'template':'scratch','aiChance':[1,0,0],'extra':{
+				'dmg,ratio,fire':1,'objImg':'slashFire','burn,baseChance':0.5,
+			}},
+			[1,1,1]
+		],
+		'deathExp':1,
+		"mastery":{'def':{'melee':0.5,'range':0.5,'magic':0.5,'fire':2,'cold':2,'lightning':2},
+					'dmg':{'melee':1,'range':1,'magic':1,'fire':1,'cold':1,'lightning':1}},	
+		"acc":0.5,
+		"maxSpd":10,
+		"moveRange":{'ideal':250,"confort":25,"aggressive":500,"farthest":600},	
+	}; //}
+	//}
+	
+	
+	a["gargoyle"] = {}; //{
+	a["gargoyle"]["normal"] = {  //{
+		"name":"Gargoyle",
+		"sprite":{'name':"gargoyle",'sizeMod':1},
+		"abilityList":[
+			{'template':'lightningBomb','aiChance':[0.5,0.5,1],'extra':{}},
+			{'template':'scratch','aiChance':[0.5,0,0],'extra':{
+				'stun,baseChance':1,
+			}},
+			{'template':'lightningBullet','aiChance':[1,1,1],'extra':{}},
+			[0.5,0.5,0.5]
+		],
+		'deathExp':1,
+		"mastery":{'def':{'melee':1,'range':1,'magic':2,'fire':1,'cold':0.5,'lightning':4},
+					'dmg':{'melee':1,'range':1,'magic':1,'fire':1,'cold':1,'lightning':1}},	
+		"acc":0.5,
+		"maxSpd":8,
+		"moveRange":{'ideal':150,"confort":25,"aggressive":500,"farthest":600},	
+	}; //}
+	//}
+	
+	a["ghost"] = {}; //{
+	a["ghost"]["normal"] = {  //{
+		"name":"Ghost",
+		"sprite":{'name':"ghost",'sizeMod':1},
+		"abilityList":[
+			{'template':'magicBullet','aiChance':[0.5,0.5,1],'extra':{
+				'curse':{'chance':0.25,'boost':[{'stat':'globalDmg','type':'*','value':0.1,'time':50}]},
+			}},
+			{'template':'magicBomb','aiChance':[0.3,0.3,0.3],'extra':{
+				'drain,baseChance':1,
+				'curse':{'chance':0.25,'boost':[{'stat':'globalDef','type':'*','value':0.5,'time':50}]},
+			}},
+			{'template':'lightningBullet','aiChance':[1,1,1],'extra':{}},
+			[0.5,0.5,0.5]
+		],
+		'deathExp':1,
+		"mastery":{'def':{'melee':1,'range':1,'magic':1,'fire':1,'cold':1,'lightning':1},
+					'dmg':{'melee':1,'range':1,'magic':1,'fire':1,'cold':1,'lightning':1}},	
+		immune:{melee:1,range:1,magic:1},
+		"acc":0.5,
+		"maxSpd":8,
+		"moveRange":{'ideal':150,"confort":25,"aggressive":500,"farthest":600},	
+	}; //}
+	//}
+	
+	
 	
 	
 	
@@ -460,18 +733,19 @@ Init.db.enemy.creation.ability = function(e){
 		}	
 				
 		var a = deepClone(Db.ability[e.abilityList[i].template]);
-		
+		if(!a) console.log(e.abilityList[i].template);
 		var extra = e.abilityList[i].extra;
 		if(extra.global)
 			a = useTemplate(a,a.action.param.global,1,1);
 		delete extra.global;
 		
+		
 		if(a.action.func === 'Combat.action.attack'){
 			a.action.param = useTemplate(Attack.template(),a.action.param,0);
 			a.action.param = useTemplate(a.action.param,extra,1,1);	//TOFIX if want to change something other then attack
 		}
-		if(a.action.func === 'Combat.action.boost'){		
-			a.action.param = deepClone(extra.boost);
+		if(a.action.func === 'Combat.action.boost' || a.action.func === 'Combat.action.summon'){		
+			a.action.param = deepClone(extra.param);
 		}
 		
 		var id = Math.randomId();

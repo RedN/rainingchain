@@ -64,6 +64,7 @@ Init.db.song = function(){
 		},
 		'super_gourmet_race':{
 			'link':'http://www.newgrounds.com/audio/listen/540968',
+			'permission':true,
 			'author':{
 				'name':'MiguelVolkov',
 			}

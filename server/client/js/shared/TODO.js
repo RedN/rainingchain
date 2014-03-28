@@ -20,6 +20,8 @@ ENEMY:
 	orcRange:		knockback
 	orcMagic:
 	
+	
+	
 	gargoyle:		atk lightning bomb, weak cold
 	ghost:			immune melee, range, magic atk with aoe darkness,
 	death:			curse less def, curse no regen, magicball

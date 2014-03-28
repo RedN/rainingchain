@@ -1,15 +1,15 @@
 
 Init.db.anim = function(){
 	Db.anim ={
-		"aura":{'frame':30},
+		"aura":{'frame':30,'layer':'b'},
 		"bind":{'frame':16},
 		"heal":{'frame':13},
 		
-		"boostBlue":{'frame':16},
-		"boostGrey":{'frame':18},
-		"boostPink":{'frame':16},
-		"boostRed":{'frame':16},
-		"boostWhite":{'frame':10},
+		"boostBlue":{'frame':16,'layer':'b'},
+		"boostGrey":{'frame':18,'layer':'b'},
+		"boostPink":{'frame':16,'layer':'b'},
+		"boostRed":{'frame':16,'layer':'b'},
+		"boostWhite":{'frame':10,'layer':'b'},
 		
 		"curseBlue":{'frame':15},
 		"curseGreen":{'frame':14},
@@ -23,8 +23,8 @@ Init.db.anim = function(){
 		"fireBomb":{'frame':30,'size':2},
 		"fireBomb2":{'frame':6},
 		"fireHit":{'frame':12},
-		"iceBomb":{'frame':9},
-		"iceHit":{'frame':16},
+		"coldBomb":{'frame':9,spd:0.4},
+		"coldHit":{'frame':16},
 		"lightningBomb":{'frame':12},
 		"lightningBomb2":{'frame':5},
 		"lightningHit":{'frame':5},
@@ -36,7 +36,12 @@ Init.db.anim = function(){
 		"slashFire":{'frame':15},
 		"slashLightning":{'frame':14},
 		"slashMelee":{'frame':6},
-		"strikeHit":{'frame':3},		
+		"strikeHit":{'frame':3},	
+
+		"splashCold":{'frame':10},
+		"splashFire":{'frame':7},
+		"splashLightning":{'frame':7},
+		"splashMelee":{'frame':9},		
 	}
 		
 			
@@ -61,6 +66,7 @@ Init.db.anim = function(){
 Anim = {};
 Anim.loop = function (anim){
 	var animFromDb = Db.anim[anim.name];
+	if(!animFromDb){ DEBUG(0,"anim not found"); return; }
 	anim.timer += animFromDb.spd * anim.spdMod;
 	
 	anim.x = anim.target.x;

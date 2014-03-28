@@ -66,7 +66,7 @@ Test.firstSignIn = function(key){
 Test.spawnEnemy = function(key,info){
 	var player = List.all[key];
 	info = info || ["bat","normal"];
-	if(!Db.enemy[info[0]][info[1]]){ DEBUG("no enemy with that cat and var"); return;}
+	if(!Db.enemy[info[0]][info[1]]){ DEBUG(0,"no enemy with that cat and var"); return;}
 	Actor.creation({
 		'xym':{x:player.x,y:player.y,map:player.map},
 		"category":info[0],		

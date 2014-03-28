@@ -102,7 +102,7 @@ a['bulletMulti'] = {					//bulletMulti is the id of attack
 		//Bullet Only
 		
 			spd:15, 					//bullet travelling speed
-			maxTimer:25,				//how many frame it stays
+			maxTimer:40,				//how many frame it stays
 			ghost: 0,					//does bullet goes thru wall?
 			pierce : {
 				'chance':0.5,			//chance to pierce
@@ -214,7 +214,7 @@ Init.db.ability = function(cb){
 			a[results[i].id] = results[i];
 		}
 	
-	
+	//Alt-03
 	//{ Pvp
 	a['pvp-bullet'] = {'type':'attack','name':'Basic Bullet','icon':'attackRange.steady',
 		'spd':{'main':1,'support':0},'period':{'own':30,'global':20},
@@ -243,7 +243,7 @@ Init.db.ability = function(cb){
 		'spd':{'main':1,'support':0},'period':{'own':100,'global':25},
 		'action':{'func':'Combat.action.attack','param':{
 			'type':"bullet",'angle':0,'amount':1,
-			'objImg':{'name':"iceshard",'sizeMod':1},'hitImg':{'name':"iceHit",'sizeMod':0.5},
+			'objImg':{'name':"iceshard",'sizeMod':1},'hitImg':{'name':"coldHit",'sizeMod':0.5},
 			'dmg':{'main':100,'ratio':{'melee':0,'range':0,'magic':0,'fire':0,'cold':1,'lightning':0}},
 			'chill':{time:25,magn:100,chance:1000},
 		}
@@ -349,7 +349,11 @@ Init.db.ability = function(cb){
 		'spd':{'main':1,'support':0},'period':{'own':25,'global':25},
 		'action':{'animOnSprite':'boostWhite','func':'Combat.action.boost','param':[]}
 	};
-
+	a['summon'] = {'type':'summon','name':'Summon','icon':'summon.wolf',
+		'spd':{'main':1,'support':0},'period':{'own':50,'global':50},
+		'action':{'animOnSprite':'boostPink','func':'Combat.action.summon','param':[]}
+	};
+	
 	//{ Regular Elemental Bullet
 	a['fireBullet'] = {'type':'attack','name':'Fire Bullet','icon':'attackMagic.fireball',
 		'spd':{'main':1,'support':0},'period':{'own':25,'global':25},
@@ -363,7 +367,7 @@ Init.db.ability = function(cb){
 		'spd':{'main':1,'support':0},'period':{'own':25,'global':25},
 		'action':{'func':'Combat.action.attack','param':{
 			'type':"bullet",'angle':0,'amount':1,
-			'objImg':{'name':"iceshard",'sizeMod':1},'hitImg':{'name':"iceHit",'sizeMod':0.5},
+			'objImg':{'name':"iceshard",'sizeMod':1},'hitImg':{'name':"coldHit",'sizeMod':0.5},
 			'dmg':{'main':100,'ratio':{'melee':0,'range':0,'magic':0,'fire':0,'cold':1,'lightning':0}},
 		}
 	}};
@@ -375,6 +379,16 @@ Init.db.ability = function(cb){
 			'dmg':{'main':100,'ratio':{'melee':0,'range':0,'magic':0,'fire':0,'cold':0,'lightning':1}},
 		}
 	}};
+	
+	a['arrowBullet'] = {'type':'attack','name':'Arrow','icon':'attackMagic.fireball',
+		'spd':{'main':1,'support':0},'period':{'own':25,'global':25},
+		'action':{'func':'Combat.action.attack','param':{
+			'type':"bullet",'angle':0,'amount':1,
+			'objImg':{'name':"arrow",'sizeMod':1},'hitImg':{'name':"splashMelee",'sizeMod':0.5},
+			'dmg':{'main':100,'ratio':{'melee':0,'range':1,'magic':0,'fire':0,'cold':0,'lightning':0}},
+		}
+	}};
+	
 	a['magicBullet'] = {'type':'attack','name':'Magic Bullet','icon':'attackMagic.fireball',
 		'spd':{'main':1,'support':0},'period':{'own':25,'global':25},
 		'action':{'func':'Combat.action.attack','param':{
@@ -383,6 +397,25 @@ Init.db.ability = function(cb){
 			'dmg':{'main':100,'ratio':{'melee':0,'range':0,'magic':1,'fire':0,'cold':0,'lightning':0}},
 		}
 	}};
+	
+	a['meleeBullet'] = {'type':'attack','name':'Bone Throw','icon':'attackMagic.fireball',
+		'spd':{'main':1,'support':0},'period':{'own':25,'global':25},
+		'action':{'func':'Combat.action.attack','param':{
+			'type':"bullet",'angle':0,'amount':1,
+			'objImg':{'name':"bone",'sizeMod':1},'hitImg':{'name':"strikeHit",'sizeMod':0.5},
+			'dmg':{'main':100,'ratio':{'melee':1,'range':0,'magic':0,'fire':0,'cold':0,'lightning':0}},
+		}
+	}};
+	
+	a['rangeBullet'] = {'type':'attack','name':'Rock Throw','icon':'attackMagic.fireball',
+		'spd':{'main':1,'support':0},'period':{'own':25,'global':25},
+		'action':{'func':'Combat.action.attack','param':{
+			'type':"bullet",'angle':0,'amount':1,
+			'objImg':{'name':"rock",'sizeMod':1},'hitImg':{'name':"earthBomb",'sizeMod':0.4},
+			'dmg':{'main':100,'ratio':{'melee':0,'range':1,'magic':0,'fire':0,'cold':0,'lightning':0}},
+		}
+	}};
+	
 	a['dart'] = {'type':'attack','name':'Dart','icon':'attackRange.head',
 		'spd':{'main':1,'support':0},'period':{'own':25,'global':25},
 		'action':{'func':'Combat.action.attack','param':{
@@ -406,8 +439,109 @@ Init.db.ability = function(cb){
 		}
 	}};
 	
+	a['coldBomb'] = {'type':'attack','name':'Cold Explosion','icon':'attackMagic.fireball',
+		'spd':{'main':1,'support':0},'period':{'own':30,'global':20},
+		'action':{'func':'Combat.action.attack','param':{
+			'type':"strike",'angle':0,'amount':1,
+			'preDelayAnim':{'name':"coldBomb",'sizeMod':1},
+			'dmg':{'main':400,'ratio':{'melee':0,'range':0,'magic':0,'fire':0,'cold':1,'lightning':0}},
+			'width':50,
+			'height':50,
+			'delay':10,
+			'minRange':0,
+			'maxRange':200,
+		}
+	}};
 	
-	//Fire Nova
+	a['magicBomb'] = {'type':'attack','name':'Cold Explosion','icon':'attackMagic.fireball',
+		'spd':{'main':1,'support':0},'period':{'own':30,'global':20},
+		'action':{'func':'Combat.action.attack','param':{
+			'type':"strike",'angle':0,'amount':1,
+			'preDelayAnim':{'name':"coldBomb",'sizeMod':1},
+			'dmg':{'main':400,'ratio':{'melee':0,'range':0,'magic':0,'fire':0,'cold':1,'lightning':0}},
+			'width':50,
+			'height':50,
+			'delay':10,
+			'minRange':0,
+			'maxRange':200,
+		}
+	}};
+	
+	
+	a['lightningBomb'] = {'type':'attack','name':'Lightning Explosion','icon':'attackMagic.fireball',
+		'spd':{'main':1,'support':0},'period':{'own':30,'global':20},
+		'action':{'func':'Combat.action.attack','param':{
+			'type':"strike",'angle':0,'amount':1,
+			'preDelayAnim':{'name':"lightningBomb",'sizeMod':1},
+			'dmg':{'main':400,'ratio':{'melee':0,'range':0,'magic':0,'fire':0,'cold':0,'lightning':1}},
+			'width':50,
+			'height':50,
+			'delay':10,
+			'minRange':0,
+			'maxRange':200,
+		}
+	}};
+	
+	a['healZone'] = {'type':'attack','name':'Heal Zone','icon':'heal.plus',
+		'spd':{'main':1,'support':0},'period':{'own':50,'global':50},
+		'action':{'func':'Combat.action.attack','param':{
+			'type':"strike",'angle':0,'amount':1,
+			'delayAnim':{'name':"aura",'sizeMod':2},
+			'dmg':{'main':0,'ratio':{'melee':0,'range':0,'magic':0,'fire':1,'cold':0,'lightning':0}},
+			'width':200,
+			'height':200,
+			'delay':0,
+			'minRange':0,
+			'maxRange':0,
+			'hitIfMod':1,
+			'heal':{hp:200},
+		}
+	}};
+
+	
+	a['coldNova'] = {'type':'attack','name':'Cold Nova','icon':'attackMagic.fireball',
+		'spd':{'main':1,'support':0},'period':{'own':25,'global':25},
+		'action':{'func':'Combat.action.attack','param':{
+			'type':"bullet",'angle':0,'amount':1,
+			'objImg':{'name':"iceshard",'sizeMod':1},'hitImg':{'name':"coldHit",'sizeMod':0.5},
+			'dmg':{'main':100,'ratio':{'melee':0,'range':0,'magic':0,'fire':0,'cold':1,'lightning':0}},
+			maxTimer:80,
+			spd:4,
+			nova:{					
+				period:4,				
+				rotation:3,
+				attack:{		//attack info
+					'type':"bullet",'angle':360,'amount':4,
+					'objImg':{'name':"iceshard",'sizeMod':0.5},'hitImg':{'name':"coldHit",'sizeMod':0.3},
+					'dmg':{'main':25,'ratio':{'melee':0,'range':0,'magic':0,'fire':0,'cold':1,'lightning':0}},
+					'maxTimer':10,
+				},		
+			},
+		}
+	}};
+	
+	a['lightningNova'] = {'type':'attack','name':'Lightning Nova','icon':'attackMagic.fireball',
+		'spd':{'main':1,'support':0},'period':{'own':25,'global':25},
+		'action':{'func':'Combat.action.attack','param':{
+			'type':"bullet",'angle':0,'amount':1,
+			'objImg':{'name':"lightningball",'sizeMod':1},'hitImg':{'name':"lightningHit",'sizeMod':0.5},
+			'dmg':{'main':100,'ratio':{'melee':0,'range':0,'magic':0,'fire':0,'cold':1,'lightning':0}},
+			maxTimer:80,
+			nova:{					
+				period:3,				
+				rotation:0,
+				attack: {
+					'type':"strike",'angle':0,'amount':1,
+					'delayAnim':{'name':"lightningHit",'sizeMod':0.5},
+					'hitImg':{'name':"lightningHit",'sizeMod':0.25},
+					'dmg':{'main':100,'ratio':{'melee':0,'range':0,'magic':0,'fire':0,'cold':0,'lightning':1}},
+					'width':75,'height':75,'delay':0,
+					'minRange':0,'maxRange':0,
+				}	
+			},
+		}
+	}};
+	
 	a['fireNova'] = {'type':'attack','name':'Fire Nova','icon':'attackMagic.fireball',
 		'spd':{'main':1,'support':0},'period':{'own':25,'global':25},
 		'action':{'func':'Combat.action.attack','param':{
@@ -597,7 +731,7 @@ Init.db.ability = function(cb){
 		'spd':{'main':0.8,'support':0.2},'period':{'own':20,'global':10},
 		'action':{'func':'Combat.action.attack','param':{
 			'type':"bullet",'angle':15,'amount':1,
-			'objImg':{'name':"iceshard",'sizeMod':1},'hitImg':{'name':"iceHit",'sizeMod':0.5},
+			'objImg':{'name':"iceshard",'sizeMod':1},'hitImg':{'name':"coldHit",'sizeMod':0.5},
 			'dmg':{'main':100,'ratio':{'melee':0,'range':10,'magic':80,'fire':10,'cold':0,'lightning':0}},
 		}
 	}};

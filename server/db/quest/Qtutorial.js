@@ -22,7 +22,7 @@ q.ability['Aiceshard'] = {'type':'attack','name':'Ice Shard','icon':'attackMagic
 	'spd':{'main':1,'support':0},'period':{'own':25,'global':25},
 	'action':{'func':'Combat.action.attack','param':{
 		'type':"bullet",'angle':0,'amount':1,
-		'objImg':{'name':"iceshard",'sizeMod':1},'hitImg':{'name':"iceHit",'sizeMod':0.5},
+		'objImg':{'name':"iceshard",'sizeMod':1},'hitImg':{'name':"coldHit",'sizeMod':0.5},
 		'dmg':{'main':100,'ratio':{'melee':0,'range':0,'magic':30,'fire':0,'cold':70,'lightning':0}},
 	}
 }};
@@ -154,9 +154,9 @@ q.map.tutorial = function(){
 	tut.variable = {
 		rotation: -9,
 		angle:0,
-		arrow:{'type':"bullet",'angle':15,'amount':1,'objImg':{'name':"arrow",'sizeMod':1},'hitImg':{'name':"iceHit",'sizeMod':0.5},
+		arrow:{'type':"bullet",'angle':15,'amount':1,'objImg':{'name':"arrow",'sizeMod':1},'hitImg':{'name':"coldHit",'sizeMod':0.5},
 			'dmg':{'main':10000,'ratio':{'melee':100,'range':0,'magic':0,'fire':0,'cold':0,'lightning':0}}},	
-		fireball:{maxTimer:20,'type':"bullet",'angle':0,'amount':1,'objImg':{'name':"fireball",'sizeMod':1},'hitImg':{'name':"iceHit",'sizeMod':0.5},
+		fireball:{maxTimer:20,'type':"bullet",'angle':0,'amount':1,'objImg':{'name':"fireball",'sizeMod':1},'hitImg':{'name':"coldHit",'sizeMod':0.5},
 			'dmg':{'main':10000,'ratio':{'melee':100,'range':0,'magic':0,'fire':0,'cold':0,'lightning':0}}},		
 
 	};

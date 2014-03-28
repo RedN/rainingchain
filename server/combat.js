@@ -138,7 +138,7 @@ Combat.collision = function(b,act){
 	
 	if(b.crit.baseChance >= Math.random() || b.crit.chance >= Math.random()){ b = Combat.collision.crit(b) }
 	
-	var dmg = Combat.collision.damage(b,act); if(!dmg) return;
+	var dmg = Combat.collision.damage(b,act); if(typeof dmg === 'undefined') return;
 	Combat.collision.reflect(dmg,b,act);
 	
 	//Mods

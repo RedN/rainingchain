@@ -38,6 +38,8 @@ Actor.loop.input.move.sub = function(act){
 		var target = List.all[act.target.main];
 		if(!target) return;
 		act.angle = atan2(target.y-act.y,target.x-act.x);
+		act.mouseX = target.x-act.x+Cst.WIDTH2;
+		act.mouseY = target.y-act.y+Cst.HEIGHT2;
 	} else if(diff  > 10){
 		act.angle = atan2(y,x);
 	}
@@ -96,6 +98,7 @@ Actor.loop.setTarget = function(act){
 	if(act.frameCount % tar.period.stuck === 0){
 		tar.isStuck = Actor.isStuck(act);
 		if(tar.isStuck) Actor.loop.setTarget.stuck(act);
+		else tar.stuck = [];
 	}
 }
 
