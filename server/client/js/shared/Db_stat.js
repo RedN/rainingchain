@@ -225,7 +225,7 @@ Init.db.stat = function(){
 	'burn-magn':{
 		'icon':'status.burn',
 		'name':'Burn Magn',
-		'boost':{'base':0.002,'stat':['bonus','burn','magn'],},
+		'boost':{'base':0.005,'stat':['bonus','burn','magn'],},
 		'description':"Affect damage dealt to a burnt enemy.",
 		},	
 	'burn-chance':{

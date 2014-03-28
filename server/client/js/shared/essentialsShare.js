@@ -84,7 +84,7 @@ DEBUG = function(lvl,message){
 }  
 
 DEBUG.level = 10;
-DEBUG.stackSize = 1;
+DEBUG.stackSize = 2;
 DEBUG.minify = true;
 
 

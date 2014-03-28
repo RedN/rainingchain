@@ -185,7 +185,7 @@ Init.db.sprite = function(){
     		"attack":{"startY":0,"frame":3,"sizeX":96,"sizeY":96,"dir":4,"spd":0.5,"next":"walk"},
     	}};
 		
-	a["taurus"] ={"src":"actor/taurus.png","size":1,"side":[2,0,1,3],"hpBar":-55,"legs":50,
+	a["taurus"] ={"src":"actor/taurus.png","size":2,"side":[2,0,1,3],"hpBar":-55,"legs":50,
     	"preHitBox":[ -60,60,-40,60 ],"preBumperBox":[ -60,60,-40,60 ],"anim": {
     		"walk":{"startY":0,"frame":3,"sizeX":96,"sizeY":96,"dir":4,"spd":0.5,"walk":1,"next":"walk"},
     		"attack":{"startY":0,"frame":3,"sizeX":96,"sizeY":96,"dir":4,"spd":0.5,"next":"walk"},
@@ -227,10 +227,13 @@ Init.db.sprite = function(){
 	a["rock"] ={"src":"bullet/rock.png","size":1,"side":[0],"anim": {
     		"travel":{"startY":0,"frame":1,"sizeX":48,"sizeY":48,"dir":1,"spd":1,"next":"travel"},
     	}};
-	a["shadowball"] ={"src":"bullet/shadowball.png","size":1,"side":[0],"anim": {
+	a["shadowball"] ={"src":"bullet/shadowball.png","size":1,"side":[0],'link':'http://mohsin-kun.deviantart.com/art/Shadow-Ball-73303663',"anim": {
     		"travel":{"startY":0,"frame":1,"sizeX":48,"sizeY":48,"dir":1,"spd":1,"next":"travel"},
     	}};	
-	//http://mohsin-kun.deviantart.com/art/Shadow-Ball-73303663
+	a["tornado"] ={"src":"bullet/tornado.png","size":1,"side":[0],"anim": {
+    		"travel":{"startY":0,"frame":5,"sizeX":48,"sizeY":48,"dir":1,"spd":1,"next":"travel"},
+    	}};	
+
     //}	
     //{ System
 	a["block1x1"] ={"src":"picture/block2x2.png","size":0.5,"side":[0],

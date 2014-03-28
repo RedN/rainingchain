@@ -36,8 +36,8 @@ ENEMY:
 	
 	dragonKing:		big bomb all elemental, high regen
 	
-	
-	
+	enemy that boost = boost atkspd
+	enemy reflect
 	
 	aquanite:		
 	aquagoblin:		
@@ -58,24 +58,30 @@ ENEMY:
 
 
 
+death clear status
+fix reflect
+add what curse active
+use attack template for other attack
 
 
 
+cutscene
+teleport actor zone
+getAbility and getEquip for pvp
 
-
-
-
+pvp quest
 add flag for contact me
+add report player
+
 chrono ingame
 stat window
-cutscene
+
 contribution pts window
 plan revamp: already know what min and max mods are
 
 
 custom look
 
-teleport actor zone
 
 
 

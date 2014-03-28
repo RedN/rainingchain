@@ -22,7 +22,6 @@ Server.start = function(data){
 	Init.db(data);
 	Init.email(data);
 	main.initServer();
-	Server.ready = 1;	
 }
 
 Server.botwatch = function(key,towatch){

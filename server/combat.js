@@ -147,7 +147,6 @@ Combat.collision = function(b,act){
 	
 	if(b.onHit && b.onHit.chance >= Math.random()){	Combat.action.attack(b,useTemplate(Attack.template(),b.onHit.attack));}
 	
-	
 	if(b.curse && b.curse.chance >= Math.random()){ Combat.collision.curse(act,b.curse); }
 	
 	//Apply Status

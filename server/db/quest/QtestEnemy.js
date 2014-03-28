@@ -69,7 +69,7 @@ q.enemy["demon"] = {  //{
 	"sprite":{'name':"demon",'sizeMod':1},
 	"abilityList":[
 		{'template':'fireNova','aiChance':0.5,'extra':{}},
-		{'template':'fireCircle','aiChance':0.5,'extra':{
+		{'template':'fireBullet','aiChance':0.5,'extra':{
 			'amount':9,angle:360,'burn':{baseChance:1,chance:0,magn:1,time:1}}},
 		
 	],

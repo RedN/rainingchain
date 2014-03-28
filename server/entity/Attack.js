@@ -44,10 +44,8 @@ Attack.template = function(){
 	b.leech = {'baseChance':0,'chance':1,'magn':1,'time':1};	
 	b.pierce = {'baseChance':0,'chance':0,'dmgReduc':0.5};		//will be overwrite completly
 	b.curse = 0;
+	b.onHit = 0;
 	
-	
-	
-
 	//Strike
 	b.width = 10;      			 //width for strike
 	b.height = 10;       		//height for strike
@@ -55,7 +53,7 @@ Attack.template = function(){
 	b.point = [{'x':10,'y':10}];	//used for collision
 	b.minRange = 5;				//min distance player-strike
 	b.maxRange = 50;			//max distance player-strike
-	
+	b.onStrike = 0;				//call another attack when strike goes live
 	
 	//Bullet
 	b.maxTimer = 40;
@@ -113,7 +111,7 @@ Attack.creation.info = function(player,bullet){
 	
 	bullet.angle = (player.angle || 0 +360)%360;
 	
-	if(bullet.nova || bullet.onHit){
+	if(bullet.nova || bullet.onHit || bullet.onStrike){
 		bullet.bonus = player.bonus || Actor.template.bonus();
 		bullet.weapon = player.weapon || Actor.template.weapon();
 		bullet.mastery = player.mastery || Actor.template.mastery();		
@@ -188,7 +186,9 @@ Attack.creation.strike = function(s){
 	}
 	
 	if(s.preDelayAnim){ Anim.creation(s.preDelayAnim.name,{'x':s.crX + s.middleX,'y':s.crY + s.middleY,'map':s.map,'viewedIf':s.viewedIf},s.preDelayAnim.sizeMod);}
-		
+	
+	s.x = s.crX + s.middleX;
+	s,y = s.crY + s.middleY;
 	List.strike[s.id] = s;
 	
 	return s;

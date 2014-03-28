@@ -185,7 +185,7 @@ Init.db.enemy = function(){
 		"sprite":{'name':"mosquito",'sizeMod':1},
 		"abilityList":[
 			{'template':'dart','aiChance':[1,0.2,0.4],'extra':{
-				'knock,baseChance':1,
+				'knock,baseChance':0.25,
 			}},
 			{'template':'lightningBullet','aiChance':[1,0.2,0.4],'extra':{
 				'amount':5,'angle':30,'knock,baseChance':0.25,'sin':{"amp":2,"freq":2},
@@ -197,6 +197,7 @@ Init.db.enemy = function(){
 					'dmg':{'melee':1,'range':1,'magic':1,'fire':1,'cold':1,'lightning':1}},	
 		"acc":2,
 		"maxSpd":20,
+		'atkSpd':{main:2,support:1},
 		"moveRange":{'ideal':250,"confort":25,"aggressive":500,"farthest":600},	
 	}; //}
 	//}
@@ -381,7 +382,7 @@ Init.db.enemy = function(){
 				'knock,baseChance':1,'knock,magn':2,'knock,time':1,
 			}},
 			{'template':'rangeBullet','aiChance':[0,0,1],'extra':{
-				'amount':5,'angle':25,'parabole':{'height':10,'min':10,'max':500,'timer':50},
+				'amount':5,'angle':45,'parabole':{'height':10,'min':10,'max':500,'timer':50},
 			}},
 			[1,1,1]
 		],
@@ -429,12 +430,12 @@ Init.db.enemy = function(){
 			{'template':'blessing','aiChance':[0.2,0.4,0.4],'extra':{
 				'global':{'action,animOnSprite':'boostRed'},
 				param:[{'stat':'bleed-chance','type':'+','value':1000,'time':100},
-					{'stat':'dmgMod','type':'*','value':5,'time':100},
+					{'stat':'atkSpd-main','type':'*','value':3,'time':100},
 					{'stat':'globalDef','type':'*','value':10,'time':100},
 				],
 			}},
 			{'template':'rangeBullet','aiChance':[0.5,0.5,1],'extra':{
-				'amount':3,'angle':10,
+				'amount':3,'angle':30,
 			}},
 			[0.5,0.5,0.5]
 		],
@@ -450,7 +451,7 @@ Init.db.enemy = function(){
 		"sprite":{'name':"orcRange",'sizeMod':1},
 		"abilityList":[
 			{'template':'arrowBullet','aiChance':[0,0.5,0.5],'extra':{
-				'objImg,sizeMod':1.5,'amount':3,'angle':10,'pierce,baseChance':1,'dmg,main':200,
+				'objImg,sizeMod':1.5,'amount':3,'angle':30,'pierce,baseChance':1,'dmg,main':200,
 			}},
 			
 			{'template':'scratch','aiChance':[1,0,0],'extra':{
@@ -458,7 +459,7 @@ Init.db.enemy = function(){
 			}},
 			{'template':'arrowBullet','aiChance':[0.5,1,1],'extra':{
 				'global':{period:{own:10,global:10}},
-				'amount':5,'angle':25,'parabole':{'height':10,'min':10,'max':500,'timer':50},
+				'amount':5,'angle':45,'parabole':{'height':10,'min':10,'max':500,'timer':50},
 			}},
 			[1,1,1]
 		],
@@ -479,7 +480,7 @@ Init.db.enemy = function(){
 			{'template':'healZone','aiChance':[0.2,0.2,0.2],'extra':{}},
 			{'template':'lightningNova','aiChance':[0.5,0.5,0.5],'extra':{}},
 			{'template':'scratch','aiChance':[1,0,0],'extra':{
-				'dmg,ratio,fire':1,'objImg':'slashFire','burn,baseChance':0.5,
+				'dmg,ratio,fire':1,'objImg,name':'slashFire','burn,baseChance':0.5,
 			}},
 			[1,1,1]
 		],
@@ -492,7 +493,6 @@ Init.db.enemy = function(){
 	}; //}
 	//}
 	
-	
 	a["gargoyle"] = {}; //{
 	a["gargoyle"]["normal"] = {  //{
 		"name":"Gargoyle",
@@ -503,6 +503,7 @@ Init.db.enemy = function(){
 				'stun,baseChance':1,
 			}},
 			{'template':'lightningBullet','aiChance':[1,1,1],'extra':{}},
+			{'template':'lightningNova','aiChance':[0,0.4,0.4],'extra':{}},
 			[0.5,0.5,0.5]
 		],
 		'deathExp':1,
@@ -522,7 +523,7 @@ Init.db.enemy = function(){
 			{'template':'magicBullet','aiChance':[0.5,0.5,1],'extra':{
 				'curse':{'chance':0.25,'boost':[{'stat':'globalDmg','type':'*','value':0.1,'time':50}]},
 			}},
-			{'template':'magicBomb','aiChance':[0.3,0.3,0.3],'extra':{
+			{'template':'magicBomb','aiChance':[0.3,0.5,0.5],'extra':{
 				'drain,baseChance':1,
 				'curse':{'chance':0.25,'boost':[{'stat':'globalDef','type':'*','value':0.5,'time':50}]},
 			}},
@@ -539,7 +540,223 @@ Init.db.enemy = function(){
 	}; //}
 	//}
 	
+	a["death"] = {}; //{
+	a["death"]["normal"] = {  //{
+		"name":"Death",
+		"sprite":{'name':"death",'sizeMod':1},
+		"abilityList":[
+			{'template':'magicBullet','aiChance':[0.5,0.5,0.5],'extra':{
+				'drain,baseChance':1,
+				'curse':{'chance':0.25,'boost':[{'stat':'hp-regen','type':'*','value':0.5,'time':250},{'stat':'mana-regen','type':'*','value':0.5,'time':250}]},
+			}},
+			{'template':'magicBomb','aiChance':[0.8,0.8,0.8],'extra':{
+				'aim':25,'dmg,main':25,'minRange':100,
+				'onStrike':{chance:1,attack:{
+						'type':"bullet",'angle':360,'amount':8,
+						'objImg':{'name':"shadowball",'sizeMod':0.8},'hitImg':{'name':"magicHit",'sizeMod':0.5},
+						'dmg':{'main':100,'ratio':{'melee':0,'range':0,'magic':1,'fire':0,'cold':0,'lightning':0}},
+					}
+				}
+			}},
+			{'template':'coldBullet','aiChance':[0.1,0.3,0.3],'extra':{}},
+			[0.5,0.5,0.5]
+		],
+		'deathExp':1,
+		"mastery":{'def':{'melee':2,'range':2,'magic':0.5,'fire':0.5,'cold':2,'lightning':0.5},
+					'dmg':{'melee':1,'range':1,'magic':1,'fire':1,'cold':1,'lightning':1}},	
+		"acc":0.5,
+		"maxSpd":8,
+		"moveRange":{'ideal':200,"confort":25,"aggressive":500,"farthest":600},	
+	}; //}
+	//}
 	
+	a["skeleton"] = {}; //{
+	a["skeleton"]["normal"] = {  //{
+		"name":"Skeleton",
+		"sprite":{'name':"skeleton",'sizeMod':1},
+		"abilityList":[
+			{'template':'boneBoomerang','aiChance':[0.1,0.5,0.5],'extra':{
+				'amount':5,'angle':45,
+			}},
+			{'template':'boneBoomerang','aiChance':[0.1,0.8,0.8],'extra':{
+				'objImg,size':1.5,'dmg,main':250,'knock,baseChance':1,
+			}},
+			{'template':'scratch','aiChance':[1,0,0],'extra':{
+				'knock,baseChance':0.25,
+			}},
+			[0.5,0.5,0.5]
+		],
+		'deathExp':1,
+		"mastery":{'def':{'melee':2,'range':2,'magic':0.5,'fire':0.5,'cold':2,'lightning':0.5},
+					'dmg':{'melee':1,'range':1,'magic':1,'fire':1,'cold':1,'lightning':1}},	
+		"acc":0.5,
+		"maxSpd":8,
+		"moveRange":{'ideal':200,"confort":25,"aggressive":500,"farthest":600},	
+	}; //}
+	//}
+	
+	a["spirit"] = {}; //{
+	a["spirit"]["fire"] = {  //{
+		"name":"Spirit",
+		"sprite":{'name':"spirit",'sizeMod':1},
+		"abilityList":[
+			{'template':'fireBomb','aiChance':[0.5,0.5,0.5],'extra':{
+				'aim':20,
+				'onStrike':{chance:1,attack:{
+						'type':"bullet",'angle':360,'amount':4,
+						'objImg':{'name':"fireball",'sizeMod':0.8},'hitImg':{'name':"fireHit",'sizeMod':0.5},
+						'dmg':{'main':100,'ratio':{'melee':0,'range':0,'magic':0,'fire':1,'cold':0,'lightning':0}},
+					}
+				}
+			}},
+			{'template':'fireBullet','aiChance':[0.4,0.8,0.8],'extra':{
+				'amount':3,'angle':45,'burn,baseChance':1,
+			}},
+			{'template':'fireBomb','aiChance':[0.3,0.3,0.3],'extra':{
+				'preDelayAnim,name':'cursePink','dmg,main':25,
+				'curse':{'chance':1,'boost':[{'stat':'def-fire-mod','type':'*','value':0.5,'time':150}]},
+			}},
+			{'template':'fireNova','aiChance':[0,0.4,0.4],'extra':{}},
+			[0.5,0.5,0.5]
+		],
+		'reflect':{'fire':2},
+		'deathExp':1,
+		"mastery":{'def':{'melee':0.5,'range':0.5,'magic':0.5,'fire':2,'cold':0.5,'lightning':0.5},
+					'dmg':{'melee':1,'range':1,'magic':1,'fire':1,'cold':1,'lightning':1}},	
+		"acc":0.5,
+		"maxSpd":8,
+		"moveRange":{'ideal':200,"confort":25,"aggressive":500,"farthest":600},	
+	}; //}
+	//}
+	
+	a["demon"] = {}; //{
+	a["demon"]["normal"] = {  //{
+		"name":"Demon.",
+		"sprite":{'name':"demon",'sizeMod':1},
+		"abilityList":[
+			{'template':'fireNova','aiChance':[0,0.4,0.4],'extra':{}},
+			{'template':'fireBullet','aiChance':[0.4,0.4,0.4],'extra':{
+				'amount':7,angle:360,'burn,baseChance':1,'burn,magn':2,
+			}},
+			{'template':'scratch','aiChance':[0.4,0,0],'extra':{
+				'dmg,ratio,fire':1,'delayAnim,name':'scratchFire',
+			}},
+			[0.5,0.5,0.5]
+		],
+		'immune':{'fire':1},
+		'deathExp':1,
+		"mastery":{'def':{'melee':2,'range':0.5,'magic':2,'fire':1,'cold':0.5,'lightning':0.5},
+					'dmg':{'melee':1,'range':1,'magic':1,'fire':1,'cold':1,'lightning':1}},	
+		"acc":2,
+		"maxSpd":8,
+		"moveRange":{'ideal':200,"confort":25,"aggressive":500,"farthest":600},	
+	}; //}
+	//}
+
+	a["taurus"] = {}; //{
+	a["taurus"]["normal"] = {  //{
+		"name":"Taurus",
+		"sprite":{'name':"taurus",'sizeMod':1},
+		"abilityList":[
+			{'template':'rangeBullet','aiChance':[0,0.4,0.4],'extra':{
+				'amount':7,'angle':160,'bleed,baseChance':0.5,
+			}},
+			{'template':'scratchBig','aiChance':[1,0,0],'extra':{
+				'delayAnim,sizeMod':1.5,'dmg,main':200,
+				'onStrike':{chance:0.5,attack:{
+						'type':"bullet",'angle':360,'amount':8,
+						'objImg':{'name':"rock",'sizeMod':0.8},'hitImg':{'name':"earthHit",'sizeMod':0.5},
+						'dmg':{'main':25,'ratio':{'melee':1,'range':1,'magic':0,'fire':0,'cold':0,'lightning':0}},
+					}
+				}
+			}},
+			[0.5,0.5,0.5]
+		],
+		'deathExp':1,
+		"mastery":{'def':{'melee':4,'range':4,'magic':0.5,'fire':1,'cold':1,'lightning':1},
+					'dmg':{'melee':1,'range':1,'magic':1,'fire':1,'cold':1,'lightning':1}},	
+		"acc":2,
+		"maxSpd":8,
+		"moveRange":{'ideal':50,"confort":25,"aggressive":500,"farthest":600},	
+	}; //}
+	//}
+	
+	
+	a["mummy"] = {}; //{
+	a["mummy"]["normal"] = {  //{
+		"name":"Mummy",
+		"sprite":{'name':"mummy",'sizeMod':1},
+		'resource':{'hp':{'max':1000,'regen':3},'mana':{'max':100,'regen':1}},
+		"abilityList":[
+			{'template':'scratch','aiChance':[1,0,0],'extra':{
+				'leech,baseChance':1,'delayAnim,name':'cursePink',
+			}},
+			{'template':'scratch','aiChance':[0.5,0,0],'extra':{
+				'chill,baseChance':1,'delayAnim,name':'slashCold',
+			}},
+			{'template':'coldNova','aiChance':[0,0.2,0.4],'extra':{}},
+			{'template':'magicBomb','aiChance':[0,0.5,0.5],'extra':{
+				'dmg,main':100,
+				'curse':{'chance':0.75,'boost':[{'stat':'globalDmg','type':'*','value':0.5,'time':50}]},
+			}},
+			[0.5,0.5,0.5]
+		],
+		'deathExp':1,
+		"mastery":{'def':{'melee':1,'range':1,'magic':0.5,'fire':0.5,'cold':2,'lightning':2},
+					'dmg':{'melee':1,'range':1,'magic':1,'fire':1,'cold':1,'lightning':1}},	
+		"acc":2,
+		"maxSpd":8,
+		"moveRange":{'ideal':50,"confort":25,"aggressive":500,"farthest":600},	
+	}; //}
+	//}
+	
+	a["bird"] = {}; //{
+	a["bird"]["red"] = {  //{
+		"name":"Bird",
+		"sprite":{'name':"birdRed",'sizeMod':1},
+		"abilityList":[
+			{'template':'windBomb','aiChance':[0.5,0.5,0.5],'extra':{}},
+			{'template':'scratch','aiChance':[0.5,0,0],'extra':{
+				'knock,baseChance':1,'delayAnim,name':'earthHit',
+			}},
+			{'template':'windBullet','aiChance':[0,0.5,0.5],'extra':{
+				'amount':5,'angle':45,'sin':{"amp":2,"freq":2},'knock,baseChance':0.5,
+			}},
+			[0.5,0.5,0.5]
+		],
+		'deathExp':1,
+		"mastery":{'def':{'melee':1,'range':0.5,'magic':1,'fire':2,'cold':0.5,'lightning':0.5},
+					'dmg':{'melee':1,'range':1,'magic':1,'fire':1,'cold':1,'lightning':1}},	
+		"acc":2,
+		"maxSpd":8,
+		"moveRange":{'ideal':250,"confort":25,"aggressive":500,"farthest":600},	
+	}; //}
+	//}
+	
+	a["dragon"] = {}; //{
+	a["dragon"]["king"] = {  //{
+		"name":"Dragon",
+		"sprite":{'name':"dragonKing",'sizeMod':1},
+		"abilityList":[
+			{'template':'windBullet','aiChance':[1,0.5,0.5],'extra':{
+				'angle':360,'amount':9,
+			}},
+			{'template':'fireNova','aiChance':[0.5,0.5,0.5],'extra':{}},
+			{'template':'coldNova','aiChance':[0.5,0.5,0.5],'extra':{}},
+			{'template':'lightningNova','aiChance':[0.5,0.5,0.5],'extra':{}},
+			{'template':'scratchBig','aiChance':[0.5,0,0],'extra':{
+				'bleed,baseChance':1,
+			}},
+			[0.5,0.5,0.5]
+		],
+		'deathExp':1,
+		"mastery":{'def':{'melee':2,'range':2,'magic':1,'fire':2,'cold':2,'lightning':2},
+					'dmg':{'melee':1,'range':1,'magic':1,'fire':1,'cold':1,'lightning':1}},	
+		"acc":2,
+		"maxSpd":14,
+		"moveRange":{'ideal':250,"confort":25,"aggressive":500,"farthest":600},	
+	}; //}
+	//}
 	
 	
 	
@@ -565,9 +782,6 @@ Init.db.enemy = function(){
 		'drop':{'category':{'regular':1},'plan':{'melee':1/10,'helm':1/10}},
 	}; //}
 	//}
-	
-		
-	
 	
 	a["neutral"] = {}; //{
 	a["neutral"]["jenny"] = {  //{

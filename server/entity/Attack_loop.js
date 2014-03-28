@@ -131,7 +131,10 @@ Bullet.loop.mapMod = function(){
 Strike = {};
 Strike.loop = function(s){
 	if(s.delay <= 0){
+		if(s.onStrike && s.onStrike.chance >= Math.random()){	Combat.action.attack(s,useTemplate(Attack.template(),s.onStrike.attack));}
+	
 		Strike.loop.collision(s);
+		
 		if(s.delayAnim){ Anim.creation(s.delayAnim.name,{'x':s.crX + s.middleX,'y':s.crY + s.middleY,'map':s.map,'viewedIf':s.viewedIf},s.delayAnim.sizeMod);}
 		s.toRemove = 1;
 	}

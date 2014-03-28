@@ -16,9 +16,13 @@ Init.db.anim = function(){
 		"cursePink":{'frame':14},
 		"cursePurple":{'frame':9},
 		
+		"earthHit":{'frame':7},
 		"earthBomb":{'frame':7},
-		"windBomb":{'frame':10},
+		"windBomb":{'frame':10,spd:0.5},
 		"waterBomb":{'frame':15},
+		
+		"magicBomb":{'frame':9},
+		"magicHit":{'frame':9},
 		
 		"fireBomb":{'frame':30,'size':2},
 		"fireBomb2":{'frame':6},
@@ -27,7 +31,7 @@ Init.db.anim = function(){
 		"coldHit":{'frame':16},
 		"lightningBomb":{'frame':12},
 		"lightningBomb2":{'frame':5},
-		"lightningHit":{'frame':5},
+		"lightningHit":{'frame':6},
 		
 		"scratch":{'frame':6},
 		"scratch2":{'frame':8},
