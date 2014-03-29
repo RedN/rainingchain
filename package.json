@@ -4,7 +4,7 @@
 	"scripts": {
 		"start": "app.js"
 	},
-	"version": "0.10.11-26",
+	"version": "0.10.11-27",
 	"engines": {
 		"node": "0.10.x"
 	},

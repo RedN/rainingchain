@@ -95,6 +95,8 @@ Draw.logout = function(){
 		"shiftLeft":{'func':Chat.send.command,'param':['$logout,' + i]},
 		'text':"Shift-Left Click to safely leave the game.",
 	});	
+	
+	
 	return; //OPENBETA
 	//contact me
 	Draw.icon('system.close',[Cst.WIDTH-size*2,0],size);
