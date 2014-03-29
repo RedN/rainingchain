@@ -46,6 +46,7 @@ Main.template = function(key){
 			},
 			'symbol':'',
 			'status':'on',
+			'muted':0,
 		}
 		
 		

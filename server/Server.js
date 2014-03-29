@@ -1,8 +1,8 @@
 /*
 1- connect db
 2- ts("Server.maxPlayerAmount = 16")
-
-
+3- ts("Server.loginMessage = 'Server is down. <br> Open beta at 3pm East Coast March 29th.'")
+4- ts("List.main[key].social.symbol = 1")
 
 pvp too much dmg
 reset pvp = bad
@@ -75,11 +75,15 @@ Server.disconnectAll = function(){
 
 
 Server.admin = [
-	'sam',//'rc','admin','idk whats rc','idkwhatsrc',
+	'rc', //'sam','admin','idk whats rc','idkwhatsrc',
 ];
 
-
-
+Server.mute = function(name){
+	for(var i in List.main){
+		if(List.all[i].name === name)
+			List.main[i].social.muted = 1;	
+	}
+}
 
 
 

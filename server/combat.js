@@ -290,7 +290,7 @@ Combat.collision.damage = function(bullet,player){
 	Actor.changeHp(player,-dmgInfo.sum);
 	
 	if(player.damagedBy[bullet.parent] === undefined) { player.damagedBy[bullet.parent] = 0; }
-	player.damagedBy[bullet.parent] += dmgInfo.sum;
+	player.damagedBy[bullet.parent] += dmgInfo.sum || 0;
 	
 	return dmgInfo;
 }

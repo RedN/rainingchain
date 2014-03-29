@@ -26,6 +26,7 @@ Sign.up = function(socket,d){
 	var fuser = escape.user(user);
 		
 	if(user !==	 fuser){ socket.emit('signUp', { 'success':0, 'message':'<font color="red">Illegal characters in username.</font>'} ); return; }
+	if(!Server.admin.have(user) && user.length < 3){ socket.emit('signUp', { 'success':0, 'message':'<font color="red">Too short username.</font>'} ); return; }
 	if(pass.length < 3){ socket.emit('signUp', {'success':0, 'message':'<font color="red">Too short password.</font>'} ); return; }
 	
 	db.find('account',{username:user},{},function(err, results) { if(err) throw err;		

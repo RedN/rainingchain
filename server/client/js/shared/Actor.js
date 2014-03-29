@@ -577,10 +577,19 @@ Actor.death.player = function(act){
 Actor.death.enemy = function(act){
 	act.dead = 1;
 	
+	/*
 	var killers = Actor.death.getKiller(act);
 	Actor.death.drop(act,killers);
 	Actor.death.exp(act,killers);
-	if(act.deathFunc)	for(var i in killers) act.deathFunc(killers[i],act,act.map) //custom death function (ex quest)
+	*/
+	//if(act.deathFunc)	for(var i in killers) act.deathFunc(killers[i],act,act.map) //custom death function (ex quest)
+	if(act.deathFunc){	
+		for(var i in act.damagedBy){
+			if(List.all[i]) act.deathFunc(i,act,act.map) 
+		}
+	}
+		
+		//custom death function (ex quest)
 	if(act.deathFuncArray) act.deathFuncAll(killers,act,act.map)
 	
 	Actor.death.performAbility(act);				//custom death ability function

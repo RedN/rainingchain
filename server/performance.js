@@ -14,9 +14,9 @@ Performance.cpu = function(){
         Performance.cpu.oldtime = d;
     }
 };
-Performance.cpu.active = true;
+Performance.cpu.active = nodejitsu;
 Performance.cpu.oldtime = Date.now();
-Performance.cpu.frequence = 10*1000/40;
+Performance.cpu.frequence = 30*1000/40;
 
 
 //Bandwidth
@@ -27,10 +27,10 @@ Performance.bandwidth = function(type,data){
     }
 	
 }
-Performance.playerAmount = false;
-Performance.bandwidth.upload = {'active':false,log:false,'size':0,logString:""};
-Performance.bandwidth.download = {'active':false,log:false,'size':0,logString:""};
-Performance.bandwidth.frequence = 10*1000/40;
+Performance.playerAmount = nodejitsu;
+Performance.bandwidth.upload = {'active':nodejitsu,log:nodejitsu,'size':0,logString:""};
+Performance.bandwidth.download = {'active':nodejitsu,log:nodejitsu,'size':0,logString:""};
+Performance.bandwidth.frequence = 30*1000/40;
 Performance.bandwidth.getSize = function(obj){
     return stringify(obj).length * 2;   //in bytes
 }  

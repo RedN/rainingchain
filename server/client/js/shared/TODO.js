@@ -72,8 +72,8 @@ add what curse active
 use attack template for other attack
 
 
-
-
+mutelist
+range for public
 
 cutscene
 teleport actor zone
