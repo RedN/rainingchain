@@ -117,6 +117,7 @@ Chat.receive.clan = function(key,text,to,type,from,data){
 }    
 
 Chat.receive.report = function(key,data){
+	if(!Server.report) return;
 	if(data.text.length < 1000 && data.title.length < 100){
 		db.insert('report',{
 			date:new Date().toLocaleString(),

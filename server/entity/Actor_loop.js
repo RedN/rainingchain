@@ -50,7 +50,8 @@ Actor.loop.ability = function(m){
 	var alreadyBoosted = {};
 	m.abilityChange.chargeClient = [0,0,0,0,0,0];
 	
-	m.abilityChange.globalCooldown--; 
+	m.abilityChange.globalCooldown--;
+	m.abilityChange.globalCooldown = m.abilityChange.globalCooldown.mm(-100,250); 	//cuz if atkSpd is low, fuck everything
 	for(var i in m.ability){	
 		var s = m.ability[i]; if(!s || !s.period) continue;	//cuz can have hole if player AND enemy attack rate is are in m.ability
 		var id = s.id;
@@ -449,7 +450,7 @@ Actor.loop.friendList = function(act){
 
 Actor.loop.attackReceived = function(act){
 	for(var i in act.attackReceived){
-		act.attackReceived[i] -= 1;
+		act.attackReceived[i] -= 1;		//per second
 		if(act.attackReceived[i] <= 0){
 			delete act.attackReceived[i];
 		}

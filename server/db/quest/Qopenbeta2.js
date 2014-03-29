@@ -51,6 +51,7 @@ q.func = {
 		var map = List.map['goblinLand@MAIN'].addon.main;
 		Actor.teleport(act,map.spot.a);
 		act.respawnLoc.recent = deepClone(map.spot.a);
+		act.respawnLoc.safe = deepClone(map.spot.a);
 		
 		Itemlist.add(key,'Qopenbeta2-enemyLeft');
 		Itemlist.add(key,'Qopenbeta2-pvp');
@@ -125,61 +126,61 @@ q.map.goblinLand = function(){
 		}});
 		
 		//Enemy
-		Actor.creation.group({'xym':spot.d,'respawn':25*60},[
+		Actor.creation.group({'xym':spot.d,'respawn':25*15},[
 			{'amount':1,"category":"mushroom","variant":"normal",'modAmount':1,'extra':{deathFunc:Db.quest.Qopenbeta2.func.enemyKilled}},
 			{'amount':5,"category":"larva","variant":"normal",'modAmount':1,'extra':{deathFunc:Db.quest.Qopenbeta2.func.enemyKilled}},
 			{'amount':1,"category":"plant","variant":"normal",'modAmount':1,'extra':{deathFunc:Db.quest.Qopenbeta2.func.enemyKilled}},
 		]);
 		
 		
-		Actor.creation.group({'xym':spot.C,'respawn':25*60},[
+		Actor.creation.group({'xym':spot.C,'respawn':25*15},[
 			{'amount':1,"category":"goblin","variant":"melee",'modAmount':1,'extra':{deathFunc:Db.quest.Qopenbeta2.func.enemyKilled}},
 			{'amount':1,"category":"goblin","variant":"range",'modAmount':1,'extra':{deathFunc:Db.quest.Qopenbeta2.func.enemyKilled}},
 			{'amount':1,"category":"goblin","variant":"magic",'modAmount':1,'extra':{deathFunc:Db.quest.Qopenbeta2.func.enemyKilled}},
 		]);
 		
-		Actor.creation.group({'xym':spot.D,'respawn':25*60},[
+		Actor.creation.group({'xym':spot.D,'respawn':25*15},[
 			{'amount':1,"category":"orc","variant":"melee",'modAmount':1,'extra':{deathFunc:Db.quest.Qopenbeta2.func.enemyKilled}},
 			{'amount':1,"category":"orc","variant":"range",'modAmount':1,'extra':{deathFunc:Db.quest.Qopenbeta2.func.enemyKilled}},
 			{'amount':1,"category":"orc","variant":"magic",'modAmount':1,'extra':{deathFunc:Db.quest.Qopenbeta2.func.enemyKilled}},
 		]);
 		
-		Actor.creation.group({'xym':spot.i,'respawn':25*60},[
+		Actor.creation.group({'xym':spot.i,'respawn':25*15},[
 			{'amount':1,"category":"gargoyle","variant":"normal",'modAmount':1,'extra':{deathFunc:Db.quest.Qopenbeta2.func.enemyKilled}},
 			{'amount':1,"category":"death","variant":"normal",'modAmount':1,'extra':{deathFunc:Db.quest.Qopenbeta2.func.enemyKilled}},
 		]);
 		
-		Actor.creation.group({'xym':spot.k,'respawn':25*60},[
+		Actor.creation.group({'xym':spot.k,'respawn':25*15},[
 			{'amount':1,"category":"skeleton","variant":"normal",'modAmount':1,'extra':{deathFunc:Db.quest.Qopenbeta2.func.enemyKilled}},
 			{'amount':1,"category":"spirit","variant":"fire",'modAmount':1,'extra':{deathFunc:Db.quest.Qopenbeta2.func.enemyKilled}},
 		]);
 		
-		Actor.creation.group({'xym':spot.k,'respawn':25*60},[
+		Actor.creation.group({'xym':spot.k,'respawn':25*15},[
 			{'amount':1,"category":"demon","variant":"normal",'modAmount':1,'extra':{deathFunc:Db.quest.Qopenbeta2.func.enemyKilled}},
 			{'amount':1,"category":"mummy","variant":"normal",'modAmount':1,'extra':{deathFunc:Db.quest.Qopenbeta2.func.enemyKilled}},
 		]);
 		
-		Actor.creation.group({'xym':spot.m,'respawn':25*60},[
+		Actor.creation.group({'xym':spot.m,'respawn':25*15},[
 			{'amount':2,"category":"slime","variant":"normal",'modAmount':1,'extra':{deathFunc:Db.quest.Qopenbeta2.func.enemyKilled}},
 			{'amount':1,"category":"salamander","variant":"normal",'modAmount':1,'extra':{deathFunc:Db.quest.Qopenbeta2.func.enemyKilled}},
 		]);
 		
-		Actor.creation.group({'xym':spot.r,'respawn':25*60},[
+		Actor.creation.group({'xym':spot.r,'respawn':25*15},[
 			{'amount':1,"category":"bee","variant":"normal",'modAmount':1,'extra':{deathFunc:Db.quest.Qopenbeta2.func.enemyKilled}},
 			{'amount':1,"category":"bat","variant":"normal",'modAmount':1,'extra':{deathFunc:Db.quest.Qopenbeta2.func.enemyKilled}},
 		]);
 		
-		Actor.creation.group({'xym':spot.u,'respawn':25*60},[
+		Actor.creation.group({'xym':spot.u,'respawn':25*15},[
 			{'amount':1,"category":"bird","variant":"red",'modAmount':1,'extra':{deathFunc:Db.quest.Qopenbeta2.func.enemyKilled}},
 			{'amount':1,"category":"mosquito","variant":"normal",'modAmount':1,'extra':{deathFunc:Db.quest.Qopenbeta2.func.enemyKilled}},
 		]);
 		
-		Actor.creation.group({'xym':spot.p,'respawn':25*60},[
+		Actor.creation.group({'xym':spot.p,'respawn':25*15},[
 			{'amount':1,"category":"ghost","variant":"normal",'modAmount':1,'extra':{deathFunc:Db.quest.Qopenbeta2.func.enemyKilled}},
 			{'amount':1,"category":"taurus","variant":"normal",'modAmount':1,'extra':{deathFunc:Db.quest.Qopenbeta2.func.enemyKilled}},
 		]);
 		
-		Actor.creation.group({'xym':spot.v,'respawn':25*60},[
+		Actor.creation.group({'xym':spot.v,'respawn':25*15},[
 			{'amount':3,"category":"dragon","variant":"king",'modAmount':1,'extra':{deathFunc:Db.quest.Qopenbeta2.func.enemyKilled}},
 		]);
 	}

@@ -1,3 +1,23 @@
+/*
+1- connect db
+2- ts("Server.maxPlayerAmount = 16")
+
+
+
+pvp too much dmg
+reset pvp = bad
+
+
+
+
+*/
+
+
+
+
+
+
+
 
 Server =  {
 	testing:!nodejitsu,		//will trigger special testing func
@@ -14,6 +34,7 @@ Server =  {
 	ready:0,
 	maxPlayerAmount:nodejitsu ? 0 : 64,
 	customMod:false,
+	report:false,
 	loginMessage:"Server is down. Come later.",
 }
 

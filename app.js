@@ -64,7 +64,7 @@ require('./server/craft');
 require('./server/drop');
 require('./server/Skill');
 require('./server/Test');
-require('./server/Performance');
+require('./server/performance');
 require('./server/Draw');
 
 require('./server/db/Db_enemy');

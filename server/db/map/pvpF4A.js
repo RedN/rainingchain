@@ -27,7 +27,7 @@ a.playerEnter = function(key,map,spot,v,m){
 	var act = List.all[key];
 	Actor.permBoost(act,'pvp',[
 		{stat:'bullet-spd',value:1,type:'+'},
-		{stat:'globalDmg',value:9,type:'+'},
+		{stat:'globalDmg',value:-0.80,type:'+'},
 	]);		
 	act.hitIf = 'player';
 	
@@ -40,7 +40,7 @@ a.playerEnter = function(key,map,spot,v,m){
 	//Test.pvpAbility(key);	//OPENBETA
 	
 
-	
+	//ts("Actor.permBoost(act,'pvp',[{stat:'bullet-spd',value:1,type:'+'},{stat:'globalDmg',value:0.08,type:'*'},]);");		
 }
 
 a.playerLeave = function(key,map,spot,v,m){
@@ -52,6 +52,7 @@ a.playerLeave = function(key,map,spot,v,m){
 }
 
 a.loop = function(map,spot,v,m){
+	return;	//TOFIX
 	if(Loop.interval(100)){
 		try {
 		var kl = v.killList;
@@ -93,10 +94,11 @@ a.variable = {
 	pvpScorePerPlayer:{},
 	
 	pvpKill:function(key,killer){
+		return; //TOFIX
 		if(!killer || !List.all[killer] || !List.all[key] || !List.map[List.all[key].map]) return;
 		Chat.add(killer,"You have killed " + List.all[key].name + ".");
 		Chat.add(key,"You have been killed by " + List.all[killer].name + ".");
-		List.map[List.all[key].map].addon.main.variable.killList.push({'killer':killer,'killed':key,'time':Date.now()});
+		List.map[List.all[key].map].addon.pvpRespawn.variable.killList.push({'killer':killer,'killed':key,'time':Date.now()});
 		
 	}
 }

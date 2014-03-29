@@ -61,7 +61,7 @@ Init.db.sprite = function(){
 		
 	//}
     //{ NPC
-    a["jenny"] ={"src":"actor/nSprite0.png","size":2,"side":[0,1,2,3],"hpBar":-22,"legs":16,
+    a["jenny"] ={"src":"actor/jenny.png","size":2,"side":[0,1,2,3],"hpBar":-22,"legs":16,
     	"preHitBox":[ -16,16,-16,16 ],"preBumperBox":[ -16,16,-16,16 ],"anim": {
     		"walk":{"startY":0,"frame":3,"sizeX":32,"sizeY":32,"dir":4,"spd":0.5,"walk":1,"next":"walk"},
     	}};
