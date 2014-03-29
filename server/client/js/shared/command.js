@@ -602,7 +602,7 @@ Command.list['team,tele'].doc = {
 
 Actor.teleport.join
 
-Command.list['pvp'] = function(key,slot){
+Command.list['pvp'] = function(key){
 	var act = List.all[key];
 	if(act.map.have('pvpF4A')){
 		Actor.teleport(act,act.respawnLoc.safe.x,act.respawnLoc.safe.y,act.respawnLoc.safe.map);

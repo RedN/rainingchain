@@ -221,7 +221,7 @@ Init.db.ability = function(cb){
 		'action':{'func':'Combat.action.attack','param':{
 			'type':"bullet",'angle':0,'amount':1,
 			'objImg':{'name':"arrow",'sizeMod':1},'hitImg':{'name':"strikeHit",'sizeMod':0.5},
-			'dmg':{'main':100,'ratio':{'melee':0,'range':1,'magic':0,'fire':0,'cold':0,'lightning':0}},
+			'dmg':{'main':100,'ratio':{'melee':1,'range':1,'magic':1,'fire':1,'cold':1,'lightning':1}},
 		}
 	}};
 	
@@ -229,11 +229,11 @@ Init.db.ability = function(cb){
 		'spd':{'main':1,'support':0},'period':{'own':30,'global':20},
 		'action':{'func':'Combat.action.attack','param':{
 			'type':"strike",'angle':0,'amount':1,
-			'preDelayAnim':{'name':"fireBomb",'sizeMod':1},
-			'dmg':{'main':200,'ratio':{'melee':0,'range':0,'magic':0,'fire':1,'cold':0,'lightning':0}},
+			'preDelayAnim':{'name':"fireBomb2",'sizeMod':1},
+			'dmg':{'main':200,'ratio':{'melee':1,'range':1,'magic':1,'fire':1,'cold':1,'lightning':1}},
 			'width':50,
 			'height':50,
-			'delay':10,
+			'delay':8,
 			'minRange':0,
 			'maxRange':200,
 		}
@@ -244,7 +244,7 @@ Init.db.ability = function(cb){
 		'action':{'func':'Combat.action.attack','param':{
 			'type':"bullet",'angle':0,'amount':1,
 			'objImg':{'name':"iceshard",'sizeMod':1},'hitImg':{'name':"coldHit",'sizeMod':0.5},
-			'dmg':{'main':100,'ratio':{'melee':0,'range':0,'magic':0,'fire':0,'cold':1,'lightning':0}},
+			'dmg':{'main':100,'ratio':{'melee':1,'range':1,'magic':1,'fire':1,'cold':1,'lightning':1}},
 			'chill':{time:25,magn:100,chance:1000},
 		}
 	}};
@@ -254,7 +254,7 @@ Init.db.ability = function(cb){
 		'action':{'func':'Combat.action.attack','param':{
 			'type':"bullet",'angle':360,'amount':9,
 			'objImg':{'name':"fireball",'sizeMod':1.2},'hitImg':{'name':"fireHit",'sizeMod':0.5},
-			'dmg':{'main':100,'ratio':{'melee':0,'range':0,'magic':0,'fire':1,'cold':0,'lightning':0}},
+			'dmg':{'main':100,'ratio':{'melee':1,'range':1,'magic':1,'fire':1,'cold':1,'lightning':1}},
 		}
 	}};
 		
@@ -493,6 +493,8 @@ Init.db.ability = function(cb){
 	}};
 	
 	
+	
+	
 	a['boneBoomerang'] = {'type':'attack','name':'Bone Boomerang','icon':'attackMagic.fireball',
 		'spd':{'main':1,'support':0},'period':{'own':25,'global':25},
 		'action':{'func':'Combat.action.attack','param':{
@@ -565,13 +567,13 @@ Init.db.ability = function(cb){
 			'dmg':{'main':100,'ratio':{'melee':0,'range':0,'magic':0,'fire':0,'cold':1,'lightning':0}},
 			maxTimer:80,
 			nova:{					
-				period:3,				
+				period:6,				
 				rotation:0,
 				attack: {
 					'type':"strike",'angle':0,'amount':1,
 					'delayAnim':{'name':"lightningHit",'sizeMod':0.5},
 					'hitImg':{'name':"lightningHit",'sizeMod':0.25},
-					'dmg':{'main':100,'ratio':{'melee':0,'range':0,'magic':0,'fire':0,'cold':0,'lightning':1}},
+					'dmg':{'main':200,'ratio':{'melee':0,'range':0,'magic':0,'fire':0,'cold':0,'lightning':1}},
 					'width':75,'height':75,'delay':0,
 					'minRange':0,'maxRange':0,
 				}	

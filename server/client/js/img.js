@@ -57,7 +57,7 @@ Img.icon = newImage("img/img/iconSheet.png");
 	'element':{'y':system+3,'x':['melee','range','magic','fire','cold','lightning']},
 	'status':{'y':system+4,'x':['bleed','knock','drain','burn','chill','stun']},
 	'resource':{'y':system+5,'x':['hp','mana','fury','dodge','heal']},
-	'skill':{'y':system+6,'x':['melee','range','magic','metalwork','woodwork','leatherwork','geology','metallurgy','trapping']},
+	'skill':{'y':system+6,'x':['melee','range','magic','metalwork','woodwork','leatherwork','mining','woodcutting','trapping']},
 	'friend':{'y':system+7,'x':['friend','mute','add','remove']},
 	'minimapIcon':{'y':system+8,'x':['enemy','boss','npc','quest','player']},
 	'offensive':{'y':system+9,'x':['pierce','bullet','strike','leech','atkSpd']},

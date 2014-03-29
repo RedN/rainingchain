@@ -27,7 +27,7 @@ Actor.creation = function(data){
 	}
 	if(e.nevermove){ Actor.creation.nevermove(e); }
 	
-	
+	if(!e.group) e.deleteOnceDead = 1;
 	return e.id;
 }
 
@@ -188,8 +188,8 @@ Actor.creation.mod.list = {
 		'func': (function(e){ e.atkSpd.main *= 2; return e; })},
 	'reflectPhysical':{'name':'Reflect Physical','chance':1,
 		'func': (function(e){ e.reflect = {"melee":0.5,"range":0.5,"magic":0.5,"fire":0,"cold":0,"lightning":0}; return e; })},
-	'reflectElemental':{'name':'Reflecth Elemental','chance':1,
-		'func': (function(e){ e.reflect = {"melee":0,"range":0,"magic":0,"fire":0.5,"cold":0.5,"lightning":0.5}; return e; })},
+	//'reflectElemental':{'name':'Reflect Elemental','chance':1,	//TOFIX
+	//	'func': (function(e){ e.reflect = {"melee":0,"range":0,"magic":0,"fire":0.5,"cold":0.5,"lightning":0.5}; return e; })},
 	'aoe':{'name':'Bigger AoE','chance':1,
 		'func': (function(e){ e.bonus.strike.size *= 2; e.bonus.strike.maxHit *= 2; return e; })},
 	'drop':{'name':'Better Drop','chance':1,

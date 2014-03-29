@@ -29,8 +29,8 @@ Draw.state.resource = function (s){ ctxrestore();
 	var array = [
 		{'name':'hp','height':20,'width':s.w},
 		{'name':'mana','height':10,'width':s.w},
-		//{'name':'heal','height':10,'width':s.w},
-		//{'name':'fury','height':10,'width':s.w},
+		// {'name':'heal','height':10,'width':s.w},
+		// {'name':'fury','height':10,'width':s.w},
 	];
 	
 	for(var i in array){
@@ -73,7 +73,8 @@ Draw.state.ability = function(s){ ctxrestore();
 		var charge = player.abilityChange.chargeClient[i];
 		
 		if(charge !== 1) ctx.globalAlpha = 0.5;
-		Draw.icon(ab.icon,[numX,numY],size);
+		var str = Input.key.ability[i][0].toString().keyCodeToName().keyFullName();
+		Draw.icon(ab.icon,[numX,numY],size,str + ': ' + ab.name);
 		ctx.globalAlpha = 1;
 		
 		if(charge !== 1){	//loading circle

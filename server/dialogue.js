@@ -53,6 +53,7 @@ Init.db.dialogue = function(){
 					
 					for(var m in node.option){
 						var next = node.option[m].next;
+						if(!next) continue;
 						next.group = next.group || i ;
 						next.npc = next.npc || ii ;
 						next.convo = next.convo || j ;

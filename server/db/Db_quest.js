@@ -3,6 +3,7 @@ Db.quest = {};
 var questList = [
 	'Qtutorial',
 	'QquestId',
+	'Qopenbeta2',
 ];
 
 if(Server.testing){

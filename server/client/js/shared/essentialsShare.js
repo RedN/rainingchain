@@ -330,7 +330,7 @@ String.prototype.replaceAll = function (find, replace) {
     var str = this;
     return str.replace(new RegExp(find, 'g'), replace);
 };
-String.prototype.keyCodeToName = function(){
+String.prototype.keyCodeToName = function(full){	//TOFIX fusion bothfunctions
 	var charCode = Number(this);
 	var boost = '';
 	
@@ -418,7 +418,7 @@ String.prototype.keyFullName = function(){
 	if(this == 'sl') return 'Shift-Left Click'; 
 	if(this == 'sr') return 'Shift-Right Click';
 	if(this == '_') return 'Space';
-	return "";
+	return this;
 }
 
 

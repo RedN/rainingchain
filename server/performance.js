@@ -14,7 +14,7 @@ Performance.cpu = function(){
         Performance.cpu.oldtime = d;
     }
 };
-Performance.cpu.active = false;
+Performance.cpu.active = true;
 Performance.cpu.oldtime = Date.now();
 Performance.cpu.frequence = 10*1000/40;
 

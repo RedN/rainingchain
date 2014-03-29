@@ -10,6 +10,7 @@ Actor.remove = function(act){
 
 //{Combat
 Actor.changeHp = function(act,amount){
+	amount *= Test.dmgMod[act.type] || 1;	//OPENBETA
     Actor.changeResource(act,{hp:amount});
 }
 
@@ -199,7 +200,6 @@ Actor.boost = function(act, boost){
 	if(b.time < 25){ b.spd = 'fast'; }
 	
 	act.boost[b.spd][b.stat + '@' + name] = b;
-	if(!act.boost.list[b.stat]) console.log(b,b.stat);
 	act.boost.list[b.stat].name[name] = b;
 	act.boost.toUpdate[b.stat] = 1;
 	
@@ -235,6 +235,7 @@ Actor.permBoost.stack = function(b){	//if boost same thing, add values
 
 //{Map Interaction	
 Actor.teleport = function(act,x,y,map){
+	if(typeof x === 'object'){ Actor.teleport(act,x.x,x.y,x.map); return; }
 	act = typeof act === 'string' ? List.all[act] : act;
 	LOG(2,act.id,'teleport',x,y,map);
 	

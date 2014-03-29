@@ -24,8 +24,8 @@ Init.db.anim = function(){
 		"magicBomb":{'frame':9},
 		"magicHit":{'frame':9},
 		
-		"fireBomb":{'frame':30,'size':2},
-		"fireBomb2":{'frame':6},
+		"fireBomb":{'frame':30},
+		"fireBomb2":{'frame':6,spd:0.4},
 		"fireHit":{'frame':12},
 		"coldBomb":{'frame':9,spd:0.4},
 		"coldHit":{'frame':16},
@@ -56,7 +56,7 @@ Init.db.anim = function(){
 		anim.layer = anim.layer || 'a';
 		anim.frameX = anim.frameX || Math.min(anim.frame,5);
 		anim.spd = anim.spd || 1;
-		anim.size = anim.size || 1;
+		anim.size = anim.size || 4;
 		anim.startY = anim.startY || 0;
 		anim.src = anim.src || 'img/anim/' + i + '.png';
 		

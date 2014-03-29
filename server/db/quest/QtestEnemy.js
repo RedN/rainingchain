@@ -25,10 +25,7 @@ q.func = {
 		act.abilityList = {'QtestEnemy-simple':1};
 		Actor.swapAbility(act,'QtestEnemy-simple',0);
 		
-		for(var i in List.main[key].invList.data){
-			var a = List.main[key].invList.data[i];
-			if(Db.equip[a[0]]) Itemlist.remove(key,a[0]);
-		}
+		Test.removeEquipInventory(key);
 		
 	}
 }

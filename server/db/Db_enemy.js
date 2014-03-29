@@ -210,8 +210,8 @@ Init.db.enemy = function(){
 			{'template':'magicBullet','aiChance':[1,1,1],'extra':{
 				'spd':0.1,'maxTimer':250,'stun,baseChance':1,'dmg,main':200,'objImg,name':'spore'
 			}},
-			{'template':'fireBomb','aiChance':[0.3,0.1,0.1],'extra':{
-				'maxRange':0,
+			{'template':'magicBullet','aiChance':[0.5,0.3,0.3],'extra':{
+				'stun,baseChance':0.5,'objImg,name':'spore','angle':360,'amount':5,
 			}},
 			[0.4,0.2,0.2]
 		],
@@ -619,7 +619,7 @@ Init.db.enemy = function(){
 			{'template':'fireNova','aiChance':[0,0.4,0.4],'extra':{}},
 			[0.5,0.5,0.5]
 		],
-		'reflect':{'fire':2},
+		//'reflect':{'fire':2},
 		'deathExp':1,
 		"mastery":{'def':{'melee':0.5,'range':0.5,'magic':0.5,'fire':2,'cold':0.5,'lightning':0.5},
 					'dmg':{'melee':1,'range':1,'magic':1,'fire':1,'cold':1,'lightning':1}},	
@@ -631,7 +631,7 @@ Init.db.enemy = function(){
 	
 	a["demon"] = {}; //{
 	a["demon"]["normal"] = {  //{
-		"name":"Demon.",
+		"name":"Demon",
 		"sprite":{'name':"demon",'sizeMod':1},
 		"abilityList":[
 			{'template':'fireNova','aiChance':[0,0.4,0.4],'extra':{}},
@@ -800,6 +800,7 @@ Init.db.enemy = function(){
 		"waypoint":1,
 		'nevercombat':1,
 		'nevermove':1,
+		"block":{condition:'true',pushable:0,size:[-1,1,-1,1]},
 	}; //}
 	a["system"]["chest"] = {  //{
 		"name":"Chest",
@@ -947,7 +948,6 @@ Init.db.enemy.creation.ability = function(e){
 		}	
 				
 		var a = deepClone(Db.ability[e.abilityList[i].template]);
-		if(!a) console.log(e.abilityList[i].template);
 		var extra = e.abilityList[i].extra;
 		if(extra.global)
 			a = useTemplate(a,a.action.param.global,1,1);

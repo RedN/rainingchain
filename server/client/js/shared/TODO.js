@@ -56,12 +56,22 @@ ENEMY:
 	
 	troll:
 
-
-
+SDK
+zone broken for region
+teel if layer not found in map	
+add lvl to map and graphics	
+I simlar to l in tileset
+	
+	
+	
+if map exclusive for quest, addon should still be questId cuz simplify if move to default
+	
 death clear status
 fix reflect
 add what curse active
 use attack template for other attack
+
+
 
 
 

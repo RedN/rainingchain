@@ -185,7 +185,7 @@ Init.db.sprite = function(){
     		"attack":{"startY":0,"frame":3,"sizeX":96,"sizeY":96,"dir":4,"spd":0.5,"next":"walk"},
     	}};
 		
-	a["taurus"] ={"src":"actor/taurus.png","size":2,"side":[2,0,1,3],"hpBar":-55,"legs":50,
+	a["taurus"] ={"src":"actor/taurus.png","size":1.5,"side":[2,0,1,3],"hpBar":-55,"legs":50,
     	"preHitBox":[ -60,60,-40,60 ],"preBumperBox":[ -60,60,-40,60 ],"anim": {
     		"walk":{"startY":0,"frame":3,"sizeX":96,"sizeY":96,"dir":4,"spd":0.5,"walk":1,"next":"walk"},
     		"attack":{"startY":0,"frame":3,"sizeX":96,"sizeY":96,"dir":4,"spd":0.5,"next":"walk"},
@@ -388,7 +388,6 @@ Sprite.change = function(act,info){
 }
 
 Sprite.updateBumper = function(player){		//server only
-	if(!Db.sprite[player.sprite.name]) console.log(player.sprite.name);
 	//Set the Sprite Bumper Box to fit the sizeMod
 	if(Db.sprite[player.sprite.name].hitBox){	//Attack Dont
 		player.hitBox = deepClone(Db.sprite[player.sprite.name].hitBox);
