@@ -23,13 +23,12 @@ Performance.cpu.frequence = 30*1000/40;
 Performance.bandwidth = function(type,data){
     if(Performance.bandwidth[type].active){
         Performance.bandwidth[type].size += Performance.bandwidth.getSize(data);
-		if(Performance.bandwidth[type].log) Performance.bandwidth[type].logString += stringify(data);
     }
 	
 }
 Performance.playerAmount = nodejitsu;
-Performance.bandwidth.upload = {'active':nodejitsu,log:nodejitsu,'size':0,logString:""};
-Performance.bandwidth.download = {'active':nodejitsu,log:nodejitsu,'size':0,logString:""};
+Performance.bandwidth.upload = {'active':nodejitsu,'size':0};
+Performance.bandwidth.download = {'active':nodejitsu,'size':0};
 Performance.bandwidth.frequence = 30*1000/40;
 Performance.bandwidth.getSize = function(obj){
     return stringify(obj).length * 2;   //in bytes

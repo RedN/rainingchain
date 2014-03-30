@@ -31,6 +31,8 @@ Actor.creation = function(data){
 	return e.id;
 }
 
+
+
 Actor.creation.group = function(gr,el){
    	/*
 	gr: x y map respawn

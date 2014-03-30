@@ -4,6 +4,7 @@ var questList = [
 	'Qtutorial',
 	'QquestId',
 	'Qopenbeta2',
+	'QtestEnemy',
 ];
 
 if(Server.testing){

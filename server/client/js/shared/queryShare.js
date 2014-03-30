@@ -249,7 +249,7 @@ if(server){
 		if(d && d.data){ 
 			try { 
 				ts.a = JSON.parse(d.data);
-				permConsoleLog(ts.a); } catch (err){ }	}
+				permConsoleLog(ts.a); } catch (err){ logError(err); }	}
 	});
 }
 

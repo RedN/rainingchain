@@ -1,4 +1,7 @@
 //####Update Actor####
+
+abilityUpdatePeriod = {enemy:1,player:1};
+
 Actor.loop = function(act){	
 	act.frameCount++;
 	if(act.frameCount % 25 === 0){ Actor.loop.activeList(act); }
@@ -14,7 +17,7 @@ Actor.loop = function(act){
 		if(act.boss){ 
 			for(var i in act.boss.loop) act.boss.loop[i](act.boss,act);    //custom boss loop
 		}
-		Actor.loop.ability(act);
+		if(act.frameCount % abilityUpdatePeriod[act.type] === 0) Actor.loop.ability(act);
 		Actor.loop.regen(act);    
 		Actor.loop.status(act);	
 		Actor.loop.boost(act);
@@ -46,31 +49,30 @@ Actor.loop = function(act){
 }
 
 //{Ability
-Actor.loop.ability = function(m){
+Actor.loop.ability = function(m){	//HOTSPOT
 	var alreadyBoosted = {};
 	m.abilityChange.chargeClient = [0,0,0,0,0,0];
 	
 	m.abilityChange.globalCooldown--;
 	m.abilityChange.globalCooldown = m.abilityChange.globalCooldown.mm(-100,250); 	//cuz if atkSpd is low, fuck everything
-	for(var i in m.ability){	
-		var s = m.ability[i]; if(!s || !s.period) continue;	//cuz can have hole if player AND enemy attack rate is are in m.ability
-		var id = s.id;
+	for(var i in m.ability){
+		var s = m.ability[i]; if(!s) continue;	//cuz can have hole if player AND enemy attack rate is are in m.ability
 		
 		var charge = m.abilityChange.charge;	//cant used [id] cuz otherwise not longer reference
-		var press = +m.abilityChange.press[i];
-		
+
 		//Charge
-		if(!alreadyBoosted[id]){  //this is because a player can set the same ability to multiple input
-			for(var j in s.spd)	charge[id] += m.atkSpd[j] * s.spd[j];
-			charge[id] = charge[id] || 0;	//cuz if null bug
-			alreadyBoosted[id] = 1;
+		if(!alreadyBoosted[s.id]){  //this is because a player can set the same ability to multiple input
+			charge[s.id] += m.atkSpd.main * s.spd.main * abilityUpdatePeriod[m.type];
+			charge[s.id] = charge[s.id] || 0;	//cuz if null bug
+			alreadyBoosted[s.id] = 1;
 		}
 		
 		//Client
-		m.abilityChange.chargeClient[i] = (charge[id] >= s.period.own) ? 1 : (charge[id] / s.period.own);
+		var rate = charge[s.id] / s.period.own;
+		m.abilityChange.chargeClient[i] = Math.min(rate,1);
 	
 		//Perform
-		if(press && charge[id] >= s.period.own && (s.period.bypassGlobalCooldown || m.abilityChange.globalCooldown <= 0)){
+		if(m.abilityChange.press[i] == '1' && rate >= 1 && (s.period.bypassGlobalCooldown || (m.abilityChange.globalCooldown <= 0))){
 			Actor.performAbility(m,s);
 			break;	//1 ability per frame max
 		}
@@ -280,7 +282,8 @@ Actor.loop.summon = function(act){
 //}
 
 //{Move
-Actor.loop.bumper = function(act){	//test collision with map
+Actor.loop.bumper = function(act){	//HOTSPOT
+	//test collision with map
 	//test global limit
 	act.x = Math.max(act.x,50);
 	act.x = Math.min(act.x,Db.map[Map.getModel(act.map)].grid.bullet[0].length*32-50);

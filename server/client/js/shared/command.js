@@ -504,7 +504,7 @@ Command.list['question'] = function(key){
 			Chat.add(key,'Invalid answer to server question.');
 			Chat.question(key,q);
 		} else List.main[key].question = null;
-	} catch(err){ }
+	} catch(err){ logError(err); }
 	
 	
 }

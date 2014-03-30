@@ -8,7 +8,14 @@ pvp too much dmg
 reset pvp = bad
 
 
+ts("for(var i = 0; i < 100; i++){ Test.spawnEnemy(key,['larva','normal']); }")
 
+ts("for(var i = 0; i < Test.spawnEnemy(key,['bat','normal']);")
+
+ts("for(var i in List.actor) List.actor[i].hp = Math.random()-0.98;")
+
+
+ts('Actor.creation.group({x:0,y:0,map:"goblinLand@MAIN",respawn:10},[{"amount":100,"category":"dragon","variant":"king","lvl":0,"modAmount":1}]);');
 
 */
 

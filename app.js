@@ -1,6 +1,11 @@
 //git commit -am "your message goes here"
 //git push -u origin master
 
+require('nodetime').profile({
+	accountKey: '7a06997db310e13bef9840cd1d8cfc1ea45fcc57', 
+	appName: 'Node.js Application'
+});
+
 require('domain').create().on('error', function(err){ permConsoleLog(err);});
 
 
