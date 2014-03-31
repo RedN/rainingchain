@@ -1,20 +1,59 @@
 
+/*
+Init.socket = function(socket){
+	socket.lastEmit = {
+	
+	
+	
+	
+	}
+}
+*/
+
+Server.handleSocket = function(name,socket,d){
+	if(Db.socket[name])
+		Db.socket[name].func(socket,d);
+
+
+}
+
+Db.socket = {
+	'signUp':{
+		minInterval:10,
+		func:function(socket,d){
+			if(Server.ready) Sign.up(socket,d); 
+		},
+	},
+	'signIn':{
+		minInterval:10,
+		func:function(socket,d){
+			if(Server.ready) Sign.in(socket,d); 
+		},
+	},
+	'clientReady':{
+		minInterval:10,
+		func:function(socket,d){
+			if(!List.socket[socket.key]) return;
+			List.socket[socket.key].clientReady = 1; 
+		},
+	},
+	'disconnect':{
+		minInterval:10,
+		func:function(socket,d){
+			socket.toRemove = 1;
+		},
+	},
+	
+}
+
+
+
 io.sockets.on('connection', function (socket) {
-	socket.on('signUp', function (d) { 
-		if(Server.ready) Sign.up(socket,d); 
-	});
-	socket.on('signIn', function (d) { 
-		if(Server.ready) Sign.in(socket,d); 
-	});
-	socket.on('clientReady', function (d) { 
-		if(!List.socket[socket.key]) return;
-		List.socket[socket.key].clientReady = 1; 
-	});
-
-    socket.on('disconnect', function (d) {
-		socket.toRemove = 1;
-    });
-
+	//Init.socket(socket);
+	socket.on('signUp', function (d) { Server.handleSocket('signUp',socket,d);});
+	socket.on('signIn', function (d) { Server.handleSocket('signIn',socket,d);});
+	socket.on('clientReady', function (d) { Server.handleSocket('clientReady',socket,d);});
+    socket.on('disconnect', function (d) { Server.handleSocket('disconnect',socket,d);});
 });
 
 Sign = {};
@@ -85,12 +124,8 @@ Sign.up.create = function(user,pass,email,salt,socket){
 		});
     });
 }
-         
+         	
 			
-
-
-		
-//could be improved
 Sign.in = function(socket,d){
 	var user = escape.quote(d.username);
 	var pass = escape.quote(d.password);
@@ -104,7 +139,7 @@ Sign.in = function(socket,d){
 	db.findOne('account',{username:user},function(err, account) { if(err) throw err;	
 		if(!account){ socket.emit('signIn', { 'success':0,'message':'<font color="red">Wrong Password or Username.</font>' }); return }
 		if(account.online) {	socket.emit('signIn', { 'success':0, 'message':'<font color="red">This account is already online.</font>' }); return; }
-		
+		if(account.banned) {	socket.emit('signIn', { 'success':0, 'message':'<font color="red">This account is banned.</font>' }); return; }
 		crypto.pbkdf2(pass,account.salt,1000,64,function(err,pass){
 			pass = new Buffer(pass, 'binary').toString('base64');
 		

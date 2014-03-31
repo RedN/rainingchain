@@ -3,7 +3,10 @@ Draw.old = {'fl':'','quest':'','abilityShowed':'bulletMulti','abilityTypeShowed'
 
 Draw.loop = function (){
 	//Clear
-	for(var i in List.ctx){List.ctx[i].clearRect(0, 0, Cst.WIDTH, Cst.HEIGHT);}
+	for(var i in List.ctx){
+		//if(i === 'minimap') continue;
+		List.ctx[i].clearRect(0, 0, Cst.WIDTH, Cst.HEIGHT);
+	}
 	for(var i in html){ 
 		if(i === 'warning') continue;
 		//if(i === 'command') continue;
@@ -46,30 +49,42 @@ Draw.loop = function (){
 }
 
 Draw.map = function (layer){ ctxrestore();
-	var SIZEFACT = 2;	//image is x2 smaller than ingame
+	var SIZEFACT = Draw.map.cst.sizeFact;	
 
 	ctx = List.ctx.stage;
 	var map = Db.map[player.map];
-	var mapX = Math.floor((player.x-1024)/2048).mm(0,map.img[layer].length-1);
-	var mapY = Math.floor((player.y-1024)/2048).mm(0,map.img[layer][mapX].length-1);
-	var mapXY = map.img[layer][mapX][mapY];
-	var pX = player.x-mapX*2048;
-	var pY = player.y-mapY*2048;
 	
-	var numX = (pX - Cst.WIDTH/2)/SIZEFACT ;
-	var numY = (pY - Cst.HEIGHT/2)/SIZEFACT ;
-	var longueur = Cst.WIDTH/2;
-	var hauteur = Cst.HEIGHT/2;
-	var diffX = numX + longueur - mapXY.width;
-	var diffY = numY + hauteur - mapXY.height;
-	var startX = Math.max(numX,0);
-	var startY = Math.max(numY,0);
-	var endX = Math.min(numX + longueur,mapXY.width)
-	var endY = Math.min(numY + hauteur,mapXY.height)
-	var tailleX = Math.min(endX-startX,mapXY.width);
-	var tailleY = Math.min(endY-startY,mapXY.height);
+	var IMAGERATIO = Draw.map.cst.imageRatio;
+	var iw = Cst.WIDTH / IMAGERATIO;
+	var ih = Cst.HEIGHT / IMAGERATIO;
+	var mapAmount = IMAGERATIO/2+1;		//ex: ratio=4 => 2x2 maps makes whole screen => 3x3 to see everything if player is middle
 	
-	ctx.drawImage(mapXY, startX,startY,tailleX,tailleY,(startX-numX)*SIZEFACT,(startY-numY)*SIZEFACT,tailleX*SIZEFACT,tailleY*SIZEFACT);	
+	var startX = (player.x-Cst.WIDTH/2)/SIZEFACT;		//top right of screen in map ratio
+	var startY = (player.y-Cst.HEIGHT/2)/SIZEFACT;
+	
+	var offsetX = -(startX % iw);				//offset where we need to draw first map
+	var offsetY = -(startY % ih);
+	
+	if(startX < 0) offsetX -= iw;		//if negative, fucks the modulo
+	if(startY < 0) offsetY -= ih;
+	
+	for(var i = 0; i < mapAmount; i++){
+		for(var j = 0; j < mapAmount; j++){
+			var mapX = Math.floor(startX/iw) + i;
+			var mapY = Math.floor(startY/ih) + j;
+			if(!map.img[layer][mapX] || !map.img[layer][mapX][mapY]) continue;
+			var mapXY = map.img[layer][mapX][mapY];
+			
+			//problem is map not whole
+			ctx.drawImage(mapXY, 0,0,iw,ih,(offsetX + iw*i)*SIZEFACT ,(offsetY + ih*j)*SIZEFACT,iw*SIZEFACT,ih*SIZEFACT);
+		}
+	}
+	
+}
+
+Draw.map.cst = {
+	sizeFact:2,		//enlarge the map image by this factor
+	imageRatio:2  	//basically 1280 / size of 1 image
 }
 
 Draw.screenEffect = function(fx){
@@ -96,8 +111,6 @@ Draw.logout = function(){
 		'text':"Shift-Left Click to safely leave the game.",
 	});	
 	
-	
-	return; //OPENBETA
 	//contact me
 	Draw.icon('system.close',[Cst.WIDTH-size*2,0],size);
 	Button.creation(0,{

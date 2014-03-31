@@ -25,15 +25,12 @@
 	
 SDK
 fall 
-	
+curtscene
+
 error fire demon	
 	
 	
 	
-if map exclusive for quest, addon should still be questId cuz simplify if move to default
-
-multiple account with same name if click fast
-
 
 
 death clear status
@@ -105,6 +102,11 @@ add ctrl+v
 talking to npc, stop talking and facing
 Crafting System with White
 waypoint window
+
+
+multiple account with same name if click fast
+ddos track
+
 
 
 

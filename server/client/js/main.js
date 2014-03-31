@@ -95,10 +95,15 @@ Init.game = function (data) {
 	
 	//Add Canvas. param2 = z-index
 	Init.game.addCanvas('stage','stage',-10);
+	$("#stage").css({"border":'1px solid #000000'});
+	
 	Init.game.addCanvas('win','windowCanvas',10);
 	Init.game.addCanvas('passiveGrid','passiveGridCanvas',11);
 	Init.game.addCanvas('pop','popCanvas',30);
+	
 	Init.game.addCanvas('minimap','minimapCanvas',-9);
+	$("#minimapCanvas").css({"border":'4px solid #000000',"background":'#000000','top':'0px'});
+	Draw.minimap.map.updateSize();
 	
 	html.chat.text.innerHTML = 'Welcome!';
 	html.pm.text.innerHTML = '<br>'
@@ -147,9 +152,10 @@ Init.game.addCanvas = function(name,id,z){
 	//To add a canvas to the game
 	var cv = document.createElement("canvas");
 	cv.id = id;
-	cv.width = Cst.WIDTH;
-	cv.height = Cst.HEIGHT;
-	if(id === 'stage') cv.style.border = '1px solid #000000';
+	var fact = (name === 'minimap') ? main.pref.mapRatio : 1;
+	console.log(fact);
+	cv.width = Cst.WIDTH / fact;
+	cv.height = Cst.HEIGHT / fact;
 	cv.style.position = 'absolute';
 	cv.style.left = '0px';
 	cv.style.top = '0px';
@@ -166,6 +172,7 @@ Init.game.addCanvas = function(name,id,z){
 	List.ctx[name].fillStyle = 'black';
 	List.ctx[name].textAlign = 'left';
 	List.ctx[name].textBaseline = 'top';
+	List.ctx[name].canvas = cv;
 	List.ctx[name].save();
 }
 

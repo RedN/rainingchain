@@ -10,8 +10,7 @@ Actor.remove = function(act){
 
 //{Combat
 Actor.changeHp = function(act,amount){
-	amount *= Test.dmgMod[act.type] || 1;	//OPENBETA
-    Actor.changeResource(act,{hp:amount});
+	Actor.changeResource(act,{hp:amount});
 }
 
 Actor.changeResource = function(act,heal){
@@ -160,15 +159,16 @@ Actor.update.permBoost = function(act){
 Actor.update.boost = function(act,stat){
 	if(stat === 'all'){ for(var i in act.boost.list) Actor.update.boost(act,i); return; }
 	
-	
 	var stat = act.boost.list[stat];
-	viaArray.set({'origin':act,'array':stat.stat,'value':stat.base});
+	var sum = stat.base;
+	
 	for(var i in stat.name){
 		var boost = stat.name[i];
-				
-		if(boost.type === '+'){	viaArray.add({'origin':act,'array':stat.stat,'value':boost.value}); }
-		else if(boost.type === '*'){	viaArray.add({'origin':act,'array':stat.stat,'value':(boost.value-1)*stat.base}); }
+		if(boost.type === '+') sum += boost.value;
+		else if(boost.type === '*'){	sum += (boost.value-1)*stat.base; }
 	}
+	
+	viaArray.set({'origin':act,'array':stat.stat,'value':sum});
 }
 
 Actor.boost = function(act, boost){
@@ -205,8 +205,21 @@ Actor.boost = function(act, boost){
 	
 }
 
+Actor.boost.remove = function(act, boost){
+	var stat = boost.stat;
+	delete act.boost.list[stat].name[boost.name]
+	delete boost; 
+	Actor.update.boost(act,stat);
+}
+Actor.boost.removeByName = function(act, name){	//TOFIX
+	var a = name.split("@");
+	var b = act.boost.list[a[0]];
+	if(!b) return;
+	b.name[a[1]];
+}
+
 Actor.permBoost = function(act,source,boost){
-	//remove permBoost with boost undefined
+	//remove permBoost if boost undefined
 	if(boost){
 		act.permBoost[source] = arrayfy(boost);
 	} else { delete act.permBoost[source]; }

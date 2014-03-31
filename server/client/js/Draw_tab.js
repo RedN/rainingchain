@@ -467,7 +467,6 @@ Draw.tab.pref = function(){
 			var str2 = '$pref,' + i + ',';
 			var str = pref.description + ' (' + pref.min + '-' + pref.max + ')';
 			
-			//'mapZoom':{'default':200,'type':'number','min':1,'max':999,'round':1,'description':'Minimap Zoom'},
 			
 			hf.text.innerHTML += 
 			'<br><span ' + 

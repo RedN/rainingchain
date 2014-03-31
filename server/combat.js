@@ -188,7 +188,7 @@ Combat.collision.status.stun = function(act,b){
 	
 	Actor.boost(act,[
 		{'stat':'maxSpd','type':"*",'value':0,'time':stun.active.time,'name':'stun'},
-		{'stat':'atkSpd-main','type':"*",'value':0,'time':stun.active.time,'name':'stun'}
+		{'stat':'atkSpd-main','type':"*",'value':0.1,'time':stun.active.time,'name':'stun'}
 	]); 
 	
 	for(var i in act.abilityChange.charge)
@@ -228,20 +228,32 @@ Combat.collision.status.drain = function(act,b){
 	var info = b.drain;
 	var drain = act.status.drain;
 	
-	var player = List.all[b.parent]; if(!player) return;
+	var atker = List.all[b.parent]; if(!atker) return;
 	
 	
 	drain.active.time = info.time*(1-drain.resist); 
 	drain.active.magn = info.magn*(1-drain.resist);	
 
-	Actor.changeResource(player,{mana:drain.active.magn});
-	Actor.boost(act,{'stat':'mana-max','type':"+",'value':-drain.active.magn,'time':drain.active.time,'name':'drain'}); 
-	Actor.boost(player,{'stat':'mana-max','type':"+",'value':drain.active.magn,'time':drain.active.time,'name':'drain'}); 
+	Actor.changeResource(atker,{mana:drain.active.magn});
+	Actor.boost(act,{'stat':'mana-max','type':"+",'value':-drain.active.magn,'time':drain.active.time,'name':'drainBad'}); 
+	Actor.boost(atker,{'stat':'mana-max','type':"+",'value':drain.active.magn,'time':drain.active.time,'name':'drainGood'}); 
 
-	player.mana = player.resource.mana.max;
+	atker.mana = atker.resource.mana.max;
 	act.mana = 0;
 }
 
+//Clear Status
+/*
+Combat.clearStatus = {};
+Combat.clearStatus.burn = function(act){ act.status.burn.time = 0; } 
+Combat.clearStatus.burn = function(act){ act.status.stun.time = 0;
+Actor.boost(act,[		stun,maxSpd,atkSpd-main
+		{'stat':'maxSpd','type':"*",'value':1,'time':stun.active.time,'name':'stun'},
+		{'stat':'atkSpd-main','type':"*",'value':0,'time':stun.active.time,'name':'stun'}
+	]);
+
+ } 
+*/
 
 //Apply Mods
 Combat.collision.curse = function(act,info){

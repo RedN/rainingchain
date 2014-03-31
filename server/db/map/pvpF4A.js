@@ -37,7 +37,7 @@ a.playerEnter = function(key,map,spot,v,m){
 	
 	
 	
-	//Test.pvpAbility(key);	//OPENBETA
+	Test.pvpAbility(key);
 	
 
 	//ts("Actor.permBoost(act,'pvp',[{stat:'bullet-spd',value:1,type:'+'},{stat:'globalDmg',value:0.08,type:'*'},]);");		

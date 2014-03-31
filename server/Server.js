@@ -95,8 +95,16 @@ Server.mute = function(name){
 
 
 
-
-
+/*
+Server.ban = function(name){
+	for(var i in List.main){
+		if(List.all[i].name === name)
+		
+		
+		
+	}
+}
+*/
 
 
 

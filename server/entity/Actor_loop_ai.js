@@ -160,8 +160,6 @@ Actor.setCutscene = function(act, direction, spd, cb){
 }
 
 Actor.loop.setTarget.stuck = function(act){
-	return; //OPENBETA
-
 	var maintar = List.all[act.target.main];
 	if(!maintar) return;
 	

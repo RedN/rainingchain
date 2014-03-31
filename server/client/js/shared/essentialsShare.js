@@ -41,8 +41,6 @@ LOG.level = 2;
 
 
 DEBUG = function(lvl,message){
-	console.log("error");	//OPENBETA
-	return;
 	/*
 	0:CRASH
 	1:ERR

@@ -666,6 +666,7 @@ Command.list['pref'] = function(name,value){
 		return;
 	}
 	
+	
 	if(main.pref[name] === undefined){ Chat.add('Invalid name.'); return; }
 	value = Command.pref.verify(name,value);
 	if(value === 'Invalid value.'){ Chat.add('Invalid value.'); return; }
@@ -673,7 +674,9 @@ Command.list['pref'] = function(name,value){
 	main.pref[name] = value;
 	if(Command.pref.list[name].func) Command.pref.list[name].func(value);
 	Chat.add('Preferences Changed.');
-	localStorage.setItem('pref',JSON.stringify(main.pref))
+	localStorage.setItem('pref',JSON.stringify(main.pref));
+	
+	if(name === 'mapRatio') Draw.minimap.map.updateSize();
 }
 Command.list['pref'].doc = {
 	'description':"Change a Preference.",
@@ -710,8 +713,7 @@ Command.pref.list = {
 	'volumeSong':{name:'Volume Song',initValue:20,min:0,max:100,description:'Volume Song.','func':function(value){ Song.beingPlayed.volume = value/100 * main.pref.volumeMaster/100; }},
 	'volumeSfx':{name:'Volume Effects',initValue:100,min:0,max:100,description:'Volume Sound Effects.'},
 	'volumeMaster':{name:'Volume Master',initValue:100,min:0,max:100,description:'Volume Master. 0:Mute','func':function(value){ Song.beingPlayed.volume = value/100 * main.pref.volumeSong/100; }},
-	'mapZoom':{name:'Map Zoom',initValue:200,min:1,max:999,description:'Minimap Zoom'},
-	'mapRatio':{name:'Map Ratio',initValue:5,min:2,max:10,description:'Minimap Size'},
+	'mapRatio':{name:'Map Ratio',initValue:6,min:2,max:10,description:'Minimap Size'},
 	'bankTransferAmount':{name:'X- Bank',initValue:1000,min:1,max:9999999999,description:'Amount of items transfered with Shift + Left Click'},
 	'orbAmount':{name:'X- Orb',initValue:1000,min:1,max:9999999999,description:'Amount of orbs used with X- option'},
 	'passiveView':{name:'Passive View',initValue:0,min:0,max:1,description:'Impact Passive Colors. 0:Access. 1:Popularity'},

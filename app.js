@@ -1,16 +1,17 @@
 //git commit -am "your message goes here"
 //git push -u origin master
+cloud9 = typeof process.env.PORT !== 'undefined';
+nodejitsu = typeof process.env.NODEJITSU !== 'undefined';
 
-require('nodetime').profile({
-	accountKey: '7a06997db310e13bef9840cd1d8cfc1ea45fcc57', 
-	appName: 'Node.js Application'
-});
-
+if(nodejitsu){
+	require('nodetime').profile({
+		accountKey: '7a06997db310e13bef9840cd1d8cfc1ea45fcc57', 
+		appName: 'Node.js Application'
+	});
+}
 require('domain').create().on('error', function(err){ permConsoleLog(err);});
 
 
-cloud9 = typeof process.env.PORT !== 'undefined';
-nodejitsu = typeof process.env.NODEJITSU !== 'undefined';
 
 //Create Server
 var http = require('http');

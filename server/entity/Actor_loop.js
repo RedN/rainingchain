@@ -231,16 +231,13 @@ Actor.loop.regen = function(act){
 Actor.loop.boost = function(act,full){
 	var array = {'fast':1,'reg':5,'slow':25};
 	for(var j in array){
-		if(Loop.frameCount % array[j] === 0){
-			for(var i in act.boost[j]){
-				if(act.boost[j][i].timer < 0){ 
-					var stat = act.boost[j][i].stat;
-					delete act.boost.list[stat].name[act.boost[j][i].name]
-					delete act.boost[j][i]; 
-					Actor.update.boost(act,stat);
-				} else {
-					act.boost[j][i].timer -= array[j];
-				}
+		if(!Loop.interval(array[j])) continue;
+		
+		for(var i in act.boost[j]){
+			if(act.boost[j][i].timer < 0){ 
+				Actor.boost.remove(act,act.boost[j][i]);
+			} else {
+				act.boost[j][i].timer -= array[j];
 			}
 		}
 	}

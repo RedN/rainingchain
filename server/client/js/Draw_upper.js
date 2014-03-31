@@ -125,76 +125,124 @@ Draw.pvpScore = function(s){
 //{Minimap
 Draw.minimap = function (){ ctxrestore();
 	ctx = List.ctx.minimap;
-	var s = Draw.minimap.constant();
-	Draw.minimap.box(s);
-	Draw.minimap.map(s,'b');
-	Draw.minimap.button(s);
+	Draw.minimap.map();
+	
 }
 
-Draw.minimap.constant = function(){
-	return {
-		x:Cst.WIDTH - Cst.WIDTH/main.pref.mapRatio,
-		y:0,
-		w:Cst.WIDTH/main.pref.mapRatio,
-		h:Cst.HEIGHT/main.pref.mapRatio,
-	}
-}
-
-Draw.minimap.map = function(s,layer){	//bugged
+	
+Draw.minimap.map = function(){
+	var x = -(player.x)/16 + Cst.WIDTH2/main.pref.mapRatio;	
+	var y = -(player.y)/16 + Cst.HEIGHT2/main.pref.mapRatio;	
+	var im = Db.map[player.map].img.m;
+	
+	List.ctx.minimap.drawImage(Db.map[player.map].img.m, x,y);
+	List.ctx.minimap.fillRect(1280/2/main.pref.mapRatio-2,720/2/main.pref.mapRatio-2,4,4);
+	return;
+	
+	/* WORKING better!!!! 
+	var zoom = main.pref.mapZoom/100;
+	var SIZEFACT = Draw.map.cst.sizeFact / zoom;		//2 => tree appear x2 bigger ingame than on the image
+	
 	var map = Db.map[player.map];
-	var mapX = Math.floor((player.x-1024)/2048).mm(0,map.img[layer].length-1);
-	mapX = mapX.mm(0,map.img[layer].length-1);
-	if(!map.img[layer][mapX])	return;
-	var mapY = Math.floor((player.y-1024)/2048).mm(0,map.img[layer][0].length-1);
-	var mapXY = map.img[layer][mapX][mapY];
-	var pX = player.x-mapX*2048;
-	var pY = player.y-mapY*2048;
-		
-	var mapZoomFact = main.pref.mapZoom/100;
-	var mapCst = main.pref.mapRatio*mapZoomFact;
 	
-	var numX = (pX - Cst.WIDTH/2 * mapZoomFact)/2;
-	var numY = (pY - Cst.HEIGHT/2 * mapZoomFact)/2;
-	var longueur = Cst.WIDTH* mapZoomFact/2;
-	var hauteur = Cst.HEIGHT* mapZoomFact/2;
-	var startX = Math.max(numX,0);
-	var startY = Math.max(numY,0);
-	var endX = Math.min(numX + longueur,mapXY.width)
-	var endY = Math.min(numY + hauteur,mapXY.height)
-	var tailleX = Math.min(endX-startX,mapXY.width);
-	var tailleY = Math.min(endY-startY,mapXY.height);
+	var IMAGERATIO = Draw.map.cst.imageRatio;
+	var imageWidth = Cst.WIDTH / IMAGERATIO;
+	var imageHeight = Cst.HEIGHT / IMAGERATIO;
+	var mapAmount = 10;
 	
-	if(layer === 'i') ctx.globalAlpha = main.pref.mapIconAlpha/100;
-	ctx.drawImage(mapXY, startX,startY,tailleX,tailleY,s.x+(startX-numX)/mapCst*2,s.y + (startY-numY)/mapCst*2,tailleX/mapCst*2,tailleY/mapCst*2);
-	ctx.globalAlpha = 1;
+	var startX = (player.x-Cst.WIDTH/2*zoom)/Draw.map.cst.sizeFact;		//top right of screen in map ratio
+	var startY = (player.y-Cst.HEIGHT/2*zoom)/Draw.map.cst.sizeFact;
+	
+	var offsetX = -(startX % imageWidth);				//offset where we need to draw first map
+	var offsetY = -(startY % imageHeight);
+	
+	if(startX < 0) offsetX -= imageWidth;		//if negative, fucks the modulo
+	if(startY < 0) offsetY -= imageHeight;
+			
+	for(var i = 0; i < mapAmount; i++){
+		for(var j = 0; j < mapAmount; j++){
+			var mapX = Math.floor(startX/320) + i;
+			var mapY = Math.floor(startY/180) + j;
+			if(!map.img[layer][mapX] || !map.img[layer][mapX][mapY]) continue;
+			var mapXY = map.img[layer][mapX][mapY];
+			
+			ctx.drawImage(mapXY, 
+				0,
+				0,
+				320,
+				180,
+				(offsetX + 320*i)*SIZEFACT/main.pref.mapRatio,
+				(offsetY + 180*j)*SIZEFACT/main.pref.mapRatio,
+				320*SIZEFACT/main.pref.mapRatio,
+				180*SIZEFACT/main.pref.mapRatio
+			);
+		}
+	}
+	ctx.fillRect(1280/2-50, 720/2-50, 100, 100);
+	*/
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	/* WORKING basic!!!!
+	return;
+	var zoom = main.pref.mapZoom/100;
+	var SIZEFACT = Draw.map.cst.sizeFact / zoom;		//2 => tree appear x2 bigger ingame than on the image
+	
+	var map = Db.map[player.map];
+	
+	var IMAGERATIO = Draw.map.cst.imageRatio;
+	var imageWidth = Cst.WIDTH / IMAGERATIO;
+	var imageHeight = Cst.HEIGHT / IMAGERATIO;
+	var mapAmount = 10;
+	
+	var startX = (player.x-Cst.WIDTH/2*zoom)/Draw.map.cst.sizeFact;		//top right of screen in map ratio
+	var startY = (player.y-Cst.HEIGHT/2*zoom)/Draw.map.cst.sizeFact;
+	
+	var offsetX = -(startX % imageWidth);				//offset where we need to draw first map
+	var offsetY = -(startY % imageHeight);
+	
+	if(startX < 0) offsetX -= imageWidth;		//if negative, fucks the modulo
+	if(startY < 0) offsetY -= imageHeight;
+	
+	if(SHOW) console.log(startX,startY);
+			
+	for(var i = 0; i < mapAmount; i++){
+		for(var j = 0; j < mapAmount; j++){
+			var mapX = Math.floor(startX/320) + i;
+			var mapY = Math.floor(startY/180) + j;
+			if(!map.img[layer][mapX] || !map.img[layer][mapX][mapY]) continue;
+			var mapXY = map.img[layer][mapX][mapY];
+			
+			ctx.drawImage(mapXY, 0,0,320,180,(offsetX + 320*i)*SIZEFACT ,(offsetY + 180*j)*SIZEFACT,320*SIZEFACT,180*SIZEFACT);
+		}
+	}
+	ctx.fillRect(1280/2-50, 720/2-50, 100, 100);
+	 */
 }
 
-Draw.minimap.box = function(s){
-	ctx.fillStyle = "black";
-	ctx.lineWidth = 4;
-	ctx.fillRect(s.x,s.y,Cst.WIDTH/main.pref.mapRatio,Cst.HEIGHT/main.pref.mapRatio);
-	ctx.strokeRect(s.x,s.y,Cst.WIDTH/main.pref.mapRatio,Cst.HEIGHT/main.pref.mapRatio);
-	ctx.lineWidth = 1;
-}
-
-Draw.minimap.button = function(s){
-	var disX = 50;
-	var disY = 22;
-	var numX = s.x+s.w-disX;
-	var numY = s.y+s.h-disY;
-	ctx.fillRect(numX,numY,disX,disY);
-	ctx.fillStyle = "white";
-	ctx.fillText(main.pref.mapZoom + '%',numX,numY);
+Draw.minimap.map.updateSize = function(){
+	$("#minimapCanvas").css({
+		left:Cst.WIDTH-Cst.WIDTH/main.pref.mapRatio,
+		width:Cst.WIDTH/main.pref.mapRatio,
+		height:Cst.HEIGHT/main.pref.mapRatio,
+	});
+	$("#minimapCanvas")[0].width = Cst.WIDTH/main.pref.mapRatio;
+	$("#minimapCanvas")[0].height = Cst.HEIGHT/main.pref.mapRatio;
 	
-	//client button
-	Button.creation(0,{
-		"rect":[numX,numX+disX,numY,numY+disY],
-		"left":{"func":(function(){ Input.add('$pref,mapZoom,'); }),"param":[]},
-		"text":'Change Map Zoom.'
-		});	
 }
 
-Draw.minimap.icon = function(s){	//creates lag? bug NEEDWORK
+Draw.minimap.icon = function(s){	//creates lag? TOFIX
 	return;
 	var zoom = main.pref.mapZoom/100;
 	var ratio = main.pref.mapRatio;
