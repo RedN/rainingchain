@@ -22,7 +22,6 @@ List = {
 	map:{},		//all maps
 };
 
-
 Init.timer = function(){
 	var nextDailyUpdate = new Date((new Date().toLocaleDateString())).getTime() + 86400000 - 60000;	
 	var daysTilNextWeekUpdate = (11-new Date(nextDailyUpdate).getDay())%7;

@@ -326,7 +326,6 @@ Draw.chat.dialogue = function(){
 			'<font size="4"> -' + dia.option[i].text + '</font>' +
 			'</span>';
 	}
-	if(Math.random()<0.01) console.log(str);
 	Draw.setInnerHTML(html.dialogue.text,str);
 }
 

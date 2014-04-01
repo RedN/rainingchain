@@ -564,6 +564,25 @@ Object.defineProperty(Object.prototype, "randomAttribute", {	//return random att
 	}
 });	
 	
+Object.defineProperty(Object.prototype, "$count", {
+    enumerable: false,
+    value: function(){
+		var count = 0;
+		for(var i in this) if(this[i]) count++;
+		return count;
+	}
+});	
+
+Object.defineProperty(Object.prototype, "$sum", {
+    enumerable: false,
+    value: function(){
+		var count = 0;
+		for(var i in this) count += this[i];
+		return count;
+	}
+});	
+	
+	
 convertRatio = function(ratio){
 	var sum = 0;
 	for(var i in ratio) sum += ratio[i];

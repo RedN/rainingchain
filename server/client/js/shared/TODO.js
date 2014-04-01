@@ -1,40 +1,20 @@
 
-	enemy that boost = boost atkspd
-	enemy reflect
-	
-	aquanite:		
-	aquagoblin:		
-	basilisk: 		
-	draco: 		
-		
-	dragon:		
-	dragonBaby:		
-	goddessFire:	knockback, big regen
-	goddessIce:
-	scorpion: 
-	birdBlue:
-	snake:		
-	werewolf:
-	
-	
-	troll:
 
 	
-	
-	
-	
-SDK
-fall 
-cutscene
-
 handle anim bad
 
-dialogue face
-add main.quest to dialogue 2nd param
+	
+	
+###SDK###
+fall 
+cutscene
+sdk quest tester param
+end dialogue
+###
 
 quest variable setter
 
-
+dialogue face
 
 death clear status
 fix reflect
@@ -61,9 +41,6 @@ plan revamp: already know what min and max mods are
 
 
 custom look
-
-
-
 
 
 
@@ -114,7 +91,7 @@ ddos track
 
 
 
-
+#####################################
 Contribution Rewards:
 
 Custom Character Design:
@@ -144,9 +121,31 @@ Possible broadcast: Level-up, Quest complete, Item Found,
 
 
 
+#####################################
 
 
 
+
+
+	enemy that boost = boost atkspd
+	enemy reflect
+	
+	aquanite:		
+	aquagoblin:		
+	basilisk: 		
+	draco: 		
+		
+	dragon:		
+	dragonBaby:		
+	goddessFire:	knockback, big regen
+	goddessIce:
+	scorpion: 
+	birdBlue:
+	snake:		
+	werewolf:
+	
+	
+	troll:
 
 
 

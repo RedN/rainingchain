@@ -46,8 +46,6 @@ Db.socket = {
 	
 }
 
-
-
 io.sockets.on('connection', function (socket) {
 	//Init.socket(socket);
 	socket.on('signUp', function (d) { Server.handleSocket('signUp',socket,d);});
@@ -55,6 +53,7 @@ io.sockets.on('connection', function (socket) {
 	socket.on('clientReady', function (d) { Server.handleSocket('clientReady',socket,d);});
     socket.on('disconnect', function (d) { Server.handleSocket('disconnect',socket,d);});
 });
+
 
 Sign = {};
 Sign.up = function(socket,d){

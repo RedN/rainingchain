@@ -105,7 +105,7 @@ Button.reset = function(key){
 		var m = List.main[key];
 		
 		if(m.optionList){
-			if(m.optionList.count <= 0){ optionList = null; } 
+			if(m.optionList.count <= 0){ m.optionList = null; } 
 			else {	m.optionList.count--; }
 		}
 		

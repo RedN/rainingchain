@@ -119,9 +119,10 @@ Quest.createVariableTester = function(q){
 }
 
 
-Quest.template = function(){
+Quest.template = function(id,version){
 	return {
-		id:Math.random(),
+		id:id || Math.random(),
+		version: version || 'v1.0',
 		name:'Default Quest',
 		icon:'skill.melee',
 		reward:{
@@ -165,9 +166,12 @@ Quest.template.variable = function(){
 	};
 }
 
+Quest.getActor = function(key){ return List.all[key]; }
+Quest.getMain = function(key,quest){return List.main[key].quest[quest];}
 
-
-
-
+require('fs').readFile('../rainingchain/server/db/Db_quest_eval.js', 'utf8', function (err,data) {
+	if (err) {   logError("FILE NOT FOUND CUZ FUKING PATH " + err); }
+	Quest.template.eval = function(){ return data; }
+});
 
 
