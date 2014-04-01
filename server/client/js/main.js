@@ -153,7 +153,6 @@ Init.game.addCanvas = function(name,id,z){
 	var cv = document.createElement("canvas");
 	cv.id = id;
 	var fact = (name === 'minimap') ? main.pref.mapRatio : 1;
-	console.log(fact);
 	cv.width = Cst.WIDTH / fact;
 	cv.height = Cst.HEIGHT / fact;
 	cv.style.position = 'absolute';

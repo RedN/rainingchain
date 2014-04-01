@@ -214,8 +214,6 @@ Draw.minimap.map = function(){
 	
 	if(startX < 0) offsetX -= imageWidth;		//if negative, fucks the modulo
 	if(startY < 0) offsetY -= imageHeight;
-	
-	if(SHOW) console.log(startX,startY);
 			
 	for(var i = 0; i < mapAmount; i++){
 		for(var j = 0; j < mapAmount; j++){

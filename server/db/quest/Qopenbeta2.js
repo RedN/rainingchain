@@ -57,8 +57,13 @@ q.func = {
 		Itemlist.add(key,'Qopenbeta2-pvp');
 		
 		Test.pvpAbility(key);
-	}
-	
+	},
+	talkNpc:function(key,mq){
+		var main = List.main[key];
+		var q = mq['Qopenbeta2'];
+		if(q.killedAll) Dialogue.start(key,{'group':'Qopenbeta2','npc':'jenny','convo':'intro','node':'gratz'});
+		else Dialogue.start(key,{'group':'Qopenbeta2','npc':'jenny','convo':'intro','node':'intro'});
+	},
 	
 }
 
@@ -85,6 +90,13 @@ q.dialogue['jenny'] = {'face':'Jenny',
 	'intro':{
 		'intro':{
 			'text':"If you manage to kill all the different types of monsters, I'll give you something special.",
+			'option':[
+				{'text':"Bee!",'func':function(key){ Sprite.change(List.all[key],{name:'bee'}); }},
+				{'text':"Mushroom!",'func':function(key){ Sprite.change(List.all[key],{name:'mushroom'}); }},
+				{'text':"Werewolf!",'func':function(key){ Sprite.change(List.all[key],{name:'werewolf'}); }},
+				{'text':"Ghost!",'func':function(key){ Sprite.change(List.all[key],{name:'ghost'}); }},
+			
+			]
 		},
 		'gratz':{
 			'text':"Congratz! Choose your special power!",
@@ -117,12 +129,7 @@ q.map.goblinLand = function(){
 		
 		
 		Actor.creation({'xym':spot.I,"category":"neutral","variant":"jenny","extra":{
-			'nevermove':1,'angle':90,'dialogue':{'func':function(key,mq){
-				var main = List.main[key];
-				var q = mq['Qopenbeta2'];
-				if(q.killedAll) Dialogue.start(key,{'group':'Qopenbeta2','npc':'jenny','convo':'intro','node':'gratz'});
-				else Dialogue.start(key,{'group':'Qopenbeta2','npc':'jenny','convo':'intro','node':'intro'});
-			}},
+			'nevermove':1,'angle':90,'dialogue':{'func':Db.quest.Qopnbeta2.func.talkNpc},
 		}});
 		
 		//Enemy

@@ -302,10 +302,9 @@ Draw.chat.dialogue = function(){
 	if(dia.face){	s.numX += s.faceX;} 
 	if(dia.option){ var nY = s.y+s.h-10-dia.option.length*20; }	
 			
-	html.dialogue.div.style.visibility = "visible";
 	html.chat.div.style.visibility = "hidden"; //dunno if useful
+	html.dialogue.div.style.visibility = "visible";
 	html.dialogue.text.style.width = s.w - 2*s.textBorder + 'px';
-	html.dialogue.text.innerHTML = dia.text;		
 	
 	if(dia.face){
 		html.dialogue.text.style.width = s.w - 2*s.textBorder-s.faceX + 'px';
@@ -318,19 +317,17 @@ Draw.chat.dialogue = function(){
 	} 
 	
 	//Options
-	if(dia.option){
-		ctx.setFont(s.optionY);
-		for(var i in dia.option){
-			ctx.fillText('-' + dia.option[i].text,s.numX,nY+i*s.optionY);
-			
-			Button.creation(0,{
-				"rect":[s.numX,s.numX+s.h,nY+i*s.optionY,nY+s.optionY+i*s.optionY],
-				"left":{"func":Chat.send.command,"param":['$dia,option,' + i]},
-				"text":dia.option[i].text
-			});	
-			
-		}
+	var str = dia.text;
+	for(var i in dia.option){
+		str  += '<br><span ' +
+			'onclick="Chat.send.command(\'$dia,option,' + i + '\');" ' +
+			'title="' + dia.option[i].text + '"' + 
+			'>' +
+			'<font size="4"> -' + dia.option[i].text + '</font>' +
+			'</span>';
 	}
+	if(Math.random()<0.01) console.log(str);
+	Draw.setInnerHTML(html.dialogue.text,str);
 }
 
 Draw.chat.constant = function(){

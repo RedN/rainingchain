@@ -25,12 +25,15 @@
 	
 SDK
 fall 
-curtscene
+cutscene
 
-error fire demon	
-	
-	
-	
+handle anim bad
+
+dialogue face
+add main.quest to dialogue 2nd param
+
+quest variable setter
+
 
 
 death clear status

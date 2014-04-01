@@ -639,7 +639,7 @@ Init.db.enemy = function(){
 				'amount':7,angle:360,'burn,baseChance':1,'burn,magn':2,
 			}},
 			{'template':'scratch','aiChance':[0.4,0,0],'extra':{
-				'dmg,ratio,fire':1,'delayAnim,name':'scratchFire',
+				'dmg,ratio,fire':1,'delayAnim,name':'slashFire',
 			}},
 			[0.5,0.5,0.5]
 		],
