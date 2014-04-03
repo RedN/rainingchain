@@ -159,24 +159,6 @@ Actor.loop.setTarget.sub = function(act){
 	act.target.sub = {x:cos(angle)*rayon+cible.x,y:sin(angle)*rayon+cible.y};
 } 
 
-
-
-
-
-
-/*
-if(act.target.cutscene.active){
-	var c = act.target.cutscene;
-	act.x = c.list[0].x;
-	act.y = c.list[0].y;
-	c.list.shift();
-	if(c.list.length === 0){
-		c.active = 0;
-		if(c.func) c.func(act);
-	}
-}
-*/
-
 Actor.setCutscene = function(act, path, cb, boost){
 	boost = boost || 8;
 	if(!Array.isArray(boost))
@@ -201,7 +183,6 @@ Actor.loop.setTarget.stuck = function(act){
 	act.target.stuck = Actor.getPath(act,maintar);
 	act.target.sub = act.target.stuck[0] || act.target.sub;
 } 
-
 
 Actor.getPath = function(act,target){	//using a*
 	if(act.map !== target.map) return [];

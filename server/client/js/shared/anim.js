@@ -70,7 +70,8 @@ Init.db.anim = function(){
 Anim = {};
 Anim.loop = function (anim){
 	var animFromDb = Db.anim[anim.name];
-	if(!animFromDb){ DEBUG(0,"anim not found" + anim.name); return; }
+	if(!animFromDb){ DEBUG(1,"anim not found" + anim.name); animFromDb = Db.anim['slashMelee']; }
+	
 	anim.timer += animFromDb.spd * anim.spdMod;
 	
 	anim.x = anim.target.x;

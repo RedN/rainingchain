@@ -56,7 +56,7 @@ q.plan['Pstaff'] = {
 };
 		
 
-q.dialogue['jenny'] = {'face':'Jenny',
+q.dialogue['jenny'] = {'face':{'image':'villager-female.0','name':'Jenny'},
 	'intro':{
 		'intro0':{
 			'text':'Do you want to help me out?',

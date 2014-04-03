@@ -1,14 +1,5 @@
 
 
-	
-handle anim bad
-
-	
-	
-###SDK###
-cutscene
-###
-
 freeze passive
 
 limit amount message
@@ -24,7 +15,6 @@ use attack template for other attack
 mutelist
 range for public
 
-cutscene
 teleport actor zone
 getAbility and getEquip for pvp
 
@@ -35,7 +25,6 @@ add report player
 chrono ingame
 stat window
 
-contribution pts window
 plan revamp: already know what min and max mods are
 
 
@@ -63,32 +52,12 @@ revamp a*
 
 
 
-quest tutorial:
-talk give 2 coin
-select yes
-chest with 2 coin
-new item 
-chest + monster
-
-
-
-
-
-
 
 POST RELEASE:
-talking to npc, stop talking and facing
+talking to npc, stop moving and facing
 Crafting System with White
 waypoint window
-
-
-multiple account with same name if click fast
-ddos track
-
-
-
-
-
+limit emit
 
 
 

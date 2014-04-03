@@ -87,7 +87,7 @@ q.item['cutscene'] = {'name':'cutscene','icon':'magic.staff','stack':1,'drop':0,
 ]};	
 
 
-q.dialogue['jenny'] = {'face':'Jenny',
+q.dialogue['jenny'] = {'face':{'image':'villager-female.0','name':'Jenny'},
 	'intro':{
 		'intro':{
 			'text':"If you manage to kill all the different types of monsters, I'll give you something special.",

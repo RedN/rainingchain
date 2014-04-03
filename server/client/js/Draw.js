@@ -309,11 +309,7 @@ Draw.chat.dialogue = function(){
 	if(dia.face){
 		html.dialogue.text.style.width = s.w - 2*s.textBorder-s.faceX + 'px';
 		html.dialogue.div.style.left = (s.x + s.divX + s.textBorder + s.faceX) + 'px';
-		ctx.drawImage(Img.face,0,0,96,96,s.facesX,s.y+s.facesY,96,96);
-		ctx.setFont(20);	
-		ctx.textAlign = 'center';
-		ctx.fillText(dia.face.name,s.facesX+96/2,s.y+s.facesY+96+5);
-		ctx.textAlign = 'left';
+		Draw.face(dia.face.image,s.facesX,s.y+s.facesY,96,dia.face.name);
 	} 
 	
 	//Options
@@ -337,7 +333,7 @@ Draw.chat.constant = function(){
 		y:Cst.HEIGHT-200,
 		numX:5,			//border for text
 		faceX:96 + 5,	//push dia text by that if has face
-		facesX:8,		//border for face	
+		facesX:15,		//border for face	
 		facesY:30,		//border for face
 		optionY:20,		//Y between options
 		textBorder:20, //distance between border of box and where text starts, applied to start and end
@@ -565,4 +561,20 @@ Draw.setInnerHTML = function(el,str,name){
 
 }
 
+Draw.face = function(info,x,y,size,name){
+	size = size || 96;
+	var slot = Img.face.index[info];
+	ctx.drawImage(Img.face,slot.x,slot.y,Cst.FACE,Cst.FACE,x,y,size,size);
+	if(!name) return;
+	
+	Button.creation(0,{
+		'rect':[x,x+size,y,y + size],
+		'text':name,
+	});	
+	
+	ctx.textAlign = 'center';
+	ctx.fillText(name,x+size/2,y+size+5);
+	ctx.textAlign = 'left';
+	
+}
 

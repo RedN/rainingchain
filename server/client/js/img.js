@@ -10,10 +10,6 @@ Img.preload = function(arr,cb){
 	$("#preloader")[0].max = arr.length;
 	
     function imageloadpost(){
-        /*
-		List.ctx.stage.clearRect(0,0,Cst.WIDTH,Cst.HEIGHT);
-		List.ctx.stage.fillText('Loading... ' + loadedimages + '/' + arr.length,Cst.WIDTH2,Cst.HEIGHT2);
-		*/
 		loadedimages++;
 		var str = Math.round(loadedimages/arr.length*100) + '%';
 		$('.progress-value').html(str);
@@ -120,6 +116,29 @@ Img.icon = newImage("img/img/iconSheet.png");
 Img.face = newImage("img/img/faceSheet.png");
 
 
+(function(){	
+	Img.face.index = {};
+	var iconPreIndex = {
+	//System
+	'warrior-male':{'y':0,'x':[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16]},
+	'warrior-female':{'y':1,'x':[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16]},
+	'villager-male':{'y':2,'x':[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16]},
+	'villager-female':{'y':3,'x':[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16]},
+	'villager-child':{'y':4,'x':[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16]},
+	'fairy':{'y':5,'x':[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16]},
+	'bad-monster':{'y':6,'x':[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16]},
+	'bad-human':{'y':7,'x':[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16]},	
+	};
+
+	for(var i in iconPreIndex){
+		Img.face.index[i.toUpperCase()] = iconPreIndex[i].y * Cst.FACE;
+		for(var j = 0 ; j < iconPreIndex[i].x.length; j++){
+			var x = j * Cst.FACE;
+			var y = iconPreIndex[i].y * Cst.FACE;
+			Img.face.index[i + '.' + iconPreIndex[i].x[j]] = {'x':x,'y':y};
+		}
+	}
+})();
 
 
 
