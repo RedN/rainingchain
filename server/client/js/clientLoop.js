@@ -189,7 +189,7 @@ Help.closeAll = function(){
 
 Help.icon = function(txt,x,y,size){
 	size = size || 20;
-	Draw.icon('system.question',[x,y],20);	
+	Draw.icon('system.question',x,y,20);	
 	Button.creation(0,{
 		"rect":[x,x+size,y,y+size],
 		"left":{"func":Help.open,"param":[txt]},

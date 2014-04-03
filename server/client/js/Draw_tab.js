@@ -35,7 +35,7 @@ Draw.tab.main = function (){ ctxrestore();
 			'sfx':'menu',
 		});	
 		
-		Draw.icon('tab.' + Cst.tab.list[i],[numX,numY],24);
+		Draw.icon('tab.' + Cst.tab.list[i],numX,numY,24);
 		if(main.currentTab === Cst.tab.list[i]){ctx.strokeRect(numX-1,numY-1,24+1,24+1);}
 		
 	}
@@ -82,7 +82,7 @@ Draw.tab.equip = function (){ ctxrestore();
 		
 		if(equip){
 			if(player.weapon !== player.equip.piece[piece]) ctx.globalAlpha = 0.5;
-			Draw.icon(equip.icon,[numX,numY],40);
+			Draw.icon(equip.icon,numX,numY,40);
 			ctx.globalAlpha = 1;
 			
 			if(Collision.PtRect(Collision.getMouse(),[numX,numX+40,numY,numY+40])){
@@ -111,7 +111,7 @@ Draw.tab.equip = function (){ ctxrestore();
 		var id = player.equip.piece[piece];
 		var equip = Db.query('equip',id);
 		if(equip){
-			Draw.icon(equip.icon,[numX,numY],40);
+			Draw.icon(equip.icon,numX,numY,40);
 			
 			if(Collision.PtRect(Collision.getMouse(0),[numX,numX+40,numY,numY+40])){
 				main.popupList.equip = equip.id;
@@ -150,7 +150,7 @@ Draw.tab.equip = function (){ ctxrestore();
 		var name = array[i][0];
 		var capname = name.capitalize();
 		
-		Draw.icon(array[i][1],[numX,numY],20);
+		Draw.icon(array[i][1],numX,numY,20);
 		ctx.fillText(capname,numX+vy,numY);
 		Button.creation(0,{
 			"rect":[numX,numX+80+vy,numY,numY+20],
@@ -185,7 +185,7 @@ Draw.tab.inventory = function (){ ctxrestore();
 				"text":text
 			});	
 			
-			Draw.item(main.invList[i],[numX,numY]);
+			Draw.item(main.invList[i],numX,numY);
 		}
 	}		
 }
@@ -249,7 +249,7 @@ Draw.tab.skill = function(){ ctxrestore();
 		
 		ctx.fillStyle = 'white';
 		
-		Draw.icon('skill.' + Cst.skill.list[i],[numX,numY],20);
+		Draw.icon('skill.' + Cst.skill.list[i],numX,numY,20);
 		ctx.fillText(player.skill.lvl[Cst.skill.list[i]],numX+30,numY);
 		
 		if(Collision.PtRect(Collision.getMouse(0),[numX,numX+vx,numY,numY+vy])){
@@ -279,7 +279,7 @@ Draw.tab.skill = function(){ ctxrestore();
 		var expMod = player.bonus.exp[sk];
 		expMod = expMod == 1 ? '' : '  *' + round(expMod,2)
 		
-		Draw.icon('skill.' + sk,[ssx+5,ssy+1],20);
+		Draw.icon('skill.' + sk,ssx+5,ssy+1,20);
 		ctx.fillTextU(sk.capitalize(),ssx + 5 + 30,ssy+1);
 		ctx.fillText('Level: ' + lvl,ssx + 5,ssy+1+25*1);
 		ctx.fillText('Exp: ' + exp +  expMod,ssx + 5,ssy+1+25*2);
@@ -356,7 +356,7 @@ Draw.tab.friend = function(){ ctxrestore();
 		var numX = s.x + divX + i*vx; 
 		var numY = s.y + s.h - iconY + divY;	
 	
-		Draw.icon(array[i][2],[numX,numY],20);
+		Draw.icon(array[i][2],numX,numY,20);
 		Button.creation(0,{
 			"rect":[numX,numX+20,numY,numY+20],
 			'left':{'func':Input.add, 'param':[array[i][1]]},

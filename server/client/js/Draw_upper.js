@@ -74,7 +74,7 @@ Draw.state.ability = function(s){ ctxrestore();
 		
 		if(charge !== 1) ctx.globalAlpha = 0.5;
 		var str = Input.key.ability[i][0].toString().keyCodeToName().keyFullName();
-		Draw.icon(ab.icon,[numX,numY],size,str + ': ' + ab.name);
+		Draw.icon(ab.icon,numX,numY,size,str + ': ' + ab.name);
 		ctx.globalAlpha = 1;
 		
 		if(charge !== 1){	//loading circle
@@ -99,7 +99,7 @@ Draw.state.status = function(s,status){ ctxrestore();
 	for(var i in status){
 		if(+status[i]){
 			var text = status !== player.statusClient ? '' : Cst.status.list[i].capitalize();
-			Draw.icon('status.' + Cst.status.list[i],[numX,s.y],24,text);
+			Draw.icon('status.' + Cst.status.list[i],numX,s.y,24,text);
 			numX += 30;			
 		}
 	}
@@ -259,11 +259,11 @@ Draw.minimap.icon = function(s){	//creates lag? TOFIX
 			var numY = cy+vy/zoom/ratio-size/2;
 		
 			if(Collision.PtRect({x:numX+size/2,y:numY+size/2},[s.x,s.x+Cst.WIDTH/main.pref.mapRatio,s.y,s.y+Cst.HEIGHT/main.pref.mapRatio])){
-				Draw.icon(m.minimapIcon,[numX,numY],size);
+				Draw.icon(m.minimapIcon,numX,numY,size);
 			}
 		}
 	}
-	//Draw.icon('system.square',[s.x + Cst.WIDTH/main.pref.mapRatio/2-2,s.y + Cst.HEIGHT/main.pref.mapRatio/2-2],4);
+	//Draw.icon('system.square',s.x + Cst.WIDTH/main.pref.mapRatio/2-2,s.y + Cst.HEIGHT/main.pref.mapRatio/2-2,4);
 }
 //}
 

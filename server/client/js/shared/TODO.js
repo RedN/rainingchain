@@ -1,4 +1,5 @@
 
+separate iconsheet and facesheet into multiple images
 
 freeze passive
 

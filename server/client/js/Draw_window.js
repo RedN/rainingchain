@@ -58,7 +58,7 @@ Draw.window.main = function(title){ ctxrestore();
 	Help.icon('window_' + titlename,s.x + s.w -45,s.y);
 		
 	//Close
-	Draw.icon('system.close',[s.x + s.w -20,s.y],20);	
+	Draw.icon('system.close',s.x + s.w -20,s.y,20);	
 	Button.creation(0,{
 		"rect":[s.x + s.w -20,s.x + s.w,s.y,s.y+20],
 		"left":{"func":Chat.send.command,"param":['$win,close']},
@@ -128,7 +128,7 @@ Draw.window.bank = function (){ ctxrestore();
 			"right":{"func":Chat.send.command,"param":['$win,bank,click,right,' + i]},
 			'text':'Withdraw ' + main.bankList[i][2]
 		});	
-		Draw.item(main.bankList[i],[numX,numY]);
+		Draw.item(main.bankList[i],numX,numY);
 	}
 	
 	
@@ -188,7 +188,7 @@ Draw.window.stat = function(type){ ctxrestore();
 		
 		ctx.fillText(info.name + ':',numX,numY);
 		ctx.fillText(string,numX+125,numY);
-		Draw.icon(info.icon,[numX-30,numY],20)
+		Draw.icon(info.icon,numX-30,numY,20)
 		
 		if(Collision.PtRect(Collision.getMouse(),[numX,numX+500,numY,numY+30])){
 			var hover = i;
@@ -324,8 +324,8 @@ Draw.window.stat.hover = function(hover,type){ ctxrestore();
 	ctx.fillText(info.name + ':',numX + 200,numY+10);
 	ctx.textAlign = 'left';
 	ctx.setFont(25);
-	Draw.icon(info.icon,[numX+50,numY],48);	//not working ?
-	Draw.icon(info.icon,[numX+400-100,numY],48);
+	Draw.icon(info.icon,numX+50,numY,48);	//not working ?
+	Draw.icon(info.icon,numX+400-100,numY,48);
 	
 	numY += 50;
 			
@@ -397,7 +397,7 @@ Draw.window.ability.leftSide = function(){ ctxrestore();
 		
 		var ability = Db.query('ability',player.ability[i]);
 		if(ability){
-			Draw.icon(ability.icon,[numX+45,numY],20);
+			Draw.icon(ability.icon,numX+45,numY,20);
 		} else {
 			ctx.strokeStyle = 'black';
 			ctx.strokeRect(numX+45,numY,20,20);
@@ -478,7 +478,7 @@ Draw.window.ability.abilityList = function(diffX){ ctxrestore();
 		var numY = s.zy + charY*1.2 + Math.floor(+j/15) * 25;
 				
 		var ability = obj[ats][j];	
-		Draw.icon(ability.icon,[numX,numY],20);
+		Draw.icon(ability.icon,numX,numY,20);
 		
 		Button.creation(0,{
 			"rect":[numX, numX + 20, numY, numY + 20 ],
@@ -506,7 +506,7 @@ Draw.window.ability.generalInfo = function(diffX,diffY){ ctxrestore();
 	//Icon
 	var ab = Draw.old.abilityShowed;
 	var icon = 100;
-	Draw.icon(ab.icon,[s.zx,s.zy],icon);
+	Draw.icon(ab.icon,s.zx,s.zy,icon);
 	
 	//General Info
 	var gi = html.abilityWin.generalinfo;
@@ -729,7 +729,7 @@ Draw.window.ability.action.attack = function(diffX,diffY){  ctxrestore();
 				tmp.chance = Math.probability(base,mod);
 			}	
 			if(tmp.chance !== undefined && tmp.chance <= 0.01){ continue;}
-			Draw.icon(Draw.window.ability.action.attack.modTo[i].icon,[s.zx,s.zy+30],20);
+			Draw.icon(Draw.window.ability.action.attack.modTo[i].icon,s.zx,s.zy+30,20);
 			ctx.fillText('=> ' + Draw.window.ability.action.attack.modTo[i].text(tmp),s.zx+30,s.zy+30);
 			s.zy += fontSize;
 			
@@ -809,7 +809,7 @@ Draw.window.ability.action.boost = function(diffX,diffY){  ctxrestore();
 	ctx.font = fontSize + 'px Kelly Slab';
 
 	for(var i in boost[0]){
-		Draw.icon(Db.stat[boost[0][i].stat].icon,[s.zx,s.zy],fontSize);
+		Draw.icon(Db.stat[boost[0][i].stat].icon,s.zx,s.zy,fontSize);
 		var value = round(boost[0][i].value,2);
 		if(+value >= + Cst.bigInt) value = 'Infinity';
 		var str = boost[0][i].type + value + ' ' + Db.stat[boost[0][i].stat].name + ' for ' + round(boost[0][i].time/25,2) + 's.';
@@ -862,7 +862,7 @@ Draw.window.quest.upper = function(s,charY,q,mq,hq){
 	var icon = charY*4;
 	
 	//Icon
-	Draw.icon(q.icon,[s.zx,s.zy],icon);
+	Draw.icon(q.icon,s.zx,s.zy,icon);
 	
 	//Info
 	hq.info.style.left = icon + 5 + 'px'; 
@@ -1041,7 +1041,7 @@ Draw.window.trade = function (){ ctxrestore();
 		});	
 		
 		
-		Draw.item(myList[i],[numX,numY],56);
+		Draw.item(myList[i],numX,numY,56);
 		
 	}	
 	
@@ -1056,7 +1056,7 @@ Draw.window.trade = function (){ ctxrestore();
 			'text':hisList[i][2]
 		});	
 		
-		Draw.item(hisList[i],[numX,numY],56);
+		Draw.item(hisList[i],numX,numY,56);
 	}	
 	
 	//Accept
@@ -1081,14 +1081,14 @@ Draw.window.trade = function (){ ctxrestore();
 	ctx.fillText('Trade State ',numX+wi/2,numY+3);
 	ctx.strokeRect(numX,numY,wi,he);
 		
-	Draw.icon(trade.confirm.self ? 'system.heart' : 'system.close',[numX+7,numY+7],20);
+	Draw.icon(trade.confirm.self ? 'system.heart' : 'system.close',numX+7,numY+7,20);
 
 	var numX = s.x+570; var numY = s.h-50; var wi = 250; var he = 35;
 	ctx.fillText('Trade State ',numX+wi/2,numY+3);
 	ctx.strokeRect(numX,numY,wi,he);
 	
 	
-	Draw.icon(trade.confirm.other ? 'system.heart' : 'system.close',[numX+7,numY+7],20);
+	Draw.icon(trade.confirm.other ? 'system.heart' : 'system.close',numX+7,numY+7,20);
 	
 	
 }
@@ -1275,7 +1275,7 @@ Draw.window.passive.grid = function(){ ctxrestore();
 			ctx.globalAlpha = 0.5;
 			if(+pass[i][j]){ ctx.globalAlpha = 1; }
 			var name = Db.passive[i][j].stat ? Db.stat[Db.passive[i][j].stat].icon : Db.customBoost[Db.passive[i][j]].icon;
-			Draw.icon(name,[numX+border2,numY+border2],icon);
+			Draw.icon(name,numX+border2,numY+border2,icon);
 			
 			//Hover
 			if(!Input.mouse.drag.active && Collision.PtRect(Collision.getMouse(key),[numX,numX+ic,numY,numY+ic])){
@@ -1341,7 +1341,7 @@ Draw.window.passive.hover = function(over){ ctxrestore();
 	
 	//Info
 
-	Draw.icon(st.icon,[ssx+5,ssy+1],20,'a');
+	Draw.icon(st.icon,ssx+5,ssy+1,20,'a');
 	
 	
 	ctx.fillTextU(st.name,ssx + 5 + 30,ssy+1);

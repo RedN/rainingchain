@@ -104,7 +104,7 @@ Draw.screenEffect = function(fx){
 Draw.logout = function(){
 	ctx = List.ctx.pop;
 	var size = 24;
-	Draw.icon('system.close',[Cst.WIDTH-size,0],size);
+	Draw.icon('system.close',Cst.WIDTH-size,0,size);
 	Button.creation(0,{
 		'rect':[Cst.WIDTH-size,Cst.WIDTH,0,size],
 		"shiftLeft":{'func':Chat.send.command,'param':['$logout,' + i]},
@@ -112,7 +112,7 @@ Draw.logout = function(){
 	});	
 	
 	//contact me
-	Draw.icon('system.close',[Cst.WIDTH-size*2,0],size);
+	Draw.icon('system.close',Cst.WIDTH-size*2,0,size);
 	Button.creation(0,{
 		'rect':[Cst.WIDTH-size*2,Cst.WIDTH-size,0,size],
 		"shiftLeft":{'func':function(){ $("#contactMe").dialog("open"); },'param':[]},
@@ -354,21 +354,35 @@ Draw.chat.constant = function(){
 	}
 }
 
-Draw.icon = function(info,xy,size,text){
+Draw.icon = function(info,x,y,size,text){
 	size = size || 32;
 	var slot = Img.icon.index[info];
-	ctx.drawImage(Img.icon,slot.x,slot.y,Cst.ICON,Cst.ICON,xy[0],xy[1],size,size);
+	
+	var whatImage = Math.floor(slot.y/(Img.icon.row*48));
+
+	ctx.drawImage(
+		Img.icon[whatImage],
+		slot.x,
+		slot.y%(Img.icon.row*48),
+		Cst.ICON,
+		Cst.ICON,
+		x,
+		y,
+		size,
+		size
+	);
+		
 	if(!text) return;
 	
 	Button.creation(0,{
-		'rect':[xy[0],xy[0]+size,xy[1],xy[1] + size],
+		'rect':[x,x+size,y,y + size],
 		'text':text,
 	});	
 }
 
-Draw.item = function(info,xy,size){
+Draw.item = function(info,x,y,size){
 	size = size || 32;
-	Draw.icon(typeof info === 'string' ? info : info[0],xy,size);
+	Draw.icon(typeof info === 'string' ? info : info[0],x,y,size);
 	
 	var amount = typeof info === 'string' ? 1 : Math.floor(info[1]);
 	
@@ -384,13 +398,13 @@ Draw.item = function(info,xy,size){
 		ctx.globalAlpha = 0.8;
 		ctx.fillStyle = "black";
 		ctx.strokeStyle = "white";
-		ctx.roundRect(xy[0]-2,xy[1]+size-2,size+4,15);
+		ctx.roundRect(x-2,y+size-2,size+4,15);
 		ctx.globalAlpha = 1;
 		
 				
 		ctx.fillStyle = "yellow";
 		ctx.setFont(size/32*13);
-		ctx.fillText(amount,xy[0],xy[1]+size-2);
+		ctx.fillText(amount,x,y+size-2);
 	}
 	
 }

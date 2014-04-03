@@ -69,7 +69,7 @@ Draw.popup.frame = function(s){
 
 Draw.popup.equip.top = function(s){
 	//Draw icon
-	Draw.icon(s.equip.icon,[s.x+2,s.y+2],48);
+	Draw.icon(s.equip.icon,s.x+2,s.y+2,48);
 	
 	//Draw Name
 	ctx.setFont(25);
@@ -164,7 +164,7 @@ Draw.popup.plan.main = function(){
 
 Draw.popup.plan.top = function(s){
 	//Draw icon
-	Draw.icon(s.equip.icon,[s.x+2,s.y+2],48);
+	Draw.icon(s.equip.icon,s.x+2,s.y+2,48);
 	
 	//Draw Name
 	ctx.fillStyle = s.equip.color;
@@ -211,7 +211,7 @@ Draw.popup.plan.req = function(s){
 		for(var i in s.equip.req.skill){
 			var numY = s.y+80+count*20;
 			
-			Draw.icon('skill.' + i,[numX-2,numY+2],16);	
+			Draw.icon('skill.' + i,numX-2,numY+2,16);	
 			
 			var str = 'Level '  + s.equip.req.skill[i] + ' ' + i.capitalize();
 			ctx.fillText(str,numX+25,numY);
@@ -227,7 +227,7 @@ Draw.popup.plan.req = function(s){
 		var numY = s.y+80+count*20;
 		
 		var info = s.equip.req.item[i];
-		Draw.icon(info[0],[numX-2,numY+2],16);	
+		Draw.icon(info[0],numX-2,numY+2,16);	
 		var str = 'x'  + info[1] + ' ' + info[2];
 		ctx.fillText(str,numX+25,numY);
 		count++;	

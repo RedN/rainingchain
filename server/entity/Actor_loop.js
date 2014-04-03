@@ -28,7 +28,7 @@ Actor.loop = function(act){
 		Actor.loop.setTarget(act);  //update Enemy Target
 		Actor.loop.input(act); 		//simulate enemy key press depending on target 
 	}
-	if(act.combat && act.move) Actor.loop.move.aim(act); //impact max spd depending on aim
+	if(act.combat && act.move && act.frameCount % 3 === 0) Actor.loop.move.aim(act); //impact max spd depending on aim
 	
 	if(act.move){
 		if(act.frameCount % 10 === 0){ Actor.loop.mapMod(act); }
@@ -106,14 +106,6 @@ Actor.performAbility.resetCharge = function(act,ab){
 	
 	//Reset the ability and related abilities
 	return;
-	for(var j in ab.reset){	//'attack':0,'summon':1
-		for(var k in act.ability){
-			if(!act.ability[k]) continue;
-			if(act.ability[k].type === j){
-				charge[act.ability[k].id] = charge[act.ability[k].id] * ab.reset[j];
-			}
-		}
-	}
 }
 
 Actor.performAbility.resource = function(act,cost){
@@ -281,12 +273,12 @@ Actor.loop.summon = function(act){
 //{Move
 Actor.loop.bumper = function(act){	//HOTSPOT
 	//test collision with map
-	//test global limit
-	act.x = Math.max(act.x,50);
-	act.x = Math.min(act.x,Db.map[Map.getModel(act.map)].grid.bullet[0].length*32-50);
-	act.y = Math.max(act.y,50);
-	act.y = Math.min(act.y,Db.map[Map.getModel(act.map)].grid.bullet.length*32-50);
-
+	if(Loop.interval(100)){	//test global limit
+		act.x = Math.max(act.x,50);
+		act.x = Math.min(act.x,Db.map[Map.getModel(act.map)].grid.bullet[0].length*32-50);
+		act.y = Math.max(act.y,50);
+		act.y = Math.min(act.y,Db.map[Map.getModel(act.map)].grid.bullet.length*32-50);
+	}
 	//test bumpers
 	for(var i = 0 ; i < 4 ; i ++){
 		var pos = Collision.getPos({x:act.x + act.bumperBox[i].x,y:act.y + act.bumperBox[i].y});
@@ -379,7 +371,7 @@ Actor.loop.move.aim = function (act){
 	//penalty if looking and moving in opposite direction
 	var diffAim = Math.abs(act.angle - act.moveAngle);
 	if (diffAim > 180){ diffAim = 360 - diffAim;}
-	Actor.boost(act,{'stat':'maxSpd','type':"*",'value':Math.pow((360-diffAim)/360,1.5),'time':2,'name':'Aim'});
+	Actor.boost(act,{'stat':'maxSpd','type':"*",'value':Math.pow((360-diffAim)/360,1.5),'time':4,'name':'Aim'});
 }
 //}
 

@@ -9,7 +9,7 @@ if(nodejitsu){
 		appName: 'Node.js Application'
 	});
 }
-require('domain').create().on('error', function(err){ permConsoleLog(err);});
+require('domain').create().on('error', function(err){ permConsoleLog(err);});	//no idea if working
 
 
 

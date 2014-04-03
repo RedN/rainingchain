@@ -117,7 +117,7 @@ Draw.drop = function(){
 		var numX = Cst.WIDTH2 + drop.x - player.x;
 		var numY = Cst.HEIGHT2 + drop.y - player.y;
 		
-		Draw.item(drop.item,[numX,numY]);
+		Draw.item(drop.item,numX,numY);
 	}
 }
 

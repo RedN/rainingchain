@@ -174,9 +174,20 @@ Quest.getActor = function(key){ return List.all[key]; }
 Quest.getMain = function(key,quest){return List.main[key].quest[quest];}
 Quest.itemExist = function(id){ return !!Db.item[id]; }
 
-require('fs').readFile('../rainingchain/server/db/Db_quest_eval.js', 'utf8', function (err,data) {
-	if (err) {   logError("FILE NOT FOUND CUZ FUKING PATH " + err); }
+
+require('fs').readFile('./server/db/Db_quest_eval.js', 'utf8', function (err,data) {
+	if(err) permConsoleLog(1,err);
+	Quest.template.eval = function(){ return data; }
+});
+/*
+require('fs').readFile('./Db_quest_eval.js', 'utf8', function (err,data) {
+	if(err) permConsoleLog(2,err);
 	Quest.template.eval = function(){ return data; }
 });
 
+require('fs').readFile('Db_quest_eval.js', 'utf8', function (err,data) {
+	if(err) permConsoleLog(3,err);
+	Quest.template.eval = function(){ return data; }
+});
 
+*/

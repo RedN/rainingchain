@@ -31,18 +31,20 @@ Img.preload = function(arr,cb){
  
 
 Img.frame = {};
-Img.frame.window = newImage('img/img/interface/window.png');
-Img.frame.postit = newImage('img/img/interface/postit.png');
+Img.frame.window = newImage('img/ui/interface/window.png');
+Img.frame.postit = newImage('img/ui/interface/postit.png');
 
 //Icon
-Img.icon = newImage("img/img/iconSheet.png");
+Img.icon = [];
+
 (function(){
+	for(var i = 0; i<= 9; i++) Img.icon.push(newImage("img/ui/icon/iconSheet" + i + ".png"));
+	Img.icon.row = 5;
+	
 	var system = 0;
 	var ability = system + 11 + 1;
 	var equip = ability + 9 + 1;
-	var craft = equip + 12 + 1;
-	
-	
+	var craft = equip + 12 + 1;	
 	
 	Img.icon.index = {};
 	var iconPreIndex = {
@@ -113,7 +115,7 @@ Img.icon = newImage("img/img/iconSheet.png");
 
 
 //Npc Face Sheet
-Img.face = newImage("img/img/faceSheet.png");
+Img.face = newImage("img/ui/face/faceSheet.png");
 
 
 (function(){	
