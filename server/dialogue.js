@@ -67,49 +67,4 @@ Init.db.dialogue = function(){
 
 
 
-/*
-NOT USED
-
-'ryve':{
-	'option':{
-		'greet':{'text':'Hey!','name':'ryve','convo':'greetings':'first'},
-		'fun':{'text':'yo','name':'ryve','convo':'place of interest':'first'},	
-	},
-	'elf':{
-		'option':{
-			'fun':{'text':'yo','name':'ryve','convo':'place of interest':'child'},
-		},
-	},
-}
-
-Actor.creation.dialogue = function(act){
-	if(act.dialogue){
-		act.dialogue = useTemplate(Actor.template.dialogue,act.dialogue);
-	}
-	Actor.creation.dialogue.generic(act);
-	return act;	
-}
-
-Actor.creation.dialogue.generic = function(act){
-	var overwrite = act.dialogue.option;
-	act.dialogue.option = {};
-	Actor.creation.dialogue.generic.recursive(act.dialogue.tag,act.dialogue.option,Dialogue.generic);
-	for(var i in overwrite){
-		act.dialogue.option[i] = overwrite[i];
-	}
-	return act;
-}
-
-Actor.creation.dialogue.generic.recursive = function(tag,option,dialogue){
-	for(var j in dialogue.option){
-		option[j] = dialogue.option[j];
-	}
-	for(var j in dialogue){
-		if(j !== 'option' && tag.have(j)){
-			Actor.creation.dialogue.generic.recursive(tag,option,dialogue[j]);
-		}
-	}
-}
-*/
-
 

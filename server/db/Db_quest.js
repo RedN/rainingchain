@@ -39,6 +39,7 @@ Init.db.quest.map = function(){
 	for(var i in Db.quest){
 		for(var j in Db.quest[i].map){
 			Db.map[j] = Db.quest[i].map[j];
+			Db.quest[i].map[j] = Db.quest[i].map[j]().addon;
 		}
 	}
 }
@@ -69,22 +70,26 @@ Quest.creation = function(q){
 	}
 	
 	for(var i in q.item){
-		q.item[i].id = q.id+'-'+i;
+		var start = q.id+'-';
+		q.item[i].id = i.indexOf(start) === 0 ? i : start + i;
 		Item.creation(q.item[i]);
 	}
 	
 	for(var i in q.equip){
-		q.equip[i].id = q.id+'-'+i;
+		var start = q.id+'-';
+		q.equip[i].id = i.indexOf(start) === 0 ? i : start + i;
 		Equip.creation(q.equip[i]);
 	}
 	
 	for(var i in q.ability){
-		q.ability[i].id = q.id+'-'+i;
+		var start = q.id+'-';
+		q.ability[i].id = i.indexOf(start) === 0 ? i : start + i;
 		Ability.creation(q.ability[i]);
 	}
 	
 	for(var i in q.plan){
-		q.plan[i].id = q.id+'-'+i;
+		var start = q.id+'-';
+		q.plan[i].id = i.indexOf(start) === 0 ? i : start + i;
 		Plan.creation(q.plan[i]);
 	}
 	
@@ -132,7 +137,6 @@ Quest.template = function(id,version){
 		description:"Default Description",
 		variable:{},
 		requirement:[],		
-		hintGiver:function(key,mq){ return 'None';},
 		dialogue:{},
 		challenge:{},
 		mapAddOn:{},
@@ -142,7 +146,7 @@ Quest.template = function(id,version){
 		enemy:{},
 		ability:{},
 		plan:{},
-		func:{},
+		event:{},
 		skillPlot:[],
 	};
 }
@@ -168,6 +172,7 @@ Quest.template.variable = function(){
 
 Quest.getActor = function(key){ return List.all[key]; }
 Quest.getMain = function(key,quest){return List.main[key].quest[quest];}
+Quest.itemExist = function(id){ return !!Db.item[id]; }
 
 require('fs').readFile('../rainingchain/server/db/Db_quest_eval.js', 'utf8', function (err,data) {
 	if (err) {   logError("FILE NOT FOUND CUZ FUKING PATH " + err); }

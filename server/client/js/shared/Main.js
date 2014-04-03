@@ -113,7 +113,7 @@ Main.openWindow = function(main,name,param){
 	if(name === 'quest'){
 		main.windowList.quest = param;
 		Quest.req.update(key,param);
-		Quest.hint.update(key,param);
+		Quest.hint(key,param);
 	}
 	if(name === 'trade'){
 		tradermain = List.main[param];

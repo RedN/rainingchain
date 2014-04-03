@@ -15,12 +15,12 @@ Test.signIn = function(key){
 	Test.signIn.hideHUD(key);
 	
 	if(Server.testing){
-		Db.quest["QtestEnemy"].func.start(key);	//test enemy
+		Db.quest["QtestEnemy"].event.start(key);	//test enemy
 		Itemlist.add(key,'gold');
 		TestingQuest(key);
 	}
 	
-	Db.quest.Qopenbeta2.func.start(key);	//OPENBETA
+	Db.quest.Qopenbeta2.event.start(key);	//OPENBETA
 	
 	Actor.permBoost(List.all[key],'Player',[
 		{stat:'bullet-spd',value:0.5,type:'+'},

@@ -21,13 +21,6 @@ q.requirement = [
 	{'text':'Level 0 Magic','func':(function(key){ return List.all[key].skill.lvl.magic >= 0; })},
 ];
 
-q.hintGiver = function(key,mq){
-	if(mq.receivedDevice){
-		return 'Vas tuer le boss';
-	} 
-	return 'You can start this quest by talking to God.';
-};
-
 //{Dialogue
 q.dialogue = {}
 
@@ -67,17 +60,17 @@ q.challenge = {
 //}
 
 //{ Functions
-q.func.giveDevice = function(key){
+q.event.giveDevice = function(key){
 	Itemlist.add(List.main[key].invList,'Q-QquestId-teleport');
 	List.main[key].quest['QquestId'].receivedDevice = true;
 };
 
-q.func.giveReward = function(key){
+q.event.giveReward = function(key){
 	List.main[key].invList.add('gold',1000);
 	List.main[key].quest['QquestId'].receivedReward = true;
 };
 
-q.func.bossKilled = function(key){
+q.event.bossKilled = function(key){
 	List.main[key].quest['QquestId'].bossKilled = true;
 	Chat.add(key,"Congratz! You have slain the demon. Come back to town for reward.");
 };	

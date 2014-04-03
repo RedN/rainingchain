@@ -499,7 +499,7 @@ Command.list['question'] = function(key){
 	if(!q) return;
 	
 	try {
-		var success = applyFunc(q.func,arguments);
+		var success = applyFunc(q.event,arguments);
 		if(!success && q.repeat){
 			Chat.add(key,'Invalid answer to server question.');
 			Chat.question(key,q);

@@ -1,6 +1,5 @@
-var q = Quest.template();
-		
-q.id = 'QtestEnemy';
+var q = Quest.template('QtestEnemy','v1.0');
+eval(Quest.template.eval(q));
 
 q.variable = {
 	enemy:[
@@ -9,12 +8,9 @@ q.variable = {
 	]	
 };
 
-q.func = {
+q.event = {
 	start:function(key){
-		var act = List.all[key];
-		Actor.teleport(act,250,250,"testEnemy");
-		act.respawnLoc.recent = {x:250,y:250,map:"testEnemy@MAIN"};
-		
+		var act = getAct(key);
 		Itemlist.add(key,'QtestEnemy-enemyGenerator');
 		Test.generateEquip(key,0,5);
 		
@@ -54,8 +50,11 @@ q.item['enemyGenerator'] = {'name':'Enemy Gen','icon':'magic.staff','stack':1,'d
 	{'name':'Enemy 0','param':[q.variable.enemy[0]],'func':Test.spawnEnemy},
 	{'name':'Enemy 1','param':[q.variable.enemy[1]],'func':Test.spawnEnemy},
 	{'name':'Enemy 2','param':[q.variable.enemy[2]],'func':Test.spawnEnemy},
-	{'name':'Enemy 3','param':[q.variable.enemy[3]],'func':Test.spawnEnemy},
-	
+	{'name':'Tele','param':[],'func':function(key){
+		var act = getAct(key);
+		Actor.teleport(act,250,250,"testEnemy");
+		act.respawnLoc.recent = {x:250,y:250,map:"testEnemy@MAIN"};
+	}},	
 	{'name':'Equip','param':[],'func':Test.generateEquip},
 ]};	
 

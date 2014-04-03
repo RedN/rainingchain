@@ -1,8 +1,11 @@
 
 Actor.loop.input = function(act){
+	if(act.type === 'enemy' || act.target.cutscene.active){
+		if(act.move && act.moveSelf) //&& act.frameCount % 3 === 0 //bad cuz fuck timing for period.main
+			Actor.loop.input.move(act);
+	}
+	
 	if(act.type === 'player') return;
-	if(act.move && act.moveSelf) //&& act.frameCount % 3 === 0 //bad cuz fuck timing for period.main
-		Actor.loop.input.move(act);
 	if(act.combat && act.frameCount % 25 === 0){
 		Actor.loop.input.ability(act);
 	}
@@ -11,10 +14,9 @@ Actor.loop.input = function(act){
 Actor.loop.input.move = function(act){
 	var tar = act.target;
 	if(tar.stuck.length) Actor.loop.input.move.stuck(act);	//set sub as the first position in stuck
+	if(tar.cutscene.length) Actor.loop.input.move.cutscene(act);	//set sub as the first position in stuck
 	
 	Actor.loop.input.move.sub(act);
-	
-	
 	
 	for(var i in act.moveInput){	if(Math.random()< 0.05){ act.moveInput[i] = 1;} }	//Prevent Piling
 }
@@ -51,9 +53,27 @@ Actor.loop.input.move.stuck = function(act){
 		act.target.reachedGoal = 0;
 	}
 	
-	
 	act.target.sub = act.target.stuck[0] || act.target.sub;
 }
+
+Actor.loop.input.move.cutscene = function(act){
+	var tar = act.target;
+	if(tar.reachedGoal){
+		tar.cutscene.path.shift();
+		tar.reachedGoal = 0;
+		tar.cutscene.time = 0;
+		if(tar.cutscene.path.length === 0) tar.cutscene.func(act.id);
+	}
+	tar.cutscene.time++;
+	tar.sub = tar.cutscene[0] || tar.sub;
+	
+	if(tar.cutscene.time >= 25*30){	//aka being stuck for more than 30 sec
+		act.x = tar.sub.x;
+		act.y = tar.sub.y;
+		tar.reachedGoal = 1;
+	}
+}
+
 
 
 Actor.loop.input.ability = function(act){
@@ -145,16 +165,14 @@ if(act.target.cutscene.active){
 }
 */
 
-Actor.setCutscene = function(act, direction, spd, cb){
+Actor.setCutscene = function(act, path, spd, cb){
 	spd = spd || 8;
-	direction = deepClone(direction);
-	for(var i in direction){
-		direction[i].x = mort.x + (direction[i].x*32)/spd;
-		direction[i].y = mort.y + (direction[i].y*32)/spd;
-	}
+	path = deepClone(path);
+	
 	act.target.cutscene = {
 		active:1,
-		list:direction,
+		time:0,
+		list:path,
 		func:cb,		
 	}
 }
@@ -191,7 +209,6 @@ Actor.isStuck = function(act){
 	}
 	return 0;
 }
-
 
 
 

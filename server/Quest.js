@@ -77,9 +77,9 @@ Quest.reward.stack = function(mq){
 	temp = Actor.permBoost.stack(temp);
 	return temp;
 }
-Quest.hint = {};
-Quest.hint.update = function(key,id){
-	List.main[key].quest[id].hint = Db.quest[id].hintGiver(key,List.main[key].quest[id]);
+
+Quest.hint = function(key,id){
+	if(Db.quest[id].event.hint) List.main[key].quest[id].hint = Db.quest[id].event.hint(key);
 }
 
 Quest.req = {};

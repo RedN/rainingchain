@@ -6,15 +6,14 @@ handle anim bad
 	
 	
 ###SDK###
-fall 
 cutscene
-sdk quest tester param
-end dialogue
 ###
 
-quest variable setter
+freeze passive
 
-dialogue face
+limit amount message
+
+dialogue face. put in client side.
 
 death clear status
 fix reflect
@@ -78,7 +77,6 @@ chest + monster
 
 
 POST RELEASE:
-add ctrl+v
 talking to npc, stop talking and facing
 Crafting System with White
 waypoint window
@@ -90,38 +88,6 @@ ddos track
 
 
 
-
-#####################################
-Contribution Rewards:
-
-Custom Character Design:
-You can choose how your character look. Submit your very own sprite or use one already in the game engine.
-Ex: Any NPC/Monster/Boss
-
-Player Symbol:
-Add a symbol in front of your name in the chat box.
-Bronze Star:
-Silver Star:
-Gold Star:
-Custom Icon:
-
-Change Display Name:
-Change the name showed in-game. The username used to sign in will remain the same.
-
-Display announcement on website:
-Your message will appear for 24 hours starting at midnight East-Coast the day after your request.
-No offensive/IRL ads allowed.
-Cost/Character.
-
-Change bullet image:
-Change bullet image for one of your ability. Must be a bullet attack. The image/sprite can be anything. Limit 20 Ko.
-
-Broadcast Achievement:
-Possible broadcast: Level-up, Quest complete, Item Found,
-
-
-
-#####################################
 
 
 
