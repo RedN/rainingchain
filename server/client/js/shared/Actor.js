@@ -171,16 +171,12 @@ Actor.update.boost = function(act,stat){
 	viaArray.set({'origin':act,'array':stat.stat,'value':sum});
 }
 
-Actor.boost = function(act, boost){
+Actor.boost = function(act, boost){	//boost: { 'stat':'globalDmg','value':1,'type':'*','time':100,'name':'weapon'}
 	//Add a boost to a actor
 
 	//list[i]: i = stat
 	//toUpdate[i]: i = stat
 	//fast[i]: i = stat@source
-
-	// {stat:'globalDmg',value:1000,type:'*',time:10000,name:'quest'}
-
-	//format: boost { 'stat':'globalDmg','value':1,'type':'*','time':100,'name':'weapon'}
 	
 	if(Array.isArray(boost)){
 		for(var i in boost) Actor.boost(act,boost[i]);
@@ -211,11 +207,11 @@ Actor.boost.remove = function(act, boost){
 	delete boost; 
 	Actor.update.boost(act,stat);
 }
-Actor.boost.removeByName = function(act, name){	//TOFIX
+Actor.boost.removeByName = function(act, name){	//TOFIX		name: STAT@ID
 	var a = name.split("@");
 	var b = act.boost.list[a[0]];
 	if(!b) return;
-	b.name[a[1]];
+	Actor.boost.remove(b.name[a[1]]);
 }
 
 Actor.permBoost = function(act,source,boost){

@@ -14,11 +14,10 @@ Actor.loop.input = function(act){
 Actor.loop.input.move = function(act){
 	var tar = act.target;
 	if(tar.stuck.length) Actor.loop.input.move.stuck(act);	//set sub as the first position in stuck
-	if(tar.cutscene.length) Actor.loop.input.move.cutscene(act);	//set sub as the first position in stuck
+	if(tar.cutscene.path.length) Actor.loop.input.move.cutscene(act);	//set sub as the first position in stuck
 	
 	Actor.loop.input.move.sub(act);
 	
-	for(var i in act.moveInput){	if(Math.random()< 0.05){ act.moveInput[i] = 1;} }	//Prevent Piling
 }
 
 Actor.loop.input.move.sub = function(act){
@@ -28,7 +27,7 @@ Actor.loop.input.move.sub = function(act){
 	var y = loc.y - act.y;
 	var diff = Math.sqrt(x*x+y*y);
 	
-	if(diff  < 10){
+	if(diff  < 15){
 		act.moveInput = [0,0,0,0];
 		act.target.reachedGoal = 1;
 	} else {
@@ -42,8 +41,9 @@ Actor.loop.input.move.sub = function(act){
 		act.angle = atan2(target.y-act.y,target.x-act.x);
 		act.mouseX = target.x-act.x+Cst.WIDTH2;
 		act.mouseY = target.y-act.y+Cst.HEIGHT2;
-	} else if(diff  > 10){
+	} else if(diff  > 15){
 		act.angle = atan2(y,x);
+		for(var i in act.moveInput){	if(Math.random()< 0.05){ act.moveInput[i] = 1;} }	//Prevent Piling
 	}
 }
 
@@ -59,13 +59,25 @@ Actor.loop.input.move.stuck = function(act){
 Actor.loop.input.move.cutscene = function(act){
 	var tar = act.target;
 	if(tar.reachedGoal){
-		tar.cutscene.path.shift();
+		if(typeof tar.cutscene.path[0] !== 'number' || tar.cutscene.time >= tar.cutscene.path[0]){
+			tar.cutscene.path.shift();
+			tar.cutscene.time = 0;
+		}
+		
 		tar.reachedGoal = 0;
-		tar.cutscene.time = 0;
-		if(tar.cutscene.path.length === 0) tar.cutscene.func(act.id);
+		if(tar.cutscene.path.length === 0){
+			if(tar.cutscene.func) tar.cutscene.func(act.id);
+			tar.cutscene.active = 0;
+			Actor.permBoost(act,"cutscene");
+			act.combat = tar.cutscene.oldCombat;
+			return;
+		}
 	}
 	tar.cutscene.time++;
-	tar.sub = tar.cutscene[0] || tar.sub;
+	
+	if(typeof tar.cutscene.path[0] !== 'number')
+		tar.sub = tar.cutscene.path[0] || tar.sub;
+		
 	
 	if(tar.cutscene.time >= 25*30){	//aka being stuck for more than 30 sec
 		act.x = tar.sub.x;
@@ -165,16 +177,21 @@ if(act.target.cutscene.active){
 }
 */
 
-Actor.setCutscene = function(act, path, spd, cb){
-	spd = spd || 8;
-	path = deepClone(path);
+Actor.setCutscene = function(act, path, cb, boost){
+	boost = boost || 8;
+	if(!Array.isArray(boost))
+		boost = [{'stat':'maxSpd','value':boost,'type':'min'},{'stat':'maxSpd','value':boost,'type':'max'}];
+	
+	Actor.permBoost(act,'cutscene',boost);
 	
 	act.target.cutscene = {
 		active:1,
 		time:0,
-		list:path,
+		path:deepClone(path),
+		oldCombat:act.combat || 0,
 		func:cb,		
 	}
+	act.combat = 0;
 }
 
 Actor.loop.setTarget.stuck = function(act){

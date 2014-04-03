@@ -27,7 +27,7 @@ Init.actor = function(){
 		act.type = type;
 		act.target = {
 			main:null,sub:{x:0,y:0},	
-			cutscene:{active:0,list:[],func:null},
+			cutscene:{active:0,path:[],time:0,func:null},
 			period:{main:90,sub:25,stuck:113},
 			stuck:[],
 			reachedGoal:0,isStuck:0,
