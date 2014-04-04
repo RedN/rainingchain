@@ -193,6 +193,28 @@ Object.defineProperty(Number.prototype, "toPercent", {
 	}
 });	
 	
+Object.defineProperty(Number.prototype, "toChrono", {
+    enumerable: false,
+    value: function() {
+		var time = this;
+		var hour = Math.floor(time / Cst.HOUR);
+		time %= Cst.HOUR;
+		var min = Math.floor(time / Cst.MIN);
+		min = min < 10 ? '0' + min : min;
+		time %= Cst.MIN;
+		var sec = Math.floor(time / Cst.SEC);
+		sec = sec < 10 ? '0' + sec : sec;
+		var milli = time % Cst.SEC;
+		
+		return hour + ':' + min + ':' + sec + '.' + milli;		
+	}
+});	
+
+
+
+	
+	
+	
 //Function
 applyFunc = function(func,param){
 	if(typeof func === 'string'){
@@ -501,6 +523,8 @@ useTemplate = function(temp,obj,deep,viaarray){
 arrayfy = function(a){
 	return (a instanceof Array) ? a : [a];
 }
+
+
 
 
 

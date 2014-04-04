@@ -11,6 +11,8 @@ Draw.state = function(){
 	s.y += 30;
 	Draw.state.status(s,player.statusClient,player.curseClient,1);
 	s.y += 30;
+	Draw.chrono(s);
+	s.y += 30;
 	Draw.pvpScore(s);
 }
 
@@ -113,9 +115,34 @@ Draw.state.status = function(s,status,curse,showtext){ ctxrestore();		//also use
 		numX += 30;
 	}
 }
+
+
+
 //}
 
-//{Pvp
+Draw.chrono = function(s){	//TOFIX
+	for(var i in main.chrono){
+		var end = main.chrono[i].end || Date.now();
+		var str = (end - main.chrono[i].start).toChrono();
+		
+		ctx.fillStyle = main.chrono[i].active ? 'white' : 'red';
+		ctx.setFont(30);
+		ctx.fillText(str,s.x+10,s.y);
+		
+		var right = null;
+		if(main.chrono[i]) right = {func: Chat.send.command,param:['$chrono,remove,' + i]};
+		
+		Button.creation(0,{
+			'rect':[s.x+10,s.x+160,s.y,s.y+30],
+			'text':main.chrono[i].text + (main.chrono[i].active ? '' : ' - Right-Click to remove'),
+			'right':right,
+		});	
+		
+		s.y += 35;		
+	}
+	ctx.fillStyle = 'black';
+}
+
 Draw.pvpScore = function(s){
 	var pv = main.pvpScore;
 	ctx.font = '20px Kelly Slab';
@@ -129,7 +156,6 @@ Draw.pvpScore = function(s){
 	//main.pvpScore = [{name:'asdasd','point':123},{name:'asdasd','point':123}]
 }
 
-//}
 
 //{Minimap
 Draw.minimap = function (){ ctxrestore();
@@ -138,7 +164,6 @@ Draw.minimap = function (){ ctxrestore();
 	
 }
 
-	
 Draw.minimap.map = function(){
 	var x = -(player.x)/16 + Cst.WIDTH2/main.pref.mapRatio;	
 	var y = -(player.y)/16 + Cst.HEIGHT2/main.pref.mapRatio;	

@@ -1,4 +1,11 @@
 
+viewedIf documentation
+keep same grid for same maps graphics
+only add items quest related
+
+
+
+
 freeze passive
 
 limit amount message

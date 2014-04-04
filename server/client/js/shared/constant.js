@@ -14,6 +14,10 @@ Cst.FACE = 48;
 
 Cst.bigInt = Math.pow(10,10);
 
+Cst.SEC = 1000;
+Cst.MIN = Cst.SEC*60;
+Cst.HOUR = Cst.MIN*60;
+Cst.DAY = Cst.HOUR*24;
 
 
 Cst.tab = {

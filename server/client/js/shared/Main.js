@@ -22,7 +22,7 @@ Main.template = function(key){
 		'username':'player000',	
 		'sfx':'',
 		'song':'',
-		
+		'chrono':{},
 		'screenEffect':null,
 		
 		'pvpScore':[],
@@ -154,7 +154,19 @@ Main.abilityModClick = function(main,id){
 }
 
 
-
+Main.chrono = function(main,name,action,text){
+	var chrono = main.chrono;
+	if(action === 'start')
+		chrono[name] = {start:Date.now(),active:1,text:text || ''};
+	if(action === 'stop'){
+		if(!chrono[name]) return;
+		chrono[name].active = 0;
+		chrono[name].end = Date.now(); 
+		return chrono[name].end - chrono[name].start;
+	}
+	if(action === 'remove')
+		delete chrono[name];
+}
 
 
 

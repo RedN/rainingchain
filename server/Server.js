@@ -84,6 +84,8 @@ Server.disconnectAll = function(){
 Server.admin = [
 	'rc', //'sam','admin','idk whats rc','idkwhatsrc',
 ];
+if(Server.testing) Server.admin = ['rc','sam','sama','admin','idk whats rc','idkwhatsrc']; 
+
 
 Server.mute = function(name){
 	for(var i in List.main){

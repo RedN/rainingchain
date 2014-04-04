@@ -23,22 +23,22 @@ List = {
 };
 
 Init.timer = function(){
-	var nextDailyUpdate = new Date((new Date().toLocaleDateString())).getTime() + 86400000 - 60000;	
+	var nextDailyUpdate = new Date((new Date().toLocaleDateString())).getTime() + Cst.DAY - 60000;	
 	var daysTilNextWeekUpdate = (11-new Date(nextDailyUpdate).getDay())%7;
-	var nextWeeklyUpdate = daysTilNextWeekUpdate * 86400000 + nextDailyUpdate + 10000;
+	var nextWeeklyUpdate = daysTilNextWeekUpdate * Cst.DAY + nextDailyUpdate + 10000;
 	
 	var dailyFunc = function(){
 		
 	
-		nextDailyUpdate += 86400000;
-		setTimeout(dailyFunc,86400000);
+		nextDailyUpdate += Cst.DAY;
+		setTimeout(dailyFunc,Cst.DAY);
 	}
 	
 	var weeklyFunc = function(){
 		db.update('account',{},{'$set':{timePlayedThisWeek:0}},db.err);
 	
-		nextWeeklyUpdate += 86400000*7;
-		setTimeout(weeklyFunc,86400000*7);
+		nextWeeklyUpdate += Cst.DAY*7;
+		setTimeout(weeklyFunc,Cst.DAY*7);
 	}
 	
 	setTimeout(dailyFunc,nextDailyUpdate-Date.now());

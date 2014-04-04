@@ -29,7 +29,7 @@ Init.db = function(data){
 		port: '10000',
 		db: 'public',
 		connectionString: function(){return 'mongodb://'+this.username+':'+this.password+'@'+this.server+':'+this.port+'/'+this.db;},
-		options: {server:{auto_reconnect: true,socketOptions:{connectTimeoutMS:3600000,keepAlive:3600000,socketTimeoutMS:3600000}}}
+		options: {server:{auto_reconnect: true,socketOptions:{connectTimeoutMS:Cst.HOUR,keepAlive:Cst.HOUR,socketTimeoutMS:Cst.HOUR}}}
 	};
 	
 	

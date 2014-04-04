@@ -139,6 +139,7 @@ Change.update.init = function(){
 				{'array':['hideHUD']},
 				
 				{'array':['pvpScore']},	
+				{'array':['chrono']},	
 			]
 			},	
 		'exist':{

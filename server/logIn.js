@@ -221,7 +221,7 @@ Save.main = function(key,updateDb){
 	var main = typeof key === 'string' ? List.main[key] : key;
     main = Save.main.compress(main);
     var save = {};
-    var toSave = ['invList','bankList','tradeList','quest','username','name','social','passive','passiveRemovePt','passiveActive'];
+    var toSave = ['invList','bankList','tradeList','quest','username','name','social','passive','passiveRemovePt','passiveActive','chrono'];
     for(var i in toSave){ save[toSave[i]] = main[toSave[i]]; }
 
     if(updateDb !== false){
@@ -269,7 +269,7 @@ Load = function (key,account,socket,cb){
 				socket.emit('signIn', { cloud9:cloud9, success:1, key:key, data:Load.initData(key,player,main)});
 			});
 			
-			var time = Math.floor(account.timePlayedThisWeek/3600000) + 'h ' + Math.floor(account.timePlayedThisWeek%3600000/60000) + 'm';
+			var time = Math.floor(account.timePlayedThisWeek/Cst.HOUR) + 'h ' + Math.floor(account.timePlayedThisWeek%Cst.HOUR/Cst.MIN) + 'm';
 			Chat.add(key,"You have played " + time + " this week.");
 			
 			Test.signIn(key);
@@ -306,7 +306,7 @@ Save.main.compress = function(mainn){
 		message:main.social.message,
 		symbol:main.social.symbol,
 	}
-
+	
     return main;
 }
 

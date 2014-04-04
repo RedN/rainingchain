@@ -514,6 +514,18 @@ Command.list['question'].doc = {
 	],
 }
 
+Command.list['chrono,remove'] = function(key,name){
+	var main = List.main[key];
+	if(main.chrono[name] && !main.chrono[name].active)
+		Main.chrono(main,name,'remove');
+}
+Command.list['chrono,remove'].doc = {
+	'description':"Remove a stopped chronometer.",
+	'help':0,'param':[
+		{type:'Letters',name:'Chrono Name',optional:0},
+	],
+}
+
 
 Command.list['logout'] = function(key){
 	Sign.off(key,"You safely quit the game.");
