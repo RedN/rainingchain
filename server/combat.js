@@ -243,23 +243,38 @@ Combat.collision.status.drain = function(act,b){
 }
 
 //Clear Status
-/*
-Combat.clearStatus = {};
+Combat.clearStatus = function(act){
+	Combat.clearStatus.burn(act);
+	Combat.clearStatus.knock(act);
+	Combat.clearStatus.bleed(act);
+	Combat.clearStatus.stun(act);
+	Combat.clearStatus.chill(act);
+	Combat.clearStatus.drain(act);
+};
 Combat.clearStatus.burn = function(act){ act.status.burn.time = 0; } 
-Combat.clearStatus.burn = function(act){ act.status.stun.time = 0;
-Actor.boost(act,[		stun,maxSpd,atkSpd-main
-		{'stat':'maxSpd','type':"*",'value':1,'time':stun.active.time,'name':'stun'},
-		{'stat':'atkSpd-main','type':"*",'value':0,'time':stun.active.time,'name':'stun'}
-	]);
-
- } 
-*/
+Combat.clearStatus.knock = function(act){ act.status.knock.time = 0; }
+Combat.clearStatus.bleed = function(act){ act.status.bleed.time = 0; }
+Combat.clearStatus.stun = function(act){ 
+	act.status.stun.time = 0;
+	Actor.boost.removeByName(act,'maxSpd@stun');
+	Actor.boost.removeByName(act,'atkSpd-main@stun');
+}
+Combat.clearStatus.chill = function(act){ 
+	act.status.chill.time = 0;
+	Actor.boost.removeByName(act,'maxSpd@chill');
+}
+Combat.clearStatus.drain = function(act){ 
+	act.status.drain.time = 0;
+	Actor.boost.removeByName(act,'mana-max@drainBad');
+}
 
 //Apply Mods
 Combat.collision.curse = function(act,info){
 	for(var i in info.boost){
 		var boost = info.boost[i];
 		Actor.boost(act,{'stat':boost.stat,'type':boost.type,'value':boost.value,'time':boost.time,'name':'curse'}); 
+		
+		act.curseClient[boost.stat] = boost.type + round(boost.value,2);
 	}
 }
 
@@ -282,9 +297,13 @@ Combat.collision.leech = function(act,b){
 Combat.collision.reflect = function(dmg,bullet,act){
 	var attacker = List.all[bullet.parent];
 	if(attacker && attacker.hp){
+		var sum = 0;
 		for(var i in Cst.element.list){
-			Actor.changeHp(attacker,-act.reflect[Cst.element.list[i]]*dmg[Cst.element.list[i]]/attacker.globalDef);
+			sum += act.reflect[Cst.element.list[i]]*(dmg[Cst.element.list[i]] || 0);
 		}
+		sum /= attacker.globalDef;
+		sum = sum || 0;
+		Actor.changeHp(attacker,-sum);
 	}
 }
 	

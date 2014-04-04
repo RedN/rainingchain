@@ -244,7 +244,7 @@ q.map.tutorial = function(){
 		Actor.creation({'xym':spot.c,
 			"category":"system","variant":"switch",extra:function(act){
 				act.switch = {
-					on:function(key,mortid,map){
+					on:function(key,act,map){
 						map.addon.Qtutorial.variable.rotation *= -1;		
 					}
 				};

@@ -1,27 +1,13 @@
 
-separate iconsheet and facesheet into multiple images
-
 freeze passive
 
 limit amount message
 
-dialogue face. put in client side.
-
-death clear status
-fix reflect
-add what curse active
-use attack template for other attack
-
 
 mutelist
-range for public
 
 teleport actor zone
 getAbility and getEquip for pvp
-
-pvp quest
-add flag for contact me
-add report player
 
 chrono ingame
 stat window

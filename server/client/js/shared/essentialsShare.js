@@ -452,7 +452,7 @@ String.prototype.set = function(pos,value){
 //Testing
 eval('permCo' + 'nsoleLog = function(){ co' + 'nsole.log.apply(co' + 'nsole,arguments); }');
 logError = function(err) {
-	permConsoleLog(err); return;
+	//permConsoleLog(err); return;
 	if (typeof err === 'object') {
 		if (err.message) { permConsoleLog('\nMessage: ' + err.message) }
 		if (err.stack) { permConsoleLog(err.stack); }

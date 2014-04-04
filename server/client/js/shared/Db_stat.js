@@ -646,7 +646,7 @@ Init.db.stat = function(){
 	//{Dmg
 	'globalDmg':{
 		'icon':'element.melee',
-		'name':'Main Dmgense',
+		'name':'Main Damage',
 		'boost':{'base':1,'stat':['globalDmg'],},
 		'description':"Increase Damage Dealt for all elements.",
 		},

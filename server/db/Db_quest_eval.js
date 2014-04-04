@@ -54,9 +54,6 @@ var testItem = function (key,array_items){
 var teleport = Actor.teleport;
 var chat = Chat.add;
 var cutscene = function(key,map,path){
-	console.log(key,map,path);
-	console.log(Object.keys(q.map),q.map[map]);
-
 	Actor.setCutscene(getAct(key),q.map[map][Q].path[path]);
 }
 

@@ -59,6 +59,7 @@ Change.update.init = function(){
 				{'array':['spdX'],'filter':Math.round,'condition':(function(e){ return !e.nevermove; })},
 				{'array':['spdY'],'filter':Math.round,'condition':(function(e){ return !e.nevermove; })},
 				{'array':['statusClient'],'condition':(function(e){ return e.combat; })},
+				{'array':['curseClient'],'condition':(function(e){ return e.combat; })},
 			],
 			'slow':[
 				{'array':['combat']},
@@ -90,6 +91,7 @@ Change.update.init = function(){
 				{'array':['spdY'],'filter':Math.round},
 				{'array':['hp'],'filter':Math.round},
 				{'array':['statusClient']},
+				{'array':['curseClient']},
 			],
 			'slow':[
 				{'array':['resource','hp','max'],'filter':Math.round},
@@ -175,7 +177,7 @@ Change.update.init = function(){
 				
 				
 				{'array':['statusClient']},
-				
+				{'array':['curseClient']},
 				
 				{'array':['equip','piece']},
 				{'array':['weapon']},

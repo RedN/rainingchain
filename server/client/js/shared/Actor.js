@@ -97,7 +97,7 @@ Actor.swapWeapon = function(act,piece){
 
 //}
 
-//{Update
+//{Update + Boost
 Actor.update = {};
 Actor.update.mastery = function(act){
 	//Note: mod is applied in Combat.action.attack.mod.act
@@ -157,7 +157,7 @@ Actor.update.permBoost = function(act){
 }
 
 Actor.update.boost = function(act,stat){
-	if(stat === 'all'){ for(var i in act.boost.list) Actor.update.boost(act,i); return; }
+	if(!stat || stat === 'all'){ for(var i in act.boost.list) Actor.update.boost(act,i); return; }
 	
 	var stat = act.boost.list[stat];
 	var sum = stat.base;
@@ -203,6 +203,7 @@ Actor.boost = function(act, boost){	//boost: { 'stat':'globalDmg','value':1,'typ
 
 Actor.boost.remove = function(act, boost){
 	var stat = boost.stat;
+	if(boost.name === 'curse') delete act.curseClient[stat];
 	delete act.boost.list[stat].name[boost.name]
 	delete boost; 
 	Actor.update.boost(act,stat);
@@ -210,8 +211,16 @@ Actor.boost.remove = function(act, boost){
 Actor.boost.removeByName = function(act, name){	//TOFIX		name: STAT@ID
 	var a = name.split("@");
 	var b = act.boost.list[a[0]];
-	if(!b) return;
-	Actor.boost.remove(b.name[a[1]]);
+	if(b && b.name[a[1]]){
+		Actor.boost.remove(act,b.name[a[1]]);
+	}
+}
+Actor.boost.removeAll = function(act){
+	for(var i in act.boost.list)
+		for(var j in act.boost.list[i].name)
+			delete act.boost.list[i].name[j];
+	act.curseClient = {};
+	Actor.update.boost(act,'all');
 }
 
 Actor.permBoost = function(act,source,boost){
@@ -719,11 +728,11 @@ Actor.respawn.player = function(act){
 	act.y = good.y;
 	act.map = good.map;
 		
+	Combat.clearStatus(act);
+	Actor.boost.removeAll(act);
 	for(var i in act.resource)
 		act[i] = act.resource[i].max;
-	
 	act.dead = 0;
-	
 	LOG(2,act.id,'respawn',act.x,act.y,act.map);
 	
 }

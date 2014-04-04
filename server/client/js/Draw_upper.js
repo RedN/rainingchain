@@ -9,7 +9,7 @@ Draw.state = function(){
 	s.y += 5;
 	Draw.state.ability(s);
 	s.y += 30;
-	Draw.state.status(s,player.statusClient);
+	Draw.state.status(s,player.statusClient,player.curseClient,1);
 	s.y += 30;
 	Draw.pvpScore(s);
 }
@@ -93,15 +93,24 @@ Draw.state.ability = function(s){ ctxrestore();
 	}
 }
 
-Draw.state.status = function(s,status){ ctxrestore();
+Draw.state.status = function(s,status,curse,showtext){ ctxrestore();		//also use over head
 	ctx = List.ctx.stage;
 	var numX = s.x+10;		
 	for(var i in status){
 		if(+status[i]){
-			var text = status !== player.statusClient ? '' : Cst.status.list[i].capitalize();
+			var text = showtext ? Cst.status.list[i].capitalize() : "";	
 			Draw.icon('status.' + Cst.status.list[i],numX,s.y,24,text);
-			numX += 30;			
+			numX += 30;
 		}
+	}
+	
+	for(var i in curse){
+		var value = curse[i];
+		if(value[1] === '-') value = value.slice(1);
+		
+		var text = showtext ? Db.stat[i].name + ':' + value : "";	
+		Draw.icon(Db.stat[i].icon,numX,s.y,24,text);
+		numX += 30;
 	}
 }
 //}

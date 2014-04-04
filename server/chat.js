@@ -75,12 +75,21 @@ Chat.receive = function(data){
 };
 
 Chat.receive.public = function(key,text,to,type,from,data){
-    if(text === data.text){
-		List.all[key].chatHead = {'text':text,'timer':25*10};
+	var act = List.all[key];
+	var main = List.main[key];
+	
+    if(text === data.text){	//if item
+		act.chatHead = {'text':text,'timer':25*10};
 	}
 	var from = {'from':from};
-	if(List.main[key].social.symbol) from.symbol = List.main[key].social.symbol;
-	for(var i in List.main){ Chat.add(i,text,'public',from);}
+	if(main.social.symbol) from.symbol = List.main[key].social.symbol;
+	
+	for(var i in act.activeList)
+		if(List.main[i]) Chat.add(i,text,'public',from);
+		
+	for(var i in List.team[act.team])
+		if(List.main[i] && i !== key) Chat.add(i,text,'public',from);
+	
 }
 
 Chat.receive.pm = function(key,text,to,type,from,data){

@@ -60,8 +60,8 @@ Quest.creation = function(q){
 		Db.dialogue[q.id][i] = q.dialogue[i];		
 	}
 	//load map via Init.db.quest.map
-	for(var i in q.mapAddOn){
-		Db.map[i].addon[q.id] = q.mapAddOn[i];
+	for(var i in q.mapAddon){
+		Db.map[i].addon[q.id] = q.mapAddon[i];
 	}
 	
 	Db.enemy[q.id] = {};
@@ -139,7 +139,7 @@ Quest.template = function(id,version){
 		requirement:[],		
 		dialogue:{},
 		challenge:{},
-		mapAddOn:{},
+		mapAddon:{},
 		map:{},
 		item:{}, 
 		equip:{},

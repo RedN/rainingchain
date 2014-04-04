@@ -112,11 +112,11 @@ Draw.logout = function(){
 	});	
 	
 	//contact me
-	Draw.icon('system.close',Cst.WIDTH-size*2,0,size);
+	Draw.icon('system.flag',Cst.WIDTH-size*2,0,size);
 	Button.creation(0,{
 		'rect':[Cst.WIDTH-size*2,Cst.WIDTH-size,0,size],
 		"shiftLeft":{'func':function(){ $("#contactMe").dialog("open"); },'param':[]},
-		'text':"Shift-Left to report a bug/hack/other.",
+		'text':"Shift-Left to contact admin to report bug/player/hack/other.",
 	});	
 }
 
@@ -309,7 +309,7 @@ Draw.chat.dialogue = function(){
 	if(dia.face){
 		html.dialogue.text.style.width = s.w - 2*s.textBorder-s.faceX + 'px';
 		html.dialogue.div.style.left = (s.x + s.divX + s.textBorder + s.faceX) + 'px';
-		Draw.face(dia.face.image,s.facesX,s.y+s.facesY,96,dia.face.name);
+		Draw.face(dia.face,s.facesX,s.y+s.facesY,96);
 	} 
 	
 	//Options
@@ -382,9 +382,10 @@ Draw.icon = function(info,x,y,size,text){
 
 Draw.item = function(info,x,y,size){
 	size = size || 32;
-	Draw.icon(typeof info === 'string' ? info : info[0],x,y,size);
+	info = typeof info === 'string' ? [info,1] : info;
 	
-	var amount = typeof info === 'string' ? 1 : Math.floor(info[1]);
+	Draw.icon(info[0],x,y,size);
+	var amount = info[1];
 	
 	if(amount > 1){
 		if(amount >= 100000){
@@ -575,19 +576,19 @@ Draw.setInnerHTML = function(el,str,name){
 
 }
 
-Draw.face = function(info,x,y,size,name){
+Draw.face = function(info,x,y,size){
 	size = size || 96;
-	var slot = Img.face.index[info];
+	if(info === 'player') info = {image:'warrior-man.0','name':player.name};
+	var slot = Img.face.index[info.image];
 	ctx.drawImage(Img.face,slot.x,slot.y,Cst.FACE,Cst.FACE,x,y,size,size);
-	if(!name) return;
-	
+
 	Button.creation(0,{
 		'rect':[x,x+size,y,y + size],
-		'text':name,
+		'text':info.name,
 	});	
 	
 	ctx.textAlign = 'center';
-	ctx.fillText(name,x+size/2,y+size+5);
+	ctx.fillText(info.name,x+size/2,y+size+5);
 	ctx.textAlign = 'left';
 	
 }

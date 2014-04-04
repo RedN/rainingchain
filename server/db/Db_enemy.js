@@ -249,13 +249,14 @@ Init.db.enemy = function(){
 		"name":"Plant",
 		"sprite":{'name':"plant",'sizeMod':1},
 		"abilityList":[
-			{'template':'scratchBig','aiChance':[1,0,0],'extra':{	//onDeath
+			{'template':'scratchBig','aiChance':[1,0,0],'extra':{
 				'dmg,main':300,'objImg,name':'splashMelee','bleed,baseChance':1,
 			}},
 			
 			{'template':'dart','aiChance':[0.2,1,1],'extra':{
 				'bleed,baseChance':0.2,'chill,baseChance':0.4,'amount':5,'angle':25,
 				'dmg,main':50,'parabole':{'height':10,'min':10,'max':500,'timer':50},
+				'curse':{'chance':1,'boost':[{'stat':'globalDmg','type':'*','value':0.5,'time':50},{'stat':'maxSpd','type':'+','value':0.1231231414,'time':50}]},
 			}},
 			[0.4,0.2,0.2]
 		],

@@ -4,12 +4,13 @@ Loop = function(){
     Test.loop();
     Performance.loop();
 	
-	Loop.Bullet();
-	Loop.Strike();
-	Loop.Group();
-	Loop.Actor();
-	Loop.Drop();
-	Loop.Map();
+	Loop.bullet();
+	Loop.strike();
+	Loop.group();
+	Loop.actor();
+	Loop.drop();
+	Loop.map();
+	Loop.team();
 	
 	Change.update();
 	Change.send();
@@ -23,13 +24,13 @@ Loop.interval = function(num){
 	return Loop.frameCount % num === 0;
 }
 
-Loop.Actor = function(){
+Loop.actor = function(){
 	for (var i in List.actor ){     
 	    Actor.loop(List.actor[i]); 
 	}
 }
 
-Loop.Bullet = function (){
+Loop.bullet = function (){
 	for(var i in List.bullet){
 		Bullet.loop(List.bullet[i]);
 	}
@@ -38,13 +39,13 @@ Loop.Bullet = function (){
 	}
 }
 
-Loop.Strike = function(){
+Loop.strike = function(){
 	for(var i in List.strike){
 		Strike.loop(List.strike[i]); 
 	}
 }
 
-Loop.Drop = function(){
+Loop.drop = function(){
 	for(var i in List.drop){ 
 		var drop = List.drop[i];
 		drop.timer--; 
@@ -52,13 +53,13 @@ Loop.Drop = function(){
 	}
 }
 
-Loop.Map = function(){
+Loop.map = function(){
 	for(var i in List.map){
 		Map.loop(List.map[i]);		
 	}
 }
 
-Loop.Group = function(){
+Loop.group = function(){
 	for(var i in List.group){
 		var g = List.group[i];
 		var list = g.list;
@@ -102,6 +103,20 @@ Loop.logOut = function(){
 	for(var i in List.main)	if(!List.socket[i]){
 		Sign.off.remove.safe(i);
 	}
+}
+
+
+Loop.team = function(){
+	if(!Loop.interval(50)) return;
+	List.team = {};
+	for(var i in List.main){
+		if(List.actor[i]){
+			var team = List.actor[i].team;
+			List.team[team] = List.team[team] || {};
+			List.team[team][i] = i;
+		}
+	}
+
 }
 
 ActiveList = {};

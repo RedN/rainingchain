@@ -45,6 +45,7 @@ Init.actor = function(){
 			'stun':{'active':{"time":0,"magn":0},'resist':0},					//stun, remove attack charge
 		}
 		act.statusClient = '000000';
+		act.curseClient = {};
 		act.pushed = {"time":0,"magn":0,"angle":0};							//same than knock but no combat related
 		act.block = 0; 						//{direction:4,distance:0};
 			

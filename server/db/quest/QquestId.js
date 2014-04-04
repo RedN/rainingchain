@@ -77,7 +77,7 @@ q.event.bossKilled = function(key){
 //}
 
 //{Map
-var test = q.mapAddOn['test'] = {};
+var test = q.mapAddon['test'] = {};
 test.load = function(map){
 	Actor.creation.group({'x':1060,'y':1900,'map':map},[
 		{"category":"neutral","variant":"jenny",'extra':{
