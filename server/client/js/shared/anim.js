@@ -1,5 +1,5 @@
 
-Init.db.anim = function(){
+Init.db.anim = function(){	//client
 	Db.anim ={
 		"aura":{'frame':30,'layer':'b'},
 		"bind":{'frame':16},
@@ -68,7 +68,25 @@ Init.db.anim = function(){
 }
 
 Anim = {};
-Anim.loop = function (anim){
+Anim.creation = function(name,target,sizeMod){	//server
+	//Add animation to the game. target = actor id OR an obj x,y,map,viewedIf
+	sizeMod = sizeMod || 1;
+	var id = 'a'+Math.randomId(5);	
+	var anim = {'sizeMod':sizeMod,'name':name,'target':target,'id':id};
+	
+	if(typeof target === 'string') List.map[List.all[target].map].list.anim[id] = anim;
+	else List.map[target.map].list.anim[id] = anim;
+	
+	return id;
+}
+
+Anim.clearList = function(){	//server
+	for(var i in List.map){
+		List.map[i].list.anim = {};
+	}
+}
+
+Anim.loop = function (anim){	//client
 	var animFromDb = Db.anim[anim.name];
 	if(!animFromDb){ DEBUG(1,"anim not found" + anim.name); animFromDb = Db.anim['slashMelee']; }
 	
@@ -83,13 +101,6 @@ Anim.loop = function (anim){
 	}	
 }
 
-Anim.creation = function(name,target,sizeMod){	//server side
-	//Add animation to the game. target = actor id OR an obj x,y,map,viewedIf
-	sizeMod = sizeMod || 1;
-	var id = 'a'+Math.randomId(5);
-	List.anim[id] = {'sizeMod':sizeMod,'name':name,'target':target,'id':id};
-	return id;
-}
 
 
 

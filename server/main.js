@@ -9,7 +9,6 @@ List = {
 	all:{},		//EVERYTHING (player id refers to actor)
 	actor:{},	//all mortals (player,enemy)
 	bullet:{},	//all bullet
-	anim:{},	//all anim
 	strike:{},	//all strike
 	group:{},	//all enemy group
 	drop:{},	//all drop

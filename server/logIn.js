@@ -174,7 +174,7 @@ Sign.off.remove = function(key){
 	
 	var act = List.all[key];
 	if(act && List.map[act.map]) delete List.map[act.map].list[key];
-	ActiveList.remove(List.all[key]);
+	Activelist.remove(List.all[key]);
 	delete List.nameToKey[List.all[key].name];
 	delete List.actor[key];
 	delete List.socket[key];

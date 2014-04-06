@@ -91,7 +91,7 @@ Attack.creation = function(player,attack,extra){
 	s.crAngle = s.angle; s.moveAngle = s.angle;
 
 	List.all[s.id] = s;
-	ActiveList.add(s);
+	Activelist.add(s);
 	
 	if(attack.type === 'strike'){ return Attack.creation.strike(attack);}
 	if(attack.type === 'bullet'){ return Attack.creation.bullet(attack);}
@@ -138,7 +138,7 @@ Attack.creation.bullet = function(b){
 	Sprite.creation(b,{'name':b.objImg.name,'anim':"travel",'sizeMod':b.objImg.sizeMod});
 	
 	List.bullet[b.id] = b;
-	List.map[b.map].list[b.id] = b;
+	Map.enter(b);
 	
 	return b;
 }; 

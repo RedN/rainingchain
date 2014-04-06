@@ -314,7 +314,6 @@ Init.db.ability = function(cb){
 		}
 	}};	
 	
-	
 	a['bind'] = {'type':'attack','name':'Binding','icon':'curse.stumble',
 		'spd':{'main':1,'support':0},'period':{'own':50,'global':50},
 		'action':{'func':'Combat.action.attack','param':{
@@ -334,7 +333,6 @@ Init.db.ability = function(cb){
 		}
 	}};	
 	
-	
 	a['mine'] = {'type':'attack','name':'Mine','icon':'attackRange.head',
 		'spd':{'main':1,'support':0},'period':{'own':25,'global':25},
 		'action':{'func':'Combat.action.attack','param':{
@@ -344,11 +342,11 @@ Init.db.ability = function(cb){
 		}
 	}};	
 	
-	
 	a['blessing'] = {'type':'blessing','name':'Blessing','icon':'blessing.fly',
 		'spd':{'main':1,'support':0},'period':{'own':25,'global':25},
 		'action':{'animOnSprite':'boostWhite','func':'Combat.action.boost','param':[]}
 	};
+
 	a['summon'] = {'type':'summon','name':'Summon','icon':'summon.wolf',
 		'spd':{'main':1,'support':0},'period':{'own':50,'global':50},
 		'action':{'animOnSprite':'boostPink','func':'Combat.action.summon','param':[]}

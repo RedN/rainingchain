@@ -1,7 +1,7 @@
 //List of handy functions.
 
 
-
+DEBUG = function(text){ permConsoleLog(text); }
 LOG = function(lvl,key,name,param){
 	/*
 	0:Very important

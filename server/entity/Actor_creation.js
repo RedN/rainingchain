@@ -13,8 +13,7 @@ Actor.creation = function(data){
 	e.data = data;
 	List.actor[e.id] = e;
 	List.all[e.id] = e;
-	List.map[e.map].list[e.id] = e;
-	
+	Map.enter(e);
 	
 	for(var i in e.immune) e.equip.def[i] = Cst.bigInt;
 	

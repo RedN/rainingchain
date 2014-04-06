@@ -2,11 +2,11 @@
 Bullet = {};
 
 Bullet.remove = function(b){
-	ActiveList.remove(b);
+	Activelist.remove(b);
 	
 	delete List.bullet[b.id];
 	delete List.all[b.id]
-	if(List.map[b.map])	delete List.map[b.map].list[b.id];
+	Map.leave(b);
 }
 
 Bullet.loop = function(b){
@@ -150,7 +150,7 @@ Strike.loop.collision = function(atk){
 
 
 Strike.remove = function(strike){
-	ActiveList.remove(strike);
+	Activelist.remove(strike);
 	
 	delete List.strike[strike.id];
 	delete List.all[strike.id]

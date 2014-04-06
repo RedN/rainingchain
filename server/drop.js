@@ -69,8 +69,7 @@ Drop.creation = function(d){
 	drop.y += Math.randomML(drop.vx);
 	
 	List.drop[drop.id] = drop;
-	List.all[drop.id] = drop;
-	List.map[drop.map].list[drop.id] = drop;
+	Map.enter(drop);
 }
 
 
@@ -92,10 +91,10 @@ Drop.template = function(){
 }
 
 Drop.remove = function(drop){
-	ActiveList.remove(drop);
+	Activelist.remove(drop);
 	delete List.all[drop.id];
 	delete List.drop[drop.id];
-	if(List.map[drop.map])	delete List.map[drop.map].list[drop.id];
+	Map.leave(drop);
 }
 
 

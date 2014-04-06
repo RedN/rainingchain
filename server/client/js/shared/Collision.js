@@ -100,6 +100,7 @@ Collision.BulletActor = function(atk){
 		Combat.collision(atk,player);
 	}	
 }
+
 Collision.BulletActor.test = function(atk,player){
 	var normal = true;
 	if(!['map','true','all'].have(atk.hitIf)){	//no testing needed

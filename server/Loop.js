@@ -119,8 +119,8 @@ Loop.team = function(){
 
 }
 
-ActiveList = {};
-ActiveList.test = function(act,obj){
+Activelist = {};	//Actor.loop.activeList is where the update happens
+Activelist.test = function(act,obj){
 	//Test used to know if obj should be in activeList of act.
 	if(!obj){ return false; }
 	if(act.id === obj.id){ return false; }
@@ -137,12 +137,12 @@ ActiveList.test = function(act,obj){
 	return Collision.PtRect(pt,rect);
 }
 
-ActiveList.add = function(bullet){
+Activelist.add = function(bullet){
 	for(var i in List.actor){
 		var player = List.actor[i];
 		if(!player) continue;
 		
-		if(ActiveList.test(player,bullet)){ 
+		if(Activelist.test(player,bullet)){ 
 			player.activeList[bullet.id] = bullet.id;
 			if(player.type !== 'player' || bullet.type === 'strike'){ 
 				bullet.viewedBy[player.id] = 1; 
@@ -151,7 +151,7 @@ ActiveList.add = function(bullet){
 	}
 }
 
-ActiveList.remove = function(b){
+Activelist.remove = function(b){
 	if(!b) return;
 	for(var i in b.viewedBy){
 		if(!List.all[i]) continue;	//quick fix
@@ -161,12 +161,12 @@ ActiveList.remove = function(b){
 }
 
 removeAny = function(act){
+	if(typeof act === 'string') act = List.all[act];
 	if(!act) return;
 	if(act.type === 'bullet') Bullet.remove(act);
 	else if(act.type === 'enemy') Actor.remove(act);
 	else if(act.type === 'player') Sign.off(act.id);
 	else if(act.type === 'drop') Drop.remove(act);
-	else if(act.type === 'strike') Strike.remove(act);
 	else if(act.type === 'strike') Strike.remove(act);
 }
 

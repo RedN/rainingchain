@@ -1,8 +1,7 @@
 
-viewedIf documentation
 keep same grid for same maps graphics
-only add items quest related
 
+condition to be hit
 
 
 
@@ -16,7 +15,6 @@ mutelist
 teleport actor zone
 getAbility and getEquip for pvp
 
-chrono ingame
 stat window
 
 plan revamp: already know what min and max mods are

@@ -184,7 +184,7 @@ if(server){
 							le[id] = act;
 							if(act.combat) lc[id] = act;
 							
-							if(ActiveList.test(p,act)){
+							if(Activelist.test(p,act)){
 								e[id] = act;
 								if(act.combat) c[id] = act;
 							}
@@ -192,11 +192,11 @@ if(server){
 						if(act.type === 'player'){
 							var id = act.name + ' ' + act.id;
 							lp[id] = act;
-							if(ActiveList.test(p,act)) pl[id] = act;
+							if(Activelist.test(p,act)) pl[id] = act;
 						}
 						if(List.all[i].type === 'bullet'){
 							lb.push(act);
-							if(ActiveList.test(p,act)) b[id] = act;
+							if(Activelist.test(p,act)) b[id] = act;
 						}
 					}				
 					

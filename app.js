@@ -1,15 +1,12 @@
-//git commit -am "your message goes here"
-//git push -u origin master
-cloud9 = typeof process.env.PORT !== 'undefined';
 nodejitsu = typeof process.env.NODEJITSU !== 'undefined';
 
 if(nodejitsu){
 	require('nodetime').profile({
 		accountKey: '7a06997db310e13bef9840cd1d8cfc1ea45fcc57', 
-		appName: 'Node.js Application'
+		appName: 'Raining Chain'//'Node.js Application'
 	});
 }
-require('domain').create().on('error', function(err){ permConsoleLog(err);});	//no idea if working
+require('domain').create().on('error', function(err){ permConsoleLog('domain',err);});	//no idea if working
 
 
 
@@ -22,22 +19,23 @@ request = require('request');
 	
 crypto = require('crypto');
 astar = require('astar');
-
-
-
-
-router = express();
-serv = http.createServer(router);
+app = express();
+serv = http.createServer(app);
 io = socketio.listen(serv); io.set('log level', 1); io.set('heartbeat timeout', 20); io.set('heartbeat interval', 15);
 
-if(cloud9){ serv.listen(process.env.PORT, process.env.IP);}	//if using cloud9
-else {serv.listen(3000);}	//if using on own PC, go http://localhost:3000/ 
+serv.listen(3000);
 
 var clientPath = 'server/';
-router.use(express.static(path.resolve(__dirname, clientPath + 'client')));
+app.use(express.bodyParser());
+app.use(express.static(path.resolve(__dirname, clientPath + 'client')));
 
 
-DEBUG = function(text){ permConsoleLog(text); }
+//Runescape Calculators:
+app.get('/rs', function (req, res) { res.sendfile(__dirname  + '/server/client/rscalc/index.html');});
+app.post('/getPrice', function(req, res){	res.send(require('./server/RS_calculators').itemDb);});
+app.post('/getExp', function(req, res){	require('./server/RS_calculators').appPostGetExp(req,res); });
+
+
 
 //Require
 require('./' + clientPath + 'client/js/shared/essentialsShare');

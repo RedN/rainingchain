@@ -1,0 +1,48 @@
+STRUCTURE
+
+methodDb = array;
+
+add methods to methodDb via mod, function
+
+uniform methods
+
+turn methodDb into obj
+
+####
+
+click on update
+
+99:
+select all methods possible (not excluded)
+generate full table
+select the best ones
+generate table with best ones
+add sum
+draw table
+
+normal:
+select all methods (not excluded and visible)
+generate table
+draw table
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

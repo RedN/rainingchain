@@ -29,12 +29,12 @@ var dialogue = function(key,npc,convo,node){
 
 
 var addItem = function(key,item,amount){
-	if(Quest.itemExist(Q+'-'+item)) item = Q+'-'+item;
-	Itemlist.add(key,item,amount);
+	if(item.indexOf(Q) !== 0) item = item = Q+'-'+item;
+	if(Quest.itemExist(item)) Itemlist.add(key,item,amount);
 }
 var removeItem = function(key,item,amount){
-	if(Quest.itemExist(Q+'-'+item)) item = Q+'-'+item;
-	Itemlist.remove(key,item,amount);
+	if(item.indexOf(Q) !== 0) item = item = Q+'-'+item;
+	if(Quest.itemExist(item)) Itemlist.remove(key,item,amount);
 }
 
 var haveItem = function(key,item,amount){
@@ -56,4 +56,20 @@ var chat = Chat.add;
 var cutscene = function(key,map,path){
 	Actor.setCutscene(getAct(key),q.map[map][Q].path[path]);
 }
+
+
+
+var teleZone = function(zone,x,y,map){
+
+
+}
+//Map.collisionRect(map,spot.a,'player',q.func.teleportPlayer);
+
+
+
+
+
+
+
+
 

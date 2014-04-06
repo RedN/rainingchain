@@ -385,7 +385,7 @@ Actor.loop.activeList = function(act){
 			delete act.activeList[j];
 			continue;
 		}
-		if(!ActiveList.test(act,List.all[j])){
+		if(!Activelist.test(act,List.all[j])){
 			delete List.all[j].viewedBy[act.id];
 			delete act.activeList[j];
 			if(act.removeList) act.removeList.push(List.all[j].publicId || j);
@@ -394,8 +394,8 @@ Actor.loop.activeList = function(act){
 	
 	//Add New Boys
 	if(List.map[act.map]){
-		for(var j in List.map[act.map].list){
-			if(ActiveList.test(act,List.all[j])){
+		for(var j in List.map[act.map].list.all){
+			if(Activelist.test(act,List.all[j])){
 				act.activeList[j] = 1;
 				if(act.type !== 'player'){ List.all[j].viewedBy[act.id] = 1;}	//for player, viewedBy is used in send init data
 			}

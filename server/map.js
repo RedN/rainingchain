@@ -37,7 +37,7 @@ Map.creation = function(namemodel,version,lvl){
 		model:model.id,
 		fall:model.fall,
 		timer:version === 'MAIN' ? 1/0 : 1000,// 5*60*1000/25,
-		list:{},		//acts like List.all (for faster activeList)
+		list:{all:{},player:{},bullet:{},enemy:{},anim:{}},		//acts like List.all (for faster activeList and collisionRect)
 		lvl:lvl || model.lvl,
 		addon:newaddon,
 	};
@@ -136,8 +136,8 @@ Map.instance.list = function(model){
 Map.instance.player = function(id){
 	//return list of players names that are in a certain model of instance
 	var plist = [];
-	for(var i in List.map[id].list){
-		if(List.all[i] && List.all[i].type === 'player'){
+	for(var i in List.map[id].list.player){
+		if(List.all[i]){
 			plist.push(List.all[i].name);
 		}
 	}
@@ -147,18 +147,19 @@ Map.instance.player = function(id){
 Map.remove = function(map){
 	if(map.id === map.model) return; //cant delete main maps
 	for(var i in map.list){
-		removeAny(List.all[i]);
+		for(var j in map.list[i]){
+			removeAny(List.all[j]);
+		}
 	}
 	delete List.map[map.id];
 }
 
 
 Map.collisionRect = function(id,rect,type,cb){	//used in map loop. return array is no cb, else call func foreach
-	var list = List.map[id].list;
 	var array = [];
-	for(var i in list){
+	for(var i in List.map[id].list[type]){
 		var act = List.all[i];
-		if( (!type || act.type === type) && Collision.PtRect(act,rect)){
+		if(Collision.PtRect(act,rect)){
 			array.push(i);
 		}
 	}
@@ -167,5 +168,28 @@ Map.collisionRect = function(id,rect,type,cb){	//used in map loop. return array 
 }
 
 
-
+Map.leave = function(act,map){
+	map = map || act.map;
+	var oldmap = List.map[map];
+	
+	if(act.type === 'player'){
+		for(var i in oldmap.addon)
+			if(oldmap.addon[i].playerLeave)
+				oldmap.addon[i].playerLeave(act.id,map,oldmap.addon[i].spot,oldmap.addon[i].variable,oldmap);
+	}
+	delete oldmap.list.all[act.id];
+	if(oldmap.list[act.type]) delete oldmap.list[act.type][act.id];
+}
+Map.enter = function(act,map){
+	map = map || act.map;
+	var newmap = List.map[act.map];
+	newmap.list.all[act.id] = 1;
+	if(newmap.list[act.type]) newmap.list[act.type][act.id] = 1;
+	
+	if(act.type === 'player'){
+		for(var i in newmap.addon)
+			if(newmap.addon[i].playerEnter)
+				newmap.addon[i].playerEnter(act.id,act.map,newmap.addon[i].spot,newmap.addon[i].variable,newmap);
+	}
+}
 

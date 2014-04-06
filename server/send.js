@@ -12,7 +12,7 @@ Change.send = function(){
 		sa.p = player.privateChange;
 		sa.p = Change.send.compressXYA(sa.p);
 		
-		//Update ActiveList AKA List.all
+		//Update Activelist AKA List.all
 		var array = [];
 		for (var i in player.activeList){
 			var bool = true;	
@@ -41,19 +41,24 @@ Change.send = function(){
 		//Anim
 		//note: remove map and viewedif from .target and slot?
 		//ts("Anim.creation('fire2',{x:p.x,y:p.y,map:p.map,viewedIf:'true'})")	
-		for(var i in List.anim){
-			var anim = deepClone(List.anim[i]);
-			var testTarget = anim.target;
-			if(typeof testTarget === 'string'){ testTarget = List.all[testTarget]; }	//aka target is an obj
-			//else target is already in form {x:1,y:1,map:1}
+		for(var i in List.map[player.map].list.anim){
+			var anim = List.map[player.map].list.anim[i];
 			
-			if(!testTarget) continue;
-			
-			if(player.id === testTarget.id || ActiveList.test(player,testTarget)){
-				if(typeof anim.target === 'string'){ anim.target = testTarget.publicId; }				
-				anim = Change.send.init.anim(anim);
-				sa.a.push(anim); 
-			}	
+			if(typeof anim.target === 'string'){	//aka target is an obj
+				var targ = List.all[anim.target];
+				if(!targ) continue;
+				if(player.id === targ.id || Activelist.test(player,targ)){
+					anim.target = targ.publicId || targ.id;
+					anim = Change.send.init.anim(anim);
+					sa.a.push(anim); 
+				}
+			}
+			if(typeof anim.target !== 'string'){	//aka target is already in form {x:1,y:1,map:1}
+				if(Activelist.test(player,anim.target)){
+					anim = Change.send.init.anim(anim);
+					sa.a.push(anim); 
+				}
+			}
 		}
 		
 		
@@ -127,7 +132,7 @@ Change.send.compressXYA = function(info){
 }
 
 Change.send.reset = function(){
-	List.anim = {};
+	Anim.clearList();
 	for(var i in List.all){ List.all[i].change = {}; }
 	for(var i in List.main){ 
 		List.main[i].change = {}; 

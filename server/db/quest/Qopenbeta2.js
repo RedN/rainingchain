@@ -60,8 +60,7 @@ q.event = {
 		if(get(key,'killedAll')) dialogue(key,'jenny','intro','gratz');
 		else dialogue(key,'jenny','intro','intro');
 	},
-	
-}
+}	
 
 q.item['enemyLeft'] = {'name':'Enemy Left','icon':'magic.staff','stack':1,'drop':0,'option':[		
 	{'name':'Enemy Left','param':[],'func':function(key){
@@ -117,7 +116,7 @@ q.map.goblinLand = function(){
 	var a = m.addon[Q] = {};
 	a.spot = {"F":[5248,5536,0,64],"L":{"x":816,"y":112},"r":{"x":4400,"y":304},"s":{"x":3504,"y":368},"n":{"x":5232,"y":880},"x":{"x":1392,"y":1008},"v":{"x":2448,"y":1040},"w":{"x":2096,"y":1168},"q":{"x":4656,"y":1168},"p":{"x":5616,"y":1232},"t":{"x":3728,"y":1296},"H":{"x":1456,"y":1584},"G":[5024,5664,1568,1600],"o":{"x":5840,"y":1616},"u":{"x":2896,"y":1648},"D":{"x":944,"y":1680},"M":{"x":3728,"y":2288},"C":{"x":1904,"y":2320},"E":{"x":976,"y":2384},"m":{"x":4624,"y":2832},"B":[1920,1984,2880,2912],"A":{"x":1904,"y":2960},"l":{"x":5392,"y":3536},"g":{"x":2192,"y":3664},"e":{"x":1488,"y":3728},"h":{"x":2896,"y":3920},"d":{"x":880,"y":4272},"f":{"x":2128,"y":4272},"i":{"x":3760,"y":4624},"k":{"x":5520,"y":4720},"c":{"x":336,"y":4912},"b":{"x":1168,"y":5264},"I":{"x":1744,"y":5488},"a":{"x":1808,"y":5712},"j":{"x":4080,"y":5872}};
 	a.path = {"blue":[{"x":2128,"y":5584},{"x":1936,"y":5456},25*10,{"x":1552,"y":5584},{"x":1136,"y":5136},{"x":1296,"y":4464},{"x":2192,"y":4688},{"x":2704,"y":4400}]}
-		
+	
 	a.load = function(map,spot,v,m){
 		//Grave
 		Actor.creation({'xym':spot.b,"category":"system","variant":"grave"});
@@ -187,6 +186,9 @@ q.map.goblinLand = function(){
 			{'amount':3,"category":"dragon","variant":"king",'modAmount':1,'extra':{deathFunc:q.event.enemyKilled}},
 		]);
 	}
+	
+	
+	
 	return m;
 };
 

@@ -2,10 +2,10 @@
 Actor = typeof Actor !== 'undefined' ? Actor : {};
 
 Actor.remove = function(act){
-	ActiveList.remove(act);
+	Activelist.remove(act);
 	delete List.actor[act.id];
 	delete List.all[act.id]
-	if(List.map[act.map])	delete List.map[act.map].list[act.id];
+	Map.leave(act);
 }
 
 //{Combat
@@ -262,16 +262,16 @@ Actor.teleport = function(act,x,y,map){
 	act.y = y;
 	
 	if(!map){ //regular teleport
-		ActiveList.remove(act);
+		Activelist.remove(act);
 		return; 
-	}		
+	}
 	
 	if(!map.have("@"))	map += '@MAIN'; 			//main instance
 	if(map[map.length-1] === '@') map += act.team;	//team instance
 	if(map.have("@@"))	map += act.name; 			//alone instance
 	
 	if(act.map === map){ //regular teleport
-		ActiveList.remove(act);
+		Activelist.remove(act);
 		return; 
 	}
 	
@@ -281,24 +281,25 @@ Actor.teleport = function(act,x,y,map){
 		Map.creation(model,version); 
 	}
 	
-	var oldmap = List.map[act.map];
-	for(var i in oldmap.addon)
-		if(oldmap.addon[i].playerLeave)
-			oldmap.addon[i].playerLeave(act.id,act.map,oldmap.addon[i].spot,oldmap.addon[i].variable,oldmap);
+	Map.leave(act);
+	act.map = map;
+	Map.enter(act);	
+	Actor.teleport.enterMap(act);
 	
-	delete List.map[act.map].list[act.id];
-	act.map = map;	
-	List.map[act.map].list[act.id] = act.id;
-	
-	var newmap = List.map[act.map];
-	for(var i in newmap.addon)
-		if(newmap.addon[i].playerEnter)
-			newmap.addon[i].playerEnter(act.id,act.map,newmap.addon[i].spot,newmap.addon[i].variable,newmap);
 			
-	ActiveList.remove(act);
+	Activelist.remove(act);
 
 		Chat.add(act.id,"You leave " + oldmap.name + " and you enter " + newmap.name + '.');
 }
+
+Actor.teleport.getMapName = function(act,map){
+	if(!map.have("@"))	map += '@MAIN'; 			//main instance
+	if(map[map.length-1] === '@') map += act.team;	//team instance
+	if(map.have("@@"))	map += act.name; 			//alone instance
+	return map;
+}
+
+
 
 Actor.teleport.join = function(act,mort2){
 	if(mort2.map.have("@@")) return false;
@@ -611,7 +612,7 @@ Actor.death.enemy = function(act){
 	if(act.deathFuncArray) act.deathFuncAll(killers,act,act.map)
 	
 	Actor.death.performAbility(act);				//custom death ability function
-	ActiveList.remove(act);
+	Activelist.remove(act);
 }
 
 Actor.death.performAbility = function(act){
@@ -724,15 +725,14 @@ Actor.respawn.player = function(act){
 	
 	var good = List.map[rec.map] ? rec : act.respawnLoc.safe;
 	
-	act.x = good.x;
-	act.y = good.y;
-	act.map = good.map;
+	Actor.teleport(act, good);
 		
 	Combat.clearStatus(act);
 	Actor.boost.removeAll(act);
 	for(var i in act.resource)
 		act[i] = act.resource[i].max;
 	act.dead = 0;
+	
 	LOG(2,act.id,'respawn',act.x,act.y,act.map);
 	
 }
