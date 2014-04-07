@@ -30,6 +30,7 @@ Map.creation = function(namemodel,version,lvl){
 	
 	var map = {
 		id:newid,
+		randomId:Math.randomId(),
 		name:model.name,
 		version:version,
 		graphic:model.graphic,

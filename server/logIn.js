@@ -208,7 +208,7 @@ Save.player = function(key,updateDb){
 	var player = typeof key === 'string' ? List.all[key] : key;
 	player = Save.player.compress(player);
 	var save = {};
-    var toSave = ['x','y','map','username','name','weapon','equip','skill','ability','abilityList'];
+    var toSave = ['respawnLoc','username','name','weapon','equip','skill','ability','abilityList'];
     for(var i in toSave){	save[toSave[i]] = player[toSave[i]]; }
 	
     if(updateDb !== false){
@@ -266,7 +266,7 @@ Load = function (key,account,socket,cb){
 				Test.dayCycle(key);
 				
 			db.update('account',{username:player.username},{'$set':{online:1,key:key,lastSignIn:now}},function(err, res) { if(err) throw err
-				socket.emit('signIn', { cloud9:cloud9, success:1, key:key, data:Load.initData(key,player,main)});
+				socket.emit('signIn', { success:1, key:key, data:Load.initData(key,player,main)});
 			});
 			
 			var time = Math.floor(account.timePlayedThisWeek/Cst.HOUR) + 'h ' + Math.floor(account.timePlayedThisWeek%Cst.HOUR/Cst.MIN) + 'm';
@@ -368,13 +368,11 @@ Save.player.compress = function(playerr){
 	var player = deepClone(playerr);
 	for(var i in player.ability)	player.ability[i] = player.ability[i] ? player.ability[i].id : 0;
 
-	player.x = player.respawnLoc.safe.x || 0;
-	player.y = player.respawnLoc.safe.y || 0;
-	player.map = player.respawnLoc.safe.map || 'test@MAIN';
-	
-	player.x = Math.round(player.x);
-	player.y = Math.round(player.y);
-	
+	player.respawnLoc.recent.x = Math.round(player.respawnLoc.recent.x);
+	player.respawnLoc.recent.y = Math.round(player.respawnLoc.recent.y);
+	player.respawnLoc.safe.x = Math.round(player.respawnLoc.safe.x);
+	player.respawnLoc.safe.y = Math.round(player.respawnLoc.safe.y);
+		
 	//Skill
 	player.skill = player.skill.exp;
 	var tmp = [];

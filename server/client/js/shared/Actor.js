@@ -252,50 +252,42 @@ Actor.permBoost.stack = function(b){	//if boost same thing, add values
 //}
 
 //{Map Interaction	
-Actor.teleport = function(act,x,y,map){
-	if(typeof x === 'object'){ Actor.teleport(act,x.x,x.y,x.map); return; }
+Actor.teleport = function(act,x,y,mapName){
+	if(typeof x === 'object'){ Actor.teleport(act,x.x,x.y,x.mapName); return; }
 	act = typeof act === 'string' ? List.all[act] : act;
-	LOG(2,act.id,'teleport',x,y,map);
+	LOG(2,act.id,'teleport',x,y,mapName);
 	
 	//Teleport player. if no map specified, stay in same map.
 	act.x = x;
 	act.y = y;
+	mapName = mapName || act.map;
 	
-	if(!map){ //regular teleport
-		Activelist.remove(act);
-		return; 
-	}
+	var map = Actor.teleport.getMapName(act,mapName);
 	
-	if(!map.have("@"))	map += '@MAIN'; 			//main instance
-	if(map[map.length-1] === '@') map += act.team;	//team instance
-	if(map.have("@@"))	map += act.name; 			//alone instance
-	
-	if(act.map === map){ //regular teleport
+	if(act.map === map){ 			//regular teleport
 		Activelist.remove(act);
 		return; 
 	}
 	
 	if(!List.map[map]){	//test if need to create instance
-		var model = map.slice(0,map.indexOf('@'));
-		var version = map.slice(map.indexOf('@')+1);
+		var model = map.split("@")[0];
+		var version = map.split("@")[1];
 		Map.creation(model,version); 
 	}
 	
 	Map.leave(act);
 	act.map = map;
 	Map.enter(act);	
-	Actor.teleport.enterMap(act);
-	
 			
 	Activelist.remove(act);
 
-		Chat.add(act.id,"You leave " + oldmap.name + " and you enter " + newmap.name + '.');
+	Chat.add(act.id,"You enter " + List.map[act.map].name + '.');
 }
 
 Actor.teleport.getMapName = function(act,map){
-	if(!map.have("@"))	map += '@MAIN'; 			//main instance
-	if(map[map.length-1] === '@') map += act.team;	//team instance
-	if(map.have("@@"))	map += act.name; 			//alone instance
+	if(!map.have("@"))	return map + '@MAIN'; 				//main instance
+	if(map.have("@@"))	return map + act.name; 				//alone instance
+	if(map[map.length-1] === '@') return map + act.team;	//team instance
 	return map;
 }
 
@@ -310,8 +302,7 @@ Actor.teleport.join = function(act,mort2){
 
 Actor.talk = function(act,enemyId){
 	if(List.all[enemyId].dialogue){
-		List.all[enemyId].dialogue.func(act.id,List.main[act.id].quest);
-		//TOFIX not taking into consideration param
+		List.all[enemyId].dialogue.func(act.id);
 	}
 }
 

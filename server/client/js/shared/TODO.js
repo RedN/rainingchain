@@ -1,8 +1,9 @@
 
-keep same grid for same maps graphics
+keep same grid for same maps graphics | map creation
 
 condition to be hit
 
+minimap icon
 
 
 freeze passive
@@ -30,12 +31,6 @@ custom look
 
 
 
-remake tileset:
-remove useless stuff
-remove tree weird
-change ladder well cuz too detailed
-
-
 boss documentation
 
 
@@ -50,6 +45,14 @@ talking to npc, stop moving and facing
 Crafting System with White
 waypoint window
 limit emit
+
+###TILESET
+tent fit
+fix turning edge wall
+table chevet + table cuisine sizable
+remove useless stuff
+remove tree weird
+change ladder well cuz too detailed
 
 
 

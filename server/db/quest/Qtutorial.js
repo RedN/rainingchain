@@ -255,6 +255,7 @@ q.map.tutorial = function(){
 	
 
 	tut.loop =  function(map,spot,v,m){
+		return; //TOFIX
 		if(Loop.interval(25)){
 			Map.collisionRect(map,spot.n,'player',function(key){
 				var act = List.all[key];

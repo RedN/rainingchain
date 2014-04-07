@@ -128,7 +128,7 @@ Actor.loop.setTarget = function(act){
 	//Stuck	
 
 	if(act.frameCount % tar.period.stuck === 0){
-		tar.isStuck = Actor.isStuck(act);
+		tar.isStuck = Actor.isStuck(act,List.all[act.target.main]);
 		if(tar.isStuck) Actor.loop.setTarget.stuck(act);
 		else tar.stuck = [];
 	}
@@ -197,10 +197,8 @@ Actor.getPath = function(act,target){	//using a*
 	return astar.search.parse(astar.search(map,start,end));
 }
 
-Actor.isStuck = function(act){
-	var maintar = List.all[act.target.main];
+Actor.isStuck = function(act,maintar){
 	if(!maintar) return 0;
-	
 	var path = Collision.getPath(Collision.getPos(act),Collision.getPos(maintar));
 	for(var i in path){
 		if(Collision.ActorMap(path[i],act.map,act)) return 1;	

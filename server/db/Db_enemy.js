@@ -795,6 +795,12 @@ Init.db.enemy = function(){
 	//}
 	
 	a["system"] = {}; //{
+	a["system"]["default"] = {  //{
+		"name":"I am ERROR",
+		"sprite":{'name':"grave",'sizeMod':1},
+		'nevercombat':1,
+		'nevermove':1,
+	}; //}
 	a["system"]["grave"] = {  //{
 		"name":"Grave",
 		"sprite":{'name':"grave",'sizeMod':1},

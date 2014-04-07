@@ -1,9 +1,11 @@
 Actor = typeof Actor !== 'undefined' ? Actor : {};
 
-Actor.creation = function(data){
-	if(data.xym){ data.x = data.xym.x; data.y = data.xym.y; data.map = data.xym.map; delete data.xym;}
+Actor.creation = function(d){
+	if(d.xym){ d.x = d.xym.x; d.y = d.xym.y; d.map = d.xym.map; delete d.xym;}
 	//data: x  y  map category variant lvl modAmount extra
 
+	
+	var data = useTemplate(Actor.creation.template(),d);
 	var e = Actor.template('enemy');
 	e = Actor.creation.db(e,data);
 	e = Actor.creation.info(e,data);
@@ -30,7 +32,10 @@ Actor.creation = function(data){
 	return e.id;
 }
 
+Actor.creation.template = function(){
+	return {x:0,y:0,v:0,map:"test@MAIN",category:'system',variant:"default",lvl:0,extra:{},modAmount:0}
 
+}
 
 Actor.creation.group = function(gr,el){
    	/*
@@ -116,10 +121,11 @@ Actor.creation.db.globalLvlMod = function(lvl){
 
 Actor.creation.info = function(e,cr){
 	e.map = cr.map || 'test@MAIN';
-	e.x = cr.x + Math.randomML() * (cr.v || 0); 
-	e.y = cr.y + Math.randomML() * (cr.v || 0); 
-	e.crX = cr.x;
-	e.crY = cr.y;
+	
+	var pos = Actor.creation.info.position(cr);
+	e.x = e.crX = pos.x; 
+	e.y = e.crY = pos.y; 	
+	
 	e.category = cr.category || 'slime'; 
 	e.variant = cr.variant || 'Regular'; 
 	e.modAmount = cr.modAmount !== undefined ?  cr.modAmount : 1;
@@ -129,6 +135,19 @@ Actor.creation.info = function(e,cr){
 	
 	e.target.main = {x:e.x,y:e.y};
 	return e;
+}
+
+Actor.creation.info.position = function(cr){
+	for(var i = 0; i < 100; i++){
+		var x = cr.x + Math.randomML() * cr.v;
+		var y = cr.y + Math.randomML() * cr.v;
+		if(!Actor.isStuck(
+			{map:cr.map,x:cr.x,y:cr.y,type:'enemy'},
+			{map:cr.map,x:x,y:y,type:'enemy'})){
+			return {x:x,y:y};
+		}
+	}
+	return {x:cr.x,y:cr.y};
 }
 
 Actor.creation.info.lvl = function(lvl,mod){

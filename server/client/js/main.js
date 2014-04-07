@@ -74,7 +74,7 @@ Sign.log = function(text){
 
 
 socket.on('signIn', function (data) {
-	if(data.success){ /*id = data.key;*/ cloud9 = data.cloud9; Init.game(data.data);  }
+	if(data.success){ /*id = data.key;*/ Init.game(data.data);  }
 	else { Sign.log(data.message);  } 	
 	
 });
@@ -130,7 +130,6 @@ Init.game = function (data) {
 		
 		setInterval(Loop,40);
 		socket.emit('clientReady',1); 
-		if(cloud9) { Chat.add('Warning, you are running under cloud9 servers. You may experience intense lagging. Downloading the project and running it locally is recommended.');}	
 		
 	});
 }

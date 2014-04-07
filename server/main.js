@@ -84,7 +84,7 @@ exports.initServer = function (){
 		setInterval(Loop,40);
 		
 		Server.ready = 1;
-		
+		permConsoleLog("Server ready.");
 		//Track Global Variables
 		var tmp = Object.keys(this); for(var i in ObjectKeys) tmp.splice(tmp.indexOf(ObjectKeys[i]),1);
 		//permConsoleLog(tmp);

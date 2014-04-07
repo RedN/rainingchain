@@ -145,7 +145,7 @@ Draw.chrono = function(s){	//TOFIX
 
 Draw.pvpScore = function(s){
 	var pv = main.pvpScore;
-	ctx.font = '20px Kelly Slab';
+	ctx.setFont(20);
 	ctx.fillStyle = 'white';
 	for(var i in pv){
 		var str = 1+(+i) + ':  ' + pv[i].name + '  (' + pv[i].point + ')';
@@ -169,98 +169,8 @@ Draw.minimap.map = function(){
 	var y = -(player.y)/16 + Cst.HEIGHT2/main.pref.mapRatio;	
 	var im = Db.map[player.map].img.m;
 	
-	List.ctx.minimap.drawImage(Db.map[player.map].img.m, x,y);
-	List.ctx.minimap.fillRect(1280/2/main.pref.mapRatio-2,720/2/main.pref.mapRatio-2,4,4);
-	return;
-	
-	/* WORKING better!!!! 
-	var zoom = main.pref.mapZoom/100;
-	var SIZEFACT = Draw.map.cst.sizeFact / zoom;		//2 => tree appear x2 bigger ingame than on the image
-	
-	var map = Db.map[player.map];
-	
-	var IMAGERATIO = Draw.map.cst.imageRatio;
-	var imageWidth = Cst.WIDTH / IMAGERATIO;
-	var imageHeight = Cst.HEIGHT / IMAGERATIO;
-	var mapAmount = 10;
-	
-	var startX = (player.x-Cst.WIDTH/2*zoom)/Draw.map.cst.sizeFact;		//top right of screen in map ratio
-	var startY = (player.y-Cst.HEIGHT/2*zoom)/Draw.map.cst.sizeFact;
-	
-	var offsetX = -(startX % imageWidth);				//offset where we need to draw first map
-	var offsetY = -(startY % imageHeight);
-	
-	if(startX < 0) offsetX -= imageWidth;		//if negative, fucks the modulo
-	if(startY < 0) offsetY -= imageHeight;
-			
-	for(var i = 0; i < mapAmount; i++){
-		for(var j = 0; j < mapAmount; j++){
-			var mapX = Math.floor(startX/320) + i;
-			var mapY = Math.floor(startY/180) + j;
-			if(!map.img[layer][mapX] || !map.img[layer][mapX][mapY]) continue;
-			var mapXY = map.img[layer][mapX][mapY];
-			
-			ctx.drawImage(mapXY, 
-				0,
-				0,
-				320,
-				180,
-				(offsetX + 320*i)*SIZEFACT/main.pref.mapRatio,
-				(offsetY + 180*j)*SIZEFACT/main.pref.mapRatio,
-				320*SIZEFACT/main.pref.mapRatio,
-				180*SIZEFACT/main.pref.mapRatio
-			);
-		}
-	}
-	ctx.fillRect(1280/2-50, 720/2-50, 100, 100);
-	*/
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	/* WORKING basic!!!!
-	return;
-	var zoom = main.pref.mapZoom/100;
-	var SIZEFACT = Draw.map.cst.sizeFact / zoom;		//2 => tree appear x2 bigger ingame than on the image
-	
-	var map = Db.map[player.map];
-	
-	var IMAGERATIO = Draw.map.cst.imageRatio;
-	var imageWidth = Cst.WIDTH / IMAGERATIO;
-	var imageHeight = Cst.HEIGHT / IMAGERATIO;
-	var mapAmount = 10;
-	
-	var startX = (player.x-Cst.WIDTH/2*zoom)/Draw.map.cst.sizeFact;		//top right of screen in map ratio
-	var startY = (player.y-Cst.HEIGHT/2*zoom)/Draw.map.cst.sizeFact;
-	
-	var offsetX = -(startX % imageWidth);				//offset where we need to draw first map
-	var offsetY = -(startY % imageHeight);
-	
-	if(startX < 0) offsetX -= imageWidth;		//if negative, fucks the modulo
-	if(startY < 0) offsetY -= imageHeight;
-			
-	for(var i = 0; i < mapAmount; i++){
-		for(var j = 0; j < mapAmount; j++){
-			var mapX = Math.floor(startX/320) + i;
-			var mapY = Math.floor(startY/180) + j;
-			if(!map.img[layer][mapX] || !map.img[layer][mapX][mapY]) continue;
-			var mapXY = map.img[layer][mapX][mapY];
-			
-			ctx.drawImage(mapXY, 0,0,320,180,(offsetX + 320*i)*SIZEFACT ,(offsetY + 180*j)*SIZEFACT,320*SIZEFACT,180*SIZEFACT);
-		}
-	}
-	ctx.fillRect(1280/2-50, 720/2-50, 100, 100);
-	 */
+	ctx.drawImage(Db.map[player.map].img.m, x,y);
+	ctx.fillRect(1280/2/main.pref.mapRatio-2,720/2/main.pref.mapRatio-2,4,4);
 }
 
 Draw.minimap.map.updateSize = function(){
