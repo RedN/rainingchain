@@ -1,7 +1,7 @@
 
 //Boost that grants a custom advanced special effect to a player. 
 Init.db.customBoost = function(){
-	Db.customBoost = {}; var b = Db.customBoost;
+	var b = Db.customBoost = {};
 	
 	/*
 	b.balancedAtk = {
@@ -49,6 +49,20 @@ Init.db.customBoost = function(){
 			}
 		})
 	}
+	
+	b.testing = {
+		'name':'testing Taker',
+		'description':'testing.',
+		'icon':'element.melee',
+		'func':(function(pb,key){
+			var pbl = pb.list;
+			
+			pbl['maxSpd'].base = 0;
+			pbl['maxSpd'].min = 0;
+			pbl['maxSpd'].max = 0;
+		})
+	}
 }
 
+//ts("Actor.permBoost(p,'test',[{stat:'custom-testing',value:1,type:'+'}]);");
 

@@ -130,17 +130,17 @@ Actor.update.mastery = function(act){
 }
 
 Actor.update.permBoost = function(act){
-	var pb = act.boost;
+	var pb = act.boost.list;
 	
 	//Reset to PermBase
-	for(var i in pb.list){
-		pb.list[i].base = pb.list[i].permBase;	
-		pb.list[i].max = pb.list[i].permMax;
-		pb.list[i].min = pb.list[i].permMin;
-		pb.list[i].t = 1;
-		pb.list[i].tt = 1;
-		pb.list[i].p = 0;
-		pb.list[i].pp = 0;
+	for(var i in pb){
+		pb[i].base = pb[i].permBase;	
+		pb[i].max = pb[i].permMax;
+		pb[i].min = pb[i].permMin;
+		pb[i].t = 1;
+		pb[i].tt = 1;
+		pb[i].p = 0;
+		pb[i].pp = 0;
 	}
 	
 	//Update Value
@@ -148,33 +148,32 @@ Actor.update.permBoost = function(act){
 		for(var j in act.permBoost[i]){	//each indidual boost boost
 			var b = act.permBoost[i][j];
 			
-			if(!pb.list[b.stat]) console.log(b.stat);
-			if(b.type === '+' || b.type === 'base'){pb.list[b.stat].p += b.value;}
-			else if(b.type === '*'){pb.list[b.stat].t += b.value;}
-			else if(b.type === '++'){pb.list[b.stat].pp += b.value;}
-			else if(b.type === '**'){pb.list[b.stat].tt += b.value;}
-			else if(b.type === 'min'){pb.list[b.stat].min = Math.max(pb.list[b.stat].min,b.value);}
-			else if(b.type === 'max'){pb.list[b.stat].max = Math.min(pb.list[b.stat].max,b.value);}			
+			if(b.type === '+' || b.type === 'base'){pb[b.stat].p += b.value;}
+			else if(b.type === '*'){pb[b.stat].t += b.value;}
+			else if(b.type === '++'){pb[b.stat].pp += b.value;}
+			else if(b.type === '**'){pb[b.stat].tt += b.value;}
+			else if(b.type === 'min'){pb[b.stat].min = Math.max(pb[b.stat].min,b.value);}
+			else if(b.type === 'max'){pb[b.stat].max = Math.min(pb[b.stat].max,b.value);}			
 		}
 	}
 	
 	//Max and min
-	for(var i in pb.list){
-		pb.list[i].base *= pb.list[i].t;
-		pb.list[i].base += pb.list[i].p;
-		pb.list[i].base *= pb.list[i].tt;
-		pb.list[i].base += pb.list[i].pp;
+	for(var i in pb){
+		pb[i].base *= pb[i].t;
+		pb[i].base += pb[i].p;
+		pb[i].base *= pb[i].tt;
+		pb[i].base += pb[i].pp;
 	
-		pb.list[i].base = Math.max(pb.list[i].base,pb.list[i].min);
-		pb.list[i].base = Math.min(pb.list[i].base,pb.list[i].max);	
-	}
-	
-	for(var j in act.customBoost){ 
-		if(act.customBoost[j])
-			Db.customBoost[j].func(pb,act.id);
+		pb[i].base = Math.max(pb[i].base,pb[i].min);
+		pb[i].base = Math.min(pb[i].base,pb[i].max);	
 	}
 	
 	Actor.update.boost(act,'all');
+	
+	for(var j in act.customBoost){ 
+		if(act.customBoost[j])
+			Db.customBoost[j].func(act.boost,act.id);
+	}	
 }
 
 Actor.update.boost = function(act,stat){

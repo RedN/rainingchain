@@ -994,7 +994,7 @@ Init.db.stat.bonus = function(){
 	var info = {};
 	
 	for(var i in Db.stat){
-		if(Db.stat[i].custom){
+		if(Db.stat[i].boost.stat[0] === 'bonus'){
 			var a = Db.stat[i].boost.stat;
 			var value = Db.stat[i].boost.base;
 			
@@ -1017,7 +1017,7 @@ Init.db.stat.customBoost = function(){
 	var info = {};
 	
 	for(var i in Db.stat){
-		if(Db.stat[i].boost.stat[0] === 'customBoost'){
+		if(Db.stat[i].custom){
 			info[Db.stat[i].boost.stat[1]] = 0;
 		}
 	}

@@ -19,7 +19,7 @@ Loop = function(){
 	if(+$("#chatBoxInput").is(":focus")){
 		Input.press = {'move':[0,0,0,0],'ability':[0,0,0,0,0,0],'combo':[0,0]};	
 	}
-	
+	main.hideHUD.passive = 0	//TOFIX
 }
 window.onblur = function(){
 	Input.press = {'move':[0,0,0,0],'ability':[0,0,0,0,0,0],'combo':[0,0]}; 	

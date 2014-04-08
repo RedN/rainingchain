@@ -192,18 +192,17 @@ Draw.window.stat = function(type){ ctxrestore();
 		}
 	}
 	
-	//Bottom, custom effects
+	//Bottom, custom effects	//TOFIX add title
 	var numX = s.x + 10;
 	var numY = s.y + 60 + 30* 15;
-	var str = '';
-	for(var i in player.boost.custom){
-		str += Db.customBoost[i].name + ', ';
+	var str = 'Custom Effects: ';
+	for(var i in player.customBoost){
+		if(player.customBoost[i])
+			str += Db.customBoost[i].name + ', ';
 	}
 	str = str.slice(0,-2);
-	str = 'Custom Effects: ' + str;
 	ctx.font = '30px Kelly Slab';
 	ctx.fillText(str,numX,numY);
-	
 	
 	return hover;
 }
@@ -1258,7 +1257,7 @@ Draw.window.passive.grid = function(){ ctxrestore();
 			ctx.globalAlpha = 1;
 			
 			//Freebies
-			if(pass[i][j] === '2'){
+			if(pass[i][j] === '2' || !Db.stat[boost.stat]){	//TOFIX should only be ===2
 				ctx.globalAlpha = 0.5;
 				ctx.fillStyle = 'green';
 				ctx.fillRect(numX,numY,ic,ic);

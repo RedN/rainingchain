@@ -144,6 +144,8 @@ Init.game.player = function(data){    //use data sent from server and default to
 }
 Init.game.other = function(data){    //use data sent from server and default to create the player
 	Db.passiveGrid = data.other.passiveGrid;
+	Db.passiveGrid.height = 20;
+	Db.passiveGrid.width = 20;
 }
 Init.game.addCanvas = function(name,id,z){
 	//To add a canvas to the game

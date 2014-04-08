@@ -383,6 +383,7 @@ Load.initData = function(key,player,main){
             'skill':0,
             'ability':Change.send.convert.ability,
             'abilityList':Change.send.convert.abilityList,
+			'permBoost':0,
         },
         'main':{
             'passive':0,

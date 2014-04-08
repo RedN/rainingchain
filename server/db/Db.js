@@ -82,7 +82,7 @@ Init.db = function(data){
 	}
 
 	//Clear Db of useless info. ex: weapon dropped by player
-	//BROKEN
+	//TOFIX
 	db.filterDb = function(){
 		//fill bigList
 		var bigList = {};	//list of all equip used

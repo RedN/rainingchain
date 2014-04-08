@@ -54,6 +54,7 @@ exports.initServer = function (){
 	Init.db.ability(function(){
 	Init.db.plan(function(){
 		
+		Init.db.customBoost();
 		Init.db.stat();
 		Init.db.material();
 		
@@ -66,7 +67,6 @@ exports.initServer = function (){
 		Init.db.drop();
 		Change.update.init();
 		Init.db.boost();
-		Init.db.customBoost();
 		Init.actor();
 		
 		Init.db.quest();
