@@ -333,6 +333,7 @@ Combat.collision.damage.calculate = function(dmg,def){
 	
 	var mod = dmg.main / def.main;
 	for(var i in dmg.ratio){ 
+		if(!def.ratio) console.log(dmg,def);
 		var add = mod * dmg.ratio[i]/def.ratio[i]; 
 		sum += add;
 		info[i] = add;

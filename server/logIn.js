@@ -331,7 +331,7 @@ Save.player.compress = function(playerr){
 	player.skill = tmp;
 	
 	//Equip
-	player.equip = player.equip.piece;
+	player.equip = player.equip.regular.piece;
 	var tmp = [];
 	for(var i in Cst.equip.piece) tmp.push(player.equip[Cst.equip.piece[i]]);
 	player.equip = tmp;
@@ -348,11 +348,12 @@ Load.player.uncompress = function(player){
 	for(var i in player.skill.exp) player.skill.lvl[i] = Skill.getLvlViaExp(player.skill.exp[i]);
 	
 	//Equip
-	player.equip = {piece:player.equip,dmg:Cst.element.template(1),def:Cst.element.template(1)};
+	player.equip = {piece:player.equip,dmg:Cst.element.template(1),def:Cst.element.template(1)}
 	var tmp = {};
 	for(var i in Cst.equip.piece) tmp[Cst.equip.piece[i]] = player.equip.piece[i];
-	player.equip.piece = tmp;
-	Actor.updateEquip(player);
+	player.equip.piece = tmp;	
+	player.equip = Actor.template.equip(player.equip);
+	Actor.updateEquip(player,false);
 	
 	
 	player.respawnLoc = {safe:{x:player.x,y:player.y,map:player.map},
@@ -377,7 +378,7 @@ Load.initData = function(key,player,main){
             'x':0,
             'y':0,
             'map':Change.send.convert.map,
-            'equip':0,
+            'equip':Change.send.convert.equip,
             'weapon':0,
             'skill':0,
             'ability':Change.send.convert.ability,

@@ -696,7 +696,6 @@ Init.db.enemy = function(){
 	}; //}
 	//}
 	
-	
 	a["mummy"] = {}; //{
 	a["mummy"]["normal"] = {  //{
 		"name":"Mummy",
@@ -773,8 +772,7 @@ Init.db.enemy = function(){
 	}; //}
 	//}
 	
-	
-	
+	//###################
 	
 	a["troll"] = {}; //{
 	a["troll"]["ice"] = {  //{
@@ -885,7 +883,6 @@ Init.db.enemy = function(){
 		"block":{condition:'true',pushable:1,magn:8,time:8,size:[-1,1,-1,1]},
 	}; //}
 	//}
-
 	
 	a["tree"] = {}; //{
 	a["tree"]["red"] = {  //{

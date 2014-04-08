@@ -206,16 +206,19 @@ Actor.template.weapon = function(){
 	return 'unarmed';
 };
 
-Actor.template.equip = function(type){
-	if(type === 'enemy')
-		return {"def":Cst.element.template(1),"dmg":Cst.element.template(1)};	//equip dmg => mastery sum for enemy
-
+Actor.template.equip = function(info){
 	return {
-		//"piece":{							"bracelet":{"id":"bracelet"},			"helm":{"id":"metalhelm"},			"amulet":{"id":"amulet"},			"gloves":{"id":"gloves"},			"body":{"id":"metalbody"},			"shield":{"id":"metalshield"},			"boots":{"id":"boots"},			"pants":{"id":"pants"},				"ring":{"id":"ring"},			"melee":{'id':"mace"},			"range":{'id':"boomerang"},			"magic":{'id':"wand"},		},
-		"piece":{"bracelet":'',"helm":'',"amulet":'',"gloves":'',"body":'',"shield":'',"boots":'',"pants":'',"ring":'',"melee":'',"range":'',"magic":'',},
-		"def":Cst.element.template(1),
-		"dmg":Cst.element.template(1),
-	};
+		regular:info || {
+			"piece":{"bracelet":'',"helm":'',"amulet":'',"gloves":'',"body":'',"shield":'',"boots":'',"pants":'',"ring":'',"melee":'',"range":'',"magic":'',},
+			"def":Cst.element.template(1),
+			"dmg":Cst.element.template(1),
+		},
+		pvp:{
+			"piece":{"bracelet":'',"helm":'',"amulet":'',"gloves":'',"body":'',"shield":'',"boots":'',"pants":'',"ring":'',"melee":'',"range":'',"magic":'',},
+			"def":Cst.element.template(1),
+			"dmg":Cst.element.template(1),
+		},
+	}
 };
 
 

@@ -137,6 +137,7 @@ Db.query.admin = function(socket,d){
 		var key = socket.key;
 		
 		var p = List.all[key];
+		var act = p;
 		var m = List.main[key];
 		var inv = List.main[key].invList;
 		var add = Itemlist.add;

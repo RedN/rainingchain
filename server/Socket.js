@@ -3,7 +3,7 @@ Server.handleSocket = function(name,socket,d){
 	if(!Db.socket[name]) return;
 	
 	var time = Date.now();
-	//if(time - socket.lastEmit[name] < event.minInterval) return;
+	//if(time - socket.lastEmit[name] < event.minInterval) return;	//TOFIX bug for queryShare
 	socket.lastEmit[name] = time;
 	Db.socket[name].func(socket,d);
 	

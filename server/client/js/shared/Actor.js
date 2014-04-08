@@ -9,6 +9,12 @@ Actor.remove = function(act){
 }
 
 //{Combat
+Actor.changeCombatContext = function(act,type){
+	act.combatContext = type;
+	Actor.updateEquip(act);
+
+}
+
 Actor.changeHp = function(act,amount){
 	Actor.changeResource(act,{hp:amount});
 }
@@ -22,9 +28,10 @@ Actor.changeResource = function(act,heal){
 }
 
 Actor.getDef = function(act){
+	var defratio = server ? Actor.getEquip(act).def : player.equip.def;
 	var def = {
 		main:act.globalDef,
-		ratio:deepClone(act.equip.def)
+		ratio:deepClone(defratio)
 	};
 	for(var i in def.ratio){
 		def.ratio[i] *= act.mastery.def[i].mod * act.mastery.def[i].sum;
@@ -36,17 +43,31 @@ Actor.getDef = function(act){
 //}
 
 //{Player Command
-Actor.updateEquip = function(act){
+Actor.updateEquip = function(act,updateboosttoo){
+	var equip = Actor.getEquip(act);
+
 	for(var k in Cst.element.list){	//Each Element
 		var i = Cst.element.list[k];
 		var sum = 0;
-		for(var j in act.equip.piece){	//Each Piece
-			var equip = Db.equip[act.equip.piece[j]];
-			if(!equip) continue;
-			sum += equip.def.main * equip.def.ratio[i] * equip.orb.upgrade.bonus;
+		for(var j in equip.piece){	//Each Piece
+			var eq = Db.equip[equip.piece[j]];
+			if(!eq) continue;
+			sum += eq.def.main * eq.def.ratio[i] * eq.orb.upgrade.bonus;
 		}
-		act.equip.def[i] = sum || 1;
+		equip.def[i] = sum || 1;
 	}
+	
+	if(updateboosttoo === false) return;
+	
+	for(var i in equip.piece){
+		if(!Cst.isArmor(i)) continue;
+		var dbequip = Db.equip[equip.piece[i]];
+		if(dbequip) Actor.permBoost(act,'armor' + i,dbequip.boost);		//have something
+		else Actor.permBoost(act,'armor' + i);							//have nothing so reset
+	}
+	Actor.permBoost(act,'weapon',Db.equip[act.weapon].boost);
+	
+	
 }
 
 Actor.switchEquip = function(act,name,piece){
@@ -61,13 +82,11 @@ Actor.switchEquip = function(act,name,piece){
 	equip = equip || '';	//incase wants to be unarmed
 	
 	piece = piece || equip.piece;		//piece is defined when changing to unarmed
-	var old = act.equip.piece[piece];	//get old
-	act.equip.piece[piece] = name;		//set new
 	
-	if(Cst.isArmor(piece))		//if armor, add boost
-		Actor.permBoost(act,piece,equip.boost);
-
-	Actor.updateEquip(act);	//update def
+	var aequip = Actor.getEquip(act);
+	var old = aequip.piece[piece];	//get old
+	aequip.piece[piece] = name;		//set new
+	
 	
 	
 	var inv = List.main[act.id].invList;
@@ -77,6 +96,8 @@ Actor.switchEquip = function(act,name,piece){
 	if(Cst.isWeapon(piece)){
 		Actor.swapWeapon(act,piece);
 	}
+	
+	Actor.updateEquip(act);	//update def
 }
 
 Actor.switchEquip.req = function(act,equip){
@@ -88,11 +109,10 @@ Actor.switchEquip.req = function(act,equip){
 
 Actor.swapWeapon = function(act,piece){
 	//Equip a weapon already present in the weaponList
-	act.weapon = act.equip.piece[piece] || 'unarmed';
+	act.weapon = Actor.getEquip(act).piece[piece] || 'unarmed';
 	
 	var equip = Db.equip[act.weapon];
 	Sprite.change(act,equip.sprite);
-	Actor.permBoost(act,'weapon',equip.boost);
 }
 
 //}
@@ -225,6 +245,7 @@ Actor.boost.removeAll = function(act){
 
 Actor.permBoost = function(act,source,boost){
 	//remove permBoost if boost undefined
+	if(!act.permBoost) console.log(act);
 	if(boost){
 		act.permBoost[source] = arrayfy(boost);
 	} else { delete act.permBoost[source]; }
@@ -739,6 +760,9 @@ Actor.getAbility = function(act){
 
 Actor.getAbilityList = function(act){
 	return act.abilityList[act.combatContext];
+}
+Actor.getEquip = function(act){
+	return act.equip[act.combatContext || 'regular'];
 }
 //ts("p.combatContext = 'regular'")
 

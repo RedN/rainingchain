@@ -180,7 +180,7 @@ Change.update.init = function(){
 				{'array':['statusClient']},
 				{'array':['curseClient']},
 				
-				{'array':['equip','piece']},
+				{'array':['equip'],'filter':Change.send.convert.equip},	
 				{'array':['weapon']},
 			
 				
@@ -190,12 +190,12 @@ Change.update.init = function(){
 				{'array':['resource'],'filter':(function(w){ for(var i in w){ for(var j in w[i]){ w[i][j] = Math.round(w[i][j]); return w; }} })},
 				
 				{'array':['permBoost']},
-				{'array':['equip','def']},
-				{'array':['equip','dmg']},
+				//{'array':['equip','def']},
+				//{'array':['equip','dmg']},
 				{'array':['def']},
 						
 				
-				{'array':['ability'],'filter':Change.send.convert.ability },
+				{'array':['ability'],'filter':Change.send.convert.ability},
 				{'array':['abilityList'],'filter':Change.send.convert.abilityList},
 				
 				{'array':['skill','exp']},

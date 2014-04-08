@@ -273,13 +273,13 @@ Change.send.convert.equipPiece = function(w){
 	return {'icon':w.icon,id:w.id} 
 }
 				
-Change.send.convert.equipWeapon	= function(w){ 
+Change.send.convert.equipWeapon = function(w){ 
 	if(!w) return '';
 	return {'type':w.type,'piece':w.piece,'icon':w.icon,id:w.id} 
 }
 
-
-
-
+Change.send.convert.equip = function(eq,act){
+	return eq[act.combatContext || 'regular'];
+}
 
 

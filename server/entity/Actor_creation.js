@@ -17,7 +17,6 @@ Actor.creation = function(d){
 	List.all[e.id] = e;
 	Map.enter(e);
 	
-	for(var i in e.immune) e.equip.def[i] = Cst.bigInt;
 	
 	if(typeof e.dialogue === 'function') e.dialogue = {func:e.dialogue};
 	
@@ -28,8 +27,9 @@ Actor.creation = function(d){
 	}
 	if(e.nevermove){ Actor.creation.nevermove(e); }
 	
+	for(var i in e.immune) e.mastery.def[i].sum = Cst.bigInt;
+	
 	if(!e.group) e.deleteOnceDead = 1;
-	//console.log(e);
 	return e.id;
 }
 
@@ -184,17 +184,17 @@ Actor.creation.mod = function(e,d){
 
 Actor.creation.mod.list = {
 	'immuneMelee':{'name':'Immune to Melee','chance':1,
-		'func': (function(e){ e.equip.def.melee = Cst.bigInt;  return e; })},
+		'func': (function(e){ e.immune.melee = 1;  return e; })},
 	'immuneRange':{'name':'Immune to Range','chance':1,
-		'func': (function(e){ e.equip.def.range = Cst.bigInt;  return e; })},
+		'func': (function(e){ e.immune.range = 1;  return e; })},
 	'immuneMagic':{'name':'Immune to Magic','chance':1,
-		'func': (function(e){ e.equip.def.magic = Cst.bigInt;  return e; })},
+		'func': (function(e){ e.immune.magic = 1;  return e; })},
 	'immuneFire':{'name':'Immune to Fire','chance':1,
-		'func':(function(e){ e.equip.def.fire = Cst.bigInt;  return e; })},
-	'immuneCold':{'name':'Immune to Cole','chance':1,
-		'func': (function(e){ e.equip.def.cold = Cst.bigInt;  return e; })},
+		'func':(function(e){ e.immune.fire = 1;  return e; })},
+	'immuneCold':{'name':'Immune to Cold','chance':1,
+		'func': (function(e){ e.immune.cold = 1;  return e; })},
 	'immuneLightning':{'name':'Immune to Lightning','chance':1,
-		'func': (function(e){ e.equip.def.lightning = Cst.bigInt;  return e; })},
+		'func': (function(e){ e.immune.lightning = 1;  return e; })},
 
 	'immuneStatus':{'name':'Immune to Status','chance':1,
 		'func': (function(e){ for(var i in e.status){ e.status[i].resist = 1; }  return e; })},

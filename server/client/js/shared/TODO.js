@@ -6,7 +6,6 @@ freeze passive
 mutelist
 
 teleport actor zone
-getAbility and getEquip for pvp
 
 stat window
 
