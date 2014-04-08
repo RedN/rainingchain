@@ -42,7 +42,7 @@ Img.icon = [];
 	Img.icon.row = 5;
 	
 	var system = 0;
-	var ability = system + 11 + 1;
+	var ability = system + 12 + 1;
 	var equip = ability + 9 + 1;
 	var craft = equip + 12 + 1;	
 	
@@ -50,16 +50,17 @@ Img.icon = [];
 	var iconPreIndex = {
 	//System
 	'system':{'y':system+0,'x':['square','close','arrow','heart','gold','question','flag']},
-	'system1':{'y':system+1,'x':['left','right','down','up','more','less']},
-	'tab':{'y':system+2,'x':['equip','inventory','quest','skill','friend','pref']},
-	'element':{'y':system+3,'x':['melee','range','magic','fire','cold','lightning']},
-	'status':{'y':system+4,'x':['bleed','knock','drain','burn','chill','stun']},
-	'resource':{'y':system+5,'x':['hp','mana','fury','dodge','heal']},
-	'skill':{'y':system+6,'x':['melee','range','magic','metalwork','woodwork','leatherwork','mining','woodcutting','trapping']},
-	'friend':{'y':system+7,'x':['friend','mute','add','remove']},
-	'minimapIcon':{'y':system+8,'x':['enemy','boss','npc','quest','player']},
-	'offensive':{'y':system+9,'x':['pierce','bullet','strike','leech','atkSpd']},
-	'defensive':{'y':system+10,'x':['speed','pickup','life','item']},
+	'color':{'y':system+1,'x':['red','yellow','blue','green','purple']},
+	'system1':{'y':system+2,'x':['left','right','down','up','more','less']},
+	'tab':{'y':system+3,'x':['equip','inventory','quest','skill','friend','pref']},
+	'element':{'y':system+4,'x':['melee','range','magic','fire','cold','lightning']},
+	'status':{'y':system+5,'x':['bleed','knock','drain','burn','chill','stun']},
+	'resource':{'y':system+6,'x':['hp','mana','fury','dodge','heal']},
+	'skill':{'y':system+7,'x':['melee','range','magic','metalwork','woodwork','leatherwork','mining','woodcutting','trapping']},
+	'friend':{'y':system+8,'x':['friend','mute','add','remove']},
+	'minimapIcon':{'y':system+9,'x':['enemy','quest','good','friend','tree','trap','rock','grave','chest','switch','door']},
+	'offensive':{'y':system+10,'x':['pierce','bullet','strike','leech','atkSpd']},
+	'defensive':{'y':system+11,'x':['speed','pickup','life','item']},
 	
 	
 	//Ability

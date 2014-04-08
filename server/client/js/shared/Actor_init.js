@@ -102,7 +102,7 @@ Init.actor = function(){
 			"category":[],
 			'plan':[],
 		};    
-		act.minimapIcon = 'minimapIcon.enemy';     //icon used for minimap
+		act.minimapIcon = 'color.red';     //icon used for minimap
 		act.sprite = {"name":"mace","anim":"walk","sizeMod":1}			
 		act.equip = Actor.template.equip();
 		act.weapon = Actor.template.weapon();

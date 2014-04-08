@@ -148,7 +148,7 @@ function updateExcludeList(){
 	array.each(
 		function(i){
 			excludeList[array[i].value] = array[i].checked;
-			console.log(array[i].checked);			
+					
 		}
 	);
 }

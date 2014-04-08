@@ -1,58 +1,8 @@
 
-/*
-Init.socket = function(socket){
-	socket.lastEmit = {
-	
-	
-	
-	
-	}
-}
-*/
-
-Server.handleSocket = function(name,socket,d){
-	if(Db.socket[name])
-		Db.socket[name].func(socket,d);
 
 
-}
 
-Db.socket = {
-	'signUp':{
-		minInterval:10,
-		func:function(socket,d){
-			if(Server.ready) Sign.up(socket,d); 
-		},
-	},
-	'signIn':{
-		minInterval:10,
-		func:function(socket,d){
-			if(Server.ready) Sign.in(socket,d); 
-		},
-	},
-	'clientReady':{
-		minInterval:10,
-		func:function(socket,d){
-			if(!List.socket[socket.key]) return;
-			List.socket[socket.key].clientReady = 1; 
-		},
-	},
-	'disconnect':{
-		minInterval:10,
-		func:function(socket,d){
-			socket.toRemove = 1;
-		},
-	},
-	
-}
 
-io.sockets.on('connection', function (socket) {
-	//Init.socket(socket);
-	socket.on('signUp', function (d) { Server.handleSocket('signUp',socket,d);});
-	socket.on('signIn', function (d) { Server.handleSocket('signIn',socket,d);});
-	socket.on('clientReady', function (d) { Server.handleSocket('clientReady',socket,d);});
-    socket.on('disconnect', function (d) { Server.handleSocket('disconnect',socket,d);});
-});
 
 
 Sign = {};

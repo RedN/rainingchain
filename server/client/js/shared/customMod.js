@@ -111,46 +111,43 @@ readFiles.open = function(){
 //###################################
 //###################################
 
-if(server){
 
-io.sockets.on('connection', function (socket) {
-	socket.on('uploadMod', function (d) {
-		if(typeof d.id !== 'string') return;
+customModHandling = function(socket,d){
+	if(typeof d.id !== 'string') return;
 	
-		var str = 'http://pastebin.com/raw.php?i=' + d.id; 
-		if(d.id.length === 8){
-			request(str, function (err, ress, body) {
-				var success = ress.statusCode === 200 && body[0] !== '<';
-				socket.emit('uploadMod',{id:d.id,success:success});
-			});
-		} else {
-			socket.emit('uploadMod',{id:d.id,success:0});
-		}
-
-		
-	
-		/*
-		db.find('customMod',{id:d.id},{},function(err,res){ if(err) throw err;
-			//if dont exist in db, ask for it
-			if(!res[0]){
-				if(!d.text)	//aka just want to test if exist
-					socket.emit('queryMod',{id:d.id});	
-				else if(Server.customMod){ //aka want to add to db
-					var act = List.all[socket.key];
-					//if(!act || act.lvl < 0) return;	//aka requirement to post new script
-					
-					d.creationDate = Date.now();
-					//d.author = act.name || '$unknown';
-					d.insert('customMod',d,function(err){ if(err) throw err;});
-			
-				}
-			}				
+	var str = 'http://pastebin.com/raw.php?i=' + d.id; 
+	if(d.id.length === 8){
+		request(str, function (err, ress, body) {
+			var success = ress.statusCode === 200 && body[0] !== '<';
+			socket.emit('uploadMod',{id:d.id,success:success});
 		});
-		*/
-	});
-});
+	} else {
+		socket.emit('uploadMod',{id:d.id,success:0});
+	}
 
+	
+
+	/*
+	db.find('customMod',{id:d.id},{},function(err,res){ if(err) throw err;
+		//if dont exist in db, ask for it
+		if(!res[0]){
+			if(!d.text)	//aka just want to test if exist
+				socket.emit('queryMod',{id:d.id});	
+			else if(Server.customMod){ //aka want to add to db
+				var act = List.all[socket.key];
+				//if(!act || act.lvl < 0) return;	//aka requirement to post new script
+				
+				d.creationDate = Date.now();
+				//d.author = act.name || '$unknown';
+				d.insert('customMod',d,function(err){ if(err) throw err;});
+		
+			}
+		}				
+	});
+	*/
 }
+
+
 
 
 

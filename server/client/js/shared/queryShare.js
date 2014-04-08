@@ -100,22 +100,6 @@ Db.query.quest.bonus = function(info){
 	return tmp;
 }	
 
-	
-
-
-
-
-
-	
-	
-io.sockets.on('connection', function (socket) {
-	socket.on('queryDb', function (d) {
-		var toreturn = Db.query(d);
-		if(toreturn) socket.emit('queryDb',toreturn); 
-		else socket.emit('queryDb',{'failure':1});
-	});
-});
-
 } 
 
 //##############################################
@@ -148,91 +132,86 @@ socket.on('queryDb', function (d) {
 
 }
 
+Db.query.admin = function(socket,d){
+	try {
+		var key = socket.key;
+		
+		var p = List.all[key];
+		var m = List.main[key];
+		var inv = List.main[key].invList;
+		var add = Itemlist.add;
+		
+		var q = m.quest;
+		
+		
+		var le = {}; //all enemy
+		var lp = {}; //all player
+		var lc = {}; //all combat
+		var lb = []; //all bullet
+		
+		
+		var e = {};	//all enemy nearby
+		var c = {}; //all combat enemy nearby
+		var pl = {}; //all player nearby 
+		var b = [];	//all bullet nearby
+		
+
+		for(var i in List.all){
+			var act = List.all[i];
+			if(act.type === 'enemy'){
+				var id = act.name + ' ' + act.id;
+				le[id] = act;
+				if(act.combat) lc[id] = act;
+				
+				if(Activelist.test(p,act)){
+					e[id] = act;
+					if(act.combat) c[id] = act;
+				}
+			}						
+			if(act.type === 'player'){
+				var id = act.name + ' ' + act.id;
+				lp[id] = act;
+				if(Activelist.test(p,act)) pl[id] = act;
+			}
+			if(List.all[i].type === 'bullet'){
+				lb.push(act);
+				if(Activelist.test(p,act)) b[id] = act;
+			}
+		}				
+		
+		
+		
+		var S = function(id){	//select a actor via name or id
+			for(var i in List.all)	if(i === id || List.all[i].name === id) return List.all[i];
+		}
+		var sm = function(id){	//select main via id or name
+			for(var i in List.socket)	if(i === id || List.all[i].name === id) return List.main[i];
+		}
+		var a = function(id){	//select actor via partially name or id. same map 
+			for(var i in List.actor)	
+				if(List.actor[i].map !== p.map) continue;
+				if(i === id || List.actor[i].name.have(id)) return List.actor[i];
+		}
+		
+		var e1 = e[Object.keys(e)[0]];
+		
+		var tele = function(x,y,map){
+			Actor.teleport(p,x,y,map);
+		}
+		
+		var info = eval(d.command);
+		data = JSON.stringify(info);
+		permConsoleLog(info);
+		socket.emit('testing', {'data':data} );				
+	} catch (err){
+		logError(err);
+		socket.emit('testing', 'failure');
+	}			
+}
+
 
 //Testing
-if(server){
-	io.sockets.on('connection', function (socket) {
-		socket.on('testing', function (d) {
-			try {
-				var key = socket.key;
-				
-				if(Server.admin.have(List.all[key].name)){
-					var p = List.all[key];
-					var m = List.main[key];
-					var inv = List.main[key].invList;
-					var add = Itemlist.add;
-					
-					var q = m.quest;
-					
-					
-					var le = {}; //all enemy
-					var lp = {}; //all player
-					var lc = {}; //all combat
-					var lb = []; //all bullet
-					
-					
-					var e = {};	//all enemy nearby
-					var c = {}; //all combat enemy nearby
-					var pl = {}; //all player nearby 
-					var b = [];	//all bullet nearby
-					
-
-					for(var i in List.all){
-						var act = List.all[i];
-						if(act.type === 'enemy'){
-							var id = act.name + ' ' + act.id;
-							le[id] = act;
-							if(act.combat) lc[id] = act;
-							
-							if(Activelist.test(p,act)){
-								e[id] = act;
-								if(act.combat) c[id] = act;
-							}
-						}						
-						if(act.type === 'player'){
-							var id = act.name + ' ' + act.id;
-							lp[id] = act;
-							if(Activelist.test(p,act)) pl[id] = act;
-						}
-						if(List.all[i].type === 'bullet'){
-							lb.push(act);
-							if(Activelist.test(p,act)) b[id] = act;
-						}
-					}				
-					
-					
-					
-					var S = function(id){	//select a actor via name or id
-						for(var i in List.all)	if(i === id || List.all[i].name === id) return List.all[i];
-					}
-					var sm = function(id){	//select main via id or name
-						for(var i in List.socket)	if(i === id || List.all[i].name === id) return List.main[i];
-					}
-					var a = function(id){	//select actor via partially name or id. same map 
-						for(var i in List.actor)	
-							if(List.actor[i].map !== p.map) continue;
-							if(i === id || List.actor[i].name.have(id)) return List.actor[i];
-					}
-					
-					var e1 = e[Object.keys(e)[0]];
-					
-					var tele = function(x,y,map){
-						Actor.teleport(p,x,y,map);
-					}
-					
-					var info = eval(d.command);
-					data = JSON.stringify(info);
-					permConsoleLog(info);
-					socket.emit('testing', {'data':data} );				
-				}
-			} catch (err){
-				logError(err);
-				socket.emit('testing', 'failure');
-			}			
-		});
-	});
-
-} else {
+if(!server){
 	ts = function(command){socket.emit('testing', {'command':command});}
 	
 	ts.superBoost = function(){

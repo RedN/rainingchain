@@ -84,6 +84,8 @@ Chat.receive.public = function(key,text,to,type,from,data){
 	var from = {'from':from};
 	if(main.social.symbol) from.symbol = List.main[key].social.symbol;
 	
+	//Send info
+	Chat.add(key,text,'public',from);
 	for(var i in act.activeList)
 		if(List.main[i]) Chat.add(i,text,'public',from);
 		
@@ -138,14 +140,6 @@ Chat.receive.report = function(key,data){
 		});
 	}
 }
-
-io.sockets.on('connection', function (socket) {
-	//server receives information from client that wishes to send a message
-	socket.on('sendChat', function (data) {
-		data.key = socket.key;
-		Chat.receive(data);
-	});
-});
 
 
 

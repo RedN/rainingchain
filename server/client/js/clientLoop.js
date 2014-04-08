@@ -27,6 +27,9 @@ window.onblur = function(){
 	
 Loop.frameCount = 0;
 
+Loop.interval = function(num){
+	return Loop.frameCount % num === 0;
+}
 Loop.send = function(){ 
 	Input.send(); 
 }

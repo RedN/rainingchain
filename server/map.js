@@ -34,7 +34,7 @@ Map.creation = function(namemodel,version,lvl){
 		name:model.name,
 		version:version,
 		graphic:model.graphic,
-		grid:model.grid,
+		grid:Db.map[model.graphic].grid,
 		model:model.id,
 		fall:model.fall,
 		timer:version === 'MAIN' ? 1/0 : 1000,// 5*60*1000/25,
@@ -68,8 +68,9 @@ Map.creation.model = function(map){	//create the model that will be in Db.map | 
 	map.grid.enemy = JSON.parse(strGrid.replaceAll('0','a').replaceAll('1','0').replaceAll('2','0').replaceAll('a','1').replaceAll('4','0'));
 	map.grid.bullet = JSON.parse(strGrid.replaceAll('0','a').replaceAll('1','0').replaceAll('2','1').replaceAll('a','1'));
 	
-	map.addon = map.addon || {};
 	map.graphic = map.graphic || map.id;
+	map.addon = map.addon || {};
+	
 	return map;
 }
 

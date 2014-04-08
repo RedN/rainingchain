@@ -4,7 +4,7 @@ Draw.old = {'fl':'','quest':'','abilityShowed':'bulletMulti','abilityTypeShowed'
 Draw.loop = function (){
 	//Clear
 	for(var i in List.ctx){
-		//if(i === 'minimap') continue;
+		if(i === 'minimap') continue;	//managed  in Draw.minimap
 		List.ctx[i].clearRect(0, 0, Cst.WIDTH, Cst.HEIGHT);
 	}
 	for(var i in html){ 
@@ -35,7 +35,7 @@ Draw.loop = function (){
 	if(!main.hideHUD.window) Draw.window();
 	if(!main.hideHUD.popup) Draw.popup();
 	
-	if(!main.hideHUD.minimap) Draw.minimap();
+	if(!main.hideHUD.minimap && Loop.interval(3)) Draw.minimap();
 	if(!main.hideHUD.state) Draw.state();
 
 	Draw.logout();

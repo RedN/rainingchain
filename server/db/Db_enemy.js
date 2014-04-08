@@ -123,6 +123,20 @@ ePreDb["troll"]["ice"] = {  //{		//troll is category, ice is variant
 
 */
 
+/*
+enemy = red
+npc = green
+good or bad = yellow
+quest = blue
+grave = purple
+boss = skull
+
+
+
+
+
+
+*/
 Db.enemy = {};
 Init.db.enemy = function(){ 
 	var a = Db.enemy;
@@ -803,6 +817,7 @@ Init.db.enemy = function(){
 	}; //}
 	a["system"]["grave"] = {  //{
 		"name":"Grave",
+		'minimapIcon':'minimapIcon.grave',
 		"sprite":{'name':"grave",'sizeMod':1},
 		"waypoint":1,
 		'nevercombat':1,
@@ -811,12 +826,14 @@ Init.db.enemy = function(){
 	}; //}
 	a["system"]["chest"] = {  //{
 		"name":"Chest",
+		'minimapIcon':'minimapIcon.chest',
 		"sprite":{'name':"chest",'sizeMod':1},
 		'nevercombat':1,
 		'nevermove':1,
 	}; //}
 	a["system"]["switch"] = {  //{
 		"name":"Switch",
+		'minimapIcon':'minimapIcon.switch',
 		"sprite":{'name':"switchBox",'sizeMod':1},
 		'nevercombat':1,
 		'nevermove':1,
@@ -826,6 +843,7 @@ Init.db.enemy = function(){
 	a["block"] = {}; //{
 	a["block"]["1x1"] = {  //{
 		"name":"Block",
+		'minimapIcon':'',
 		"sprite":{'name':"block1x1",'sizeMod':1},
 		'nevercombat':1,
 		'moveSelf':0,
@@ -834,6 +852,7 @@ Init.db.enemy = function(){
 	
 	a["block"]["2x2"] = {  //{
 		"name":"Block",
+		'minimapIcon':'',
 		"sprite":{'name':"block1x1",'sizeMod':2},
 		'nevercombat':1,
 		'moveSelf':0,
@@ -841,6 +860,7 @@ Init.db.enemy = function(){
 	}; //}
 	a["block"]["2x2Fix"] = {  //{
 		"name":"Block",
+		'minimapIcon':'',
 		"sprite":{'name':"block1x1-black",'sizeMod':2},
 		'nevercombat':1,
 		'moveSelf':0,
@@ -849,6 +869,7 @@ Init.db.enemy = function(){
 
 	a["block"]["3x3"] = {  //{
 		"name":"Block",
+		'minimapIcon':'',
 		"sprite":{'name':"block1x1",'sizeMod':3},
 		'nevercombat':1,
 		'moveSelf':0,
@@ -857,6 +878,7 @@ Init.db.enemy = function(){
 	
 	a["block"]["4x4"] = {  //{
 		"name":"Block",
+		'minimapIcon':'',
 		"sprite":{'name':"block1x1",'sizeMod':4},
 		'nevercombat':1,
 		'moveSelf':0,
@@ -868,12 +890,14 @@ Init.db.enemy = function(){
 	a["tree"] = {}; //{
 	a["tree"]["red"] = {  //{
 		"name":"Red Tree",
+		'minimapIcon':'minimapIcon.tree',
 		"sprite":{'name':"treeRed",'sizeMod':1},
 		'nevercombat':1,
 		'nevermove':1,
 	}; //}
 	a["tree"]["down"] = {  //{
 		"name":"Tree",
+		'minimapIcon':'minimapIcon.tree',
 		"sprite":{'name':"block1x1",'sizeMod':1},
 		'nevercombat':1,
 		'nevermove':1,

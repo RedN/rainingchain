@@ -2,8 +2,9 @@ Change = {};
 
 Change.send = function(){
 	//Send what has changed to the client.for (var key in List.socket){
-	for(var key in List.socket){	
-		if(!List.socket[key].clientReady) continue;
+	for(var key in List.socket){
+		var socket = List.socket[key];
+		if(!socket.clientReady) continue;
 		if(key === Server.botwatch.watcher) continue;
 		var sa = Change.send.template();
 		
@@ -67,7 +68,7 @@ Change.send = function(){
 		//if(Object.keys(sa).length === 0){ continue; }
 		
 		//Send
-		List.socket[key].emit('change', sa );
+		socket.emit('change', sa );
 		
 		if(key === Server.botwatch.watched){
 			if(List.socket[Server.botwatch.watcher])
@@ -78,7 +79,7 @@ Change.send = function(){
 			}
 		}
 		
-	    Performance.bandwidth('upload',sa);
+	    Performance.bandwidth('upload',sa,socket);
 	}
 	
 	Change.send.reset();

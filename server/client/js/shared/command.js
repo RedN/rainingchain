@@ -2,29 +2,21 @@
 Command = {};
 Command.list = {};
 
-if(server){
-	//Receive command from client
-	//format: data:{cmd:command_Name,param:[param1,param2]} io.sockets.on('connection', function (socket) {
-	io.sockets.on('connection', function (socket) {
-		socket.on('Chat.send.command', function (data) {
-			var key = socket.key;
-			var cmd = data.cmd;
-			var param = data.param;
-			param.unshift(key);
-			
-			cmd = escape.quote(cmd);
-			for(var i in param){ param[i] = escape.quote(param[i]); }
-			
-			if(!Command.client.have(cmd) && Command.list[cmd]){
-				Command.list[cmd].apply(this,param);
-			}
-			
-		});
-	});
+//Receive command from client
+//format: data:{cmd:command_Name,param:[param1,param2]} io.sockets.on('connection', function (socket) {
+Command.receive = function(socket,data){
+	var key = socket.key;
+	var cmd = data.cmd;
+	var param = data.param;
+	param.unshift(key);
+	
+	cmd = escape.quote(cmd);
+	for(var i in param){ param[i] = escape.quote(param[i]); }
+	
+	if(!Command.client.have(cmd) && Command.list[cmd]){
+		Command.list[cmd].apply(this,param);
+	}
 }
-
-
-
 
 //{Fl
 Command.list['fl,add'] = function(key,user,nick,comment,color){

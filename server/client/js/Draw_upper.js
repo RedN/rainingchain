@@ -1,6 +1,3 @@
-MAPSIZEFACT = 1;
-
-
 //{State
 Draw.state = function(){
 	var s = Draw.state.constant();
@@ -160,17 +157,18 @@ Draw.pvpScore = function(s){
 //{Minimap
 Draw.minimap = function (){ ctxrestore();
 	ctx = List.ctx.minimap;
+	ctx.clearRect(0, 0, Cst.WIDTH, Cst.HEIGHT);
 	Draw.minimap.map();
-	
+	Draw.minimap.icon();
 }
+Draw.minimap.zoom = 16;
 
 Draw.minimap.map = function(){
-	var x = -(player.x)/16 + Cst.WIDTH2/main.pref.mapRatio;	
-	var y = -(player.y)/16 + Cst.HEIGHT2/main.pref.mapRatio;	
+	var x = -(player.x)/Draw.minimap.zoom + Cst.WIDTH2/main.pref.mapRatio;	
+	var y = -(player.y)/Draw.minimap.zoom + Cst.HEIGHT2/main.pref.mapRatio;	
 	var im = Db.map[player.map].img.m;
 	
 	ctx.drawImage(Db.map[player.map].img.m, x,y);
-	ctx.fillRect(1280/2/main.pref.mapRatio-2,720/2/main.pref.mapRatio-2,4,4);
 }
 
 Draw.minimap.map.updateSize = function(){
@@ -184,30 +182,27 @@ Draw.minimap.map.updateSize = function(){
 	
 }
 
-Draw.minimap.icon = function(s){	//creates lag? TOFIX
-	return;
-	var zoom = main.pref.mapZoom/100;
-	var ratio = main.pref.mapRatio;
-
+Draw.minimap.icon = function(){
+	var cx = Cst.WIDTH2/main.pref.mapRatio-2;
+	var cy = Cst.HEIGHT2/main.pref.mapRatio-2;
+	
 	for(var i in List.actor){
 		var m = List.actor[i];
-		if(m.minimapIcon){
-			var vx = m.x - player.x;
-			var vy = m.y - player.y;
-			
-			var cx = s.x + Cst.WIDTH/ratio/2; //center
-			var cy = s.y + Cst.HEIGHT/ratio/2;
-			var size = 36/zoom;
-			
-			var numX = cx+vx/zoom/ratio-size/2;
-			var numY = cy+vy/zoom/ratio-size/2;
+		if(!m.minimapIcon) continue;
 		
-			if(Collision.PtRect({x:numX+size/2,y:numY+size/2},[s.x,s.x+Cst.WIDTH/main.pref.mapRatio,s.y,s.y+Cst.HEIGHT/main.pref.mapRatio])){
-				Draw.icon(m.minimapIcon,numX,numY,size);
-			}
-		}
+		var vx = m.x - player.x;
+		var vy = m.y - player.y;
+		
+		var numX = cx+vx/Draw.minimap.zoom;
+		var numY = cy+vy/Draw.minimap.zoom;
+		
+		if(m.type === 'player' && main.social.list.friend[m.id]) m.minimapIcon = 'minimapIcon.friend';
+		
+		var size = m.minimapIcon.have('color') ? 4 : 16;
+		Draw.icon(m.minimapIcon,numX-size/2,numY-size/2,size);
 	}
-	//Draw.icon('system.square',s.x + Cst.WIDTH/main.pref.mapRatio/2-2,s.y + Cst.HEIGHT/main.pref.mapRatio/2-2,4);
+	
+	ctx.fillRect(1280/2/main.pref.mapRatio-2,720/2/main.pref.mapRatio-2,4,4);	//player icon
 }
 //}
 

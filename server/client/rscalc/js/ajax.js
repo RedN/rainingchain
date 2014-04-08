@@ -18,7 +18,6 @@ function getExp(name){
 
 function updatePrice(cb){
 	if(ONLINE == 1){
-		console.log(1);
 		$.ajax( {
 			url: '/getPrice',
 			data: 'hello',
@@ -50,7 +49,6 @@ function submitMethod(){
 			data: {'text':text},
 			type: 'POST',
 			success: function(data) {
-				if(data != '123'){console.log(JSON.parse(data));}
 				
 				methodBox.value = '{\n"credit":your_name!,\n"name":"Method submitted. Thanks :D",\n"icon":"name_of_the_item_for_the_icon",\n"lvl":level,\n"input":{"name_item1":amount_item1,"name_item2":amount_item2},\n"output":{"name_item1":amount_item1,"name_item2":amount_item2},\n"expPa":[exp],\n"actionPh":action_per_hour,\n},';
 ;

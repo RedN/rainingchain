@@ -157,7 +157,6 @@ function imgError(image) {
 	
 	var itemId = '';
 	itemId = image.src.slice(image.src.indexOf('id=')+3);
-	console.log(itemId);
 	
 	image.onerror = "";
 	if(image.errorCount == 1){

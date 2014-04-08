@@ -1,15 +1,7 @@
 
-keep same grid for same maps graphics | map creation
-
 condition to be hit
 
-minimap icon
-
-
 freeze passive
-
-limit amount message
-
 
 mutelist
 
