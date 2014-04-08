@@ -70,14 +70,14 @@ Test.dayCycle = function(key){
 Test.pvpAbility = function(key){
 	var act = List.all[key];
 	//PVP
-	act.abilityList = {
+	act.abilityList = Actor.template.abilityList({
 		'pvp-bullet':1,
 		'pvp-fireball':1,
 		'pvp-freeze':1,
 		'pvp-explosion':1,
 		'pvp-invincibility':1,
 		'pvp-heal':1,
-	};
+	});
 
 	Actor.swapAbility(act,'pvp-bullet',0);
 	Actor.swapAbility(act,'pvp-explosion',1);

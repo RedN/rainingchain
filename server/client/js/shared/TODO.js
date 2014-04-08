@@ -18,8 +18,15 @@ custom look
 
 
 
-
-
+/*
+ability = {
+	get:function(){
+		return this.regular;
+	},
+	regular:[],
+	pvp:[],
+},
+*/
 
 
 

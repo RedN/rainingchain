@@ -196,7 +196,7 @@ Change.update.init = function(){
 						
 				
 				{'array':['ability'],'filter':Change.send.convert.ability },
-				{'array':['abilityList']},
+				{'array':['abilityList'],'filter':Change.send.convert.abilityList},
 				
 				{'array':['skill','exp']},
 				{'array':['skill','lvl']},
@@ -240,7 +240,7 @@ Change.update.watch = function(act,info,priv){
 
 	//Get Old and New Value and Set Old = to New
 	var valRaw = viaArray.get({'origin':act,'array':info.array});
-	if(valRaw && info.filter) valRaw = info.filter(valRaw);
+	if(valRaw && info.filter) valRaw = info.filter(valRaw,act);
 	        
 	var val0 = stringify(valRaw);                                   //Get new
 	

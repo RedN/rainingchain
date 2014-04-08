@@ -67,8 +67,8 @@ Init.actor = function(){
 		
 		act.abilityChange = Actor.template.abilityChange();	
 		act.abilityAi = {close:{},middle:{},far:{},range:[60,300]};
-		act.abilityList = {};		
-		
+		act.abilityList = Actor.template.abilityList();		
+		act.combatContext = 'regular';		//or pvp
 		act.friction = 0.9;
 		act.move = 1;
 		act.summon = {};       //if actor is master
@@ -128,7 +128,7 @@ Init.actor = function(){
 		act.globalDmg = 1;   //global modifier
 		act.aim = 0;       //difference between mouse and actually bullet direction
 		act.atkSpd = {'main':1,'support':1};	
-		act.ability = [];
+		act.ability = Actor.template.ability();
 		act.invisible = 0;
 		act.ghost = 0;
 		act.nevermove = 0;
@@ -173,8 +173,6 @@ Init.actor = function(){
 			act.respawnLoc = {safe:{x:act.x,y:act.y,map:act.map},recent:{x:act.x,y:act.y,map:act.map}};
 			
 			Sprite.creation(act,act.sprite);
-			act.ability = Actor.template.ability(type);
-			act.abilityList = Actor.template.abilityList();
 		}
 		//}
 		for(var i in act.boost.list){  //init default Db.stat value
@@ -240,11 +238,21 @@ Actor.template.mastery = function(type){
 	};
 };
 
-Actor.template.abilityList = function(){
-	return {};	//check Test for added ability
+Actor.template.abilityList = function(info){
+	info = info || {};
+	return {
+		regular:info,
+		pvp:{},
+		type:'regular'	
+	};	//check Test for added ability
 }
-Actor.template.ability = function(){
-	return [0,0,0,0,0,0];
+Actor.template.ability = function(info){
+	info = info || [0,0,0,0,0,0];
+	return {
+		regular:info,
+		pvp:[0,0,0,0,0,0],
+		type:'regular'	
+	}
 }
 
 

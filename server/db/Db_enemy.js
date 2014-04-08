@@ -917,7 +917,7 @@ Init.db.enemy = function(){
 }
 
 Init.db.enemy.creation = function(e){
-	e = useTemplate(Actor.template('enemy'),e);
+	e = useTemplate(Actor.template('enemy'),e);		//abilityList: [], ability: regular...
 	
 	e.context = e.name; 
 	if(e.combat && !e.nevercombat)	e.context += ' | Lvl: ' + e.lvl;
@@ -933,21 +933,23 @@ Init.db.enemy.creation = function(e){
 		tmp.dmg[i] = {sum:e.mastery.dmg[i],mod:1};
 	}
 	e.mastery = tmp;
-		
 	
 	//Add to Db.enemy	
-	var a = Db.enemy[e.category][e.variant] = new Function('return ' + stringify(e));
+	var dbinfo = Db.enemy[e.category][e.variant] = new Function('return ' + stringify(e));
 	
 	//things cant stringify cuz function
-	a.globalDmg = e.globalDmg;	
-	a.globalDef = e.globalDef;
-	a.globalMod = e.globalMod;
+	dbinfo.globalDmg = e.globalDmg;	
+	dbinfo.globalDef = e.globalDef;
+	dbinfo.globalMod = e.globalMod;
 	
-	a.ability = [];	
+	dbinfo.ability = [];
 	for(var i in e.ability)
-		a.ability.push(e.ability[i].action.param);
+		if(e.ability[i])	//case 0
+			dbinfo.ability.push(e.ability[i].action.param);
+	//
 		
-	return e;
+	
+	return e;	//no need to return anything
 }
 
 Init.db.enemy.creation.drop = function(e){ 
@@ -1006,7 +1008,7 @@ Init.db.enemy.creation.ability = function(e){
 	
 	var a = {};
 	for(var i in e.abilityList)	a[e.abilityList[i].id] = 1;
-	e.abilityList = a;
+	e.ability = e.ability.regular;
 	return e;
 }
 

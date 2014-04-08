@@ -33,7 +33,7 @@ Performance.bandwidth.upload = {'display':nodejitsu,'size':0,'limitPerPlayer':10
 Performance.bandwidth.download = {'display':nodejitsu,'size':0,'limitPerPlayer':1000*1000000};
 Performance.bandwidth.frequence = 30*1000/40;
 Performance.bandwidth.getSize = function(obj){
-    return stringify(obj).length * 2;   //in bytes
+    return stringify(obj||0).length * 2;   //in bytes
 }  
 Performance.bandwidth.display = function(){
     if(Loop.frameCount % Performance.bandwidth.frequence === 0){

@@ -243,14 +243,17 @@ Change.send.convert.windowList.trade = function(data){
 	return draw;
 }
 
-Change.send.convert.ability = function(list){
+Change.send.convert.ability = function(ab,act){
+	var list = ab[act.combatContext || 'regular'];
 	var tmp = [];
 	for(var i in list){
 		tmp[i] = list[i] ? list[i].id : 0;		
 	}
 	return tmp;
 }
-
+Change.send.convert.abilityList = function(ab,act){
+	return ab[act.combatContext || 'regular'];
+}
 
 Change.send.convert.abilityChangeClient = function(info){
 	var tmp = '';

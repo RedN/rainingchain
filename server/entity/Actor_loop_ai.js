@@ -102,9 +102,10 @@ Actor.loop.input.ability = function(act){
 	
 	var id = act.abilityAi[range].random();
 	if(!id || id === 'idle') return;
-
-	for(var i in act.ability){
-		if(act.ability[i].id === id){
+	
+	var ab = Actor.getAbility(act);
+	for(var i in ab){
+		if(ab[i].id === id){
 			act.abilityChange.press = act.abilityChange.press.set(+i,'1');
 		}
 	}	

@@ -29,6 +29,7 @@ Actor.creation = function(d){
 	if(e.nevermove){ Actor.creation.nevermove(e); }
 	
 	if(!e.group) e.deleteOnceDead = 1;
+	//console.log(e);
 	return e.id;
 }
 
@@ -90,7 +91,10 @@ Actor.creation.db = function(e,d){
 	var f = Db.enemy[d.category][d.variant];
 	e = f();
 	for(var i in f.ability) e.ability[i].action.param = f.ability[i];
-	for(var i in f) if(i !== 'ability') e[i] = f[i];	//cuz of function (globalDmg)
+	for(var i in f) if(i !== 'ability') e[i] = f[i];	//cuz of function (globalDmg) + cant delete ability if multi use same
+	
+	e.ability = Actor.template.ability(e.ability);
+	e.abilityList = Actor.template.ability(e.abilityList);
 	
 	e.id = Math.randomId();
 	e.publicId = Math.randomId(6);
@@ -100,6 +104,7 @@ Actor.creation.db = function(e,d){
 	e.globalDmg = typeof e.globalDmg === 'function' ? e.globalDmg(e.lvl) : e.globalDmg * Actor.creation.db.globalLvlMod(e.lvl).globalDmg
 	e.deathExp = e.deathExp * Actor.creation.db.globalLvlMod(e.lvl).deathExp;
 	if(e.globalMod) e = e.globalMod(e,e.lvl);
+
 	
 	if(e.boss){	
 		e.boss = Boss.creation(e.boss);

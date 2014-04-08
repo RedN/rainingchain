@@ -500,10 +500,11 @@ Actor.dropInv = function(act,id){
 
 //{Ability
 Actor.removeAbility = function(act,name){
-	delete act.abilityList[name];
-	for(var i in act.ability){
-		if(act.ability[i] && act.ability[i].id === name){
-			act.ability[i] = null;
+	delete Actor.getAbilityList(act)[name];
+	var ab = Actor.getAbility(act);
+	for(var i in ab){
+		if(ab[i] && ab[i].id === name){
+			ab[i] = null;
 		}
 	}
 	LOG(1,act.id,'removeAbility',name);
@@ -517,13 +518,15 @@ Actor.swapAbility = function(act,name,position){
 		if(abPos === 5 && act.abilityList[abListPost].type !== 'dodge'){Chat.add(act.id,'This ability slot can only support Dodge abilities.'); return;}	
 	}
 	*/
-	if(act.type === 'player' && !act.abilityList[name]) return; 		//dont have access to this ability
+	if(act.type === 'player' && !Actor.getAbilityList(act)[name]) return; 		//dont have access to this ability
 	var ability = Ability.uncompress(name);
 	
-	act.ability[position] = ability;
+	//console.log(act);
+	var ab = Actor.getAbility(act);
+	ab[position] = ability;
 	act.abilityChange = Actor.template.abilityChange();
-	for(var i in act.ability){ 
-		if(act.ability[i])		act.abilityChange.charge[act.ability[i].id] = 0;
+	for(var i in ab){ 
+		if(ab[i])		act.abilityChange.charge[ab[i].id] = 0;
 	}
 
 }
@@ -531,7 +534,7 @@ Actor.swapAbility = function(act,name,position){
 Actor.learnAbility = function(act,name){
 	if(!Db.ability[name]) return;
 	Chat.add(act.id,"You have learnt a new ability: \"" + Db.ability[name].name + '".');
-	act.abilityList[name] = 1;
+	Actor.getAbilityList(act)[name] = 1;
 	LOG(1,act.id,'learnAbility',name);
 }
 
@@ -606,9 +609,9 @@ Actor.death.enemy = function(act){
 	Activelist.remove(act);
 }
 
-Actor.death.performAbility = function(act){
+Actor.death.performAbility = function(act){	//HERE
 	for(var i in act.deathAbility){
-		Actor.performAbility(act,act.ability[act.deathAbility[i]],false,false);
+		Actor.performAbility(act,Actor.getAbility(act)[act.deathAbility[i]],false,false);
 	}
 }
 
@@ -730,8 +733,14 @@ Actor.respawn.player = function(act){
 //ts("Plan.creation({'rarity':0,'quality':0,'piece':'melee','lvl':10,'category':'equip',});")
 
 
+Actor.getAbility = function(act){
+	return act.ability[act.combatContext];
+}
 
-
+Actor.getAbilityList = function(act){
+	return act.abilityList[act.combatContext];
+}
+//ts("p.combatContext = 'regular'")
 
 
 

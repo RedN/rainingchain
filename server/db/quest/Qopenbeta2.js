@@ -129,11 +129,12 @@ q.map.goblinLand = function(){
 		
 		//Enemy
 		Actor.creation.group({'xym':spot.d,'respawn':25*15},[
-			{'amount':1,"category":"mushroom","variant":"normal",'modAmount':1,'extra':{deathFunc:q.event.enemyKilled}},
+			{'amount':4,"category":"mushroom","variant":"normal",'modAmount':1,'extra':{deathFunc:q.event.enemyKilled}},
 			{'amount':5,"category":"larva","variant":"normal",'modAmount':1,'extra':{deathFunc:q.event.enemyKilled}},
-			{'amount':1,"category":"plant","variant":"normal",'modAmount':1,'extra':{deathFunc:q.event.enemyKilled}},
+			{'amount':4,"category":"plant","variant":"normal",'modAmount':1,'extra':{deathFunc:q.event.enemyKilled}},
 		]);
-		
+	
+		return; //TOFIX
 		
 		Actor.creation.group({'xym':spot.C,'respawn':25*15},[
 			{'amount':1,"category":"goblin","variant":"melee",'modAmount':1,'extra':{deathFunc:q.event.enemyKilled}},
@@ -185,6 +186,7 @@ q.map.goblinLand = function(){
 		Actor.creation.group({'xym':spot.v,'respawn':25*15},[
 			{'amount':3,"category":"dragon","variant":"king",'modAmount':1,'extra':{deathFunc:q.event.enemyKilled}},
 		]);
+		
 	}
 	
 	

@@ -55,8 +55,9 @@ Actor.loop.ability = function(m){	//HOTSPOT
 	
 	m.abilityChange.globalCooldown--;
 	m.abilityChange.globalCooldown = m.abilityChange.globalCooldown.mm(-100,250); 	//cuz if atkSpd is low, fuck everything
-	for(var i in m.ability){
-		var s = m.ability[i]; if(!s) continue;	//cuz can have hole if player AND enemy attack rate is are in m.ability
+	var ab = Actor.getAbility(m);
+	for(var i in ab){
+		var s = ab[i]; if(!s) continue;	//cuz can have hole if player AND enemy attack rate is are in m.ability
 		
 		var charge = m.abilityChange.charge;	//cant used [id] cuz otherwise not longer reference
 

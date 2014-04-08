@@ -316,8 +316,9 @@ Load.player = function(key,account,cb){
 
 Save.player.compress = function(playerr){
 	var player = deepClone(playerr);
-	for(var i in player.ability)	player.ability[i] = player.ability[i] ? player.ability[i].id : 0;
-
+	for(var i in player.ability.regular)	player.ability.regular[i] = player.ability.regular[i] ? player.ability.regular[i].id : 0;
+	player.ability = player.ability.regular;
+	
 	player.respawnLoc.recent.x = Math.round(player.respawnLoc.recent.x);
 	player.respawnLoc.recent.y = Math.round(player.respawnLoc.recent.y);
 	player.respawnLoc.safe.x = Math.round(player.respawnLoc.safe.x);
@@ -358,6 +359,10 @@ Load.player.uncompress = function(player){
 							recent:{x:player.x,y:player.y,map:player.map}};
 							
     for(var i in player.ability)	player.ability[i] = Ability.uncompress(player.ability[i]);
+	player.ability = Actor.template.ability(player.ability);
+	
+	
+	
     return player;
 }
 
@@ -376,7 +381,7 @@ Load.initData = function(key,player,main){
             'weapon':0,
             'skill':0,
             'ability':Change.send.convert.ability,
-            'abilityList':0,
+            'abilityList':Change.send.convert.abilityList,
         },
         'main':{
             'passive':0,
@@ -394,7 +399,7 @@ Load.initData = function(key,player,main){
     }
     for(var i in array){
         for(var j in array[i]){
-            if(array[i][j]){ data[i][j] = array[i][j](obj[i][j]);  continue;}
+            if(array[i][j]){ data[i][j] = array[i][j](obj[i][j],player);  continue;}
             data[i][j] = obj[i][j];
         }
     }
