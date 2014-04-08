@@ -33,6 +33,7 @@ Init.actor = function(){
 			reachedGoal:0,isStuck:0,
 		}
 		
+		act.customBoost = Actor.template.customBoost();
 		act.bonus = Actor.template.bonus();	//Bonus applies on top of ability attack. If effect not on ability, do nothing.
 		act.mastery = Actor.template.mastery(type);
 		

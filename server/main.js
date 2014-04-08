@@ -78,16 +78,16 @@ exports.initServer = function (){
 		Init.db.dialogue();
 		Map.creation.all();
 		
-		Init.db.passive();
-		Init.db.clan();
-		Test.serverStart();
-		setInterval(Loop,40);
-		
-		Server.ready = 1;
-		//Track Global Variables
-		var tmp = Object.keys(this); for(var i in ObjectKeys) tmp.splice(tmp.indexOf(ObjectKeys[i]),1);
-		//permConsoleLog(tmp);
-    
+		Init.db.passive(function(){
+			Init.db.clan();
+			Test.serverStart();
+			setInterval(Loop,40);
+			
+			Server.ready = 1;
+			//Track Global Variables
+			var tmp = Object.keys(this); for(var i in ObjectKeys) tmp.splice(tmp.indexOf(ObjectKeys[i]),1);
+			//permConsoleLog(tmp);
+		});
 	})})})});
 	
 	db.update('account',{},{'$set':{online:0}},{multi:true},function(err, results) { if(err) throw err });   //set all players offline

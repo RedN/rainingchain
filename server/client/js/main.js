@@ -111,10 +111,10 @@ Init.game = function (data) {
 	for(var i in main.social.message.chat){Chat.receive(main.social.message.chat[i]);}	main.social.message.chat = [];   //for offline pm
 	
 	//Note: a part of Init.db are directly in index.html
+	Init.db.customBoost();
 	Init.db.stat();
 	Init.actor();
 	//Init.db.quest();
-	Init.db.customBoost();
 	Init.db.ability();
 	
 	//initAbilityModDb();   //need fixing
@@ -143,9 +143,7 @@ Init.game.player = function(data){    //use data sent from server and default to
 	$("#chatUserName")[0].innerHTML = player.name + ': '; 
 }
 Init.game.other = function(data){    //use data sent from server and default to create the player
-	Db.passive = data.other.passive.db;
-	delete data.other.passive.db;
-	for(var i in data.other.passive) Db.passive[i] = data.other.passive[i];	
+	Db.passiveGrid = data.other.passiveGrid;
 }
 Init.game.addCanvas = function(name,id,z){
 	//To add a canvas to the game

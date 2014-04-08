@@ -69,9 +69,6 @@ Draw.window.main = function(title){ ctxrestore();
 	return s;
 }
 
-
-
-
 Draw.window.main.constant = function(){
 	var startX = 20;
 	var startY = 20;
@@ -1242,18 +1239,21 @@ Draw.window.passive.grid = function(){ ctxrestore();
 	
 	info.size = Math.max(0.1,info.size);
 	info.size = Math.min(200,info.size);
-	var icon = info.size ;
+	var iconSize = info.size ;
 	var border = info.size/20;
 	var border2 = border/2;
-	var ic = icon + border;
+	var ic = iconSize + border;
 	
 	var pass = main.passive[main.passiveActive];
 	
 	//Draw Stat	
-	for(var i = 0 ; i < Db.passive.length ; i++){
-		for(var j = 0 ; j < Db.passive[i].length ; j++){
+	var grid = Db.passiveGrid.grid;
+	for(var i = 0 ; i < grid.length ; i++){
+		for(var j = 0 ; j < grid[i].length ; j++){
 			var numX = s.x + 300 + ic * j + dx;	
 			var numY = s.y + 60 + ic * i + dy;
+			
+			var boost = grid[i][j];
 			
 			ctx.globalAlpha = 1;
 			
@@ -1268,29 +1268,22 @@ Draw.window.passive.grid = function(){ ctxrestore();
 			//Border
 			ctx.globalAlpha = 0.5;
 			if(main.pref.passiveView === 0){ ctx.fillStyle = +pass[i][j] ? 'green' : (Passive.test.add(pass,i,j) ? '#FFFF00': 'red');}
-			if(main.pref.passiveView === 1){ var n = (Db.passive[i][j].count-Db.passive.min) / (Db.passive.max-Db.passive.min);	ctx.fillStyle =	Draw.gradientRG(n);}
+			if(main.pref.passiveView === 1){ var n = (boost.count-grid.min) / (grid.max-grid.min);	ctx.fillStyle =	Draw.gradientRG(n);}
 			ctx.fillRect(numX,numY,ic,ic);
 		
 			//Icon
-			ctx.globalAlpha = 0.5;
-			if(+pass[i][j]){ ctx.globalAlpha = 1; }
-			var name = Db.passive[i][j].stat ? Db.stat[Db.passive[i][j].stat].icon : Db.customBoost[Db.passive[i][j]].icon;
-			Draw.icon(name,numX+border2,numY+border2,icon);
+			ctx.globalAlpha = +pass[i][j] ? 1 : 0.5;
+			var name = Db.stat[boost.stat].icon;
+			Draw.icon(name,numX+border2,numY+border2,iconSize,{
+				"right":{"func":Chat.send.command,"param":['$win,passive,add,' + main.passiveActive + ',' + i + ',' + j]},
+				"shiftRight":{"func":Chat.send.command,"param":['$win,passive,remove,' + main.passiveActive + ',' + i + ',' + j]},
+				'text':'Right: Choose ' + name + ' | Shift-Right: Remove',
+			});
+			
 			
 			//Hover
 			if(!Input.mouse.drag.active && Collision.PtRect(Collision.getMouse(key),[numX,numX+ic,numY,numY+ic])){
-				var hover = Db.passive[i][j];
-			}
-			
-			//Button
-			if(typeof Db.passive[i][j] === 'object'){
-				var name = Db.passive[i][j].stat ? Db.stat[Db.passive[i][j].stat].name : Db.customBoost[Db.passive[i][j]].name;
-				Button.creation(0,{
-					"rect":[numX,numX+ic,numY,numY+ic],
-					"right":{"func":Chat.send.command,"param":['$win,passive,add,' + main.passiveActive + ',' + i + ',' + j]},
-					"shiftRight":{"func":Chat.send.command,"param":['$win,passive,remove,' + main.passiveActive + ',' + i + ',' + j]},
-					'text':'Right: Choose ' + name + ' | Shift-Right: Remove',
-				});	
+				var hover = boost;
 			}
 			
 		}
@@ -1302,7 +1295,7 @@ Draw.window.passive.grid = function(){ ctxrestore();
 	Button.creation(0,{
 		"rect":[s.x,s.x+s.w,s.y+50,s.y+50+s.h],	//+50 or close doesnt work
 		"left":{"func":Input.event.mouse.drag,"param":[]},
-		});	
+	});	
 	
 }
 
@@ -1325,7 +1318,7 @@ Draw.window.passive.hover = function(over){ ctxrestore();
 	var s = Draw.window.main.constant(); 
 	ctx = List.ctx.pop;
 	
-	var st = over.stat ? Db.stat[over.stat] : Db.customBoost[over];
+	var st = Db.stat[over.stat];
 	
 	var vvx = 300;
 	var vvy = 100;
@@ -1341,21 +1334,16 @@ Draw.window.passive.hover = function(over){ ctxrestore();
 	
 	//Info
 
-	Draw.icon(st.icon,ssx+5,ssy+1,20,'a');
-	
-	
+	Draw.icon(st.icon,ssx+5,ssy+1,20);
+
 	ctx.fillTextU(st.name,ssx + 5 + 30,ssy+1);
-	
-	if(over.stat){
-		var pop = 'Popularity: ';
-		pop += round(100*over.count/Db.passive.average,1) + '%';
-		ctx.fillText(pop,ssx + 5,ssy+1+25*1);
-		var value = 'Value: +' + round(over.value,5);
-		ctx.fillText(value,ssx + 5,ssy+1+25*2);
-	} else {
-		ctx.setFont(20);
-		ctx.fillText(st.description,ssx + 5,ssy+1+25*1);
-	}
+
+	var pop = 'Popularity: ';
+	pop += round(100*over.count/Db.passiveGrid.average,1) + '%';
+	ctx.fillText(pop,ssx + 5,ssy+1+25*1);
+	var value = 'Value: +' + round(over.value,5);
+	ctx.fillText(value,ssx + 5,ssy+1+25*2);
+	//TOFIX add description
 }
 //}
 

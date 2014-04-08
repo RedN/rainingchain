@@ -100,10 +100,12 @@ Chat.send.message.parse = function(txt){
 	return {'type':'public','to':'@public','text':txt};	
 }
 
-
 Chat.send.message.reply = function(){
 	if(Chat.send.message.reply.history.length){
 		Input.add('@' + Chat.send.message.reply.history[0].from + ',');
+	}
+	if(Chat.send.message.reply.history.length > 20){
+		Chat.send.message.reply.history = Chat.send.message.reply.history.slice(0,10);
 	}
 }
 Chat.send.message.reply.history = [];

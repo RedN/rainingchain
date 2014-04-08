@@ -404,7 +404,7 @@ Load.initData = function(key,player,main){
             data[i][j] = obj[i][j];
         }
     }
-	data.other.passive = {'db':Db.passive,'min':Db.passive.min,'max':Db.passive.max,'sum':Db.passive.sum,'option':Db.passive.option,'average':Db.passive.average};
+	data.other.passiveGrid = Db.passiveGrid.moddedGrid['Monday, March 10, 2014'];	//TOFIX send real
     return data;
 }
 

@@ -955,6 +955,19 @@ Init.db.stat = function(){
 
 
 }
+	//add custom boost
+	for(var i in Db.customBoost){
+		var b = Db.customBoost[i];
+		Db.stat['custom-' + i] = {
+			'custom':1,
+			'icon':b.icon,
+			'name':b.name,
+			'boost':{'base':0,'stat':['customBoost',i],},
+			'playerOnly':1,	
+			'description':b.description,
+		};
+	}
+	
 	
 	for(var i in Db.stat){
 		Db.stat[i].description = Db.stat[i].description || Db.stat[i].name;
@@ -969,8 +982,10 @@ Init.db.stat = function(){
 		s.permBase = s.base;
 		
 	}
+	
 	Init.db.stat.bonus();
 	Init.db.stat.boost();
+	Init.db.stat.customBoost();
 }
 
 	
@@ -979,7 +994,7 @@ Init.db.stat.bonus = function(){
 	var info = {};
 	
 	for(var i in Db.stat){
-		if(Db.stat[i].boost.stat[0] === 'bonus'){
+		if(Db.stat[i].custom){
 			var a = Db.stat[i].boost.stat;
 			var value = Db.stat[i].boost.base;
 			
@@ -997,6 +1012,17 @@ Init.db.stat.bonus = function(){
 	Actor.template.bonus = new Function('return ' + stringify(info));
 }
 
+Init.db.stat.customBoost = function(){
+	//generate bonus attribute for Actor
+	var info = {};
+	
+	for(var i in Db.stat){
+		if(Db.stat[i].boost.stat[0] === 'customBoost'){
+			info[Db.stat[i].boost.stat[1]] = 0;
+		}
+	}
+	Actor.template.customBoost = new Function('return ' + stringify(info));
+}
 
 Init.db.stat.boost = function(){
 	//generate boost attribute for Actor

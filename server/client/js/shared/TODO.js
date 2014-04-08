@@ -2,8 +2,11 @@
 condition to be hit
 
 freeze passive
+question client side
+confirm action for item
 
-mutelist
+customboost become a stat that is 0 or 1
+
 
 teleport actor zone
 
@@ -13,19 +16,6 @@ plan revamp: already know what min and max mods are
 
 
 custom look
-
-
-
-
-/*
-ability = {
-	get:function(){
-		return this.regular;
-	},
-	regular:[],
-	pvp:[],
-},
-*/
 
 
 

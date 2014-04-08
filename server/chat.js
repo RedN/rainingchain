@@ -58,7 +58,7 @@ Chat.receive = function(data){
 	var key = data.key;									//source (key)
 	var act = List.all[key];
 	if(!act) return;
-	if(List.main[key].social.muted) return;
+	if(List.main[key].social.muted) return;				//player is muted
 	var from = act.name;                     			 //source (name)
 	var to = escape.quote(data.to);                     //destination (name)
 	var text = Chat.parse(escape.quote(data.text));      //text

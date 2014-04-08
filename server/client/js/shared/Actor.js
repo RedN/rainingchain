@@ -133,7 +133,6 @@ Actor.update.permBoost = function(act){
 	var pb = act.boost;
 	
 	//Reset to PermBase
-	pb.custom = [];
 	for(var i in pb.list){
 		pb.list[i].base = pb.list[i].permBase;	
 		pb.list[i].max = pb.list[i].permMax;
@@ -149,14 +148,13 @@ Actor.update.permBoost = function(act){
 		for(var j in act.permBoost[i]){	//each indidual boost boost
 			var b = act.permBoost[i][j];
 			
+			if(!pb.list[b.stat]) console.log(b.stat);
 			if(b.type === '+' || b.type === 'base'){pb.list[b.stat].p += b.value;}
 			else if(b.type === '*'){pb.list[b.stat].t += b.value;}
 			else if(b.type === '++'){pb.list[b.stat].pp += b.value;}
 			else if(b.type === '**'){pb.list[b.stat].tt += b.value;}
 			else if(b.type === 'min'){pb.list[b.stat].min = Math.max(pb.list[b.stat].min,b.value);}
-			else if(b.type === 'max'){pb.list[b.stat].max = Math.min(pb.list[b.stat].max,b.value);}
-			else if(b.type === 'custom'){ pb.custom[b.value] = 1; }
-			
+			else if(b.type === 'max'){pb.list[b.stat].max = Math.min(pb.list[b.stat].max,b.value);}			
 		}
 	}
 	
@@ -171,7 +169,10 @@ Actor.update.permBoost = function(act){
 		pb.list[i].base = Math.min(pb.list[i].base,pb.list[i].max);	
 	}
 	
-	for(var j in pb.custom){ Db.customBoost[j].function(pb,act.id);}
+	for(var j in act.customBoost){ 
+		if(act.customBoost[j])
+			Db.customBoost[j].func(pb,act.id);
+	}
 	
 	Actor.update.boost(act,'all');
 }
@@ -245,7 +246,6 @@ Actor.boost.removeAll = function(act){
 
 Actor.permBoost = function(act,source,boost){
 	//remove permBoost if boost undefined
-	if(!act.permBoost) console.log(act);
 	if(boost){
 		act.permBoost[source] = arrayfy(boost);
 	} else { delete act.permBoost[source]; }
@@ -542,7 +542,6 @@ Actor.swapAbility = function(act,name,position){
 	if(act.type === 'player' && !Actor.getAbilityList(act)[name]) return; 		//dont have access to this ability
 	var ability = Ability.uncompress(name);
 	
-	//console.log(act);
 	var ab = Actor.getAbility(act);
 	ab[position] = ability;
 	act.abilityChange = Actor.template.abilityChange();

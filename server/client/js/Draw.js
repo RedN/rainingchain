@@ -373,11 +373,10 @@ Draw.icon = function(info,x,y,size,text){
 	);
 		
 	if(!text) return;
-	
-	Button.creation(0,{
-		'rect':[x,x+size,y,y + size],
-		'text':text,
-	});	
+	var button = deepClone(text);
+	if(typeof button === 'string') button = {text:txt};
+	button.rect = [x,x+size,y,y + size];
+	Button.creation(0,button);	
 }
 
 Draw.item = function(info,x,y,size){

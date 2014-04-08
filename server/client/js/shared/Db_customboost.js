@@ -31,7 +31,7 @@ Init.db.customBoost = function(){
 		'name':'Risk Taker',
 		'description':'x2 Life Leech. Cannot use Potions.',
 		'icon':'element.melee',
-		'function':(function(pb,key){
+		'func':(function(pb,key){
 			var mod;
 			var pbl = pb.list;
 			var array = ['x','*','^','+'];

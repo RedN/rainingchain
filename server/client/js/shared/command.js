@@ -299,7 +299,7 @@ Command.list['win,quest,toggleChallenge'].doc = {
 
 Command.list['win,passive,add'] = function(key,num,i,j){
 	i = Math.floor(+i); j = Math.floor(+j); num = +num;
-	if(!Db.passive[i] || !Db.passive[i][j]){ return; }
+	if(!Db.passiveGrid[i] || !Db.passiveGrid[i][j]){ return; }
 	
 	var pass= List.main[key].passive[num];
 	if(!pass) return;
@@ -316,7 +316,7 @@ Command.list['win,passive,add'].doc = {
 }
 Command.list['win,passive,remove'] = function(key,num,i,j){
 	i = Math.floor(+i); j = Math.floor(+j); num = +num;
-	if(!Db.passive[i] || !Db.passive[i][j]){ return; }
+	if(!Db.passiveGrid[i] || !Db.passiveGrid[i][j]){ return; }
 	
 	var pass= List.main[key].passive[num];
 	if(!pass) return;

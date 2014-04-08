@@ -5,51 +5,55 @@
 2 - start with
 3 - highway
 4 - block
+//[[["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["dmg-melee-^",1],		["dmg-melee-+",1],		["dmg-melee-x",1],		["dmg-melee-+",1],		["dmg-melee-^",1],		["dmg-melee-+",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1]],[["maxSpd",1],		["maxSpd",1],		["hp-regen",1],		["hp-max",1],		["hp-regen",1],		["maxSpd",1],		["maxSpd",1],		["dmg-melee-+",1],		["dmg-melee-*",1],		["dmg-melee-+",1],		["dmg-melee-*",1],		["maxSpd",1],		["dmg-melee-+",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1]],[["maxSpd",1],		["maxSpd",1],		["hp-max",1],		["hp-max",1],		["hp-max",1],		["maxSpd",1],		["maxSpd",1],		["dmg-melee-x",1],		["dmg-melee-+",1],		["dmg-melee-+",1],		["dmg-melee-+",1],		["dmg-melee-x",1],		["dmg-melee-+",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["leech-magn",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1]],[["maxSpd",1],		["maxSpd",1],		["hp-regen",1],		["hp-max",1],		["hp-regen",1],		["maxSpd",1],		["maxSpd",1],		["dmg-melee-+",1],		["dmg-melee-*",1],		["dmg-melee-+",1],		["dmg-melee-*",1],		["maxSpd",1],		["dmg-melee-+",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1]],[["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["dmg-melee-^",1],		["dmg-melee-+",1],		["dmg-melee-x",1],		["dmg-melee-+",1],		["dmg-melee-^",1],		["dmg-melee-+",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1]],[["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["dmg-melee-*",1],		["dmg-melee-+",1],		["dmg-melee-x",1],		["dmg-melee-^",1],		["maxSpd",1],		["dmg-melee-+",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1]],[["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["crit-magn",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1]],[["maxSpd",1],		["maxSpd",1],		["dmg-lightning-+",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1]],[["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],"balancedAtk",2,2,2,2,["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1]],[["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],2,2,2,2,["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1]],[["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],2,2,2,2,["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1]],[["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["dmg-fire-+",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],2,2,2,2,["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1]],[["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["dmg-cold-+",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1]],[["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1]],[["maxSpd",1],		["maxSpd",1],		["bullet-amount",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1]],[["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["summon-amount",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1]],[["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1]],[["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["dmg-range-+",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["dmg-magic-+",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["hp-regen",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1]],[["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1]],[["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1],		["maxSpd",1]]]
 
 */
 
-Init.db.passive = function(){	
-	Db.passive = [
-		[['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1]],
-		[['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1]],
-		[['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1]],
-		[['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1]],
-		[['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1]],
-		[['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1]],
-		[['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1]],
-		[['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1]],
-		
-		[['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],'balancedAtk',2,2,2,2,['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1]],
-		[['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],2,2,2,2,['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1]],
-		[['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],2,2,2,2,['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1]],
-		[['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],2,2,2,2,['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1]],
-		
-		[['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1]],
-		[['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1]],
-		[['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1]],
-		[['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1]],
-		[['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1]],
-		[['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1]],
-		[['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1]],
-		[['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1]],
-	];
-	
-	//by default, each stat has a 100 count.
-	for(var i = 0 ; i < Db.passive.length ; i++){
-		for(var j = 0 ; j < Db.passive[i].length ; j++){
-			var pg = Db.passive[i][j];
-			if(typeof pg === 'object'){	//aka stat
-				//stat random atm
-				Db.passive[i][j] = {'stat':Passive.init.randomStat(),'value':pg[1],'count':100};
-			}
-			if(typeof pg === 'string'){	//aka custom
-				pg = {'type':'custom','value':pg,'count':100};
-			}
-		}
+//TOFIX save currentCount to db
+/* MODEL
+PassiveGrid = {
+	width:20,
+	height:20,
+	base:[[{stat:'b',value:100},...],
+	count:{
+		'2014/10/10':{max:0,min:0,sum:0,option:0,average:0,grid:[[100,100,100],[100,100,100]]}
+	},
+	moddedGrid:{
+		'2014/10/10':{max:0,min:0,sum:0,option:0,average:0,grid:[[{stat:'b',value:642.33,count:100}]]}
 	}
+}
+*/
+
+Init.db.passive = function(cb){
+	//Db.passiveGrid = [/**/		[['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1]],/**/		[['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1]],/**/		[['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1]],/**/		[['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1]],/**/		[['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1]],/**/		[['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1]],/**/		[['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1]],/**/		[['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1]],/**/		/**/		[['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],'balancedAtk',2,2,2,2,['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1]],/**/		[['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],2,2,2,2,['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1]],/**/		[['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],2,2,2,2,['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1]],/**/		[['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],2,2,2,2,['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1]],/**/		/**/		[['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1]],/**/		[['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1]],/**/		[['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1]],/**/		[['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1]],/**/		[['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1]],/**/		[['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1]],/**/		[['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1]],/**/		[['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1],['maxSpd',1]],/**/	];
+	Db.passiveGrid = PassiveGrid.template();
 	
-	//increase count depending on player popularity
+	Init.db.passive.getCurrentCount(function(currentCount){
+		Init.db.passive.getOldCount(function(countList){
+			for(var i in Db.passiveGrid.count)
+				Db.passiveGrid.count[i] = countList[i] || deepClone(currentCount);	//if exist, use db otherwise use current
+			
+				Db.passiveGrid = PassiveGrid.setGrid(Db.passiveGrid);	
+				cb();
+		});
+	});
+
+}
+
+Init.db.passive.getOldCount = function(cb){
+	db.find('passiveCount',{},function(err,info){ if(err) throw err;
+		var tmp = {};
+		for(var i in info){
+			tmp[info[i].date] = info[i];
+		}
+		cb(tmp);
+	});
+}
+
+Init.db.passive.getCurrentCount = function(cb){
 	db.find('main',{},{_id:0,passive:1},function(err,info){ if(err) throw err;
+		var count = PassiveGrid.template.count();	//have 100 count already
+		
 		for(var i = 0 ; i < info.length ; i++){
 			var main = info[i];
 			for(var m in main.passive){
@@ -57,21 +61,125 @@ Init.db.passive = function(){
 				for(var j = 0 ; j < pass.length ; j++){
 					for(var k = 0 ; k < pass[j].length ; k++){
 						if(pass[j][k] == '1'){
-							Db.passive[j][k].count++;
+							count.grid[j][k].count++;
 						}
 					}
 				}
 			}
 		}
-		Db.passive = Passive.init(Db.passive);
-		Db.passive = Passive.init.value(Db.passive);
+		count = PassiveGrid.template.count.setInfo(count);
+		cb(count);
 	});
-
-
 }
 
 
+//PassiveGrid = main.passiveGrid 	aka stats and values
+//Passive = main.passive 			aka 0s and 1s
+PassiveGrid = {};
+PassiveGrid.template = function(){
+	var a = {width:20,height:20}
+	a.base = PassiveGrid.template.base();
+	a.moddedGrid = {};
+	a.count = {};
+	
+	var time = Date.now();
+	for(var i = 0 ; i < 30; i++){
+		var day = (new Date(time - Cst.DAY*i)).toLocaleDateString();
+		a.count[day] = PassiveGrid.template.count();
+	}
+	
+	return a;
+}
+PassiveGrid.template.base = function(){
+	return PassiveGrid.template.base.turnObject(	
+		[[["def-fire-+",1],["def-range-*",1],["bleed-chance",1],["dmg-melee-*",1],["def-range-^",1],["hp-regen",1],["burn-time",1],["def-cold-x",1],["weapon-crossbow",1],["def-melee-^",1],["stun-time",1],["def-melee-x",1],["def-range-x",1],["dmg-magic-+",1],["weapon-bow",1],["bullet-spd",1],["def-fire-*",1],["dmg-fire-^",1],["dmg-cold-^",1],["knock-time",1]],[["hp-max",1],["def-fire-x",1],["def-melee-x",1],["dmg-cold-*",1],["mana-regen",1],["def-magic-x",1],["def-cold-*",1],["def-lightning-*",1],["strike-maxHit",1],["def-melee-^",1],["dmg-melee-*",1],["dmg-cold-^",1],["summon-def",1],["drain-chance",1],["bullet-spd",1],["def-lightning-+",1],["weapon-boomerang",1],["knock-time",1],["dmg-magic-^",1],["dmg-cold-x",1]],[["weapon-sword",1],["def-cold-x",1],["dmg-lightning-*",1],["weapon-sword",1],["atkSpd-main",1],["strike-maxHit",1],["dmg-lightning-x",1],["leech-magn",1],["def-magic-x",1],["def-melee-^",1],["def-magic-+",1],["dmg-melee-x",1],["knock-time",1],["weapon-bow",1],["knock-time",1],["chill-magn",1],["knock-time",1],["dmg-melee-*",1],["dmg-magic-^",1],["dmg-lightning-x",1]],[["item-rarity",1],["drain-chance",1],["def-magic-+",1],["bullet-spd",1],["bullet-spd",1],["dmg-range-^",1],["def-fire-*",1],["leech-chance",1],["def-range-*",1],["bleed-time",1],["knock-chance",1],["strike-maxHit",1],["dmg-melee-x",1],["item-quality",1],["bullet-spd",1],["bullet-spd",1],["dmg-magic-^",1],["hp-regen",1],["def-range-x",1],["dmg-lightning-+",1]],[["def-lightning-*",1],["bleed-time",1],["leech-chance",1],["mana-max",1],["def-cold-+",1],["knock-chance",1],["chill-time",1],["leech-magn",1],["bleed-chance",1],["dmg-melee-*",1],["stun-magn",1],["dmg-melee-+",1],["chill-time",1],["dmg-magic-^",1],["def-melee-^",1],["crit-chance",1],["knock-time",1],["item-quantity",1],["def-melee-*",1],["strike-maxHit",1]],[["mana-max",1],["dmg-melee-^",1],["dmg-lightning-*",1],["def-cold-^",1],["summon-def",1],["burn-time",1],["leech-chance",1],["dmg-melee-*",1],["def-cold-^",1],["dmg-cold-*",1],["def-magic-^",1],["def-magic-*",1],["dmg-cold-x",1],["bleed-magn",1],["dmg-magic-x",1],["weapon-sword",1],["def-fire-^",1],["def-melee-*",1],["burn-chance",1],["dmg-range-*",1]],[["dmg-melee-^",1],["def-range-+",1],["stun-magn",1],["weapon-wand",1],["dmg-cold-^",1],["dmg-cold-x",1],["def-lightning-^",1],["chill-time",1],["chill-time",1],["knock-time",1],["stun-time",1],["def-range-x",1],["chill-time",1],["def-lightning-^",1],["mana-max",1],["def-melee-*",1],["acc",1],["dmg-melee-*",1],["dmg-lightning-*",1],["strike-size",1]],[["burn-time",1],["item-quality",1],["dmg-magic-+",1],["dmg-fire-+",1],["leech-magn",1],["dmg-melee-+",1],["atkSpd-main",1],["drain-chance",1],["weapon-boomerang",1],["def-cold-+",1],["drain-magn",1],["dmg-range-+",1],["dmg-lightning-^",1],["drain-time",1],["dmg-range-^",1],["def-fire-^",1],["def-range-x",1],["def-melee-^",1],["weapon-crossbow",1],["def-magic-x",1]],[["burn-time",1],["def-cold-+",1],["weapon-boomerang",1],["item-rarity",1],["crit-magn",1],["drain-time",1],["weapon-wand",1],"balancedAtk",2,2,2,2,["mana-max",1],["def-magic-x",1],["def-lightning-+",1],["def-magic-*",1],["leech-magn",1],["hp-max",1],["knock-chance",1],["def-melee-*",1]],[["chill-time",1],["bleed-time",1],["def-melee-x",1],["strike-maxHit",1],["dmg-lightning-^",1],["weapon-staff",1],["weapon-sword",1],["stun-magn",1],2,2,2,2,["leech-chance",1],["def-cold-*",1],["bleed-time",1],["def-lightning-+",1],["strike-size",1],["atkSpd-main",1],["stun-magn",1],["atkSpd-main",1]],[["dmg-melee-+",1],["item-rarity",1],["dmg-fire-x",1],["item-quality",1],["dmg-cold-^",1],["def-cold-*",1],["def-magic-+",1],["mana-regen",1],2,2,2,2,["dmg-magic-*",1],["def-cold-*",1],["hp-regen",1],["knock-magn",1],["strike-maxHit",1],["chill-magn",1],["dmg-cold-^",1],["def-range-^",1]],[["dmg-range-x",1],["def-fire-^",1],["def-magic-x",1],["dmg-cold-x",1],["drain-chance",1],["def-cold-x",1],["dmg-cold-^",1],["def-cold-*",1],2,2,2,2,["acc",1],["def-lightning-^",1],["def-lightning-^",1],["dmg-melee-*",1],["maxSpd",1],["def-melee-x",1],["strike-range",1],["dmg-cold-*",1]],[["burn-time",1],["bullet-spd",1],["pickRadius",1],["dmg-range-*",1],["weapon-mace",1],["bullet-amount",1],["summon-amount",1],["dmg-melee-x",1],["dmg-fire-x",1],["def-melee-*",1],["dmg-melee-^",1],["hp-regen",1],["dmg-range-*",1],["dmg-magic-^",1],["def-fire-+",1],["pickRadius",1],["hp-max",1],["def-melee-*",1],["weapon-boomerang",1],["burn-time",1]],[["def-lightning-^",1],["def-lightning-^",1],["dmg-range-x",1],["weapon-orb",1],["def-range-*",1],["def-range-+",1],["def-melee-+",1],["bleed-chance",1],["atkSpd-main",1],["stun-chance",1],["def-lightning-x",1],["leech-chance",1],["dmg-range-x",1],["leech-chance",1],["dmg-lightning-^",1],["dmg-magic-*",1],["weapon-sword",1],["weapon-crossbow",1],["def-range-^",1],["leech-chance",1]],[["weapon-spear",1],["knock-magn",1],["mana-regen",1],["dmg-fire-x",1],["bleed-chance",1],["knock-chance",1],["dmg-melee-+",1],["knock-chance",1],["dmg-range-*",1],["def-range-+",1],["leech-magn",1],["knock-magn",1],["def-melee-*",1],["weapon-spear",1],["def-melee-^",1],["knock-time",1],["item-quality",1],["dmg-lightning-*",1],["dmg-lightning-*",1],["summon-amount",1]],[["atkSpd-main",1],["def-melee-*",1],["def-melee-^",1],["atkSpd-main",1],["def-cold-^",1],["def-cold-x",1],["def-melee-*",1],["def-lightning-+",1],["weapon-wand",1],["weapon-sword",1],["def-range-+",1],["weapon-wand",1],["def-fire-x",1],["stun-time",1],["acc",1],["def-cold-+",1],["dmg-cold-x",1],["mana-regen",1],["def-lightning-^",1],["acc",1]],[["dmg-range-+",1],["chill-magn",1],["def-range-*",1],["knock-magn",1],["dmg-lightning-*",1],["knock-magn",1],["dmg-melee-+",1],["burn-time",1],["dmg-range-x",1],["acc",1],["stun-magn",1],["def-lightning-+",1],["summon-time",1],["item-quality",1],["chill-magn",1],["def-range-+",1],["def-magic-x",1],["weapon-staff",1],["item-quantity",1],["dmg-range-^",1]],[["dmg-range-*",1],["dmg-lightning-+",1],["weapon-staff",1],["summon-time",1],["summon-time",1],["weapon-wand",1],["knock-chance",1],["dmg-magic-x",1],["summon-amount",1],["hp-max",1],["dmg-range-^",1],["mana-max",1],["leech-chance",1],["dmg-melee-x",1],["dmg-melee-x",1],["weapon-spear",1],["mana-max",1],["weapon-crossbow",1],["weapon-mace",1],["weapon-orb",1]],[["dmg-range-^",1],["burn-magn",1],["dmg-range-^",1],["bullet-spd",1],["item-quantity",1],["def-lightning-x",1],["chill-time",1],["dmg-lightning-^",1],["def-lightning-+",1],["maxSpd",1],["summon-amount",1],["mana-regen",1],["dmg-magic-+",1],["mana-max",1],["dmg-cold-x",1],["def-cold-x",1],["acc",1],["summon-amount",1],["weapon-orb",1],["dmg-magic-*",1]],[["def-fire-^",1],["burn-time",1],["def-melee-x",1],["def-lightning-+",1],["summon-atk",1],["dmg-melee-+",1],["dmg-melee-^",1],["strike-range",1],["def-fire-x",1],["dmg-melee-x",1],["item-rarity",1],["dmg-range-+",1],["acc",1],["dmg-cold-^",1],["dmg-lightning-*",1],["weapon-staff",1],["chill-chance",1],["bullet-spd",1],["knock-chance",1],["maxSpd",1]]]	
+	);
+}
+PassiveGrid.template.base.turnObject = function(base){	//turn ['stat',value] into {stat:stat,value:value}
+	for(var i = 0 ; i < base.length ; i++){
+		for(var j = 0 ; j < base[i].length ; j++){
+			var pg = base[i][j];
+			if(typeof pg === 'object'){	//aka stat
+				//Db.passiveGrid[i][j] = {'stat':Passive.randomStat(),'value':pg[1],'count':100};
+				base[i][j] = {'stat':pg[0],'value':pg[1]};
+			}
+			if(typeof pg === 'string'){	//aka custom
+				base[i][j] = {'type':'custom','value':pg};
+			}
+		}
+	}
+	return base;
+}
+
+
+PassiveGrid.setGrid = function(pg){		//at this point, count should be the one from db. count should have average/sum/max already
+	//TOFIX test if object (aka not freeby)
+	for(var i in pg.count){
+		
+		for(var i in pg.count){
+			pg.moddedGrid[i] = deepClone(pg.count[i]);	//grid should have max/min/average
+			for(var j in pg.count[i].grid){
+				for(var k in pg.count[i].grid[j]){		//i:date, j:x, k:y
+					
+					pg.moddedGrid[i].grid[j][k] = {
+						stat:	pg.base[j][k].stat,
+						value: 	pg.base[j][k].value * pg.moddedGrid[i].average / pg.count[i].grid[j][k],	//value * average / count
+						count:	pg.count[i].grid[j][k]					
+					};
+				}
+			}		
+		}
+	}
+	return pg;
+
+}
+
+PassiveGrid.template.count = function(){
+	var tmp = {max:100,min:100,sum:0,option:0,grid:[],average:100};
+
+	for(var i = 0; i < 20; i++){
+		tmp.grid[i] = [];
+		for(var j = 0; j < 20; j++){
+			tmp.grid[i][j] = 100;
+		}
+	}
+	return PassiveGrid.template.count.setInfo(tmp);
+}
+
+PassiveGrid.template.count.setInfo = function(count){
+	count.sum = 0;
+	count.min = 10000;
+	count.max = 0;
+	count.option = 0;
+	for(var i in count.grid){
+		for(var j in count.grid[i]){
+			count.option++;
+			count.max = Math.max(count.max,count.grid[i][j]);
+			count.min = Math.min(count.min,count.grid[i][j]);
+			count.sum += count.grid[i][j];
+		}
+	}
+	count.average = count.sum/count.option;
+	return count;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
 Passive = {};
+Passive.randomStat = function(good){
+	var good = ["maxSpd","acc","hp-regen","mana-regen","hp-max","mana-max","leech-magn","leech-chance","pickRadius","item-quantity","item-quality","item-rarity","atkSpd-main","crit-chance","crit-magn","bullet-amount","bullet-spd","strike-range","strike-size","strike-maxHit","burn-time","burn-magn","burn-chance","chill-time","chill-magn","chill-chance","stun-time","stun-magn","stun-chance","bleed-time","bleed-magn","bleed-chance","drain-time","drain-magn","drain-chance","knock-time","knock-magn","knock-chance","def-melee-+","def-melee-*","def-melee-^","def-melee-x","def-range-+","def-range-*","def-range-^","def-range-x","def-magic-+","def-magic-*","def-magic-^","def-magic-x","def-fire-+","def-fire-*","def-fire-^","def-fire-x","def-cold-+","def-cold-*","def-cold-^","def-cold-x","def-lightning-+","def-lightning-*","def-lightning-^","def-lightning-x","dmg-melee-+","dmg-melee-*","dmg-melee-^","dmg-melee-x","dmg-range-+","dmg-range-*","dmg-range-^","dmg-range-x","dmg-magic-+","dmg-magic-*","dmg-magic-^","dmg-magic-x","dmg-fire-+","dmg-fire-*","dmg-fire-^","dmg-fire-x","dmg-cold-+","dmg-cold-*","dmg-cold-^","dmg-cold-x","dmg-lightning-+","dmg-lightning-*","dmg-lightning-^","dmg-lightning-x","weapon-mace","weapon-spear","weapon-sword","weapon-bow","weapon-boomerang","weapon-crossbow","weapon-wand","weapon-staff","weapon-orb","summon-amount","summon-time","summon-atk","summon-def"];
+	return good.random();
+}
 Passive.updatePt = function(key){
 	var main = List.main[key];
 	for(var i in main.passive){
@@ -100,62 +208,36 @@ Passive.getUsablePt = function(key){
 }
 
 
-Passive.stack = function(p){
-	//convert the list of passive owned by player into actual boost.
+Passive.getBoost = function(p){	//convert the list of passive owned by player into actual boost.
 	var temp = [];
-	for(var i = 0 ; i < Db.passive.length ; i++){
-		for(var j = 0 ; j < Db.passive[i].length ; j++){
-			if(p[i][j] == '1' && typeof Db.passive[i][j] === 'object'){
-				if(Db.passive[i][j].stat){
-					temp.push({'type':'base','value':Db.passive[i][j].value,'stat':Db.passive[i][j].stat});
+	var grid = Db.passiveGrid.moddedGrid['Monday, March 10, 2014'].grid;	//TOFIX so use freezed one
+	
+	for(var i = 0 ; i < grid.length ; i++){
+		for(var j = 0 ; j < grid[i].length ; j++){
+			
+			if(p[i][j] == '1' && grid[i][j].stat)	//cuz freeby fucks things
+				temp.push({'type':'base','value':grid[i][j].value,'stat':grid[i][j].stat});
+			
+			/*
+			if(p[i][j] == '1' && typeof Db.passiveGrid[i][j] === 'object'){
+				if(Db.passiveGrid[i][j].stat){
+					temp.push({'type':'base','value':Db.passiveGrid[i][j].value,'stat':Db.passiveGrid[i][j].stat});
 				}
-				if(Db.passive[i][j].type === 'custom'){
-					temp.push({'type':'custom','value':Db.passive[i][j].value});
+				if(Db.passiveGrid[i][j].type === 'custom'){
+					temp.push({'type':'custom','value':Db.passiveGrid[i][j].value});
 				}
 			}
+			*/
 		}
 	}
-	temp = Actor.permBoost.stack(temp);
-	return temp;
+	return Actor.permBoost.stack(temp);
 }
 
 
 
 
 
-Passive.init = function(pg){
-	//probably here cuz attribute to array are lost
-	pg.min = findMin(pg,function(a){ return findMin(a,function(b){ return b.count || 1/0; })});  
-	pg.max = findMax(pg,function(a){ return findMax(a,function(b){ return b.count || -1/0; })});  
-	pg.sum = 0;		//total amount of passive pts spent
-	pg.option = 0;	//amount of different options
-	for(var i = 0 ; i < pg.length ; i++){
-		for(var j = 0 ; j < pg[i].length ; j++){
-			if(typeof pg[i][j] === 'object'){
-				pg.sum += pg[i][j].count;
-				pg.option++;
-			}	
-		}
-	}
-	pg.average = pg.sum / pg.option;
-	return pg;
-}
 
-Passive.init.value = function(pg){
-	for(var i = 0 ; i < pg.length ; i++){
-		for(var j = 0 ; j < pg[i].length ; j++){
-			if(pg[i][j].stat){
-				pg[i][j].value *= pg.average / pg[i][j].count;
-			}
-		}
-	}
-	return pg;
-}
-
-Passive.init.randomStat = function(){
-	var array = Object.keys(Db.stat);
-	return array.random();
-}
 
 Passive.template = function(){ 
 	return [
@@ -207,7 +289,7 @@ Passive.template = function(){
 }
 
 Passive.updateBoost = function(key){
-	Actor.permBoost(List.all[key],'Passive',Passive.stack(List.main[key].passive[List.main[key].passiveActive]));
+	Actor.permBoost(List.all[key],'Passive',Passive.getBoost(List.main[key].passive[List.main[key].passiveActive]));
 }		
 
 
@@ -215,9 +297,9 @@ Passive.updateBoost = function(key){
 Passive.test = {};
 Passive.test.add = function(passive,i,j){
 	var n = [Math.max(0,i-1),j];
-	var s = [Math.min(Db.passive.length-1,i+1),j];
+	var s = [Math.min(Db.passiveGrid.height-1,i+1),j];
 	var w = [i,Math.max(0,j-1)];
-	var e = [i,Math.min(Db.passive[i].length-1,j+1)];
+	var e = [i,Math.min(Db.passiveGrid.width-1,j+1)];
 	var pos = [n,s,w,e];
 	
 	for(var i in pos){
@@ -252,9 +334,9 @@ Passive.test.remove = function(passive,yy,xx){
 			var x = +i.slice(i.indexOf('-')+1);
 			
 			var n = [Math.max(0,y-1),x];
-			var s = [Math.min(Db.passive.length-1,y+1),x];
+			var s = [Math.min(Db.passiveGrid.height-1,y+1),x];
 			var w = [y,Math.max(0,x-1)];
-			var e = [y,Math.min(Db.passive[y].length-1,x+1)];
+			var e = [y,Math.min(Db.passiveGrid.width-1,x+1)];
 			
 			var pos = [n,s,w,e];
 			
