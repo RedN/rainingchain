@@ -30,7 +30,7 @@ Input.key = function(socket,d){
 			var ab = d.i.slice(4);
 			player.abilityChange.press = ab;
 		}
-
+		
 		if(d.m){
 			player.mouseX = Math.min(Math.max(d.m[0],0),Cst.WIDTH);
 			player.mouseY = Math.min(Math.max(d.m[1],0),Cst.HEIGHT);

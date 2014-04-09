@@ -37,21 +37,22 @@ io.sockets.on('connection', function (socket) {
     socket.on('uploadMod', function (d) { Server.handleSocket('uploadMod',socket,d);});
 });
 
+
 Db.socket = {
 	'signUp':{
-		minInterval:10,
+		minInterval:10000,
 		func:function(socket,d){
 			if(Server.ready) Sign.up(socket,d); 
 		},
 	},
 	'signIn':{
-		minInterval:10,
+		minInterval:1000,
 		func:function(socket,d){
 			if(Server.ready) Sign.in(socket,d); 
 		},
 	},
 	'clientReady':{
-		minInterval:10,
+		minInterval:1000,
 		func:function(socket,d){
 			if(!List.socket[socket.key]) return;
 			List.socket[socket.key].clientReady = 1; 

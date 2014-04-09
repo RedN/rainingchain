@@ -562,13 +562,10 @@ Command.list['dia,option'].doc = {
 Command.list['option'] = function(key,slot){
 	var main = List.main[key];
 	if(main.optionList && main.optionList.option[slot]){
-		if(!main.optionList.option[slot].nokey){
-			applyFunc.key(key,main.optionList.option[slot].func,main.optionList.option[slot].param);	
-		} else {
-			applyFunc(main.optionList.option[slot].func,main.optionList.option[slot].param);	
-		}
-	
+		var opt = main.optionList.option[slot];
 		
+		if(!opt.nokey) applyFunc.key(key,opt.func,opt.param);	
+		else applyFunc(opt.func,opt.param);	
 	}	
 }
 Command.list['option'].doc = {

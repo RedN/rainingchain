@@ -1,10 +1,3 @@
-
-
-
-
-
-
-
 Sign = {};
 Sign.up = function(socket,d){
 	
@@ -17,8 +10,8 @@ Sign.up = function(socket,d){
 	if(!Server.admin.have(user) && user.length < 3){ socket.emit('signUp', { 'success':0, 'message':'<font color="red">Too short username.</font>'} ); return; }
 	if(pass.length < 3){ socket.emit('signUp', {'success':0, 'message':'<font color="red">Too short password.</font>'} ); return; }
 	
-	db.find('account',{username:user},{},function(err, results) { if(err) throw err;		
-		if(results[0] !== undefined){ socket.emit('signUp', {'success':0,'message':'<font color="red">This username is already taken.</font>'} );  return; }	//Player with same username
+	db.findOne('account',{username:user},{},function(err, results) { if(err) throw err;		
+		if(!results){ socket.emit('signUp', {'success':0,'message':'<font color="red">This username is already taken.</font>'} );  return; }	//Player with same username
 				
 		crypto.randomBytes(32, function(err,salt){
 			salt = salt.toString('base64');
@@ -59,19 +52,22 @@ Sign.up.create = function(user,pass,email,salt,socket){
     };
 	
 	
-	
-    db.insert('account',obj, function(err) { 	if (err) throw err;
-		db.insert('player',Save.player(p,false), function(err) { 	if (err) throw err;
-			db.insert('main',Save.main(m,false), function(err) { 	if (err) throw err;
-				socket.emit('signUp', {'success':1,'message':'<font color="green">New Account Created.</font>'} );
-				
-				var str = 'Welcome to Raining Chain! This is your activation key for your account "' + user + '": ' + activationKey;
-				
-				if(email) nodemailer.email(user,'Raining Chain: Activation Key',str);
-				
+	db.findOne('account',{username:user},{},function(err, results) { if(err) throw err;	
+		if(!results){ socket.emit('signUp', {'success':0,'message':'<font color="red">This username is already taken.</font>'} );  return; }	//Player with same username
+		
+		db.insert('account',obj, function(err) { 	if (err) throw err;
+			db.insert('player',Save.player(p,false), function(err) { 	if (err) throw err;
+				db.insert('main',Save.main(m,false), function(err) { 	if (err) throw err;
+					socket.emit('signUp', {'success':1,'message':'<font color="green">New Account Created.</font>'} );
+					
+					var str = 'Welcome to Raining Chain! This is your activation key for your account "' + user + '": ' + activationKey;
+					
+					if(email) nodemailer.email(user,'Raining Chain: Activation Key',str);
+					
+				});
 			});
 		});
-    });
+	});
 }
          	
 			

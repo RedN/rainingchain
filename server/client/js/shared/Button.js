@@ -36,20 +36,18 @@ Button.test = function (key,x,y,side){	//on click
 	for(var i = list.length-1 ; i >= 0 ; i--){
 		if(list[i][side]){
 			if(Collision.PtRect({"x":x,'y':y},list[i].rect)){
+				var opt = list[i][side];
 				if(server) {
-					if(!list[i].nokey){
-						applyFunc.key(key,list[i][side].func,list[i][side].param);
-					} else {
-						applyFunc(list[i][side].func,list[i][side].param);
-					}
-					if(list[i].help) List.main[key].help = list[i].help;
+					if(!opt.nokey)	applyFunc.key(key,opt.func,opt.param);
+					else applyFunc(opt.func,opt.param);
+					if(opt.help) List.main[key].help = opt.help;
 				} else {
-					applyFunc(list[i][side].func,list[i][side].param);
-					if(list[i].help) Help.open(list[i].help);
-					if(list[i].sfx) Sfx.play(list[i].sfx);
+					applyFunc(opt.func,opt.param);
+					if(opt.help) Help.open(opt.help);
+					if(opt.sfx) Sfx.play(opt.sfx);
 				}
 				
-				break;
+				break;	//max 1 button per click
 			}	
 		}
 	}

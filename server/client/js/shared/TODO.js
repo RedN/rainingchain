@@ -1,23 +1,20 @@
 
+===PRE SDK===
 question client side
 confirm action for item
-
-
 teleport actor zone
 
+===POST SDK===
 stat window
-
 plan revamp: already know what min and max mods are
-
-
 custom look
-
+revamp a*
 
 
 boss documentation
 
 
-revamp a*
+
 
 
 

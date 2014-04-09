@@ -57,12 +57,12 @@ Init.db.customBoost = function(){
 		'func':(function(pb,key){
 			var pbl = pb.list;
 			
-			pbl['maxSpd'].base = 0;
 			pbl['maxSpd'].min = 0;
 			pbl['maxSpd'].max = 0;
 		})
 	}
 }
+
 
 //ts("Actor.permBoost(p,'test',[{stat:'custom-testing',value:1,type:'+'}]);");
 

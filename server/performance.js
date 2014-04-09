@@ -25,12 +25,16 @@ Performance.bandwidth = function(type,data,socket){
 	socket.bandwidth[type] += size;
 	Performance.bandwidth[type].size += size;
 	
-	if(socket.bandwidth[type] > Performance.bandwidth[type].limitPerPlayer)
+	if(socket.bandwidth[type] > Performance.bandwidth[type].limitTotal
+		|| socket.bandwidth[type]/Math.max(socket.globalTimer/Cst.MIN,2) > Performance.bandwidth[type].limitPerMin){
 		Sign.off(socket.key,'You have capped your bandwidth for this session.');
+	}
 }
+
+
 Performance.playerAmount = nodejitsu;
-Performance.bandwidth.upload = {'display':nodejitsu,'size':0,'limitPerPlayer':100*1000000};
-Performance.bandwidth.download = {'display':nodejitsu,'size':0,'limitPerPlayer':1000*1000000};
+Performance.bandwidth.upload = {'display':nodejitsu,'size':0,'limitTotal':1000*1000000,limitPerMin:50*1000000};		//what server send
+Performance.bandwidth.download = {'display':nodejitsu,'size':0,'limitTotal':100*1000000,limitPerMin:100000};	//what client send
 Performance.bandwidth.frequence = 30*1000/40;
 Performance.bandwidth.getSize = function(obj){
     return stringify(obj||0).length * 2;   //in bytes
