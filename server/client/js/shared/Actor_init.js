@@ -146,7 +146,8 @@ Init.actor = function(){
 		act.deathFuncArray = null;	//function param = array id of killers
 		act.combat = 1;
 		act.deleteOnceDead = 0;
-		act.hitIf = 'player';
+		act.damageIf = 'player';
+		act.damagedIf = 'true';
 		act.targetIf = 'player';  //condition used by monsters to find their target. check targetIfList
 		act.onclick = {};			
 		act.waypoint = null; 		//right click = setRespawn
@@ -160,7 +161,7 @@ Init.actor = function(){
 			act.skill = Actor.template.skill();
 			act.removeList = [];	//for things that got removed from activeList
 			act.type = 'player';
-			act.hitIf = 'enemy';
+			act.damageIf = 'enemy';
 			act.targetIf = 'player';
 			act.privateChange = {};
 			act.privateOld = {};

@@ -279,7 +279,7 @@ Actor.creation.nevercombat = function(act){
 	
 	//Combat
 	delete act.attackReceived;	
-	delete act.hitIf;
+	delete act.damageIf;
 	delete act.targetIf;
 	delete act.boss;
 	delete act.deleteOnceDead;

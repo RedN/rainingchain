@@ -246,18 +246,10 @@ Draw.window.stat.list = {
 	{'name':'Fire','icon':'element.fire','stat':[{'name':'x','stat':'def-fire-x'},{'name':'*','stat':'def-fire-*'},{'name':'^','stat':'def-fire-^'},{'name':'+','stat':'def-fire-+'}],'string':(function(){ return Draw.window.stat.list.element('def','fire')})},
 	{'name':'Cold','icon':'element.cold','stat':[{'name':'x','stat':'def-cold-x'},{'name':'*','stat':'def-cold-*'},{'name':'^','stat':'def-cold-^'},{'name':'+','stat':'def-cold-+'}],'string':(function(){ return Draw.window.stat.list.element('def','cold')})},
 	{'name':'Lightning','icon':'element.lightning','stat':[{'name':'x','stat':'def-lightning-x'},{'name':'*','stat':'def-lightning-*'},{'name':'^','stat':'def-lightning-^'},{'name':'+','stat':'def-lightning-+'}],'string':(function(){ return Draw.window.stat.list.element('def','lightning')})},
-		
-	{'name':'Burn','icon':'status.burn','stat':[{'name':'Resist','stat':'resist-burn'}],'string':(function(){ return Draw.window.stat.list.status('def','burn')})},
-	{'name':'Chill','icon':'status.chill','stat':[{'name':'Resist','stat':'resist-chill'}],'string':(function(){ return Draw.window.stat.list.status('def','chill')})},
-	{'name':'Confuse','icon':'status.stun','stat':[{'name':'Resist','stat':'resist-stun'}],'string':(function(){ return Draw.window.stat.list.status('def','stun')})},
-	{'name':'Knockback','icon':'status.knock','stat':[{'name':'Resist','stat':'resist-knock'}],'string':(function(){ return Draw.window.stat.list.status('def','knock')})},
-	{'name':'Bleed','icon':'status.bleed','stat':[{'name':'Resist','stat':'resist-bleed'}],'string':(function(){ return Draw.window.stat.list.status('def','bleed')})},
-	{'name':'Drain','icon':'status.drain','stat':[{'name':'Resist','stat':'resist-drain'}],'string':(function(){ return Draw.window.stat.list.status('def','drain')})},
-	
+			
 	{'name':'Speed','icon':'defensive.speed','stat':[{'name':'Max','stat':'maxSpd'}],'string':(function(){ return round(player.boost.list['maxSpd'].base,2,1)})},
 	{'name':'Pick Radius','icon':'defensive.pickup','stat':[{'name':'Pick Radius','stat':'pickRadius'}],'string':(function(){ return round(player.boost.list['pickRadius'].base,2,1)})},
 	{'name':'Item Find','icon':'defensive.item','stat':[{'name':'Quality','stat':'item-quality'},{'name':'Quantity','stat':'item-quantity'},{'name':'Rarity','stat':'item-rarity'}],'string':(function(){ return 'Qual.: ' + round(player.boost.list['item-quality'].base,2,1) + ', Quant.: ' + round(player.boost.list['item-quantity'].base,2,1)+ ', Rarity: ' + round(player.boost.list['item-rarity'].base,2,1)})},
-
 
 	{'name':'Life','icon':'resource.hp','stat':[{'name':'Max','stat':'hp-max'},{'name':'Regen','stat':'hp-regen'}],'string':(function(){ return 'Max: ' + round(player.boost.list['hp-max'].base,0,1) + ', Regen: ' + round(player.boost.list['hp-regen'].base,2,1)})},
 	{'name':'Mana','icon':'resource.mana','stat':[{'name':'Max','stat':'mana-max'},{'name':'Regen','stat':'mana-regen'}],'string':(function(){ return 'Max: ' + round(player.boost.list['mana-max'].base,0,1) + ', Regen: ' + round(player.boost.list['mana-regen'].base,2,1)})},
@@ -784,7 +776,7 @@ Draw.window.ability.action.attack.modTo = {
 			text:(function(a){ return 'Boomerang'; })},
 	'onHit':{icon:'offensive.bullet',
 			text:(function(a){ return 'Explosive'; })},
-	'hitIfMod':{icon:'system.heart',
+	'damageIfMod':{icon:'system.heart',
 			text:(function(a){ return 'Affect Allies'; })},
 	'heal':{icon:'system.heart',
 			text:(function(a){ return 'HEAL NEED TO BE DONE'; })},

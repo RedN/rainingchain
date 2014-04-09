@@ -29,7 +29,7 @@ a.playerEnter = function(key,map,spot,v,m){
 		{stat:'bullet-spd',value:1,type:'+'},
 		{stat:'globalDmg',value:Test.dmgMod.pvp,type:'+'},
 	]);		
-	act.hitIf = 'player';
+	act.damageIf = 'player';
 	
 	act.respawnLoc.recent = m.addon.pvpRespawn.spot;
 	
@@ -46,7 +46,7 @@ a.playerEnter = function(key,map,spot,v,m){
 a.playerLeave = function(key,map,spot,v,m){
 	var act = List.all[key];
 	Actor.permBoost(act,'pvp');	
-	act.hitIf = 'enemy';	
+	act.damageIf = 'enemy';	
 	act.respawnLoc.recent = deepClone(act.respawnLoc.safe);
 	act.deathFunc = null;
 }

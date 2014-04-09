@@ -106,7 +106,7 @@ Combat.action.summon = function(key,action,enemy){
 			'extra':{'deleteOnceDead':1,
 					'summoned':{'father':master.id,'time':action.time*timeMod,'distance':action.distance},
 					'targetIf':'summoned',
-					'hitIf':'summoned',
+					'damageIf':'summoned',
 					}
 		};
 		var childList = Actor.creation.group(param0,enemy);
@@ -342,9 +342,9 @@ Combat.collision.damage.calculate = function(dmg,def){
 
 
 
-//TargetIf hitIf
+//TargetIf damageIf
 Combat.targetIf = {};
-Combat.hitIf = {};
+Combat.damageIf = {};
 
 Combat.targetIf.global = function(atk,def){
 	//Used first in every target if test
@@ -371,7 +371,7 @@ Combat.targetIf.list = {
 			if(!def.summoned) return def.type === "player"; 
 			
 			if(def.summoned.father === atk.id) return false;
-			var hIf = typeof atk.hitIf === 'function' ? atk.hitIf : Combat.hitIf.list[atk.hitIf];
+			var hIf = typeof atk.damageIf === 'function' ? atk.damageIf : Combat.damageIf.list[atk.damageIf];
 			return hIf(List.all[def.summoned.father],atk);
 			
 		} catch(err) { logError(err); }
@@ -381,7 +381,7 @@ Combat.targetIf.list = {
 			if(!def.summoned) return def.type === "enemy"; 
 			
 			if(def.summoned.father === atk.id) return false;
-			var hIf = typeof atk.hitIf === 'function' ? atk.hitIf : Combat.hitIf.list[atk.hitIf];
+			var hIf = typeof atk.damageIf === 'function' ? atk.damageIf : Combat.damageIf.list[atk.damageIf];
 			return hIf(List.all[def.summoned.father],atk);
 			
 		} catch(err) { logError(err); }
@@ -390,7 +390,7 @@ Combat.targetIf.list = {
 		try {
 			if(def.id === atk.summoned.father){ return false; }
 			var master = List.all[atk.summoned.father];
-			var hIf = typeof master.hitIf === 'function' ? master.hitIf : Combat.hitIf.list[master.hitIf];
+			var hIf = typeof master.damageIf === 'function' ? master.damageIf : Combat.damageIf.list[master.damageIf];
 			return hIf(def,master);
 		} catch(err) { logError(err); } //quickfix
 	}),
@@ -403,11 +403,11 @@ Combat.targetIf.list = {
 
 
 
-Combat.hitIf.global = Combat.targetIf.global;
+Combat.damageIf.global = Combat.targetIf.global;
 
 (function(){
 	for(var i in Combat.targetIf.list){Combat.targetIf.list[i].id = i;}
-	Combat.hitIf.list = Combat.targetIf.list;
+	Combat.damageIf.list = Combat.targetIf.list;
 })();
 
 

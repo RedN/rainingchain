@@ -16,7 +16,7 @@ a.loop = function(map,spot,v){
 			act.hp -= 100;
 			
 			Attack.creation(
-				{x:act.x,y:act.y,map:map,hitIf:'player-simple',angle:act.angle},
+				{x:act.x,y:act.y,map:map,damageIf:'player-simple',angle:act.angle},
 				useTemplate(Attack.template(),v.atk)
 			);
 			

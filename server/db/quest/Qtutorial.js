@@ -271,7 +271,7 @@ q.map.tutorial = function(){
 		if(Loop.interval(6)){
 			//Arrow
 			Attack.creation(
-				{hitIf:'player-simple',xym:spot.a,angle:Math.randomML()*2},
+				{damageIf:'player-simple',xym:spot.a,angle:Math.randomML()*2},
 				useTemplate(Attack.template(),v.arrow)
 			);
 		}
@@ -281,17 +281,17 @@ q.map.tutorial = function(){
 			v.angle += v.rotation;
 			v.angle = v.angle+360;
 			Attack.creation(
-				{hitIf:'player-simple',xym:spot.d,angle:v.angle},
+				{damageIf:'player-simple',xym:spot.d,angle:v.angle},
 				useTemplate(Attack.template(),v.fireball)
 			);
 			
 			Attack.creation(
-				{hitIf:'player-simple',xym:spot.d,angle:v.angle+120},
+				{damageIf:'player-simple',xym:spot.d,angle:v.angle+120},
 				useTemplate(Attack.template(),v.fireball)
 			);
 			
 			Attack.creation(
-				{hitIf:'player-simple',xym:spot.d,angle:v.angle+240},
+				{damageIf:'player-simple',xym:spot.d,angle:v.angle+240},
 				useTemplate(Attack.template(),v.fireball)
 			);
 			

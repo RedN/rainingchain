@@ -29,7 +29,7 @@ Attack.template = function(){
 	b.hitImg = 0;	//when enemy get hits, use anim on him {name,sizeMod}
 	
 	
-	b.hitIfMod = 0; //if 1, hit allies
+	b.damageIfMod = 0; //if 1, hit allies
 	b.num = 0;		//# bullet if many shoot at once
 	b.amount = 1;	//# bullets shot (useless here tho)
 	b.aim = 0;
@@ -107,7 +107,7 @@ Attack.creation.info = function(player,bullet){
 	
 	bullet.map = player.map || 'test@MAIN';	
 	bullet.viewedIf = player.viewedIf || 'true';
-	bullet.hitIf = player.hitIf || 'player';
+	bullet.damageIf = player.damageIf || 'player';
 	
 	bullet.angle = (player.angle || 0 +360)%360;
 	

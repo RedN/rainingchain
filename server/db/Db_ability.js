@@ -88,7 +88,7 @@ a['bulletMulti'] = {					//bulletMulti is the id of attack
 			leech : {'baseChance':0,'chance':1,'magn':1},			
 			crit : {'chance':1,'magn':1},
 			
-			hitIfMod':0,				//if 0: normal, 1: attack allies
+			damageIfMod':0,				//if 0: normal, 1: attack allies
 			
 			'heal':{					//regeneration resource on hit
 				'hp':100,				
@@ -530,7 +530,7 @@ Init.db.ability = function(cb){
 			'delay':0,
 			'minRange':0,
 			'maxRange':0,
-			'hitIfMod':1,
+			'damageIfMod':1,
 			'heal':{hp:200},
 		}
 	}};
@@ -651,7 +651,7 @@ Init.db.ability = function(cb){
 			'objImg':{'name':"arrow",'sizeMod':1},'hitImg':{'name':"lightningHit",'sizeMod':0.5},
 			'dmg':{'main':100,'ratio':{'melee':0,'range':10,'magic':80,'fire':10,'cold':0,'lightning':0}},
 			
-			'hitIfMod':1,'ghost':1,	
+			'damageIfMod':1,'ghost':1,	
 		}
 	}};
 	
@@ -743,7 +743,7 @@ Init.db.ability = function(cb){
 			'type':"strike",'angle':0,'amount':1,'delay':2,'maxHit':1,'width':1,'height':1,'minRange':5,'maxRange':50,
 			'hitImg':{'name':"strikeHit",'sizeMod':0.5},'objImg':{'name':"strikeHit",'sizeMod':0.5},
 			'dmg':{'main':100,'ratio':{'melee':0,'range':10,'magic':80,'fire':10,'cold':0,'lightning':0}},
-			'hitIfMod':0,'heal':{'hp':100}
+			'damageIfMod':0,'heal':{'hp':100}
 		}	
 	}};
 

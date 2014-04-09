@@ -1,7 +1,4 @@
 
-condition to be hit
-
-freeze passive
 question client side
 confirm action for item
 

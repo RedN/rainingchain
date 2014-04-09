@@ -139,7 +139,7 @@ Actor.loop.setTarget.main = function(act){
 	var targetList = {}; 
 	for (var i in act.activeList){
 		var target = List.all[i];
-		var hIf = typeof act.targetIf === 'function' ? act.targetIf : Combat.hitIf.list[act.targetIf];
+		var hIf = typeof act.targetIf === 'function' ? act.targetIf : Combat.damageIf.list[act.targetIf];
 			
 		if(Combat.targetIf.global(act,target) && hIf(target,act)){
 			var diff = Collision.distancePtPt(act,target);

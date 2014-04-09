@@ -93,7 +93,7 @@ Collision.BulletActor = function(atk){
 	for(var i in atk.viewedBy){ 
 		var player = List.all[i];
 		if(!player) continue;	//test bullet exist
-		if(!Combat.hitIf.global(atk,player)) continue;	//exist is same map, not himself etc
+		if(!Combat.damageIf.global(atk,player)) continue;	//exist is same map, not himself etc
 		if(!Collision.BulletActor.test(atk,player)) continue;	//exist if can attack this type of player
 		if(!Collision.PtRect({'x':atk.x,'y':atk.y},Collision.getHitBox(player))) continue;	//test if nearby
 		
@@ -103,15 +103,20 @@ Collision.BulletActor = function(atk){
 
 Collision.BulletActor.test = function(atk,player){
 	var normal = true;
-	if(!['map','true','all'].have(atk.hitIf)){	//no testing needed
-		if(['player-simple','enemy-simple'].have(atk.hitIf)){	//only testing type
-			normal = Combat.hitIf.list[atk.hitIf](player);
+	if(!['map','true','all'].have(atk.damageIf)){	//no testing needed
+		if(['player-simple','enemy-simple'].have(atk.damageIf)){	//only testing type
+			normal = Combat.damageIf.list[atk.damageIf](player);
 		} else {												//testing type and summon
-			var hIf = typeof atk.hitIf == 'function' ? atk.hitIf : Combat.hitIf.list[atk.hitIf];
+			var hIf = typeof atk.damageIf == 'function' ? atk.damageIf : Combat.damageIf.list[atk.damageIf];
 			normal = List.all[atk.parent] && hIf(player,List.all[atk.parent])
 		}
 	}
-	return (!atk.hitIfMod && normal) || (atk.hitIfMod && !normal); 
+	if(player.damagedIf !== 'true'){
+		if(Array.isArray(player.damagedIf)) normal = player.damagedIf.have(atk.parent);
+		if(typeof player.damagedIf === 'function') normal = player.damagedIf(List.all[atk.parent]);
+	}
+	
+	return (!atk.damageIfMod && normal) || (atk.damageIfMod && !normal); 
 }
 
 
@@ -131,13 +136,18 @@ Collision.StrikeActor = function(atk){
 	for(var j in atk.viewedBy){	//could be optimized with other function and return;
 		var player = List.all[j];
 		
-		if(!Combat.hitIf.global(atk,player)) continue;	
+		if(!Combat.damageIf.global(atk,player)) continue;	
 		
 		//Test if can hit that target
-		var hIf = typeof atk.hitIf == 'function' ? atk.hitIf : Combat.hitIf.list[atk.hitIf];
+		var hIf = typeof atk.damageIf == 'function' ? atk.damageIf : Combat.damageIf.list[atk.damageIf];
 		var a = hIf(player,List.all[atk.parent]);						//a = regular test
-		if((atk.hitIfMod && a) || (!atk.hitIfMod && !a)) continue;		//atk.hitIfMod = flip the regular test (ex: healing)
-	
+		if((atk.damageIfMod && a) || (!atk.damageIfMod && !a)) continue;		//atk.damageIfMod = flip the regular test (ex: healing)
+		
+		if(player.damagedIf !== 'true'){
+			if(Array.isArray(player.damagedIf) && !player.damagedIf.have(atk.parent)) continue;
+			if(typeof player.damagedIf === 'function' && !player.damagedIf(List.all[atk.parent])) continue;
+		}
+		
 		//Touch?
 		if(Collision.StrikeActor.collision(atk,player)){
 			Combat.collision(atk,player);
