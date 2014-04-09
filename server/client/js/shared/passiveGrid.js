@@ -30,20 +30,25 @@ Init.db.passive = function(cb){
 	
 	Init.db.passive.getCurrentCount(function(currentCount){
 		Init.db.passive.getOldCount(function(countList){
+			console.log(countList);
 			for(var i in Db.passiveGrid.count)
 				Db.passiveGrid.count[i] = countList[i] || deepClone(currentCount);	//if exist, use db otherwise use current
 			
-				Db.passiveGrid = PassiveGrid.setGrid(Db.passiveGrid);	
-				cb();
+			
+			//console.log(Db.passiveGrid.count[Date.nowDate()]);
+			Db.passiveGrid = PassiveGrid.setGrid(Db.passiveGrid);	
+			//Cycle.daily.passive();
+			cb();
 		});
 	});
 
 }
 
 Init.db.passive.getOldCount = function(cb){
-	db.find('passiveCount',{},function(err,info){ if(err) throw err;
+	db.find('passiveCount',{},{'_id':0},function(err,info){ if(err) throw err;
 		var tmp = {};
-		for(var i in info){
+		console.log(info);
+		for(var i = 0 ; i < info.length; i++){
 			tmp[info[i].date] = info[i];
 		}
 		cb(tmp);
@@ -68,6 +73,7 @@ Init.db.passive.getCurrentCount = function(cb){
 			}
 		}
 		count = PassiveGrid.template.count.setInfo(count);
+		count.date = Date.nowDate();
 		cb(count);
 	});
 }
@@ -86,6 +92,7 @@ PassiveGrid.template = function(){
 	for(var i = 0 ; i < 30; i++){
 		var day = (new Date(time - Cst.DAY*i)).toLocaleDateString();
 		a.count[day] = PassiveGrid.template.count();
+		a.count[day].date = day;
 	}
 	
 	return a;
@@ -210,7 +217,7 @@ Passive.getUsablePt = function(key){
 
 Passive.getBoost = function(p){	//convert the list of passive owned by player into actual boost.
 	var temp = [];
-	var grid = Db.passiveGrid.moddedGrid['Monday, March 10, 2014'].grid;	//TOFIX so use freezed one
+	var grid = Db.passiveGrid.moddedGrid[Date.nowDate()].grid;	//TOFIX so use freezed one
 	
 	for(var i = 0 ; i < grid.length ; i++){
 		for(var j = 0 ; j < grid[i].length ; j++){

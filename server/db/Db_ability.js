@@ -817,7 +817,7 @@ Init.db.ability.template = function(){
 Ability = {};
 Ability.creation = function(a){
 	//Setting Ability
-	db.update('ability',{'id':a.id}, a, { upsert: true }, db.err);	
+	db.upsert('ability',{'id':a.id}, a, db.err);	
 	
 	a.spd = convertRatio(a.spd);
 	a.cost = a.cost || {};

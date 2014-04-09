@@ -257,7 +257,7 @@ Equip.creation = function(equip){
 	Item.creation(item);
 		
 	
-	db.update('equip',{'id':equip.id}, Equip.compress(equip), { upsert: true }, db.err);
+	db.upsert('equip',{'id':equip.id}, Equip.compress(equip), db.err);
 
 }
 

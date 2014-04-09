@@ -43,6 +43,7 @@ require('./' + clientPath + 'client/js/shared/essentialsShare');
 require('./server/Server');
 require('./server/db/Db');
 main = require('./server/main');
+require('./server/cycle');
 require('./server/Socket');
 
 

@@ -5,8 +5,6 @@ freeze passive
 question client side
 confirm action for item
 
-customboost become a stat that is 0 or 1
-
 
 teleport actor zone
 

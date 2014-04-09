@@ -63,8 +63,12 @@ Init.db = function(data){
 		DB[name].save(info,cb);
 	}
 	db.update = function(name,searchInfo,updateInfo,cb){
-		if(arguments.length === 3) DB[name].find(searchInfo,updateInfo);
+		if(arguments.length === 3) DB[name].update(searchInfo,updateInfo);
 		else DB[name].update(searchInfo,updateInfo,cb);
+	}
+	db.upsert = function(name,searchInfo,updateInfo,cb){
+		if(arguments.length === 3) DB[name].update(searchInfo,updateInfo,{upsert:true});
+		else DB[name].update(searchInfo,updateInfo,{upsert:true},cb);
 	}
 	db.insert = function(name,updateInfo,cb){
 		DB[name].insert(updateInfo,cb);

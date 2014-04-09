@@ -60,7 +60,7 @@ Plan.creation = function(preplan){
 		]
 	});
 		
-	db.update('plan',{'id':plan.id}, plan, { upsert: true }, db.err);
+	db.upsert('plan',{'id':plan.id}, plan, db.err);
 	
 	if(plan.definitive) return plan.id;
 	

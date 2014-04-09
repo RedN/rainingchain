@@ -88,6 +88,28 @@ DEBUG.stackSize = 10;
 DEBUG.minify = true;
 
 
+/* DATE
+
+toDateString 		Tue Apr 08 2014
+toGMTString 		Tue, 08 Apr 2014 23:05:05 GMT
+toISOString 		2014-04-08T23:05:05.249Z
+toJSON 				2014-04-08T23:05:05.249Z
+toLocaleDateString 	4/8/2014
+toLocaleTimeString 	7:05:05 PM
+toLocaleString 		4/8/2014 7:05:05 PM
+toString 			Tue Apr 08 2014 19:05:05 GMT-0400 (Eastern Daylight Time)
+toTimeString 		19:05:05 GMT-0400 (Eastern Daylight Time)
+toUTCString 		Tue, 08 Apr 2014 23:05:05 GMT
+valueOf 			1396998305249
+
+*/
+
+Date.prototype.toLocaleDateString = function(){	//cuz nodejs sucks
+	return this.getMonth()+1 + '/' + this.getDate() + '/' + this.getFullYear();
+}
+Date.nowDate = function(){
+	return new Date().toLocaleDateString();
+}
 
 function getParamNames(func) {
 	var STRIP_COMMENTS = /((\/\/.*$)|(\/\*[\s\S]*?\*\/))/mg;

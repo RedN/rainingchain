@@ -21,33 +21,11 @@ List = {
 	map:{},		//all maps
 };
 
-Init.timer = function(){
-	var nextDailyUpdate = new Date((new Date().toLocaleDateString())).getTime() + Cst.DAY - 60000;	
-	var daysTilNextWeekUpdate = (11-new Date(nextDailyUpdate).getDay())%7;
-	var nextWeeklyUpdate = daysTilNextWeekUpdate * Cst.DAY + nextDailyUpdate + 10000;
-	
-	var dailyFunc = function(){
-		
-	
-		nextDailyUpdate += Cst.DAY;
-		setTimeout(dailyFunc,Cst.DAY);
-	}
-	
-	var weeklyFunc = function(){
-		db.update('account',{},{'$set':{timePlayedThisWeek:0}},db.err);
-	
-		nextWeeklyUpdate += Cst.DAY*7;
-		setTimeout(weeklyFunc,Cst.DAY*7);
-	}
-	
-	setTimeout(dailyFunc,nextDailyUpdate-Date.now());
-	setTimeout(weeklyFunc,nextWeeklyUpdate-Date.now());
 
-}
 
 //Sync DB and Server when Server starts
 exports.initServer = function (){
-    Init.timer();
+    Init.cycle();
 	
 	Init.db.item(function(){
 	Init.db.equip(function(){

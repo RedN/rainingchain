@@ -4,7 +4,6 @@ Init.db.map = function(){
     Db.map = {};
 	
 	var mapDb = {
-		'test':[0,0],
 		'tutorial':[1,1],
 		'pvpF4A':[0,0],
 		'goblinLand':[4,8],
