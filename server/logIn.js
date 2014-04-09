@@ -171,7 +171,7 @@ Save.main = function(key,updateDb){
 	var main = typeof key === 'string' ? List.main[key] : key;
     main = Save.main.compress(main);
     var save = {};
-    var toSave = ['invList','bankList','tradeList','quest','username','name','social','passive','passiveRemovePt','passiveActive','chrono'];
+    var toSave = ['invList','bankList','tradeList','quest','username','name','social','passive','chrono'];
     for(var i in toSave){ save[toSave[i]] = main[toSave[i]]; }
 
     if(updateDb !== false){
@@ -392,11 +392,7 @@ Load.initData = function(key,player,main){
 			'invList':Change.send.convert.itemlist,
 			'bankList':Change.send.convert.itemlist,
 			'tradeList':Change.send.convert.itemlist,
-			'hideHUD':0,
-			'passiveUsedPt':0,
-			'passiveRemovePt':0,
-			'passiveUsablePt':0,
-			
+			'hideHUD':0,			
         }
     }
     for(var i in array){
@@ -405,7 +401,12 @@ Load.initData = function(key,player,main){
             data[i][j] = obj[i][j];
         }
     }
-	data.other.passiveGrid = Db.passiveGrid.moddedGrid[Date.nowDate()];	//TOFIX send real
+		
+	data.other.passiveGrid = [
+		Db.passiveGrid.moddedGrid[main.passive.freeze[0] || Date.nowDate()],
+		Db.passiveGrid.moddedGrid[main.passive.freeze[1] || Date.nowDate()]
+	];
+	
     return data;
 }
 

@@ -1190,18 +1190,36 @@ Draw.window.passive = function (){ ctxrestore();
 	hp.text.style.backgroundColor = 'white';
 	
 	var str = 'Page: ';
-	for(var i in main.passive){
+	for(var i in main.passive.grid){
 		str += '<span ' + 
 		'onclick="Chat.send.command(\'$win,passive,page,' + i + '\');'+ '" ' +
-		'style="text-decoration:' + (+i == main.passiveActive ? 'underline' : 'none') + '" ' +
+		'style="text-decoration:' + (+i == main.passive.active ? 'underline' : 'none') + '" ' +
 		'title="Change Active Page ' + i + '" ' + 
 		'>' + i +
 		'</span> ';
 	}
 	str += '<br>';
 	str += '<br>';
-	str += 'Pts: ' + main.passiveUsedPt[main.passiveActive] + '/' + main.passiveUsablePt + '<br>';
-	str += 'Remove Pts: ' + main.passiveRemovePt + '<br>';
+	if(main.passive.freeze[main.passive.active]){	//aka frozen
+		str += 'Freeze: ' + main.passive.freeze[main.passive.active];	
+		str += '<br>';
+		str += 	'<span ' + 
+		'onclick="Chat.send.command(\'$win,passive,unfreeze,' +main.passive.active + '\');' + '" ' + 
+		'title="Unfreeze. Changes will go live upon relogging."' +
+		'>' + 'Unfreeze' + 
+		'</span>';
+	} else {
+		str += 	'<span ' + 
+		'onclick="Chat.send.command(\'$win,passive,freeze,' +main.passive.active + '\');' + '" ' + 
+		'title="You will keep this grid and values until you unfreeze. Future changes of popularity won\'t affect this grid if frozen."' +
+		'>' + 'Freeze' + 
+		'</span>';
+	}	
+	
+	str += '<br>';
+	str += '<br>';
+	str += 'Pts: ' + main.passive.usedPt[main.passive.active] + '/' + main.passive.usablePt + '<br>';
+	str += 'Remove Pts: ' + main.passive.removePt + '<br>';
 	str += '<br>';
 	str += '<span ' + 
 	'onclick="Draw.window.passive.grid.info.toggleFullscreen();' + '" ' + 
@@ -1243,10 +1261,10 @@ Draw.window.passive.grid = function(){ ctxrestore();
 	var border2 = border/2;
 	var ic = iconSize + border;
 	
-	var pass = main.passive[main.passiveActive];
+	var pass = main.passive.grid[main.passive.active];
 	
 	//Draw Stat	
-	var grid = Db.passiveGrid.grid;
+	var grid = Db.passiveGrid[main.passive.active].grid;
 	for(var i = 0 ; i < grid.length ; i++){
 		for(var j = 0 ; j < grid[i].length ; j++){
 			var numX = s.x + 300 + ic * j + dx;	
@@ -1274,8 +1292,8 @@ Draw.window.passive.grid = function(){ ctxrestore();
 			ctx.globalAlpha = +pass[i][j] ? 1 : 0.5;
 			var name = Db.stat[boost.stat].icon;
 			Draw.icon(name,numX+border2,numY+border2,iconSize,{
-				"right":{"func":Chat.send.command,"param":['$win,passive,add,' + main.passiveActive + ',' + i + ',' + j]},
-				"shiftRight":{"func":Chat.send.command,"param":['$win,passive,remove,' + main.passiveActive + ',' + i + ',' + j]},
+				"right":{"func":Chat.send.command,"param":['$win,passive,add,' + main.passive.active + ',' + i + ',' + j]},
+				"shiftRight":{"func":Chat.send.command,"param":['$win,passive,remove,' + main.passive.active + ',' + i + ',' + j]},
 				'text':'Right: Choose ' + name + ' | Shift-Right: Remove',
 			});
 			
@@ -1338,14 +1356,14 @@ Draw.window.passive.hover = function(over){ ctxrestore();
 	ctx.fillTextU(st.name,ssx + 5 + 30,ssy+1);
 
 	var pop = 'Popularity: ';
-	pop += round(100*over.count/Db.passiveGrid.average,1) + '%';
+	var grid = Db.passiveGrid[main.passive.active];
+	pop += round(100*over.count/grid.average,1) + '%';
 	ctx.fillText(pop,ssx + 5,ssy+1+25*1);
 	var value = 'Value: +' + round(over.value,5);
 	ctx.fillText(value,ssx + 5,ssy+1+25*2);
 	//TOFIX add description
 }
 //}
-
 
 
 

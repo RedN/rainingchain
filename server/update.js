@@ -132,10 +132,6 @@ Change.update.init = function(){
 				{'array':['quest']},
 				
 				{'array':['passive']},	
-				{'array':['passiveRemovePt']},
-				{'array':['passiveUsedPt']},
-				{'array':['passiveUsablePt']},
-				{'array':['passiveActive']},
 				{'array':['hideHUD']},
 				
 				{'array':['pvpScore']},	

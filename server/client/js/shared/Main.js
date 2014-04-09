@@ -30,10 +30,6 @@ Main.template = function(key){
 		
 		'help':'',
 		'passive':Passive.template(),
-		'passiveUsablePt':0,
-		'passiveUsedPt':[0,0],
-		'passiveRemovePt':0,
-		'passiveActive':0,
 		'social':{
 			'message':{
 				'chat':[],
@@ -71,11 +67,11 @@ Main.template = function(key){
 Main.passiveAdd = function(main,num,i,j){
 	var key = main.id;
 	//when player wants to add a passive
-	if(Passive.getUnusedPt(key,num) <= -10){ Chat.add(key,"You don't have any Passive Points to use."); return;}	//TOFIX
-	if(main.passive[num][i][j] !== '0'){ Chat.add(key,"You already have this passive.");	return;}
-	if(!Passive.test.add(main.passive[num],i,j)){Chat.add(key,"You can't choose this passive yet.");	return;}
+	if(Passive.getUnusedPt(key,num) <= -10){ Chat.add(key,"You don't have any Passive Points to use."); return;}	//TOFIXTEST
+	if(main.passive.grid[num][i][j] !== '0'){ Chat.add(key,"You already have this passive.");	return;}
+	if(!Passive.test.add(main.passive.grid[num],i,j)){Chat.add(key,"You can't choose this passive yet.");	return;}
 	
-	main.passive[num][i] = main.passive[num][i].set(j,'1');
+	main.passive.grid[num][i] = main.passive.grid[num][i].set(j,'1');
 	
 	Passive.updatePt(key);
 	Passive.updateBoost(key);
@@ -83,11 +79,11 @@ Main.passiveAdd = function(main,num,i,j){
 Main.passiveRemove = function(main,num,i,j){
 	var key = main.id;
 	//when player wants to add a passive
-	if(main.passiveRemovePt <= 0){ Chat.add(key,"You don't have any Passive Remove Points to use."); return;}
-	if(main.passive[num][i][j] !== '1'){ Chat.add(key,"You don't have this passive.");	return;}
-	if(!Passive.test.remove(main.passive[num],i,j)){Chat.add(key,"You can't remove this passive because it would create 2 subgroups.");	return;}
+	if(main.passive.removePt <= 0){ Chat.add(key,"You don't have any Passive Remove Points to use."); return;}
+	if(main.passive.grid[num][i][j] !== '1'){ Chat.add(key,"You don't have this passive.");	return;}
+	if(!Passive.test.remove(main.passive.grid[num],i,j)){Chat.add(key,"You can't remove this passive because it would create 2 subgroups.");	return;}
 	
-	main.passive[num][i] = main.passive[num][i].set(j,'0');
+	main.passive.grid[num][i] = main.passive.grid[num][i].set(j,'0');
 	
 	Passive.updatePt(key);
 	Passive.updateBoost(key);

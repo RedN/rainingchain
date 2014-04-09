@@ -24,7 +24,7 @@ List = {
 
 
 //Sync DB and Server when Server starts
-exports.initServer = function (){
+Init.server = function (){
     Init.cycle();
 	
 	Init.db.item(function(){

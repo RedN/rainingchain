@@ -49,7 +49,7 @@ Server =  {
 Server.start = function(data){
 	Init.db(data);
 	Init.email(data);
-	main.initServer();
+	Init.server();
 }
 
 Server.botwatch = function(key,towatch){

@@ -42,7 +42,7 @@ require('./' + clientPath + 'client/js/shared/essentialsShare');
 
 require('./server/Server');
 require('./server/db/Db');
-main = require('./server/main');
+require('./server/main');
 require('./server/cycle');
 require('./server/Socket');
 
@@ -100,8 +100,6 @@ require('./' + clientPath + 'client/js/shared/passiveGrid');
 require('./' + clientPath + 'client/js/shared/queryShare');
 require('./' + clientPath + 'client/js/shared/clanShare');
 require('./' + clientPath + 'client/js/shared/Db_customboost');
-
-
 
 
 

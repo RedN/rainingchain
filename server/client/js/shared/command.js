@@ -297,12 +297,11 @@ Command.list['win,quest,toggleChallenge'].doc = {
 	],
 }
 
+
+
 Command.list['win,passive,add'] = function(key,num,i,j){
-	i = Math.floor(+i); j = Math.floor(+j); num = +num;
-	if(!Db.passiveGrid[i] || !Db.passiveGrid[i][j]){ return; }
-	
-	var pass= List.main[key].passive[num];
-	if(!pass) return;
+	i = Math.floor(+i); j = Math.floor(+j); num = Math.floor(+num);
+	if(!(i < Db.passiveGrid.height && j < Db.passiveGrid.width && num < 2)) return;
 		
 	Main.passiveAdd(List.main[key],num,i,j);
 }
@@ -315,11 +314,8 @@ Command.list['win,passive,add'].doc = {
 	],
 }
 Command.list['win,passive,remove'] = function(key,num,i,j){
-	i = Math.floor(+i); j = Math.floor(+j); num = +num;
-	if(!Db.passiveGrid[i] || !Db.passiveGrid[i][j]){ return; }
-	
-	var pass= List.main[key].passive[num];
-	if(!pass) return;
+	i = Math.floor(+i); j = Math.floor(+j); num = Math.floor(+num);
+	if(!(i < Db.passiveGrid.height && j < Db.passiveGrid.width && num < 2)) return;
 		
 	Main.passiveRemove(List.main[key],num,i,j);
 }
@@ -331,15 +327,37 @@ Command.list['win,passive,remove'].doc = {
 		{type:'Number',name:'Position X',optional:0},
 	],
 }
-
 Command.list['win,passive,page'] = function(key,num){
 	num = +num;
-	if(!List.main[key].passive[num]) return;
-	List.main[key].passiveActive = num;
+	if(!List.main[key].passive.grid[num]) return;
+	List.main[key].passive.active = num;
 	Passive.updateBoost(key);
 }
 Command.list['win,passive,page'].doc = {
 	'description':"Change Active Passive Page",
+	'help':0,'param':[
+		{type:'Number',name:'Which Page',optional:0},
+	],
+}
+
+Command.list['win,passive,freeze'] = function(key,num){
+	num = +num;
+	if(!List.main[key].passive.grid[num]) return;
+	List.main[key].passive.freeze[num] = Date.nowDate();
+}
+Command.list['win,passive,freeze'].doc = {
+	'description':"Freeze a page.",
+	'help':0,'param':[
+		{type:'Number',name:'Which Page',optional:0},
+	],
+}
+Command.list['win,passive,unfreeze'] = function(key,num){
+	num = +num;
+	if(!List.main[key].passive.grid[num]) return;
+	List.main[key].passive.freeze[num] = null;
+}
+Command.list['win,passive,unfreeze'].doc = {
+	'description':"Unfreeze a page. Effect will go live on new login.",
 	'help':0,'param':[
 		{type:'Number',name:'Which Page',optional:0},
 	],
@@ -604,7 +622,6 @@ Command.list['team,tele'].doc = {
 	],
 }
 
-Actor.teleport.join
 
 Command.list['pvp'] = function(key){
 	var act = List.all[key];

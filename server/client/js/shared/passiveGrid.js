@@ -30,14 +30,12 @@ Init.db.passive = function(cb){
 	
 	Init.db.passive.getCurrentCount(function(currentCount){
 		Init.db.passive.getOldCount(function(countList){
-			console.log(countList);
 			for(var i in Db.passiveGrid.count)
 				Db.passiveGrid.count[i] = countList[i] || deepClone(currentCount);	//if exist, use db otherwise use current
 			
 			
-			//console.log(Db.passiveGrid.count[Date.nowDate()]);
 			Db.passiveGrid = PassiveGrid.setGrid(Db.passiveGrid);	
-			//Cycle.daily.passive();
+			Cycle.daily.passive();
 			cb();
 		});
 	});
@@ -47,7 +45,6 @@ Init.db.passive = function(cb){
 Init.db.passive.getOldCount = function(cb){
 	db.find('passiveCount',{},{'_id':0},function(err,info){ if(err) throw err;
 		var tmp = {};
-		console.log(info);
 		for(var i = 0 ; i < info.length; i++){
 			tmp[info[i].date] = info[i];
 		}
@@ -61,8 +58,8 @@ Init.db.passive.getCurrentCount = function(cb){
 		
 		for(var i = 0 ; i < info.length ; i++){
 			var main = info[i];
-			for(var m in main.passive){
-				var pass = main.passive[m];
+			for(var m in main.passive.grid){
+				var pass = main.passive.grid[m];
 				for(var j = 0 ; j < pass.length ; j++){
 					for(var k = 0 ; k < pass[j].length ; k++){
 						if(pass[j][k] == '1'){
@@ -187,17 +184,18 @@ Passive.randomStat = function(good){
 	var good = ["maxSpd","acc","hp-regen","mana-regen","hp-max","mana-max","leech-magn","leech-chance","pickRadius","item-quantity","item-quality","item-rarity","atkSpd-main","crit-chance","crit-magn","bullet-amount","bullet-spd","strike-range","strike-size","strike-maxHit","burn-time","burn-magn","burn-chance","chill-time","chill-magn","chill-chance","stun-time","stun-magn","stun-chance","bleed-time","bleed-magn","bleed-chance","drain-time","drain-magn","drain-chance","knock-time","knock-magn","knock-chance","def-melee-+","def-melee-*","def-melee-^","def-melee-x","def-range-+","def-range-*","def-range-^","def-range-x","def-magic-+","def-magic-*","def-magic-^","def-magic-x","def-fire-+","def-fire-*","def-fire-^","def-fire-x","def-cold-+","def-cold-*","def-cold-^","def-cold-x","def-lightning-+","def-lightning-*","def-lightning-^","def-lightning-x","dmg-melee-+","dmg-melee-*","dmg-melee-^","dmg-melee-x","dmg-range-+","dmg-range-*","dmg-range-^","dmg-range-x","dmg-magic-+","dmg-magic-*","dmg-magic-^","dmg-magic-x","dmg-fire-+","dmg-fire-*","dmg-fire-^","dmg-fire-x","dmg-cold-+","dmg-cold-*","dmg-cold-^","dmg-cold-x","dmg-lightning-+","dmg-lightning-*","dmg-lightning-^","dmg-lightning-x","weapon-mace","weapon-spear","weapon-sword","weapon-bow","weapon-boomerang","weapon-crossbow","weapon-wand","weapon-staff","weapon-orb","summon-amount","summon-time","summon-atk","summon-def"];
 	return good.random();
 }
+
 Passive.updatePt = function(key){
-	var main = List.main[key];
-	for(var i in main.passive){
-		main.passiveUsedPt[i] = Passive.getUsedPt(main.passive[i]);
+	var mp = List.main[key].passive;
+	for(var i in mp.grid){
+		mp.usedPt[i] = Passive.getUsedPt(mp.grid[i]);
 	}
-	main.passiveUsablePt = Passive.getUsablePt(key);
+	mp.usablePt = Passive.getUsablePt(key);
 }
 
 Passive.getUnusedPt = function(key,num){
-	num = num || List.main[key].passiveActive;
-	var p = List.main[key].passive[num];
+	num = num || List.main[key].passive.active;
+	var p = List.main[key].passive.grid[num];
 	return Passive.getUsablePt(key)-Passive.getUsedPt(p);
 }
 
@@ -247,8 +245,7 @@ Passive.getBoost = function(p){	//convert the list of passive owned by player in
 
 
 Passive.template = function(){ 
-	return [
-	[
+	var grid = [
 		'00000000000000000000',
 		'00000000000000000000',
 		'00000000000000000000',
@@ -269,34 +266,19 @@ Passive.template = function(){
 		'00000000000000000000',
 		'00000000000000000000',
 		'00000000000000000000',
-	],
-	[
-		'00000000000000000000',
-		'00000000000000000000',
-		'00000000000000000000',
-		'00000000000000000000',
-		'00000000000000000000',
-		'00000000000000000000',
-		'00000000000000000000',
-		'00000000000000000000',
-		'00000000222200000000',
-		'00000000222200000000',
-		'00000000222200000000',
-		'00000000222200000000',
-		'00000000000000000000',
-		'00000000000000000000',
-		'00000000000000000000',
-		'00000000000000000000',
-		'00000000000000000000',
-		'00000000000000000000',
-		'00000000000000000000',
-		'00000000000000000000',
-	]
 	];
+	return {
+		grid:[grid,deepClone(grid)],
+		usablePt:0,
+		usedPt:[0,0],
+		removePt:0,
+		active:0,
+		freeze:[null,null],
+	}
 }
 
 Passive.updateBoost = function(key){
-	Actor.permBoost(List.all[key],'Passive',Passive.getBoost(List.main[key].passive[List.main[key].passiveActive]));
+	Actor.permBoost(List.all[key],'Passive',Passive.getBoost(List.main[key].passive.grid[List.main[key].passive.active]));
 }		
 
 

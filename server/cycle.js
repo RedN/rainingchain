@@ -4,9 +4,7 @@ Init.cycle = function(){
 	var nextWeeklyUpdate = daysTilNextWeekUpdate * Cst.DAY + nextDailyUpdate + 10000;
 	
 	var dailyFunc = function(){
-		var day = new Date().toLocaleDateString();
-		
-		Cycle.daily.passive(day);
+		Cycle.daily.passive();
 		nextDailyUpdate += Cst.DAY;
 		setTimeout(dailyFunc,Cst.DAY);
 	}
@@ -29,6 +27,7 @@ Init.cycle = function(){
 Cycle = {};
 Cycle.daily = {};
 Cycle.daily.passive = function(day){
+	var day = Date.nowDate();
 	db.upsert('passiveCount',{date:day},Db.passiveGrid.count[Date.nowDate()],db.err);
 
 }

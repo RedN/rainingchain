@@ -1,6 +1,3 @@
-Init = {};
-
-
 /*
 if at home 
 node app.js : connect to local db
@@ -18,7 +15,7 @@ for real: need to emit info
 
 var DB;
 
-
+Init = {};
 
 Init.db = function(data){
 	data = data || {};
