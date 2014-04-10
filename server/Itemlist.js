@@ -3,7 +3,6 @@
 
 Itemlist = {};
 
-//Add item in inventory
 Itemlist.add = function (inv,id,amount){
 	if(typeof inv === 'string') inv = List.main[inv].invList;
 	amount = amount || 1;
@@ -21,16 +20,13 @@ Itemlist.add = function (inv,id,amount){
 	}
 }
 
-//Itemlist.have(inv,
-
 Itemlist.add.bulk = function (inv,array_items){
 	for(var i in array_items){
 		Itemlist.add(inv,array_items[i][0],array_items[i][1] || 1);
 	}	
 }
 
-//Test if theres enough place for all the items (array of items)
-Itemlist.test = function (inv,array_items){
+Itemlist.test = function (inv,array_items){ //Test if theres enough place for all the items (array of items)
 	if(typeof inv === 'string') inv = List.main[inv].invList;
 	
 	//Fast Test this
@@ -51,8 +47,7 @@ Itemlist.test = function (inv,array_items){
 	return spaceNeeded <= Itemlist.empty(inv);
 }
 
-//Return first position of first empty slot
-Itemlist.firstEmpty = function(inv){
+Itemlist.firstEmpty = function(inv){ //Return first position of first empty slot
     for(var i = 0; i < inv.data.length; i++){
 	    if(inv.data[i].length === 0){ 
 		    return i;	
@@ -61,7 +56,6 @@ Itemlist.firstEmpty = function(inv){
 	return -1;
 }
 
-//Remove item in inventory
 Itemlist.remove = function (inv,id,amount){
 	if(typeof inv === 'string') inv = List.main[inv].invList;
 	
@@ -94,8 +88,8 @@ Itemlist.remove.bulk = function (inv,array_items){
 	}	
 }
 
-//Return amount of empty slots. (If amount is speficied, return if empty
-Itemlist.empty = function (inv,amount){
+
+Itemlist.empty = function (inv,amount){ //Return amount of empty slots. (If amount is speficied, return if empty
 	var empty = 0;
 	for(var i in inv.data){
 		if(inv.data[i].length === 0){ empty++; }
@@ -142,31 +136,6 @@ Itemlist.have.bulk = function (inv,array_items){
 	}	
 	return true;
 }
-//return what info should be in db
-Itemlist.toDb = function(){
-    return inv.data;
-}
-
-//return what to send to client 
-Itemlist.toClient = function(){
-    var ret = [];
-	
-	for(var i in inv.data){
-		ret[i] = '';
-		if(inv.data[i][0]){
-            ret[i] = [];
-            ret[i][0] = Db.item[inv.data[i][0]].icon;
-			ret[i][1] = inv.data[i][1];
-			ret[i][2] = Db.item[inv.data[i][0]].name;
-		}
-	}
-	
-	return ret;
-}
-
-Itemlist.toString = function(inv){
-    return inv.data.toString();
-}
 
 Itemlist.transfer = function(inv,other,id,amount){
 	amount = Math.min(amount || 1,Itemlist.have(inv,id,0,'amount'));
@@ -197,8 +166,6 @@ Itemlist.transfer.bank = function(key,inv,id,amount){
 	Itemlist.transfer(List.main[key].bankList,inv,id,amount);
 }
 
-
-//Inventory
 Itemlist.template = function(type,data){
 	var tmp = {};
 	tmp.type = type;
@@ -218,8 +185,6 @@ Itemlist.template = function(type,data){
 	
     return tmp;
 }
-
-
 
 Itemlist.click = {};
 
@@ -316,8 +281,6 @@ Itemlist.click.trade = function(trade,side,slot){
 
 
 //Actual trade function is Command.list['win,trade,toggle']
-
-
 Itemlist.trade = function(trade,other){
 	var temp = deepClone(trade.data);
 	var temp2 = deepClone(other.data);
@@ -327,9 +290,6 @@ Itemlist.trade = function(trade,other){
 	Chat.add(other.key,'Trade Accepted.');
 	Itemlist.trade.reset(trade);
 }
-
-
-
 
 Itemlist.trade.reset = function(trade){
 	var other = List.main[trade.key].windowList.trade.trader;

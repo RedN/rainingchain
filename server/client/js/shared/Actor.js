@@ -9,6 +9,15 @@ Actor.remove = function(act){
 }
 
 //{Combat
+Actor.enemyPower = function(num){
+	var dmg = 1 + Math.sqrt(num-1) * 110.25;
+	var def = 1 + Math.sqrt(num-1) * 110.50;
+	return [
+		{'stat':'globalDmg','value':dmg || 1,'type':'*','time':100000,'name':'enemypower'},
+		{'stat':'globalDef','value':def || 1,'type':'*','time':100000,'name':'enemypower'},
+	];
+}
+
 Actor.changeCombatContext = function(act,type){
 	act.combatContext = type;
 	Actor.updateEquip(act);
@@ -118,79 +127,6 @@ Actor.swapWeapon = function(act,piece){
 //}
 
 //{Update + Boost
-Actor.update = {};
-Actor.update.mastery = function(act){
-	//Note: mod is applied in Combat.action.attack.mod.act
-	var mas = act.mastery;
-	for(var i in mas){
-		for(var j in mas[i]){
-			mas[i][j].sum = Math.pow(mas[i][j]['x'] * mas[i][j]['*'],mas[i][j]['^']) + mas[i][j]['+'];
-		}
-	}
-}
-
-Actor.update.permBoost = function(act){
-	var pb = act.boost.list;
-	
-	//Reset to PermBase
-	for(var i in pb){
-		pb[i].base = pb[i].permBase;	
-		pb[i].max = pb[i].permMax;
-		pb[i].min = pb[i].permMin;
-		pb[i].t = 1;
-		pb[i].tt = 1;
-		pb[i].p = 0;
-		pb[i].pp = 0;
-	}
-	
-	//Update Value
-	for(var i in act.permBoost){	//i = Source (item)	
-		for(var j in act.permBoost[i]){	//each indidual boost boost
-			var b = act.permBoost[i][j];
-			
-			if(b.type === '+' || b.type === 'base'){pb[b.stat].p += b.value;}
-			else if(b.type === '*'){pb[b.stat].t += b.value;}
-			else if(b.type === '++'){pb[b.stat].pp += b.value;}
-			else if(b.type === '**'){pb[b.stat].tt += b.value;}
-			else if(b.type === 'min'){pb[b.stat].min = Math.max(pb[b.stat].min,b.value);}
-			else if(b.type === 'max'){pb[b.stat].max = Math.min(pb[b.stat].max,b.value);}			
-		}
-	}
-	
-	//Max and min
-	for(var i in pb){
-		pb[i].base *= pb[i].t;
-		pb[i].base += pb[i].p;
-		pb[i].base *= pb[i].tt;
-		pb[i].base += pb[i].pp;
-	
-		pb[i].base = Math.max(pb[i].base,pb[i].min);
-		pb[i].base = Math.min(pb[i].base,pb[i].max);	
-	}
-	
-	Actor.update.boost(act,'all');
-	
-	for(var j in act.customBoost){ 
-		if(act.customBoost[j])
-			Db.customBoost[j].func(act.boost,act.id);
-	}	
-}
-
-Actor.update.boost = function(act,stat){
-	if(!stat || stat === 'all'){ for(var i in act.boost.list) Actor.update.boost(act,i); return; }
-	
-	var stat = act.boost.list[stat];
-	var sum = stat.base;
-	
-	for(var i in stat.name){
-		var boost = stat.name[i];
-		if(boost.type === '+') sum += boost.value;
-		else if(boost.type === '*'){	sum += (boost.value-1)*stat.base; }
-	}
-	
-	viaArray.set({'origin':act,'array':stat.stat,'value':sum});
-}
-
 Actor.boost = function(act, boost){	//boost: { 'stat':'globalDmg','value':1,'type':'*','time':100,'name':'weapon'}
 	//Add a boost to a actor
 
@@ -267,6 +203,78 @@ Actor.permBoost.stack = function(b){	//if boost same thing, add values
 	}
 	for(var i in tmp){temp.push(tmp[i]);}
 	return temp;
+}
+Actor.update = {};
+Actor.update.mastery = function(act){
+	//Note: mod is applied in Combat.action.attack.mod.act
+	var mas = act.mastery;
+	for(var i in mas){
+		for(var j in mas[i]){
+			mas[i][j].sum = Math.pow(mas[i][j]['x'] * mas[i][j]['*'],mas[i][j]['^']) + mas[i][j]['+'];
+		}
+	}
+}
+
+Actor.update.permBoost = function(act){
+	var pb = act.boost.list;
+	
+	//Reset to PermBase
+	for(var i in pb){
+		pb[i].base = pb[i].permBase;	
+		pb[i].max = pb[i].permMax;
+		pb[i].min = pb[i].permMin;
+		pb[i].t = 1;
+		pb[i].tt = 1;
+		pb[i].p = 0;
+		pb[i].pp = 0;
+	}
+	
+	//Update Value
+	for(var i in act.permBoost){	//i = Source (item)	
+		for(var j in act.permBoost[i]){	//each indidual boost boost
+			var b = act.permBoost[i][j];
+			
+			if(b.type === '+' || b.type === 'base'){pb[b.stat].p += b.value;}
+			else if(b.type === '*'){pb[b.stat].t += b.value;}
+			else if(b.type === '++'){pb[b.stat].pp += b.value;}
+			else if(b.type === '**'){pb[b.stat].tt += b.value;}
+			else if(b.type === 'min'){pb[b.stat].min = Math.max(pb[b.stat].min,b.value);}
+			else if(b.type === 'max'){pb[b.stat].max = Math.min(pb[b.stat].max,b.value);}			
+		}
+	}
+	
+	//Max and min
+	for(var i in pb){
+		pb[i].base *= pb[i].t;
+		pb[i].base += pb[i].p;
+		pb[i].base *= pb[i].tt;
+		pb[i].base += pb[i].pp;
+	
+		pb[i].base = Math.max(pb[i].base,pb[i].min);
+		pb[i].base = Math.min(pb[i].base,pb[i].max);	
+	}
+	
+	Actor.update.boost(act,'all');
+	
+	for(var j in act.customBoost){ 
+		if(act.customBoost[j])
+			Db.customBoost[j].func(act.boost,act.id);
+	}	
+}
+
+Actor.update.boost = function(act,stat){
+	if(!stat || stat === 'all'){ for(var i in act.boost.list) Actor.update.boost(act,i); return; }
+	
+	var stat = act.boost.list[stat];
+	var sum = stat.base;
+	
+	for(var i in stat.name){
+		var boost = stat.name[i];
+		if(boost.type === '+') sum += boost.value;
+		else if(boost.type === '*'){	sum += (boost.value-1)*stat.base; }
+	}
+	
+	viaArray.set({'origin':act,'array':stat.stat,'value':sum});
 }
 
 //}

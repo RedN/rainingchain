@@ -105,8 +105,8 @@ Combat.action.summon = function(key,action,enemy){
 			'map':master.map,
 			'extra':{'deleteOnceDead':1,
 					'summoned':{'father':master.id,'time':action.time*timeMod,'distance':action.distance},
-					'targetIf':Combat.targetIf.list['summoned'],
-					'damageIf':Combat.targetIf.list['summoned'],
+					'targetIf':'summoned',
+					'damageIf':'summoned',
 					}
 		};
 		var childList = Actor.creation.group(param0,enemy);
@@ -251,20 +251,20 @@ Combat.clearStatus = function(act){
 	Combat.clearStatus.chill(act);
 	Combat.clearStatus.drain(act);
 };
-Combat.clearStatus.burn = function(act){ act.status.burn.time = 0; } 
-Combat.clearStatus.knock = function(act){ act.status.knock.time = 0; }
-Combat.clearStatus.bleed = function(act){ act.status.bleed.time = 0; }
+Combat.clearStatus.burn = function(act){ act.status.burn.active.time = 0; } 
+Combat.clearStatus.knock = function(act){ act.status.knock.active.time = 0; }
+Combat.clearStatus.bleed = function(act){ act.status.bleed.active.time = 0; }
 Combat.clearStatus.stun = function(act){ 
-	act.status.stun.time = 0;
+	act.status.stun.active.time = 0;
 	Actor.boost.removeByName(act,'maxSpd@stun');
 	Actor.boost.removeByName(act,'atkSpd-main@stun');
 }
 Combat.clearStatus.chill = function(act){ 
-	act.status.chill.time = 0;
+	act.status.chill.active.time = 0;
 	Actor.boost.removeByName(act,'maxSpd@chill');
 }
 Combat.clearStatus.drain = function(act){ 
-	act.status.drain.time = 0;
+	act.status.drain.active.time = 0;
 	Actor.boost.removeByName(act,'mana-max@drainBad');
 }
 

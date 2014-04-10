@@ -106,8 +106,9 @@ Collision.BulletActor.test = function(atk,player){
 	if(!['map','true','all'].have(atk.damageIf)){	//no testing needed
 		if(['player-simple','enemy-simple'].have(atk.damageIf)){	//only testing type
 			normal = Combat.damageIf.list[atk.damageIf](player);
-		} else {												//testing type and summon
-			normal = List.all[atk.parent] && atk.damageIf(player,List.all[atk.parent])
+		} else {					
+			var hIf = typeof atk.damageIf == 'function' ? atk.damageIf : Combat.damageIf.list[atk.damageIf]; //testing type and summon
+			normal = List.all[atk.parent] && hIf(player,List.all[atk.parent])
 		}
 	}
 	if(player.damagedIf !== 'true'){
@@ -136,13 +137,14 @@ Collision.StrikeActor = function(atk){
 		var player = List.all[j];
 		if(!player) continue;	//test target exist
 		if(!Combat.damageIf.global(atk,player)) continue;	
-		if(Collision.StrikeActor.test(atk,player)) continue;
+		if(!Collision.StrikeActor.test(atk,player)) continue;
 		if(!Collision.StrikeActor.collision(atk,player)) continue;
 		
 		Combat.collision(atk,player);
 		if(--atk.maxHit <= 0) return;	//can not longer hit someone
 	}
 }
+
 Collision.StrikeActor.test = Collision.BulletActor.test;
 
 

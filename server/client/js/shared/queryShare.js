@@ -194,7 +194,10 @@ Db.query.admin = function(socket,d){
 				if(i === id || List.actor[i].name.have(id)) return List.actor[i];
 		}
 		
-		var e1 = e[Object.keys(e)[0]];
+		for(var i in e){
+			if(e[i].combat && e[i].type !== 'player') var e1 = e[i];
+			if(e[i].type === 'player')	var p1 = e[i];
+		}
 		
 		var tele = function(x,y,map){
 			Actor.teleport(p,x,y,map);

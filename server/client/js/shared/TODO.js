@@ -6,6 +6,8 @@ teleport to teammeate fix
 
 enemy power when setting target
 
+only showing anim for 1 guy
+
 ===POST SDK===
 stat window
 plan revamp: already know what min and max mods are

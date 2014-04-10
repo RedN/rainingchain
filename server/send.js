@@ -49,7 +49,6 @@ Change.send = function(){
 				var targ = List.all[anim.target];
 				if(!targ) continue;
 				if(player.id === targ.id || Activelist.test(player,targ)){
-					anim.target = targ.publicId || targ.id;
 					anim = Change.send.init.anim(anim);
 					sa.a.push(anim); 
 				}
@@ -190,13 +189,14 @@ Change.send.init.drop = function(drop){
 }
 
 Change.send.init.anim = function(anim){
-	if(anim.sizeMod === 1) delete anim.sizeMod;
-	delete anim.id;
-	delete anim.target.map;
-	delete anim.target.viewedIf;
-	anim.target.x = Math.round(anim.target.x);
-	anim.target.y = Math.round(anim.target.y);
-	return anim;		//otherwise fuck anim for 2nd+ player
+	var t = {name:anim.name};
+	if(anim.sizeMod !== 1) t.sizeMod = anim.sizeMod;
+	if(typeof anim.target === 'string')
+		t.target = List.all[anim.target].publicId || List.all[anim.target].id;
+	else
+		t.target = {x:Math.round(anim.target.x),y:Math.round(anim.target.y)}
+	
+	return t;
 };
 
 //########################################

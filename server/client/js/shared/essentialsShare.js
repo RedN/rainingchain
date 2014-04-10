@@ -270,7 +270,8 @@ deepClone = function(obj){
         temp[key] = deepClone(obj[key]);
     return temp;
 }
-stringify = function(string){
+stringify = function(string,func){
+	if(func) return JSONf.stringify(string);
 	if(typeof string === 'string'){ return '"' + string + '"'; }
 	else if(typeof string === 'number'){ return string.toString(); }
 	else { return JSON.stringify(string); }
@@ -628,6 +629,13 @@ Object.defineProperty(Object.prototype, "$sum", {
 	}
 });	
 	
+Object.defineProperty(Object.prototype, "$length", {
+    enumerable: false,
+    value: function(){
+		return Object.keys(this).length;
+	}
+});	
+
 	
 convertRatio = function(ratio){
 	var sum = 0;

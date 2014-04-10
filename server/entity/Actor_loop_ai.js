@@ -86,8 +86,6 @@ Actor.loop.input.move.cutscene = function(act){
 	}
 }
 
-
-
 Actor.loop.input.ability = function(act){
 	act.abilityChange.press = '0000000000000000000000';
 	var target = List.all[act.target.main];
@@ -140,15 +138,20 @@ Actor.loop.setTarget.main = function(act){
 	for (var i in act.activeList){
 		var target = List.all[i];
 		
-		if(!act.targetIf) console.log(act.name);
-		if(Combat.targetIf.global(act,target) && act.targetIf(target,act)){
+		var hIf = typeof act.targetIf === 'function' ? act.targetIf : Combat.damageIf.list[act.targetIf];
+		if(Combat.targetIf.global(act,target) && hIf(target,act)){
 			var diff = Collision.distancePtPt(act,target);
 			if(diff <= act.moveRange.aggressive){
 				targetList[i] = 1/(diff+100);
 			}
 		}
 	}
-	act.target.main = targetList.random() || {x:act.x,y:act.y,real:0};		//kinda dumb cuz array only 1
+	act.target.main = targetList.random() || {x:act.x,y:act.y,real:0};
+	
+	if(act.target.main.real !== 0){
+		Actor.boost(act,Actor.enemyPower(targetList.$length()));
+	}
+	
 } 
 		
 Actor.loop.setTarget.sub = function(act){
