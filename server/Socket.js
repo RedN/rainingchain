@@ -1,20 +1,25 @@
 Server.handleSocket = function(name,socket,d){
 	var event = Db.socket[name];
-	if(!Db.socket[name]) return;
+	if(!event) return;
 	
 	var time = Date.now();
-	//if(time - socket.lastEmit[name] < event.minInterval) return;	//TOFIX bug for queryShare
-	socket.lastEmit[name] = time;
-	Db.socket[name].func(socket,d);
+	if(socket.emitCount[name] /Math.max(socket.globalTimer/Cst.MIN,5) > event.limitPerMin) return;
+	if(time-socket.emitLast[name] < event.minInterval) return;
 	
+	socket.emitLast[name] = time;
+	socket.emitCount[name]++;
+	event.func(socket,d);
 	
 	Performance.bandwidth('download',d,socket);
 }
 
 Init.socket = function(socket){
-	socket.lastEmit = {};
-	for(var i in Db.socket)
-		socket.lastEmit[i] = 0;
+	socket.emitCount = {};
+	socket.emitLast = {};
+	for(var i in Db.socket){
+		socket.emitCount[i] = 0;
+		socket.emitLast[i] = 0;
+	}
 	socket.bandwidth = {upload:0,download:0};
 	return socket;
 }
@@ -40,18 +45,23 @@ io.sockets.on('connection', function (socket) {
 
 Db.socket = {
 	'signUp':{
-		minInterval:10000,
+		limitPerMin:1,
+		minInterval:1000,
 		func:function(socket,d){
 			if(Server.ready) Sign.up(socket,d); 
+			else socket.emit('signIn', { 'success':0,'message':'<font color="red">SERVER IS CLOSED. Next open beta should come soon.</font>' }); 
 		},
 	},
 	'signIn':{
+		limitPerMin:1,
 		minInterval:1000,
 		func:function(socket,d){
 			if(Server.ready) Sign.in(socket,d); 
+			else socket.emit('signIn', { 'success':0,'message':'<font color="red">SERVER IS CLOSED. Next open beta should come soon.</font>' }); 
 		},
 	},
 	'clientReady':{
+		limitPerMin:1,
 		minInterval:1000,
 		func:function(socket,d){
 			if(!List.socket[socket.key]) return;
@@ -59,26 +69,30 @@ Db.socket = {
 		},
 	},
 	'disconnect':{
-		minInterval:10,
+		limitPerMin:1,
+		minInterval:1000,
 		func:function(socket,d){
 			socket.toRemove = 1;
 		},
 	},
 	'sendChat':{
-		minInterval:100,
+		limitPerMin:100,
+		minInterval:500,
 		func:function(socket,d){
 			d.key = socket.key;
 			Chat.receive(d);
 		},
 	},
 	'Chat.send.command':{
-		minInterval:100,
+		limitPerMin:30,
+		minInterval:0,
 		func:function(socket,d){
 			Command.receive(socket,d);
 		},
 	},
 	'queryDb':{
-		minInterval:100,
+		limitPerMin:20,
+		minInterval:0,
 		func:function(socket,d){
 			var toreturn = Db.query(d);
 			if(toreturn) socket.emit('queryDb',toreturn); 
@@ -86,7 +100,8 @@ Db.socket = {
 		},
 	},
 	'testing':{
-		minInterval:100,
+		limitPerMin:20,
+		minInterval:0,
 		func:function(socket,d){
 			var act = List.all[socket.key];
 			if(act && act.name && Server.admin.have(act.name))
@@ -94,18 +109,21 @@ Db.socket = {
 		},
 	},
 	'click':{
+		limitPerMin:60*1000/40,
 		minInterval:10,
 		func:function(socket,d){
 			Input.click(socket,d);
 		},
 	},
 	'input':{
+		limitPerMin:60*1000/40,
 		minInterval:10,
 		func:function(socket,d){
 			Input.key(socket,d);
 		},
 	},
 	'uploadMod':{
+		limitPerMin:2,
 		minInterval:1000,
 		func:function(socket,d){
 			customModHandling(socket,d);

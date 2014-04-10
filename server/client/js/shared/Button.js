@@ -34,22 +34,28 @@ Button.test = function (key,x,y,side){	//on click
 		else { var list = List.btn;}
 		
 	for(var i = list.length-1 ; i >= 0 ; i--){
-		if(list[i][side]){
-			if(Collision.PtRect({"x":x,'y':y},list[i].rect)){
-				var opt = list[i][side];
-				if(server) {
-					if(!opt.nokey)	applyFunc.key(key,opt.func,opt.param);
-					else applyFunc(opt.func,opt.param);
-					if(opt.help) List.main[key].help = opt.help;
-				} else {
-					applyFunc(opt.func,opt.param);
-					if(opt.help) Help.open(opt.help);
-					if(opt.sfx) Sfx.play(opt.sfx);
-				}
-				
-				break;	//max 1 button per click
-			}	
+		if(!list[i][side]) continue;
+		if(!Collision.PtRect({"x":x,'y':y},list[i].rect)) continue;
+		
+		var opt = list[i][side];
+		if(opt.question){
+			var tmp = {server:server,func:opt.func,param:opt.param};
+			if(opt.question === true){	tmp.text = 'Are you sure?';	tmp.option = ['yes','no'];} 
+			else {	tmp.text = opt.question.text; tmp.option = opt.question.option;	}
+			Chat.question(key,tmp);
+			break;
 		}
+		
+		if(server) {
+			applyFunc.key(key,opt.func,opt.param);
+			if(opt.help) List.main[key].help = opt.help;
+		} else {
+			applyFunc(opt.func,opt.param);
+			if(opt.help) Help.open(opt.help);
+			if(opt.sfx) Sfx.play(opt.sfx);
+		}
+		
+		break;	//max 1 button per click
 	}
 	
 }

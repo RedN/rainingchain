@@ -1,4 +1,4 @@
-//First param is invlist AKA requires nokey:true
+//First param is invlist
 //ts('Main.openWindow(m,"bank")')
 
 Itemlist = {};
@@ -193,7 +193,9 @@ Itemlist.transfer.bulk = function(inv,other,array_items,allornothing){
 	return true;	
 }
 
-
+Itemlist.transfer.bank = function(key,inv,id,amount){
+	Itemlist.transfer(List.main[key].bankList,inv,id,amount);
+}
 
 
 //Inventory
@@ -239,10 +241,10 @@ Itemlist.click.inventory = function(inv,side,slot,amount){
 			Button.optionList(key,{
 				'name':Db.item[id].name,
 				'option':[
-					{'name':'Deposit 5','func':Itemlist.transfer,'param':[inv,list,id,5],'nokey':true},
-					{'name':'Deposit 25','func':Itemlist.transfer,'param':[inv,list,id,25],'nokey':true},
-					{'name':'Deposit 100','func':Itemlist.transfer,'param':[inv,list,id,100],'nokey':true},
-					{'name':'Deposit 1000','func':Itemlist.transfer,'param':[inv,list,id,1000],'nokey':true},
+					{'name':'Deposit 5','func':Itemlist.transfer,'param':[list,id,5]},
+					{'name':'Deposit 25','func':Itemlist.transfer,'param':[list,id,25]},
+					{'name':'Deposit 100','func':Itemlist.transfer,'param':[list,id,100]},
+					{'name':'Deposit 1000','func':Itemlist.transfer,'param':[list,id,1000]},
 				]
 			});
 		}
@@ -296,10 +298,10 @@ Itemlist.click.bank = function(bank,side,slot,amount){
 		Button.optionList(key,{
 			'name':Db.item[id].name,
 			'option':[
-				{'name':'Withdraw 5','func':Itemlist.transfer,'param':[bank,inv,id,5],'nokey':true},
-				{'name':'Withdraw 25','func':Itemlist.transfer,'param':[bank,inv,id,25],'nokey':true},
-				{'name':'Withdraw 100','func':Itemlist.transfer,'param':[bank,inv,id,100],'nokey':true},
-				{'name':'Withdraw 1000','func':Itemlist.transfer,'param':[bank,inv,id,1000],'nokey':true},
+				{'name':'Withdraw 5','func':Itemlist.transfer.bank,'param':[inv,id,5]},
+				{'name':'Withdraw 25','func':Itemlist.transfer.bank,'param':[inv,id,25]},
+				{'name':'Withdraw 100','func':Itemlist.transfer.bank,'param':[inv,id,100]},
+				{'name':'Withdraw 1000','func':Itemlist.transfer.bank,'param':[inv,id,1000]},
 			]
 		});
 	}

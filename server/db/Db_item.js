@@ -38,7 +38,7 @@ Init.db.item = function (cb){
 
 	//
 	a['gold'] = {'name':'Gold','icon':'system.gold','stack':1,
-		'option':[	{'name':'Craft Armor','func':'Plan.use','param':['randomArmor']},
+		'option':[	{'name':'Craft Armor','func':'Plan.use','param':['randomArmor'],question:true,description:'Generate a armor'},
 						{'name':'Craft Weapon','func':'Plan.use','param':['randomWeapon']},
 						{'name':'Craft Weapon2','func':'Plan.use','param':['randomWeapon2']},
 						{'name':'Open Bank','func':'Main.openWindow','param':['bank']},

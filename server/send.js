@@ -203,15 +203,18 @@ Change.send.init.anim = function(anim){
 
 Change.send.convert = {};
 
-Change.send.convert.optionList = function(option){
+Change.send.convert.optionList = function(ol){
 	var draw = {};
-	draw.x = option.x;
-	draw.y = option.y;
-	draw.name = option.name;
+	draw.x = ol.x;
+	draw.y = ol.y;
+	draw.name = ol.name;
 	
 	draw.option = [];
-	for(var i = 0; i < option.option.length ; i++){
-		draw.option.push({'name':option.option[i].name});
+	for(var i = 0; i < ol.option.length ; i++){
+		var tmp = {'name':ol.option[i].name};
+		if(ol.option[i].description) tmp.description = ol.option[i].description;
+		if(ol.option[i].question) tmp.question = ol.option[i].question;
+		draw.option.push(tmp);
 	}
 	return draw;
 }

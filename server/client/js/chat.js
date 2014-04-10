@@ -141,7 +141,10 @@ Chat.receive = function(pack){
 		html.chat.text.innerHTML += '<br>' + text; 
 	}
 	if(pack.type === 'question'){
-		Chat.question(pack.text,pack.option);
+		if(pack.option === 'boolean') pack.option === ['yes','no'];
+		pack.server = 1;
+		pack.client = 0;
+		Chat.receive.question(pack);
 	}
 	
 	html.chat.text.scrollTop += 50;
@@ -183,31 +186,60 @@ Chat.click.name = function(name){
 Chat.add = function(text,txt){
 	html.chat.text.innerHTML += '<br>' + (txt || text); 	//incase passing key as first param
 }
+Chat.question = function(uselesskey,pack){	//client question
+	pack.server = 0;
+	main.question = pack;
+	Chat.receive.question(pack);
+}
 
-Chat.question = function(text,option){
+Chat.question.answer = function(answer){
+	var q = main.question;
+	if(!q) return;
+	
+	if(typeof answer === 'string'){	//aka textboxt		
+		if(q.server){	Chat.send.command('$question,' + answer); }
+		else applyFunc(main.question.func,(main.question.param || []).concat(answer.split(',')));
+	}
+	if(typeof answer === 'number'){	//aka option
+		if(q.server) Chat.send.command('$question,' + q.option[answer]);
+		else {		
+			if(q.option.toString() === 'yes,no'){
+				if(q.option[answer] === 'yes')						
+					applyFunc(q.func,q.param);
+			}
+			else applyFunc(q.func,q.param.push(q.option[answer]));
+		}
+						
+	}
+	$("#questionInput")[0].value = '';
+	$( "#questionDiv" ).dialog('close');
+	main.question = null;
+}
+
+//Chat.question(0,{func:permConsoleLog,param:['1'],'server':0,'option':['yes','no']});
+Chat.receive.question = function(q){
 	$( "#questionDiv" ).dialog( "open" );
-	$("#questionText")[0].innerHTML = text;
+	$("#questionText")[0].innerHTML = q.text;
 	
 	var ho = $("#questionOption")[0];
 	ho.innerHTML = '';
+	main.question = q;
 	
-	if(option){
-		var str = '';
-		for(var i in option){
-			str += 
-			'<button ' +
-			'onclick="Chat.send.command(\'$question,' + option[i] + '\'); $( \'#questionDiv\' ).dialog(\'close\')' + '" ' +
-			'> ' + option[i] +
-			'</button>';
+	if(q.option){
+		for(var i in q.option){
+			var but = document.createElement('button');
+			but.innerHTML = q.option[i];
+			but.onclick = function(ii){	return function(){
+				Chat.question.answer(+ii);
+			}}(i);
+			ho.appendChild(but);
 		}
-		ho.innerHTML = str;
 		
 		$("#questionInput").prop('disabled', true);
 	} else {
 		$("#questionInput").focus();
 		$("#questionInput").prop('disabled', false);
 	}
-	
 	
 	
 }

@@ -11,7 +11,7 @@ Sign.up = function(socket,d){
 	if(pass.length < 3){ socket.emit('signUp', {'success':0, 'message':'<font color="red">Too short password.</font>'} ); return; }
 	
 	db.findOne('account',{username:user},{},function(err, results) { if(err) throw err;		
-		if(!results){ socket.emit('signUp', {'success':0,'message':'<font color="red">This username is already taken.</font>'} );  return; }	//Player with same username
+		if(results){ socket.emit('signUp', {'success':0,'message':'<font color="red">This username is already taken.</font>'} );  return; }	//Player with same username
 				
 		crypto.randomBytes(32, function(err,salt){
 			salt = salt.toString('base64');
@@ -53,7 +53,7 @@ Sign.up.create = function(user,pass,email,salt,socket){
 	
 	
 	db.findOne('account',{username:user},{},function(err, results) { if(err) throw err;	
-		if(!results){ socket.emit('signUp', {'success':0,'message':'<font color="red">This username is already taken.</font>'} );  return; }	//Player with same username
+		if(results){ socket.emit('signUp', {'success':0,'message':'<font color="red">This username is already taken.</font>'} );  return; }	//Player with same username
 		
 		db.insert('account',obj, function(err) { 	if (err) throw err;
 			db.insert('player',Save.player(p,false), function(err) { 	if (err) throw err;
@@ -77,11 +77,11 @@ Sign.in = function(socket,d){
 	
 	if(!Server.admin.have(user) && Object.keys(List.main).length >= Server.maxPlayerAmount){
 		if(Server.loginMessage)		socket.emit('signIn', { 'success':0,'message':'<font color="red">' + Server.loginMessage + '</font>' }); 
-		else if(Server.maxPlayerAmount !== 0)		socket.emit('signIn', { 'success':0,'message':'<font color="red">SERVER IS FULL.</font>' }); 
-		else if(Server.maxPlayerAmount === 0)	socket.emit('signIn', { 'success':0,'message':'<font color="red">SERVER IS CLOSED.</font>' }); 
+		else if(Server.maxPlayerAmount !== 0)	socket.emit('signIn', { 'success':0,'message':'<font color="red">SERVER IS FULL.</font>' }); 
+		else if(Server.maxPlayerAmount === 0)	socket.emit('signIn', { 'success':0,'message':'<font color="red">SERVER IS CLOSED. Next open beta should come soon.</font>' }); 
 		return;
 	}
-	db.findOne('account',{username:user},function(err, account) { if(err) throw err;	
+	db.findOne('account',{username:user},function(err, account) { if(err) throw err;
 		if(!account){ socket.emit('signIn', { 'success':0,'message':'<font color="red">Wrong Password or Username.</font>' }); return }
 		if(account.online) {	socket.emit('signIn', { 'success':0, 'message':'<font color="red">This account is already online.</font>' }); return; }
 		if(account.banned) {	socket.emit('signIn', { 'success':0, 'message':'<font color="red">This account is banned.</font>' }); return; }
@@ -105,7 +105,7 @@ Sign.off = function(key,message){
 	var socket = List.socket[key];
 	if(!socket) return;
 	socket.beingRemoved = 1;
-	if(message){ socket.emit('warning','You have been disconnected: ' + message);}
+	if(message){ socket.emit('warning',{signOff:1,text:'You have been disconnected: ' + message});}
 
 	Save(key);
 	db.update('account',{username:List.main[key].username},{'$set':{online:0},'$inc':{timePlayed:socket.globalTimer,timePlayedThisWeek:socket.globalTimer}},function(err){ 

@@ -250,12 +250,11 @@
 		
 		$( "#questionDiv" ).dialog({autoOpen: false,width: 400});
 		$('#questionForm').submit(function(e) {
-			var txt = $("#questionInput")[0].value;
-			$("#questionInput")[0].value = '';
-			Chat.send.command('$question,' + txt);
-			$( "#questionDiv" ).dialog('close');
 			e.preventDefault();
+			Chat.question.answer($("#questionInput")[0].value);
 		});
+		$('#questionForm')[0].mode = 'server';
+		
 		//ts('Chat.question(key,{text:"asdkjasdas asd ahjd asd asjhd",func:function(){return false},repeat:1})')
 		
 		$( "#customMod" ).dialog({autoOpen: false,width: 1000});

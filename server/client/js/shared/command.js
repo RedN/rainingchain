@@ -504,12 +504,16 @@ Command.list['cc,leave'].doc = {
 }
 //}
 
-Command.list['question'] = function(key){
+Command.list['question'] = function(key,param0){
 	var q = List.main[key].question;
 	if(!q) return;
 	
-	try {
-		var success = applyFunc(q.event,arguments);
+	if(q.option === 'boolean'){
+		if(param0 === 'yes') applyFunc.key(key,q.func,q.param);	
+		return;
+	}
+	try {		
+		var success = applyFunc(q.func,arguments);
 		if(!success && q.repeat){
 			Chat.add(key,'Invalid answer to server question.');
 			Chat.question(key,q);
@@ -561,12 +565,11 @@ Command.list['dia,option'].doc = {
 }
 Command.list['option'] = function(key,slot){
 	var main = List.main[key];
-	if(main.optionList && main.optionList.option[slot]){
-		var opt = main.optionList.option[slot];
-		
-		if(!opt.nokey) applyFunc.key(key,opt.func,opt.param);	
-		else applyFunc(opt.func,opt.param);	
-	}	
+	if(!main.optionList ||  !main.optionList.option[slot]){ return; }
+	var opt = main.optionList.option[slot];
+	
+	applyFunc.key(key,opt.func,opt.param);	
+
 }
 Command.list['option'].doc = {
 	'description':"Select an option from the Right-Click Option List.",

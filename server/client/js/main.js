@@ -138,11 +138,11 @@ Init.game.main = function(data){
 	for(var i in data.main){ main[i] = data.main[i]; }    //set init values sent by server
 	main.pref = JSON.parse(localStorage.getItem('pref')) || main.pref;
 }
-Init.game.player = function(data){    //use data sent from server and default to create the player
+Init.game.player = function(data){  
 	player = useTemplate(Actor.template('player'),data.player);	
 	$("#chatUserName")[0].innerHTML = player.name + ': '; 
 }
-Init.game.other = function(data){    //use data sent from server and default to create the player
+Init.game.other = function(data){
 	Db.passiveGrid = data.other.passiveGrid;
 	Db.passiveGrid.height = 20;
 	Db.passiveGrid.width = 20;
@@ -175,8 +175,9 @@ Init.game.addCanvas = function(name,id,z){
 }
 
 
-socket.on('warning', function (message) {
-	$("#warningText")[0].innerHTML = '<strong>Alert:</strong> ' + message;
+socket.on('warning', function (d) {
+	$("#warningText")[0].innerHTML = '<strong>Alert:</strong> ' + d.text;
+	if(d.signOff) setTimeout(function(){location.reload();},2000);
 });
 
 

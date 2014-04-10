@@ -1,8 +1,9 @@
 
 ===PRE SDK===
-question client side
-confirm action for item
 teleport actor zone
+
+teleport to teammeate fix
+
 
 ===POST SDK===
 stat window

@@ -176,21 +176,21 @@ Draw.optionList = function(){ ctxrestore();
 		
 	for(var i = 0 ; i < option.length ; i++){
 	
-		var name = Draw.optionList.parse(option[i].name);
+		var name = Draw.optionList.parse(option[i].name);	//no idea if still used
 		ctx.fillText(name,sx+optionX,sy+optionY*(i+1));
 		
 		if(main.optionList.client || option[i].client){ 
 			Button.creation(0,{
 				'rect':[sx,sx+w,sy+nameY+optionY*i,sy+nameY+optionY*(i+1)],
-				"left":option[i],
-				'text':name,
+				"left":option[i],	//contain everything including func and param
+				'text':option[i].description || option[i].name,
 				});		
 				
 		}else {
 			Button.creation(0,{
 				'rect':[sx,sx+w,sy+nameY+optionY*i,sy+nameY+optionY*(i+1)],
-				"left":{'func':Chat.send.command,'param':['$option,' + i]},
-				'text':name,
+				"left":{'func':Chat.send.command,'param':['$option,' + i],question:option[i].question},
+				'text':option[i].description || option[i].name,
 				});	
 		}
 				
