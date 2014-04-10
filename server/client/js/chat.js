@@ -186,10 +186,14 @@ Chat.click.name = function(name){
 Chat.add = function(text,txt){
 	html.chat.text.innerHTML += '<br>' + (txt || text); 	//incase passing key as first param
 }
-Chat.question = function(uselesskey,pack){	//client question
-	pack.server = 0;
-	main.question = pack;
-	Chat.receive.question(pack);
+Chat.question = function(uselesskey,q){	//client question
+	q.param = q.param || [];
+	q.repeat = q.repeat || 0;
+	q.text = q.text || 'Are you sure?';
+	if(q.option === true) q.option = ['yes','no'];
+	q.server = 0;
+	main.question = q;
+	Chat.receive.question(q);
 }
 
 Chat.question.answer = function(answer){

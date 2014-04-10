@@ -43,8 +43,8 @@ q.ability['simple'] = {'type':'attack','name':'Fire Basic','icon':'attackMagic.f
 	
 q.item['enemyGenerator'] = {'name':'Enemy Gen','icon':'magic.staff','stack':1,'drop':0,'option':[		
 	{'name':'Custom','param':[],'func':function(key){
-		Chat.question(key,{text:"Category.Variant", func:function(key,str){
-			Test.spawnEnemy(key,str.split('.'));		
+		Chat.question(key,{text:"Category,Variant", func:function(key,cat,variant){
+			Test.spawnEnemy(key,cat,variant);		
 		}});	
 	}},
 	{'name':'Enemy 0','param':[q.variable.enemy[0]],'func':Test.spawnEnemy},

@@ -180,7 +180,7 @@ Db.map['test'] = function(){	//'test' = mapId
 
 		//######################
 		Map.collisionRect(		//call a function for each actor in a zone
-			map,					//map
+			map,					//map id
 			zone,					//zone that will trigger the function (use spot)
 			type,					//either 'player' or 'enemy'. for both, create 2 Map.collisionRect
 			function(key){			//function that will be called for each actor thats in the zone. param is their id

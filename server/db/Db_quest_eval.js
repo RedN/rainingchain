@@ -51,7 +51,6 @@ var testItem = function (key,array_items){
 	return Itemlist.test(key,list);
 }
 
-var teleport = Actor.teleport;
 var chat = Chat.add;
 var cutscene = function(key,map,path){
 	Actor.setCutscene(getAct(key),q.map[map][Q].path[path]);
@@ -59,11 +58,30 @@ var cutscene = function(key,map,path){
 
 
 
-var teleZone = function(zone,x,y,map){
-
-
+var teleport = function(key,map,letter,popup){	//type: 0=immediate, 1=popup
+	if(typeof letter === 'string') var spot = Map.getSpot(map,Q,letter);
+	else var spot = {x:letter.x,y:letter.y,map:map};
+	
+	console.log(spot);
+	if(!popup) Actor.teleport(key,spot);
+	else {
+		Chat.question(key,{
+			func:function(){Actor.teleport(key,spot);},
+			option:true,			
+		});
+	}
 }
-//Map.collisionRect(map,spot.a,'player',q.func.teleportPlayer);
+
+
+var teleZone = function(zone,mapDestination,letterDestination,popup){
+	if(!Loop.interval(25)) return;
+	var array = Map.collisionRect(zone.map,zone,'player');
+	
+	for(var i in array){
+		teleport(array[i],mapDestination,letterDestination,popup === undefined ? 1 : popup);	
+	}
+}
+//
 
 
 

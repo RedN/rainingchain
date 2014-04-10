@@ -46,7 +46,7 @@ q.event = {
 	},
 	start:function(key){
 		var act = getAct(key);
-		teleport(key,1808,5712,'goblinLand@MAIN');
+		teleport(key,'goblinLand@MAIN','a');
 		act.respawnLoc.recent = {x:1808,y:5712,map:'goblinLand@MAIN'};
 		act.respawnLoc.safe = {x:1808,y:5712,map:'goblinLand@MAIN'};
 		
@@ -77,6 +77,16 @@ q.item['pvp'] = {'name':'Go/Leave Pvp','icon':'magic.staff','stack':1,'drop':0,'
 		chat(key,"You can also type '$pvp' in chat to go/leave Pvp at any time.");
 		Command.list['pvp'](key);
 	}},
+	
+	{'name':'Tele','param':[],'func':function(key){
+		teleport(key,'goblinLand@','a',0);
+	}},
+	{'name':'Tele Pop','param':[],'func':function(key){
+		teleport(key,'goblinLand@','b',1);
+	}},
+	{'name':'Tele Pop+','param':[],'func':function(key){
+		teleport(key,'goblinLand@',{x:1000,y:1000},1);
+	}}	
 ]};	
 
 q.item['cutscene'] = {'name':'cutscene','icon':'magic.staff','stack':1,'drop':0,'option':[		
@@ -187,7 +197,9 @@ q.map.goblinLand = function(){
 		
 	}
 	
-	
+	a.loop = function(map,spot,variable,cst){
+		teleZone(spot.F,'goblinLand','a');
+	}
 	
 	return m;
 };

@@ -286,10 +286,10 @@ Actor.update.boost = function(act,stat){
 
 //{Map Interaction	
 Actor.teleport = function(act,x,y,mapName){
-	if(typeof x === 'object'){ Actor.teleport(act,x.x,x.y,x.mapName); return; }
+	if(typeof x === 'object'){ Actor.teleport(act,x.x,x.y,x.map); return; }
 	act = typeof act === 'string' ? List.all[act] : act;
 	LOG(2,act.id,'teleport',x,y,mapName);
-	
+	console.log(act.id,'teleport',x,y,mapName);
 	//Teleport player. if no map specified, stay in same map.
 	act.x = x;
 	act.y = y;

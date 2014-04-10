@@ -105,7 +105,7 @@ Map.loop = function(map){
 }
 
 Map.getModel = function(name){
-	return List.map[name].model;
+	return List.map[name] ? List.map[name].model : name.split('@')[0];
 }	
 
 Map.load = function(map){
@@ -202,4 +202,21 @@ Map.enter = function(act,map){
 		
 	}
 }
+
+
+
+
+Map.getSpot = function(id,addon,spot){
+	var a = Db.map[Map.getModel(id)].addon[addon].spot[spot];
+	
+	return {
+		x:a.x,
+		y:a.y,
+		map:id,
+	}
+}
+
+
+
+
 
