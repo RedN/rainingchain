@@ -4,9 +4,6 @@ teleport actor zone
 
 teleport to teammeate fix
 
-enemy power when setting target
-
-only showing anim for 1 guy
 
 ===POST SDK===
 stat window
@@ -21,7 +18,8 @@ boss documentation
 
 
 
-
+join teammate
+get same quest variable than teammate
 
 
 POST RELEASE:

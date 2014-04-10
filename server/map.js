@@ -192,6 +192,14 @@ Map.enter = function(act,map){
 		for(var i in newmap.addon)
 			if(newmap.addon[i].playerEnter)
 				newmap.addon[i].playerEnter(act.id,act.map,newmap.addon[i].spot,newmap.addon[i].variable,newmap);
+		//
+		var lvlMod = (10+newmap.lvl) / (10+Actor.getCombatLevel(act));
+		
+		Actor.permBoost(act,'mapLevelDifference',[
+			{'stat':'globalDmg','value':lvlMod,'type':'***'},
+			{'stat':'globalDef','value':lvlMod,'type':'***'},
+		]);
+		
 	}
 }
 

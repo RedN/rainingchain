@@ -135,10 +135,12 @@ Actor.loop.setTarget = function(act){
 
 Actor.loop.setTarget.main = function(act){
 	var targetList = {}; 
+	var enemypower = 0;
 	for (var i in act.activeList){
 		var target = List.all[i];
 		
 		var hIf = typeof act.targetIf === 'function' ? act.targetIf : Combat.damageIf.list[act.targetIf];
+		if(target.type === 'player') enemypower++;
 		if(Combat.targetIf.global(act,target) && hIf(target,act)){
 			var diff = Collision.distancePtPt(act,target);
 			if(diff <= act.moveRange.aggressive){
@@ -149,7 +151,7 @@ Actor.loop.setTarget.main = function(act){
 	act.target.main = targetList.random() || {x:act.x,y:act.y,real:0};
 	
 	if(act.target.main.real !== 0){
-		Actor.boost(act,Actor.enemyPower(targetList.$length()));
+		Actor.boost(act,Actor.enemyPower(enemypower));
 	}
 	
 } 

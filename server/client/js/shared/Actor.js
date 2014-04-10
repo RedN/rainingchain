@@ -9,13 +9,16 @@ Actor.remove = function(act){
 }
 
 //{Combat
+Actor.getCombatLevel = function(act){
+	return Math.max(act.skill.lvl.melee,act.skill.lvl.range,act.skill.lvl.magic);
+}
 Actor.enemyPower = function(num){
-	var dmg = 1 + Math.sqrt(num-1) * 110.25;
-	var def = 1 + Math.sqrt(num-1) * 110.50;
+	var dmg = 1 + Math.sqrt(num-1) * 0.25;
+	var def = 1 + Math.sqrt(num-1) * 0.50;
 	return [
-		{'stat':'globalDmg','value':dmg || 1,'type':'*','time':100000,'name':'enemypower'},
-		{'stat':'globalDef','value':def || 1,'type':'*','time':100000,'name':'enemypower'},
-	];
+		{'stat':'globalDmg','value':dmg || 1,'type':'*','time':60*1000,'name':'enemypower'},
+		{'stat':'globalDef','value':def || 1,'type':'*','time':60*1000,'name':'enemypower'},
+	];	//could be permBoost instead
 }
 
 Actor.changeCombatContext = function(act,type){
@@ -223,8 +226,9 @@ Actor.update.permBoost = function(act){
 		pb[i].base = pb[i].permBase;	
 		pb[i].max = pb[i].permMax;
 		pb[i].min = pb[i].permMin;
-		pb[i].t = 1;
-		pb[i].tt = 1;
+		pb[i].x = 1;
+		pb[i].xx = 1;
+		pb[i].xxx = 1;
 		pb[i].p = 0;
 		pb[i].pp = 0;
 	}
@@ -235,9 +239,10 @@ Actor.update.permBoost = function(act){
 			var b = act.permBoost[i][j];
 			
 			if(b.type === '+' || b.type === 'base'){pb[b.stat].p += b.value;}
-			else if(b.type === '*'){pb[b.stat].t += b.value;}
 			else if(b.type === '++'){pb[b.stat].pp += b.value;}
-			else if(b.type === '**'){pb[b.stat].tt += b.value;}
+			else if(b.type === '*'){pb[b.stat].x += b.value;}
+			else if(b.type === '**'){pb[b.stat].xx += b.value;}
+			else if(b.type === '***'){pb[b.stat].xxx *= b.value;}		//used for very global things (map mod, enemy power)
 			else if(b.type === 'min'){pb[b.stat].min = Math.max(pb[b.stat].min,b.value);}
 			else if(b.type === 'max'){pb[b.stat].max = Math.min(pb[b.stat].max,b.value);}			
 		}
@@ -245,11 +250,11 @@ Actor.update.permBoost = function(act){
 	
 	//Max and min
 	for(var i in pb){
-		pb[i].base *= pb[i].t;
+		pb[i].base *= pb[i].x;
 		pb[i].base += pb[i].p;
-		pb[i].base *= pb[i].tt;
+		pb[i].base *= pb[i].xx;
 		pb[i].base += pb[i].pp;
-	
+		pb[i].base *= pb[i].xxx;
 		pb[i].base = Math.max(pb[i].base,pb[i].min);
 		pb[i].base = Math.min(pb[i].base,pb[i].max);	
 	}
