@@ -105,8 +105,8 @@ Combat.action.summon = function(key,action,enemy){
 			'map':master.map,
 			'extra':{'deleteOnceDead':1,
 					'summoned':{'father':master.id,'time':action.time*timeMod,'distance':action.distance},
-					'targetIf':'summoned',
-					'damageIf':'summoned',
+					'targetIf':Combat.targetIf.list['summoned'],
+					'damageIf':Combat.targetIf.list['summoned'],
 					}
 		};
 		var childList = Actor.creation.group(param0,enemy);

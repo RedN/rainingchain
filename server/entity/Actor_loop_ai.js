@@ -139,9 +139,9 @@ Actor.loop.setTarget.main = function(act){
 	var targetList = {}; 
 	for (var i in act.activeList){
 		var target = List.all[i];
-		var hIf = typeof act.targetIf === 'function' ? act.targetIf : Combat.damageIf.list[act.targetIf];
-			
-		if(Combat.targetIf.global(act,target) && hIf(target,act)){
+		
+		if(!act.targetIf) console.log(act.name);
+		if(Combat.targetIf.global(act,target) && act.targetIf(target,act)){
 			var diff = Collision.distancePtPt(act,target);
 			if(diff <= act.moveRange.aggressive){
 				targetList[i] = 1/(diff+100);

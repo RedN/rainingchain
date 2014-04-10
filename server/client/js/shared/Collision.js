@@ -92,7 +92,7 @@ Collision.getMouse = function(key){
 Collision.BulletActor = function(atk){
 	for(var i in atk.viewedBy){ 
 		var player = List.all[i];
-		if(!player) continue;	//test bullet exist
+		if(!player) continue;	//test target exist
 		if(!Combat.damageIf.global(atk,player)) continue;	//exist is same map, not himself etc
 		if(!Collision.BulletActor.test(atk,player)) continue;	//exist if can attack this type of player
 		if(!Collision.PtRect({'x':atk.x,'y':atk.y},Collision.getHitBox(player))) continue;	//test if nearby
@@ -107,8 +107,7 @@ Collision.BulletActor.test = function(atk,player){
 		if(['player-simple','enemy-simple'].have(atk.damageIf)){	//only testing type
 			normal = Combat.damageIf.list[atk.damageIf](player);
 		} else {												//testing type and summon
-			var hIf = typeof atk.damageIf == 'function' ? atk.damageIf : Combat.damageIf.list[atk.damageIf];
-			normal = List.all[atk.parent] && hIf(player,List.all[atk.parent])
+			normal = List.all[atk.parent] && atk.damageIf(player,List.all[atk.parent])
 		}
 	}
 	if(player.damagedIf !== 'true'){
@@ -135,27 +134,17 @@ Collision.BulletMap = function(bullet){
 Collision.StrikeActor = function(atk){
 	for(var j in atk.viewedBy){	//could be optimized with other function and return;
 		var player = List.all[j];
-		
+		if(!player) continue;	//test target exist
 		if(!Combat.damageIf.global(atk,player)) continue;	
+		if(Collision.StrikeActor.test(atk,player)) continue;
+		if(!Collision.StrikeActor.collision(atk,player)) continue;
 		
-		//Test if can hit that target
-		var hIf = typeof atk.damageIf == 'function' ? atk.damageIf : Combat.damageIf.list[atk.damageIf];
-		var a = hIf(player,List.all[atk.parent]);						//a = regular test
-		if((atk.damageIfMod && a) || (!atk.damageIfMod && !a)) continue;		//atk.damageIfMod = flip the regular test (ex: healing)
-		
-		if(player.damagedIf !== 'true'){
-			if(Array.isArray(player.damagedIf) && !player.damagedIf.have(atk.parent)) continue;
-			if(typeof player.damagedIf === 'function' && !player.damagedIf(List.all[atk.parent])) continue;
-		}
-		
-		//Touch?
-		if(Collision.StrikeActor.collision(atk,player)){
-			Combat.collision(atk,player);
-			atk.maxHit--;
-		}
-		if(atk.maxHit <= 0) return;	//can not longer hit someone
+		Combat.collision(atk,player);
+		if(--atk.maxHit <= 0) return;	//can not longer hit someone
 	}
 }
+Collision.StrikeActor.test = Collision.BulletActor.test;
+
 
 Collision.StrikeActor.collision = function(atk,player){
 	//Test Center First with Rot Rect

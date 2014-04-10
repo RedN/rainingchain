@@ -134,8 +134,6 @@ q.map.goblinLand = function(){
 			{'amount':4,"category":"plant","variant":"normal",'modAmount':1,'extra':{deathFunc:q.event.enemyKilled}},
 		]);
 	
-		return; //TOFIX
-		
 		Actor.creation.group({'xym':spot.C,'respawn':25*15},[
 			{'amount':1,"category":"goblin","variant":"melee",'modAmount':1,'extra':{deathFunc:q.event.enemyKilled}},
 			{'amount':1,"category":"goblin","variant":"range",'modAmount':1,'extra':{deathFunc:q.event.enemyKilled}},

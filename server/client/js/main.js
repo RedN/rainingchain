@@ -3,6 +3,8 @@
 var gameStarted = false;
 var key = 0;
 
+main = Main.template();
+
 List = {
 	all:{},		//EVERYTHING (player id refers to actor)
 	actor:{},	//all mortals (player,enemy)
@@ -28,24 +30,12 @@ Db.plan = {};
 Db.quest = {};
 Db.customMod = {};
 Db.customImg = {};
-/*
-Db = {
-	equip:{},
-	ability:{},
-	item:{},
-	plan:{},
-};  */
 
 
 
 //############################################
 
-//Set the init values from Main.template.
-(function(){ 
-	main = {};
-	var m = Main.template();
-	for(var i in m) main[i] = m[i];
-})();
+
 
 
 //Log In

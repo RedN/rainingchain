@@ -4,6 +4,7 @@ teleport actor zone
 
 teleport to teammeate fix
 
+enemy power when setting target
 
 ===POST SDK===
 stat window

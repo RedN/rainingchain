@@ -146,9 +146,9 @@ Init.actor = function(){
 		act.deathFuncArray = null;	//function param = array id of killers
 		act.combat = 1;
 		act.deleteOnceDead = 0;
-		act.damageIf = 'player';
+		act.damageIf = Combat.targetIf.list['player'];
 		act.damagedIf = 'true';
-		act.targetIf = 'player';  //condition used by monsters to find their target. check targetIfList
+		act.targetIf = Combat.targetIf.list['player'];  //condition used by monsters to find their target. check targetIfList
 		act.onclick = {};			
 		act.waypoint = null; 		//right click = setRespawn
 		act.chest = null;		//right click = gives items;
@@ -161,8 +161,7 @@ Init.actor = function(){
 			act.skill = Actor.template.skill();
 			act.removeList = [];	//for things that got removed from activeList
 			act.type = 'player';
-			act.damageIf = 'enemy';
-			act.targetIf = 'player';
+			act.damageIf = Combat.targetIf.list['enemy'];
 			act.privateChange = {};
 			act.privateOld = {};
 			act.context = 'player0000';
