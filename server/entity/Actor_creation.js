@@ -18,7 +18,11 @@ Actor.creation = function(d){
 	Map.enter(e);
 	
 	
-	if(typeof e.dialogue === 'function') e.dialogue = {func:e.dialogue};
+	if(typeof e.dialogue === 'function') e.dialogue = {func:e.dialogue,distance:125};
+	if(typeof e.teleport === 'function') e.teleport = {func:e.teleport,distance:75};
+	if(typeof e.chest === 'function') e.chest = {func:e.chest,list:[]};
+	if(e.switch) e.switch.state = e.switch.state || 'off';
+	
 	
 	if(e.nevercombat){ Actor.creation.nevercombat(e); }	
 	else {
@@ -235,28 +239,26 @@ Actor.creation.extra = function(act){
 Actor.creation.optionList = function(e){
 	var ol = {'name':e.name,'option':[]};
 	
+	if(e.onclick.shiftLeft)	ol.option.push(e.onclick.shiftLeft);
 	if(e.type === 'player') ol.option.push({'name':'Trade',"func":'Main.openWindow',"param":['trade',e.id]});
-	if(e.dialogue)	ol.option.push({'name':'Talk To',"func":'Actor.talk',"param":[e.id]});
+	if(e.dialogue)	ol.option.push({'name':'Talk To',"func":'Actor.dialogue',"param":[e.id]});
 	if(e.waypoint)	ol.option.push({'name':'Set Respawn',"func":'Actor.setRespawn',"param":[{x:e.x,y:e.y+64,map:e.map}]});
-	if(e.chest){
-		ol.option.push({'name':'Open Chest',"func":'Actor.openChest',"param":[e.id]});
-		e.chest = {func:e.chest,list:[]}
-	}	
-	if(e.skillPlot){
-		ol.option.push({'name':'Harvest',"func":'Actor.harvest',"param":[e.id]});
+	if(e.chest)	ol.option.push({'name':'Open Chest',"func":'Actor.openChest',"param":[e.id]});	
+	if(e.skillPlot)	ol.option.push({'name':'Harvest',"func":'Actor.harvest',"param":[e.id]});
+	if(e.teleport){
+		var info = {'name':'Teleport',"func":'Actor.teleport.click',"param":[e.id]};
+		ol.option.push(info);
+		ol.option.push({'name':'Select Instance',"func":'Actor.teleport.selectInstance',"param":[e.id]});
+		e.onclick.shiftLeft = info;
 	}
 	if(e.switch){
 		ol.option.push({'name':'Pull Switch',"func":'Actor.activateSwitch',"param":[e.id]});
-		e.switch.state = e.switch.state || 'off';
-	}
-	
+	}	
 	if(e.block && e.block.pushable){
 		var info = {'name':'Push',"func":'Actor.pushing',"param":[e.id]};
 		ol.option.push(info);
 		e.onclick.shiftLeft = info;
-	} else if(e.onclick.shiftLeft){
-		ol.option.push(e.onclick.shiftLeft);
-	}
+	} 
 	
 	e.optionList = ol.option.length ? ol : '';
 	return e;

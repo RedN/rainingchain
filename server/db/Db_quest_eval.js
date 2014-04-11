@@ -99,7 +99,15 @@ var actorGroup = function(spot,respawn,list,extra){
 	Actor.creation.group({'xym':spot,'respawn':respawn},tmp);
 }
 
+var bullet = function(spot,atk,angle,hit){
+	hit = hit || 'player-simple';
+	
+	Attack.creation(
+		{damageIf:hit,xym:spot,angle:angle},
+		useTemplate(Attack.template(),atk)
+	);
 
+}
 
 
 

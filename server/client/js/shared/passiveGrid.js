@@ -278,7 +278,9 @@ Passive.template = function(){
 }
 
 Passive.updateBoost = function(key){
-	Actor.permBoost(List.all[key],'Passive',Passive.getBoost(List.main[key].passive.grid[List.main[key].passive.active]));
+	var act = List.all[key];
+	var main = List.main[key];
+	Actor.permBoost(act,'Passive',Passive.getBoost(main.passive.grid[main.passive.active]));
 }		
 
 

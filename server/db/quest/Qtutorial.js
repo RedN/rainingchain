@@ -151,7 +151,7 @@ q.map.tutorial = function(){
 		//drop staff
 		Drop.creation({'xym':spot.o,
 			"item":"Qtutorial-Pstaff","amount":1,'timer':1/0
-		});
+		});		
 		
 		//block for switch
 		Actor.creation({'xym':spot.b,
@@ -228,30 +228,17 @@ q.map.tutorial = function(){
 		}	
 		
 		if(Loop.interval(6)){
-			//Arrow
-			Attack.creation(
-				{damageIf:'player-simple',xym:spot.a,angle:Math.randomML()*2},
-				useTemplate(Attack.template(),v.arrow)
-			);
+			bullet(spot.a,v.arrow,0);
 		}
 
 		if(Loop.interval(4)){
 			//Fireball
 			v.angle += v.rotation + 360;
-			Attack.creation(
-				{damageIf:'player-simple',xym:spot.d,angle:v.angle},
-				useTemplate(Attack.template(),v.fireball)
-			);
 			
-			Attack.creation(
-				{damageIf:'player-simple',xym:spot.d,angle:v.angle+120},
-				useTemplate(Attack.template(),v.fireball)
-			);
+			bullet(spot.d,v.fireball,v.angle);
+			bullet(spot.d,v.fireball,v.angle+120);
+			bullet(spot.d,v.fireball,v.angle+240);
 			
-			Attack.creation(
-				{damageIf:'player-simple',xym:spot.d,angle:v.angle+240},
-				useTemplate(Attack.template(),v.fireball)
-			);
 			
 		}
 		

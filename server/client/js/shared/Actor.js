@@ -289,7 +289,6 @@ Actor.teleport = function(act,x,y,mapName){
 	if(typeof x === 'object'){ Actor.teleport(act,x.x,x.y,x.map); return; }
 	act = typeof act === 'string' ? List.all[act] : act;
 	LOG(2,act.id,'teleport',x,y,mapName);
-	console.log(act.id,'teleport',x,y,mapName);
 	//Teleport player. if no map specified, stay in same map.
 	act.x = x;
 	act.y = y;
@@ -325,18 +324,30 @@ Actor.teleport.getMapName = function(act,map){
 }
 
 
+Actor.teleport.click = function(act,eid){
+	var e = List.all[eid];
+	var tele = e.teleport;
+	if(Collision.distancePtPt(act,e) > tele.distance){ Chat.add(act.id,"You're too far."); return; }
+	tele.func(act.id);
+
+}
+Actor.teleport.selectInstance = function(act,eid){
+	//TODO
+	Actor.teleport.click(act,eid);
+}
 
 Actor.teleport.join = function(act,mort2){
 	if(mort2.map.have("@@")) return false;
 	
-	Actor.teleport(act,mort2.respawnLoc.recent.x,mort2.respawnLoc.recent.y,mort2.respawnLoc.recent.map);
+	Actor.teleport(act,mort2.respawnLoc.recent);
 	return true;
 }
 
-Actor.talk = function(act,enemyId){
-	if(List.all[enemyId].dialogue){
-		List.all[enemyId].dialogue.func(act.id);
-	}
+Actor.dialogue = function(act,eid){
+	var e = List.all[eid];
+	var dia = e.dialogue;
+	if(Collision.distancePtPt(act,e) > dia.distance){ Chat.add(act.id,"You're too far."); return; }
+	dia.func(act.id);
 }
 
 Actor.pushing = function(pusher,beingPushed){
@@ -513,17 +524,19 @@ Actor.rightClickDrop = function(act,rect){
 	
 	if(ol.option)	Button.optionList(key,ol);  
 }
-	
+
 Actor.dropInv = function(act,id){
+	if(Actor.destroyInv(act,id))
+		Drop.creation({'x':act.x,'y':act.y,'map':act.map,'item':id,'amount':amount,'timer':25*30});
+	LOG(1,act.id,'dropInv',id,amount);
+}
+Actor.destroyInv = function(act,id){
 	var inv = List.main[act.id].invList;
 	var amount = Math.min(1,Itemlist.have(inv,id,0,'amount'));
-	
-	if(!amount) return;
-	
-	Drop.creation({'x':act.x,'y':act.y,'map':act.map,'item':id,'amount':amount,'timer':25*30});
+	if(!amount) return false;
 	Itemlist.remove(inv,id,amount);
-	
-	LOG(1,act.id,'dropInv',id,amount);
+	LOG(1,act.id,'destroyInv',id,amount);
+	return true;
 }
 
 

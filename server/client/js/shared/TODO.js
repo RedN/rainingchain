@@ -2,8 +2,17 @@
 ===PRE SDK===
 
 create intermediate for actor.creation
-call loop only when ppl in mapp
-teleport is a actor
+
+different teleport image: door, zone
+
+freeze unfreeze
+exp after completing quest
+dollar sign for reserved quest var name
+quest test, start, abandon
+message if dchange var for unstarted quest
+
+button to end dialogue
+barricade
 
 
 ===POST SDK===
@@ -30,7 +39,6 @@ POST RELEASE:
 talking to npc, stop moving and facing
 Crafting System with White
 waypoint window
-limit emit
 
 ###TILESET
 tent fit

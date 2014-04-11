@@ -119,13 +119,10 @@ Sign.off.remove = function(key){
 	var socket = List.socket[key]; if(!socket){ Sign.off.remove.safe(key); return; }
 	
 	var act = List.all[key];
-	if(act && List.map[act.map]) delete List.map[act.map].list[key];
-	Activelist.remove(List.all[key]);
-	delete List.nameToKey[List.all[key].name];
-	delete List.actor[key];
+	Actor.remove(act);
+	delete List.nameToKey[act.name];
 	delete List.socket[key];
 	delete List.main[key];
-	delete List.all[key];
 	delete List.btn[key];
 	socket.disconnect();
 }

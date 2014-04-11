@@ -139,7 +139,7 @@ Init.actor = function(){
 		//}
 		
 		//{Setting for Map.load extra
-		act.dialogue = '';      //function used to trigger dialogue
+		act.dialogue = null;      //function used to trigger dialogue
 		act.chatHead = "";     //is talking?
 		act.deathAbility = [];
 		act.deathFunc = null;	//function param = id of each killer
@@ -153,6 +153,7 @@ Init.actor = function(){
 		act.waypoint = null; 		//right click = setRespawn
 		act.chest = null;		//right click = gives items;
 		act.block = null;			//change map coliision
+		act.teleport = null;
 		//}	
 		
 

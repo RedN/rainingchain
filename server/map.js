@@ -99,12 +99,12 @@ Map.load = function(map){
 Map.loop = function(map){
 	//Time Out Instance
 	if(Loop.interval(60*1000/40)){		//each min
-		if(Map.instance.player(map.id).length === 0){
+		if(map.list.player.$length() === 0){
 			map.timer -= 60*1000/25;
 			if(map.timer <= 0){
 				Map.remove(map);
-				return;
 			}
+			return;		//no addon if nobody in map
 		}	
 	}
 	
@@ -172,6 +172,7 @@ Map.leave = function(act,map){
 	delete oldmap.list.all[act.id];
 	if(oldmap.list[act.type]) delete oldmap.list[act.type][act.id];
 }
+
 Map.enter = function(act,map){
 	map = map || act.map;
 	var newmap = List.map[act.map];

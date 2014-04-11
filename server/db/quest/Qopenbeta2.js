@@ -46,7 +46,7 @@ q.event = {
 	},
 	start:function(key){
 		var act = getAct(key);
-		teleport(key,'goblinLand@MAIN','a');
+		teleport(key,'goblinLand','a');
 		act.respawnLoc.recent = {x:1808,y:5712,map:'goblinLand@MAIN'};
 		act.respawnLoc.safe = {x:1808,y:5712,map:'goblinLand@MAIN'};
 		
@@ -56,8 +56,12 @@ q.event = {
 		Test.pvpAbility(key);
 	},
 	talkNpc:function(key){
+		teleport(key,'goblinLand','a');
+		
+		/*
 		if(get(key,'killedAll')) dialogue(key,'jenny','intro','gratz');
 		else dialogue(key,'jenny','intro','intro');
+		*/
 	},
 }	
 
@@ -131,16 +135,11 @@ q.map.goblinLand = function(){
 		Actor.creation({'xym':spot.b,"category":"system","variant":"grave"});
 		Actor.creation({'xym':spot.M,"category":"system","variant":"grave"});
 		
-		/*
-		Actor.creation({'xym':spot.I,"category":"neutral","variant":"jenny","extra":{
-			'nevermove':1,'angle':90,'dialogue':{'func':q.event.talkNpc},
-		}});
-		
-		
+				
 		actor(spot.I,"neutral","jenny",{
 			'nevermove':1,
 			'angle':90,
-			'dialogue':{func:q.event.talkNpc},
+			'teleport':q.event.talkNpc,
 		});
 		
 		actorGroup(spot.d,25*15,[
@@ -148,7 +147,7 @@ q.map.goblinLand = function(){
 			["larva","normal",5,{deathFunc:q.event.enemyKilled}],
 			["plant","normal",4,{deathFunc:q.event.enemyKilled}],
 		]);
-		*/
+		
 		
 		
 		//Enemy
