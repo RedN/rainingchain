@@ -297,6 +297,30 @@ Command.list['win,quest,toggleChallenge'].doc = {
 	],
 }
 
+Command.list['win,quest,start'] = function(key,id,amount){
+	var mq = List.main[key].quest[id];
+	if(!mq){ Chat.add(key,'Wrong Input.'); return; }	
+	
+	Quest.start(key,id);
+}
+Command.list['win,quest,start'].doc = {
+	'description':"Start a quest.",
+	'help':0,'param':[
+		{type:'Letters',name:'Quest Id',optional:0},
+	],
+}
+Command.list['win,quest,abandon'] = function(key,id,amount){
+	var mq = List.main[key].quest[id];
+	if(!mq){ Chat.add(key,'Wrong Input.'); return; }	
+	
+	Quest.abandon(key,id);
+}
+Command.list['win,quest,abandon'].doc = {
+	'description':"Abandon a quest.",
+	'help':0,'param':[
+		{type:'Letters',name:'Quest Id',optional:0},
+	],
+}
 
 
 Command.list['win,passive,add'] = function(key,num,i,j){

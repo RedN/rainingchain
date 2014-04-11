@@ -1,15 +1,11 @@
 
 ===PRE SDK===
 
-create intermediate for actor.creation
 
 different teleport image: door, zone
 
 exp after completing quest
-quest test, start, abandon
-message if dchange var for unstarted quest
 
-button to end dialogue
 barricade
 
 

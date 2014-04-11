@@ -11,12 +11,25 @@ var get = function(key,attr){
 
 var set = function(key,attr,attr2,value){
 	var mq = Quest.getMain(key,Q);
-	mq.started = true;
+		
+	if(!mq.started){
+		Chat.add(key,"You need to start this quest via the Quest Tab before making progress in it."); 
+		startQuest(key);
+		return;
+	}
 	if(value === undefined) mq[attr] = attr2;	//aka deep = 1
 	else mq[attr][attr2] = value;
 	
-	
 	if(attr === 'complete' && attr2)	Quest.complete(key,Q);
+}
+
+var startQuest = function(key){
+	Chat.question(key,{
+		'func':function(key){
+			Quest.start(key,Q);	
+		},	
+		'text':'Would you like to start the quest "' + q.name + '"?',
+	});
 }
 
 var getAct = function(key){

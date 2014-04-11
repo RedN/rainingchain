@@ -1,5 +1,6 @@
 Draw = {};
 Draw.old = {'fl':'','quest':'','abilityShowed':'bulletMulti','abilityTypeShowed':'attack','abilitySub':''};
+Draw.refresh = '';
 
 Draw.loop = function (){
 	//Clear

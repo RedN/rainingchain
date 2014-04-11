@@ -103,17 +103,26 @@ Quest.complete = function(key,id){
 	mq.complete++;
 	
 	Quest.reward(key,id);
-	List.main[key].quest[id] = Quest.reset(mq,id);
+	List.main[key].quest[id] = Quest.reset(key,id);
 	LOG(0,key,'Quest.complete',id);
 }
 
-Quest.reset = function(mq,qid){
+Quest.reset = function(key,qid,abandon){
+	var main = List.main[key];
+	var mq = main.quest[qid];
+	
 	var keep = ['rewardTier','reward','complete'];
+	if(abandon) keep.push('skillPlot');
 	var tmp = {};
 	for(var i in keep) tmp[keep[i]] = mq[keep[i]];
 	
 	var newmq = Main.template.quest[qid]();
 	for(var i in tmp) newmq[i] = tmp[i];
+	
+	for(var i in Db.quest[qid].item){
+		Itemlist.remove(main.invList,qid + '-' + i, 10000);
+		Itemlist.remove(main.bankList,qid + '-' + i, 10000);
+	}
 	
 	return newmq;
 }
@@ -125,10 +134,17 @@ Quest.orb = function(key,quest,amount){
 }
 
 
+Quest.start = function(key,id){
+	List.main[key].quest[id].started = 1;
+	if(Db.quest[id].event.start)
+		Db.quest[id].event.start(key);
+}
 
-
-
-
+Quest.abandon = function(key,id){
+	Quest.reset(key,id,1);
+	if(Db.quest[id].event.abandon)
+		Db.quest[id].event.abandon(key);
+}
 
 
 
