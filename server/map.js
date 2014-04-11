@@ -24,8 +24,10 @@ Map.creation = function(namemodel,version,lvl){
 	
 	var newaddon = deepClone(model.addon);
 	for(var i in newaddon){
-		for(var j in newaddon[i].spot)
+		for(var j in newaddon[i].spot){
 			newaddon[i].spot[j].map = newid;
+			newaddon[i].spot[j].addon = i;
+		}
 	}
 	
 	var map = {

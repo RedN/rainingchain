@@ -551,13 +551,14 @@ Command.list['logout'].doc = {
 }
 
 
-Command.list['dia,option'] = function(key,slot){
+Command.list['dialogue,option'] = function(key,slot){
 	var main = List.main[key];
+	if(slot === '-1'){ Dialogue.end(key); return; }
 	if(main.dialogue && main.dialogue.option[slot]){
 		Dialogue.option(key,main.dialogue.option[slot]);
 	}	
 }
-Command.list['dia,option'].doc = {
+Command.list['dialogue,option'].doc = {
 	'description':"Choose a dialogue option.",
 	'help':0,'param':[
 		{type:'Number',name:'Dialogue Option #',optional:0},

@@ -56,12 +56,12 @@ q.event = {
 		Test.pvpAbility(key);
 	},
 	talkNpc:function(key){
-		teleport(key,'goblinLand','a');
+		//teleport(key,'goblinLand','a');
 		
-		/*
+		
 		if(get(key,'killedAll')) dialogue(key,'jenny','intro','gratz');
 		else dialogue(key,'jenny','intro','intro');
-		*/
+		
 	},
 }	
 
@@ -139,9 +139,15 @@ q.map.goblinLand = function(){
 		actor(spot.I,"neutral","jenny",{
 			'nevermove':1,
 			'angle':90,
+			'dialogue':q.event.talkNpc,
+		});
+		/*
+		actor(spot.I,"neutral","jenny",{
+			'nevermove':1,
+			'angle':90,
 			'teleport':q.event.talkNpc,
 		});
-		
+		*/
 		actorGroup(spot.d,25*15,[
 			["mushroom","normal",4,{deathFunc:q.event.enemyKilled}],
 			["larva","normal",5,{deathFunc:q.event.enemyKilled}],

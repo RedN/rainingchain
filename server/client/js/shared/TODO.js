@@ -5,9 +5,7 @@ create intermediate for actor.creation
 
 different teleport image: door, zone
 
-freeze unfreeze
 exp after completing quest
-dollar sign for reserved quest var name
 quest test, start, abandon
 message if dchange var for unstarted quest
 

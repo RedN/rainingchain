@@ -316,13 +316,23 @@ Draw.chat.dialogue = function(){
 	var str = dia.text;
 	for(var i in dia.option){
 		str  += '<br><span ' +
-			'onclick="Chat.send.command(\'$dia,option,' + i + '\');" ' +
+			'onclick="Chat.send.command(\'$dialogue,option,' + i + '\');" ' +
 			'title="' + dia.option[i].text + '"' + 
 			'>' +
 			'<font size="4"> -' + dia.option[i].text + '</font>' +
 			'</span>';
 	}
 	Draw.setInnerHTML(html.dialogue.text,str);
+	
+	
+	Draw.icon('system.close',s.w-24,s.y,24);
+	Button.creation(0,{
+		'rect':[s.w-24,s.w,s.y,s.y+24],
+		"left":{'func':Chat.send.command,'param':['$dialogue,option,-1']},
+		'text':"End dialogue.",
+	});	
+	
+	
 }
 
 Draw.chat.constant = function(){

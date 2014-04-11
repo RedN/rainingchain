@@ -790,5 +790,13 @@ Actor.getEquip = function(act){
 }
 //ts("p.combatContext = 'regular'")
 
+Actor.freeze = function(act,time,cb){
+	time = time || Cst.MIN*10;
+	Actor.setCutscene(act,[{x:act.x,y:act.y},time],cb);
+}
+Actor.freeze.remove = function(act){
+	act.target.cutscene.active = 0;
+}
+
 
 

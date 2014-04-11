@@ -110,7 +110,8 @@ var bullet = function(spot,atk,angle,hit){
 }
 
 
-
+var freeze = Actor.freeze;
+var unfreeze = Actor.freeze.remove;
 
 
 
