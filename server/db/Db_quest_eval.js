@@ -59,10 +59,8 @@ var cutscene = function(key,map,path){
 
 
 var teleport = function(key,map,letter,popup){	//type: 0=immediate, 1=popup
-	if(typeof letter === 'string') var spot = Map.getSpot(map,Q,letter);
-	else var spot = {x:letter.x,y:letter.y,map:map};
+	var spot = typeof letter === 'string' ? Map.getSpot(map,Q,letter) : {x:letter.x,y:letter.y,map:map};
 	
-	console.log(spot);
 	if(!popup) Actor.teleport(key,spot);
 	else {
 		Chat.question(key,{
@@ -74,14 +72,33 @@ var teleport = function(key,map,letter,popup){	//type: 0=immediate, 1=popup
 
 
 var teleZone = function(zone,mapDestination,letterDestination,popup){
-	if(!Loop.interval(25)) return;
+	if(!Loop.interval(15)) return;
 	var array = Map.collisionRect(zone.map,zone,'player');
 	
 	for(var i in array){
 		teleport(array[i],mapDestination,letterDestination,popup === undefined ? 1 : popup);	
 	}
 }
-//
+
+var getMapAddon = function(key){
+	return Map.getAddon(getAct(key).map,Q);
+}
+
+var actor = function(spot,cat,variant,extra){
+	Actor.creation({xym:spot,category:cat,variant:variant,extra:(extra || {})});
+}
+
+var actorGroup = function(spot,respawn,list,extra){
+	var tmp = [];
+	for(var i in list){
+		var m = list[i];
+		tmp.push({
+			"category":m[0],"variant":m[1],'amount':m[2] || 1,'modAmount':1,'extra':(m[3] || {})
+		});
+	}
+	Actor.creation.group({'xym':spot,'respawn':respawn},tmp);
+}
+
 
 
 

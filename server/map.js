@@ -81,6 +81,21 @@ Map.creation.all = function(){
 }
 
 
+
+Map.getModel = function(name){
+	return List.map[name] ? List.map[name].model : name.split('@')[0];
+}	
+
+Map.load = function(map){
+	var map = List.map[map];
+	
+	for(var j in map.addon){
+		if(map.addon[j].load)
+			map.addon[j].load(map.addon[j].spot);
+	}
+	
+}
+
 Map.loop = function(map){
 	//Time Out Instance
 	if(Loop.interval(60*1000/40)){		//each min
@@ -95,34 +110,9 @@ Map.loop = function(map){
 	
 	for(var j in map.addon){
 		if(map.addon[j].loop)
-			map.addon[j].loop(
-				map.id,
-				map.addon[j].spot,
-				map.addon[j].variable,
-				map.addon[j]
-			);
+			map.addon[j].loop(map.addon[j].spot);
 	}
 }
-
-Map.getModel = function(name){
-	return List.map[name] ? List.map[name].model : name.split('@')[0];
-}	
-
-Map.load = function(map){
-	var map = List.map[map];
-	
-	for(var j in map.addon){
-		if(map.addon[j].load)
-			map.addon[j].load(
-				map.id,
-				map.addon[j].spot,
-				map.addon[j].variable,
-				map.addon[j]
-			);
-	}
-	
-}
-
 
 Map.instance = {};
 Map.instance.list = function(model){
@@ -160,7 +150,7 @@ Map.remove = function(map){
 Map.collisionRect = function(id,rect,type,cb){	//used in map loop. return array is no cb, else call func foreach
 	var array = [];
 	for(var i in List.map[id].list[type]){
-		var act = List.all[i];
+		var act = List.all[i];		//TOFIX test if player exist
 		if(Collision.PtRect(act,rect)){
 			array.push(i);
 		}
@@ -194,6 +184,7 @@ Map.enter = function(act,map){
 				newmap.addon[i].playerEnter(act.id,act.map,newmap.addon[i].spot,newmap.addon[i].variable,newmap);
 		//
 		var lvlMod = (10+newmap.lvl) / (10+Actor.getCombatLevel(act));
+		lvlMod = Math.min(lvlMod,1);
 		
 		Actor.permBoost(act,'mapLevelDifference',[
 			{'stat':'globalDmg','value':lvlMod,'type':'***'},
@@ -203,11 +194,8 @@ Map.enter = function(act,map){
 	}
 }
 
-
-
-
 Map.getSpot = function(id,addon,spot){
-	var a = Db.map[Map.getModel(id)].addon[addon].spot[spot];
+	var a = Db.map[Map.getModel(id)].addon[addon].spot[spot];	//cant use list cuz map could not be created yet
 	
 	return {
 		x:a.x,
@@ -216,7 +204,9 @@ Map.getSpot = function(id,addon,spot){
 	}
 }
 
-
+Map.getAddon = function(id,addon){
+	return List.map[id].addon[addon];	
+}
 
 
 

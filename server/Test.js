@@ -10,14 +10,12 @@ Test.serverStart = function(){
 }
 
 
-Test.signIn = function(key){	
-	//Called when player logs in
+Test.signIn = function(key){ //Called when player logs in
 	Test.signIn.hideHUD(key);
 	
 	if(Server.testing){
-		Db.quest["QtestEnemy"].event.start(key);	//test enemy
-		Itemlist.add(key,'gold');
-		TestingQuest(key);
+		Db.quest["Qtest"].event.start(key);	//test
+		if(Quest.test) Db.quest[Quest.test].event.test(key);
 	}
 	
 	Db.quest.Qopenbeta2.event.start(key);	//OPENBETA
@@ -30,20 +28,9 @@ Test.signIn = function(key){
 Test.firstSignIn = function(key){
 	var inv = List.main[key].invList;
 	var act = List.all[key];
-
-	if(Server.testing){
-		Itemlist.add(inv,'gold');
-		Itemlist.add(inv,'teleport');
-	}
-	
-	/* OPENBETA
-	Actor.teleport(act,56*32,101*32,"tutorial@MAIN");
-	act.respawnLoc = {safe:{x:56*32,y:101*32,map:"tutorial@MAIN"},recent:{x:56*32,y:101*32,map:"tutorial@MAIN"}};
-	*/
-		
+			
 	Chat.add(act.id,"Note: This is a very early beta. Expect things to change... A LOT.");
 	Chat.add(act.id,"Control: WADS. (For AZERTY users, change key binding via Pref Tab)");
-
 }
 
 
@@ -56,16 +43,6 @@ Test.signIn.hideHUD = function(key){
 	if(total < 15) List.main[key].hideHUD.advancedStat = 1;
 	if(total < 10) List.main[key].hideHUD.passive = 1;
 }
-
-
-Test.dayCycle = function(key){
-	var mq = List.main[key].quest;
-	for(var i in mq){
-		mq[i].bonus.cycle += 0.02;
-	}	
-}
-
-
 
 Test.pvpAbility = function(key){
 	var act = List.all[key];

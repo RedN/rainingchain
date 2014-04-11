@@ -20,7 +20,7 @@ Collision.PtRect = function(pt,rect){
 
 Collision.PosMap = function(pos,map,type){
 	//Test Collision between pt and map
-	
+	if(!map) console.log(map,pos);
 	var grid = Db.map[Map.getModel(map)].grid[type];
 	return !grid[pos.y] || !+grid[pos.y][pos.x];		//return 1 if collision
 }

@@ -7,7 +7,6 @@ nothing => directly what u use inside <>
 html {
 	overflow: auto;
 	cursor:default;
-	
 	white-space:nowrap;
 }
 
@@ -43,14 +42,14 @@ div{
 	
 	/*height:auto;
 	width:auto;*/
-	
+	/*
 	-webkit-touch-callout: none;
 	-webkit-user-select: none;
 	-khtml-user-select: none;
 	-moz-user-select: none;
 	-ms-user-select: none;
 	user-select: none;
-	
+	*/
 }
 
 /*HELP*/

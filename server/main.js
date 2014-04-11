@@ -25,9 +25,7 @@ List = {
 
 //Sync DB and Server when Server starts
 Init.server = function (){
-    Init.cycle();
-	
-	Init.db.item(function(){
+    Init.db.item(function(){
 	Init.db.equip(function(){
 	Init.db.ability(function(){
 	Init.db.plan(function(){
@@ -57,6 +55,7 @@ Init.server = function (){
 		Map.creation.all();
 		
 		Init.db.passive(function(){
+			Init.cycle();
 			Init.db.clan();
 			Test.serverStart();
 			setInterval(Loop,40);

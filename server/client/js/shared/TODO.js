@@ -1,8 +1,9 @@
 
 ===PRE SDK===
-teleport actor zone
 
-teleport to teammeate fix
+create intermediate for actor.creation
+call loop only when ppl in mapp
+teleport is a actor
 
 
 ===POST SDK===
@@ -11,9 +12,12 @@ plan revamp: already know what min and max mods are
 custom look
 revamp a*
 
+hide quest in quest tab
 
 boss documentation
 
+
+fix pvp map
 
 
 

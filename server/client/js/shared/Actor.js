@@ -447,7 +447,7 @@ Actor.activateSwitch = function(act,eid){
 	var oldstate = sw.state;
 	sw.state = sw.state === 'off' ? 'on' : 'off';
 	
-	if(sw[sw.state]) sw[sw.state](act.id,e,List.map[e.map]);
+	if(sw[sw.state]) sw[sw.state](act.id);
 	
 	Sprite.change(e,{'initAnim':sw.state});
 	Chat.add(act.id,"You turned the switch " + sw.state + '.');

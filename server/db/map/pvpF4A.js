@@ -23,7 +23,8 @@ var a = m.addon.pvpRespawn = {};
 m.addon.pvpRespawn.spot = {"a":{"x":368,"y":336},"b":{"x":1264,"y":336},"c":{"x":880,"y":752},"d":{"x":336,"y":1264},"e":{"x":1072,"y":1328}} 
 
 
-a.playerEnter = function(key,map,spot,v,m){
+a.playerEnter = function(key,map,spot,v,m){	
+	return;
 	var act = List.all[key];
 	Actor.permBoost(act,'pvp',[
 		{stat:'bullet-spd',value:1,type:'+'},
@@ -44,6 +45,8 @@ a.playerEnter = function(key,map,spot,v,m){
 }
 
 a.playerLeave = function(key,map,spot,v,m){
+	return;
+	
 	var act = List.all[key];
 	Actor.permBoost(act,'pvp');	
 	act.damageIf = 'enemy';	

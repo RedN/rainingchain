@@ -4,24 +4,11 @@ m.grid = ['000000000000000000000000000000000000100000000000000000000000100000000
 m.lvl = 0;
 var a = m.addon.main = {};
 a.load = function(map,spot,v){
-	Actor.creation.group({'x':1060,'y':1900,'map':map,'respawn':100},[
-		{'amount':3,"category":"troll","variant":"ice",'modAmount':1},
-	]);
+	
 }
 
 a.loop = function(map,spot,v){
-	if(Loop.interval(10) && false){
-		Map.collisionRect(map,[1000,1400,1000,1400],'player',function(key){
-			var act = List.all[key];
-			act.hp -= 100;
-			
-			Attack.creation(
-				{x:act.x,y:act.y,map:map,damageIf:'player-simple',angle:act.angle},
-				useTemplate(Attack.template(),v.atk)
-			);
-			
-		});
-	}
+	
 }
 
 

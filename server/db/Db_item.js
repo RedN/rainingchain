@@ -37,21 +37,6 @@ Init.db.item = function (cb){
 
 
 	//
-	a['gold'] = {'name':'Gold','icon':'system.gold','stack':1,
-		'option':[	{'name':'Craft Armor','func':'Plan.use','param':['randomArmor'],question:true,description:'Generate a armor'},
-						{'name':'Craft Weapon','func':'Plan.use','param':['randomWeapon']},
-						{'name':'Craft Weapon2','func':'Plan.use','param':['randomWeapon2']},
-						{'name':'Open Bank','func':'Main.openWindow','param':['bank']},
-			]};	
-			
-	a['teleport'] = {'name':'Gold','icon':'system.gold','stack':1,
-		'option':[
-					{'name':'Tele Tuto','func':'Actor.teleport','param':[912,2288,'tutorial']},
-					{'name':'Tele Main','func':'Actor.teleport','param':[1230,1230,'test']},
-					{'name':'Tele Team','func':'Actor.teleport','param':[1230,1230,'test@']},
-					{'name':'Tele Alone','func':'Actor.teleport','param':[1241*2,1111*2,'test@@']},
-			]};
-		
 	a['bugged-drop'] = {'name':'I AM ERR0R','icon':'system.square'};
 	
 	a['lobster'] = {'name':'Lobster','icon':'system.square'};

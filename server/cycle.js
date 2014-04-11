@@ -31,8 +31,12 @@ Cycle.daily.passive = function(day){
 	db.upsert('passiveCount',{date:day},Db.passiveGrid.count[Date.nowDate()],db.err);
 
 }
-
-
+Cycle.daily.quest = function(key){
+	var mq = List.main[key].quest;
+	for(var i in mq){
+		mq[i].bonus.cycle += 0.02;
+	}	
+}
 
 
 

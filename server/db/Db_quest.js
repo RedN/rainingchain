@@ -1,22 +1,14 @@
-if(typeof Db === 'undefined') Db = {};
 Db.quest = {};
 var questList = [
 	'Qtutorial',
-	'QquestId',
 	'Qopenbeta2',
-	'QtestEnemy',
+	'Qtest'
 ];
-
-if(Server.testing){
-	questList.push('QtestEnemy');
-}
+Quest = {};
+Quest.test = null;	//will trigger event.test() so that quest
 
 
-TestingQuest = function(key){
-	
 
-
-}
 
 Init.db.quest = function(){
 	//Note: List.main[key].quest[id] only has variable
@@ -43,7 +35,7 @@ Init.db.quest.map = function(){
 		}
 	}
 }
-Quest = {};
+
 
 Quest.creation = function(q){
 	q = useTemplate(Quest.template(),q)
