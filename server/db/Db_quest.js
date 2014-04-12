@@ -127,6 +127,8 @@ Quest.template = function(id,version){
 			exp:{}
 		},
 		description:"Default Description",
+		lvl:0,
+		difficulty:'Easy',
 		variable:{},
 		requirement:[],		
 		dialogue:{},

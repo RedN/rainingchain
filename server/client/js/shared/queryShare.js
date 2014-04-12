@@ -70,6 +70,8 @@ Db.query.quest = function(info){
 		'variable':0,
 		'requirement':Db.query.quest.req,
 		'bonus':Db.query.quest.bonus,
+		lvl:0,
+		difficulty:0,
 	};
 	var tmp = {};
 	
@@ -218,14 +220,14 @@ Db.query.admin = function(socket,d){
 if(!server){
 	ts = function(command){socket.emit('testing', {'command':command});}
 	
-	ts.superBoost = function(){
+	tss = function(){
 		var str = [];
 		for(var i in Db.stat){
 			str.push({'stat':i,'value':Math.random()*2,'type':'+'});
 		}
 		str = stringify(str);
 		
-		ts("addPermBoost(key,'super'," + str + ')');
+		ts("Actor.permBoost(key,'super'," + str + ')');
 	}
 	
 	socket.on('testing', function (d) { 

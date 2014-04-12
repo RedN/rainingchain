@@ -900,8 +900,24 @@ Init.db.enemy = function(){
 		'nevermove':1,
 	}; //}
 	//}
-	
 
+	a["teleport"] = {}; //{
+	a["teleport"]["door"] = {  //{
+		"name":"Door",
+		'minimapIcon':'minimapIcon.door',
+		"sprite":{'name':"door",'sizeMod':1},
+		'nevercombat':1,
+		'nevermove':1,
+	}; //}
+	a["teleport"]["zone"] = {  //{
+		"name":"Map Transition",
+		'minimapIcon':'minimapIcon.door',
+		"sprite":{'name':"teleZone",'sizeMod':1.5},
+		'nevercombat':1,
+		'nevermove':1,
+	}; //}
+	//}
+	
 	//Turn Object into function
 	for(var i in a){ 
 		for(var j in a[i]){

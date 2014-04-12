@@ -269,6 +269,16 @@ Init.db.sprite = function(){
 			"off":{"startY":0,"frame":1,"sizeX":32,"sizeY":32,"dir":1,"spd":0,"next":"off"},	
 			"on":{"startY":64,"frame":1,"sizeX":32,"sizeY":32,"dir":1,"spd":0,"next":"on"},							
     	}};
+	
+	a["door"] ={"src":"picture/door.png","size":1,"side":[0],
+    	"preBumperBox":[ -16,16,-8,40 ],"preHitBox":[ -16,16,-8,40 ],"anim": {
+    		"walk":{"startY":0,"frame":1,"sizeX":32,"sizeY":80,"dir":1,"spd":0,"next":"walk"},  
+    	}};
+		
+	a["teleZone"] ={"src":"picture/teleZone.png","size":1.5,"side":[0],
+    	"preBumperBox":[ -16,16,-16,16 ],"preHitBox":[ -16,16,-16,16 ],"anim": {
+    		"walk":{"startY":0,"frame":1,"sizeX":32,"sizeY":32,"dir":1,"spd":0,"next":"walk"},  
+    	}};
 	//}
     
     

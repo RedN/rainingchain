@@ -1,6 +1,6 @@
 Draw = {};
 Draw.old = {'fl':'','quest':'','abilityShowed':'bulletMulti','abilityTypeShowed':'attack','abilitySub':''};
-Draw.refresh = '';
+Draw.refresh = {};
 
 Draw.loop = function (){
 	//Clear
@@ -389,6 +389,7 @@ Draw.icon = function(info,x,y,size,text){
 	button.rect = [x,x+size,y,y + size];
 	Button.creation(0,button);	
 }
+
 
 Draw.item = function(info,x,y,size){
 	size = size || 32;

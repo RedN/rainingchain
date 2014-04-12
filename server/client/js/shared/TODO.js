@@ -2,8 +2,6 @@
 ===PRE SDK===
 
 
-different teleport image: door, zone
-
 exp after completing quest
 
 barricade
@@ -30,6 +28,7 @@ get same quest variable than teammate
 
 
 POST RELEASE:
+REVAMP ALL FUCKING HTML WINDOWS
 talking to npc, stop moving and facing
 Crafting System with White
 waypoint window

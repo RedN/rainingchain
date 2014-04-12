@@ -309,7 +309,7 @@ Command.list['win,quest,start'].doc = {
 		{type:'Letters',name:'Quest Id',optional:0},
 	],
 }
-Command.list['win,quest,abandon'] = function(key,id,amount){
+Command.list['win,quest,abandon'] = function(key,id){
 	var mq = List.main[key].quest[id];
 	if(!mq){ Chat.add(key,'Wrong Input.'); return; }	
 	

@@ -103,7 +103,7 @@ Quest.complete = function(key,id){
 	mq.complete++;
 	
 	Quest.reward(key,id);
-	List.main[key].quest[id] = Quest.reset(key,id);
+	Quest.reset(key,id);
 	LOG(0,key,'Quest.complete',id);
 }
 
@@ -119,12 +119,13 @@ Quest.reset = function(key,qid,abandon){
 	var newmq = Main.template.quest[qid]();
 	for(var i in tmp) newmq[i] = tmp[i];
 	
+	
 	for(var i in Db.quest[qid].item){
 		Itemlist.remove(main.invList,qid + '-' + i, 10000);
 		Itemlist.remove(main.bankList,qid + '-' + i, 10000);
 	}
+	main.quest[qid] = newmq;
 	
-	return newmq;
 }
 
 Quest.orb = function(key,quest,amount){

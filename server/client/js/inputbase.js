@@ -251,7 +251,7 @@ document.addEventListener('keydown', function(event) {	Input.event.key(event.key
 document.addEventListener('keyup', function(event) {Input.event.key(event.keyCode,'up',event);});
 document.activeElement.addEventListener("mousemove", Input.event.mouse.move);
 
-$(document).bind('contextmenu', function(e){return false;});	//Disable Right Click Context Menu and Lose Focus
+//$(document).bind('contextmenu', function(e){return false;});	//Disable Right Click Context Menu and Lose Focus
 //$(window).keydown(function(e) { if(e.ctrlKey) { e.preventDefault();}});	//Disable Ctrl Shortcut
 
 //Send

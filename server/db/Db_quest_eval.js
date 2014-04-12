@@ -84,15 +84,6 @@ var teleport = function(key,map,letter,popup){	//type: 0=immediate, 1=popup
 }
 
 
-var teleZone = function(zone,mapDestination,letterDestination,popup){
-	if(!Loop.interval(15)) return;
-	var array = Map.collisionRect(zone.map,zone,'player');
-	
-	for(var i in array){
-		teleport(array[i],mapDestination,letterDestination,popup === undefined ? 1 : popup);	
-	}
-}
-
 var getMapAddon = function(key){
 	return Map.getAddon(getAct(key).map,Q);
 }

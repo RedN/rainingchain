@@ -832,12 +832,16 @@ Draw.window.quest = function (){ ctxrestore();
 	var s = Draw.window.main('Quest: ' + q.name);	
 	ctx = List.ctx.win;
 	
-	if(Draw.window.quest.refreshIf) Draw.window.quest.refresh(s,q)
+	var hq = html.questWin;	
+	hq.div.style.visibility = 'visible';
+	
+	Draw.icon(q.icon,s.zx,s.zy,22*4);	//TOFIX rushed
+	
+	if(Draw.window.quest.refreshIf(q,main.quest[main.windowList.quest])) Draw.window.quest.refresh(s,q)
 }
 
 Draw.window.quest.refresh = function(s,q){
 	var hq = html.questWin;	
-	hq.div.style.visibility = 'visible';
 	hq.div.style.left = s.mx + 'px'; 
 	hq.div.style.top = s.my + 'px'; 
 	
@@ -851,9 +855,10 @@ Draw.window.quest.refresh = function(s,q){
 	Draw.window.quest.bonus(s,q,mq,hq);
 
 }
-Draw.window.quest.refreshIf = function(q){
-	var bool = Draw.refresh.winQuest === q.name;
-	Draw.refresh.winQuest = q.name;
+Draw.window.quest.refreshIf = function(q,mq){
+	var str = stringify(q) + stringify(mq);
+	var bool = Draw.refresh.winQuest !== str;
+	Draw.refresh.winQuest = str;
 	return bool;
 
 }
@@ -862,7 +867,7 @@ Draw.window.quest.upper = function(s,q,mq,hq){
 	var icon = s.charY*4;
 	
 	//Icon
-	Draw.icon(q.icon,s.zx,s.zy,icon);
+	//Draw.icon(q.icon,s.zx,s.zy,icon);
 	
 	//Info
 	hq.info.style.left = icon + 5 + 'px'; 
@@ -870,14 +875,34 @@ Draw.window.quest.upper = function(s,q,mq,hq){
 	
 	hq.info.style.font = s.charY + 'px Kelly Slab';
 	hq.info.style.width = s.dw/2 - icon - 5 + 'px';
-	hq.info.style.height = s.charY*5*1.2 + 'px';
+	hq.info.style.height = s.charY*3*1.2 + 'px';
 
+	hq.info.innerHTML = '';
 	
-	var str = '';
-	str += 'Difficulty: ' + q.difficulty + '(Lvl ' + q.lvl + ')<br>';
+	var first = $('<p>Difficulty: ' + q.difficulty + ' (Lvl ' + q.lvl + ')</p>')[0];
+	
+	if(!mq.started){
+		var second = $('<p class="u">Start Quest</p>')[0];
+		second.onclick = function(){Chat.send.command('$win,quest,start,' + q.id);}
+	} else {
+		var second = $('<p class="u">Abandon Quest</p>')[0];
+		second.onclick = function(){Chat.send.command('$win,quest,abandon,' + q.id);}
+	}
+	
+	hq.info.appendChild(first);
+	hq.info.appendChild(second);
+	
+	//'<span style="color:' + color + '" class="u" onclick="main.context=Draw.old.winQuestReq">Requirements</span>';
+	
+	//TOFIX
+	
+	
+	//hq.info.innerHTML = str;
+	
+	/*
 	str += Draw.window.quest.upper.reward(q,mq);
 	str += Draw.window.quest.upper.req(q,mq);
-	
+	*/
 	/*
 	var state = mq.complete ? 'Complete (x' + mq.complete + ')' : (mq.started ? 'Started' : 'Not Started');
 	str += 'State: ' + state + '<br>';
@@ -892,29 +917,27 @@ Draw.window.quest.upper = function(s,q,mq,hq){
 	str += 'Exp Reward: <span class="u" title="' + str2 + '">List<span> <br>'
 	*/
 	
-	hq.info.innerHTML = str;
+	
 
 }
 
 
+
+
 Draw.window.quest.upper.req = function(q,mq){
-	if(!q.req || !q.req.length){ return 'No Requirements.'; }
+	if(!q.req || !q.req.length){ return false; }
 	
 	var returnStr = '<h3>Requirements:</h3>';
-	var good = true;
 	for(var i in q.req){
 		var text = q.req[i].text;
 		if(+mq.req[i]) returnStr += '<del>' + text + '</del>';	//if requirement is met
 		else {
-			returnStr += text;	
-			good = false;
+			returnStr += text;
 		}
 		returnStr += '<br>';
 	}
-	var color = good ? 'green' : 'red';
 	
-	Draw.old.winQuestReq = {server:0,text:returnStr};
-	return '<span style="color:' + color + '" class="u" onclick="main.context=Draw.old.winQuestReq">Requirements</span>';
+	return $('<div>' + returnStr + '</div>')[0];
 	
 }
 
