@@ -34,9 +34,9 @@ q.item['enemyGenerator'] = {'name':'Enemy Gen','icon':'magic.staff','stack':1,'d
 		}});	
 	}},
 	{'name':'Tele','param':[],'func':function(key){
-		var act = getAct(key);
-		Actor.teleport(act,250,250,"test");
-		act.respawnLoc.recent = {x:250,y:250,map:"test@MAIN"};
+		Chat.question(key,{text:"x,y,map", func:function(key,x,y,map){
+			Actor.teleport(key,x,y,map);		
+		}});	
 	}},	
 	{'name':'Equip','param':[],'func':Test.generateEquip},
 ]};	

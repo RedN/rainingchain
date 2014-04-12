@@ -1,54 +1,20 @@
-var q = Quest.template('Qopenbeta2','v1.0');
+var q = Quest.template('QgoblinJewel','v1.0');
 eval(Quest.template.eval(q));
 
 q.variable = {
-	'enemyKilled':{
-		'bat,normal':0,
-		'bee,normal':0,
-		'mosquito,normal':0,
-		'mushroom,normal':0,
-		'larva,normal':0,
-		'plant,normal':0,
-		'slime,normal':0,
-		'salamander,normal':0,
-		'goblin,melee':0,
-		'goblin,range':0,
-		'goblin,magic':0,
-		'orc,melee':0,
-		'orc,range':0,
-		'orc,magic':0,
-		'gargoyle,normal':0,
-		'ghost,normal':0,
-		'death,normal':0,
-		'skeleton,normal':0,
-		'spirit,fire':0,
-		'taurus,normal':0,
-		'demon,normal':0,
-		'mummy,normal':0,
-		'bird,red':0,
-		'dragon,king':0,
-	},
-	'killedAll':0,
+	
+
 };
 
 
 q.event = {
-	enemyKilled:function(key,act){
-		set(key,'enemyKilled',act.category + ',' + act.variant,1);
-		
-		var count = get(key,'enemyKilled').$count();
-		chat(key,"You have killed " + count + "/24 monsters in the area.");
-		
-		if(count === 24 && !get(key,'killedAll')){
-			set(key,'killedAll',1);
-			chat(key,"Congratz! You have killed them all. Go talk to Jenny for your reward.");
-		}
+	test:function(key){
+		teleport(key,'goblinLand','a');
+	
 	},
 	start:function(key){
 		var act = getAct(key);
-		teleport(key,'goblinLand','a');
-		act.respawnLoc.recent = {x:1808,y:5712,map:'goblinLand@MAIN'};
-		act.respawnLoc.safe = {x:1808,y:5712,map:'goblinLand@MAIN'};
+		
 		
 		addItem(key,'enemyLeft');
 		addItem(key,'pvp');
@@ -60,8 +26,29 @@ q.event = {
 		else dialogue(key,'jenny','intro','intro');
 		
 	},
-	teleport:function(key){
-		teleport(key,'goblinLand','a');		
+	receivePotion:function(key){
+		
+	},
+	killGoblin:function(key){
+		
+	},
+	killOrc:function(key){
+		
+	},
+	grabJewel:function(key){
+		
+	},
+	teleportInUnderground:function(key){
+		
+	},
+	teleportOutUnderground:function(key){
+		
+	},
+	bossCutscene:function(key){
+		
+	},
+	bossDeath:function(key){
+		
 	},
 }	
 

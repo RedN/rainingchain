@@ -30,7 +30,7 @@ Init.db.sprite = function(){
     //ts('Sprite.change(p,{name:"taurus"});')
     //{ PLAYER
     a["mace"] = {"src":"actor/main.png","size":2.5,"side":[1,2,3,0],"hpBar":-50/3,"legs":20,
-    	"preHitBox":[ -30/3,30/3,-10/3,50/3],"preBumperBox":[ -30/3,30/3,-10/3,50/3 ],"anim": {
+    	"preHitBox":[ -36/3,36/3,-16/3,56/3],"preBumperBox":[ -36/3,36/3,-16/3,56/3 ],"anim": {
     		"walk":{"startY":0,"frame":4,"sizeX":24,"sizeY":32,"dir":4,"spd":0.4,"walk":1,"next":"walk"},
     		"attack":{"startY":0,"frame":4,"sizeX":24,"sizeY":32,"dir":4,"spd":0.4,"next":"walk"}
     	}};
@@ -275,10 +275,21 @@ Init.db.sprite = function(){
     		"walk":{"startY":0,"frame":1,"sizeX":32,"sizeY":80,"dir":1,"spd":0,"next":"walk"},  
     	}};
 		
-	a["teleZone"] ={"src":"picture/teleZone.png","size":1.5,"side":[0],
+	a["teleZone"] ={"src":"picture/teleZone.png","size":1.5,"side":[0,1,2,3],
+    	"preBumperBox":[ -16,16,-16,16 ],"preHitBox":[ -16,16,-16,16 ],"anim": {
+    		"walk":{"startY":0,"frame":1,"sizeX":32,"sizeY":32,"dir":4,"spd":0,"next":"walk"},  
+    	}};
+	
+	a["barrier"] ={"src":"picture/barrier.png","size":1,"side":[0],
+    	"preBumperBox":[ -64,64,-32,32 ],"preHitBox":[ -64,64,-32,32 ],"anim": {
+    		"walk":{"startY":0,"frame":1,"sizeX":128,"sizeY":64,"dir":1,"spd":0,"next":"walk"},  
+    	}};
+	
+	a["underground"] ={"src":"picture/barrier.png","size":2,"side":[0],
     	"preBumperBox":[ -16,16,-16,16 ],"preHitBox":[ -16,16,-16,16 ],"anim": {
     		"walk":{"startY":0,"frame":1,"sizeX":32,"sizeY":32,"dir":1,"spd":0,"next":"walk"},  
     	}};
+	
 	//}
     
     

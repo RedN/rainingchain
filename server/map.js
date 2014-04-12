@@ -212,4 +212,13 @@ Map.getAddon = function(id,addon){
 }
 
 
+Map.convertSpot = function(d){
+	if(!d.spot) return;
+	d.x = d.spot.x;
+	d.y = d.spot.y;
+	d.map = d.spot.map;
+	d.addon = d.spot.addon;
+	delete d.spot;
+}
+
 

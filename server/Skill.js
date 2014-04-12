@@ -104,10 +104,10 @@ Db.skillPlot = {
 
 
 SkillPlot = {};
-SkillPlot.creation = function(data){	//xym, type, num, quest
+SkillPlot.creation = function(data){	//spot, type, num, quest
 	var plot = Db.skillPlot[data.type];
 	
-	var id = Actor.creation({'xym':data.xym,
+	var id = Actor.creation({'spot':data.spot,
 		"category":plot.category,"variant":plot.variant,"extra":{
 			skillPlot:{
 				quest:data.quest,
@@ -123,7 +123,7 @@ SkillPlot.creation = function(data){	//xym, type, num, quest
 	});
 	Db.quest[data.quest].skillPlot.push(id);
 	
-	Actor.creation({'xym':data.xym,
+	Actor.creation({'spot':data.spot,
 		"category":plot.category,"variant":"down","extra":{
 			skillPlot:{
 				quest:data.quest,

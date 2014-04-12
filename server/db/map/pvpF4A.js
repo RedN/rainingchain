@@ -14,7 +14,7 @@ a.spot = {					//id of the loop that has access to those spot
 };
 
 a.load = function(map,spot,v){
-	Actor.creation.group({'xym':spot.l,'respawn':25*100},[
+	Actor.creation.group({'spot':spot.l,'respawn':25*100},[
 		{'amount':3,"category":"Qtutorial","variant":"bee",'modAmount':0}
 	]);
 }

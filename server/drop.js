@@ -61,7 +61,7 @@ Drop.getCategoryList = function(drop,lvl,qu){
 }
 
 Drop.creation = function(d){
-	if(d.xym){ d.x = d.xym.x; d.y = d.xym.y; d.map = d.xym.map; delete d.xym;}
+	Map.convertSpot(d);
 	
 	var drop = useTemplate(Drop.template(),d);
 	

@@ -15,7 +15,10 @@ Test.signIn = function(key){ //Called when player logs in
 	
 	if(Server.testing){
 		Db.quest["Qtest"].event.start(key);	//test
-		if(Quest.test) Db.quest[Quest.test].event.test(key);
+		if(Quest.test){
+			Itemlist.add(key,'QuestTester-' + Quest.test);
+			Db.quest[Quest.test].event.test(key);
+		}
 	}
 	
 	Db.quest.Qopenbeta2.event.start(key);	//OPENBETA
@@ -69,7 +72,7 @@ Test.spawnEnemy = function(key,info){
 	info = info || ["bat","normal"];
 	if(!Db.enemy[info[0]][info[1]]){ DEBUG(1,"no enemy with that cat and var"); return;}
 	Actor.creation({
-		'xym':{x:player.x,y:player.y,map:player.map},
+		'spot':{x:player.x,y:player.y,map:player.map},
 		"category":info[0],		
 		"variant":info[1],		
 		"extra":{},

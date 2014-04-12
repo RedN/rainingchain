@@ -125,86 +125,70 @@ q.map.tutorial = function(){
 	};
 			
 	a.load = function(spot){
-		SkillPlot.creation({'xym':spot.e,
+		
+		SkillPlot.creation({'spot':spot.e,
 			"quest":"Qtutorial",'num':0,"type":"treeRed"
 		});
 		
-		//grave
-		Actor.creation({'xym':spot.h,
-			"category":"system","variant":"grave"
-		});
 		
-		Actor.creation({'xym':spot.q,
-			"category":"system","variant":"grave"
-		});
+		//grave
+		actor(spot.h,"system","grave",{});
+		actor(spot.q,"system","grave",{});
 		
 		//chest
-		Actor.creation({'xym':spot.m,
-			"category":"system","variant":"chest",extra:{
-				'chest':function(key){
-					addItem(get,'Aiceshard',1);
-					return true;
-				}
+		actor(spot.m,"system","chest",{
+			'chest':function(key){
+				addItem(get,'Aiceshard',1);
+				return true;
 			}
 		});
+	
 		
 		//drop staff
-		Drop.creation({'xym':spot.o,
+		drop(spot.o,"Qtutorial-Pstaff",1,1/0);
+		Drop.creation({'spot':spot.o,
 			"item":"Qtutorial-Pstaff","amount":1,'timer':1/0
 		});		
 		
 		//block for switch
-		Actor.creation({'xym':spot.b,
-			"category":"block","variant":"2x2"
-		});
+		actor(spot.b,"block","2x2",{});
+		
 		//Block to block arrow
-		Actor.creation({'xym':spot.f,
-			"category":"block","variant":"2x2"
-		});
+		actor(spot.f,"block","2x2",{});
+		
 		
 		//Block that disppear when bee dead
-		Actor.creation({'xym':spot.j,
-			"category":"block","variant":"2x2Fix",extra:{
-				'viewedIf':function(key){
-					if(getAct(key).type !== 'player') return true;
-					return !get(key,'beeDead');
-				}
+		actor(spot.j,"block","barrier",{
+			'viewedIf':function(key){
+				return true; //TOFIX
+				if(getAct(key).type !== 'player') return true;
+				return !get(key,'beeDead');
 			}
+		});
+				
+		//First bee
+		actor(spot.i,"Qtutorial","bee",{
+			'deathFunc':function(key){
+				set(key,'beeDead',true);				
+			}	
 		});
 		
-		//First monster
-		Actor.creation({'xym':spot.i,
-			"category":"Qtutorial","variant":"bee",lvl:'+100',extra:{
-				'deathFunc':function(key){
-					set(key,'beeDead',true);				
-				}		
-			}
-		});
-		/*
-		//Bats Near Chest
-		Actor.creation.group({'xym':spot.l,'respawn':25*100},[
-			{'amount':3,"category":"bat","variant":"normal",'modAmount':0}
-		]);
-		*/
 		//Bees Near Chest
-		Actor.creation.group({'xym':spot.l,'respawn':25*100},[
-			{'amount':3,"category":"Qtutorial","variant":"bee",'modAmount':0}
+		actorGroup(spot.l,25*100,[
+			["Qtutorial","bee",3,{deathFunc:q.event.enemyKilled}],
 		]);
-	
+		
 		//Boss Fire
-		Actor.creation({'xym':spot.k,
-			"category":"Qtutorial","variant":"demon",lvl:'+100',extra:{
-				deathFunc:function(key){
-					set(key,'bossDead',true);
-				}
-			}
+		actor(spot.k,"Qtutorial","demon",{
+			'deathFunc':function(key){
+				set(key,'bossDead',true);				
+			},
+			lvl:'+100',
 		});
 		
 		//Switch
-		Actor.creation({'xym':spot.c,
-			"category":"system","variant":"switch",extra:{
-				'switch':{on:q.event.switchActivate},
-			}
+		actor(spot.c,"system","switch",{
+			'switch':{on:q.event.switchActivate},
 		});
 		
 	};

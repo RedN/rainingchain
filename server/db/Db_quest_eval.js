@@ -89,7 +89,7 @@ var getMapAddon = function(key){
 }
 
 var actor = function(spot,cat,variant,extra){
-	Actor.creation({xym:spot,category:cat,variant:variant,extra:(extra || {})});
+	Actor.creation({spot:spot,category:cat,variant:variant,extra:(extra || {})});
 }
 
 var actorGroup = function(spot,respawn,list,extra){
@@ -100,14 +100,14 @@ var actorGroup = function(spot,respawn,list,extra){
 			"category":m[0],"variant":m[1],'amount':m[2] || 1,'modAmount':1,'extra':(m[3] || {})
 		});
 	}
-	Actor.creation.group({'xym':spot,'respawn':respawn},tmp);
+	Actor.creation.group({'spot':spot,'respawn':respawn},tmp);
 }
 
 var bullet = function(spot,atk,angle,hit){
 	hit = hit || 'player-simple';
 	
 	Attack.creation(
-		{damageIf:hit,xym:spot,angle:angle},
+		{damageIf:hit,spot:spot,angle:angle},
 		useTemplate(Attack.template(),atk)
 	);
 
@@ -117,7 +117,14 @@ var bullet = function(spot,atk,angle,hit){
 var freeze = Actor.freeze;
 var unfreeze = Actor.freeze.remove;
 
-
+var drop = function(key,spot,name,amount,time){
+	time = time || 25*120;
+	if(!Quest.itemExist(Q+ '-' + name)) return;
+	
+	var tmp = {'spot':spot,"item":Q + '-' + name,"amount":amount,'timer':time};
+	if(typeof key === 'string') tmp.viewedIf = [key];
+	Drop.creation(tmp);	
+}
 
 
 

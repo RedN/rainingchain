@@ -856,12 +856,22 @@ Init.db.enemy = function(){
 		'moveSelf':0,
 		"block":{condition:'true',pushable:1,magn:4,time:9,size:[-1,1,-1,1]},
 	}; //}
+	
+	a["block"]["barrier"] = {  //{
+		"name":"Barrier",
+		'minimapIcon':'',
+		"sprite":{'name':"barrier",'sizeMod':1.5},
+		'nevercombat':1,
+		'nevermove':1,
+		"block":{condition:'true',pushable:0,size:[-2,2,-1,1]},
+	}; //}
+	
 	a["block"]["2x2Fix"] = {  //{
 		"name":"Block",
 		'minimapIcon':'',
 		"sprite":{'name':"block1x1-black",'sizeMod':2},
 		'nevercombat':1,
-		'moveSelf':0,
+		'nevermove':1,
 		"block":{condition:'true',pushable:0,size:[-1,1,-1,1]},
 	}; //}
 
@@ -913,6 +923,13 @@ Init.db.enemy = function(){
 		"name":"Map Transition",
 		'minimapIcon':'minimapIcon.door',
 		"sprite":{'name':"teleZone",'sizeMod':1.5},
+		'nevercombat':1,
+		'nevermove':1,
+	}; //}
+	a["teleport"]["underground"] = {  //{
+		"name":"Underground",
+		'minimapIcon':'minimapIcon.door',
+		"sprite":{'name':"underground",'sizeMod':1},
 		'nevercombat':1,
 		'nevermove':1,
 	}; //}

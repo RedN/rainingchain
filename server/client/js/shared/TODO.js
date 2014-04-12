@@ -1,11 +1,10 @@
 
 ===PRE SDK===
-
+lvl for monsters
 
 exp after completing quest
 
-barricade
-
+map spot too far away warning
 
 ===POST SDK===
 stat window

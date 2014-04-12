@@ -27,7 +27,7 @@ Db.map['test'] = function(){	//'test' = mapId
 	a.load = function(map,spot,variable,cst){	//main: loadId, map:instancedName, spot = map.spot[loadId], variable = map.variable[loadId], cst = map.cst[loadId],
 		//######################
 		Actor.creation({				//create 1 enemy that cant respawn
-			'xym':spot.c,				//location
+			'spot':spot.c,				//location
 			"category":"system",		
 			"variant":"switch",
 			"extra":{},
@@ -140,7 +140,7 @@ Db.map['test'] = function(){	//'test' = mapId
 		//######################
 		Actor.creation.group(			//create a group of monsters that respawns
 			{
-				'x':1060,				//or 'xym':spot.a
+				'x':1060,				
 				'y':1900,
 				'map':map,				//always put 'map':map.
 				'respawn':100			//frames before enemy group respawns. (timer starts when every members is dead)
@@ -159,7 +159,7 @@ Db.map['test'] = function(){	//'test' = mapId
 		
 		//######################
 		Drop.creation({						//create a drop on the ground
-			'xym':spot.o,
+			'spot':spot.o,
 			'map':map,
 			"item":"gold",		//itemId
 			"amount":1,						//item amount
