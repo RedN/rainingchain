@@ -806,6 +806,17 @@ Init.db.enemy = function(){
 	}; //}
 	//}
 	
+	a["npc"] = {}; //{
+	a["npc"]["ringo"] = {  //{
+		"name":"Ringo",
+		"sprite":{'name':"jenny",'sizeMod':1},
+		'nevercombat':1,
+		"acc":0.5,
+		"maxSpd":3,
+	}; //}
+	//}
+	
+	
 	a["system"] = {}; //{
 	a["system"]["default"] = {  //{
 		"name":"I am ERROR",
@@ -891,6 +902,15 @@ Init.db.enemy = function(){
 		'nevercombat':1,
 		'moveSelf':0,
 		"block":{condition:'true',pushable:1,magn:8,time:8,size:[-1,1,-1,1]},
+	}; //}
+	
+	a["block"]["spike"] = {  //{
+		"name":"Spike",
+		'minimapIcon':'',
+		"sprite":{'name':"spike",'sizeMod':1},
+		'nevercombat':1,
+		'nevermove':1,
+		"block":{condition:'true',size:[0,0,0,0]},
 	}; //}
 	//}
 	

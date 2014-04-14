@@ -146,3 +146,17 @@ var getEnemy = function(key,tag){
 	return null;
 }
 
+var block = function(zone,extra){
+	if(zone[2] === zone[3]){	//horizontal
+		for(var i = zone[0]; i <= zone[1]; i += 32){
+			actor({x:i+16,y:zone[2],map:zone.map,addon:zone.addon},'block','spike',extra);
+		}
+	}
+	if(zone[0] === zone[1]){
+		for(var i = zone[2]; i <= zone[3]; i += 32){
+			actor({x:zone[0],y:i+16,map:zone.map,addon:zone.addon},'block','spike',extra);
+		}	
+	}
+}
+
+
