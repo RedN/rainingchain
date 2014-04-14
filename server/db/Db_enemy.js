@@ -165,7 +165,7 @@ Init.db.enemy = function(){
 		"acc":2,
 		"maxSpd":15,
 		"moveRange":{'ideal':50,"confort":25,"aggressive":500,"farthest":600},	
-	}; //}
+	}; //}	
 	//}
 	
 	a["bee"] = {}; //{
@@ -947,7 +947,7 @@ Init.db.enemy = function(){
 }
 
 Init.db.enemy.creation = function(e){
-	e = useTemplate(Actor.template('enemy'),e);		//abilityList: [], ability: regular...
+	e = useTemplate(Actor.template('enemy'),e,1,1);		//abilityList: [], ability: regular...
 	
 	e.context = e.name; 
 	if(e.combat && !e.nevercombat)	e.context += ' | Lvl: ' + e.lvl;

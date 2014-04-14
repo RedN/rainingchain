@@ -320,7 +320,7 @@ Draw.chat.dialogue = function(){
 			'onclick="Chat.send.command(\'$dialogue,option,' + i + '\');" ' +
 			'title="' + dia.option[i].text + '"' + 
 			'>' +
-			'<font size="4"> -' + dia.option[i].text + '</font>' +
+			'<font size="4">&nbsp; - ' + dia.option[i].text + '</font>' +
 			'</span>';
 	}
 	Draw.setInnerHTML(html.dialogue.text,str);

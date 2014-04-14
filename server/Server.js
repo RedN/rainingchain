@@ -8,9 +8,9 @@ pvp too much dmg
 reset pvp = bad
 
 
-ts("for(var i = 0; i < 100; i++){ Test.spawnEnemy(key,['larva','normal']); }")
+ts("for(var i = 0; i < 100; i++){ Test.spawnEnemy(key,'larva','normal'); }")
 
-ts("for(var i = 0; i < Test.spawnEnemy(key,['bat','normal']);")
+ts("for(var i = 0; i < Test.spawnEnemy(key,'bat','normal');")
 
 ts("for(var i in List.actor) List.actor[i].hp = Math.random()-0.98;")
 

@@ -53,8 +53,9 @@ Init.db.dialogue = function(){
 						next.convo = next.convo || j ;
 					}				
 				}
-				delete npc.face;
+				delete convo.face;
 			}
+			delete npc.face;
 		}
 	}
 }

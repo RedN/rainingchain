@@ -8,9 +8,8 @@ q.variable = {
 q.event = {
 	start:function(key){
 		var act = getAct(key);
-		addItem(key,'enemyGenerator');
-		addItem(key,'equipGenerator');
-		addItem(key,'teleport');
+		addItem(key,'generator');
+		//addItem(key,'equipGenerator');
 		Test.generateEquip(key,0,5);
 		
 		
@@ -27,18 +26,20 @@ q.event = {
 
 
 
-q.item['enemyGenerator'] = {'name':'Enemy Gen','icon':'magic.staff','stack':1,'drop':0,'option':[		
-	{'name':'Custom','param':[],'func':function(key){
+q.item['generator'] = {'name':'Generator','icon':'magic.staff','stack':1,'drop':0,'option':[		
+	{'name':'Enemy','param':[],'func':function(key){
 		Chat.question(key,{text:"Category,Variant", func:function(key,cat,variant){
 			Test.spawnEnemy(key,cat,variant);		
 		}});	
 	}},
 	{'name':'Tele','param':[],'func':function(key){
 		Chat.question(key,{text:"x,y,map", func:function(key,x,y,map){
-			Actor.teleport(key,x,y,map);		
+			Actor.teleport(key,+x,+y,map);		
 		}});	
 	}},	
 	{'name':'Equip','param':[],'func':Test.generateEquip},
+	{'name':'Ability','param':[],'func':Test.setAbility},
+	{'name':'Invincible','param':[],'func':Test.invincible},
 ]};	
 
 
@@ -48,14 +49,7 @@ q.item['equipGenerator'] = {'name':'Equip Gen','icon':'system.gold','stack':1,'o
 	{'name':'Craft Weapon2','func':'Plan.use','param':['randomWeapon2']},
 	{'name':'Open Bank','func':'Main.openWindow','param':['bank']},
 ]};	
-			
-q.item['teleport'] = {'name':'Telport','icon':'system.gold','stack':1,'option':[
-	{'name':'Tele Tuto','func':'Actor.teleport','param':[912,2288,'tutorial']},
-	{'name':'Tele Main','func':'Actor.teleport','param':[1230,1230,'test']},
-	{'name':'Tele Team','func':'Actor.teleport','param':[1230,1230,'test@']},
-	{'name':'Tele Alone','func':'Actor.teleport','param':[1241*2,1111*2,'test@@']},
-]};
-	
+
 //}	
 
 q.equip['weapon'] = {'piece': 'melee','type': 'mace','icon':'melee.mace',

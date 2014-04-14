@@ -14,7 +14,6 @@ var set = function(key,attr,attr2,value){
 		
 	if(!mq.started){
 		Chat.add(key,"You need to start this quest via the Quest Tab before making progress in it."); 
-		startQuest(key);
 		return;
 	}
 	if(value === undefined) mq[attr] = attr2;	//aka deep = 1
@@ -83,9 +82,34 @@ var teleport = function(key,map,letter,popup){	//type: 0=immediate, 1=popup
 	}
 }
 
+var freeze = Actor.freeze;
+var unfreeze = Actor.freeze.remove;
+
 
 var getMapAddon = function(key){
 	return Map.getAddon(getAct(key).map,Q);
+}
+
+
+
+
+var drop = function(key,spot,name,amount,time){
+	time = time || 25*120;
+	if(!Quest.itemExist(Q+ '-' + name)) return;
+	
+	var tmp = {'spot':spot,"item":Q + '-' + name,"amount":amount,'timer':time};
+	if(typeof key === 'string') tmp.viewedIf = [key];
+	Drop.creation(tmp);	
+}
+
+var bullet = function(spot,atk,angle,hit){
+	hit = hit || 'player-simple';
+	
+	Attack.creation(
+		{damageIf:hit,spot:spot,angle:angle},
+		useTemplate(Attack.template(),atk)
+	);
+
 }
 
 var actor = function(spot,cat,variant,extra){
@@ -103,28 +127,22 @@ var actorGroup = function(spot,respawn,list,extra){
 	Actor.creation.group({'spot':spot,'respawn':respawn},tmp);
 }
 
-var bullet = function(spot,atk,angle,hit){
-	hit = hit || 'player-simple';
-	
-	Attack.creation(
-		{damageIf:hit,spot:spot,angle:angle},
-		useTemplate(Attack.template(),atk)
-	);
-
+var sprite = function(key,name,size){
+	var tmp = {name:name};
+	if(size && size !== 1) tmp.sizeMod = size;
+	Sprite.change(getAct(key),tmp);
 }
 
+var bossAttack = Boss.attack;
+var bossSummon = Boss.summon;
 
-var freeze = Actor.freeze;
-var unfreeze = Actor.freeze.remove;
 
-var drop = function(key,spot,name,amount,time){
-	time = time || 25*120;
-	if(!Quest.itemExist(Q+ '-' + name)) return;
-	
-	var tmp = {'spot':spot,"item":Q + '-' + name,"amount":amount,'timer':time};
-	if(typeof key === 'string') tmp.viewedIf = [key];
-	Drop.creation(tmp);	
+var getEnemy = function(key,tag){
+	var list = List.map[getAct(key).map].list.enemy;
+	for(var i in list){
+		if(getAct(list[i]).tag === tag)
+			return getAct(list[i]);
+	}
+	return null;
 }
-
-
 

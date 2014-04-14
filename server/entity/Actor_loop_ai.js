@@ -161,7 +161,7 @@ Actor.loop.setTarget.sub = function(act){
 	if(!cible) return;
 	
 	var rayon = (Math.randomML()*act.moveRange.confort*2)+act.moveRange.ideal;
-	var angle = Math.randomML()*360;
+	var angle = (act.angle+180) + Math.randomML()*act.target.maxAngleChange;
 	act.target.sub = {x:cos(angle)*rayon+cible.x,y:sin(angle)*rayon+cible.y};
 } 
 

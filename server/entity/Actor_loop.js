@@ -14,9 +14,7 @@ Actor.loop = function(act){
 	}
 	if(act.combat){
 		if(act.hp <= 0) Actor.death(act);
-		if(act.boss){ 
-			for(var i in act.boss.loop) act.boss.loop[i](act.boss,act);    //custom boss loop
-		}
+		if(act.boss){ Boss.loop(act.boss);}
 		if(act.frameCount % abilityUpdatePeriod[act.type] === 0) Actor.loop.ability(act);
 		Actor.loop.regen(act);    
 		Actor.loop.status(act);	

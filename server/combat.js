@@ -41,7 +41,8 @@ Combat = {};
 //ACTION//
 Combat.action = {};
 
-Combat.action.attack = function(id,action,extra){   
+Combat.action.attack = function(id,action,extra){   	
+	extra = extra || {};
 	var player = typeof id === 'string' ? List.all[id] : id;
 	
 	//Add Bonus and mastery
@@ -63,15 +64,13 @@ Combat.action.attack.perform = function(player,attack,extra){   //extra used for
 	for(var i = 1 ; i < attack.amount ; i ++)
 		atkList.push(deepClone(attack));
 	
-	
-	var initAngle = player.angle + Math.randomML() * (attack.aim + player.aim) || 0;
+	var pAngle = extra.angle || player.angle;
+	var initAngle = pAngle + Math.randomML() * (attack.aim + player.aim) || 0;
 	var atkAngle = attack.angle; var atkAmount = attack.amount;
 
 	for(var i = 0 ; i < atkList.length ; i ++){
 		var angle = initAngle + atkAngle * (atkAmount-2*(i+1/2)) / (atkAmount*2) ;
 		angle = (angle+360) % 360;
-		
-		if(extra && extra.angle !== undefined){ angle = extra.angle; }	//quickfix
 		
 		Attack.creation(player,atkList[i],{'angle':angle,'num':i});	//num used for parabole/sin
 	}

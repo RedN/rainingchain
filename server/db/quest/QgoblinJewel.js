@@ -2,108 +2,311 @@ var q = Quest.template('QgoblinJewel','v1.0');
 eval(Quest.template.eval(q));
 
 q.variable = {
+	killedGoblinBoss:false,
+	gotJewel:false,
+	goblinKillCount:0,
+	gotFlower:0,
+	gotOrc:0,
 	
-
 };
 
 
 q.event = {
+	hint:function(key){
+		if(!get(key,'started')) return 'You can start this quest by talking to the guy south west of Goblin Land';
+		
+		return "Good luck!";
+	},
 	test:function(key){
 		teleport(key,'goblinLand','a');
 	
 	},
 	start:function(key){
-		var act = getAct(key);
+		teleport(key,'goblinLand','a');
+		getAct(key).respawnLoc.recent = {x:1808,y:5712,map:'goblinLand@MAIN'};
+		getAct(key).respawnLoc.safe = {x:1808,y:5712,map:'goblinLand@MAIN'};
 		
-		
-		addItem(key,'enemyLeft');
-		addItem(key,'pvp');
-		
-		Test.pvpAbility(key);
 	},
+	disconnect:function(key){
+		
+	
+	},
+	complete:function(key){
+		set(key,'complete',true);
+	},
+	
 	talkNpc:function(key){
-		if(get(key,'killedAll')) dialogue(key,'jenny','intro','gratz');
-		else dialogue(key,'jenny','intro','intro');
-		
+		if(!get(key,'started')){ dialogue(key,'ringo','intro','first'); return; }
+		if(!haveItem(key,'potion')){  dialogue(key,'ringo','intro','second-prePotion'); return; }
+		if(haveItem(key,'potion') && !haveItem(key,'jewel')){  dialogue(key,'ringo','intro','second-postPotion'); return; }
+		if(haveItem(key,'jewel')){ dialogue(key,'ringo','intro','second-postJewel'); return; }
 	},
-	receivePotion:function(key){
-		
+	givePotion:function(key){
+		set(key,'started',true);
+		addItem(key,'potion_unf');
 	},
-	killGoblin:function(key){
-		
+	getFlower:function(key){
+		addItem(key,'flower');
+		set(key,'gotFlower',true);
+	},
+	seeFlower:function(key){
+		return !haveItem(key,'flower');
+	},
+	completePotion:function(key){
+		if(haveItem(key,'potion_unf') && haveItem(key,'orc_sock') && haveItem(key,'flower')){
+			removeItem(key,'potion_unf');
+			removeItem(key,'orc_sock');
+			removeItem(key,'flower');
+			addItem(key,'potion');
+			chat(key,"You completed the potion by adding Orc Socks and the Mystical flower.");
+		} else chat(key,"You don't have all the ingredients needed.");	
+			
+	},
+	usePotion:function(key){
+		sprite(key,'orc-melee');
+	},
+	removePotionEffect:function(key){
+		sprite(key,'mace');
 	},
 	killOrc:function(key){
-		
+		if(Math.random()<0.25){
+			addItem(key,'orc_sock');
+			chat(key,"You managed to grab his socks!");
+			set(key,'gotOrc',true);
+		}
 	},
-	grabJewel:function(key){
-		
+	killGoblin:function(key){
+		if(Math.random()<0.25){
+			addItem(key,'orc_sock');
+			chat(key,"You managed to grab his socks!");
+		}
+	},
+	openJewelChest:function(key){
+		if(testItem(key,'jewel')){
+			set(key,'gotJewel',true);
+			addItem(key,'jewel');
+			return true;
+		}
+		return false;
 	},
 	teleportInUnderground:function(key){
-		
+		if(get(key,'goblinKillCount') > 5)	teleport(key,'goblinLand_underground','a');	//TOFIXQUEST
+		else chat(key,"You should kill more goblins first to make them angry with orcs.");
 	},
 	teleportOutUnderground:function(key){
-		
+		if(get(key,'gotJewel'))	teleport(key,'goblinLand_boss@@','a');
+		else teleport(key,'goblinLand','a');
 	},
 	bossCutscene:function(key){
-		
+		freeze(key);
+		dialogue(key,'goblin','intro','first');
 	},
-	bossDeath:function(key){
-		
+	endBossCutscene:function(key){
+		unfreeze(key);
+		var boss = getEnemy(key,'goblinBoss');
+		boss.combat = 1;
 	},
-}	
+	killGoblinBoss:function(key){
+		set(key,'killedGoblinBoss',true);
+	},
+	seeBlock:function(key){
+		return !get(key,'killedGoblinBoss');
+	},
+};	
 
-q.item['enemyLeft'] = {'name':'Enemy Left','icon':'magic.staff','stack':1,'drop':0,'option':[		
-	{'name':'Enemy Left','param':[],'func':function(key){
-		var q = get(key,'enemyKilled');
-		var str = 'Monsters Left: ';
-		for(var i in q)
-			if(!q[i]) str += i + ' ||| ';
-		chat(key,str);
-	}},
+q.item['potion_unf'] = {'name':'Unfinished Potion','icon':'magic.staff','drop':0,'bank':0,'option':[		
+	{'name':'Finish potion','description':'Requires 1 mystical flower and 1 orc socks.','param':[],'func':q.event.completePotion},
 ]};	
 
-q.item['pvp'] = {'name':'Go/Leave Pvp','icon':'magic.staff','stack':1,'drop':0,'option':[		
-	{'name':'Pvp','param':[],'func':function(key){
-		chat(key,"You can also type '$pvp' in chat to go/leave Pvp at any time.");
-		Command.list['pvp'](key);
-	}},
-	
-	{'name':'Tele','param':[],'func':function(key){
-		teleport(key,'goblinLand@','a',0);
-	}},
-	{'name':'Tele Pop','param':[],'func':function(key){
-		teleport(key,'goblinLand@','b',1);
-	}},
-	{'name':'Tele Pop+','param':[],'func':function(key){
-		teleport(key,'goblinLand@',{x:1000,y:1000},1);
-	}}	
-]};	
+q.item['orc_sock'] = {'name':'Orc Sock','icon':'magic.staff','drop':0,'bank':0,'option':[		
 
-q.item['cutscene'] = {'name':'cutscene','icon':'magic.staff','stack':1,'drop':0,'option':[		
-	{'name':'cutscene','param':[],'func':function(key){ cutscene(key,'goblinLand','blue',function(key){
-		Chat.add(key,"wooot");	
-	});}	},
-]};	
+]};
 
+q.item['flower'] = {'name':'Mystical Flower','icon':'magic.staff','drop':0,'bank':0,'option':[		
 
-q.dialogue['jenny'] = {'face':{'image':'villager-female.0','name':'Jenny'},
+]};
+
+q.enemy["boss"] = {  //{
+	"name":"Goblin",
+	"sprite":{'name':"goblin",'sizeMod':1},
+	"abilityList":[],
+	'deathExp':1,
+	"mastery":{'def':{'melee':0.5,'range':0.5,'magic':0.5,'fire':2,'cold':2,'lightning':2},
+				'dmg':{'melee':1,'range':1,'magic':1,'fire':1,'cold':1,'lightning':1}},	
+	"acc":0.5,
+	"maxSpd":10,
+	"boss":Q+'-test',
+	"moveRange":{'ideal':250,"confort":25,"aggressive":500,"farthest":600},	
+	'target,maxAngleChance':10,
+	'resource,hp,regen':0,
+}; //}
+
+q.dialogue['goblin'] = {'face':{'image':'bad-monster.0','name':'Ringo'},
 	'intro':{
-		'intro':{
-			'text':"If you manage to kill all the different types of monsters, I'll give you something special.",
-		},
-		'gratz':{
-			'text':"Congratz! Choose your special power!",
+		'first':{
+			'text':"Did you really think you could escape so easily? Prepare to die, orc!",
+			'end':0,
 			'option':[
-				{'text':"Bee!",'func':function(key){ Sprite.change(getAct(key),{name:'bee'}); }},
-				{'text':"Mushroom!",'func':function(key){ Sprite.change(getAct(key),{name:'mushroom'}); }},
-				{'text':"Werewolf!",'func':function(key){ Sprite.change(getAct(key),{name:'werewolf'}); }},
-				{'text':"Ghost!",'func':function(key){ Sprite.change(getAct(key),{name:'ghost'}); }},
-			
-			]
-		},	
+				{'text':"Show me what you got, noob!",func:q.event.endBossCutscene}
+			],
+		},
 	}
-};
+}
 
+q.dialogue['ringo'] = {'face':{'image':'villager-male.0','name':'Ringo'},
+	'intro':{
+		'first':{
+			'text':"Hey! My name's Ringo! Guess what, I need your help! Wanna help me out real quick, man?",
+			'option':[
+				{'text':"Sure. Why not!",next:{node:'yes'}},
+				{'text':"No",next:{node:'no'}},
+			],
+		},
+		'no':{
+			'text':"Ah, come on man. I need your help... I know you will change your mind someday. I'll be standing still until you do!",
+		},	
+		'yes':{
+			'text':"There's a group of goblins north of here and they keep attacking my village. It's pissing me off.",
+			'option':[
+				{'text':"Why are they attacking the village?",next:{convo:'quest',node:'whyAttack'}},
+				{'text':"What's your plan?",next:{convo:'quest',node:'plan'}},
+			],
+		},
+		'second-prePotion':{
+			'text':"Oh, you're back already!",
+			'option':[
+				{'text':"What am I supposed to do again?",next:{convo:'question',node:'pre-potion'}},
+				{'text':"Where can I find orcs?",next:{convo:'question',node:'orc'}},
+				{'text':"Where can I find a Mystical flower?",next:{convo:'question',node:'flower'}},
+			],
+		},
+		'second-postPotion':{
+			'text':"Oh, you're back already!",
+			'option':[
+				{'text':"What am I supposed to do again?",next:{convo:'question',node:'post-potion'}},
+			],
+		},
+		'second-postJewel':{
+			'text':"Oh my god! You did it! My plan worked! It's a miracle!",
+			'option':[
+				{'text':"Wait? You thought it wouldn't work?",next:{convo:'quest',node:'complete'}},
+			],
+		},
+	},
+	'quest':{
+		'whyAttack':{
+			'text':"Let just say that I 'borrowed' one of their precious jewels. And apparently, they didn't like it much... They get angry very easily, you know.",
+			'option':[
+				{'text':"Why don't you just give it back?",next:{node:'whyGiveBack'}},
+				{'text':"What's your plan?",next:{node:'plan'}},
+			],
+		},
+		'whyGiveBack':{
+			'text':"Wait, what? What did I just say? Oh damn... I wanted to say that 'someone', which is obviously not me, 'borrowed' their jewel. But anyway, that's not the point, let's just change topic to something more important.",
+			'option':[
+				{'text':"Okay? So what's your plan?",next:{node:'plan'}},
+			],
+		},
+		'plan':{
+			'text':"I know for a fact that they own a second jewel. I didn't manage to steal it last time. Oh damn... I mean 'the thief' didn't manage to steal it last time.",
+			'option':[
+				{'text':"Continue",next:{node:'plan2'}},
+			],
+		},
+		'plan2':{
+			'text':"Anyway, I got a plan! A genius plan! My plan is so freaking smart that there's no way something could go wrong with it. Trust me, I'm an expert at this kind of stuff.",
+			'option':[
+				{'text':"Continue",next:{node:'plan3'}},
+			],
+		},
+		'plan3':{
+			'text':"You take the appearance of an orc then you steal by force the second jewel! That's so smart, right! The goblins will be soooo pissed off against orcs that they will attack them instead of us!",
+			'option':[
+				{'text':"That's a dumb plan...",next:{node:'planDumb'}},
+				{'text':"That sounds like an AMAZING plan.",next:{node:'plan4'}},
+				{'text':"That sounds like an AMAZING plan. Kappa",next:{node:'planKappa'}},
+			],
+		},
+		'planDumb':{
+			'text':"Just trust me, my plans work every time, 25% of the time.",
+			'option':[
+				{'text':"...",next:{node:'plan4'}},
+			],
+		},
+		'planKappa':{
+			'text':"You're not on Twitch, you fool.",
+			'option':[
+				{'text':"...",next:{node:'plan4'}},
+			],
+		},
+		'plan4':{
+			'text':"Glad you like my plan! How couldn't you like it anyway, right? So, in order to take the appearance of an orc, you will first need to put your hands on a piece of orc and and on the Mystical Flower.",
+			'option':[
+				{'text':"Wait, where do I put my hand on the orc body exactly?",next:{node:'orcHand'}},
+				{'text':"And then what do I do?",next:{node:'plan5'}},
+			],
+		},
+		'orcHand':{
+			'text':"Are you trolling me? 'Put your hands on' as in 'get'... Just get a piece of clothing of something.",
+			'option':[
+				{'text':"Ahhhh, that makes more sense now.",next:{node:'plan5'}},
+			],
+		},
+		'plan5':{
+			'text':"Here take this unfinished potion. Once you got the orc clothing and the Mystical Flower, complete the potion and use it.",
+			func:q.event.givePotion,
+			'option':[
+				{'text':"Where can I find orcs?",next:{convo:'question',node:'orc'}},
+				{'text':"Where can I find the Mystical Flower?",next:{convo:'question',node:'flower'}},
+			],
+		},
+		
+		'complete':{
+			'text':"Oh, my plans are always genius. Most of the time, it's the humans involved that cause problems... Anyway, thanks again for your help. Bye.",
+			'option':[
+				{'text':"Wait what? Where's my reward?",next:{node:'complete2'}},
+			],
+		},
+		'complete2':{
+			'text':"What reward? I never talked about a reward, did I? Just give me the jewel already...",
+			'option':[
+				{'text':"No reward, no jewel.",next:{node:'complete3'}},
+			],
+		},
+		'complete3':{
+			'text':"Okay... Fine... I will increase your maximum HP.",
+			'option':[
+				{'text':"Thanks.",func:q.event.complete},
+			],
+		},
+	},
+	'question':{
+		'orc':{
+			'text':"The orc village is located north east of here.",
+			'option':[
+				{'text':"Okay, thanks."},
+			],
+		},
+		'flower':{
+			'text':"Mystical flowers are huge white flowers that can normally be found near lakes. I'm sure you will find one in this area.",
+			'option':[
+				{'text':"Okay, thanks."},
+			],
+		},
+		'pre-potion':{
+			'text':"You need to complete the potion with a piece of orc and a Mystical flower.",
+			'option':[
+				{'text':"Okay, thanks."},
+			],
+		},
+		'post-potion':{
+			'text':"I can see you have the potion now. Use it and go in the Goblin village. Find the jewel and bring it back to me!",
+			'option':[
+				{'text':"Okay, thanks."},
+			],
+		},
+	},
+};
 
 //{Map
 q.map.goblinLand = function(){
@@ -122,6 +325,7 @@ q.map.goblinLand = function(){
 		actor(spot.b,"system","grave",{});
 		actor(spot.M,"system","grave",{});
 			
+		/*
 		actor(spot.P,"teleport","zone",{
 			angle:90,
 			teleport:q.event.teleport,
@@ -192,7 +396,7 @@ q.map.goblinLand = function(){
 		actorGroup(spot.v,25*15,[
 			["dragon","king",3,{deathFunc:q.event.enemyKilled}],
 		]);
-		
+		*/
 	}
 	
 	a.loop = function(spot){
@@ -201,10 +405,92 @@ q.map.goblinLand = function(){
 	
 	return m;
 };
-
-
 //}
 
+q.boss['test'] = function(){
+	var boss = Boss.template('v1.0');
+	
+	boss.opening = 20;
+	
+	boss.attack['center'] = {
+		'type':"bullet",'angle':20,'amount':10, 'aim': 0,
+		'objImg':{'name':"fireball",'sizeMod':1},
+		'dmg':{'main':100,'ratio':{'melee':0,'range':0,'magic':20,'fire':80,'cold':0,'lightning':0}},	
+		'spd':20
+	};
+	boss.attack['offcenter'] = {
+		'type':"bullet",'angle':20,'amount':10, 'aim': 0,
+		'objImg':{'name':"fireball",'sizeMod':1},
+		'dmg':{'main':200,'ratio':{'melee':0,'range':0,'magic':20,'fire':80,'cold':0,'lightning':0}},	
+		'spd':30
+	};
+	boss.attack['360fire'] =	{
+		'type':"bullet",'angle':360,'amount':36, 'aim': 0,
+		'objImg':{'name':"fireball",'sizeMod':1},
+		'dmg':{'main':100,'ratio':{'melee':0,'range':0,'magic':20,'fire':80,'cold':0,'lightning':0}},
+	};
+	boss.attack['slowfire'] = {
+		'type':"bullet",'angle':60,'amount':4, 'aim': 0,
+		'objImg':{'name':"fireball",'sizeMod':1.5},
+		'dmg':{'main':300,'ratio':{'melee':0,'range':0,'magic':20,'fire':80,'cold':0,'lightning':0}},	
+		'spd':15,'maxTimer':250,
+	};
+	boss.attack['weakfire'] = {
+		'type':"bullet",'angle':40,'amount':5, 'aim': 0,
+		'objImg':{'name':"fireball",'sizeMod':0.75},
+		'dmg':{'main':50,'ratio':{'melee':0,'range':0,'magic':20,'fire':80,'cold':0,'lightning':0}},	
+	};
+	
+	boss.phase[0] = {
+		loop:function(boss){
+			if(boss.frame % 25 !== 0) return;	//every 25 frame
+			
+			if(Math.random() < 0.5){
+				Boss.attack(boss,'center',{'angle':boss.angle});			
+			} else {
+				Boss.attack(boss,'offcenter',{'angle':boss.angle+boss.opening});
+				Boss.attack(boss,'offcenter',{'angle':boss.angle-boss.opening});			
+			}	
+			
+		},
+		transitionTest:function(boss){
+			return boss.hpRatio < 0.50;
+		}
+	}
+	boss.phase[1] = {	//big
+		loop:function(boss){
+			if(boss.frame % 10 !== 0) return;	
+			Boss.attack(boss,'slowfire',{'angle':boss.angle});
+		},
+		transitionIn:function(boss){
+			Boss.attack(boss,'360fire',{'angle':boss.angle});
+			boss.noattack = 25;
+			var act = getAct(boss.parent);
+			Sprite.change(act,{'sizeMod':2});
+			Actor.boost(act,[
+				{'stat':'globalDef','type':"*",'value':10,'time':250,'name':'boss'},
+			]); 
+		},
+		transitionOut:function(boss){
+			var act = getAct(boss.parent);
+			Sprite.change(act,{'sizeMod':0.75});
+		},
+		transitionTest:function(boss){
+			return boss.frame % 250 === 0;
+		}
+	}
+	boss.phase[2] = {	//small
+		loop:function(boss){
+			if(boss.frame % 25 !== 0) return;
+			Boss.attack(boss,'weakfire',{'angle':boss.angle});
+		},
+		transitionTest:function(boss){
+			return (boss.frame % 100 === 0) ? 1 : false;
+		}
+	}
+	
+	return boss;
+}	
 
 exports.quest = q;
 

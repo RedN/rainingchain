@@ -21,7 +21,7 @@ Test.signIn = function(key){ //Called when player logs in
 		}
 	}
 	
-	Db.quest.Qopenbeta2.event.start(key);	//OPENBETA
+	Db.quest.QgoblinJewel.event.start(key);	//OPENBETA
 	
 	Actor.permBoost(List.all[key],'Player',[
 		{stat:'bullet-spd',value:0.5,type:'+'},
@@ -47,7 +47,7 @@ Test.signIn.hideHUD = function(key){
 	if(total < 10) List.main[key].hideHUD.passive = 1;
 }
 
-Test.pvpAbility = function(key){
+Test.setAbility = function(key){
 	var act = List.all[key];
 	//PVP
 	act.abilityList = Actor.template.abilityList({
@@ -67,17 +67,27 @@ Test.pvpAbility = function(key){
 	Actor.swapAbility(act,'pvp-invincibility',5);
 	
 }
-Test.spawnEnemy = function(key,info){
+
+Test.spawnEnemy = function(key,cat,variant){
+	cat = cat || 'bat';
+	variant = variant || 'normal';
+	
 	var player = List.all[key];
-	info = info || ["bat","normal"];
-	if(!Db.enemy[info[0]][info[1]]){ DEBUG(1,"no enemy with that cat and var"); return;}
+	if(!Db.enemy[cat][variant]){ DEBUG(1,"no enemy with that cat and var"); return;}
 	Actor.creation({
 		'spot':{x:player.x,y:player.y,map:player.map},
-		"category":info[0],		
-		"variant":info[1],		
+		"category":cat,		
+		"variant":variant,		
 		"extra":{},
 	});
 }
+Test.invincible = function(key){
+	Actor.permBoost(List.all[key],'Test.invincible',[
+		{stat:'globalDef',value:1000,type:'+'},
+		{stat:'globalDmg',value:1000,type:'+'},
+	]);	
+}
+
 
 Test.generateEquip = function(key,lvl,maxAmount){
 	var act = List.all[key];

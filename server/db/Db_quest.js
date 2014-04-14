@@ -2,7 +2,8 @@ Db.quest = {};
 var questList = [
 	'Qtutorial',
 	'Qopenbeta2',
-	'Qtest'
+	'Qtest',
+	'QgoblinJewel'
 ];
 Quest = {};
 Quest.test = null;	//will trigger event.test() so that quest
@@ -60,28 +61,26 @@ Quest.creation = function(q){
 	for(var i in q.enemy){
 		Db.enemy[q.id][i] = q.enemy[i];
 	}
-	
+	for(var i in q.boss){
+		Db.boss[q.id+'-'+ i] = q.boss[i];
+	}
 	for(var i in q.item){
-		var start = q.id+'-';
-		q.item[i].id = i.indexOf(start) === 0 ? i : start + i;
+		q.item[i].id = q.id+'-'+ i;
 		Item.creation(q.item[i]);
 	}
 	
 	for(var i in q.equip){
-		var start = q.id+'-';
-		q.equip[i].id = i.indexOf(start) === 0 ? i : start + i;
+		q.equip[i].id = q.id+'-'+ i;
 		Equip.creation(q.equip[i]);
 	}
 	
 	for(var i in q.ability){
-		var start = q.id+'-';
-		q.ability[i].id = i.indexOf(start) === 0 ? i : start + i;
+		q.ability[i].id = q.id+'-'+ i;
 		Ability.creation(q.ability[i]);
 	}
 	
 	for(var i in q.plan){
-		var start = q.id+'-';
-		q.plan[i].id = i.indexOf(start) === 0 ? i : start + i;
+		q.plan[i].id = q.id+'-'+ i;
 		Plan.creation(q.plan[i]);
 	}
 	
@@ -142,6 +141,7 @@ Quest.template = function(id,version){
 		plan:{},
 		event:{},
 		skillPlot:[],
+		boss:{},
 	};
 }
 

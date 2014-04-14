@@ -1,152 +1,9 @@
 //boss
+Db.boss = {};
 Init.db.boss = function(){
 	
-	Db.boss = {};
-	/*
-	Db.boss['fireTroll'] = function(){
-		var boss = Boss.template();
-		
-		//Attributes
-		boss.hole = Math.floor(Math.random()*6) + 2;
-		boss.center = Math.random()*360;
-		boss.opening = 10;
-		
-		//Attacks
-		boss.attack['explosion'] = {
-			'type':"strike",'angle':0,'amount':1, 'aim': 0,'objImg':{'name':'fire4','sizeMod':0.75},
-			'delay':15,'maxHit':3,'w':25,'h':25,'maxRange':10000,'minRange':0,
-			'dmg':{'melee':25,'range':25,'magic':25,'fire':10,'cold':10,'lightning':5},
-			'mods':	{}
-		};
-		
-		boss.attack['spiral'] = {
-			'type':"strike",'angle':0,'amount':1, 'aim': 0,'objImg':{'name':'fire4','sizeMod':0.5},
-			'delay':0,'maxHit':3,'w':25,'h':25,'maxRange':10000,'minRange':0,
-			'dmg':{'melee':25,'range':25,'magic':25,'fire':10,'cold':10,'lightning':5},
-			'mods':	{}
-		};
-		
-		//Loop
-		boss.loop = {};
-		
-		
-		function(){
-		
-			var boss = this;
-			var act = boss.parent;
-			boss.frame++;
-			
-			Boss.target(boss);
-		
-
-			if(boss.frame % 1 === 0){
-				for(var i = 0 ; i < 3 ; i++){
-					var angle = Math.random()*360;
-					var dist = Math.random()*200 + 500;
-					var middleX = cos(angle)*dist;
-					var middleY = sin(angle)*dist;
-						
-					//Attack.creation(act,boss.attack['explosion'],{'middleX':middleX,'middleY':middleY});    //attack?
-				}
-			}	
-
-			
-			if(boss.phase === 0){
-				boss.center += 4.3;
-
-				if(boss.frame % 1 == 0){
-					var angle = boss.center;
-					
-					if(angle%360 < 5){ boss.hole = Math.floor(Math.random()*6) + 2;}
-					
-					for(var i = 0 ; i < 11 ; i++){
-						var dist = 0 + 55*i;
-						var middleX = cos(angle)*dist;
-						var middleY = sin(angle)*dist;
-							
-						if(i != boss.hole && i != boss.hole+1){
-							//addStrike(act,boss.attack['spiral'],{'middleX':middleX,'middleY':middleY});
-						}
-					}
-				}
-			}
-		}
-		return boss;
-	}
-	*/
-	Db.boss['iceTroll'] = function(){
-		
-		var boss = Boss.template();
-		
-		boss.hole = 6;
-		boss.opening = 8;
-		
-		boss.attack['fastSpear'] = {
-			'type':"bullet",'angle':0,'amount':1, 'aim': 0,
-			'objImg':{'name':"iceshard",'sizeMod':1},
-			'dmg':{'main':1,'ratio':{'melee':0,'range':10,'magic':80,'fire':10,'cold':0,'lightning':0}},	
-			'spd':40
-		};			
-		boss.attack['slowSpear'] =	{
-			'type':"bullet",'angle':0,'amount':1, 'aim': 0,
-			'objImg':{'name':"iceshard",'sizeMod':1},
-			'dmg':{'main':1,'ratio':{'melee':0,'range':10,'magic':80,'fire':10,'cold':0,'lightning':0}},	
-			'spd':5
-		};
-		
-		boss.attack['tooFar'] = {
-			'type':"strike",'angle':0,'amount':1, 'aim': 0,'objImg':{'name':'iceshard','sizeMod':1.5},'hitImg':{'name':"ice1",'sizeMod':0.5},
-			'delay':20,'maxHit':3,'w':50,'h':50,'maxRange':10000,'minRange':0,
-			'dmg':{'main':1,'ratio':{'melee':0,'range':10,'magic':80,'fire':10,'cold':0,'lightning':0}},	
-			
-		};
-		
-		
-		boss.attack['midSpear'] = {
-			'type':"bullet",'angle':15,'amount':1, 'aim': 0,'objImg':{'name':"iceshard",'sizeMod':1},'hitImg':{'name':"coldHit",'sizeMod':0.5},
-			'dmg':{'main':1,'ratio':{'melee':0,'range':10,'magic':80,'fire':10,'cold':0,'lightning':0}},	
-		};
-		
-		
-		boss.loop.attack = function(boss,act){
-			if(boss.phase === 0){	//if boss on phase 0
-				boss.opening = 30;
-				for(var i in boss.target){	//for each player around the boss
-					if(boss.frame % 4 == 0){	//every 4 frame
-						//to form the V
-						Boss.attack(act,'midSpear',{'angle':boss.angle[i]+boss.opening});
-						Boss.attack(act,'midSpear',{'angle':boss.angle[i]-boss.opening});
-						
-						//random projectiles inside the V
-						if(Math.random() < 0.4){
-							Boss.attack(act,'midSpear',{'angle':boss.angle[i]+Math.randomML()*boss.opening});
-							Boss.attack(act,'midSpear',{'angle':boss.angle[i]+Math.randomML()*boss.opening});
-						}
-					}
-					break;
-				}
-				if(act.hp/act.resource.hp.max <= 3/5){	//if has 3/5 hp, transition to phase 1
-					boss.phase = 1;
-					boss.frame = 1;
-					boss.hole = 6;
-					boss.opening = 8;
-				} 
-			}
-			
-			if(boss.phase === 1){ //if boss on phase 1
-				if(boss.frame % 80 === 0){	//every 80 frame
-					boss.center = Math.random()*360;
-					for(var j = 0 ; j < boss.hole ; j++){
-						for(var k = 0 ; k < (360/boss.hole-2*boss.opening) ; k+=4){
-							Boss.attack(act,'midSpear',{'angle':boss.center+360/boss.hole*j+boss.opening+k});
-						}	
-					}
-				}		
-			}
-		}
-		return boss;
-	}
-
+	
+	
 	
 	
 	for(var i in Db.boss){
@@ -158,66 +15,146 @@ Init.db.boss = function(){
 	
 }
 
+
+
+
+
 Boss = {};
 
 Boss.creation = function(name){
-	var model = Db.boss[name];
-	var exception = ['loop','attack','ability'];
-	
-	var tmp = {};
-	for(var i in model){
-		if(!exception.have(i)) tmp[i] = deepClone(model[i]);
-		else tmp[i] = model[i];
-	}
-	
-	return tmp;
+	return deepClone(Db.boss[name]);
 }
 
+
 Boss.creation.model = function(boss){
-	for(var i in boss.attack){
-		boss.attack[i] = useTemplate(Attack.template(),boss.attack[i]);
-	}
-	boss.loop.target = Boss.target;
+
 }
 
 
 Boss.template = function(){
 	return {
-		'phase':0,
+		'active':1,
+		'phase':[],
+		'currentPhase':0,
 		'frame':0,
-		'target':{},
-		'angle':{},
+		'hpRatio':1,
+		'target':{},		//id:angle
 		'minion':{},
 		'tooFar':1000,
+		'noattack':0,		//time if above 0 => cant attack
 		
-		'loop':{},
+		'extraLoop':{},
 		'attack':{},
 		'ability':{},
 	}
 }
 
-Boss.target = function(boss,act){
+Boss.target = function(boss){
 	//Update Boss Target. can have multiple targets unlike regular enemy
+	var act = List.all[boss.parent];
 	boss.target = {};
-	for(var key in act.activeList){ 
-		if(List.all[key].type === 'player'){
-			boss.target[key] = key;	
+	for(var i in act.activeList){ 
+		if(List.all[i].type === 'player'){
+			boss.target[i] = Collision.anglePtPt(act,List.all[i]);	
+			boss.angle = boss.target[i];	//RUSHED
 		}
 	}
-			
-	for(var i in boss.target){
-		var target = List.all[boss.target[i]];
-		var diffX = target.x - act.x;
-		var diffY = target.y - act.y;
-		var diff = Math.sqrt(diffX*diffX+diffY*diffY);
-		boss.angle[i] = atan2(diffY,diffX);			
-	}
-}
-Boss.attack = function(act,name,extra){
-	Combat.action.attack(act,act.boss.attack[name],extra);
+	
+	boss.active = boss.target.$length();
 }
 
+Boss.attack = function(boss,name,extra){
+	if(boss.noattack < 0)
+		Combat.action.attack(
+			List.actor[boss.parent],
+			useTemplate(Attack.template(),boss.attack[name]),
+			extra
+		);
+		
+		
+}
+
+
+
+
+Boss.loop = function(boss){
+	boss.frame++;
+	Boss.target(boss);
+	if(!boss.active) return;
 	
+	boss.noattack--;
+	boss.hpRatio = List.all[boss.parent].hp/List.all[boss.parent].resource.hp.max;
+		
+	var curPhase = boss.currentPhase;
+	var phase = boss.phase[boss.currentPhase];
+	
+	if(phase.transitionTest){
+		var res = phase.transitionTest(boss);
+		if(res === true) boss.currentPhase++;
+		if(typeof res === 'number') boss.currentPhase = res;
+	}
+	
+	if(curPhase !== boss.currentPhase){
+		if(boss.phase[boss.currentPhase].transitionIn)
+			boss.phase[boss.currentPhase].transitionIn(boss);
+		if(boss.phase[curPhase].transitionOut)
+			boss.phase[curPhase].transitionOut(boss);
+	}
+		
+	
+	boss.phase[boss.currentPhase].loop(boss);
+	
+	for(var i in boss.extraLoop){
+		boss.extraLoop[i](boss);
+	}
+
+}
+
+
+
+
+/*
+//to form the V
+Boss.attack(boss,'midSpear',{'angle':boss.angle+boss.opening});
+Boss.attack(boss,'midSpear',{'angle':boss.angle-boss.opening});
+
+//random projectiles inside the V
+if(Math.random() < 0.4){
+	Boss.attack(boss,'midSpear',{'angle':boss.angle+Math.randomML()*boss.opening});
+	Boss.attack(boss,'midSpear',{'angle':boss.angle+Math.randomML()*boss.opening});
+}
+//##################################
+360 with holes:
+
+boss.center = Math.random()*360;
+for(var j = 0 ; j < boss.hole ; j++){
+	for(var k = 0 ; k < (360/boss.hole-2*boss.opening) ; k+=4){
+		Boss.attack(act,'midSpear',{'angle':boss.center+360/boss.hole*j+boss.opening+k});
+	}	
+}
+
+//##################################
+spiral of fire:
+
+boss.center += 4.3;
+
+if(boss.frame % 1 == 0){
+	var angle = boss.center;
+	
+	if(angle%360 < 5){ boss.hole = Math.floor(Math.random()*6) + 2;}
+	
+	for(var i = 0 ; i < 11 ; i++){
+		var dist = 0 + 55*i;
+		var middleX = cos(angle)*dist;
+		var middleY = sin(angle)*dist;
+			
+		if(i != boss.hole && i != boss.hole+1){
+			//addStrike(act,boss.attack['spiral'],{'middleX':middleX,'middleY':middleY});
+		}
+	}
+}
+
+*/
 
 
 

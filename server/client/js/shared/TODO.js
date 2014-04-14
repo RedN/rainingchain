@@ -1,5 +1,22 @@
 
 ===PRE SDK===
+transform not be overwrite if change equip
+
+have and remove same time
+test and add same time
+
+call function on disconnect quest
+some dialogue cant be ended
+
+put custom id on enemy to be able to grab it in events
+
+sdk quest prevent if not started
+can use whole quest file for testing dialogue
+transform
+block a zone and create barricade auto
+boss summon
+
+```
 lvl for monsters
 
 exp after completing quest

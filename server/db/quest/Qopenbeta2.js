@@ -46,14 +46,16 @@ q.event = {
 	},
 	start:function(key){
 		var act = getAct(key);
+		/*
 		teleport(key,'goblinLand','a');
 		act.respawnLoc.recent = {x:1808,y:5712,map:'goblinLand@MAIN'};
 		act.respawnLoc.safe = {x:1808,y:5712,map:'goblinLand@MAIN'};
+		*/
 		
 		addItem(key,'enemyLeft');
 		addItem(key,'pvp');
 		
-		Test.pvpAbility(key);
+		Test.setAbility(key);
 	},
 	talkNpc:function(key){
 		if(get(key,'killedAll')) dialogue(key,'jenny','intro','gratz');
@@ -119,6 +121,7 @@ q.dialogue['jenny'] = {'face':{'image':'villager-female.0','name':'Jenny'},
 
 
 //{Map
+/*
 q.map.goblinLand = function(){
 	var m = Init.db.map.baseMap();
 	m.name = "Goblin Land";
@@ -214,7 +217,7 @@ q.map.goblinLand = function(){
 	
 	return m;
 };
-
+*/
 
 //}
 
