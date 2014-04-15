@@ -7,6 +7,7 @@ Init.db.map = function(){
 		'tutorial':[1,5],
 		'pvpF4A':[1,2],
 		'goblinLand':[4,8],
+		'goblinUnderground':[0,1],
 	}
 
 
@@ -41,8 +42,6 @@ Map.creation = function(name,info){
 	Db.map[name] = m;
 	
 }
-
-
 
 
 

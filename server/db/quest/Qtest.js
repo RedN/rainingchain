@@ -27,16 +27,22 @@ q.event = {
 
 
 q.item['generator'] = {'name':'Generator','icon':'magic.staff','stack':1,'drop':0,'option':[		
-	{'name':'Enemy','param':[],'func':function(key){
-		Chat.question(key,{text:"Category,Variant", func:function(key,cat,variant){
-			Test.spawnEnemy(key,cat,variant);		
-		}});	
-	}},
 	{'name':'Tele','param':[],'func':function(key){
 		Chat.question(key,{text:"x,y,map", func:function(key,x,y,map){
 			Actor.teleport(key,+x,+y,map);		
 		}});	
 	}},	
+	{'name':'Item','param':[],'func':function(key){
+		Chat.question(key,{text:"item,amount", func:function(key,item,amount){
+			if(Db.item[item])	Itemlist.add(key,item,amount || 1);
+			else Chat.add(key,'wrong');
+		}});	
+	}},
+	{'name':'Enemy','param':[],'func':function(key){
+		Chat.question(key,{text:"Category,Variant", func:function(key,cat,variant){
+			Test.spawnEnemy(key,cat,variant);		
+		}});	
+	}},
 	{'name':'Equip','param':[],'func':Test.generateEquip},
 	{'name':'Ability','param':[],'func':Test.setAbility},
 	{'name':'Invincible','param':[],'func':Test.invincible},

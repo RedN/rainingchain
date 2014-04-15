@@ -18,8 +18,8 @@ Actor.creation = function(d){
 	Map.enter(e);
 	
 	
-	if(typeof e.dialogue === 'function') e.dialogue = {func:e.dialogue,distance:125};
-	if(typeof e.teleport === 'function') e.teleport = {func:e.teleport,distance:75};
+	if(typeof e.dialogue === 'function') e.dialogue = {func:e.dialogue,distance:150};
+	if(typeof e.teleport === 'function') e.teleport = {func:e.teleport,distance:150};
 	if(typeof e.chest === 'function') e.chest = {func:e.chest,list:[]};
 	if(e.switch) e.switch.state = e.switch.state || 'off';
 	

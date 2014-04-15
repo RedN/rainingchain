@@ -302,9 +302,7 @@ Actor.teleport = function(act,x,y,mapName){
 	}
 	
 	if(!List.map[map]){	//test if need to create instance
-		var model = map.split("@")[0];
-		var version = map.split("@")[1];
-		Map.creation(model,version); 
+		Map.creation(Map.getModel(map),Map.getVersion(map)); 
 	}
 	
 	Map.leave(act);
@@ -796,6 +794,7 @@ Actor.freeze = function(act,time,cb){
 }
 Actor.freeze.remove = function(act){
 	act.target.cutscene.active = 0;
+	act.combat = act.target.cutscene.oldCombat;
 }
 
 

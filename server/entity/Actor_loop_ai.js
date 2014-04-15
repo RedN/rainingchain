@@ -191,6 +191,7 @@ Actor.loop.setTarget.stuck = function(act){
 } 
 
 Actor.getPath = function(act,target){	//using a*
+	return [];
 	if(act.map !== target.map) return [];
 	var map = Db.map[Map.getModel(act.map)].grid.astar.nodes;
 	

@@ -6,7 +6,7 @@ var questList = [
 	'QgoblinJewel'
 ];
 Quest = {};
-Quest.test = 'QgoblinJewel';	//will trigger event.test() so that quest
+Quest.test = 'QgoblinJewel';
 
 
 
@@ -94,37 +94,8 @@ Quest.creation = function(q){
 }
 
 Quest.createVariableTester = function(q){
-	//Var changer
-	var item = {"id":q.id + '-QuestVariable','name':q.id + " Var",'icon':'system.gold','stack':1,'drop':0,
-		'option':[]};
-	
-	for(var i in q.variable){
-		if(["hint", "rewardTier", "reward", "complete", "started", "deathCount", "bonus", "challenge", "requirement", "skillPlot"].have(i)) continue;
-		
-		item.option.push({'name':i,'func':function(key,param){
-			Chat.question(key,{text:q.id + '.' + param,func:(function(){
-				return function(key,value){
-					if(Server.testing) List.main[key].quest[q.id][param] = eval(value);
-					Chat.add(key,"Variable changed");
-				}
-			})()});		
-		},'param':[i]});
-	}
-	Item.creation(item);
-
-	//##################
-	//Event Caller
-	
 	var item = {"id":q.id + '-QuestTester','name':q.id + " Event",'icon':'system.gold','stack':1,'drop':0,
 		'option':[]};
-		
-	item.option.push({name:'Call Event','func':function(key){
-		Chat.question(key,{text:q.id,func:function(key,param){
-			if(q.event[param]) q.event[param](key);
-			else if(q.event.test && q.event.test.list && q.event.test.list[param]) q.event.test.list[param](key);
-			else Chat.add(key,"no found");
-		}});
-	}});
 		
 	item.option.push({name:'Teleport','func':function(key){
 		Chat.question(key,{text:"enter spot",func:function(key,param){
@@ -134,6 +105,32 @@ Quest.createVariableTester = function(q){
 			} catch(err) { logError(err); Chat.add(key,"no found"); }
 		}});
 	}});
+	
+	item.option.push({name:'Item','func':function(key){
+		Chat.question(key,{text:"item,amount", func:function(key,item,amount){
+			item = q.id + '-' + item;
+			if(Db.item[item])	Itemlist.add(key,item,amount || 1);
+			else Chat.add(key,'wrong');
+		}});	
+	}});
+	
+	item.option.push({name:'Call Event','func':function(key){
+		Chat.question(key,{text:'event',func:function(key,param){
+			if(q.event[param]) q.event[param](key);
+			else if(q.event.test && q.event.test.list && q.event.test.list[param]) q.event.test.list[param](key);
+			else Chat.add(key,"no found");
+		}});
+	}});
+	
+	item.option.push({name:'Change Var','func':function(key){
+		Chat.question(key,{text:'variable,value',func:function(key,param,param1){
+			var mq = List.main[key].quest[q.id];
+			if(mq[param] !== undefined) mq[param] = param1;
+			else Chat.add(key,"bad name");
+		}});
+	}});
+	
+	
 	
 	Item.creation(item);
 		

@@ -139,7 +139,6 @@ Db.query.admin = function(socket,d){
 		var key = socket.key;
 		
 		var p = List.all[key];
-		var act = p;
 		var m = List.main[key];
 		var inv = List.main[key].invList;
 		var add = Itemlist.add;
@@ -204,6 +203,8 @@ Db.query.admin = function(socket,d){
 		var tele = function(x,y,map){
 			Actor.teleport(p,x,y,map);
 		}
+		
+		var act = p;
 		
 		var info = eval(d.command);
 		data = JSON.stringify(info);

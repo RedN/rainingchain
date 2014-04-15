@@ -16,14 +16,12 @@ Test.signIn = function(key){ //Called when player logs in
 	if(Server.testing){
 		Db.quest["Qtest"].event.start(key);	//test
 		if(Quest.test){
-			Itemlist.add(key,Quest.test + '-QuestVariable');
 			Itemlist.add(key,Quest.test + '-QuestTester');
-			Db.quest[Quest.test].event.test.login(key);
+			if(Db.quest[Quest.test].event.test && Db.quest[Quest.test].event.test.login)
+				Db.quest[Quest.test].event.test.login(key);
 		}
 	}
-	
-	Db.quest.QgoblinJewel.event.start(key);	//OPENBETA
-	
+
 	Actor.permBoost(List.all[key],'Player',[
 		{stat:'bullet-spd',value:0.5,type:'+'},
 	]);	

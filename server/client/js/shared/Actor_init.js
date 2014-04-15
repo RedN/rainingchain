@@ -154,6 +154,7 @@ Init.actor = function(){
 		act.chest = null;		//right click = gives items;
 		act.block = null;			//change map coliision
 		act.teleport = null;
+		act.tag = null;				//to get enemy in q.event
 		//}	
 		
 

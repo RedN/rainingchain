@@ -125,15 +125,16 @@ var teleport = function(key,map,letter,popup){	//type: 0=immediate, 1=popup
 	}
 }
 
-var freeze = Actor.freeze;
-var unfreeze = Actor.freeze.remove;
-
+var freeze = function(key,time,cb){
+	Actor.freeze(getAct(key),time,cb);
+}
+var unfreeze = function(key){
+	Actor.freeze.remove(getAct(key));
+}
 
 var getMapAddon = function(key){
 	return Map.getAddon(getAct(key).map,Q);
 }
-
-
 
 
 var drop = function(key,spot,name,amount,time){
@@ -181,12 +182,7 @@ var bossSummon = Boss.summon;
 
 
 var getEnemy = function(key,tag){
-	var list = List.map[getAct(key).map].list.enemy;
-	for(var i in list){
-		if(getAct(list[i]).tag === tag)
-			return getAct(list[i]);
-	}
-	return null;
+	return Map.getEnemy(getAct(key).map,tag);
 }
 
 var block = function(zone,extra,image){
@@ -211,6 +207,14 @@ var respawn = function(key,map,letter){	//must be same map
 
 	var spot = Map.getSpot(map,Q,letter);
 	if(spot) player.respawnLoc.recent = {x:spot.x,y:spot.y,map:spot.map};
+}
+
+
+
+
+var collision = function(spot,cb){
+	if(!Loop.interval(5)) return;
+		Map.collisionRect(spot.map,spot,'player',cb);
 }
 
 

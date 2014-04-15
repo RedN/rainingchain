@@ -29,6 +29,7 @@ Map.creation = function(namemodel,version,lvl){
 			newaddon[i].spot[j].addon = i;
 		}
 	}
+	//TOFIX problem with grid if using graphic
 	
 	var map = {
 		id:newid,
@@ -60,6 +61,9 @@ Map.creation.model = function(map){	//create the model that will be in Db.map | 
 		}
 	}
 	
+	map.graphic = map.graphic || map.id;
+	map.addon = map.addon || {};
+		
 	var strGrid = stringify(map.grid);
 	map.grid = {};
 	map.grid.astar = new astar.Graph(grid);
@@ -69,9 +73,6 @@ Map.creation.model = function(map){	//create the model that will be in Db.map | 
 	map.grid.player = JSON.parse(strGrid.replaceAll('0','a').replaceAll('1','0').replaceAll('2','0').replaceAll('a','1'));
 	map.grid.enemy = JSON.parse(strGrid.replaceAll('0','a').replaceAll('1','0').replaceAll('2','0').replaceAll('a','1').replaceAll('4','0'));
 	map.grid.bullet = JSON.parse(strGrid.replaceAll('0','a').replaceAll('1','0').replaceAll('2','1').replaceAll('a','1'));
-	
-	map.graphic = map.graphic || map.id;
-	map.addon = map.addon || {};
 	
 	return map;
 }
@@ -85,8 +86,11 @@ Map.creation.all = function(){
 
 
 Map.getModel = function(name){
-	return List.map[name] ? List.map[name].model : name.split('@')[0];
+	return name.split('@')[0];
 }	
+Map.getVersion = function(name){
+	return name.replace(Map.getModel(name),"").replace("@","");
+}
 
 Map.load = function(map){
 	var map = List.map[map];
@@ -153,6 +157,7 @@ Map.collisionRect = function(id,rect,type,cb){	//used in map loop. return array 
 	var array = [];
 	for(var i in List.map[id].list[type]){
 		var act = List.all[i];		//TOFIX test if player exist
+		if(!act){ DEBUG(0,'act dont exist ' + id); continue; }
 		if(Collision.PtRect(act,rect)){
 			array.push(i);
 		}
@@ -198,12 +203,7 @@ Map.enter = function(act,map){
 }
 
 Map.getSpot = function(id,addon,spot){
-
-	console.log(Map.getModel(id),addon,spot);
-	console.log(Db.map[Map.getModel(id)],Db.map[Map.getModel(id)].addon[addon]);
-	
 	var a = Db.map[Map.getModel(id)].addon[addon].spot[spot];	//cant use list cuz map could not be created yet
-	
 	
 	if(!a){ DEBUG(0,'spot not found ' + id + addon + spot); return }
 	return {
@@ -226,5 +226,18 @@ Map.convertSpot = function(d){
 	d.addon = d.spot.addon;
 	delete d.spot;
 }
+
+
+Map.getEnemy = function(map,tag){
+	var list = List.map[map].list.enemy;
+	for(var i in list){
+		if(List.all[i].tag === tag)
+			return List.all[i];
+	}
+	return null;
+}
+
+
+
 
 
