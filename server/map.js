@@ -1,4 +1,3 @@
-
 /*
 Db.map loaded.
 Map model created
@@ -10,96 +9,31 @@ Quest loaded
 	Modify Equip
 	Modify Equip
 Map MAIN created
-
 */
-
-
 Map = {};
-
-Map.creation = function(namemodel,version,lvl){
-	//create a copy of a default map. used for instanced map. version is usually the player name
-	version = version || 'MAIN';
-	var newid = namemodel + '@' + version;
-	var model = Db.map[namemodel];
-	
-	var newaddon = deepClone(model.addon);
-	for(var i in newaddon){
-		for(var j in newaddon[i].spot){
-			newaddon[i].spot[j].map = newid;
-			newaddon[i].spot[j].addon = i;
-		}
-	}
-	//TOFIX problem with grid if using graphic
-	
-	var map = {
-		id:newid,
-		randomId:Math.randomId(),
-		name:model.name,
-		version:version,
-		graphic:model.graphic,
-		grid:Db.map[model.graphic].grid,
-		model:model.id,
-		fall:model.fall,
-		timer:version === 'MAIN' ? 1/0 : 1000,// 5*60*1000/25,
-		list:{all:{},player:{},bullet:{},enemy:{},anim:{}},		//acts like List.all (for faster activeList and collisionRect)
-		lvl:lvl || model.lvl,
-		addon:newaddon,
-	};
-	
-	List.map[newid] = map;
-	
-	Map.load(newid);
-	return newid;
-}
-
-Map.creation.model = function(map){	//create the model that will be in Db.map | Model will then be modded by quest
-	var grid = [];	//for astart
-	for(var i = 0 ; i < map.grid.length; i++){	
-		grid[i] = [];
-		for(var j = 0 ; j < map.grid[i].length; j++){
-			grid[i][j] = +!+map.grid[i][j];	//opposite
-		}
-	}
-	
-	map.graphic = map.graphic || map.id;
-	map.addon = map.addon || {};
-		
-	var strGrid = stringify(map.grid);
-	map.grid = {};
-	map.grid.astar = new astar.Graph(grid);
-	
-	//PRE: 0 => can walk, 1 => cant; 2 => bullet only can walk; 3 => fall close; 4 => fall
-	//POST: 0 => cant walk, 1 => can walk; 3 => fall close 4=> fall
-	map.grid.player = JSON.parse(strGrid.replaceAll('0','a').replaceAll('1','0').replaceAll('2','0').replaceAll('a','1'));
-	map.grid.enemy = JSON.parse(strGrid.replaceAll('0','a').replaceAll('1','0').replaceAll('2','0').replaceAll('a','1').replaceAll('4','0'));
-	map.grid.bullet = JSON.parse(strGrid.replaceAll('0','a').replaceAll('1','0').replaceAll('2','1').replaceAll('a','1'));
-	
-	return map;
-}
-
-Map.creation.all = function(){
-	for(var i in Db.map){
-		Map.creation(i);
-	}
-}
-
-
 
 Map.getModel = function(name){
 	return name.split('@')[0];
 }	
+
 Map.getVersion = function(name){
 	return name.replace(Map.getModel(name),"").replace("@","");
 }
 
+Map.convertSpot = function(d){
+	if(!d.spot) return;
+	d.x = d.spot.x;
+	d.y = d.spot.y;
+	d.map = d.spot.map;
+	d.addon = d.spot.addon;
+	delete d.spot;
+}
+
 Map.load = function(map){
-	var map = List.map[map];
-	
 	for(var j in map.addon){
 		if(map.addon[j].load)
 			map.addon[j].load(map.addon[j].spot);
 	}
-	
 }
 
 Map.loop = function(map){
@@ -132,7 +66,7 @@ Map.instance.list = function(model){
 }
 
 Map.instance.player = function(id){
-	//return list of players names that are in a certain model of instance
+	//return list of players NAME that are in a certain model of instance
 	var plist = [];
 	for(var i in List.map[id].list.player){
 		if(List.all[i]){
@@ -150,20 +84,6 @@ Map.remove = function(map){
 		}
 	}
 	delete List.map[map.id];
-}
-
-
-Map.collisionRect = function(id,rect,type,cb){	//used in map loop. return array is no cb, else call func foreach
-	var array = [];
-	for(var i in List.map[id].list[type]){
-		var act = List.all[i];		//TOFIX test if player exist
-		if(!act){ DEBUG(0,'act dont exist ' + id); continue; }
-		if(Collision.PtRect(act,rect)){
-			array.push(i);
-		}
-	}
-	if(!cb) return array;
-	for(var i in array)	cb(array[i]);	
 }
 
 
@@ -202,6 +122,21 @@ Map.enter = function(act,map){
 	}
 }
 
+
+//Quest related
+Map.collisionRect = function(id,rect,type,cb){	//used in map loop. return array is no cb, else call func foreach
+	var array = [];
+	for(var i in List.map[id].list[type]){
+		var act = List.all[i];		//TOFIX test if player exist
+		if(!act){ DEBUG(0,'act dont exist ' + id); continue; }
+		if(Collision.PtRect(act,rect)){
+			array.push(i);
+		}
+	}
+	if(!cb) return array;
+	for(var i in array)	cb(array[i]);	
+}
+
 Map.getSpot = function(id,addon,spot){
 	var a = Db.map[Map.getModel(id)].addon[addon].spot[spot];	//cant use list cuz map could not be created yet
 	
@@ -215,16 +150,6 @@ Map.getSpot = function(id,addon,spot){
 
 Map.getAddon = function(id,addon){
 	return List.map[id].addon[addon];	
-}
-
-
-Map.convertSpot = function(d){
-	if(!d.spot) return;
-	d.x = d.spot.x;
-	d.y = d.spot.y;
-	d.map = d.spot.map;
-	d.addon = d.spot.addon;
-	delete d.spot;
 }
 
 

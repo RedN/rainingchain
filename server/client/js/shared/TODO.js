@@ -15,6 +15,9 @@ boss summon
 chest and skillplot anim on and off.
 change optionlist name for chest for something general ex flower
 
+give basic equip always
+
+new sprite change system: sprite.normal and sprite.custom
 ```
 lvl for monsters
 

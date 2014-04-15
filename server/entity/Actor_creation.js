@@ -341,6 +341,13 @@ Actor.creation.nevermove = function(act){
 	act.maxSpd = 1;
 }
 
+Actor.remove = function(act){
+	Activelist.remove(act);
+	delete List.actor[act.id];
+	delete List.all[act.id]
+	Map.leave(act);
+}
+
 
 
 

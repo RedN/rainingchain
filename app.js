@@ -47,7 +47,12 @@ require('./server/cycle');
 require('./server/Socket');
 
 
-require('./' + clientPath + 'client/js/shared/Actor');
+require('./' + clientPath + 'client/js/shared/Actor_combat');
+require('./' + clientPath + 'client/js/shared/Actor_boost');
+require('./server/entity/Actor_interaction');
+require('./server/entity/Actor_death');
+require('./server/entity/Actor_ability');
+require('./server/entity/Actor_equip');
 require('./' + clientPath + 'client/js/shared/Main');
 require('./server/entity/Actor_creation');
 require('./server/entity/Attack');

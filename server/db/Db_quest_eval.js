@@ -1,7 +1,5 @@
 var Q = q.id;
-
 var List, Db, db;
-
 
 var get = function(key,attr){
 	var mq = Quest.getMain(key,Q);
@@ -27,24 +25,47 @@ var set = function(key,attr,attr2,value){
 	if(attr === 'complete' && attr2)	Quest.complete(key,Q);
 }
 
-var startQuest = function(key){
-	Chat.question(key,{
-		'func':function(key){
-			Quest.start(key,Q);	
-		},	
-		'text':'Would you like to start the quest "' + q.name + '"?',
-	});
-}
-
 var getAct = function(key){
 	return Quest.getActor(key);
 }
+
+var chat = Chat.add;
 
 var dialogue = function(key,npc,convo,node){
 	Dialogue.start(key,{group:Q,npc:npc,convo:convo,node:node});
 }
 
+var teleport = function(key,map,letter,popup){	//type: 0=immediate, 1=popup
+	var spot = typeof letter === 'string' ? Map.getSpot(map,Q,letter) : {x:letter.x,y:letter.y,map:map};
+	
+	if(!popup) Actor.teleport(key,spot);
+	else {
+		Chat.question(key,{
+			func:function(){Actor.teleport(key,spot);},
+			option:true,			
+		});
+	}
+}
 
+var respawn = function(key,map,letter){	//must be same map
+	var player = getAct(key);
+	map = Actor.teleport.getMapName(player,map);
+
+	var spot = Map.getSpot(map,Q,letter);
+	if(spot) player.respawnLoc.recent = {x:spot.x,y:spot.y,map:spot.map};
+}
+
+var getMapAddon = function(key){
+	return Map.getAddon(getAct(key).map,Q);
+}
+
+var sprite = function(key,name,size){
+	var tmp = {name:name};
+	if(size && size !== 1) tmp.sizeMod = size;
+	Sprite.change(getAct(key),tmp);
+}
+
+//Item
 var addItem = function(key,item,amount){
 	if(typeof item === 'object'){
 		for(var i in item) addItem(key,i,item[i]);
@@ -106,46 +127,32 @@ var testItem = function (key,item,amount,addifgood){
 }
 
 
-var chat = Chat.add;
+//Cutscene
 var cutscene = function(key,map,path){
 	Actor.setCutscene(getAct(key),q.map[map][Q].path[path]);
 }
 
-
-
-var teleport = function(key,map,letter,popup){	//type: 0=immediate, 1=popup
-	var spot = typeof letter === 'string' ? Map.getSpot(map,Q,letter) : {x:letter.x,y:letter.y,map:map};
-	
-	if(!popup) Actor.teleport(key,spot);
-	else {
-		Chat.question(key,{
-			func:function(){Actor.teleport(key,spot);},
-			option:true,			
-		});
-	}
-}
-
 var freeze = function(key,time,cb){
-	Actor.freeze(getAct(key),time,cb);
+	var act = getAct(key);
+	time = time || Cst.MIN*10;
+	Actor.setCutscene(act,[{x:act.x,y:act.y},time],cb);
 }
+
 var unfreeze = function(key){
-	Actor.freeze.remove(getAct(key));
+	var act = getAct(key);
+	act.target.cutscene.active = 0;
+	act.combat = act.target.cutscene.oldCombat;
 }
 
-var getMapAddon = function(key){
-	return Map.getAddon(getAct(key).map,Q);
+
+
+
+var getEnemy = function(key,tag){
+	return Map.getEnemy(getAct(key).map,tag);
 }
 
 
-var drop = function(key,spot,name,amount,time){
-	time = time || 25*120;
-	if(!Quest.itemExist(Q+ '-' + name)) return;
-	
-	var tmp = {'spot':spot,"item":Q + '-' + name,"amount":amount,'timer':time};
-	if(typeof key === 'string') tmp.viewedIf = [key];
-	Drop.creation(tmp);	
-}
-
+//Map
 var bullet = function(spot,atk,angle,hit){
 	hit = hit || 'player-simple';
 	
@@ -171,18 +178,10 @@ var actorGroup = function(spot,respawn,list,extra){
 	Actor.creation.group({'spot':spot,'respawn':respawn},tmp);
 }
 
-var sprite = function(key,name,size){
-	var tmp = {name:name};
-	if(size && size !== 1) tmp.sizeMod = size;
-	Sprite.change(getAct(key),tmp);
-}
 
-var bossAttack = Boss.attack;
-var bossSummon = Boss.summon;
-
-
-var getEnemy = function(key,tag){
-	return Map.getEnemy(getAct(key).map,tag);
+var collision = function(spot,cb){
+	if(!Loop.interval(5)) return;
+		Map.collisionRect(spot.map,spot,'player',cb);
 }
 
 var block = function(zone,extra,image){
@@ -200,21 +199,17 @@ var block = function(zone,extra,image){
 	}
 }
 
-
-var respawn = function(key,map,letter){	//must be same map
-	var player = getAct(key);
-	map = Actor.teleport.getMapName(player,map);
-
-	var spot = Map.getSpot(map,Q,letter);
-	if(spot) player.respawnLoc.recent = {x:spot.x,y:spot.y,map:spot.map};
+var drop = function(key,spot,name,amount,time){
+	time = time || 25*120;
+	if(!Quest.itemExist(Q+ '-' + name)) return;
+	
+	var tmp = {'spot':spot,"item":Q + '-' + name,"amount":amount,'timer':time};
+	if(typeof key === 'string') tmp.viewedIf = [key];
+	Drop.creation(tmp);	
 }
 
 
-
-
-var collision = function(spot,cb){
-	if(!Loop.interval(5)) return;
-		Map.collisionRect(spot.map,spot,'player',cb);
-}
-
+//Boss
+var bossAttack = Boss.attack;
+var bossSummon = Boss.summon;
 

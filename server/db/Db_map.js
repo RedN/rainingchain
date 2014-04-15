@@ -240,5 +240,72 @@ Init.db.map.baseMap = function(){
 	}
 }
 
+Map.creation = function(namemodel,version,lvl){
+	//create a copy of a default map. used for instanced map. version is usually the player name
+	version = version || 'MAIN';
+	var newid = namemodel + '@' + version;
+	var model = Db.map[namemodel];
+	
+	var newaddon = deepClone(model.addon);
+	for(var i in newaddon){
+		for(var j in newaddon[i].spot){
+			newaddon[i].spot[j].map = newid;
+			newaddon[i].spot[j].addon = i;
+		}
+	}
+	//TOFIX problem with grid if using graphic
+	
+	var map = {
+		id:newid,
+		randomId:Math.randomId(),
+		name:model.name,
+		version:version,
+		graphic:model.graphic,
+		grid:Db.map[model.graphic].grid,
+		model:model.id,
+		fall:model.fall,
+		timer:version === 'MAIN' ? 1/0 : 1000,// 5*60*1000/25,
+		list:{all:{},player:{},bullet:{},enemy:{},anim:{}},		//acts like List.all (for faster activeList and collisionRect)
+		lvl:lvl || model.lvl,
+		addon:newaddon,
+	};
+	
+	List.map[newid] = map;
+	
+	Map.load(List.map[newid]);
+	return newid;
+}
+
+Map.creation.model = function(map){	//create the model that will be in Db.map | Model will then be modded by quest
+	var grid = [];	//for astart
+	for(var i = 0 ; i < map.grid.length; i++){	
+		grid[i] = [];
+		for(var j = 0 ; j < map.grid[i].length; j++){
+			grid[i][j] = +!+map.grid[i][j];	//opposite
+		}
+	}
+	
+	map.graphic = map.graphic || map.id;
+	map.addon = map.addon || {};
+		
+	var strGrid = stringify(map.grid);
+	map.grid = {};
+	map.grid.astar = new astar.Graph(grid);
+	
+	//PRE: 0 => can walk, 1 => cant; 2 => bullet only can walk; 3 => fall close; 4 => fall
+	//POST: 0 => cant walk, 1 => can walk; 3 => fall close 4=> fall
+	map.grid.player = JSON.parse(strGrid.replaceAll('0','a').replaceAll('1','0').replaceAll('2','0').replaceAll('a','1'));
+	map.grid.enemy = JSON.parse(strGrid.replaceAll('0','a').replaceAll('1','0').replaceAll('2','0').replaceAll('a','1').replaceAll('4','0'));
+	map.grid.bullet = JSON.parse(strGrid.replaceAll('0','a').replaceAll('1','0').replaceAll('2','1').replaceAll('a','1'));
+	
+	return map;
+}
+
+Map.creation.all = function(){
+	for(var i in Db.map){
+		Map.creation(i);
+	}
+}
+
 
 

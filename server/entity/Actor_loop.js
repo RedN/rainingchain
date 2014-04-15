@@ -9,7 +9,7 @@ Actor.loop = function(act){
 	
 	if(act.dead){
 		if(act.type === 'player' && act.respawn-- <= 0)
-			Actor.respawn.player(act);
+			Actor.death.respawn(act);
 		return;
 	}
 	if(act.combat){

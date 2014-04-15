@@ -102,7 +102,6 @@ removeAny = function(i){
 
 }
 
-if(typeof Actor === 'undefined') Actor = {};
 Actor.loop = function(act){
 	Sprite.update(act);
 	Actor.loop.chatHead(act);	
@@ -199,3 +198,4 @@ Help.icon = function(txt,x,y,size){
 		'text':'Open Documentation',
 	});
 }
+
