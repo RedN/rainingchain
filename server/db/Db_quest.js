@@ -6,7 +6,7 @@ var questList = [
 	'QgoblinJewel'
 ];
 Quest = {};
-Quest.test = null;	//will trigger event.test() so that quest
+Quest.test = 'QgoblinJewel';	//will trigger event.test() so that quest
 
 
 
@@ -94,7 +94,8 @@ Quest.creation = function(q){
 }
 
 Quest.createVariableTester = function(q){
-	var item = {"id":'QuestTester-' + q.id,'name':q.id,'icon':'system.gold','stack':1,'drop':0,
+	//Var changer
+	var item = {"id":q.id + '-QuestVariable','name':q.id + " Var",'icon':'system.gold','stack':1,'drop':0,
 		'option':[]};
 	
 	for(var i in q.variable){
@@ -109,9 +110,33 @@ Quest.createVariableTester = function(q){
 			})()});		
 		},'param':[i]});
 	}
-
 	Item.creation(item);
 
+	//##################
+	//Event Caller
+	
+	var item = {"id":q.id + '-QuestTester','name':q.id + " Event",'icon':'system.gold','stack':1,'drop':0,
+		'option':[]};
+		
+	item.option.push({name:'Call Event','func':function(key){
+		Chat.question(key,{text:q.id,func:function(key,param){
+			if(q.event[param]) q.event[param](key);
+			else if(q.event.test && q.event.test.list && q.event.test.list[param]) q.event.test.list[param](key);
+			else Chat.add(key,"no found");
+		}});
+	}});
+		
+	item.option.push({name:'Teleport','func':function(key){
+		Chat.question(key,{text:"enter spot",func:function(key,param){
+			try{ 
+				var spot = List.map[List.all[key].map].addon[q.id].spot[param];
+				Actor.teleport(key,spot);
+			} catch(err) { logError(err); Chat.add(key,"no found"); }
+		}});
+	}});
+	
+	Item.creation(item);
+		
 }
 
 

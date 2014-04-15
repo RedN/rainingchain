@@ -6,6 +6,8 @@ Itemlist = {};
 Itemlist.add = function (inv,id,amount){
 	if(typeof inv === 'string') inv = List.main[inv].invList;
 	amount = amount || 1;
+	
+	if(!Db.item[id]){ DEBUG(0,'item dont exist' + id); return false;}
 	if(Db.item[id].stack || inv.alwaysStack){
 		if(Itemlist.have(inv,id)){
 			inv.data[Itemlist.have(inv,id,1,"position")][1] += amount;
@@ -30,7 +32,7 @@ Itemlist.test = function (inv,array_items){ //Test if theres enough place for al
 	if(typeof inv === 'string') inv = List.main[inv].invList;
 	
 	//Fast Test this
-	if(array_items.length <= Itemlist.empty(inv)){
+	if(array_items.length <= Itemlist.empty(inv)){	//no true if element is not stackable	//TOFIX
 		return true;
 	} 
 	var spaceNeeded = 0;
@@ -60,6 +62,7 @@ Itemlist.remove = function (inv,id,amount){
 	if(typeof inv === 'string') inv = List.main[inv].invList;
 	
 	amount = amount || 1;
+	if(!Db.item[id]){ DEBUG(0,'item dont exist' + id); return false;}
 	if(Db.item[id].stack || inv.alwaysStack){
 		for(var i = 0 ; i < inv.data.length ; i ++){
 			if(inv.data[i][0] === id){
@@ -100,9 +103,11 @@ Itemlist.empty = function (inv,amount){ //Return amount of empty slots. (If amou
 }
 
 Itemlist.have = function (inv,id,amount,info){
+	if(typeof inv === 'string') inv = List.main[inv].invList;
+	
 	amount = amount || 1;
 	info = info || "bool";
-	
+	if(!Db.item[id]){ DEBUG(0,'item dont exist ' + id); return false;}
 	if(Db.item[id].stack || inv.alwaysStack){	
 		for(var i = 0 ; i < inv.data.length ; i++){
 			if(inv.data[i][0] === id){
@@ -299,5 +304,16 @@ Itemlist.trade.reset = function(trade){
 
 
 
+
+Itemlist.arrayToObj = function(list){
+	var tmp = {};
+	for(var i in list)	tmp[list[i][0]] = list[i][1];
+	return tmp;
+}
+Itemlist.objToArray = function(list){
+	var tmp = [];
+	for(var i in list)	tmp.push([i,list[i]]);
+	return tmp;
+}
 
 

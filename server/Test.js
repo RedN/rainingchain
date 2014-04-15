@@ -16,8 +16,9 @@ Test.signIn = function(key){ //Called when player logs in
 	if(Server.testing){
 		Db.quest["Qtest"].event.start(key);	//test
 		if(Quest.test){
-			Itemlist.add(key,'QuestTester-' + Quest.test);
-			Db.quest[Quest.test].event.test(key);
+			Itemlist.add(key,Quest.test + '-QuestVariable');
+			Itemlist.add(key,Quest.test + '-QuestTester');
+			Db.quest[Quest.test].event.test.login(key);
 		}
 	}
 	

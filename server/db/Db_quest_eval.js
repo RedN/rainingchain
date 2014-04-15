@@ -11,7 +11,12 @@ var get = function(key,attr){
 
 var set = function(key,attr,attr2,value){
 	var mq = Quest.getMain(key,Q);
-		
+	
+	if(attr === 'started'){
+		mq[attr] = true;
+		chat(key,"You started the quest '" + q.name + "'.");
+		return;
+	}	
 	if(!mq.started){
 		Chat.add(key,"You need to start this quest via the Quest Tab before making progress in it."); 
 		return;
@@ -41,27 +46,65 @@ var dialogue = function(key,npc,convo,node){
 
 
 var addItem = function(key,item,amount){
-	if(item.indexOf(Q) !== 0) item = item = Q+'-'+item;
-	if(Quest.itemExist(item)) Itemlist.add(key,item,amount);
-}
-var removeItem = function(key,item,amount){
-	if(item.indexOf(Q) !== 0) item = item = Q+'-'+item;
-	if(Quest.itemExist(item)) Itemlist.remove(key,item,amount);
-}
-
-var haveItem = function(key,item,amount){
-	if(Quest.itemExist(Q+'-'+item)) item = Q+'-'+item;
-	Itemlist.have(key,item,amount);
-}
-
-var testItem = function (key,array_items){
-	var list = deepClone(array_items);
-	for(var i in list){
-		if(Quest.itemExist(Q+'-'+list[i][0]))
-			list[i][0] = Q+'-'+list[i][0];
+	if(typeof item === 'object'){
+		for(var i in item) addItem(key,i,item[i]);
+		return;
 	}
-	return Itemlist.test(key,list);
+
+	item = getItemName(item);
+	if(Quest.itemExist(item))	Itemlist.add(key,item,amount);
+	else chat(key,"BUG. ITEM DOES NOT EXIST @ " + item);
 }
+
+var removeItem = function(key,item,amount){
+	if(typeof item === 'object'){
+		for(var i in item) removeItem(key,i,item[i]);
+		return;
+	}
+
+	item = getItemName(item);
+	if(Quest.itemExist(item))	Itemlist.remove(key,item,amount);
+	else chat(key,"BUG. ITEM DOES NOT EXIST @ " + item);
+}
+
+var haveItem = function(key,item,amount,removeifgood){
+	if(typeof item === 'object'){
+		for(var i in item){
+			if(!haveItem(key,i,item[i])) return false;
+		}
+		if(amount) removeItem(key,item);	//amount acts as removeifgood
+		return true;
+	}
+
+	item = getItemName(item);
+	if(Quest.itemExist(item)){
+		var success = Itemlist.have(key,item,amount);
+		if(success && removeifgood) Itemlist.remove(key,item,amount);
+		return success;
+	}
+	else chat(key,"BUG. ITEM DOES NOT EXIST @ " + item);
+	return false;
+}
+
+var getItemName = function(name){
+	if(name.have(Q)) return name;
+	else return Q + '-' + name;
+}
+
+var testItem = function (key,item,amount,addifgood){
+	if(typeof item === 'object'){
+		var success = Itemlist.test(key,Itemlist.objToArray(item));
+		if(amount) addItem(key,item);	//amount acts as addifgood
+		return true;
+	}
+	
+	
+	item = getItemName(item);
+	var success = Itemlist.test(key,[[item,amount || 1]]);
+	if(success && addifgood) addItem(key,item,amount);
+	return success;
+}
+
 
 var chat = Chat.add;
 var cutscene = function(key,map,path){
@@ -146,17 +189,28 @@ var getEnemy = function(key,tag){
 	return null;
 }
 
-var block = function(zone,extra){
+var block = function(zone,extra,image){
+	image = image || 'spike';
+	extra = extra || {};
 	if(zone[2] === zone[3]){	//horizontal
 		for(var i = zone[0]; i <= zone[1]; i += 32){
-			actor({x:i+16,y:zone[2],map:zone.map,addon:zone.addon},'block','spike',extra);
+			actor({x:i+16,y:zone[2],map:zone.map,addon:zone.addon},'block',image,extra);
 		}
 	}
 	if(zone[0] === zone[1]){
 		for(var i = zone[2]; i <= zone[3]; i += 32){
-			actor({x:zone[0],y:i+16,map:zone.map,addon:zone.addon},'block','spike',extra);
+			actor({x:zone[0],y:i+16,map:zone.map,addon:zone.addon},'block',image,extra);
 		}	
 	}
+}
+
+
+var respawn = function(key,map,letter){	//must be same map
+	var player = getAct(key);
+	map = Actor.teleport.getMapName(player,map);
+
+	var spot = Map.getSpot(map,Q,letter);
+	if(spot) player.respawnLoc.recent = {x:spot.x,y:spot.y,map:spot.map};
 }
 
 

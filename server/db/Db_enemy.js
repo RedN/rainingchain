@@ -912,6 +912,15 @@ Init.db.enemy = function(){
 		'nevermove':1,
 		"block":{condition:'true',size:[0,0,0,0]},
 	}; //}
+	
+	a["block"]["invisible"] = {  //{
+		"name":"Spike",
+		'minimapIcon':'',
+		"sprite":{'name':"invisible",'sizeMod':1},
+		'nevercombat':1,
+		'nevermove':1,
+		"block":{condition:'true',size:[0,0,0,0]},
+	}; //}
 	//}
 	
 	a["tree"] = {}; //{

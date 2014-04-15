@@ -8,6 +8,9 @@ test and add same time
 call function on disconnect quest
 some dialogue cant be ended
 
+
+nicer chat question
+
 put custom id on enemy to be able to grab it in events
 
 sdk quest prevent if not started
@@ -15,6 +18,9 @@ can use whole quest file for testing dialogue
 transform
 block a zone and create barricade auto
 boss summon
+
+chest and skillplot anim on and off.
+change optionlist name for chest for something general ex flower
 
 ```
 lvl for monsters

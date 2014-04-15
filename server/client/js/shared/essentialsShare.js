@@ -1,7 +1,6 @@
 //List of handy functions.
 
-
-DEBUG = function(text){ permConsoleLog(text); }
+DEBUG = function(lvl,text){ permConsoleLog(lvl + text); permConsoleLog(new Error().stack);}
 LOG = function(lvl,key,name,param){
 	/*
 	0:Very important
@@ -38,54 +37,6 @@ LOG.display = function(key){
 LOG.data = [];
 LOG.level = 2;
 
-
-
-DEBUG = function(lvl,message){
-	/*
-	0:CRASH
-	1:ERR
-	2:NOT GOOD
-	3:IMPORTANT ACTION
-	4:NOT IMPORTANT ACTION	
-	*/
-	
-	if(lvl > DEBUG.level) return;
-	
-	var arg = '';
-	for (var i=1; i<arguments.length; i++) 
-		if(typeof arg !== 'undefined') 
-			arg += JSON.stringify(arguments[i]) + ',';
-	arg = arg.slice(0,-1);
-	
-	
-	var trace = new Error().stack;
-	if(!DEBUG.minify){
-		permConsoleLog(arg,trace);
-		return;
-	}
-	
-	var array = trace.split('\n    at ');		//put in array
-	array.splice(0,2);					//remove first 2 line (Error. and info about DEBUG)
-	
-	var func = [];
-	for(var i = 0 ; i < DEBUG.stackSize && i < array.length; i++){
-		if(array[i].have("Object"))	//Object.[Actor.updateEquip] (C:\\r
-			func.push(array[i].slice(7,array[i].indexOf(' (C:')));
-		else if(array[i].have("Function"))	//Function.Load.player.uncompress (C:
-			func.push(array[i].slice(9,array[i].indexOf(' (C:')));
-		else 
-			func.push(array[i].slice(0,array[i].indexOf(' (C:')));
-	}
-	var str = func[0];
-	str += '(' + arg + '); ';
-	for(var i =1;i<func.length;i++) str += ' *** ' + func[i];
-	permConsoleLog(str);
-		
-}  
-
-DEBUG.level = 10;
-DEBUG.stackSize = 10;
-DEBUG.minify = true;
 
 
 /* DATE
@@ -496,7 +447,7 @@ String.prototype.set = function(pos,value){
 
 //Testing
 eval('permCo' + 'nsoleLog = function(){ co' + 'nsole.log.apply(co' + 'nsole,arguments); }');
-logError = function(err) {
+logError = function(err) {	//ERROR
 	//permConsoleLog(err); return;
 	if (typeof err === 'object') {
 		if (err.message) { permConsoleLog('\nMessage: ' + err.message) }

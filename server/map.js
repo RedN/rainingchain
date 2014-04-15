@@ -198,8 +198,14 @@ Map.enter = function(act,map){
 }
 
 Map.getSpot = function(id,addon,spot){
+
+	console.log(Map.getModel(id),addon,spot);
+	console.log(Db.map[Map.getModel(id)],Db.map[Map.getModel(id)].addon[addon]);
+	
 	var a = Db.map[Map.getModel(id)].addon[addon].spot[spot];	//cant use list cuz map could not be created yet
 	
+	
+	if(!a){ DEBUG(0,'spot not found ' + id + addon + spot); return }
 	return {
 		x:a.x,
 		y:a.y,

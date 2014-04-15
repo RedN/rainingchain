@@ -288,6 +288,10 @@ Init.db.sprite = function(){
     	"preBumperBox":[ -16,16,-32,32 ],"preHitBox":[ -16,16,-32,32 ],"anim": {
     		"walk":{"startY":0,"frame":1,"sizeX":32,"sizeY":64,"dir":1,"spd":0,"next":"walk"},  
     	}};
+	a["invisible"] ={"src":"picture/invisible.png","size":1,"side":[0],"legs":0,
+    	"preBumperBox":[ -16,16,-16,16 ],"preHitBox":[ -16,16,-16,16 ],"anim": {
+    		"walk":{"startY":0,"frame":1,"sizeX":32,"sizeY":32,"dir":1,"spd":0,"next":"walk"},  
+    	}};
 	a["underground"] ={"src":"picture/barrier.png","size":2,"side":[0],
     	"preBumperBox":[ -16,16,-16,16 ],"preHitBox":[ -16,16,-16,16 ],"anim": {
     		"walk":{"startY":0,"frame":1,"sizeX":32,"sizeY":32,"dir":1,"spd":0,"next":"walk"},  

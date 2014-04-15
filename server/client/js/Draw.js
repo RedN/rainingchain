@@ -306,7 +306,8 @@ Draw.chat.dialogue = function(){
 	html.chat.div.style.visibility = "hidden"; //dunno if useful
 	html.dialogue.div.style.visibility = "visible";
 	html.dialogue.text.style.width = s.w - 2*s.textBorder + 'px';
-	
+	html.dialogue.text.style.font = '20px Kelly Slab';
+
 	if(dia.face){
 		html.dialogue.text.style.width = s.w - 2*s.textBorder-s.faceX + 'px';
 		html.dialogue.div.style.left = (s.x + s.divX + s.textBorder + s.faceX) + 'px';
@@ -318,7 +319,6 @@ Draw.chat.dialogue = function(){
 	for(var i in dia.option){
 		str  += '<br><span ' +
 			'onclick="Chat.send.command(\'$dialogue,option,' + i + '\');" ' +
-			'title="' + dia.option[i].text + '"' + 
 			'>' +
 			'<font size="4">&nbsp; - ' + dia.option[i].text + '</font>' +
 			'</span>';
