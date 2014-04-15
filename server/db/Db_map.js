@@ -307,5 +307,14 @@ Map.creation.all = function(){
 	}
 }
 
+Map.remove = function(map){
+	if(map.id === map.model) return; //cant delete main maps
+	for(var i in map.list){
+		for(var j in map.list[i]){
+			removeAny(List.all[j]);
+		}
+	}
+	delete List.map[map.id];
+}
 
 

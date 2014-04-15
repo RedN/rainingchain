@@ -166,6 +166,21 @@ Main.chrono = function(main,name,action,text){
 
 
 
+Main.dropInv = function(main,id){
+	var act = List.all[main.id];
+	if(Main.destroyInv(main,id))
+		Drop.creation({'x':act.x,'y':act.y,'map':act.map,'item':id,'amount':amount,'timer':25*30});
+	LOG(1,act.id,'dropInv',id,amount);
+}
+
+Main.destroyInv = function(main,id){
+	var inv = main.invList;
+	var amount = Math.min(1,Itemlist.have(inv,id,0,'amount'));
+	if(!amount) return false;
+	Itemlist.remove(inv,id,amount);
+	LOG(1,act.id,'destroyInv',id,amount);
+	return true;
+}
 
 
 

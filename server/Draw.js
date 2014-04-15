@@ -43,8 +43,8 @@ Draw.drop = function(key){
 		
 		Button.creation(key,{
 		"rect":[numX,numX+32,numY,numY+32],
-		"left":{"func":'Actor.pickDrop',"param":[i]},
-		'right':{'func':'Actor.rightClickDrop','param':[[drop.x,drop.x+32,drop.y,drop.y+32]]},
+		"left":{"func":'Actor.click.drop',"param":[i]},
+		'right':{'func':'Actor.click.drop.right','param':[[drop.x,drop.x+32,drop.y,drop.y+32]]},
 		'text':'Pick ' + Db.item[drop.item].name,
 		});	
 	

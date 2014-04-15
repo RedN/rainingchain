@@ -4,9 +4,9 @@ Bullet = {};
 Bullet.remove = function(b){
 	Activelist.remove(b);
 	
-	delete List.bullet[b.id];
-	delete List.all[b.id]
 	Map.leave(b);
+	delete List.bullet[b.id];
+	delete List.all[b.id];
 }
 
 Bullet.loop = function(b){

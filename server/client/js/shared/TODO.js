@@ -1,29 +1,28 @@
 
 ===PRE SDK===
 transform not be overwrite if change equip
+new sprite change system: sprite.normal and sprite.custom
 
 call function on disconnect quest
 some dialogue cant be ended
 
 nicer chat question
 
-put custom id on enemy to be able to grab it in events
 
 can use whole quest file for testing dialogue
 boss summon
 
-chest and skillplot anim on and off.
 change optionlist name for chest for something general ex flower
 
 give basic equip always
 
-new sprite change system: sprite.normal and sprite.custom
+
+normalize block and sprite name
 ```
 lvl for monsters
 
-exp after completing quest
+exp after completing quest for enemy
 
-map spot too far away warning
 
 
 

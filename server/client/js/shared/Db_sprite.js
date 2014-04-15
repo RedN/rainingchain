@@ -264,10 +264,9 @@ Init.db.sprite = function(){
     	}};
 		
 	a["switchBox"] ={"src":"picture/switch.png","size":2,"side":[0],
-    	"preBumperBox":[ -16,16,-16,16 ],"preHitBox":[ -16,16,-16,16 ],'defaultAnim':'off',"anim": {
-    		//"walk":{"startY":64,"frame":1,"sizeX":32,"sizeY":32,"dir":1,"spd":0,"next":"walk"},  
-			"off":{"startY":0,"frame":1,"sizeX":32,"sizeY":32,"dir":1,"spd":0,"next":"off"},	
-			"on":{"startY":64,"frame":1,"sizeX":32,"sizeY":32,"dir":1,"spd":0,"next":"on"},							
+    	"preBumperBox":[ -16,16,-16,16 ],"preHitBox":[ -16,16,-16,16 ],'defaultAnim':'off',"anim": {	
+			"on":{"startY":64,"frame":1,"sizeX":32,"sizeY":32,"dir":1,"spd":0,"next":"on"},	
+    		"off":{"startY":0,"frame":1,"sizeX":32,"sizeY":32,"dir":1,"spd":0,"next":"off"},						
     	}};
 	
 	a["door"] ={"src":"picture/door.png","size":1,"side":[0],

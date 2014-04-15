@@ -34,14 +34,6 @@ Actor.teleport.getMapName = function(act,map){
 	return map;
 }
 
-Actor.teleport.click = function(act,eid){
-	var e = List.all[eid];
-	var tele = e.teleport;
-	if(Collision.distancePtPt(act,e) > tele.distance){ Chat.add(act.id,"You're too far."); return; }
-	tele.func(act.id);
-
-}
-
 Actor.teleport.selectInstance = function(act,eid){
 	//TODO
 	Actor.teleport.click(act,eid);
@@ -54,14 +46,25 @@ Actor.teleport.join = function(act,mort2){
 	return true;
 }
 
-Actor.dialogue = function(act,eid){
+
+//Optionlist
+Actor.click = {};
+Actor.click.teleport = function(act,eid){
 	var e = List.all[eid];
-	var dia = e.dialogue;
-	if(Collision.distancePtPt(act,e) > dia.distance){ Chat.add(act.id,"You're too far."); return; }
-	dia.func(act.id);
+	var tele = e.teleport;
+	if(Collision.distancePtPt(act,e) > 150){ Chat.add(act.id,"You're too far."); return; }
+	tele(act.id);
+
 }
 
-Actor.pushing = function(pusher,beingPushed){
+Actor.click.dialogue = function(act,eid){
+	var e = List.all[eid];
+	var dia = e.dialogue;
+	if(Collision.distancePtPt(act,e) > 150){ Chat.add(act.id,"You're too far."); return; }
+	dia(act.id);
+}
+
+Actor.click.block = function(pusher,beingPushed){
 	var act = List.all[beingPushed];
 	if(!act.block || !act.block.pushable) return
 	
@@ -101,7 +104,7 @@ Actor.pushing = function(pusher,beingPushed){
 	
 }
 
-Actor.harvest = function(act,eid){	
+Actor.click.skillPlot = function(act,eid){	
 	var e = List.all[eid];
 	if(!e.skillPlot){ DEBUG(2,'trying to harvest not harvestable',eid); return; }
 	var type = e.skillPlot.type;
@@ -131,14 +134,18 @@ Actor.harvest = function(act,eid){
 	LOG(2,key,'harvest',item);
 }
 
-Actor.setRespawn = function(act,wp){
+Actor.click.waypoint = function(act,eid){
+	var e = List.all[eid];
+	var wp = e.waypoint;
+	if(Collision.distancePtPt(act,e) > 150){ Chat.add(act.id,"You're too far."); return; }
+	
 	Chat.add(act.id,"You have changed your respawn point. Upon dying, you will now be teleported here.");
 
-	act.respawnLoc.recent = {x:wp.x,y:wp.y,map:wp.map};
-	if(wp.map.have('@MAIN')) act.respawnLoc.safe = {x:wp.x,y:wp.y,map:wp.map};
+	act.respawnLoc.recent = {x:wp.x,y:wp.y + 64,map:wp.map};
+	if(wp.map.have('@MAIN')) act.respawnLoc.safe = {x:wp.x,y:wp.y + 64,map:wp.map};
 }
 
-Actor.openChest = function(act,eid){	//need work
+Actor.click.chest = function(act,eid){	//need work
 	var e = List.all[eid];
 	
 	if(Collision.distancePtPt(act,e) > 100){ Chat.add(act.id,"You're too far away."); return;}
@@ -157,7 +164,7 @@ Actor.openChest = function(act,eid){	//need work
 	LOG(2,act.id,'openChest',eid);
 }
 
-Actor.activateSwitch = function(act,eid){
+Actor.click.switch = function(act,eid){
 	var e = List.all[eid];
 	
 	if(Collision.distancePtPt(act,e) > 100){ Chat.add(act.id,"You're too far away."); return;}
@@ -179,26 +186,7 @@ Actor.activateSwitch = function(act,eid){
 
 }
 
-Actor.removeOnClick = function(act,side){
-	for(var i in act.optionList.option){
-		if(act.optionList.option[i] === act.onclick[side]){
-			act.optionList.option.splice(i,1);
-			delete act.onclick[side];
-			return;
-		}
-	}
-}	
-
-Actor.removeOption = function(act,option){	//option is object or name
-	for(var i in act.optionList.option){
-		if(act.optionList.option[i] === option || act.optionList.option[i].name === option){
-			act.optionList.option.splice(i,1);
-			return;
-		}
-	}
-}	
-
-Actor.pickDrop = function (act,id){
+Actor.click.drop = function (act,id){
 	var inv = List.main[act.id].invList;
 	var drop = List.drop[id];
 		
@@ -221,33 +209,45 @@ Actor.pickDrop = function (act,id){
 	LOG(1,act.id,'pickDrop',drop);
 }
 
-Actor.rightClickDrop = function(act,rect){
+Actor.click.drop.right = function(act,rect){
 	var key = act.id;
 	var ol = {'name':'Pick Items','option':[]};
 	for(var i in List.drop){
 		var d = List.drop[i];
 		if(d.map == List.all[key].map && Collision.RectRect(rect,[d.x,d.x+32,d.y,d.y+32]) ){
-			ol.option.push({'name':'Pick ' + Db.item[List.drop[i].item].name,'func':'Actor.pickDrop','param':[i]});
+			ol.option.push({'name':'Pick ' + Db.item[List.drop[i].item].name,'func':'Actor.click.drop','param':[i]});
 		}
 	}
 	
 	if(ol.option)	Button.optionList(key,ol);  
 }
 
-Actor.dropInv = function(act,id){
-	if(Actor.destroyInv(act,id))
-		Drop.creation({'x':act.x,'y':act.y,'map':act.map,'item':id,'amount':amount,'timer':25*30});
-	LOG(1,act.id,'dropInv',id,amount);
-}
 
-Actor.destroyInv = function(act,id){
-	var inv = List.main[act.id].invList;
-	var amount = Math.min(1,Itemlist.have(inv,id,0,'amount'));
-	if(!amount) return false;
-	Itemlist.remove(inv,id,amount);
-	LOG(1,act.id,'destroyInv',id,amount);
-	return true;
+Actor.click.player = function(act,eid){
+	Main.openWindow(act.id,'trade',eid);
 }
+//
+
+Actor.removeOnClick = function(act,side){
+	for(var i in act.optionList.option){
+		if(act.optionList.option[i] === act.onclick[side]){
+			act.optionList.option.splice(i,1);
+			delete act.onclick[side];
+			return;
+		}
+	}
+}	
+
+Actor.removeOption = function(act,option){	//option is object or name
+	for(var i in act.optionList.option){
+		if(act.optionList.option[i] === option || act.optionList.option[i].name === option){
+			act.optionList.option.splice(i,1);
+			return;
+		}
+	}
+}	
+
+
 
 
 

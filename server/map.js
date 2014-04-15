@@ -76,15 +76,6 @@ Map.instance.player = function(id){
 	return plist;
 }
 
-Map.remove = function(map){
-	if(map.id === map.model) return; //cant delete main maps
-	for(var i in map.list){
-		for(var j in map.list[i]){
-			removeAny(List.all[j]);
-		}
-	}
-	delete List.map[map.id];
-}
 
 
 Map.leave = function(act,map){
@@ -151,7 +142,6 @@ Map.getSpot = function(id,addon,spot){
 Map.getAddon = function(id,addon){
 	return List.map[id].addon[addon];	
 }
-
 
 Map.getEnemy = function(map,tag){
 	var list = List.map[map].list.enemy;

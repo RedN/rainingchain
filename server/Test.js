@@ -12,6 +12,7 @@ Test.serverStart = function(){
 
 Test.signIn = function(key){ //Called when player logs in
 	Test.signIn.hideHUD(key);
+	Test.signIn.quest(key);
 	
 	if(Server.testing){
 		Db.quest["Qtest"].event.start(key);	//test
@@ -45,6 +46,15 @@ Test.signIn.hideHUD = function(key){
 	if(total < 15) List.main[key].hideHUD.advancedStat = 1;
 	if(total < 10) List.main[key].hideHUD.passive = 1;
 }
+
+Test.signIn.quest = function(key){
+	var mq = List.main[key].quest;
+	for(var i in mq){
+		if(mq[i].started && Db.quest[i].event.signIn)
+			Db.quest[i].event.signIn(key);	
+	}
+}
+
 
 Test.setAbility = function(key){
 	var act = List.all[key];

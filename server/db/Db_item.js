@@ -105,8 +105,8 @@ Item = {};
 
 Item.creation = function(item){	
 	item = useTemplate(Item.template(),item);
-	if(item.drop){	item.option.push({'name':'Drop','func':'Actor.dropInv','param':[item.id]})}
-	if(item.destroy){	item.option.push({'name':'Destroy','func':'Actor.destroyInv','param':[item.id]})}
+	if(item.drop){	item.option.push({'name':'Drop','func':'Main.dropInv','param':[item.id]})}
+	if(item.destroy){	item.option.push({'name':'Destroy','func':'Main.destroyInv','param':[item.id]})}
 	Db.item[item.id] = item;
 }
 

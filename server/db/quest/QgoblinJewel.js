@@ -1,24 +1,6 @@
 var q = Quest.template('QgoblinJewel','v1.0');
 eval(Quest.template.eval(q));
 
-
-
-/*
-got		got[ITEMID]			=> received item
-kill 	kill[ENEMY CATVAR]	=> have killed (both bool and count)
-item 	item[ITEMID]		=> use item
-cs 		cs[INFO]			=> cutscene
-talk	talk[WHO ACTION]	=> talk done
-*/
-
-
-q.variable = {
-	killGoblin:0,
-	killGoblinBoss:0,
-	
-	csInBoss:false,
-};
-
 /*
 ### STEPS ###
 talk ringo
@@ -38,6 +20,21 @@ leave camp
 talk ringo
 */
 
+/*
+got		got[ITEMID]			=> received item
+kill 	kill[ENEMY CATVAR]	=> have killed (both bool and count)
+item 	item[ITEMID]		=> use item
+cs 		cs[INFO]			=> cutscene
+talk	talk[WHO ACTION]	=> talk done
+*/
+
+
+q.variable = {
+	killGoblin:0,
+	killGoblinBoss:0,
+	csInBoss:false,
+};
+
 q.event = {
 	hint:function(key){
 		if(!get(key,'started')) return 'You can start this quest by talking to the guy south west of Goblin Land';
@@ -49,6 +46,9 @@ q.event = {
 			respawn(key,'goblinLand','n1');
 		}
 	},	
+	signIn:function(key){
+	
+	},
 	start:function(key){
 		
 		
@@ -84,8 +84,8 @@ q.event = {
 	itemPotionUnf:function(key){
 		if(haveItem(key,{'potion_unf':1,'orc_sock':1,'flower':1},true)){
 			addItem(key,'potion');
-			chat(key,"You completed the potion by adding Orc Socks and the Mystical flower.");		
-		} else chat(key,"You don't have all the ingredients needed.");	
+			chat(key,"You completed the potion by adding Orc socks and the Mystical flower.");		
+		} else chat(key,"You don't have all the ingredients needed. (Orc socks and Mystical flower)");	
 	},
 	itemPotion:function(key){
 		chat(key,"You should wait until I'm closer to the Goblin Camp before drinking it.");
@@ -96,7 +96,7 @@ q.event = {
 			teleport(key,'goblinCamp@','t3');
 			sprite(key,'orcMelee');
 		}
-		else chat(key,"You don't want the goblins to be even more mad against human. You should transform into an orc with the potion because messing with goblins.");
+		else chat(key,"You don't want the goblins to be even more mad against human.");
 	},
 	killGoblin:function(key){
 		set(key,"killGoblin",get(key,"killGoblin") + 1);
@@ -147,37 +147,31 @@ q.item['potion_unf'] = {'name':'Unfinished Potion','icon':'magic.staff','drop':0
 	{'name':'Finish potion','description':'Requires 1 mystical flower and 1 orc socks.','param':[],'func':q.event.itemPotionUnf},
 ]};	
 
-q.item['orc_sock'] = {'name':'Orc Sock','icon':'magic.staff','drop':0,'bank':0,'option':[		
-
-]};
-
-q.item['flower'] = {'name':'Mystical Flower','icon':'magic.staff','drop':0,'bank':0,'option':[		
-
-]};
-
 q.item['potion'] = {'name':'Potion','icon':'magic.staff','drop':0,'bank':0,'option':[		
 	{'name':'Drink','description':'Transform into an orc.','param':[],'func':q.event.itemPotion},
 ]};	
 
+
+q.item['orc_sock'] = {'name':'Orc Sock','icon':'magic.staff','drop':0,'bank':0,'option':[]};
+q.item['flower'] = {'name':'Mystical Flower','icon':'magic.staff','drop':0,'bank':0,'option':[]};
 q.item['jewel'] = {'name':'Jewel','icon':'magic.staff','drop':0,'bank':0,'option':[]};	
+
 
 
 
 q.enemy["boss"] = {  //{
 	"name":"Goblin",
-	"sprite":{'name':"goblin",'sizeMod':1},
-	"abilityList":[],
+	"sprite":{'name':"goblin",'sizeMod':1.2},
 	'deathExp':1,
 	"mastery":{'def':{'melee':0.5,'range':0.5,'magic':0.5,'fire':2,'cold':2,'lightning':2},
 				'dmg':{'melee':1,'range':1,'magic':1,'fire':1,'cold':1,'lightning':1}},	
 	"acc":0.5,
 	"maxSpd":10,
-	"boss":Q+'-test',
 	"moveRange":{'ideal':250,"confort":25,"aggressive":500,"farthest":600},	
+	"abilityList":[],
+	"boss":Q+'-test',
 	'target,maxAngleChance':10,
 	'resource,hp,regen':0,
-	
-	
 }; //}
 
 q.dialogue['goblin'] = {'face':{'image':'bad-monster.0','name':'Ringo'},
@@ -549,17 +543,17 @@ q.map.goblinCamp = function(){
 			combat:0,
 		});
 
-		actorGroup(spot.ei,25*15,[
+		actorGroup(spot.ei,25*300,[
 			["goblin","melee",2,{deathFunc:q.event.killGoblin}],
 			["goblin","range",1,{deathFunc:q.event.killGoblin}],
 		]);	
 		
-		actorGroup(spot.eh,25*15,[
+		actorGroup(spot.eh,25*300,[
 			["goblin","magic",2,{deathFunc:q.event.killGoblin}],
 			["goblin","range",1,{deathFunc:q.event.killGoblin}],
 		]);	
 		
-		actorGroup(spot.eg,25*15,[
+		actorGroup(spot.eg,25*300,[
 			["goblin","range",1,{deathFunc:q.event.killGoblin}],
 		]);	
 	

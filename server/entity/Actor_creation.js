@@ -17,19 +17,16 @@ Actor.creation = function(d){
 	List.all[e.id] = e;
 	Map.enter(e);
 	
-	
-	if(typeof e.dialogue === 'function') e.dialogue = {func:e.dialogue,distance:150};
-	if(typeof e.teleport === 'function') e.teleport = {func:e.teleport,distance:150};
 	if(typeof e.chest === 'function') e.chest = {func:e.chest,list:[]};
 	if(e.switch) e.switch.state = e.switch.state || 'off';
 	
 	
+	if(e.nevermove){ Actor.creation.nevermove(e); }
 	if(e.nevercombat){ Actor.creation.nevercombat(e); }	
 	else {
 		e = Actor.creation.mod(e,data); 
 		e = Actor.creation.boost(e);
 	}
-	if(e.nevermove){ Actor.creation.nevermove(e); }
 	
 	for(var i in e.immune) e.mastery.def[i].sum = Cst.bigInt;
 	
@@ -240,22 +237,22 @@ Actor.creation.optionList = function(e){
 	var ol = {'name':e.name,'option':[]};
 	
 	if(e.onclick.shiftLeft)	ol.option.push(e.onclick.shiftLeft);
-	if(e.type === 'player') ol.option.push({'name':'Trade',"func":'Main.openWindow',"param":['trade',e.id]});
-	if(e.dialogue)	ol.option.push({'name':'Talk To',"func":'Actor.dialogue',"param":[e.id]});
-	if(e.waypoint)	ol.option.push({'name':'Set Respawn',"func":'Actor.setRespawn',"param":[{x:e.x,y:e.y+64,map:e.map}]});
-	if(e.chest)	ol.option.push({'name':'Open Chest',"func":'Actor.openChest',"param":[e.id]});	
-	if(e.skillPlot)	ol.option.push({'name':'Harvest',"func":'Actor.harvest',"param":[e.id]});
+	if(e.type === 'player') ol.option.push({'name':'Trade',"func":'Actor.click.player',"param":[e.id]});
+	if(e.dialogue)	ol.option.push({'name':'Talk',"func":'Actor.click.dialogue',"param":[e.id]});
+	if(e.waypoint)	ol.option.push({'name':'Set Respawn',"func":'Actor.click.waypoint',"param":[e.id]});
+	if(e.chest)	ol.option.push({'name':'Loot',"func":'Actor.click.chest',"param":[e.id]});	
+	if(e.skillPlot)	ol.option.push({'name':'Harvest',"func":'Actor.click.skillPlot',"param":[e.id]});
 	if(e.teleport){
-		var info = {'name':'Teleport',"func":'Actor.teleport.click',"param":[e.id]};
+		var info = {'name':'Teleport',"func":'Actor.click.teleport',"param":[e.id]};
 		ol.option.push(info);
-		ol.option.push({'name':'Select Instance',"func":'Actor.teleport.selectInstance',"param":[e.id]});
+		//ol.option.push({'name':'Select Instance',"func":'Actor.teleport.selectInstance',"param":[e.id]});
 		e.onclick.shiftLeft = info;
 	}
 	if(e.switch){
-		ol.option.push({'name':'Pull Switch',"func":'Actor.activateSwitch',"param":[e.id]});
+		ol.option.push({'name':'Pull Switch',"func":'Actor.click.switch',"param":[e.id]});
 	}	
 	if(e.block && e.block.pushable){
-		var info = {'name':'Push',"func":'Actor.pushing',"param":[e.id]};
+		var info = {'name':'Push',"func":'Actor.click.block',"param":[e.id]};
 		ol.option.push(info);
 		e.onclick.shiftLeft = info;
 	} 
@@ -268,8 +265,6 @@ Actor.creation.nevercombat = function(act){
 	act.combat = 0;
 	
 	delete act.killed;
-	
-	
 	
 	delete act.permBoost;
 	delete act.boost;
@@ -343,9 +338,9 @@ Actor.creation.nevermove = function(act){
 
 Actor.remove = function(act){
 	Activelist.remove(act);
+	Map.leave(act);
 	delete List.actor[act.id];
 	delete List.all[act.id]
-	Map.leave(act);
 }
 
 

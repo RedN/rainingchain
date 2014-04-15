@@ -251,9 +251,6 @@ Itemlist.click.inventory = function(inv,side,slot,amount){
 	}
 }
 
-
-
-
 Itemlist.click.bank = function(bank,side,slot,amount){
 	if(!bank.data[slot] || !bank.data[slot].length){ return; }
 	var inv = List.main[bank.key].invList;
@@ -278,12 +275,10 @@ Itemlist.click.bank = function(bank,side,slot,amount){
 	if(side === 'shiftLeft'){ Itemlist.transfer(bank,inv,id,amount);}		
 }
 
-
 Itemlist.click.trade = function(trade,side,slot){
 	Itemlist.click.bank(trade,side,slot);
 	Itemlist.trade.reset(trade);
 }
-
 
 //Actual trade function is Command.list['win,trade,toggle']
 Itemlist.trade = function(trade,other){
