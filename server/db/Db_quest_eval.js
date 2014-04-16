@@ -134,14 +134,16 @@ var cutscene = function(key,map,path){
 
 var freeze = function(key,time,cb){
 	var act = getAct(key);
-	time = time || Cst.MIN*10;
-	Actor.setCutscene(act,[{x:act.x,y:act.y},time],cb);
+	getAct(key).move = 0;
+	time = time || Cst.MIN*10;	
+	Actor.setTimeOut(act,'freeze',time,function(key){
+		getAct(key).move = 1;
+	});
 }
 
 var unfreeze = function(key){
-	var act = getAct(key);
-	act.target.cutscene.active = 0;
-	act.combat = act.target.cutscene.oldCombat;
+	getAct(key).move = 1;
+	delete getAct(key).timeOut.freeze;
 }
 
 

@@ -50,3 +50,6 @@ Actor.getAbility = function(act){
 Actor.getAbilityList = function(act){
 	return act.abilityList[act.combatContext];
 }
+
+
+

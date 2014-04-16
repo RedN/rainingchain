@@ -7,6 +7,7 @@ Actor.loop = function(act){
 	if(act.frameCount % 25 === 0){ Actor.loop.activeList(act); }
 	if(!act.active) return;
 	
+	Actor.loop.timeOut(act);
 	if(act.dead){
 		if(act.type === 'player' && act.respawn-- <= 0)
 			Actor.death.respawn(act);
@@ -116,6 +117,20 @@ Actor.performAbility.resource = function(act,cost){
 }
 
 //}
+
+Actor.loop.timeOut = function(act){
+	for(var i in act.timeOut){
+		if(--act.timeOut[i].timer < 0){
+			act.timeOut[i].func(act.id);
+			delete act.timeOut[i];		
+		}	
+	}
+}
+
+Actor.setTimeOut = function(act,name,time,cb){
+	name = name || Math.randomId();
+	act.timeOut[name] = {timer:time,func:cb};
+}
 
 Actor.loop.mapMod = function(act){
 	act.mapMod = {};
@@ -327,12 +342,11 @@ Actor.fall = function(act){
 	List.map[act.map].fall(act.id,act);
 }
 
-
 Actor.loop.move = function(act){
-	if(act.bumper[0]){act.spdX = -Math.abs(act.spdX*0.5) - 1;} 
-	if(act.bumper[1]){act.spdY = -Math.abs(act.spdY*0.5) - 1;}
-	if(act.bumper[2]){act.spdX = Math.abs(act.spdX*0.5) + 1;} 
-	if(act.bumper[3]){act.spdY = Math.abs(act.spdY*0.5) + 1;} 
+	if(act.bumper[0]){act.spdX = -Math.abs(act.spdX*0.5)*act.bounce - 1;} 
+	if(act.bumper[1]){act.spdY = -Math.abs(act.spdY*0.5)*act.bounce - 1;}
+	if(act.bumper[2]){act.spdX = Math.abs(act.spdX*0.5)*act.bounce + 1;} 
+	if(act.bumper[3]){act.spdY = Math.abs(act.spdY*0.5)*act.bounce + 1;} 
 
 	if(act.moveInput[0] && !act.bumper[0] && act.spdX < act.maxSpd){act.spdX += act.acc;}
 	if(act.moveInput[1] && !act.bumper[1] && act.spdY < act.maxSpd){act.spdY += act.acc;}

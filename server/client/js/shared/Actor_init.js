@@ -71,6 +71,8 @@ Init.actor = function(){
 		act.abilityList = Actor.template.abilityList();		
 		act.combatContext = 'regular';		//or pvp
 		act.friction = 0.9;
+		act.bounce = 1;	
+		act.timeOut = {};
 		act.move = 1;
 		act.summon = {};       //if actor is master
 		act.summoned = 0;      //if actor is child. .summoned = master id
