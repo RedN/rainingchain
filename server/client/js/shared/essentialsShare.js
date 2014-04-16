@@ -587,7 +587,8 @@ Object.defineProperty(Object.prototype, "$length", {
 	}
 });	
 
-Object.defineProperty(Object.prototype, "toArray", {
+
+Object.defineProperty(Object.prototype, "$toArray", {
     enumerable: false,
     value: function(){
 		var tmp = [];

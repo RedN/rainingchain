@@ -11,7 +11,7 @@ Actor.boost = function(act, boost){	//boost: { 'stat':'globalDmg','value':1,'typ
 	}
 	
 	var b = useTemplate(Actor.boost.template(),boost);
-	b.id = b.stat + '@' + name;
+	b.id = b.stat + '@' + b.name;
 	
 	if(b.time > 250){ b.spd = 'slow'; }
 	if(b.time < 25){ b.spd = 'fast'; }
@@ -72,7 +72,7 @@ Actor.permBoost.stack = function(b){	//if boost same thing, add values
 		if(!tmp[name]) tmp[name] = {'type':b[i].type,'stat':b[i].stat,'value':0};
 		tmp[name].value += b[i].value;
 	}
-	return tmp.toArray();
+	return tmp.$toArray();
 }
 
 Actor.update = {};
