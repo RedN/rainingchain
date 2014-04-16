@@ -29,7 +29,7 @@ q.event = {
 q.item['generator'] = {'name':'Generator','icon':'magic.staff','stack':1,'drop':0,'option':[		
 	{'name':'Tele','param':[],'func':function(key){
 		Chat.question(key,{text:"x,y,map", func:function(key,x,y,map){
-			Actor.teleport(key,+x,+y,map);		
+			Actor.teleport(getAct(key),{x:+x,y:+y,map:map});		
 		}});	
 	}},	
 	{'name':'Item','param':[],'func':function(key){

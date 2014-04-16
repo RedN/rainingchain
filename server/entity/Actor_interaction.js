@@ -1,13 +1,9 @@
-Actor.teleport = function(act,x,y,mapName){
-	if(typeof x === 'object'){ Actor.teleport(act,x.x,x.y,x.map); return; }
-	act = typeof act === 'string' ? List.all[act] : act;
-	LOG(2,act.id,'teleport',x,y,mapName);
-	//Teleport player. if no map specified, stay in same map.
-	act.x = x;
-	act.y = y;
-	mapName = mapName || act.map;
+Actor.teleport = function(act,spot){
+	LOG(2,act.id,'teleport',spot);
 	
-	var map = Actor.teleport.getMapName(act,mapName);
+	act.x = spot.x;
+	act.y = spot.y;
+	var map = Actor.teleport.getMapName(act,spot.map);
 	
 	if(act.map === map){ 			//regular teleport
 		Activelist.remove(act);
@@ -28,6 +24,7 @@ Actor.teleport = function(act,x,y,mapName){
 }
 
 Actor.teleport.getMapName = function(act,map){
+	if(!map) return act.map;
 	if(!map.have("@"))	return map + '@MAIN'; 				//main instance
 	if(map.have("@@"))	return map + act.name; 				//alone instance
 	if(map[map.length-1] === '@') return map + act.team;	//team instance
@@ -54,7 +51,6 @@ Actor.click.teleport = function(act,eid){
 	var tele = e.teleport;
 	if(Collision.distancePtPt(act,e) > 150){ Chat.add(act.id,"You're too far."); return; }
 	tele(act.id);
-
 }
 
 Actor.click.dialogue = function(act,eid){
@@ -64,9 +60,9 @@ Actor.click.dialogue = function(act,eid){
 	dia(act.id);
 }
 
-Actor.click.block = function(pusher,beingPushed){
+Actor.click.pushable = function(pusher,beingPushed){
 	var act = List.all[beingPushed];
-	if(!act.block || !act.block.pushable) return
+	if(!act.pushable) return
 	
 	var pusherAngle = atan2(act.y - pusher.y,act.x - pusher.x);			//only work with square block
 	var fact = 360/4;
@@ -76,13 +72,10 @@ Actor.click.block = function(pusher,beingPushed){
 		//Block
 	var blockVarX = 0;	//only supported direction =4
 	var blockVarY = 0;
-	if(angle === 0) blockVarX = act.block.size[0];
-	if(angle === 90) blockVarY = act.block.size[2];
-	if(angle === 180) blockVarX = act.block.size[1];
-	if(angle === 270) blockVarY = act.block.size[3];
-	
-	blockVarX *= 32;
-	blockVarY *= 32;
+	if(angle === 0) blockVarX = act.block.size[0]*32;
+	if(angle === 90) blockVarY = act.block.size[2]*32;
+	if(angle === 180) blockVarX = act.block.size[1]*32;
+	if(angle === 270) blockVarY = act.block.size[3]*32;
 	
 		//Player
 	var pusherVarX = 0;	//only supported direction =4
@@ -98,15 +91,26 @@ Actor.click.block = function(pusher,beingPushed){
 	if(Collision.distancePtPt(posB,posP) > 64) return;	//toofar
 	//
 	
-	act.pushed.time = act.block.time;
-	act.pushed.magn = act.block.magn;
-	act.pushed.angle = angle;
-	
+	Actor.push(act,angle,act.pushable.magn,act.pushable.time);
+
 }
+
+Actor.push = function(act,angle,magn,time){
+	act.friction = 1;
+	act.spdX = magn*cos(angle);
+	act.spdY = magn*sin(angle);
+	
+	Actor.setTimeOut(act,'push',time,function(eid){
+		List.all[eid].spdX = 0;
+		List.all[eid].spdY = 0;
+		List.all[eid].friction = 0.9;
+	});
+}
+
 
 Actor.click.skillPlot = function(act,eid){	
 	var e = List.all[eid];
-	if(!e.skillPlot){ DEBUG(2,'trying to harvest not harvestable',eid); return; }
+	if(!e.skillPlot) return;
 	var type = e.skillPlot.type;
 	if(type === 'down'){
 		Chat.add(act.id,'This plot is down. Completing the quest ' + Db.quest[e.skillPlot.quest].name + ' will revive this plot.');
@@ -115,7 +119,7 @@ Actor.click.skillPlot = function(act,eid){
 	var plot = Db.skillPlot[type];
 	
 	var key = act.id;
-	var main = List.main[key]
+	var main = List.main[key];
 	var inv = main.invList;
 	var lvl = act.skill.lvl[plot.skill];
 	
@@ -136,13 +140,17 @@ Actor.click.skillPlot = function(act,eid){
 
 Actor.click.waypoint = function(act,eid){
 	var e = List.all[eid];
-	var wp = e.waypoint;
 	if(Collision.distancePtPt(act,e) > 150){ Chat.add(act.id,"You're too far."); return; }
 	
 	Chat.add(act.id,"You have changed your respawn point. Upon dying, you will now be teleported here.");
 
-	act.respawnLoc.recent = {x:wp.x,y:wp.y + 64,map:wp.map};
-	if(wp.map.have('@MAIN')) act.respawnLoc.safe = {x:wp.x,y:wp.y + 64,map:wp.map};
+	Actor.setRespawn(act,{x:e.x,y:e.y + 64,map:e.map},e.waypoint === 2);
+}
+
+Actor.setRespawn = function(act,spot,safe){
+	act.respawnLoc.recent = deepClone(spot);	//spot.map can have no @ cuz use Actor.teleport
+	if(spot.map.have("@MAIN") || safe)
+		act.respawnLoc.safe = deepClone(spot);
 }
 
 Actor.click.chest = function(act,eid){	//need work

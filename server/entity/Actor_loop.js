@@ -31,7 +31,6 @@ Actor.loop = function(act){
 	
 	if(act.move){
 		if(act.frameCount % 10 === 0){ Actor.loop.mapMod(act); }
-		Actor.loop.pushed(act);
 		Actor.loop.bumper(act);   //test if collision with map    
 		Actor.loop.move(act);  	//move the actor
 	}
@@ -154,16 +153,7 @@ Actor.loop.mapMod = function(act){
 
 };
 
-Actor.loop.pushed = function(act){
-	var status = act.pushed;
-	if(status.time > 0){ 
-		act.spdX += cos(status.angle)*status.magn;
-		act.spdY += sin(status.angle)*status.magn;
-		status.time--;
-	} else if(act.type !== 'player'){
-		//TOFIX
-	}
-}
+
 
 //{Status + stats
 Actor.loop.status = function(act){
@@ -305,7 +295,7 @@ Actor.loop.fall = function(act){
 	xy = Collision.getPos(xy);
 	var value = Collision.getSquareValue(xy,act.map,'player');
 	
-	if(value === '4'){ Actor.fall(act); return; }
+	if(value === '4'){ Actor.fall(act); return; }	//TOFIX check for map fall
 	if(value === '3'){ 
 		
 		
@@ -322,7 +312,7 @@ Actor.loop.fall = function(act){
 	
 		for(var i in list){
 			if(Collision.getSquareValue({x:xy.x+list[i][0],y:xy.y+list[i][1]},act.map,'player') === '4'){
-				act.pushed = {time:1,magn:1,angle:list[i][2]};
+				Actor.push(act,list[i][2],2,2);
 				break;
 			}
 		}
@@ -343,10 +333,10 @@ Actor.fall = function(act){
 }
 
 Actor.loop.move = function(act){
-	if(act.bumper[0]){act.spdX = -Math.abs(act.spdX*0.5)*act.bounce - 1;} 
-	if(act.bumper[1]){act.spdY = -Math.abs(act.spdY*0.5)*act.bounce - 1;}
-	if(act.bumper[2]){act.spdX = Math.abs(act.spdX*0.5)*act.bounce + 1;} 
-	if(act.bumper[3]){act.spdY = Math.abs(act.spdY*0.5)*act.bounce + 1;} 
+	if(act.bumper[0]){act.spdX = -Math.abs(act.spdX*0.5)*act.bounce - act.bounce;} 
+	if(act.bumper[1]){act.spdY = -Math.abs(act.spdY*0.5)*act.bounce - act.bounce;}
+	if(act.bumper[2]){act.spdX = Math.abs(act.spdX*0.5)*act.bounce + act.bounce;} 
+	if(act.bumper[3]){act.spdY = Math.abs(act.spdY*0.5)*act.bounce + act.bounce;} 
 
 	if(act.moveInput[0] && !act.bumper[0] && act.spdX < act.maxSpd){act.spdX += act.acc;}
 	if(act.moveInput[1] && !act.bumper[1] && act.spdY < act.maxSpd){act.spdY += act.acc;}

@@ -1,18 +1,6 @@
 //Enemy
 
 /*
-scaling is done with globalDef and globalDmg
-weapon is always same
-"equip":{'def':{ is only used for ratio
-
-
-ideally:
-enemy.mainDef * ratio = player.equip.def
-enemy.mainDmg = player.Weapon
-
-*/
-
-/*
 ePreDb["troll"]["ice"] = {  //{		//troll is category, ice is variant
 	"name":"Ice Troll",				//name	
 	"sprite":{						//sprite used 
@@ -856,7 +844,9 @@ Init.db.npc = function(){
 		"sprite":{'name':"block1x1",'sizeMod':1},
 		'nevercombat':1,
 		'moveSelf':0,
-		"block":{condition:'true',pushable:1,magn:4,time:16,size:[-1,1,-1,1]},
+		"block":{condition:'true',size:[-1,1,-1,1]},
+		"pushable":{magn:4,time:16},
+		"bounce":0,
 	}; //}
 	
 	a["block"]["2x2"] = {  //{
@@ -865,7 +855,9 @@ Init.db.npc = function(){
 		"sprite":{'name':"block1x1",'sizeMod':2},
 		'nevercombat':1,
 		'moveSelf':0,
-		"block":{condition:'true',pushable:1,magn:4,time:9,size:[-1,1,-1,1]},
+		"block":{condition:'true',size:[-1,0,-1,0]},	//TOFIX that would be 3x3
+		"pushable":{magn:4,time:16},
+		"bounce":0,
 	}; //}
 	
 	a["block"]["barrier"] = {  //{
@@ -874,7 +866,7 @@ Init.db.npc = function(){
 		"sprite":{'name':"barrier",'sizeMod':1.5},
 		'nevercombat':1,
 		'nevermove':1,
-		"block":{condition:'true',pushable:0,size:[-2,2,-1,1]},
+		"block":{condition:'true',size:[-2,2,-1,1]},
 	}; //}
 	
 	a["block"]["2x2Fix"] = {  //{
@@ -883,7 +875,7 @@ Init.db.npc = function(){
 		"sprite":{'name':"block1x1-black",'sizeMod':2},
 		'nevercombat':1,
 		'nevermove':1,
-		"block":{condition:'true',pushable:0,size:[-1,1,-1,1]},
+		"block":{condition:'true',size:[-1,0,-1,0]},
 	}; //}
 
 	a["block"]["3x3"] = {  //{
@@ -892,7 +884,9 @@ Init.db.npc = function(){
 		"sprite":{'name':"block1x1",'sizeMod':3},
 		'nevercombat':1,
 		'moveSelf':0,
-		"block":{condition:'true',pushable:1,magn:8,time:8,size:[-1,1,-1,1]},
+		"block":{condition:'true',size:[-1,1,-1,1]},
+		"pushable":{magn:4,time:16},
+		"bounce":0,
 	}; //}
 	
 	a["block"]["4x4"] = {  //{
@@ -901,7 +895,9 @@ Init.db.npc = function(){
 		"sprite":{'name':"block1x1",'sizeMod':4},
 		'nevercombat':1,
 		'moveSelf':0,
-		"block":{condition:'true',pushable:1,magn:8,time:8,size:[-1,1,-1,1]},
+		"block":{condition:'true',size:[-1,1,-1,1]},
+		"pushable":{magn:4,time:16},
+		"bounce":0,
 	}; //}
 	
 	a["block"]["spike"] = {  //{
@@ -976,14 +972,11 @@ Init.db.npc = function(){
 }
 
 Init.db.npc.creation = function(e){
-	e = useTemplate(Actor.template('npc'),e,1,1);		//abilityList: [], ability: regular...
+	e = useTemplate(Actor.template('npc'),e,1,1);		//ability and abilityList as written in Db.npc 
 	
 	e.context = e.name; 
-	if(e.combat && !e.nevercombat)	e.context += ' | Lvl: ' + e.lvl;
-	for(var i in e.resource)
-		e[i] = e.resource[i].max;
+	for(var i in e.resource) e[i] = e.resource[i].max;
 
-	e = Init.db.npc.creation.drop(e);	
 	e = Init.db.npc.creation.ability(e);
 	
 	var tmp = {def:{},dmg:{}};
@@ -993,44 +986,28 @@ Init.db.npc.creation = function(e){
 	}
 	e.mastery = tmp;
 	
-	//Add to Db.npc	
-	var dbinfo = Db.npc[e.category][e.variant] = new Function('return ' + stringify(e));
+	Db.npc[e.category][e.variant] = e;		
 	
-	//things cant stringify cuz function
-	dbinfo.globalDmg = e.globalDmg;	
-	dbinfo.globalDef = e.globalDef;
-	dbinfo.globalMod = e.globalMod;
-	
-	dbinfo.ability = [];
-	for(var i in e.ability)
-		if(e.ability[i])	//case 0
-			dbinfo.ability.push(e.ability[i].action.param);
-	//
-		
-	
-	return e;	//no need to return anything
-}
-
-Init.db.npc.creation.drop = function(e){ 
-	e.drop.mod = e.drop.mod || {};
-	e.drop.mod.quantity = e.drop.mod.quantity || 0;
-	e.drop.mod.quality = e.drop.mod.quality || 0;
-	e.drop.mod.rarity = e.drop.mod.rarity || 0;
-	
-	if(e.drop.plan){
-		for(var k in e.drop.plan){
-			if(typeof e.drop.plan[k] === 'number'){
-				var tmp = e.drop.plan[k];
-				e.drop.plan[k] = {};
-				for(var t in Cst.equip[k].type)	e.drop.plan[k][Cst.equip[k].type[t]] = tmp/3;							
-			}
-		}
-	}
 	return e;
 }
-		
-Init.db.npc.creation.ability = function(e){
-	var position = 0;
+	
+Init.db.npc.creation.ability = function(e){	//use abilityList to create custom ability
+	/*
+	"abilityList":[
+		{'template':'scratch','aiChance':[0.2,0,0],'extra':{
+			'leech,baseChance':0.25,'leech,magn':25,'hitImg,name':'cursePink',			
+		}},
+		{'template':'scratch','aiChance':[0.4,0,0],'extra':{}},
+		{'template':'lightningBullet','aiChance':[0.4,0.4,1],'extra':{}},
+		{'template':'blessing','aiChance':[0,0.1,0.2],'extra':{
+			param:[{'stat':'leech-chance','type':'+','value':1000,'time':50},
+					{'stat':'crit-chance','type':'+','value':1000,'time':50}
+			],
+		}},
+		[0.4,0.4,1]
+	],
+	*/
+	
 	for(var i in e.abilityList){
 		if(!e.abilityList[i].template){
 			e.abilityAi.close['idle'] = e.abilityList[i][0];
@@ -1041,14 +1018,13 @@ Init.db.npc.creation.ability = function(e){
 				
 		var a = deepClone(Db.ability[e.abilityList[i].template]);
 		var extra = e.abilityList[i].extra;
-		if(extra.global)
-			a = useTemplate(a,a.action.param.global,1,1);
+		if(extra.global) a = useTemplate(a,a.action.param.global,1,1);
 		delete extra.global;
 		
 		
 		if(a.action.func === 'Combat.action.attack'){
 			a.action.param = useTemplate(Attack.template(),a.action.param,0);
-			a.action.param = useTemplate(a.action.param,extra,1,1);	//TOFIX if want to change something other then attack
+			a.action.param = useTemplate(a.action.param,extra,1,1);
 		}
 		if(a.action.func === 'Combat.action.boost' || a.action.func === 'Combat.action.summon'){		
 			a.action.param = deepClone(extra.param);
@@ -1062,12 +1038,13 @@ Init.db.npc.creation.ability = function(e){
 		e.abilityAi.middle[id] = e.abilityList[i].aiChance[1];
 		e.abilityAi.far[id] = e.abilityList[i].aiChance[2];
 		
-		Actor.ability.swap(e,a,position++);
+		Actor.ability.swap(e,a);
 	}
 	
 	var a = {};
 	for(var i in e.abilityList)	a[e.abilityList[i].id] = 1;
-	e.ability = e.ability.regular;
+	e.abilityList = Actor.template.ability(e.abilityList);
+	
 	return e;
 }
 

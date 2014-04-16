@@ -1,3 +1,11 @@
+==REVAMP==
+
+
+
+
+
+
+
 
 ===PRE SDK===
 transform not be overwrite if change equip

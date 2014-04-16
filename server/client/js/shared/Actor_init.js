@@ -47,7 +47,6 @@ Init.actor = function(){
 		}
 		act.statusClient = '000000';
 		act.curseClient = {};
-		act.pushed = {"time":0,"magn":0,"angle":0};							//same than knock but no combat related
 		act.block = 0; 						//{direction:4,distance:0};
 			
 		act.angle = 1;	
@@ -251,6 +250,7 @@ Actor.template.abilityList = function(info){
 	return {
 		regular:info,
 		pvp:{},
+		quest:{},
 		type:'regular'	
 	};	//check Test for added ability
 }
@@ -259,6 +259,7 @@ Actor.template.ability = function(info){
 	return {
 		regular:info,
 		pvp:[0,0,0,0,0,0],
+		quest:[0,0,0,0,0,0],
 		type:'regular'	
 	}
 }

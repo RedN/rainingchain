@@ -651,11 +651,10 @@ Command.list['team,tele'].doc = {
 Command.list['pvp'] = function(key){
 	var act = List.all[key];
 	if(act.map.have('pvpF4A')){
-		Actor.teleport(act,act.respawnLoc.safe.x,act.respawnLoc.safe.y,act.respawnLoc.safe.map);
+		Actor.teleport(act,act.respawnLoc.safe);
 		Chat.add(key,"You can no longer attack or be attacked by other players.");
 	}
-	
-	else Actor.teleport(act,250,250,'pvpF4A');
+	//TOFIX
 }
 Command.list['pvp'].doc = {
 	'description':"Teleport/Quit to PvP Zone.",

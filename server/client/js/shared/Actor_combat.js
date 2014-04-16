@@ -25,7 +25,7 @@ Actor.changeHp = function(act,amount){
 
 Actor.changeResource = function(act,heal){
 	for(var i in heal){
-		if(typeof heal[i] === 'string'){ act[i] += heal[i].numberOnly()/100*act.resource[i].max;	}			
+		if(typeof heal[i] === 'string'){ act[i] += heal[i].numberOnly()/100*act.resource[i].max; }	//ex: 50%		
 		else {	act[i] += heal[i];	}
 		act[i] = Math.min(act[i],act.resource[i].max);
 	}

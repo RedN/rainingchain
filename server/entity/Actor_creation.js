@@ -1,18 +1,11 @@
-Actor = typeof Actor !== 'undefined' ? Actor : {};
-
-Actor.creation = function(d){
-	Map.convertSpot(d);
-	//data: x  y  map category variant lvl modAmount extra
-
-	
+Actor.creation = function(d){	//d: x  y  map category variant lvl modAmount extra
+	Map.convertSpot(d);	
 	var data = useTemplate(Actor.creation.template(),d);
-	var e = Actor.template('npc');
-	e = Actor.creation.db(e,data);
-	e = Actor.creation.info(e,data);
-	e = Actor.creation.extra(e,data);
+	var e = Actor.creation.db(data);
+	e = Actor.creation.data(e,data);
+	e = Actor.creation.extra(e);
 	e = Actor.creation.optionList(e);
 		
-	e.data = data;
 	List.actor[e.id] = e;
 	List.all[e.id] = e;
 	Map.enter(e);
@@ -35,7 +28,7 @@ Actor.creation = function(d){
 }
 
 Actor.creation.template = function(){
-	return {x:0,y:0,v:0,map:"test@MAIN",category:'system',variant:"default",lvl:0,extra:{},modAmount:0}
+	return {x:0,y:0,v:0,map:"test@MAIN",category:'system',variant:"default",lvl:0,extra:{},modAmount:1}
 
 }
 
@@ -88,62 +81,62 @@ Actor.creation.boost = function(e){
 	return e;
 }
 
-Actor.creation.db = function(e,d){
-	var f = Db.npc[d.category][d.variant];
-	e = f();
-	for(var i in f.ability) e.ability[i].action.param = f.ability[i];
-	for(var i in f) if(i !== 'ability') e[i] = f[i];	//cuz of function (globalDmg) + cant delete ability if multi use same
-	
-	e.ability = Actor.template.ability(e.ability);
-	e.abilityList = Actor.template.ability(e.abilityList);
+Actor.creation.db = function(cr){
+	var e = deepClone(Db.npc[cr.category][cr.variant]);
+	e.lvl = Actor.creation.lvl(List.map[cr.map].lvl,cr.lvl); 
 	
 	e.id = Math.randomId();
 	e.publicId = Math.randomId(6);
 	e.frameCount = Math.floor(Math.random()*100);
 	
-	e.globalDef = typeof e.globalDef === 'function' ? e.globalDef(e.lvl) : e.globalDef * Actor.creation.db.globalLvlMod(e.lvl).globalDef
-	e.globalDmg = typeof e.globalDmg === 'function' ? e.globalDmg(e.lvl) : e.globalDmg * Actor.creation.db.globalLvlMod(e.lvl).globalDmg
-	e.deathExp = e.deathExp * Actor.creation.db.globalLvlMod(e.lvl).deathExp;
+	e.globalDef =  Actor.creation.db.globalLvlMod(e.lvl).globalDef;
+	e.globalDmg = Actor.creation.db.globalLvlMod(e.lvl).globalDef;
 	if(e.globalMod) e = e.globalMod(e,e.lvl);
-
 	
-	if(e.boss){	
-		e.boss = Boss.creation(e.boss);
-		e.boss.parent = e.id; 
-	}
+	if(e.boss)	e.boss = Boss.creation(e.boss,e);
 	
 	Sprite.creation(e,e.sprite);		//To set hitbox and bumper
 		
 	return e;
+}
+Actor.creation.lvl = function(lvl,mod){
+	if(!mod) return lvl;
+	if(typeof mod === 'number') return mod;
+	if(typeof mod === 'function') return mod(lvl);
+	
+	if(mod[0] === '+' || mod[0] === '-') return lvl + +mod;
+	if(mod[0] === '*') return lvl * +mod.slice(1);
+	
+	return lvl;	
 }
 
 Actor.creation.db.globalLvlMod = function(lvl){
 	return {
 		globalDef:lvl+10,
 		globalDmg:lvl+10,
-		deathExp:Math.logBase(2,lvl+8)-2,	//0:x1, 8:x2, 24:x3, 56:x4
+		//deathExp:Math.logBase(2,lvl+8)-2,	//0:x1, 8:x2, 24:x3, 56:x4
 	};
 }
 
-Actor.creation.info = function(e,cr){
+Actor.creation.data = function(e,cr){
 	e.map = cr.map || 'test@MAIN';
 	
-	var pos = Actor.creation.info.position(cr);
+	var pos = Actor.creation.data.position(cr);
 	e.x = e.crX = pos.x; 
 	e.y = e.crY = pos.y; 	
 	
-	e.category = cr.category || 'slime'; 
-	e.variant = cr.variant || 'Regular'; 
-	e.modAmount = cr.modAmount !== undefined ?  cr.modAmount : 1;
-	e.extra = cr.extra || {};
-	
-	e.lvl = Actor.creation.info.lvl(List.map[e.map].lvl,cr.lvl); 
+	e.category = cr.category; 
+	e.variant = cr.variant; 
+	e.modAmount = cr.modAmount;
+	e.extra = cr.extra;
 	
 	e.target.main = {x:e.x,y:e.y};
+	e.data = cr;
+	
 	return e;
 }
 
-Actor.creation.info.position = function(cr){
+Actor.creation.data.position = function(cr){
 	for(var i = 0; i < 100; i++){
 		var x = cr.x + Math.randomML() * cr.v;
 		var y = cr.y + Math.randomML() * cr.v;
@@ -156,19 +149,8 @@ Actor.creation.info.position = function(cr){
 	return {x:cr.x,y:cr.y};
 }
 
-Actor.creation.info.lvl = function(lvl,mod){
-	if(!mod) return lvl;
-	if(typeof mod === 'number') return mod;
-	if(typeof mod === 'function') return mod(lvl);
-	
-	if(mod[0] === '+' || mod[0] === '-') return lvl + +mod;
-	if(mod[0] === '*') return lvl * +mod.slice(1);
-	
-	return lvl;	
-}
 
 Actor.creation.mod = function(e,d){
-	var list = Object.keys(Actor.creation.mod.list);
 	for(var i = 0 ; i < d.modAmount ; i++){
 		var choosen = Actor.creation.mod.list.random('chance');
 		if(e.modList.have(choosen)){ i -= 0.99; continue; }
@@ -223,11 +205,8 @@ Actor.creation.mod.list = {
 }
 
 Actor.creation.extra = function(act){
-	act = useTemplate(act,act.viaArray,1,1);
-	delete act.viaArray;
-	
 	if(typeof act.extra === 'function')	act.extra(act);
-	else act = useTemplate(act,act.extra);	
+	else act = useTemplate(act,act.extra,1,1);	
 	
 	delete act.extra;
 	return act;
@@ -251,13 +230,13 @@ Actor.creation.optionList = function(e){
 	if(e.switch){
 		ol.option.push({'name':'Pull Switch',"func":'Actor.click.switch',"param":[e.id]});
 	}	
-	if(e.block && e.block.pushable){
-		var info = {'name':'Push',"func":'Actor.click.block',"param":[e.id]};
+	if(e.pushable){
+		var info = {'name':'Push',"func":'Actor.click.pushable',"param":[e.id]};
 		ol.option.push(info);
 		e.onclick.shiftLeft = info;
 	} 
 	
-	e.optionList = ol.option.length ? ol : '';
+	e.optionList = ol.option.length ? ol : null;
 	return e;
 }
 

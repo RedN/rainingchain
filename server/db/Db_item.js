@@ -50,18 +50,7 @@ Init.db.item = function (cb){
 			    
 			]};		
 	
-	a['ironSword'] = {'name':'Sword','icon':'system.square',
-			'option':[	{'name':'Tele Ice','func':'Actor.teleport','param':[500,500,'ice']},
-						{'name':'Open Bank','func':'Main.openWindow','param':['bank']},
-			]};
-	a['shield'] = {'name':'Shield','icon':'system.square',
-			'option':[	{'name':'Teleport','func':'Actor.teleport','param':[500,500,'fire']},
-						{'name':'Come Back','func':'Actor.teleport','param':[1500,500,'test']}
-			]};
-	
-	
-	
-	
+
 	
 	//}
 	

@@ -101,7 +101,7 @@ Quest.createVariableTester = function(q){
 		Chat.question(key,{text:"enter spot",func:function(key,param){
 			try{ 
 				var spot = List.map[List.all[key].map].addon[q.id].spot[param];
-				Actor.teleport(key,spot);
+				Actor.teleport(List.all[key],spot);
 			} catch(err) { logError(err); Chat.add(key,"no found"); }
 		}});
 	}});

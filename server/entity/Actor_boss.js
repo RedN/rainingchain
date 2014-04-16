@@ -10,8 +10,10 @@ Init.db.boss = function(){
 
 Boss = {};
 
-Boss.creation = function(name){
-	return deepClone(Db.boss[name]);
+Boss.creation = function(name,e){
+	var b = deepClone(Db.boss[name]);
+	b.parent = e.id;
+	return b;
 }
 
 

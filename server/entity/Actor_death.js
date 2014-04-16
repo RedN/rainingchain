@@ -42,48 +42,26 @@ Actor.death.player = function(act){
 Actor.death.npc = function(act){
 	act.dead = 1;
 	
-	/*
-	var killers = Actor.death.getKiller(act);
-	Actor.death.drop(act,killers);
-	Actor.death.exp(act,killers);
-	*/
 	//if(act.deathFunc)	for(var i in killers) act.deathFunc(killers[i],act,act.map) //custom death function (ex quest)
 	if(act.deathFunc){	
 		for(var i in act.damagedBy){
-			if(List.all[i]) act.deathFunc(i,act,act.map) 
+			if(List.all[i]) act.deathFunc(i,act,act.map); 
 		}
 	}
 		
-		//custom death function (ex quest)
-	if(act.deathFuncArray) act.deathFuncAll(killers,act,act.map)
-	
 	Actor.death.performAbility(act);				//custom death ability function
 	Activelist.remove(act);
 }
 
-Actor.death.performAbility = function(act){	//HERE
+Actor.death.performAbility = function(act){
 	for(var i in act.deathAbility){
 		Actor.performAbility(act,Actor.getAbility(act)[act.deathAbility[i]],false,false);
 	}
 }
 
-Actor.death.getKiller = function(act){
-	for(var i in act.damagedBy) if(!List.all[i]) delete act.damagedBy[i];
-	
-	var tmp = Object.keys(act.damagedBy);	
-	if(!tmp.length) return [];
-	if(tmp.length === 1) return tmp;
-	
-	var killer = null; var max = -1;
-	for(var i in act.damagedBy){
-		if(act.damagedBy[i] > max){
-			killer = i;
-		} 
-	}
-	return tmp.splice(tmp.indexOf(killer),1).unshift(killer);	//place main killer in [0]
-}
 
-Actor.death.drop = function(act,killers){
+Actor.death.drop = function(act,killers){		//TOFIX toremove
+	return;	
 	var drop = act.drop;
 	
 	var quantity = (1 + drop.mod.quantity).mm(0); 
@@ -148,17 +126,6 @@ Actor.death.drop = function(act,killers){
 		}
 	}
 
-}
-
-Actor.death.exp = function(act,killers){
-	for(var i in killers){
-		var killer = List.all[killers[i]];
-		if(!killer) continue;
-		var equip = Db.equip[killer.weapon];
-		if(!equip) continue;
-		var style = equip.piece;
-		Skill.addExp(killers[i],style,act.deathExp);
-	}
 }
 
 Actor.death.respawn = function(act){	//for player

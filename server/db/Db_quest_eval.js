@@ -36,23 +36,20 @@ var dialogue = function(key,npc,convo,node){
 }
 
 var teleport = function(key,map,letter,popup){	//type: 0=immediate, 1=popup
-	var spot = typeof letter === 'string' ? Map.getSpot(map,Q,letter) : {x:letter.x,y:letter.y,map:map};
+	var spot = Map.getSpot(map,Q,letter);
 	
-	if(!popup) Actor.teleport(key,spot);
+	if(!popup) Actor.teleport(getAct(key),spot);
 	else {
 		Chat.question(key,{
-			func:function(){Actor.teleport(key,spot);},
+			func:function(){Actor.teleport(getAct(key),spot);},
 			option:true,			
 		});
 	}
 }
 
-var respawn = function(key,map,letter){	//must be same map
-	var player = getAct(key);
-	map = Actor.teleport.getMapName(player,map);
-
+var respawn = function(key,map,letter,safe){	//must be same map
 	var spot = Map.getSpot(map,Q,letter);
-	if(spot) player.respawnLoc.recent = {x:spot.x,y:spot.y,map:spot.map};
+	if(spot) Actor.setRespawn(getAct(key),spot,safe);
 }
 
 var getMapAddon = function(key){
