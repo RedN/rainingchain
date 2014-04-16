@@ -204,7 +204,7 @@ Plan.use = function(key,id){	//when player tries to use plan
 
 Plan.use.ability = function(key,seed){		//quickfix...
 	var id = Craft.ability(seed);
-	Actor.learnAbility(List.all[key],id);
+	Actor.ability.add(List.all[key],id);
 	Itemlist.remove(List.main[key].invList,seed.item);
 	LOG(1,key,'Plan.use.ability',id);
 }

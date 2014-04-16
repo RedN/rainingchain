@@ -7,27 +7,29 @@ Actor.boost = function(act, boost){	//boost: { 'stat':'globalDmg','value':1,'typ
 	//fast[i]: i = stat@source
 	
 	if(Array.isArray(boost)){
-		for(var i in boost) Actor.boost(act,boost[i]);
-		return;
+		for(var i in boost) Actor.boost(act,boost[i]); return;
 	}
 	
-	var b = deepClone(boost);
-	if(typeof act === 'string'){ act = List.all[act]; }
-	var name = b.name || 'Im dumb.';
-	var id = b.stat + '@' + name;
-	b.time = b.time || 1/0;
-	b.timer = b.time;		//otherwise, cuz reference, boost cant be used twice cuz time = 0
-	b.type = b.type || '+';
+	var b = useTemplate(Actor.boost.template(),boost);
+	b.id = b.stat + '@' + name;
 	
-	b.spd = 'reg';
 	if(b.time > 250){ b.spd = 'slow'; }
 	if(b.time < 25){ b.spd = 'fast'; }
 	
-	act.boost[b.spd][b.stat + '@' + name] = b;
-	act.boost.list[b.stat].name[name] = b;
+	act.boost[b.spd][b.id] = b;
+	act.boost.list[b.stat].name[b.id] = b;
 	act.boost.toUpdate[b.stat] = 1;
 	
 }
+Actor.boost.template = function(){
+	return {
+		name:'Im dumb.',
+		time:1/0,
+		timer:1/0,
+		type:'+',
+		spd:'reg',
+	}
+}	
 
 Actor.boost.remove = function(act, boost){
 	var stat = boost.stat;
@@ -38,10 +40,10 @@ Actor.boost.remove = function(act, boost){
 }
 
 Actor.boost.removeByName = function(act, name){	//TOFIX		name: STAT@ID
-	var a = name.split("@");
-	var b = act.boost.list[a[0]];
-	if(b && b.name[a[1]]){
-		Actor.boost.remove(act,b.name[a[1]]);
+	var stat = name.split("@")[0];
+	var b = act.boost.list[stat];
+	if(b && b.name[name]){
+		Actor.boost.remove(act,b.name[name]);
 	}
 }
 
@@ -56,8 +58,7 @@ Actor.boost.removeAll = function(act){
 
 Actor.permBoost = function(act,source,boost){
 	//remove permBoost if boost undefined
-	if(boost){
-		act.permBoost[source] = arrayfy(boost);
+	if(boost){	act.permBoost[source] = arrayfy(boost);
 	} else { delete act.permBoost[source]; }
 	
 	Actor.update.permBoost(act);
@@ -65,19 +66,13 @@ Actor.permBoost = function(act,source,boost){
 }
 
 Actor.permBoost.stack = function(b){	//if boost same thing, add values
-	var tmp = {};	var temp = [];
-	
+	var tmp = {};	
 	for(var i in b){
-		if(b[i].stat){
-			var name = b[i].type + '--' + b[i].stat;
-			if(tmp[name] === undefined){tmp[name] = {'type':b[i].type,'stat':b[i].stat,'value':0};}
-			tmp[name].value += b[i].value;
-		} else {
-			tmp[b[i].value] = b[i];
-		}
+		var name = b[i].type + '-onlyusedhere-' + b[i].stat;
+		if(!tmp[name]) tmp[name] = {'type':b[i].type,'stat':b[i].stat,'value':0};
+		tmp[name].value += b[i].value;
 	}
-	for(var i in tmp){temp.push(tmp[i]);}
-	return temp;
+	return tmp.toArray();
 }
 
 Actor.update = {};
@@ -86,7 +81,8 @@ Actor.update.mastery = function(act){
 	var mas = act.mastery;
 	for(var i in mas){
 		for(var j in mas[i]){
-			mas[i][j].sum = Math.pow(mas[i][j]['x'] * mas[i][j]['*'],mas[i][j]['^']) + mas[i][j]['+'];
+			var m = mas[i][j];
+			m.sum = Math.pow(m['x'] * m['*'],m['^']) + m['+'];
 		}
 	}
 }
@@ -115,7 +111,7 @@ Actor.update.permBoost = function(act){
 			else if(b.type === '++'){pb[b.stat].pp += b.value;}
 			else if(b.type === '*'){pb[b.stat].x += b.value;}
 			else if(b.type === '**'){pb[b.stat].xx += b.value;}
-			else if(b.type === '***'){pb[b.stat].xxx *= b.value;}		//used for very global things (map mod, enemy power)
+			else if(b.type === '***'){pb[b.stat].xxx *= b.value;}		//used for very global things (map mod)
 			else if(b.type === 'min'){pb[b.stat].min = Math.max(pb[b.stat].min,b.value);}
 			else if(b.type === 'max'){pb[b.stat].max = Math.min(pb[b.stat].max,b.value);}			
 		}
@@ -135,7 +131,7 @@ Actor.update.permBoost = function(act){
 	Actor.update.boost(act,'all');
 	
 	for(var j in act.customBoost){ 
-		if(act.customBoost[j])
+		if(act.customBoost[j] > 0)
 			Db.customBoost[j].func(act.boost,act.id);
 	}	
 }

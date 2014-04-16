@@ -1,6 +1,6 @@
 
 Actor.death = function(act){	
-	if(act.type === 'enemy') Actor.death.enemy(act);
+	if(act.type === 'npc') Actor.death.npc(act);
 	if(act.type === 'player') Actor.death.player(act);
 	
 }
@@ -39,7 +39,7 @@ Actor.death.player = function(act){
 	
 }
 
-Actor.death.enemy = function(act){
+Actor.death.npc = function(act){
 	act.dead = 1;
 	
 	/*

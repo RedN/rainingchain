@@ -30,7 +30,7 @@ Collision.ActorMap = function(pos,map,player){
 	if(player.mapMod && player.mapMod[pos.x + '-' + pos.y]){
 		return player.mapMod[pos.x + '-' + pos.y];
 	}
-	return Collision.PosMap(pos,map,player.type || 'enemy');
+	return Collision.PosMap(pos,map,player.type || 'npc');
 };
 
 Collision.getSquareValue = function(pos,map,type){
@@ -103,7 +103,7 @@ Collision.BulletActor = function(atk){
 Collision.BulletActor.test = function(atk,player){
 	var normal = true;
 	if(!['map','true','all'].have(atk.damageIf)){	//no testing needed
-		if(['player-simple','enemy-simple'].have(atk.damageIf)){	//only testing type
+		if(['player-simple','npc-simple'].have(atk.damageIf)){	//only testing type
 			normal = Combat.damageIf.list[atk.damageIf](player);
 		} else {					
 			var hIf = typeof atk.damageIf == 'function' ? atk.damageIf : Combat.damageIf.list[atk.damageIf]; //testing type and summon

@@ -165,7 +165,7 @@ Init.actor = function(){
 			act.skill = Actor.template.skill();
 			act.removeList = [];	//for things that got removed from activeList
 			act.type = 'player';
-			act.damageIf = 'enemy';
+			act.damageIf = 'npc';
 			act.privateChange = {};
 			act.privateOld = {};
 			act.context = 'player0000';
@@ -188,7 +188,7 @@ Init.actor = function(){
 
 
 	var p = defaultPreActor('player');
-	var e = defaultPreActor('enemy');
+	var e = defaultPreActor('npc');
 	
 	var temp = Actor.template;
 	
@@ -234,7 +234,7 @@ Actor.template.abilityChange = function(){
 }
 
 Actor.template.mastery = function(type){
-	if(type === 'enemy'){
+	if(type === 'npc'){
 		return {	
 			'def':{'melee':{'sum':1,'mod':1},'range':{'sum':1,'mod':1},'magic':{'sum':1,'mod':1},'fire':{'sum':1,'mod':1},'cold':{'sum':1,'mod':1},'lightning':{'sum':1,'mod':1}},
 			'dmg':{'melee':{'sum':1,'mod':1},'range':{'sum':1,'mod':1},'magic':{'sum':1,'mod':1},'fire':{'sum':1,'mod':1},'cold':{'sum':1,'mod':1},'lightning':{'sum':1,'mod':1}},

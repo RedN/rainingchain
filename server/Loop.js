@@ -164,7 +164,7 @@ removeAny = function(act){
 	if(typeof act === 'string') act = List.all[act];
 	if(!act) return;
 	if(act.type === 'bullet') Bullet.remove(act);
-	else if(act.type === 'enemy') Actor.remove(act);
+	else if(act.type === 'npc') Actor.remove(act);
 	else if(act.type === 'player') Sign.off(act.id);
 	else if(act.type === 'drop') Drop.remove(act);
 	else if(act.type === 'strike') Strike.remove(act);

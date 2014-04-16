@@ -264,8 +264,8 @@ Craft.orb = function(key,orb,amount,wId,mod){	//would be better if split in mult
 	}
 	if(category === 'ability'){
 		Ability.creation(equip);
-		Actor.removeAbility(act,wId);
-		Actor.learnAbility(act,equip.id);
+		Actor.ability.remove(act,wId);
+		Actor.ability.add(act,equip.id);
 	}
 }
 
@@ -380,10 +380,10 @@ Craft.ability.mod = function(key,id,mod){
 	
 	//Add
 	ab.modList[mod] = 0;
-	Actor.removeAbility(List.all[key],id);
+	Actor.ability.remove(List.all[key],id);
 	ab.id = Math.randomId();
 	Ability.creation(ab);
-	Actor.learnAbility(List.all[key],ab.id);
+	Actor.ability.add(List.all[key],ab.id);
 	Chat.add(key,'Mod Added.');
 	Itemlist.remove(List.main[key].invList,Db.abilityMod[mod].item);	
 }

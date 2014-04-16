@@ -587,6 +587,16 @@ Object.defineProperty(Object.prototype, "$length", {
 	}
 });	
 
+Object.defineProperty(Object.prototype, "toArray", {
+    enumerable: false,
+    value: function(){
+		var tmp = [];
+		for(var i in this)
+			tmp.push(this[i]);
+		return tmp;
+	}
+});	
+
 	
 convertRatio = function(ratio){
 	var sum = 0;

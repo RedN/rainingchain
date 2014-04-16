@@ -159,7 +159,7 @@ q.item['jewel'] = {'name':'Jewel','icon':'magic.staff','drop':0,'bank':0,'option
 
 
 
-q.enemy["boss"] = {  //{
+q.npc["boss"] = {  //{
 	"name":"Goblin",
 	"sprite":{'name':"goblin",'sizeMod':1.2},
 	'deathExp':1,

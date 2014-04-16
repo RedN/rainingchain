@@ -137,9 +137,9 @@ boss = skull
 
 
 */
-Db.enemy = {};
-Init.db.enemy = function(){ 
-	var a = Db.enemy;
+Db.npc = {};
+Init.db.npc = function(){ 
+	var a = Db.npc;
 
 	//ALT-2
 	a["bat"] = {}; //{
@@ -969,22 +969,22 @@ Init.db.enemy = function(){
 		for(var j in a[i]){
 			a[i][j].category = i;
 			a[i][j].variant = j;
-			Init.db.enemy.creation(a[i][j]);			
+			Init.db.npc.creation(a[i][j]);			
 		}
 	}
 	
 }
 
-Init.db.enemy.creation = function(e){
-	e = useTemplate(Actor.template('enemy'),e,1,1);		//abilityList: [], ability: regular...
+Init.db.npc.creation = function(e){
+	e = useTemplate(Actor.template('npc'),e,1,1);		//abilityList: [], ability: regular...
 	
 	e.context = e.name; 
 	if(e.combat && !e.nevercombat)	e.context += ' | Lvl: ' + e.lvl;
 	for(var i in e.resource)
 		e[i] = e.resource[i].max;
 
-	e = Init.db.enemy.creation.drop(e);	
-	e = Init.db.enemy.creation.ability(e);
+	e = Init.db.npc.creation.drop(e);	
+	e = Init.db.npc.creation.ability(e);
 	
 	var tmp = {def:{},dmg:{}};
 	for(var i in e.mastery.def){
@@ -993,8 +993,8 @@ Init.db.enemy.creation = function(e){
 	}
 	e.mastery = tmp;
 	
-	//Add to Db.enemy	
-	var dbinfo = Db.enemy[e.category][e.variant] = new Function('return ' + stringify(e));
+	//Add to Db.npc	
+	var dbinfo = Db.npc[e.category][e.variant] = new Function('return ' + stringify(e));
 	
 	//things cant stringify cuz function
 	dbinfo.globalDmg = e.globalDmg;	
@@ -1011,7 +1011,7 @@ Init.db.enemy.creation = function(e){
 	return e;	//no need to return anything
 }
 
-Init.db.enemy.creation.drop = function(e){ 
+Init.db.npc.creation.drop = function(e){ 
 	e.drop.mod = e.drop.mod || {};
 	e.drop.mod.quantity = e.drop.mod.quantity || 0;
 	e.drop.mod.quality = e.drop.mod.quality || 0;
@@ -1029,7 +1029,7 @@ Init.db.enemy.creation.drop = function(e){
 	return e;
 }
 		
-Init.db.enemy.creation.ability = function(e){
+Init.db.npc.creation.ability = function(e){
 	var position = 0;
 	for(var i in e.abilityList){
 		if(!e.abilityList[i].template){
@@ -1062,7 +1062,7 @@ Init.db.enemy.creation.ability = function(e){
 		e.abilityAi.middle[id] = e.abilityList[i].aiChance[1];
 		e.abilityAi.far[id] = e.abilityList[i].aiChance[2];
 		
-		Actor.swapAbility(e,a,position++);
+		Actor.ability.swap(e,a,position++);
 	}
 	
 	var a = {};

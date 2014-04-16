@@ -1,23 +1,12 @@
 //boss
 Db.boss = {};
 Init.db.boss = function(){
-	
-	
-	
-	
-	
 	for(var i in Db.boss){
 		Db.boss[i] = Db.boss[i]();
 		Db.boss[i].id = i;
 		Boss.creation.model(Db.boss[i]);
 	}
-	
-	
 }
-
-
-
-
 
 Boss = {};
 
@@ -49,20 +38,6 @@ Boss.template = function(){
 	}
 }
 
-Boss.target = function(boss){
-	//Update Boss Target. can have multiple targets unlike regular enemy
-	var act = List.all[boss.parent];
-	boss.target = {};
-	for(var i in act.activeList){ 
-		if(List.all[i].type === 'player'){
-			boss.target[i] = Collision.anglePtPt(act,List.all[i]);	
-			boss.angle = boss.target[i];	//RUSHED
-		}
-	}
-	
-	boss.active = boss.target.$length();
-}
-
 Boss.attack = function(boss,name,extra){
 	if(boss.noattack < 0)
 		Combat.action.attack(
@@ -70,21 +45,32 @@ Boss.attack = function(boss,name,extra){
 			useTemplate(Attack.template(),boss.attack[name]),
 			extra
 		);
-		
-		
 }
 
 
 
 
 Boss.loop = function(boss){
+	var enemy = List.all[boss.parent];
+	
 	boss.frame++;
-	Boss.target(boss);
+	Boss.loop.target(boss);
+	boss.active = boss.target.$length();
 	if(!boss.active) return;
 	
 	boss.noattack--;
-	boss.hpRatio = List.all[boss.parent].hp/List.all[boss.parent].resource.hp.max;
-		
+	boss.angle = enemy.angle;
+	boss.hpRatio = enemy.hp/enemy.resource.hp.max;
+	
+	Boss.loop.transition(boss);
+	
+	for(var i in boss.extraLoop){
+		boss.extraLoop[i](boss);
+	}
+
+}
+
+Boss.loop.transition = function(boss){
 	var curPhase = boss.currentPhase;
 	var phase = boss.phase[boss.currentPhase];
 	
@@ -104,13 +90,20 @@ Boss.loop = function(boss){
 	
 	boss.phase[boss.currentPhase].loop(boss);
 	
-	for(var i in boss.extraLoop){
-		boss.extraLoop[i](boss);
-	}
+	
 
 }
 
-
+Boss.loop.target = function(boss){
+	//Update Boss Target. can have multiple targets unlike regular enemy
+	var act = List.all[boss.parent];
+	boss.target = {};
+	for(var i in act.activeList){ 
+		if(List.all[i].type === 'player'){
+			boss.target[i] = Collision.anglePtPt(act,List.all[i]);
+		}
+	}
+}
 
 
 /*

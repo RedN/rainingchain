@@ -68,12 +68,12 @@ Test.setAbility = function(key){
 		'pvp-heal':1,
 	});
 
-	Actor.swapAbility(act,'pvp-bullet',0);
-	Actor.swapAbility(act,'pvp-explosion',1);
-	Actor.swapAbility(act,'pvp-freeze',2);
-	Actor.swapAbility(act,'pvp-fireball',3);
-	Actor.swapAbility(act,'pvp-heal',4);
-	Actor.swapAbility(act,'pvp-invincibility',5);
+	Actor.ability.swap(act,'pvp-bullet',0);
+	Actor.ability.swap(act,'pvp-explosion',1);
+	Actor.ability.swap(act,'pvp-freeze',2);
+	Actor.ability.swap(act,'pvp-fireball',3);
+	Actor.ability.swap(act,'pvp-heal',4);
+	Actor.ability.swap(act,'pvp-invincibility',5);
 	
 }
 
@@ -82,7 +82,7 @@ Test.spawnEnemy = function(key,cat,variant){
 	variant = variant || 'normal';
 	
 	var player = List.all[key];
-	if(!Db.enemy[cat][variant]){ DEBUG(1,"no enemy with that cat and var"); return;}
+	if(!Db.npc[cat][variant]){ DEBUG(1,"no npc with that cat and var"); return;}
 	Actor.creation({
 		'spot':{x:player.x,y:player.y,map:player.map},
 		"category":cat,		
@@ -153,7 +153,7 @@ Test.b = function(){}
 Test.c = function(){}
 Test.d = function(){}
 
-Test.dmgMod = {player:1,enemy:5,pvp:-0.8};
+Test.dmgMod = {player:1,npc:5,pvp:-0.8};
 Test.offPvp = function(){
 	for(var i in List.main){
 		Command.list.pvp(i);	

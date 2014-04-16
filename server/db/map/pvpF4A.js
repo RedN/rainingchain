@@ -49,7 +49,7 @@ a.playerLeave = function(key,map,spot,v,m){
 	
 	var act = List.all[key];
 	Actor.permBoost(act,'pvp');	
-	act.damageIf = 'enemy';	
+	act.damageIf = 'npc';	
 	act.respawnLoc.recent = deepClone(act.respawnLoc.safe);
 	act.deathFunc = null;
 }

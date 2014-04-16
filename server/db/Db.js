@@ -33,9 +33,7 @@ Init.db = function(data){
 	var databaseURI;
 	if(!data.db && data.localdb) databaseURI = "localhost:27017/test";
 	if(!data.db && !data.localdb) databaseURI = MONGO.connectionString();
-	if(data.db){
-		databaseURI = data.db;
-	}
+	if(data.db)	databaseURI = data.db;
 	
 	
 

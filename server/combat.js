@@ -351,7 +351,7 @@ Combat.targetIf.global = function(atk,def){
 	&& atk.parent !== def.id 
 	&& !def.dead 
 	&& def.combat 
-	&& (def.type === 'player' || def.type === 'enemy')
+	&& (def.type === 'player' || def.type === 'npc')
 	&& List.all[def.id];
 }
 
@@ -361,8 +361,8 @@ Combat.targetIf.list = {
 	'player-simple':(function(def,atk){ 
 		return def.type === "player";
 	}),
-	'enemy-simple':(function(def,atk){ 
-		return def.type === "enemy";
+	'npc-simple':(function(def,atk){ 
+		return def.type === "npc";
 	}),
 	
 	'player':(function(def,atk){ 
@@ -375,9 +375,9 @@ Combat.targetIf.list = {
 			
 		} catch(err) { logError(err); }
 	}),
-	'enemy':(function(def,atk){ 
+	'npc':(function(def,atk){ 
 		try {
-			if(!def.summoned) return def.type === "enemy"; 
+			if(!def.summoned) return def.type === "npc"; 
 			
 			if(def.summoned.father === atk.id) return false;
 			var hIf = typeof atk.damageIf === 'function' ? atk.damageIf : Combat.damageIf.list[atk.damageIf];

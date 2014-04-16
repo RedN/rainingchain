@@ -57,9 +57,9 @@ Quest.creation = function(q){
 		Db.map[i].addon[q.id] = q.mapAddon[i];
 	}
 	
-	Db.enemy[q.id] = {};
-	for(var i in q.enemy){
-		Db.enemy[q.id][i] = q.enemy[i];
+	Db.npc[q.id] = {};
+	for(var i in q.npc){
+		Db.npc[q.id][i] = q.npc[i];
 	}
 	for(var i in q.boss){
 		Db.boss[q.id+'-'+ i] = q.boss[i];
@@ -158,7 +158,7 @@ Quest.template = function(id,version){
 		map:{},
 		item:{}, 
 		equip:{},
-		enemy:{},
+		npc:{},
 		ability:{},
 		plan:{},
 		event:{},

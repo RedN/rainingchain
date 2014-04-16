@@ -47,7 +47,7 @@ Change.update.init = function(){
 	
 	Change.update.list = {};
 	//Fulllist
-	Change.update.list['enemy'] = {
+	Change.update.list['npc'] = {
 		'watch':{'priority':[
 				{'array':['x'],'filter':Math.round},
 				{'array':['y'],'filter':Math.round},

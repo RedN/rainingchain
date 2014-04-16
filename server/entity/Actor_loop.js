@@ -1,6 +1,6 @@
 //####Update Actor####
 
-abilityUpdatePeriod = {enemy:1,player:1};
+abilityUpdatePeriod = {npc:1,player:1};
 
 Actor.loop = function(act){	
 	act.frameCount++;

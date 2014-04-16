@@ -42,8 +42,8 @@ q.equip['Estaff'] = {
 q.item['Ifakestaff'] = {'name':'Staff','icon':'magic.staff','option':[		
 	{'name':'Examine Equip','func':'Main.examineEquip','param':['Qtutorial-Estaff']},
 	{'name':'Change Equip','param':[],'func':function(key){
-		Actor.learnAbility(getAct(key),'fireball');
-		Actor.swapAbility(getAct(key),'fireball',0);
+		Actor.ability.add(getAct(key),'fireball');
+		Actor.ability.swap(getAct(key),'fireball',0);
 		removeItem(get,'Ifakestaff',1);
 		chat(key,"You can now throw fireballs with Left-Click.");
 		chat(key,"You can now manage your abilities via the ABILITY button under the EQUIP Tab.");
@@ -61,8 +61,8 @@ q.plan['Pstaff'] = {
 };
 		
 
-//{Enemy
-q.enemy["bee"] = {  //{
+//{npc
+q.npc["bee"] = {  //{
 	"name":"Bee",
 	"sprite":{'name':"bee",'sizeMod':1},
 	"abilityList":[
@@ -80,7 +80,7 @@ q.enemy["bee"] = {  //{
 	"moveRange":{'ideal':50,"confort":50,"aggressive":200,"farthest":300},	
 }; //}
 
-q.enemy["demon"] = {  //{
+q.npc["demon"] = {  //{
 	"name":"Demon Immune To Fireballs.",
 	"sprite":{'name':"demon",'sizeMod':1},
 	"abilityList":[

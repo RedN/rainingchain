@@ -850,7 +850,7 @@ Ability.creation = function(a){
 		name:a.name,
 		icon:'plan.ability',
 		option:[	
-			{'name':'Learn Ability','func':'Actor.useAbilityPlan','param':[a.id]},
+			{'name':'Learn Ability','remove':1,'func':'Actor.ability.add','param':[a.id]},
 			// {'name':'Examine Ability','func':'Actor.examineAbility','param':[a.id]},
 		],
 		type:'ability',

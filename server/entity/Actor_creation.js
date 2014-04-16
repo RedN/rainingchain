@@ -6,7 +6,7 @@ Actor.creation = function(d){
 
 	
 	var data = useTemplate(Actor.creation.template(),d);
-	var e = Actor.template('enemy');
+	var e = Actor.template('npc');
 	e = Actor.creation.db(e,data);
 	e = Actor.creation.info(e,data);
 	e = Actor.creation.extra(e,data);
@@ -89,7 +89,7 @@ Actor.creation.boost = function(e){
 }
 
 Actor.creation.db = function(e,d){
-	var f = Db.enemy[d.category][d.variant];
+	var f = Db.npc[d.category][d.variant];
 	e = f();
 	for(var i in f.ability) e.ability[i].action.param = f.ability[i];
 	for(var i in f) if(i !== 'ability') e[i] = f[i];	//cuz of function (globalDmg) + cant delete ability if multi use same
@@ -148,8 +148,8 @@ Actor.creation.info.position = function(cr){
 		var x = cr.x + Math.randomML() * cr.v;
 		var y = cr.y + Math.randomML() * cr.v;
 		if(!Actor.isStuck(
-			{map:cr.map,x:cr.x,y:cr.y,type:'enemy'},
-			{map:cr.map,x:x,y:y,type:'enemy'})){
+			{map:cr.map,x:cr.x,y:cr.y,type:'npc'},
+			{map:cr.map,x:x,y:y,type:'npc'})){
 			return {x:x,y:y};
 		}
 	}

@@ -25,16 +25,14 @@ List = {
 
 //Sync DB and Server when Server starts
 Init.server = function (){
-    Init.db.item(function(){
+	Init.db.item(function(){
 	Init.db.equip(function(){
 	Init.db.ability(function(){
 	Init.db.plan(function(){
-		
+   
 		Init.db.customBoost();
 		Init.db.stat();
 		Init.db.material();
-		
-		//initAbilityModDb();
 		
 		Init.db.sprite();
 		Init.db.quest.map();
@@ -47,7 +45,7 @@ Init.server = function (){
 		
 		Init.db.quest();
 		
-		Init.db.enemy();
+		Init.db.npc();
 		Init.db.boss();
 							
 		
@@ -55,6 +53,7 @@ Init.server = function (){
 		Map.creation.all();
 		
 		Init.db.passive(function(){
+			console.log('victory!');
 			Init.cycle();
 			Init.db.clan();
 			Test.serverStart();

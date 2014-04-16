@@ -61,7 +61,7 @@ Draw.actor.status = function(act){	//hp + status
 	//hp
 	ctx.strokeStyle = "black";
 	ctx.roundRect(numX,numY,100,5);
-	ctx.fillStyle = act.type === 'enemy' ? 'red' : 'green';
+	ctx.fillStyle = act.type === 'npc' ? 'red' : 'green';
 	ctx.roundRect(numX,numY,Math.max(act.hp/act.resource.hp.max*100,0),5,1);	
 	ctx.fillStyle="black";
 	

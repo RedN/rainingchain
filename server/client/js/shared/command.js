@@ -393,7 +393,7 @@ Command.list['win,ability,swap'] = function(key,name,position){
 	position = +position;
 	if(typeof position !== 'number' || typeof name !== 'string'){ return; }
 	if(position < 0 || !Actor.getAbilityList(List.all[key])[name]){ return; } 
-	Actor.swapAbility(List.all[key],name,position);
+	Actor.ability.swap(List.all[key],name,position);
 }
 Command.list['win,ability,swap'].doc = {
 	'description':"Set an Ability to a Key",

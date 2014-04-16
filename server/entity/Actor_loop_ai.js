@@ -1,6 +1,6 @@
 
 Actor.loop.input = function(act){
-	if(act.type === 'enemy' || act.target.cutscene.active){
+	if(act.type === 'npc' || act.target.cutscene.active){
 		if(act.move && act.moveSelf) //&& act.frameCount % 3 === 0 //bad cuz fuck timing for period.main
 			Actor.loop.input.move(act);
 	}
@@ -111,7 +111,7 @@ Actor.loop.input.ability = function(act){
 }
 
 Actor.loop.setTarget = function(act){
-	if(act.type !== 'enemy') return;
+	if(act.type !== 'npc') return;
 	var tar = act.target;
 	
 	//Main

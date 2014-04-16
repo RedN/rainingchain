@@ -160,7 +160,7 @@ Db.query.admin = function(socket,d){
 
 		for(var i in List.all){
 			var act = List.all[i];
-			if(act.type === 'enemy'){
+			if(act.type === 'npc'){
 				var id = act.name + ' ' + act.id;
 				le[id] = act;
 				if(act.combat) lc[id] = act;

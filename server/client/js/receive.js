@@ -33,7 +33,7 @@ try {
 	for(var i in data.r){
 		var id = data.r[i];
 		if(List.all[id] && List.all[id].sprite){ 
-			List.all[id].sprite.dead = List.all[id].type === 'enemy' ? 1/12 : 1/3;
+			List.all[id].sprite.dead = List.all[id].type === 'npc' ? 1/12 : 1/3;
 		} else{removeAny(id);}			
 	}
     
@@ -103,7 +103,7 @@ Receive.parse.chargeClient = function(info){	//could be used when needed instead
 
 Receive.init = function(obj,id){
 	if(obj[0] === 'b'){	Receive.init.bullet(obj,id);}	
-	if(obj.type === 'enemy' || obj.type === 'player'){ Receive.init.actor(obj); }	
+	if(obj.type === 'npc' || obj.type === 'player'){ Receive.init.actor(obj); }	
 	else if(obj.type === 'drop'){	Receive.init.drop(obj);	}
 }
 

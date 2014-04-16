@@ -146,7 +146,7 @@ Change.send.init = function(obj){
 	//convertInit: create object that has all needed information for the client to init the object. these information are only sent when init.
 	if(obj.type == 'bullet'){return Change.send.init.bullet(obj)}
 	if(obj.type == 'drop'){return Change.send.init.drop(obj)}
-	if(obj.type == 'enemy' || obj.type == 'player'){	return Change.send.init.actor(obj)}
+	if(obj.type == 'npc' || obj.type == 'player'){	return Change.send.init.actor(obj)}
 }
 
 Change.send.init.bullet = function(bullet){	//For Init
@@ -163,17 +163,17 @@ Change.send.init.bullet = function(bullet){	//For Init
 	return draw;
 }
 
-Change.send.init.actor = function(enemy){	//For Init
+Change.send.init.actor = function(act){	//For Init
 	var draw = {};
-	draw.id = enemy.publicId;
-	draw.xya = [Math.round(enemy.x),Math.round(enemy.y),Math.round(enemy.angle)];
-	draw.sprite = {'name':enemy.sprite.name,'anim':enemy.sprite.initAnim || "walk",'sizeMod':enemy.sprite.sizeMod || 1};
-	draw.hp = Math.round(enemy.hp);
-	draw.resource = {'hp':{'max':Math.round(enemy.resource.hp.max)}};
-	draw.maxSpd = Math.round(enemy.maxSpd);
-	draw.type = enemy.type;
-	draw.combat = enemy.combat;
-	if(enemy.minimapIcon){ draw.minimapIcon = enemy.minimapIcon; }
+	draw.id = act.publicId;
+	draw.xya = [Math.round(act.x),Math.round(act.y),Math.round(act.angle)];
+	draw.sprite = {'name':act.sprite.name,'anim':act.sprite.initAnim || "walk",'sizeMod':act.sprite.sizeMod || 1};
+	draw.hp = Math.round(act.hp);
+	draw.resource = {'hp':{'max':Math.round(act.resource.hp.max)}};
+	draw.maxSpd = Math.round(act.maxSpd);
+	draw.type = act.type;
+	draw.combat = act.combat;
+	if(act.minimapIcon){ draw.minimapIcon = act.minimapIcon; }
 	return draw;
 }
 
