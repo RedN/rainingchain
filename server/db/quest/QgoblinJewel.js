@@ -397,6 +397,20 @@ q.map.goblinLand = function(){
 			["orc","magic",3,{deathFunc:q.event.killOrc}],
 		]);	
 		
+		
+		actorGroup(spot.ed,25*15,[
+			["orc","melee",12,{deathFunc:q.event.killOrc}],
+			["orc","range",11,{deathFunc:q.event.killOrc}],
+		]);	
+		actorGroup(spot.s1,25*15,[
+			["orc","magic",13,{deathFunc:q.event.killOrc}],
+		]);	
+		
+		actorGroup(spot.q1,25*15,[
+			["orc","magic",10,{deathFunc:q.event.killOrc}],
+		]);	
+		
+		
 		block(spot.b1,{},'invisible');
 		
 		actor(spot.t3,"teleport","zone",{
@@ -426,78 +440,8 @@ q.map.goblinLand = function(){
 		block(spot.b2);
 		block(spot.b3);
 		*/
-		/*
-		actor(spot.P,"teleport","zone",{
-			angle:90,
-			teleport:q.event.teleport,
-		});
 		
-		actor(spot.I,"neutral","jenny",{
-			'nevermove':1,
-			'angle':90,
-			'dialogue':q.event.talkNpc,
-		});
 		
-		actorGroup(spot.d,25*15,[
-			["mushroom","normal",4,{deathFunc:q.event.enemyKilled}],
-			["larva","normal",5,{deathFunc:q.event.enemyKilled}],
-			["plant","normal",4,{deathFunc:q.event.enemyKilled}],
-		]);
-		
-		actorGroup(spot.d,25*15,[
-			["mushroom","normal",1,{deathFunc:q.event.enemyKilled}],
-			["larva","normal",5,{deathFunc:q.event.enemyKilled}],
-			["plant","normal",1,{deathFunc:q.event.enemyKilled}],
-		]);
-		
-		actorGroup(spot.C,25*15,[
-			["goblin","melee",1,{deathFunc:q.event.enemyKilled}],
-			["goblin","range",1,{deathFunc:q.event.enemyKilled}],
-			["goblin","magic",1,{deathFunc:q.event.enemyKilled}],
-		]);
-		
-		actorGroup(spot.D,25*15,[
-			["orc","melee",1,{deathFunc:q.event.enemyKilled}],
-			["orc","range",1,{deathFunc:q.event.enemyKilled}],
-			["orc","magic",1,{deathFunc:q.event.enemyKilled}],
-		]);
-		
-		actorGroup(spot.i,25*15,[
-			["gargoyle","normal",1,{deathFunc:q.event.enemyKilled}],
-			["death","normal",1,{deathFunc:q.event.enemyKilled}],
-			["demon","normal",1,{deathFunc:q.event.enemyKilled}],
-		]);
-		
-		actorGroup(spot.k,25*15,[
-			["skeleton","normal",1,{deathFunc:q.event.enemyKilled}],
-			["spirit","fire",1,{deathFunc:q.event.enemyKilled}],
-			["mummy","normal",1,{deathFunc:q.event.enemyKilled}],
-		]);
-		
-		actorGroup(spot.m,25*15,[
-			["slime","normal",1,{deathFunc:q.event.enemyKilled}],
-			["salamander","normal",1,{deathFunc:q.event.enemyKilled}],
-		]);
-		
-		actorGroup(spot.r,25*15,[
-			["bee","normal",1,{deathFunc:q.event.enemyKilled}],
-			["bat","normal",1,{deathFunc:q.event.enemyKilled}],
-		]);
-		
-		actorGroup(spot.u,25*15,[
-			["bird","red",1,{deathFunc:q.event.enemyKilled}],
-			["mosquito","normal",1,{deathFunc:q.event.enemyKilled}],
-		]);
-		
-		actorGroup(spot.p,25*15,[
-			["ghost","normal",1,{deathFunc:q.event.enemyKilled}],
-			["taurus","normal",1,{deathFunc:q.event.enemyKilled}],
-		]);
-		
-		actorGroup(spot.v,25*15,[
-			["dragon","king",3,{deathFunc:q.event.enemyKilled}],
-		]);
-		*/
 	}
 	
 	a.loop = function(spot){

@@ -235,7 +235,7 @@ Init.db.map.baseMap = function(){
 		tileset : 'v1.1',
 		grid :[[]],
 		lvl:0,
-		fall:function(key,act){ act.hp = -1;},
+		fall:null,
 		graphic:null,	//if use same graphic than other map
 	}
 }

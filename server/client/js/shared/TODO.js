@@ -1,7 +1,7 @@
 ==REVAMP==
 
 
-
+dodge should avoid bullet collision
 
 
 

@@ -1,6 +1,7 @@
 //####Update Actor####
 
-ABILITYTIME = 3;
+ABILITYINTERVAL = 3;
+SUMMONINTERVAL = 5;
 
 Actor.loop = function(act){	
 	if(++act.frame % 25 === 0) Actor.loop.activeList(act); 
@@ -15,12 +16,12 @@ Actor.loop = function(act){
 	if(act.combat){
 		if(act.hp <= 0) Actor.death(act);
 		if(act.boss){ Boss.loop(act.boss);}
-		if(act.frame % ABILITYTIME === 0) Actor.loop.ability.charge(act);
-		if(act.frame % ABILITYTIME === 0) Actor.loop.ability.test(act);
+		if(act.frame % ABILITYINTERVAL === 0) Actor.loop.ability.charge(act);
+		if(act.frame % ABILITYINTERVAL === 0) Actor.loop.ability.test(act);
 		Actor.loop.regen(act);    
 		Actor.loop.status(act);	
 		Actor.loop.boost(act);
-		Actor.loop.summon(act);
+		if(act.frame % SUMMONINTERVAL === 0) Actor.loop.summon(act);
 		if(act.frame % 25 === 0) Actor.loop.attackReceived(act); 	//used to remove attackReceived if too long
 	}
 	if(act.combat || act.move){
@@ -35,13 +36,13 @@ Actor.loop = function(act){
 		Actor.loop.move(act);  	//move the actor
 	}
 	if(act.type === 'player'){
-		Actor.loop.fall(act);	//test if fall
+		if(act.frame % 3 === 0) Actor.loop.fall(act);	//test if fall
 		
 		if(act.frame % 2 === 0){ Draw.loop(act.id); }    						//draw everything and add button
 		if(act.frame % 25 === 0){ Actor.loop.friendList(act); }    				//check if any change in friend list
 		if(act.frame % round(Server.frequence.save/40) === 0){ Save(act.id); }    //save progression
 		if(List.main[act.id].windowList.trade){ Actor.loop.trade(act); };    
-		if(List.main[act.id].dialogue){ Actor.loop.dialogue(act); }
+		if(List.main[act.id].dialogue && act.frame % 5 === 0){ Actor.loop.dialogue(act); }
 	}
 		
 }
@@ -52,15 +53,15 @@ Actor.loop.ability.charge = function(m){	//HOTSPOT
 	var alreadyBoosted = {};
 	var ma = m.abilityChange;
 	//if(m.type === 'player') console.log(100,m.abilityChange.charge);
-	ma.globalCooldown -= ABILITYTIME;
-	ma.globalCooldown = ma.globalCooldown.mm(-100,250); 	//cuz if atkSpd is low, fuck everything
+	ma.globalCooldown -= ABILITYINTERVAL;
+	ma.globalCooldown = ma.globalCooldown.mm(-100,250); 	//cuz if atkSpd is low, fuck everything with stun
 	var ab = Actor.getAbility(m);
 	for(var i in ab){
-		var s = ab[i]; if(!s) continue;	//cuz can have hole if player AND enemy attack rate is are in m.ability
+		var s = ab[i]; if(!s) continue;	//cuz can have hole if player
 		
 		//Charge
 		if(!alreadyBoosted[s.id]){  //this is because a player can set the same ability to multiple input
-			ma.charge[s.id] += m.atkSpd.main * s.spd.main * ABILITYTIME;
+			ma.charge[s.id] += m.atkSpd.main * s.spd.main * ABILITYINTERVAL;
 			alreadyBoosted[s.id] = 1;
 		}
 		
@@ -75,7 +76,7 @@ Actor.loop.ability.test = function(m){
 	var ab = Actor.getAbility(m);
 	var ma = m.abilityChange;
 	for(var i in ab){
-		var s = ab[i]; if(!s) continue;	//cuz can have hole if player AND enemy attack rate is are in m.ability
+		var s = ab[i]; if(!s) continue;	//cuz can have hole if player
 		
 		if(ma.press[i] === '1' && ma.charge[s.id] > s.period.own && (s.period.bypassGlobalCooldown || (ma.globalCooldown <= 0))){
 			Actor.performAbility(m,s);
@@ -92,9 +93,7 @@ Actor.performAbility = function(act,ab,mana,reset){
 	
 	//Anim
 	if(ab.action.anim) Sprite.change(act,{'anim':ab.action.anim});
-	if(ab.action.animOnSprite){
-		Anim.creation(ab.action.animOnSprite,act.id,1);
-	}
+	if(ab.action.animOnSprite)	Anim.creation(ab.action.animOnSprite,act.id,1);
 	
 	//Do Ability Action (ex: Combat.action.attack)
 	applyFunc.key(act.id,ab.action.func,ab.action.param);
@@ -102,9 +101,9 @@ Actor.performAbility = function(act,ab,mana,reset){
 
 Actor.performAbility.resetCharge = function(act,ab){
 	var charge = act.abilityChange.charge;
-	charge[ab.id] = Math.min(charge[ab.id] % ab.period.own,1);
-	act.abilityChange.globalCooldown = act.abilityChange.globalCooldown < 0 ? 0 : act.abilityChange.globalCooldown;	//incase bypassing Global
-	act.abilityChange.globalCooldown +=  ab.period.global * (ab.spd.main / act.atkSpd.main.mm(0.01) + ab.spd.support / act.atkSpd.support.mm(0.01));
+	charge[ab.id] = 0;
+	act.abilityChange.globalCooldown = Math.max(act.abilityChange.globalCooldown,0);	//incase bypassing Global
+	act.abilityChange.globalCooldown +=  ab.period.global * (ab.spd.main / act.atkSpd.main.mm(0.05));
 
 }
 
@@ -200,12 +199,11 @@ Actor.loop.status.bleed = function(act){
 
 Actor.loop.regen = function(act){
 	for(var i in act.resource){
-		act[i] += act.resource[i].regen;
-		act[i] = Math.min(act[i],act.resource[i].max);
+		act[i] = Math.min(act[i] + act.resource[i].regen,act.resource[i].max);
 	}
 }
 
-Actor.loop.boost = function(act,full){
+Actor.loop.boost = function(act){
 	var array = {'fast':1,'reg':5,'slow':25};
 	for(var j in array){
 		if(!Loop.interval(array[j])) continue;
@@ -221,12 +219,10 @@ Actor.loop.boost = function(act,full){
 		Actor.update.boost(act,i);
 		delete act.boost.toUpdate[i];
 	}
-	
-	if(full){for(var i in act.boost.list){Actor.update.boost(act,i);}}
 }
 
 Actor.loop.summon = function(act){
-    //check if summon child still exist (assume player is the master)
+    //(assume player is the master)
 	for(var i in act.summon){
 		for(var j in act.summon[i].child){
 			if(!List.all[j]){ delete act.summon[i].child[j]; }
@@ -234,17 +230,18 @@ Actor.loop.summon = function(act){
 	}
 	
 	//(assume player is child)
-    if(act.summoned && act.frame % 5 === 0){
-		if(!act.summoned.father || !List.all[act.summoned.father]){ Actor.remove(act); return; }
+    if(act.summoned){
+		var fat = List.all[act.summoned.father];
+		if(!fat || fat.dead){ Actor.remove(act); return; }	//remove if father dead
 	    
 	    //if too far, teleport near master
-		if(act.map != List.all[act.summoned.father].map || Collision.distancePtPt(act,List.all[act.summoned.father]) >= act.summoned.distance){
-			act.x = List.all[act.summoned.father].x + Math.random()*5-2;
-			act.y = List.all[act.summoned.father].y + Math.random()*5-2;
-			act.map = List.all[act.summoned.father].map;
+		if(act.map !== fat.map || Collision.distancePtPt(act,fat) >= act.summoned.distance){
+			act.x = fat.x + Math.randomML()*5;
+			act.y = fat.y + Math.randomML()*5;
+			act.map = fat.map;
 		}	
 		
-		act.summoned.time -= 5;
+		act.summoned.time -= SUMMONINTERVAL;
 		if(act.summoned.time < 0){
 			Actor.remove(act);
 		}
@@ -257,10 +254,8 @@ Actor.loop.summon = function(act){
 Actor.loop.bumper = function(act){	//HOTSPOT
 	//test collision with map
 	if(Loop.interval(100)){	//test global limit
-		act.x = Math.max(act.x,50);
-		act.x = Math.min(act.x,Db.map[Map.getModel(act.map)].grid.bullet[0].length*32-50);
-		act.y = Math.max(act.y,50);
-		act.y = Math.min(act.y,Db.map[Map.getModel(act.map)].grid.bullet.length*32-50);
+		act.x = act.x.mm(50,act.x,Db.map[Map.getModel(act.map)].grid.bullet[0].length*32-50);
+		act.y = act.y.mm(50,act.y,Db.map[Map.getModel(act.map)].grid.bullet.length*32-50);
 	}
 	//test bumpers
 	for(var i = 0 ; i < 4 ; i ++){
@@ -274,10 +269,8 @@ Actor.loop.fall = function(act){
 	xy = Collision.getPos(xy);
 	var value = Collision.getSquareValue(xy,act.map,'player');
 	
-	if(value === '4'){ Actor.fall(act); return; }	//TOFIX check for map fall
+	if(value === '4'){ Actor.fall(act); }
 	if(value === '3'){ 
-		
-		
 		var list = [
 			[1,0,0],
 			[0,1,90],
@@ -287,28 +280,20 @@ Actor.loop.fall = function(act){
 			[-1,1,135],
 			[-1,1,225],
 			[1,-1,315],
-		]
+		];
 	
 		for(var i in list){
 			if(Collision.getSquareValue({x:xy.x+list[i][0],y:xy.y+list[i][1]},act.map,'player') === '4'){
-				Actor.push(act,list[i][2],2,2);
+				Actor.push(act,list[i][2],5,5);
 				break;
 			}
 		}
 	}
-	
-	
-	
-	
-	
-	
-	
-	//var xy2 = {x: act.x +act.bumperBox[1].x,y:act.y + (act.bumperBox[1].y + act.bumperBox[0].y)/2};	//x = middle, y = 3/4 below
-	//&& !Collision.ActorMap.fall(Collision.getPos(xy2),act.map,act)
 }
 
-Actor.fall = function(act){
-	List.map[act.map].fall(act.id,act);
+Actor.fall = function(act){	//default fall
+	if(List.map[act.map].fall) List.map[act.map].fall(act.id,act);
+	else act.hp = -1;
 }
 
 Actor.loop.move = function(act){
@@ -335,17 +320,16 @@ Actor.loop.move = function(act){
 	//Calculating New Position
 	var dist = Math.pyt(act.spdY,act.spdX);
 	var amount = Math.ceil(dist/30);
-	if(amount >= 2){    //aka could pass thru walls => move step by step and test bumper every time
-		//need fix, reason y stuck when too fast
+	if(amount < 2){
+		act.x += act.spdX;
+		act.y += act.spdY;
+	} else {    //aka could pass thru walls => move step by step and test bumper every time
 		for(var i = 0 ; i < amount && !act.bumper[0] && !act.bumper[1] && !act.bumper[2] && !act.bumper[3]  ; i++){
 			act.x += act.spdX/amount;
 			act.y += act.spdY/amount;
 			Sprite.updateBumper(act);
 		} 
-	} else {
-		act.x += act.spdX;
-		act.y += act.spdY;
-	}
+	} 
 	
 }
 
@@ -353,16 +337,14 @@ Actor.loop.move.aim = function (act){
 	//penalty if looking and moving in opposite direction
 	var diffAim = Math.abs(act.angle - act.moveAngle);
 	if (diffAim > 180){ diffAim = 360 - diffAim;}
-	Actor.boost(act,{'stat':'maxSpd','type':"*",'value':Math.pow((360-diffAim)/360,1.5),'time':4,'name':'Aim'});
+	Actor.boost(act,{'stat':'maxSpd','type':"*",'value':Math.pow(1-diffAim/360,1.5),'time':4,'name':'Aim'});
 }
 //}
 
 
-Actor.loop.activeList = function(act){
-	//Note: Could mix that together
-		
+Actor.loop.activeList = function(act){	
 	//Test Already in List if they deserve to stay
-	for(var j in act.activeList){		//bug here if List.all[j] is undefined
+	for(var j in act.activeList){
 		if(!List.all[j]){
 			delete act.activeList[j];
 			continue;
@@ -381,11 +363,11 @@ Actor.loop.activeList = function(act){
 			if(act.type !== 'player'){ List.all[j].viewedBy[act.id] = 1;}	//for player, viewedBy is used in send init data
 		}
 	}
-	act.active = Object.keys(act.activeList).length || act.type == 'player';
+	act.active = Object.keys(act.activeList).length || act.type === 'player';
 
 }
 
-Actor.loop.trade = function(act){
+Actor.loop.trade = function(act){	//BAD
 	var key = act.id;
 	if(List.main[List.main[key].windowList.trade.trader]){
 		List.main[key].windowList.trade.tradeList = List.main[List.main[key].windowList.trade.trader].tradeList;	
@@ -414,7 +396,7 @@ Actor.loop.friendList = function(act){
 	var fl = List.main[key].social.list.friend;
     
 	for(var i in fl){
-		fl[i].online = Chat.receive.pm.test(List.all[key].name,i);
+		fl[i].online = Chat.receive.pm.test(act.name,i);
 	}
 }
 

@@ -1,8 +1,18 @@
 
 Actor.death = function(act){	
 	var killers = Actor.death.getKillers(act);
+	Actor.death.summon(act);
 	if(act.type === 'npc') Actor.death.npc(act,killers);
 	if(act.type === 'player') Actor.death.player(act,killers);
+}
+
+
+Actor.death.summon = function(act){
+	for(var i in act.summon){
+		for(var j in act.summon[i].child){
+			Actor.remove(List.all[j]);
+		}		
+	}
 }
 
 Actor.death.player = function(act,killers){
