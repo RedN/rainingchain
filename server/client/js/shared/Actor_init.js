@@ -214,8 +214,11 @@ Actor.template.sprite = function(){
 	return {"name":"mace","anim":"walk","sizeMod":1};
 }
 
-Actor.template.abilityChange = function(){
-	return {'press':'00000000000000','charge':{},'chargeClient':[0,0,0,0,0,0],'globalCooldown':0};
+Actor.template.abilityChange = function(ab){	//ab : abilityList
+	var tmp = {'press':'00000000000000','charge':{},'chargeClient':[0,0,0,0,0,0],'globalCooldown':0};
+	
+	for(var i in ab) tmp.charge[i] = 0;
+	return tmp;
 }
 
 Actor.template.mastery = function(type){

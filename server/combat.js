@@ -174,42 +174,43 @@ Combat.collision.status = function(dmg,b,target){
 Combat.collision.status.burn = function(act,b){	
 	var info = b.burn;
 	var burn = act.status.burn;
-	burn.active.time = info.time*(1-burn.resist); 
-	burn.active.magn = info.magn*(1-burn.resist); 
+	burn.time = info.time*(1-burn.resist); 
+	burn.magn = info.magn*(1-burn.resist); 
 }
 
 Combat.collision.status.stun = function(act,b){
 	var info = b.stun;
 	var stun = act.status.stun;
 	
-	stun.active.time = info.time*(1-stun.resist);
-	stun.active.magn = info.magn*(1-stun.resist);
+	stun.time = info.time*(1-stun.resist);
+	stun.magn = info.magn*(1-stun.resist);
 	
 	Actor.boost(act,[
-		{'stat':'maxSpd','type':"*",'value':0,'time':stun.active.time,'name':'stun'},
-		{'stat':'atkSpd-main','type':"*",'value':0.1,'time':stun.active.time,'name':'stun'}
+		{'stat':'maxSpd','type':"*",'value':0,'time':stun.time,'name':'stun'},
+		{'stat':'atkSpd-main','type':"*",'value':0.1,'time':stun.time,'name':'stun'}
 	]); 
 	
-	for(var i in act.abilityChange.charge)
-		act.abilityChange.charge[i] /= stun.active.magn;
+	for(var i in act.abilityChange.charge){
+		act.abilityChange.charge[i] /= stun.magn;
+	}
 }
 
 Combat.collision.status.bleed = function(act,b,dmg){
 	var info = b.bleed;
 	var bleed = act.status.bleed;
 	
-	bleed.active.time = 25/info.time/(1-bleed.resist);	//shorter = better for atker
-	bleed.active.magn = info.magn*(1-bleed.resist) / bleed.active.time;
+	bleed.time = 25/info.time/(1-bleed.resist);	//shorter = better for atker
+	bleed.magn = info.magn*(1-bleed.resist) / bleed.time;
 }
 
 Combat.collision.status.chill = function(act,b){
 	var info = b.chill;
 	var chill = act.status.chill;
 	
-	chill.active.time = b.chill.time*(1-chill.resist);
-	chill.active.magn = (1/b.chill.magn)*(1-chill.resist);
+	chill.time = b.chill.time*(1-chill.resist);
+	chill.magn = (1/b.chill.magn)*(1-chill.resist);
 	
-	Actor.boost(act,{'stat':'maxSpd','type':"*",'value':chill.active.magn,'time':chill.active.time,'name':'chill'}); 
+	Actor.boost(act,{'stat':'maxSpd','type':"*",'value':chill.magn,'time':chill.time,'name':'chill'}); 
 	
 	
 }
@@ -218,9 +219,9 @@ Combat.collision.status.knock = function(act,b){
 	var info = b.knock;
 	var knock = act.status.knock;
 	
-	knock.active.time = info.time*(1-knock.resist); 
-	knock.active.magn = info.magn*(1-knock.resist);	
-	knock.active.angle = b.moveAngle;
+	knock.time = info.time*(1-knock.resist); 
+	knock.magn = info.magn*(1-knock.resist);	
+	knock.angle = b.moveAngle;
 }
 
 Combat.collision.status.drain = function(act,b){
@@ -230,12 +231,12 @@ Combat.collision.status.drain = function(act,b){
 	var atker = List.all[b.parent]; if(!atker) return;
 	
 	
-	drain.active.time = info.time*(1-drain.resist); 
-	drain.active.magn = info.magn*(1-drain.resist);	
+	drain.time = info.time*(1-drain.resist); 
+	drain.magn = info.magn*(1-drain.resist);	
 
-	Actor.changeResource(atker,{mana:drain.active.magn});
-	Actor.boost(act,{'stat':'mana-max','type':"+",'value':-drain.active.magn,'time':drain.active.time,'name':'drainBad'}); 
-	Actor.boost(atker,{'stat':'mana-max','type':"+",'value':drain.active.magn,'time':drain.active.time,'name':'drainGood'}); 
+	Actor.changeResource(atker,{mana:drain.magn});
+	Actor.boost(act,{'stat':'mana-max','type':"+",'value':-drain.magn,'time':drain.time,'name':'drainBad'}); 
+	Actor.boost(atker,{'stat':'mana-max','type':"+",'value':drain.magn,'time':drain.time,'name':'drainGood'}); 
 
 	atker.mana = atker.resource.mana.max;
 	act.mana = 0;
@@ -250,21 +251,21 @@ Combat.clearStatus = function(act){
 	Combat.clearStatus.chill(act);
 	Combat.clearStatus.drain(act);
 };
-Combat.clearStatus.burn = function(act){ act.status.burn.active.time = 0; } 
-Combat.clearStatus.knock = function(act){ act.status.knock.active.time = 0; }
-Combat.clearStatus.bleed = function(act){ act.status.bleed.active.time = 0; }
+Combat.clearStatus.burn = function(act){ act.status.burn.time = 0; } 
+Combat.clearStatus.knock = function(act){ act.status.knock.time = 0; }
+Combat.clearStatus.bleed = function(act){ act.status.bleed.time = 0; }
 Combat.clearStatus.stun = function(act){ 
-	act.status.stun.active.time = 0;
-	Actor.boost.removeByName(act,'maxSpd@stun');
-	Actor.boost.removeByName(act,'atkSpd-main@stun');
+	act.status.stun.time = 0;
+	Actor.boost.removeById(act,'maxSpd@stun');
+	Actor.boost.removeById(act,'atkSpd-main@stun');
 }
 Combat.clearStatus.chill = function(act){ 
-	act.status.chill.active.time = 0;
-	Actor.boost.removeByName(act,'maxSpd@chill');
+	act.status.chill.time = 0;
+	Actor.boost.removeById(act,'maxSpd@chill');
 }
 Combat.clearStatus.drain = function(act){ 
-	act.status.drain.active.time = 0;
-	Actor.boost.removeByName(act,'mana-max@drainBad');
+	act.status.drain.time = 0;
+	Actor.boost.removeById(act,'mana-max@drainBad');
 }
 
 //Apply Mods

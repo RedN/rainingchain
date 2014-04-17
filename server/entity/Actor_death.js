@@ -139,8 +139,7 @@ Actor.death.performAbility = function(act){
 Actor.death.respawn = function(act){	//for player
 	var rec = act.respawnLoc.recent;
 	
-	var good = List.map[rec.map] ? rec : act.respawnLoc.safe;
-	
+	var good = List.map[Actor.teleport.getMapName(act,rec.map)] ? rec : act.respawnLoc.safe;
 	Actor.teleport(act, good);
 		
 	Combat.clearStatus(act);

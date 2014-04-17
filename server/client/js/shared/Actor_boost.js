@@ -24,8 +24,7 @@ Actor.boost = function(act, boost){	//boost: { 'stat':'globalDmg','value':1,'typ
 Actor.boost.template = function(){
 	return {
 		name:'Im dumb.',
-		time:1/0,
-		timer:1/0,
+		time:Cst.bigInt,
 		type:'+',
 		spd:'reg',
 	}
@@ -34,16 +33,16 @@ Actor.boost.template = function(){
 Actor.boost.remove = function(act, boost){
 	var stat = boost.stat;
 	if(boost.name === 'curse') delete act.curseClient[stat];
-	delete act.boost.list[stat].name[boost.name]
+	delete act.boost.list[stat].name[boost.id]
 	delete boost; 
 	Actor.update.boost(act,stat);
 }
 
-Actor.boost.removeByName = function(act, name){	//TOFIX		name: STAT@ID
-	var stat = name.split("@")[0];
-	var b = act.boost.list[stat];
-	if(b && b.name[name]){
-		Actor.boost.remove(act,b.name[name]);
+Actor.boost.removeById = function(act, id){	//TOFIX		name: STAT@ID
+	var stat = id.split("@")[0];
+	var blist = act.boost.list[stat];
+	if(blist && blist.name[id]){
+		Actor.boost.remove(act,blist.name[id]);
 	}
 }
 
@@ -136,7 +135,7 @@ Actor.update.permBoost = function(act){
 	}	
 }
 
-Actor.update.boost = function(act,stat){
+Actor.update.boost = function(act,stat){	//for time manage, Actor.loop.boost
 	if(!stat || stat === 'all'){ for(var i in act.boost.list) Actor.update.boost(act,i); return; }
 	
 	var stat = act.boost.list[stat];

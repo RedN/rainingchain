@@ -53,7 +53,6 @@ Init.server = function (){
 		Map.creation.all();
 		
 		Init.db.passive(function(){
-			console.log('victory!');
 			Init.cycle();
 			Init.db.clan();
 			Test.serverStart();

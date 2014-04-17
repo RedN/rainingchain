@@ -26,7 +26,6 @@ Actor.ability.swap = function(act,name,position){
 	for(var i in ab){ 
 		if(ab[i]) act.abilityChange.charge[ab[i].id] = 0;
 	}
-
 }
 
 Actor.ability.add = function(act,name){

@@ -99,6 +99,7 @@ Actor.creation.db = function(cr){
 		
 	return e;
 }
+
 Actor.creation.lvl = function(lvl,mod){
 	if(!mod) return lvl;
 	if(typeof mod === 'number') return mod;
@@ -194,14 +195,12 @@ Actor.creation.mod.list = {
 		'func': (function(e){ e.bonus.leech.chance = 0.5; e.bonus.leech.magn = 0.5; return e; })},
 	'atkSpd':{'name':'Faster Attack','chance':1,
 		'func': (function(e){ e.atkSpd.main *= 2; return e; })},
-	'reflectPhysical':{'name':'Reflect Physical','chance':1,
+	/*'reflectPhysical':{'name':'Reflect Physical','chance':1,
 		'func': (function(e){ e.reflect = {"melee":0.5,"range":0.5,"magic":0.5,"fire":0,"cold":0,"lightning":0}; return e; })},
-	//'reflectElemental':{'name':'Reflect Elemental','chance':1,	//TOFIX
-	//	'func': (function(e){ e.reflect = {"melee":0,"range":0,"magic":0,"fire":0.5,"cold":0.5,"lightning":0.5}; return e; })},
+	'reflectElemental':{'name':'Reflect Elemental','chance':1,	//TOFIX
+		'func': (function(e){ e.reflect = {"melee":0,"range":0,"magic":0,"fire":0.5,"cold":0.5,"lightning":0.5}; return e; })},*/
 	'aoe':{'name':'Bigger AoE','chance':1,
 		'func': (function(e){ e.bonus.strike.size *= 2; e.bonus.strike.maxHit *= 2; return e; })},
-	'drop':{'name':'Better Drop','chance':1,
-		'func': (function(e){ e.drop.mod.quantity += 2; e.drop.mod.quality += 2; e.drop.mod.rarity += 2; return e; })},
 }
 
 Actor.creation.extra = function(act){

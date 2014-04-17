@@ -27,8 +27,9 @@ Input.key = function(socket,d){
 			//d.i format: right,down,left,up,ability0,ability1...
 			var move = d.i.slice(0,4);
 			for(var i = 0 ; i < 4 ; i++){player.moveInput[i] = +move[i];}
-			var ab = d.i.slice(4);
-			player.abilityChange.press = ab;
+			player.abilityChange.press = d.i.slice(4);
+			
+			if(player.abilityChange.press !== '000000') Actor.loop.ability.test(player);
 		}
 		
 		if(d.m){

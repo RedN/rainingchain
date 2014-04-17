@@ -1,27 +1,27 @@
 //####Update Actor####
 
-abilityUpdatePeriod = {npc:1,player:1};
+ABILITYTIME = 3;
 
 Actor.loop = function(act){	
-	act.frame++;
-	if(act.frame % 25 === 0){ Actor.loop.activeList(act); }
+	if(++act.frame % 25 === 0) Actor.loop.activeList(act); 
 	if(!act.active) return;
 	
 	Actor.loop.timeOut(act);
 	if(act.dead){
-		if(act.type === 'player' && act.respawn-- <= 0)
+		if(act.type === 'player' && --act.respawn < 0)
 			Actor.death.respawn(act);
 		return;
 	}
 	if(act.combat){
 		if(act.hp <= 0) Actor.death(act);
 		if(act.boss){ Boss.loop(act.boss);}
-		if(act.frame % abilityUpdatePeriod[act.type] === 0) Actor.loop.ability(act);
+		if(act.frame % ABILITYTIME === 0) Actor.loop.ability.charge(act);
+		if(act.frame % ABILITYTIME === 0) Actor.loop.ability.test(act);
 		Actor.loop.regen(act);    
 		Actor.loop.status(act);	
 		Actor.loop.boost(act);
 		Actor.loop.summon(act);
-		if(act.frame % 25 === 0){ Actor.loop.attackReceived(act); }	//used to remove attackReceived if too long
+		if(act.frame % 25 === 0) Actor.loop.attackReceived(act); 	//used to remove attackReceived if too long
 	}
 	if(act.combat || act.move){
 		Actor.loop.setTarget(act);  //update Enemy Target
@@ -30,7 +30,7 @@ Actor.loop = function(act){
 	if(act.combat && act.move && act.frame % 3 === 0) Actor.loop.move.aim(act); //impact max spd depending on aim
 	
 	if(act.move){
-		if(act.frame % 10 === 0){ Actor.loop.mapMod(act); }
+		if(act.frame % 10 === 0) Actor.loop.mapMod(act); 
 		Actor.loop.bumper(act);   //test if collision with map    
 		Actor.loop.move(act);  	//move the actor
 	}
@@ -47,43 +47,46 @@ Actor.loop = function(act){
 }
 
 //{Ability
-Actor.loop.ability = function(m){	//HOTSPOT
+Actor.loop.ability = {};
+Actor.loop.ability.charge = function(m){	//HOTSPOT
 	var alreadyBoosted = {};
-	m.abilityChange.chargeClient = [0,0,0,0,0,0];
-	
-	m.abilityChange.globalCooldown--;
-	m.abilityChange.globalCooldown = m.abilityChange.globalCooldown.mm(-100,250); 	//cuz if atkSpd is low, fuck everything
+	var ma = m.abilityChange;
+	//if(m.type === 'player') console.log(100,m.abilityChange.charge);
+	ma.globalCooldown -= ABILITYTIME;
+	ma.globalCooldown = ma.globalCooldown.mm(-100,250); 	//cuz if atkSpd is low, fuck everything
 	var ab = Actor.getAbility(m);
 	for(var i in ab){
 		var s = ab[i]; if(!s) continue;	//cuz can have hole if player AND enemy attack rate is are in m.ability
 		
-		var charge = m.abilityChange.charge;	//cant used [id] cuz otherwise not longer reference
-
 		//Charge
 		if(!alreadyBoosted[s.id]){  //this is because a player can set the same ability to multiple input
-			charge[s.id] += m.atkSpd.main * s.spd.main * abilityUpdatePeriod[m.type];
-			charge[s.id] = charge[s.id] || 0;	//cuz if null bug
+			ma.charge[s.id] += m.atkSpd.main * s.spd.main * ABILITYTIME;
 			alreadyBoosted[s.id] = 1;
 		}
 		
 		//Client
-		var rate = charge[s.id] / s.period.own;
-		m.abilityChange.chargeClient[i] = Math.min(rate,1);
-	
-		//Perform
-		if(m.abilityChange.press[i] == '1' && rate >= 1 && (s.period.bypassGlobalCooldown || (m.abilityChange.globalCooldown <= 0))){
-			Actor.performAbility(m,s);
-			break;	//1 ability per frame max
-		}
+		var rate = ma.charge[s.id] / s.period.own;
+		ma.chargeClient[i] = Math.min(rate,1);
 	}
 
+}
+
+Actor.loop.ability.test = function(m){
+	var ab = Actor.getAbility(m);
+	var ma = m.abilityChange;
+	for(var i in ab){
+		var s = ab[i]; if(!s) continue;	//cuz can have hole if player AND enemy attack rate is are in m.ability
+		
+		if(ma.press[i] === '1' && ma.charge[s.id] > s.period.own && (s.period.bypassGlobalCooldown || (ma.globalCooldown <= 0))){
+			Actor.performAbility(m,s);
+			break;
+		}
+	}
 }
 
 Actor.performAbility = function(act,ab,mana,reset){
 	//Mana
 	if(mana !== false && !Actor.performAbility.resource(act,ab.cost)) return;
-	
-	//Charge
 	if(reset !== false)	Actor.performAbility.resetCharge(act,ab);
 	
 	
@@ -102,9 +105,7 @@ Actor.performAbility.resetCharge = function(act,ab){
 	charge[ab.id] = Math.min(charge[ab.id] % ab.period.own,1);
 	act.abilityChange.globalCooldown = act.abilityChange.globalCooldown < 0 ? 0 : act.abilityChange.globalCooldown;	//incase bypassing Global
 	act.abilityChange.globalCooldown +=  ab.period.global * (ab.spd.main / act.atkSpd.main.mm(0.01) + ab.spd.support / act.atkSpd.support.mm(0.01));
-	
-	//Reset the ability and related abilities
-	return;
+
 }
 
 Actor.performAbility.resource = function(act,cost){
@@ -155,7 +156,7 @@ Actor.loop.mapMod = function(act){
 
 
 
-//{Status + stats
+//{Status + boost
 Actor.loop.status = function(act){
 	Actor.loop.status.knock(act);
 	Actor.loop.status.burn(act);
@@ -165,56 +166,36 @@ Actor.loop.status = function(act){
 	Actor.loop.status.drain(act);
 	
 	act.statusClient = '';
-	for(var i in Cst.status.list)	act.statusClient += act.status[Cst.status.list[i]].active.time > 0 ? '1' : '0';
+	for(var i in Cst.status.list)	act.statusClient += act.status[Cst.status.list[i]].time > 0 ? '1' : '0';
 }
 
-Actor.loop.status.chill = function(act){
-	var status = act.status.chill.active;
-	if(status.time > 0){ 
-		status.time--;	//the actual effect is a boost
-	}
-}
+Actor.loop.status.chill = function(act){act.status.chill.time--;}
+Actor.loop.status.stun = function(act){act.status.stun.time--;}
+Actor.loop.status.drain = function(act){act.status.drain.time--;}
 
 Actor.loop.status.knock = function(act){
-	var status = act.status.knock.active;
-	if(status.time > 0){ 
+	var status = act.status.knock;
+	if(status.time-- > 0){ 
 		act.spdX = cos(status.angle)*status.magn;
 		act.spdY = sin(status.angle)*status.magn;
-		status.time--;
 	}
-}
-
-Actor.loop.status.stun = function(act){
-	var status = act.status.stun.active;
-	if(status.time > 0){
-		status.time--;
-	} 
 }
 
 Actor.loop.status.burn = function(act){
-	var status = act.status.burn.active;
-	if(status.time> 0){
+	var status = act.status.burn;
+	if(status.time-- > 0){
 		Actor.changeHp(act, -status.magn*act.hp);
-		status.time--;
 	}
 }
 
 Actor.loop.status.bleed = function(act){
-	var status = act.status.bleed.active;
+	var status = act.status.bleed;
 	
-	if(status.time> 0){
+	if(status.time-- > 0){
 		Actor.changeHp(act, -status.magn);
-		status.time--;
 	}
 }
 
-Actor.loop.status.drain = function(act){
-	var status = act.status.drain.active;
-	
-	if(status.time> 0){
-		status.time--;
-	}
-}
 
 
 Actor.loop.regen = function(act){
@@ -230,11 +211,9 @@ Actor.loop.boost = function(act,full){
 		if(!Loop.interval(array[j])) continue;
 		
 		for(var i in act.boost[j]){
-			if(act.boost[j][i].timer < 0){ 
+			act.boost[j][i].time -= array[j];
+			if(act.boost[j][i].time < 0)
 				Actor.boost.remove(act,act.boost[j][i]);
-			} else {
-				act.boost[j][i].timer -= array[j];
-			}
 		}
 	}
 	
@@ -391,17 +370,15 @@ Actor.loop.activeList = function(act){
 		if(!Activelist.test(act,List.all[j])){
 			delete List.all[j].viewedBy[act.id];
 			delete act.activeList[j];
-			if(act.removeList) act.removeList.push(List.all[j].publicId || j);
+			if(act.type === 'player') act.removeList.push(List.all[j].publicId || j);
 		}
 	}
 	
 	//Add New Boys
-	if(List.map[act.map]){
-		for(var j in List.map[act.map].list.all){
-			if(Activelist.test(act,List.all[j])){
-				act.activeList[j] = 1;
-				if(act.type !== 'player'){ List.all[j].viewedBy[act.id] = 1;}	//for player, viewedBy is used in send init data
-			}
+	for(var j in List.map[act.map].list.all){
+		if(Activelist.test(act,List.all[j])){
+			act.activeList[j] = 1;
+			if(act.type !== 'player'){ List.all[j].viewedBy[act.id] = 1;}	//for player, viewedBy is used in send init data
 		}
 	}
 	act.active = Object.keys(act.activeList).length || act.type == 'player';
@@ -415,7 +392,7 @@ Actor.loop.trade = function(act){
 		List.main[key].windowList.trade.confirm.other = List.main[List.main[key].windowList.trade.trader].windowList.trade.confirm.self;
 	
 		if(List.main[key].windowList.trade.confirm.other && List.main[key].windowList.trade.confirm.self){
-			tradeItem(key,List.main[key].windowList.trade.trader);
+			//tradeItem(key,List.main[key].windowList.trade.trader);	//TOFIXBUG
 		}
 	} else {
 		List.main[key].windowList.trade = 0;
@@ -425,9 +402,7 @@ Actor.loop.trade = function(act){
 Actor.loop.dialogue = function(act){
 	//test if player has move away to end dialogue	
 	var key = act.id;
-	var dx = List.main[key].dialogueLoc.x;
-	var dy = List.main[key].dialogueLoc.y;
-	if(!Collision.PtRect({'x':act.x,'y':act.y},[dx-100,dx+100,dy-100,dy+100])){
+	if(Collision.distancePtPt(act,List.main[key].dialogueLoc) > 100){
 		Dialogue.end(key);
 	}
 

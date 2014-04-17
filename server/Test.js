@@ -13,7 +13,6 @@ Test.serverStart = function(){
 Test.signIn = function(key){ //Called when player logs in
 	Test.signIn.hideHUD(key);
 	Test.signIn.quest(key);
-	
 	if(Server.testing){
 		Db.quest["Qtest"].event.start(key);	//test
 		if(Quest.test){
@@ -26,6 +25,9 @@ Test.signIn = function(key){ //Called when player logs in
 	Actor.permBoost(List.all[key],'Player',[
 		{stat:'bullet-spd',value:0.5,type:'+'},
 	]);	
+	
+	
+	Test.signIn.fixAbilityCharge(key);	//BUG
 }
 
 Test.firstSignIn = function(key){
@@ -34,6 +36,11 @@ Test.firstSignIn = function(key){
 			
 	Chat.add(act.id,"Note: This is a very early beta. Expect things to change... A LOT.");
 	Chat.add(act.id,"Control: WADS. (For AZERTY users, change key binding via Pref Tab)");
+}
+
+Test.signIn.fixAbilityCharge = function(key){
+	for(var i in List.all[key].abilityChange.charge) 
+		List.all[key].abilityChange.charge[i] = 0;
 }
 
 

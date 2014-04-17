@@ -303,7 +303,7 @@ Load.player = function(key,account,cb){
 		player.publicId = player.name;
 		player.team = player.name;
 		player = Actor.creation.optionList(player);
-
+	
 		cb(player);
 	});
 }
@@ -354,10 +354,8 @@ Load.player.uncompress = function(player){
 							
     for(var i in player.ability)	player.ability[i] = Ability.uncompress(player.ability[i]);
 	player.ability = Actor.template.ability(player.ability);
-	
-	
-	
-    return player;
+	player.abilityChange = Actor.template.abilityChange(player.abilityList.regular);
+	return player;
 }
 
 Load.initData = function(key,player,main){
