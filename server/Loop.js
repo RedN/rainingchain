@@ -1,6 +1,6 @@
 Loop = function(){
 	try {
-	Loop.frameCount++;	
+	Loop.frame++;	
     Test.loop();
     Performance.loop();
 	
@@ -18,10 +18,10 @@ Loop = function(){
 	Loop.logOut();
 	} catch(err){ logError(err); }
 }
-Loop.frameCount = 0; 
+Loop.frame = 0; 
 
 Loop.interval = function(num){
-	return Loop.frameCount % num === 0;
+	return Loop.frame % num === 0;
 }
 
 Loop.actor = function(){

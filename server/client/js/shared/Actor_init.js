@@ -1,6 +1,4 @@
 //Mort
-Actor.template = {};	
-
 Init.actor = function(){
 	var defaultPreActor = function(type){
 		var act = {};
@@ -14,14 +12,13 @@ Init.actor = function(){
 			'toUpdate':{},
 			'list':Actor.template.boost(type),
 		};
-		act.frameCount = 0;
+		act.frame = 0;
 		act.viewedBy = {};     //list of actors that see this object
 		act.viewedIf = 'true'; //condition to see. check viewedIfList
 		act.activeList = {};   //actors near this object
 		act.active = 1;    	//if not active, dont move. no cpu
 		act.damagedBy = {};   //list of actors that damaged him (used for owner of the drops)
 		act.dead = 0;          //dead = invisible
-		act.killed = 0;        //killed = cant move, 0 hp but visible (aka death animation)
 		act.type = type;
 		act.target = {
 			main:null,sub:{x:0,y:0},	
@@ -36,13 +33,13 @@ Init.actor = function(){
 		act.mastery = Actor.template.mastery(type);
 		
 		act.status = {
-			'bleed':{'active':{"time":0,"list":[]},'resist':0,},				//fixed dmg per frame, fast but short
-			'knock':{'active':{"time":0,"magn":0,"angle":0},'resist':0},		//push
-			'drain':{'active':{"time":0,"magn":0},'resist':0},					//leech mana
-			'burn':{'active':{"time":0,"magn":0},'resist':0},					//dmg/frame depending on hp, long but slow
-			'chill':{'active':{"time":0,"magn":0},'resist':0},					//slower move
-			'stun':{'active':{"time":0,"magn":0},'resist':0},					//stun, remove attack charge
-		}
+			'bleed':{"time":0,"list":[],'resist':0,},				//fixed dmg per frame, fast but short
+			'knock':{"time":0,"magn":0,"angle":0,'resist':0},		//push
+			'drain':{"time":0,"magn":0,'resist':0},					//leech mana
+			'burn':{"time":0,"magn":0,'resist':0},					//dmg/frame depending on hp, long but slow
+			'chill':{"time":0,"magn":0,'resist':0},					//slower move
+			'stun':{"time":0,"magn":0,'resist':0},					//stun, remove attack charge
+		};
 		act.statusClient = '000000';
 		act.curseClient = {};
 		act.block = 0; 						//{direction:4,distance:0};
@@ -66,19 +63,20 @@ Init.actor = function(){
 		act.abilityChange = Actor.template.abilityChange();	
 		act.abilityAi = {close:{},middle:{},far:{},range:[60,300]};
 		act.abilityList = Actor.template.abilityList();		
+		act.ability = Actor.template.ability();
 		act.combatContext = 'regular';		//or pvp
 		act.friction = 0.9;
-		act.bounce = 1;	
+		act.bounce = 1;			//mod
 		act.timeOut = {};
 		act.move = 1;
 		act.summon = {};       //if actor is master
-		act.summoned = 0;      //if actor is child. .summoned = master id
+		act.summoned = '';      //if actor is child. .summoned = master id
 		//}}
 		
 		//{Setting Affected for Db.enemy
 		act.id = Math.randomId();
 		act.publicId = Math.randomId(6);   //id shared with all players
-		act.optionList = '';   //list of option when right-clicked
+		act.optionList = null;   //list of option when right-clicked
 		act.modList = [];  		//list of enemy mods (ex immuneFire)
 		act.group = '';            //enemy group
 		act.x = 1050;	
@@ -90,20 +88,10 @@ Init.actor = function(){
 		act.category = "slime";   //for enemy
 		act.variant = "Regular";   //for enemy
 		act.lvl = 0;
-		act.deathExp = 1;			//exp given when player kills this enemy
 		act.name = "Goblin";     //visible name
 		act.username = "player000";     //id name
-		act.drop = {
-			"mod":{
-				"quantity":0,
-				"quality":0,
-				"rarity":0
-			},
-			"category":[],
-			'plan':[],
-		};    
 		act.minimapIcon = 'color.red';     //icon used for minimap
-		act.sprite = {"name":"mace","anim":"walk","sizeMod":1}			
+		act.sprite = Actor.template.sprite();		
 		act.equip = Actor.template.equip();
 		act.weapon = Actor.template.weapon();
 		act.moveRange = {
@@ -114,7 +102,7 @@ Init.actor = function(){
 		};
 		act.moveSelf = 1; 		//generate its own input	(ex: block dont but still move)
 		
-		act.reflect = Cst.element.template(); //% reflected
+		act.reflect = Cst.element.template(0); //% reflected
 		act.nevercombat = 0;
 		act.boss = '';
 		act.resource = {
@@ -128,8 +116,6 @@ Init.actor = function(){
 		act.globalDmg = 1;   //global modifier
 		act.aim = 0;       //difference between mouse and actually bullet direction
 		act.atkSpd = {'main':1,'support':1};	
-		act.ability = Actor.template.ability();
-		act.invisible = 0;
 		act.ghost = 0;
 		act.nevermove = 0;
 		act.maxSpd = 15;	
@@ -153,7 +139,7 @@ Init.actor = function(){
 		act.loot = null;		//right click = gives items;
 		act.block = null;			//change map coliision
 		act.teleport = null;
-		act.tag = null;				//to get enemy in q.event
+		act.tag = '';				//to get enemy in q.event
 		//}	
 		
 
@@ -182,19 +168,21 @@ Init.actor = function(){
 		}
 		return act;
 	}
-
-
+	
 	var p = defaultPreActor('player');
 	var e = defaultPreActor('npc');
 	
 	var temp = Actor.template;
-	
-	Actor.template = new Function('type', 'return type === "player" ? ' + stringify(p,1) + ' : ' + stringify(e,1));
+	Actor.template = function(type){
+		if(type === 'player') return deepClone(p);
+		return deepClone(e);	
+	}
 	for(var i in temp) Actor.template[i] = temp[i];
 }
 
 
-//Template
+Actor.template = {};	
+
 Actor.template.skill = function(){
 	var value = Cst.exp.list[0];
 	return {
@@ -202,7 +190,6 @@ Actor.template.skill = function(){
 		'lvl':{'melee':0,'range':0,'magic':0,'metalwork':0,'woodwork':0,'leatherwork':0,'geology':0,'metallurgy':0,'trapping':0},
 	}; 
 };
-
 
 Actor.template.weapon = function(){
 	return 'unarmed';
@@ -223,20 +210,15 @@ Actor.template.equip = function(info){
 	}
 };
 
-
-
+Actor.template.sprite = function(){
+	return {"name":"mace","anim":"walk","sizeMod":1};
+}
 
 Actor.template.abilityChange = function(){
 	return {'press':'00000000000000','charge':{},'chargeClient':[0,0,0,0,0,0],'globalCooldown':0};
 }
 
 Actor.template.mastery = function(type){
-	if(type === 'npc'){
-		return {	
-			'def':{'melee':{'sum':1,'mod':1},'range':{'sum':1,'mod':1},'magic':{'sum':1,'mod':1},'fire':{'sum':1,'mod':1},'cold':{'sum':1,'mod':1},'lightning':{'sum':1,'mod':1}},
-			'dmg':{'melee':{'sum':1,'mod':1},'range':{'sum':1,'mod':1},'magic':{'sum':1,'mod':1},'fire':{'sum':1,'mod':1},'cold':{'sum':1,'mod':1},'lightning':{'sum':1,'mod':1}},
-		};
-	}
 	return {	
 		'def':{'melee':{'+':0,'*':0,'x':0,'^':0,'sum':1,'mod':1},'range':{'+':0,'*':0,'x':0,'^':0,'sum':1,'mod':1},'magic':{'+':0,'*':0,'x':0,'^':0,'sum':1,'mod':1},'fire':{'+':0,'*':0,'x':0,'^':0,'sum':1,'mod':1},'cold':{'+':0,'*':0,'x':0,'^':0,'sum':1,'mod':1},'lightning':{'+':0,'*':0,'x':0,'^':0,'sum':1,'mod':1}},
 		'dmg':{'melee':{'+':0,'*':0,'x':0,'^':0,'sum':1,'mod':1},'range':{'+':0,'*':0,'x':0,'^':0,'sum':1,'mod':1},'magic':{'+':0,'*':0,'x':0,'^':0,'sum':1,'mod':1},'fire':{'+':0,'*':0,'x':0,'^':0,'sum':1,'mod':1},'cold':{'+':0,'*':0,'x':0,'^':0,'sum':1,'mod':1},'lightning':{'+':0,'*':0,'x':0,'^':0,'sum':1,'mod':1}},
@@ -252,6 +234,7 @@ Actor.template.abilityList = function(info){
 		type:'regular'	
 	};	//check Test for added ability
 }
+
 Actor.template.ability = function(info){
 	info = info || [0,0,0,0,0,0];
 	return {
@@ -259,18 +242,6 @@ Actor.template.ability = function(info){
 		pvp:[0,0,0,0,0,0],
 		quest:[0,0,0,0,0,0],
 		type:'regular'	
-	}
-}
-
-
-
-Actor.template.dialogue = function(){
-	return {
-		'talkIf':true,	//can be function
-		'location':{},
-		'tag':[],
-		'option':{},
-		'func':function(){},
 	}
 }
 

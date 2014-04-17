@@ -20,7 +20,6 @@ ePreDb["troll"]["ice"] = {  //{		//troll is category, ice is variant
 	'globalDmg':function(lvl){ 		//if number, globalDef = globalDef * (lvl + 10)	#RECOMMENDED because easy balance
 		return lvl + 100;			//if function, globalDef = globalDef(lvl)
 	},
-	'deathExp':1,					//same system than other global but for exp given in combat
 	
 	"mastery":{
 		'def':{					//used as modifier
@@ -147,7 +146,6 @@ Init.db.npc = function(){
 			}},
 			[0.4,0.4,1]
 		],
-		'deathExp':1,
 		"mastery":{'def':{'melee':2,'range':2,'magic':2,'fire':1,'cold':0.5,'lightning':1},
 					'dmg':{'melee':1,'range':1,'magic':1,'fire':1,'cold':1,'lightning':1}},	
 		"acc":2,
@@ -172,7 +170,6 @@ Init.db.npc = function(){
 			[0.4,0.4,1]
 		],
 		'deathAbility':[1],
-		'deathExp':1,
 		"mastery":{'def':{'melee':2,'range':1.5,'magic':1.5,'fire':0.5,'cold':1,'lightning':2},
 					'dmg':{'melee':1,'range':1,'magic':1,'fire':1,'cold':1,'lightning':1}},	
 		"acc":2,
@@ -194,7 +191,6 @@ Init.db.npc = function(){
 			}},
 			[0.4,0.2,0.2]
 		],
-		'deathExp':1,
 		"mastery":{'def':{'melee':1,'range':1,'magic':1,'fire':1,'cold':1,'lightning':0.1},
 					'dmg':{'melee':1,'range':1,'magic':1,'fire':1,'cold':1,'lightning':1}},	
 		"acc":2,
@@ -217,7 +213,6 @@ Init.db.npc = function(){
 			}},
 			[0.4,0.2,0.2]
 		],
-		'deathExp':1,
 		"mastery":{'def':{'melee':1,'range':1,'magic':1,'fire':1,'cold':1,'lightning':0.1},
 					'dmg':{'melee':1,'range':1,'magic':1,'fire':1,'cold':1,'lightning':1}},	
 		"acc":2,
@@ -237,7 +232,6 @@ Init.db.npc = function(){
 			[0.4,0.2,0.2]
 		],
 		'deathAbility':[0],
-		'deathExp':1,
 		"mastery":{'def':{'melee':0.01,'range':0.01,'magic':0.01,'fire':0.01,'cold':0.01,'lightning':0.01},
 					'dmg':{'melee':1,'range':1,'magic':1,'fire':1,'cold':1,'lightning':1}},	
 		"acc":2,
@@ -263,7 +257,6 @@ Init.db.npc = function(){
 			[0.4,0.2,0.2]
 		],
 		'deathAbility':[0],
-		'deathExp':1,
 		"mastery":{'def':{'melee':0.5,'range':2,'magic':2,'fire':0.5,'cold':1,'lightning':1},
 					'dmg':{'melee':1,'range':1,'magic':1,'fire':1,'cold':1,'lightning':1}},	
 		"acc":0.5,
@@ -291,7 +284,6 @@ Init.db.npc = function(){
 			[0.4,0.2,0.2]
 		],
 		'deathAbility':[0],
-		'deathExp':1,
 		"mastery":{'def':{'melee':1,'range':1,'magic':1,'fire':2,'cold':2,'lightning':0.5},
 					'dmg':{'melee':1,'range':1,'magic':1,'fire':1,'cold':1,'lightning':1}},	
 		"acc":0.5,
@@ -308,7 +300,6 @@ Init.db.npc = function(){
 			[0.2,0.2,0.2]
 		],
 		'deathAbility':[0],
-		'deathExp':0,
 		"mastery":{'def':{'melee':0.1,'range':0.1,'magic':0.1,'fire':0.2,'cold':0.2,'lightning':0.05},
 					'dmg':{'melee':1,'range':1,'magic':1,'fire':1,'cold':1,'lightning':1}},	
 		"acc":0.5,
@@ -342,7 +333,6 @@ Init.db.npc = function(){
 			}},
 			[4,4,4]
 		],
-		'deathExp':1,
 		"mastery":{'def':{'melee':0.5,'range':0.5,'magic':2,'fire':2,'cold':2,'lightning':2},
 					'dmg':{'melee':1,'range':1,'magic':1,'fire':1,'cold':1,'lightning':1}},	
 		"acc":0.5,
@@ -367,7 +357,6 @@ Init.db.npc = function(){
 			}},
 			[1,0,1]
 		],
-		'deathExp':1,
 		"mastery":{'def':{'melee':2,'range':2,'magic':0.5,'fire':2,'cold':0.5,'lightning':0.5},
 					'dmg':{'melee':1,'range':1,'magic':1,'fire':1,'cold':1,'lightning':1}},	
 		"acc":0.5,
@@ -389,7 +378,6 @@ Init.db.npc = function(){
 			}},
 			[1,1,1]
 		],
-		'deathExp':1,
 		"mastery":{'def':{'melee':0.5,'range':2,'magic':2,'fire':1,'cold':1,'lightning':0.5},
 					'dmg':{'melee':1,'range':1,'magic':1,'fire':1,'cold':1,'lightning':1}},	
 		"acc":0.5,
@@ -410,7 +398,6 @@ Init.db.npc = function(){
 			}},
 			[1,1,1]
 		],
-		'deathExp':1,
 		"mastery":{'def':{'melee':0.5,'range':0.5,'magic':0.5,'fire':2,'cold':2,'lightning':2},
 					'dmg':{'melee':1,'range':1,'magic':1,'fire':1,'cold':1,'lightning':1}},	
 		"acc":0.5,
@@ -442,7 +429,6 @@ Init.db.npc = function(){
 			}},
 			[0.5,0.5,0.5]
 		],
-		'deathExp':1,
 		"mastery":{'def':{'melee':2,'range':2,'magic':0.5,'fire':2,'cold':0.5,'lightning':0.5},
 					'dmg':{'melee':1,'range':1,'magic':1,'fire':1,'cold':1,'lightning':1}},	
 		"acc":0.5,
@@ -466,7 +452,6 @@ Init.db.npc = function(){
 			}},
 			[1,1,1]
 		],
-		'deathExp':1,
 		"mastery":{'def':{'melee':0.5,'range':2,'magic':2,'fire':1,'cold':1,'lightning':0.5},
 					'dmg':{'melee':1,'range':1,'magic':1,'fire':1,'cold':1,'lightning':1}},	
 		"acc":0.5,
@@ -487,7 +472,6 @@ Init.db.npc = function(){
 			}},
 			[1,1,1]
 		],
-		'deathExp':1,
 		"mastery":{'def':{'melee':0.5,'range':0.5,'magic':0.5,'fire':2,'cold':2,'lightning':2},
 					'dmg':{'melee':1,'range':1,'magic':1,'fire':1,'cold':1,'lightning':1}},	
 		"acc":0.5,
@@ -509,7 +493,6 @@ Init.db.npc = function(){
 			{'template':'lightningNova','aiChance':[0,0.4,0.4],'extra':{}},
 			[0.5,0.5,0.5]
 		],
-		'deathExp':1,
 		"mastery":{'def':{'melee':1,'range':1,'magic':2,'fire':1,'cold':0.5,'lightning':4},
 					'dmg':{'melee':1,'range':1,'magic':1,'fire':1,'cold':1,'lightning':1}},	
 		"acc":0.5,
@@ -533,7 +516,6 @@ Init.db.npc = function(){
 			{'template':'lightningBullet','aiChance':[1,1,1],'extra':{}},
 			[0.5,0.5,0.5]
 		],
-		'deathExp':1,
 		"mastery":{'def':{'melee':1,'range':1,'magic':1,'fire':1,'cold':1,'lightning':1},
 					'dmg':{'melee':1,'range':1,'magic':1,'fire':1,'cold':1,'lightning':1}},	
 		immune:{melee:1,range:1,magic:1},
@@ -564,7 +546,6 @@ Init.db.npc = function(){
 			{'template':'coldBullet','aiChance':[0.1,0.3,0.3],'extra':{}},
 			[0.5,0.5,0.5]
 		],
-		'deathExp':1,
 		"mastery":{'def':{'melee':2,'range':2,'magic':0.5,'fire':0.5,'cold':2,'lightning':0.5},
 					'dmg':{'melee':1,'range':1,'magic':1,'fire':1,'cold':1,'lightning':1}},	
 		"acc":0.5,
@@ -589,7 +570,6 @@ Init.db.npc = function(){
 			}},
 			[0.5,0.5,0.5]
 		],
-		'deathExp':1,
 		"mastery":{'def':{'melee':2,'range':2,'magic':0.5,'fire':0.5,'cold':2,'lightning':0.5},
 					'dmg':{'melee':1,'range':1,'magic':1,'fire':1,'cold':1,'lightning':1}},	
 		"acc":0.5,
@@ -623,7 +603,6 @@ Init.db.npc = function(){
 			[0.5,0.5,0.5]
 		],
 		//'reflect':{'fire':2},
-		'deathExp':1,
 		"mastery":{'def':{'melee':0.5,'range':0.5,'magic':0.5,'fire':2,'cold':0.5,'lightning':0.5},
 					'dmg':{'melee':1,'range':1,'magic':1,'fire':1,'cold':1,'lightning':1}},	
 		"acc":0.5,
@@ -647,7 +626,6 @@ Init.db.npc = function(){
 			[0.5,0.5,0.5]
 		],
 		'immune':{'fire':1},
-		'deathExp':1,
 		"mastery":{'def':{'melee':2,'range':0.5,'magic':2,'fire':1,'cold':0.5,'lightning':0.5},
 					'dmg':{'melee':1,'range':1,'magic':1,'fire':1,'cold':1,'lightning':1}},	
 		"acc":2,
@@ -675,7 +653,6 @@ Init.db.npc = function(){
 			}},
 			[0.5,0.5,0.5]
 		],
-		'deathExp':1,
 		"mastery":{'def':{'melee':4,'range':4,'magic':0.5,'fire':1,'cold':1,'lightning':1},
 					'dmg':{'melee':1,'range':1,'magic':1,'fire':1,'cold':1,'lightning':1}},	
 		"acc":2,
@@ -703,7 +680,6 @@ Init.db.npc = function(){
 			}},
 			[0.5,0.5,0.5]
 		],
-		'deathExp':1,
 		"mastery":{'def':{'melee':1,'range':1,'magic':0.5,'fire':0.5,'cold':2,'lightning':2},
 					'dmg':{'melee':1,'range':1,'magic':1,'fire':1,'cold':1,'lightning':1}},	
 		"acc":2,
@@ -726,7 +702,6 @@ Init.db.npc = function(){
 			}},
 			[0.5,0.5,0.5]
 		],
-		'deathExp':1,
 		"mastery":{'def':{'melee':1,'range':0.5,'magic':1,'fire':2,'cold':0.5,'lightning':0.5},
 					'dmg':{'melee':1,'range':1,'magic':1,'fire':1,'cold':1,'lightning':1}},	
 		"acc":2,
@@ -751,7 +726,6 @@ Init.db.npc = function(){
 			}},
 			[0.5,0.5,0.5]
 		],
-		'deathExp':1,
 		"mastery":{'def':{'melee':2,'range':2,'magic':1,'fire':2,'cold':2,'lightning':2},
 					'dmg':{'melee':1,'range':1,'magic':1,'fire':1,'cold':1,'lightning':1}},	
 		"acc":2,
@@ -772,7 +746,6 @@ Init.db.npc = function(){
 		
 		'globalDef':1,
 		'globalDmg':1,
-		'deathExp':1,
 		
 		"mastery":{'def':{'melee':1,'range':1,'magic':1,'fire':1,'cold':1,'lightning':1},
 					'dmg':{'melee':1,'range':1,'magic':1,'fire':1,'cold':1,'lightning':1}},

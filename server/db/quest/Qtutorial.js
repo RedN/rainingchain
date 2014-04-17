@@ -72,7 +72,6 @@ q.npc["bee"] = {  //{
 	
 	'globalDef':1,
 	'globalDmg':0.1,
-	'deathExp':1,
 	"mastery":{'def':{'melee':1,'range':1,'magic':1,'fire':1,'cold':1,'lightning':1},
 				'dmg':{'melee':1,'range':1,'magic':1,'fire':1,'cold':1,'lightning':1}},	
 	"acc":2,
@@ -93,7 +92,6 @@ q.npc["demon"] = {  //{
 	'immune':{'fire':1},
 	'globalDef':1,
 	'globalDmg':0.2,
-	'deathExp':1,
 	"mastery":{'def':{'melee':1,'range':1,'magic':1,'fire':1,'cold':1,'lightning':1},
 				'dmg':{'melee':1,'range':1,'magic':1,'fire':1,'cold':1,'lightning':1}},	
 	"acc":2,

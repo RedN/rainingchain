@@ -3,8 +3,8 @@
 abilityUpdatePeriod = {npc:1,player:1};
 
 Actor.loop = function(act){	
-	act.frameCount++;
-	if(act.frameCount % 25 === 0){ Actor.loop.activeList(act); }
+	act.frame++;
+	if(act.frame % 25 === 0){ Actor.loop.activeList(act); }
 	if(!act.active) return;
 	
 	Actor.loop.timeOut(act);
@@ -16,30 +16,30 @@ Actor.loop = function(act){
 	if(act.combat){
 		if(act.hp <= 0) Actor.death(act);
 		if(act.boss){ Boss.loop(act.boss);}
-		if(act.frameCount % abilityUpdatePeriod[act.type] === 0) Actor.loop.ability(act);
+		if(act.frame % abilityUpdatePeriod[act.type] === 0) Actor.loop.ability(act);
 		Actor.loop.regen(act);    
 		Actor.loop.status(act);	
 		Actor.loop.boost(act);
 		Actor.loop.summon(act);
-		if(act.frameCount % 25 === 0){ Actor.loop.attackReceived(act); }	//used to remove attackReceived if too long
+		if(act.frame % 25 === 0){ Actor.loop.attackReceived(act); }	//used to remove attackReceived if too long
 	}
 	if(act.combat || act.move){
 		Actor.loop.setTarget(act);  //update Enemy Target
 		Actor.loop.input(act); 		//simulate enemy key press depending on target 
 	}
-	if(act.combat && act.move && act.frameCount % 3 === 0) Actor.loop.move.aim(act); //impact max spd depending on aim
+	if(act.combat && act.move && act.frame % 3 === 0) Actor.loop.move.aim(act); //impact max spd depending on aim
 	
 	if(act.move){
-		if(act.frameCount % 10 === 0){ Actor.loop.mapMod(act); }
+		if(act.frame % 10 === 0){ Actor.loop.mapMod(act); }
 		Actor.loop.bumper(act);   //test if collision with map    
 		Actor.loop.move(act);  	//move the actor
 	}
 	if(act.type === 'player'){
 		Actor.loop.fall(act);	//test if fall
 		
-		if(act.frameCount % 2 === 0){ Draw.loop(act.id); }    						//draw everything and add button
-		if(act.frameCount % 25 === 0){ Actor.loop.friendList(act); }    				//check if any change in friend list
-		if(act.frameCount % round(Server.frequence.save/40) === 0){ Save(act.id); }    //save progression
+		if(act.frame % 2 === 0){ Draw.loop(act.id); }    						//draw everything and add button
+		if(act.frame % 25 === 0){ Actor.loop.friendList(act); }    				//check if any change in friend list
+		if(act.frame % round(Server.frequence.save/40) === 0){ Save(act.id); }    //save progression
 		if(List.main[act.id].windowList.trade){ Actor.loop.trade(act); };    
 		if(List.main[act.id].dialogue){ Actor.loop.dialogue(act); }
 	}
@@ -255,7 +255,7 @@ Actor.loop.summon = function(act){
 	}
 	
 	//(assume player is child)
-    if(act.summoned && act.frameCount % 5 === 0){
+    if(act.summoned && act.frame % 5 === 0){
 		if(!act.summoned.father || !List.all[act.summoned.father]){ Actor.remove(act); return; }
 	    
 	    //if too far, teleport near master

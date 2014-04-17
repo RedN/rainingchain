@@ -12,7 +12,7 @@ Change.update = function(){
 		if(!act.dead && act.active !== false){
 		    for(var m in Change.update.list[act.type]){         //m = watch or exist
     		    for (var k in Change.update.list[act.type][m]){     //k = priority , reg , slow
-    		        if(Loop.frameCount % TIMER[k] === 0){
+    		        if(Loop.frame % TIMER[k] === 0){
 		            	for(var j in Change.update.list[act.type][m][k])
 		            	    Change.update[m](act,Change.update.list[act.type][m][k][j]);	
     }}}}}
@@ -21,7 +21,7 @@ Change.update = function(){
 		var act = List.main[i];
 		for(var m in Change.update.list.main){
     		for (var k in Change.update.list.main[m]){
-    	        if(Loop.frameCount % TIMER[k] === 0){
+    	        if(Loop.frame % TIMER[k] === 0){
 	            	for(var j in Change.update.list.main[m][k])
 			            Change.update[m](act,Change.update.list.main[m][k][j]);	
     }}}}
@@ -30,7 +30,7 @@ Change.update = function(){
 		var act = List.all[i];
     	for(var m in Change.update.list.priv){		
     	    for (var k in Change.update.list.priv[m]){
-    	        if(Loop.frameCount % TIMER[k] === 0){
+    	        if(Loop.frame % TIMER[k] === 0){
 	            	for(var j in Change.update.list.priv[m][k])
 			            Change.update[m](act,Change.update.list.priv[m][k][j],true);	
     }}}}

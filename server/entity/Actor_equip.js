@@ -37,6 +37,7 @@ Actor.equip.remove = function(act,piece){
 	var equip = Actor.getEquip(act);
 	var old = equip.piece[piece];
 	if(old) Itemlist.add(act.id,old);				//add old item if it wasnt empty
+	equip.piece[piece] = '';
 	Actor.update.equip(act);
 }
 

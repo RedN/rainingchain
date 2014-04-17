@@ -1,12 +1,12 @@
 
 Actor.loop.input = function(act){
 	if(act.type === 'npc' || act.target.cutscene.active){
-		if(act.move && act.moveSelf) //&& act.frameCount % 3 === 0 //bad cuz fuck timing for period.main
+		if(act.move && act.moveSelf) //&& act.frame % 3 === 0 //bad cuz fuck timing for period.main
 			Actor.loop.input.move(act);
 	}
 	
 	if(act.type === 'player') return;
-	if(act.combat && act.frameCount % 25 === 0){
+	if(act.combat && act.frame % 25 === 0){
 		Actor.loop.input.ability(act);
 	}
 }
@@ -116,17 +116,17 @@ Actor.loop.setTarget = function(act){
 	
 	//Main
 	if(!tar.main) tar.main = {x:act.x,y:act.y,real:0};	//problem..
-	var bool = act.frameCount % (typeof tar.main === 'string' ? tar.period.main : 25) === 0;	//if got target => custom & if no target => 25
+	var bool = act.frame % (typeof tar.main === 'string' ? tar.period.main : 25) === 0;	//if got target => custom & if no target => 25
 	if(act.combat && bool)	Actor.loop.setTarget.main(act);
 	
 	//Sub	
-	if(act.frameCount % tar.period.sub === 0){
+	if(act.frame % tar.period.sub === 0){
 		Actor.loop.setTarget.sub(act); 
 	}
 	
 	//Stuck	
 
-	if(act.frameCount % tar.period.stuck === 0){
+	if(act.frame % tar.period.stuck === 0){
 		tar.isStuck = Actor.isStuck(act,List.all[act.target.main]);
 		if(tar.isStuck) Actor.loop.setTarget.stuck(act);
 		else tar.stuck = [];

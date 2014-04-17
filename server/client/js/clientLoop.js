@@ -14,7 +14,7 @@ Loop = function(){
 	Loop.send();
 	Draw.loop();
 	Loop.warning();
-	Loop.frameCount++;
+	Loop.frame++;
 	
 	if(+$("#chatBoxInput").is(":focus")){
 		Input.press = {'move':[0,0,0,0],'ability':[0,0,0,0,0,0],'combo':[0,0]};	
@@ -25,10 +25,10 @@ window.onblur = function(){
 	Input.press = {'move':[0,0,0,0],'ability':[0,0,0,0,0,0],'combo':[0,0]}; 	
 }
 	
-Loop.frameCount = 0;
+Loop.frame = 0;
 
 Loop.interval = function(num){
-	return Loop.frameCount % num === 0;
+	return Loop.frame % num === 0;
 }
 Loop.send = function(){ 
 	Input.send(); 

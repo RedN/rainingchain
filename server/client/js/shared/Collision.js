@@ -122,7 +122,7 @@ Collision.BulletActor.test = function(atk,player){
 
 
 Collision.BulletMap = function(bullet){
-	if(bullet.ghost) return;
+	if(bullet.ghost) return 0;
 
 	var pos = Collision.getPos(bullet);
 	var str = bullet.map + '-' + pos.x + '-' + pos.y;

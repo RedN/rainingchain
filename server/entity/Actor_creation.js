@@ -87,7 +87,7 @@ Actor.creation.db = function(cr){
 	
 	e.id = Math.randomId();
 	e.publicId = Math.randomId(6);
-	e.frameCount = Math.floor(Math.random()*100);
+	e.frame = Math.floor(Math.random()*100);
 	
 	e.globalDef =  Actor.creation.db.globalLvlMod(e.lvl).globalDef;
 	e.globalDmg = Actor.creation.db.globalLvlMod(e.lvl).globalDef;
@@ -242,8 +242,6 @@ Actor.creation.optionList = function(e){
 
 Actor.creation.nevercombat = function(act){
 	act.combat = 0;
-	
-	delete act.killed;
 	
 	delete act.permBoost;
 	delete act.boost;

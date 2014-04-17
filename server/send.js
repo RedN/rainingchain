@@ -104,7 +104,7 @@ Change.send.clearEmpty = function(sa){
 	if(Object.keys(sa.m).length === 0){ delete sa.m }
 	if(Object.keys(sa.r).length === 0){ delete sa.r }
 	
-	if(Loop.frameCount % 10 !== 0 ){ //other, if nothing moves, client thinks enemy is removed
+	if(Loop.frame % 10 !== 0 ){ //other, if nothing moves, client thinks enemy is removed
 		for(var i in sa.u) if(Object.keys(sa.u[i]).length === 0) delete sa.u[i] 
 	}
 	if(Object.keys(sa.u).length === 0){ delete sa.u }

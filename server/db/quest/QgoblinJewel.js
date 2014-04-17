@@ -162,7 +162,6 @@ q.item['jewel'] = {'name':'Jewel','icon':'magic.staff','drop':0,'bank':0,'option
 q.npc["boss"] = {  //{
 	"name":"Goblin",
 	"sprite":{'name':"goblin",'sizeMod':1.2},
-	'deathExp':1,
 	"mastery":{'def':{'melee':0.5,'range':0.5,'magic':0.5,'fire':2,'cold':2,'lightning':2},
 				'dmg':{'melee':1,'range':1,'magic':1,'fire':1,'cold':1,'lightning':1}},	
 	"acc":0.5,
