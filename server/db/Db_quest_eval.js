@@ -127,22 +127,15 @@ var testItem = function (key,item,amount,addifgood){
 //Cutscene
 var cutscene = function(key,map,path){
 	Actor.setCutscene(getAct(key),q.map[map][Q].path[path]);
+	//ts("p.x = 1500; p.y = 3000;Actor.setCutscene(p,[{x:1600,y:3100},25*10,{x:1800,y:3200}]);")
 }
 
 var freeze = function(key,time,cb){
-	var act = getAct(key);
-	getAct(key).move = 0;
-	time = time || Cst.MIN*10;	
-	Actor.setTimeOut(act,'freeze',time,function(key){
-		getAct(key).move = 1;
-	});
+	Actor.freeze(getAct(key),time,cb);
 }
-
 var unfreeze = function(key){
-	getAct(key).move = 1;
-	delete getAct(key).timeOut.freeze;
+	Actor.freeze.remove(getAct(key));
 }
-
 
 
 

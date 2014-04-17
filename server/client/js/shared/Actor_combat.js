@@ -4,15 +4,6 @@ Actor.getCombatLevel = function(act){
 	return Math.max(act.skill.lvl.melee,act.skill.lvl.range,act.skill.lvl.magic);
 }
 
-Actor.enemyPower = function(num){
-	var dmg = 1 + Math.sqrt(num-1) * 0.25;
-	var def = 1 + Math.sqrt(num-1) * 0.50;
-	return [
-		{'stat':'globalDmg','value':dmg || 1,'type':'*','time':60*1000,'name':'enemypower'},
-		{'stat':'globalDef','value':def || 1,'type':'*','time':60*1000,'name':'enemypower'},
-	];
-}
-
 Actor.setCombatContext = function(act,type){
 	act.combatContext = type;
 	Actor.update.equip(act);

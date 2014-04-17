@@ -183,6 +183,13 @@ Object.defineProperty(Number.prototype, "toChrono", {
 	}
 });	
 
+Object.defineProperty(Number.prototype, "interval", {
+    enumerable: false,
+    value: function(num) {
+		return this % num === 0;
+	}
+});	
+
 
 
 	

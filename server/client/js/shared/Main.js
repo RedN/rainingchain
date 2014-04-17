@@ -55,7 +55,6 @@ Main.template = function(key){
 		main['tradeList'] = Itemlist.template('inventory');
 		main['old'] = {};
 		main['id'] = key;
-		main['dialogueLoc'] = {'x':0,'y':0};		
 	} else {
 		main['context'] = {'text':''};
 		main['clientContext'] = {'text':''};

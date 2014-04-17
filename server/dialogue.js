@@ -6,8 +6,9 @@ Dialogue.start = function(key,d){
 	
 	var dia = Db.dialogue[d.group][d.npc][d.convo][d.node];
 	var main = List.main[key];
-	main.dialogue = dia;
-	main.dialogueLoc = {'x':List.all[key].x,'y':List.all[key].y};
+	main.dialogue = deepClone(dia);
+	main.dialogue.x = List.all[key].x;
+	main.dialogue.y = List.all[key].y;
 	
 	if(dia.func) applyFunc.key(key,dia.func);	
 	

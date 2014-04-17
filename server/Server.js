@@ -29,7 +29,7 @@ ts('Actor.creation.group({x:0,y:0,map:"goblinLand@MAIN",respawn:10},[{"amount":1
 Server =  {
 	testing:!nodejitsu,		//will trigger special testing func
 	frequence:{
-		save:60*1000,
+		save:Math.round(60*1000/40),
 		inactivity:10*60*1000,
 		disconnect:6*60*60*1000,
 		db:60*1000,

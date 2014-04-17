@@ -7,6 +7,10 @@ Actor.loop = function(act){
 	if(++act.frame % 25 === 0) Actor.loop.activeList(act); 
 	if(!act.active) return;
 	
+	var interval = function(num){
+		return act.frame % num === 0;
+	};
+	
 	Actor.loop.timeOut(act);
 	if(act.dead){
 		if(act.type === 'player' && --act.respawn < 0)
@@ -16,35 +20,36 @@ Actor.loop = function(act){
 	if(act.combat){
 		if(act.hp <= 0) Actor.death(act);
 		if(act.boss){ Boss.loop(act.boss);}
-		if(act.frame % ABILITYINTERVAL === 0) Actor.loop.ability.charge(act);
-		if(act.frame % ABILITYINTERVAL === 0) Actor.loop.ability.test(act);
+		if(interval(ABILITYINTERVAL)){
+			Actor.loop.ability.charge(act);
+			Actor.loop.ability.test(act);
+		}
 		Actor.loop.regen(act);    
 		Actor.loop.status(act);	
 		Actor.loop.boost(act);
-		if(act.frame % SUMMONINTERVAL === 0) Actor.loop.summon(act);
-		if(act.frame % 25 === 0) Actor.loop.attackReceived(act); 	//used to remove attackReceived if too long
+		if(interval(SUMMONINTERVAL)) Actor.loop.summon(act);
+		if(interval(25)) Actor.loop.attackReceived(act); 	//used to remove attackReceived if too long
 	}
 	if(act.combat || act.move){
 		Actor.loop.setTarget(act);  //update Enemy Target
 		Actor.loop.input(act); 		//simulate enemy key press depending on target 
 	}
-	if(act.combat && act.move && act.frame % 3 === 0) Actor.loop.move.aim(act); //impact max spd depending on aim
+	if(act.combat && act.move && interval(3)) Actor.loop.move.aim(act); //impact max spd depending on aim
 	
 	if(act.move){
-		if(act.frame % 10 === 0) Actor.loop.mapMod(act); 
+		if(interval(10)) Actor.loop.mapMod(act); 
 		Actor.loop.bumper(act);   //test if collision with map    
 		Actor.loop.move(act);  	//move the actor
 	}
 	if(act.type === 'player'){
-		if(act.frame % 3 === 0) Actor.loop.fall(act);	//test if fall
-		
-		if(act.frame % 2 === 0){ Draw.loop(act.id); }    						//draw everything and add button
-		if(act.frame % 25 === 0){ Actor.loop.friendList(act); }    				//check if any change in friend list
-		if(act.frame % round(Server.frequence.save/40) === 0){ Save(act.id); }    //save progression
-		if(List.main[act.id].windowList.trade){ Actor.loop.trade(act); };    
-		if(List.main[act.id].dialogue && act.frame % 5 === 0){ Actor.loop.dialogue(act); }
+		if(interval(3)) Actor.loop.fall(act);						//test if fall
+		if(interval(2)) Draw.loop(act.id);     						//draw everything and add button
+		if(interval(25)) Actor.loop.friendList(act);   				//check if any change in friend list
+		if(interval(5)) Actor.loop.trade(act); ;    
+		if(interval(5))	Actor.loop.dialogue(act); 
+		if(interval(Server.frequence.save)) Save(act.id);    		//save progression
 	}
-		
+
 }
 
 //{Ability
@@ -126,10 +131,6 @@ Actor.loop.timeOut = function(act){
 	}
 }
 
-Actor.setTimeOut = function(act,name,time,cb){
-	name = name || Math.randomId();
-	act.timeOut[name] = {timer:time,func:cb};
-}
 
 Actor.loop.mapMod = function(act){
 	act.mapMod = {};
@@ -369,6 +370,8 @@ Actor.loop.activeList = function(act){
 
 Actor.loop.trade = function(act){	//BAD
 	var key = act.id;
+	if(!List.main[key].windowList.trade) return;
+	
 	if(List.main[List.main[key].windowList.trade.trader]){
 		List.main[key].windowList.trade.tradeList = List.main[List.main[key].windowList.trade.trader].tradeList;	
 		List.main[key].windowList.trade.confirm.other = List.main[List.main[key].windowList.trade.trader].windowList.trade.confirm.self;
@@ -384,7 +387,8 @@ Actor.loop.trade = function(act){	//BAD
 Actor.loop.dialogue = function(act){
 	//test if player has move away to end dialogue	
 	var key = act.id;
-	if(Collision.distancePtPt(act,List.main[key].dialogueLoc) > 100){
+	if(!List.main[key].dialogue) return;
+	if(Collision.distancePtPt(act,List.main[key].dialogue) > 100){
 		Dialogue.end(key);
 	}
 
@@ -409,8 +413,25 @@ Actor.loop.attackReceived = function(act){
 	}
 }
 
+Actor.setTimeOut = function(act,name,time,cb){
+	name = name || Math.randomId();
+	act.timeOut[name] = {timer:time,func:cb};
+}
 
+Actor.freeze = function(act,time,cb){
+	act.move = 0;
+	time = time || Cst.MIN*10;	
+	Actor.setTimeOut(act,'freeze',time,function(key){
+		List.all[key].move = 1;
+		if(cb) cb(key);
+	});
+}
 
+Actor.freeze.remove = function(act){
+	if(act.timeOut.freeze)
+		act.timeOut.freeze.timer = -1;
+	act.move = 1;
+}
 
 
 

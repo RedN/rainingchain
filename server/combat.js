@@ -79,7 +79,7 @@ Combat.action.attack.perform = function(player,attack,extra){   //extra used for
 Combat.action.summon = function(key,action,enemy){
 	var name = action.name || Math.randomId();
 	action.maxChild = action.maxChild || 1;
-	action.time = action.time || 1/0;
+	action.time = action.time || Cst.bigInt;
 	action.distance = action.distance || 500;
 	var master = List.all[key];
 	
@@ -343,7 +343,11 @@ Combat.collision.damage.calculate = function(dmg,def){
 
 
 //TargetIf damageIf
-Combat.targetIf = {};
+Combat.targetIf = function(act,target){
+	if(!Combat.targetIf.global(act,target)) return false;
+	var hIf = typeof act.targetIf === 'function' ? act.targetIf : Combat.damageIf.list[act.targetIf];
+	return hIf(target,act);
+};
 Combat.damageIf = {};
 
 Combat.targetIf.global = function(atk,def){

@@ -55,6 +55,16 @@ Actor.boost.removeAll = function(act){
 }
 
 
+Actor.boost.enemyPower = function(act,num){
+	var dmg = 1 + Math.sqrt(num-1) * 0.25;
+	var def = 1 + Math.sqrt(num-1) * 0.50;
+	Actor.boost(act,[
+		{'stat':'globalDmg','value':dmg || 1,'type':'*','time':60*1000,'name':'enemypower'},
+		{'stat':'globalDef','value':def || 1,'type':'*','time':60*1000,'name':'enemypower'},
+	]);
+}
+
+
 Actor.permBoost = function(act,source,boost){
 	//remove permBoost if boost undefined
 	if(boost){	act.permBoost[source] = arrayfy(boost);
