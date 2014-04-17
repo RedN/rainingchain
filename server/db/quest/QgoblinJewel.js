@@ -355,7 +355,7 @@ q.map.goblinUnderground = function(){
 		actor(spot.g1,"system","grave",{});
 		
 		actor(spot.q1,"system","chest",{
-			chest:q.event.getJewel
+			loot:q.event.getJewel
 		});
 		
 	
@@ -387,7 +387,7 @@ q.map.goblinLand = function(){
 		actor(spot.q1,"system","chest",{	//TOFIX LOOK
 			angle:90,
 			nevermove:1,
-			chest:q.event.getFlower,
+			loot:q.event.getFlower,
 		});
 		
 		actorGroup(spot.e1,25*15,[

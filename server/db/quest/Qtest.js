@@ -14,7 +14,7 @@ q.event = {
 		
 		
 		addItem(key,'weapon');
-		Actor.switchEquip(act,'QtestEnemy-weapon',"melee");
+		Actor.equip(act,'QtestEnemy-weapon');
 		
 		//act.abilityList = {'QtestEnemy-simple':1};
 		//Actor.ability.swap(act,'QtestEnemy-simple',0);

@@ -1,16 +1,16 @@
 
 Actor.death = function(act){	
-	if(act.type === 'npc') Actor.death.npc(act);
-	if(act.type === 'player') Actor.death.player(act);
-	
+	var killers = Actor.death.getKillers(act);
+	if(act.type === 'npc') Actor.death.npc(act,killers);
+	if(act.type === 'player') Actor.death.player(act,killers);
 }
 
-Actor.death.player = function(act){
+Actor.death.player = function(act,killers){
 	LOG(2,act.id,'death');
 	var key = act.id;
 	var main = List.main[key];
 	
-	main.screenEffect = {'name':'fadeout','time':50,'maxTimer':50,'color':'black'};
+	Main.screenEffect(main,{'name':'fadeout','time':50,'maxTimer':50,'color':'black'});
 	
 	//Quest
 	for(var i in main.quest)	if(main.quest[i].started)	main.quest[i].deathCount++;	
@@ -21,8 +21,9 @@ Actor.death.player = function(act){
 		"Please don't ragequit.",
 		"You just got a free teleport to a safe place. Lucky you.",
 		"Try harder next time.",
-		"You're Feeling Giddy",
-		"This game is harder than it looks apparently.",
+		"You're feeling giddy!",
+		"Is that all you got?",
+		"This game is harder than it looks.",
 		"If someone asks, just say you died on purpose.",	
 	];
 	string += array.random();
@@ -32,22 +33,29 @@ Actor.death.player = function(act){
 	act.dead = 1;
 	act.respawn = 25;
 	
-	if(act.deathFunc){	
-		var killers = Actor.death.getKiller(act);
-		act.deathFunc(act.id,killers[0]);	//[0] is most dmg. used for pvp
-	}	
+	if(act.deathFunc && killers[0]) 
+		act.deathFunc(act.id,killers[0]);	
 	
 }
 
-Actor.death.npc = function(act){
+Actor.death.getKillers = function(act){
+	for(var i in act.damagedBy) if(!List.all[i]) delete act.damagedBy[i];
+
+	var tmp = Object.keys(act.damagedBy);	
+	if(!tmp.length) return [];
+	if(tmp.length === 1) return tmp;
+
+	var killer = null; var max = -1;
+	for(var i in act.damagedBy){
+		if(act.damagedBy[i] > max)	killer = i;
+	}
+	return tmp.splice(tmp.indexOf(killer),1).unshift(killer);	//place main killer in [0]
+}
+
+Actor.death.npc = function(act,killers){
 	act.dead = 1;
 	
-	//if(act.deathFunc)	for(var i in killers) act.deathFunc(killers[i],act,act.map) //custom death function (ex quest)
-	if(act.deathFunc){	
-		for(var i in act.damagedBy){
-			if(List.all[i]) act.deathFunc(i,act,act.map); 
-		}
-	}
+	if(act.deathFunc) for(var i in killers) act.deathFunc(killers[i],act,act.map); 
 		
 	Actor.death.performAbility(act);				//custom death ability function
 	Activelist.remove(act);
@@ -59,8 +67,7 @@ Actor.death.performAbility = function(act){
 	}
 }
 
-
-Actor.death.drop = function(act,killers){		//TOFIX toremove
+/*Actor.death.drop = function(act,killers){		//TOFIX toremove
 	return;	
 	var drop = act.drop;
 	
@@ -127,11 +134,10 @@ Actor.death.drop = function(act,killers){		//TOFIX toremove
 	}
 
 }
+*/
 
 Actor.death.respawn = function(act){	//for player
 	var rec = act.respawnLoc.recent;
-	
-	if(!rec.x) rec = rec[rec.randomAttribute()];	//aka when multi possible spawn aka pvp
 	
 	var good = List.map[rec.map] ? rec : act.respawnLoc.safe;
 	

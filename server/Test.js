@@ -124,18 +124,18 @@ Test.generateEquip = function(key,lvl,maxAmount){
 				rarity: 0,
 				req: {item: [],skill:{}},
 			});
-			Actor.switchEquip(act,id,i);
+			Actor.equip(act,id);
 		}
 	}
 	
 	if(nodejitsu){
 		act.equip.melee = "QtestEnemy-weapon";
 		//act.equip = {"piece":{"melee":"QtestEnemy-weapon","range":"24fvltcng","magic":"ipw6bxde4","amulet":"kc3fy1ltl","helm":"w74kcmoxj","ring":"xnpno7719","gloves":"5lzcbznld","body":"ub12yl35d","shield":"csb34pzva","bracelet":"ri7qsje6y","pants":"yk4w35h1k","boots":"qjo3fpkpf"},"dmg":{"melee":1,"range":1,"magic":1,"fire":1,"cold":1,"lightning":1},"def":{"melee":1.85622969311756,"range":1.2542729220383129,"magic":3.8250781267619787,"fire":1.1564167262496907,"cold":1.1299560920228722,"lightning":1.1757721163703236}};
-		Actor.updateEquip(act);
+		Actor.update.equip(act);
 	}
 	*/
 	act.equip.melee = "QtestEnemy-weapon";
-	Actor.updateEquip(act);
+	Actor.update.equip(act);
 }
 
 

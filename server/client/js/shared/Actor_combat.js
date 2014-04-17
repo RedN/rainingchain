@@ -15,7 +15,7 @@ Actor.enemyPower = function(num){
 
 Actor.setCombatContext = function(act,type){
 	act.combatContext = type;
-	Actor.updateEquip(act);
+	Actor.update.equip(act);
 
 }
 

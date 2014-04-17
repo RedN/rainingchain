@@ -5,8 +5,6 @@
 
 
 
-
-
 ===PRE SDK===
 transform not be overwrite if change equip
 new sprite change system: sprite.normal and sprite.custom

@@ -76,6 +76,7 @@ Main.passiveAdd = function(main,num,i,j){
 	Passive.updatePt(key);
 	Passive.updateBoost(key);
 }
+
 Main.passiveRemove = function(main,num,i,j){
 	var key = main.id;
 	//when player wants to add a passive
@@ -127,13 +128,12 @@ Main.openPopup = function(main,name,id){
 	if(name === 'plan')	main.popupList.plan = {'x':player.mouseX,'y':player.mouseY,'id':id};
 }
 
-Main.examineEquip = function(main, id){
-	Main.openPopup(main,'equip',id);
+Main.examine = function(main, type, id){
+	Main.openPopup(main,type,id);
 }
 
-Main.examinePlan = function(main, id){
-	Main.openPopup(main,'plan',id);
-}
+Actor.examineAbility = function(act){}
+
 
 Main.selectInv = function(main,obj){
 	main.temp.selectInv = obj;
@@ -183,7 +183,9 @@ Main.destroyInv = function(main,id){
 }
 
 
-
+Main.screenEffect = function(main,info){
+	main.screenEffect = info;
+}
 
 
 

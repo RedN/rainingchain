@@ -1,3 +1,8 @@
+var DIST = DIST;
+var TOOFAR = function(key){
+	Chat.add(key,"You're too far away.");
+}
+
 Actor.teleport = function(act,spot){
 	LOG(2,act.id,'teleport',spot);
 	
@@ -49,14 +54,14 @@ Actor.click = {};
 Actor.click.teleport = function(act,eid){
 	var e = List.all[eid];
 	var tele = e.teleport;
-	if(Collision.distancePtPt(act,e) > 150){ Chat.add(act.id,"You're too far."); return; }
+	if(Collision.distancePtPt(act,e) > DIST) return TOOFAR(act.id);
 	tele(act.id);
 }
 
 Actor.click.dialogue = function(act,eid){
 	var e = List.all[eid];
 	var dia = e.dialogue;
-	if(Collision.distancePtPt(act,e) > 150){ Chat.add(act.id,"You're too far."); return; }
+	if(Collision.distancePtPt(act,e) > DIST) return TOOFAR(act.id);
 	dia(act.id);
 }
 
@@ -95,19 +100,6 @@ Actor.click.pushable = function(pusher,beingPushed){
 
 }
 
-Actor.push = function(act,angle,magn,time){
-	act.friction = 1;
-	act.spdX = magn*cos(angle);
-	act.spdY = magn*sin(angle);
-	
-	Actor.setTimeOut(act,'push',time,function(eid){
-		List.all[eid].spdX = 0;
-		List.all[eid].spdY = 0;
-		List.all[eid].friction = 0.9;
-	});
-}
-
-
 Actor.click.skillPlot = function(act,eid){	
 	var e = List.all[eid];
 	if(!e.skillPlot) return;
@@ -123,7 +115,7 @@ Actor.click.skillPlot = function(act,eid){
 	var inv = main.invList;
 	var lvl = act.skill.lvl[plot.skill];
 	
-	if(Collision.distancePtPt(act,e) > 150){ Chat.add(key,"You're too far away."); return;}
+	if(Collision.distancePtPt(act,e) > DIST) return TOOFAR(act.id);
 	if(!Itemlist.empty(inv,1)){ Chat.add(key,"Your inventory is full."); return;}
 	if(lvl < plot.lvl) {Chat.add(key,"You need at least level " + plot.lvl + ' ' + plot.skill.capitalize() + " to harvest this resource."); return;}
 	if(Math.random() > plot.chance(lvl)) {Chat.add(key,"You failed to harvest this resource."); return;}
@@ -140,34 +132,28 @@ Actor.click.skillPlot = function(act,eid){
 
 Actor.click.waypoint = function(act,eid){
 	var e = List.all[eid];
-	if(Collision.distancePtPt(act,e) > 150){ Chat.add(act.id,"You're too far."); return; }
+	if(Collision.distancePtPt(act,e) > DIST) return TOOFAR(act.id);
 	
 	Chat.add(act.id,"You have changed your respawn point. Upon dying, you will now be teleported here.");
 
 	Actor.setRespawn(act,{x:e.x,y:e.y + 64,map:e.map},e.waypoint === 2);
 }
 
-Actor.setRespawn = function(act,spot,safe){
-	act.respawnLoc.recent = deepClone(spot);	//spot.map can have no @ cuz use Actor.teleport
-	if(spot.map.have("@MAIN") || safe)
-		act.respawnLoc.safe = deepClone(spot);
-}
-
-Actor.click.chest = function(act,eid){	//need work
+Actor.click.loot = function(act,eid){	//need work
 	var e = List.all[eid];
 	
-	if(Collision.distancePtPt(act,e) > 100){ Chat.add(act.id,"You're too far away."); return;}
+	if(Collision.distancePtPt(act,e) > DIST) return TOOFAR(act.id);
 	
-	if(!e.chest) return;
-	if(e.chest.list.have(act.id)){
-		Chat.add(act.id,"You have already opened that chest.");
+	if(!e.loot) return;
+	if(e.loot.list.have(act.id)){
+		Chat.add(act.id,"You have already looted that.");
 		return;
 	}
-	Chat.add(act.id,"You opened the chest.");
 		
-	if(e.chest.func(act.id) !== false){
-		Sprite.change(e,{'initAnim':'on'});
-		e.chest.list.push(act.id);
+	if(e.loot.func(act.id) !== false){
+		Sprite.change(e,{'initAnim':'off'});
+		e.loot.list.push(act.id);
+		Chat.add(act.id,"Nice loot!");
 	};
 	LOG(2,act.id,'openChest',eid);
 }
@@ -175,7 +161,7 @@ Actor.click.chest = function(act,eid){	//need work
 Actor.click.switch = function(act,eid){
 	var e = List.all[eid];
 	
-	if(Collision.distancePtPt(act,e) > 100){ Chat.add(act.id,"You're too far away."); return;}
+	if(Collision.distancePtPt(act,e) > DIST) return TOOFAR(act.id);
 	
 	var sw = e.switch;
 	if(!sw) return;
@@ -197,13 +183,9 @@ Actor.click.switch = function(act,eid){
 Actor.click.drop = function (act,id){
 	var inv = List.main[act.id].invList;
 	var drop = List.drop[id];
-		
 	if(!drop) return;
 	
-	if(!Collision.distancePtPt(act,drop) > act.pickRadius){
-		Chat.add(act.id,"You're too far away.");
-		return;
-	}
+	if(!Collision.distancePtPt(act,drop) > act.pickRadius) return TOOFAR(act.id);
 
 	if(!Itemlist.test(inv,[[List.drop[id].item,List.drop[id].amount]])){
 		Chat.add(act.id,"Inventory full.");
@@ -211,23 +193,23 @@ Actor.click.drop = function (act,id){
 	}
 	
 	Itemlist.add(inv,drop.item,drop.amount);
-	Drop.remove(drop);		
-	
+	Drop.remove(drop);	
 	
 	LOG(1,act.id,'pickDrop',drop);
 }
 
-Actor.click.drop.right = function(act,rect){
+Actor.click.drop.rightClick = function(act,pt){
 	var key = act.id;
 	var ol = {'name':'Pick Items','option':[]};
-	for(var i in List.drop){
+	var list = List.map[act.map].list.drop;
+	for(var i in list){
 		var d = List.drop[i];
-		if(d.map == List.all[key].map && Collision.RectRect(rect,[d.x,d.x+32,d.y,d.y+32]) ){
-			ol.option.push({'name':'Pick ' + Db.item[List.drop[i].item].name,'func':'Actor.click.drop','param':[i]});
+		if(Collision.distancePtPt(d,pt) < 48){
+			ol.option.push({'name':'Pick ' + Db.item[d.item].name,'func':'Actor.click.drop','param':[i]});
 		}
 	}
 	
-	if(ol.option)	Button.optionList(key,ol);  
+	Button.optionList(key,ol);  
 }
 
 
@@ -235,16 +217,6 @@ Actor.click.player = function(act,eid){
 	Main.openWindow(act.id,'trade',eid);
 }
 //
-
-Actor.removeOnClick = function(act,side){
-	for(var i in act.optionList.option){
-		if(act.optionList.option[i] === act.onclick[side]){
-			act.optionList.option.splice(i,1);
-			delete act.onclick[side];
-			return;
-		}
-	}
-}	
 
 Actor.removeOption = function(act,option){	//option is object or name
 	for(var i in act.optionList.option){
@@ -256,8 +228,23 @@ Actor.removeOption = function(act,option){	//option is object or name
 }	
 
 
+Actor.setRespawn = function(act,spot,safe){
+	act.respawnLoc.recent = deepClone(spot);	//spot.map can have no @ cuz use Actor.teleport
+	if(spot.map.have("@MAIN") || safe)
+		act.respawnLoc.safe = deepClone(spot);
+}
 
-
+Actor.push = function(act,angle,magn,time){
+	act.friction = 1;
+	act.spdX = magn*cos(angle);
+	act.spdY = magn*sin(angle);
+	
+	Actor.setTimeOut(act,'push',time,function(eid){
+		List.all[eid].spdX = 0;
+		List.all[eid].spdY = 0;
+		List.all[eid].friction = 0.9;
+	});
+}
 
 
 

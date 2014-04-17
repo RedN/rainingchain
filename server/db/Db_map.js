@@ -126,7 +126,7 @@ Db.map['test'] = function(){	//'test' = mapId
 		
 		//an enemy that acts as a chest. can only be opened once REQ: enemy needs to have anim:'open' and 'close'. NOTE: will be trasnformed to {func:,list:[]}
 		//must return a boolean about the success of the action (Ex: if enough inventory space)
-		act.chest = function(key,eId){
+		act.loot = function(key,eId){
 			Itemlist.add(List.main[key].invList,'gold',1000);
 			return true;
 		} 

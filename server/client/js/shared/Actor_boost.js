@@ -1,4 +1,3 @@
-
 Actor.boost = function(act, boost){	//boost: { 'stat':'globalDmg','value':1,'type':'*','time':100,'name':'weapon'}
 	//Add a boost to a actor
 
@@ -21,6 +20,7 @@ Actor.boost = function(act, boost){	//boost: { 'stat':'globalDmg','value':1,'typ
 	act.boost.toUpdate[b.stat] = 1;
 	
 }
+
 Actor.boost.template = function(){
 	return {
 		name:'Im dumb.',

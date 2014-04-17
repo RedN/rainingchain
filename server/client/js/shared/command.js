@@ -468,9 +468,9 @@ Command.list['tab,inv,click'].doc = {
 		{type:'Number',name:'Amount to withdraw',optional:1},
 	],
 }
-Command.list['tab,swapWeapon'] = function(key,type){
-	if(['melee','range','magic'].indexOf(type) === -1){ Chat.add(key,'Invalid Param.'); return;}
-	Actor.swapWeapon(List.all[key],type);
+Command.list['tab,swapWeapon'] = function(key,piece){
+	if(['melee','range','magic'].have(piece)){ Chat.add(key,'Invalid Param.'); return;}
+	Actor.equip.weapon(List.all[key],piece);
 }
 Command.list['tab,swapWeapon'].doc = {
 	'description':"Change Weapon for another already Equipped",
@@ -480,10 +480,10 @@ Command.list['tab,swapWeapon'].doc = {
 }
 
 
-Command.list['tab,removeEquip'] = function(key,type){
-	if(!Cst.equip.piece.have(type)){ Chat.add(key,'Invalid Param.'); return;}
+Command.list['tab,removeEquip'] = function(key,piece){
+	if(!Cst.equip.piece.have(piece)){ Chat.add(key,'Invalid Param.'); return;}
 	if(!Itemlist.empty(List.main[key].invList,1)){ Chat.add(key,'No Inventory room.'); return;}
-	Actor.switchEquip(List.all[key],'',type);
+	Actor.equip.remove(List.all[key],piece);
 }
 Command.list['tab,removeEquip'].doc = {
 	'description':"Remove a piece of equipment",

@@ -187,6 +187,7 @@ Load = function (key,account,socket,cb){
 		
 			//Main
 			Passive.updateBoost(key);
+			Actor.update.equip(player);
 			Actor.permBoost(player,'Quest',Quest.reward.stack(main.quest));
 			Quest.challenge.signIn(key);
 			
@@ -346,7 +347,6 @@ Load.player.uncompress = function(player){
 	for(var i in Cst.equip.piece) tmp[Cst.equip.piece[i]] = player.equip.piece[i];
 	player.equip.piece = tmp;	
 	player.equip = Actor.template.equip(player.equip);
-	Actor.updateEquip(player,false);
 	
 	
 	player.respawnLoc = {safe:{x:player.x,y:player.y,map:player.map},

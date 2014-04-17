@@ -10,7 +10,7 @@ Actor.creation = function(d){	//d: x  y  map category variant lvl modAmount extr
 	List.all[e.id] = e;
 	Map.enter(e);
 	
-	if(typeof e.chest === 'function') e.chest = {func:e.chest,list:[]};
+	if(e.loot) e.loot = {func:e.loot,list:[]};
 	if(e.switch) e.switch.state = e.switch.state || 'off';
 	
 	
@@ -219,7 +219,7 @@ Actor.creation.optionList = function(e){
 	if(e.type === 'player') ol.option.push({'name':'Trade',"func":'Actor.click.player',"param":[e.id]});
 	if(e.dialogue)	ol.option.push({'name':'Talk',"func":'Actor.click.dialogue',"param":[e.id]});
 	if(e.waypoint)	ol.option.push({'name':'Set Respawn',"func":'Actor.click.waypoint',"param":[e.id]});
-	if(e.chest)	ol.option.push({'name':'Loot',"func":'Actor.click.chest',"param":[e.id]});	
+	if(e.loot)	ol.option.push({'name':'Loot',"func":'Actor.click.loot',"param":[e.id]});	
 	if(e.skillPlot)	ol.option.push({'name':'Harvest',"func":'Actor.click.skillPlot',"param":[e.id]});
 	if(e.teleport){
 		var info = {'name':'Teleport',"func":'Actor.click.teleport',"param":[e.id]};

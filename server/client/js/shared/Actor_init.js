@@ -1,7 +1,5 @@
 //Mort
-if(typeof Actor === 'undefined') Actor = {};
-if(!Actor.creation) Actor.creation = {};
-if(!Actor.template) Actor.template = {};	
+Actor.template = {};	
 
 Init.actor = function(){
 	var defaultPreActor = function(type){
@@ -152,7 +150,7 @@ Init.actor = function(){
 		act.targetIf = 'player';  //condition used by monsters to find their target. check targetIfList
 		act.onclick = {};			
 		act.waypoint = null; 		//right click = setRespawn
-		act.chest = null;		//right click = gives items;
+		act.loot = null;		//right click = gives items;
 		act.block = null;			//change map coliision
 		act.teleport = null;
 		act.tag = null;				//to get enemy in q.event

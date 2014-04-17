@@ -241,8 +241,8 @@ Equip.creation = function(equip){
 		'type':'equip',
 		'id':equip.id,
 		'option':[	
-			{'name':'Examine Equip','func':'Main.examineEquip','param':[equip.id]},
-			{'name':'Change Equip','func':'Actor.switchEquip','param':[equip.id]},
+			{'name':'Examine Equip','func':'Main.examine','param':['equip',equip.id]},
+			{'name':'Change Equip','func':'Actor.equip','param':[equip.id]},
 		],
 	};
 	if(!equip.accountBound && equip.creator !== null)

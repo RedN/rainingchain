@@ -36,7 +36,6 @@ Actor.ability.add = function(act,name){
 	LOG(1,act.id,'learnAbility',name);
 }
 
-Actor.examineAbility = function(act){}
 
 Actor.getAbility = function(act){
 	return act.ability[act.combatContext];

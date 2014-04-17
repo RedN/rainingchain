@@ -40,14 +40,14 @@ q.equip['Estaff'] = {
 }
 
 q.item['Ifakestaff'] = {'name':'Staff','icon':'magic.staff','option':[		
-	{'name':'Examine Equip','func':'Main.examineEquip','param':['Qtutorial-Estaff']},
+	{'name':'Examine Equip','func':'Main.examine','param':['equip','Qtutorial-Estaff']},
 	{'name':'Change Equip','param':[],'func':function(key){
 		Actor.ability.add(getAct(key),'fireball');
 		Actor.ability.swap(getAct(key),'fireball',0);
 		removeItem(get,'Ifakestaff',1);
 		chat(key,"You can now throw fireballs with Left-Click.");
 		chat(key,"You can now manage your abilities via the ABILITY button under the EQUIP Tab.");
-		Actor.switchEquip(getAct(key),'E-tutorial-staff');
+		Actor.equip(getAct(key),'E-tutorial-staff');
 	}},
 ]};	
 
@@ -137,7 +137,7 @@ q.map.tutorial = function(){
 		
 		//chest
 		actor(spot.m,"system","chest",{
-			'chest':function(key){
+			'loot':function(key){
 				addItem(get,'Aiceshard',1);
 				return true;
 			}

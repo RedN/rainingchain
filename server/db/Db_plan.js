@@ -55,7 +55,7 @@ Plan.creation = function(preplan){
 		'name':plan.name,
 		'icon':plan.icon,
 		'option':[	
-			{'name':'Examine','func':'Main.examinePlan','param':[plan.id]},
+			{'name':'Examine','func':'Main.examine','param':['plan',plan.id]},
 			{'name':'Use','func':'Plan.use','param':[plan.id]},
 		]
 	});
