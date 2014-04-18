@@ -1,5 +1,5 @@
 //Combat: Sub Functions
-if(!server) Combat = {action:{attack:{}}};
+if(!server) Combat = {attack:{}};
 Combat.attack.mod = function(player,atk){
 	atk = Combat.attack.mod.bonus(player.bonus,atk);
 	atk = Combat.attack.mod.weapon(player.weapon,atk);

@@ -167,7 +167,9 @@ Init.game.addCanvas = function(name,id,z){
 
 socket.on('warning', function (d) {
 	$("#warningText")[0].innerHTML = '<strong>Alert:</strong> ' + d.text;
-	if(d.signOff) setTimeout(function(){location.reload();},2000);
+	$("#warningDiv")[0].style.visibility = 'visible';
+	if(d.signOff) setTimeout(function(){location.reload();},5000);
+	else setTimeout(function(){$("#warningDiv")[0].style.visibility = 'hidden';},20000);
 });
 
 

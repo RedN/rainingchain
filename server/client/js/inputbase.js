@@ -88,6 +88,8 @@ Input.key.ability = JSON.parse(localStorage.getItem('bindingAbility')) || Input.
 
 
 //### End Customization###
+Input.reset = function(){ Input.press = {'move':[0,0,0,0],'ability':[0,0,0,0,0,0],'combo':[0,0]}; }
+window.onblur = Input.reset;
 
 Input.binding = {move:null,ability:null};
 
@@ -254,9 +256,10 @@ document.activeElement.addEventListener("mousemove", Input.event.mouse.move);
 $(document).bind('contextmenu', function(e){return false;});	//Disable Right Click Context Menu and Lose Focus
 //$(window).keydown(function(e) { if(e.ctrlKey) { e.preventDefault();}});	//Disable Ctrl Shortcut
 
+
+
 //Send
 Input.send = function(){
-	
 	if(Input.event.typeNormal() && Input.press.move.toString() !== "0,0,0,0"){ 
 		//so he moves fast
 		Input.mouse.x = Cst.WIDTH2 + 10*Input.press.move[0] - 10*Input.press.move[2];

@@ -4,7 +4,6 @@ Init.db.clan = function(){
 	db.find('clan',{},{'_id':0},function(err,data){
 		for(var i = 0 ; i < data.length ; i++){
 			Db.clan[data[i].id] = data[i];
-			delete Db.clan[data[i].id]._id
 		}
 	});
 }
@@ -12,9 +11,8 @@ Init.db.clan = function(){
 Clan = {};
 
 Clan.creation = function(key,name){
-	if(Db.clan[name] !== undefined){
-		Chat.add(key,'This name is already taken.');	return;
-	}
+	if(Db.clan[name]){ Chat.add(key,'This name is already taken.');	return;}
+	
 	var player = List.all[key];
 	Db.clan[name] = {'name':name,'nick':name,'id':name,'memberList':{}}
 	Db.clan[name].memberList[player.name] = {'admin':1,'rank':10,'kick':1};
@@ -25,14 +23,11 @@ Clan.creation = function(key,name){
 	db.save('clan',Db.clan[name]);
 }
 
-
 Clan.enter = function(key,name){
 	var main = List.main[key];
 	var pn = List.all[key].name;
 	
-	if(!Db.clan[name]){
-		Chat.add(key,'This clan doesn\'t exist.');	return;
-	}
+	if(!Db.clan[name]){	Chat.add(key,'This clan doesn\'t exist.');	return;}
 	if(main.social.list.clan.have(name)){
 		Chat.add(key,'You are already in this clan chat.');	return;
 	}
@@ -55,10 +50,11 @@ Clan.leave = function(key,name){
 	var main = List.main[key];
 	
 	for(var i in main.social.list.clan){
-		if(name == 'ALL' || i == 'name'){
-			Db.clan[main.social.list.clan[i]].memberList[pn].active = 0;
-			if(!Db.clan[main.social.list.clan[i]].memberList[pn].rank){
-				delete Db.clan[main.social.list.clan[i]].memberList[pn];
+		if(name === 'ALL' || i === 'name'){
+			var clan = Db.clan[main.social.list.clan[i]];
+			clan.memberList[pn].active = 0;
+			if(!clan.memberList[pn].rank){
+				delete clan.memberList[pn];
 			}
 		}
 	}
