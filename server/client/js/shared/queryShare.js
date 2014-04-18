@@ -54,7 +54,7 @@ Db.query.plan = function(info){
 
 Db.query.ability = function(info){
 	var ab = deepClone(info);
-	if(ab.action && ab.action.func === 'Combat.action.attack'){
+	if(ab.action && ab.action.func === 'Combat.attack'){
 		ab.action.param = useTemplate(Attack.template(),ab.action.param);
 	}
 	return ab;

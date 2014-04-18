@@ -86,7 +86,7 @@ Actor.permBoost.stack = function(b){	//if boost same thing, add values
 
 Actor.update = {};
 Actor.update.mastery = function(act){
-	//Note: mod is applied in Combat.action.attack.mod.act
+	//Note: mod is applied in Combat.attack.mod.act
 	var mas = act.mastery;
 	for(var i in mas){
 		for(var j in mas[i]){

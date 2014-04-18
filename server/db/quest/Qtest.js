@@ -65,7 +65,7 @@ q.equip['weapon'] = {'piece': 'melee','type': 'mace','icon':'melee.mace',
 
 q.ability['simple'] = {'type':'attack','name':'Fire Basic','icon':'attackMagic.fireball',
 	'spd':{'main':1,'support':0},'period':{'own':25,'global':25},
-	'action':{'func':'Combat.action.attack','param':{
+	'action':{'func':'Combat.attack','param':{
 		'type':"bullet",'angle':0,'amount':1,
 		'objImg':{'name':"fireball",'sizeMod':1.2},'hitImg':{'name':"fireHit",'sizeMod':0.5},
 		'dmg':{'main':100,'ratio':{'melee':100,'range':100,'magic':100,'fire':100,'cold':100,'lightning':100}},

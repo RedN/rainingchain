@@ -42,11 +42,7 @@ Boss.template = function(){
 
 Boss.attack = function(boss,name,extra){
 	if(boss.noattack < 0)
-		Combat.action.attack(
-			List.actor[boss.parent],
-			useTemplate(Attack.template(),boss.attack[name]),
-			extra
-		);
+		Combat.attack.simple(List.actor[boss.parent],boss.attack[name],extra);
 }
 
 

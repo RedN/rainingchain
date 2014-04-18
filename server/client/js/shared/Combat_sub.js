@@ -1,13 +1,13 @@
 //Combat: Sub Functions
 if(!server) Combat = {action:{attack:{}}};
-Combat.action.attack.mod = function(player,atk){
-	atk = Combat.action.attack.mod.bonus(player.bonus,atk);
-	atk = Combat.action.attack.mod.weapon(player.weapon,atk);
-	atk = Combat.action.attack.mod.player(player,atk);
+Combat.attack.mod = function(player,atk){
+	atk = Combat.attack.mod.bonus(player.bonus,atk);
+	atk = Combat.attack.mod.weapon(player.weapon,atk);
+	atk = Combat.attack.mod.player(player,atk);
 	return atk;
 }
 
-Combat.action.attack.mod.bonus = function(bon,atk){
+Combat.attack.mod.bonus = function(bon,atk){
 	var bon = useTemplate(Actor.template.bonus(),bon,0);
 	
 	//Status Effect
@@ -36,7 +36,7 @@ Combat.action.attack.mod.bonus = function(bon,atk){
 	return atk;
 }
 
-Combat.action.attack.mod.player = function(player,attack){
+Combat.attack.mod.player = function(player,attack){
 	attack.dmg.main *= player.globalDmg;
 	
 	for(var i in attack.dmg.ratio){ 
@@ -45,7 +45,7 @@ Combat.action.attack.mod.player = function(player,attack){
 	return attack;
 }
 
-Combat.action.attack.mod.weapon = function(weaponid,attack){
+Combat.attack.mod.weapon = function(weaponid,attack){
 	if(server) var weapon = Db.equip[weaponid] || Db.equip['unarmed'];
 	if(!server) var weapon = Db.query('equip',player.weapon) || {main:1,ratio:Cst.element.template(1)};
 	

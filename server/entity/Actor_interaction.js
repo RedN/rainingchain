@@ -1,4 +1,4 @@
-var DIST = DIST;
+var DIST = 150;
 var TOOFAR = function(key){
 	Chat.add(key,"You're too far away.");
 }
@@ -212,7 +212,6 @@ Actor.click.drop.rightClick = function(act,pt){
 	Button.optionList(key,ol);  
 }
 
-
 Actor.click.player = function(act,eid){
 	Main.openWindow(act.id,'trade',eid);
 }
@@ -226,7 +225,6 @@ Actor.removeOption = function(act,option){	//option is object or name
 		}
 	}
 }	
-
 
 Actor.setRespawn = function(act,spot,safe){
 	act.respawnLoc.recent = deepClone(spot);	//spot.map can have no @ cuz use Actor.teleport

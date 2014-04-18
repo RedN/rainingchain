@@ -995,11 +995,11 @@ Init.db.npc.creation.ability = function(e){	//use abilityList to create custom a
 		delete extra.global;
 		
 		
-		if(a.action.func === 'Combat.action.attack'){
+		if(a.action.func === 'Combat.attack'){
 			a.action.param = useTemplate(Attack.template(),a.action.param,0);
 			a.action.param = useTemplate(a.action.param,extra,1,1);
 		}
-		if(a.action.func === 'Combat.action.boost' || a.action.func === 'Combat.action.summon'){		
+		if(a.action.func === 'Combat.boost' || a.action.func === 'Combat.summon'){		
 			a.action.param = deepClone(extra.param);
 		}
 		

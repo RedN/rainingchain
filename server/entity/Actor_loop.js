@@ -99,7 +99,7 @@ Actor.performAbility = function(act,ab,mana,reset){
 	if(ab.action.anim) Sprite.change(act,{'anim':ab.action.anim});
 	if(ab.action.animOnSprite)	Anim.creation({name:ab.action.animOnSprite,target:act.id});
 	
-	//Do Ability Action (ex: Combat.action.attack)
+	//Do Ability Action (ex: Combat.attack)
 	applyFunc.key(act.id,ab.action.func,ab.action.param);
 }
 
@@ -271,17 +271,7 @@ Actor.loop.fall = function(act){
 	
 	if(value === '4'){ Actor.fall(act); }
 	if(value === '3'){ 
-		var list = [
-			[1,0,0],
-			[0,1,90],
-			[-1,0,180],
-			[0,-1,270],
-			[1,1,45],
-			[-1,1,135],
-			[-1,1,225],
-			[1,-1,315],
-		];
-	
+		var list = Actor.loop.fall.array;	
 		for(var i in list){
 			if(Collision.getSquareValue({x:xy.x+list[i][0],y:xy.y+list[i][1]},act.map,'player') === '4'){
 				Actor.push(act,list[i][2],5,5);
@@ -290,6 +280,9 @@ Actor.loop.fall = function(act){
 		}
 	}
 }
+Actor.loop.fall.array = [[1,0,0],[0,1,90],[-1,0,180],[0,-1,270],[1,1,45],[-1,1,135],[-1,1,225],[1,-1,315],];
+
+
 
 Actor.fall = function(act){	//default fall
 	if(List.map[act.map].fall) List.map[act.map].fall(act.id,act);

@@ -77,6 +77,22 @@ Attack.template = function(type){
 	return b;
 }; 
 
+Attack.template.parabole = function(){
+	return {
+		'height':10,	//height of parabole (distance from middle)
+		'min':100,		//min distance where bullets will collide
+		'max':500,		//max distance where bullets will collide
+		'timer':50,		//time before bullets collide
+	}
+}
+Attack.template.boomerang = function(){
+	return {
+		'comeBackTime':50,	//time before bullet turns 180 degre
+		'spd':2,			//spd mod
+		'spdBack':1.5,		//spd mod when bullet comes back
+		'newId':1			//after turn back, renew id so it can hit enemy again
+	}
+}
 
 Attack.creation = function(player,s,extra){
 	s = Attack.creation.info(player,s);
@@ -107,7 +123,7 @@ Attack.creation.info = function(act,b){
 	b.viewedIf = act.viewedIf || 'true';
 	b.damageIf = act.damageIf || 'act';
 	
-	b.angle = (act.angle || 0 +360)%360;
+	b.angle = ((act.angle || 0) +360)%360;
 	
 	if(b.nova || b.onHit || b.onStrike){
 		b.bonus = act.bonus || Actor.template.bonus();
@@ -128,11 +144,13 @@ Attack.creation.bullet = function(b){
 	b.moveAngle = b.angle;
 
 	if(b.parabole){
+		b.parabole = useTemplate(Attack.template.parabole(),b.parabole);
 		var diff = Math.pyt(b.mouseX - Cst.WIDTH2,b.mouseY - Cst.HEIGHT2);
 		b.parabole.dist = diff.mm(b.parabole.min,b.parabole.max);
 		b.parabole.timer *= b.parabole.dist/b.parabole.max;
 	}
 	if(b.nova){ b.angle = Math.random()*360;}	//otherwise, circle always the same. moveAngle is same tho
+	if(b.boomerang) b.boomerang = useTemplate(Attack.template.boomerang(),b.boomerang);
 	
 	b.normal = !b.sin && !b.parabole && !b.boomerang;
 	
@@ -145,6 +163,7 @@ Attack.creation.bullet = function(b){
 	
 	return b;
 }; 
+
 
 
 //need to remove player.bonus to pre-atk
@@ -224,7 +243,14 @@ Attack.creation.neverstrike = function(b){
 
 
 
-
+Bullet = {};
+Bullet.remove = function(b){
+	Activelist.remove(b);
+	
+	Map.leave(b);
+	delete List.bullet[b.id];
+	delete List.all[b.id];
+}
 
 
 

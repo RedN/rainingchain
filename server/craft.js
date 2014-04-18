@@ -327,7 +327,7 @@ Craft.ability.template = function(seed){
 	if(typeof ab.period.global === 'object'){ ab.period.global = Craft.boost.roll(ab.period.global,qua); }
 	if(typeof ab.period.own === 'object'){ ab.period.own = Craft.boost.roll(ab.period.own,qua); }
 	
-	if(ab.action.func === 'Combat.action.attack'){
+	if(ab.action.func === 'Combat.attack'){
 		var atk = ab.action.param;
 		
 		//All
@@ -359,10 +359,10 @@ Craft.ability.template = function(seed){
 		}
 		//need to add curse etc...
 	}
-	if(ab.action.func === 'Combat.action.summon'){
+	if(ab.action.func === 'Combat.summon'){
 	
 	}
-	if(ab.action.func === 'Combat.action.boost'){
+	if(ab.action.func === 'Combat.boost'){
 	
 	}
 	ab.id = Math.randomId();

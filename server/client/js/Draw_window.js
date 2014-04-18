@@ -629,9 +629,9 @@ Draw.window.ability.generalInfo.upMod = function(mod){	//unused
 
 Draw.window.ability.action = function(diffX,diffY){ ctxrestore();
 	var ab = Draw.old.abilityShowed;
-	if(ab.action.func === 'Combat.action.attack'){ Draw.window.ability.action.attack(diffX,diffY);}
+	if(ab.action.func === 'Combat.attack'){ Draw.window.ability.action.attack(diffX,diffY);}
 	if(ab.action.func === 'Actor.boost'){ Draw.window.ability.action.boost(diffX,diffY);}
-	if(ab.action.func === 'Combat.action.summon'){ Draw.window.ability.action.summon(diffX,diffY);}
+	if(ab.action.func === 'Combat.summon'){ Draw.window.ability.action.summon(diffX,diffY);}
 
 }
 
@@ -649,7 +649,7 @@ Draw.window.ability.action.attack = function(diffX,diffY){  ctxrestore();
 	
 	var ab = Draw.old.abilityShowed;
 	var preatk = deepClone(ab.action.param);
-	var atk = Combat.action.attack.mod(player,deepClone(preatk));
+	var atk = Combat.attack.mod(player,deepClone(preatk));
 	
 	var fontSize = 20;	
 	ctx.font = fontSize + 'px Kelly Slab';

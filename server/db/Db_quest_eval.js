@@ -145,16 +145,15 @@ var getEnemy = function(key,tag){
 
 
 //Map
-var bullet = function(spot,atk,angle,hit){
-	hit = hit || 'player-simple';
+var bullet = function(spot,atk,angle,dif){
+	var act = {damageIf:dif || 'player-simple',spot:spot,angle:angle};
+	Map.convertSpot(act);
 	
-	Attack.creation(
-		{damageIf:hit,spot:spot,angle:angle},
-		useTemplate(Attack.template(),atk)
-	);
-
+	Attack.creation(act,atk);
 }
-
+var strike = function(spot,atk,angle,dif,extra){
+	Combat.attack.simple({damageIf:dif || 'player-simple',spot:spot,angle:angle},atk,extra);
+}
 var actor = function(spot,cat,variant,extra){
 	Actor.creation({spot:spot,category:cat,variant:variant,extra:(extra || {})});
 }

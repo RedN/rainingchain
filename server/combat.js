@@ -36,26 +36,21 @@ leech chance: unrelated to dmg. abilityMod [1] * playerMod [0]
 
 Combat = {};
 
-//NOTE: Combat.action.attack.mod is inside	Combat_sub.js
+//NOTE: Combat.attack.mod is inside	Combat_sub.js
 
 //ACTION//
-Combat.action = {};
-
-Combat.action.attack = function(id,action,extra){   	
+Combat.attack = function(key,action,extra){   	
 	extra = extra || {};
-	var player = typeof id === 'string' ? List.all[id] : id;
+	var player = typeof key === 'string' ? List.all[key] : key;
 	
 	//Add Bonus and mastery
 	var atk = typeof action === 'function' ? action() : deepClone(action); 
-	atk = Combat.action.attack.mod(player,atk);
-	Combat.action.attack.perform(player,atk,extra);
+	atk = Combat.attack.mod(player,atk);
+	Combat.attack.perform(player,atk,extra);
 }
 
-Combat.action.attack.perform = function(player,attack,extra){   //extra used for stuff like boss loop
+Combat.attack.perform = function(player,attack,extra){   //extra used for stuff like boss loop
 	//At this point, player.bonus/mastery must be already applied
-	
-	if(extra){ attack = deepClone(attack); }    //cuz probably from boss
-	
 	if(attack.func && attack.func.chance >= Math.random()){
 		applyFunc.key(player.id,attack.func.func,attack.func.param);
 	}
@@ -76,7 +71,11 @@ Combat.action.attack.perform = function(player,attack,extra){   //extra used for
 	}
 }	
 	
-Combat.action.summon = function(key,action,enemy){
+Combat.attack.simple = function(player,attack,extra){
+	Combat.attack(player,useTemplate(Attack.template(),attack),deepClone(extra));	
+}
+	
+Combat.summon = function(key,action,enemy){
 	var name = action.name || Math.randomId();
 	action.maxChild = action.maxChild || 1;
 	action.time = action.time || Cst.bigInt;
@@ -121,7 +120,7 @@ Combat.action.summon = function(key,action,enemy){
 	}	
 }
 
-Combat.action.boost = function(key,info){
+Combat.boost = function(key,info){
 	Actor.boost(List.all[key], info);
 }
 
@@ -144,7 +143,7 @@ Combat.collision = function(b,act){
 	if(b.leech.baseChance >= Math.random() || b.leech.chance >= Math.random()){ Combat.collision.leech(act,b) }
 	if(b.pierce.baseChance >= Math.random() || b.pierce.chance >= Math.random()){ Combat.collision.pierce(b) } else {b.toRemove = 1;};
 	
-	if(b.onHit && b.onHit.chance >= Math.random()){	Combat.action.attack(b,useTemplate(Attack.template(),b.onHit.attack));}
+	if(b.onHit && b.onHit.chance >= Math.random()){	Combat.attack.simple(b,b.onHit.attack);}
 	
 	if(b.curse && b.curse.chance >= Math.random()){ Combat.collision.curse(act,b.curse); }
 	
@@ -242,32 +241,6 @@ Combat.collision.status.drain = function(act,b){
 	act.mana = 0;
 }
 
-//Clear Status
-Combat.clearStatus = function(act){
-	Combat.clearStatus.burn(act);
-	Combat.clearStatus.knock(act);
-	Combat.clearStatus.bleed(act);
-	Combat.clearStatus.stun(act);
-	Combat.clearStatus.chill(act);
-	Combat.clearStatus.drain(act);
-};
-Combat.clearStatus.burn = function(act){ act.status.burn.time = 0; } 
-Combat.clearStatus.knock = function(act){ act.status.knock.time = 0; }
-Combat.clearStatus.bleed = function(act){ act.status.bleed.time = 0; }
-Combat.clearStatus.stun = function(act){ 
-	act.status.stun.time = 0;
-	Actor.boost.removeById(act,'maxSpd@stun');
-	Actor.boost.removeById(act,'atkSpd-main@stun');
-}
-Combat.clearStatus.chill = function(act){ 
-	act.status.chill.time = 0;
-	Actor.boost.removeById(act,'maxSpd@chill');
-}
-Combat.clearStatus.drain = function(act){ 
-	act.status.drain.time = 0;
-	Actor.boost.removeById(act,'mana-max@drainBad');
-}
-
 //Apply Mods
 Combat.collision.curse = function(act,info){
 	for(var i in info.boost){
@@ -340,6 +313,32 @@ Combat.collision.damage.calculate = function(dmg,def){
 	return info;
 }
 
+
+//Clear Status
+Combat.clearStatus = function(act){
+	Combat.clearStatus.burn(act);
+	Combat.clearStatus.knock(act);
+	Combat.clearStatus.bleed(act);
+	Combat.clearStatus.stun(act);
+	Combat.clearStatus.chill(act);
+	Combat.clearStatus.drain(act);
+};
+Combat.clearStatus.burn = function(act){ act.status.burn.time = 0; } 
+Combat.clearStatus.knock = function(act){ act.status.knock.time = 0; }
+Combat.clearStatus.bleed = function(act){ act.status.bleed.time = 0; }
+Combat.clearStatus.stun = function(act){ 
+	act.status.stun.time = 0;
+	Actor.boost.removeById(act,'maxSpd@stun');
+	Actor.boost.removeById(act,'atkSpd-main@stun');
+}
+Combat.clearStatus.chill = function(act){ 
+	act.status.chill.time = 0;
+	Actor.boost.removeById(act,'maxSpd@chill');
+}
+Combat.clearStatus.drain = function(act){ 
+	act.status.drain.time = 0;
+	Actor.boost.removeById(act,'mana-max@drainBad');
+}
 
 
 //TargetIf damageIf

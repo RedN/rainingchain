@@ -25,7 +25,7 @@ q.event = {
 
 q.ability['Aiceshard'] = {'type':'attack','name':'Ice Shard','icon':'attackMagic.crystal',
 	'spd':{'main':1,'support':0},'period':{'own':25,'global':25},
-	'action':{'func':'Combat.action.attack','param':{
+	'action':{'func':'Combat.attack','param':{
 		'type':"bullet",'angle':0,'amount':1,
 		'objImg':{'name':"iceshard",'sizeMod':1},'hitImg':{'name':"coldHit",'sizeMod':0.5},
 		'dmg':{'main':100,'ratio':{'melee':0,'range':0,'magic':30,'fire':0,'cold':70,'lightning':0}},
@@ -211,6 +211,7 @@ q.map.tutorial = function(){
 		
 		if(Loop.interval(6)){
 			bullet(spot.a,v.arrow,0);
+			console.log(1);
 		}
 
 		if(Loop.interval(4)){
