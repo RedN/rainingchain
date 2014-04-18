@@ -41,13 +41,11 @@ Loop.player.old = {};
 
 Loop.bullet = function(){
 	for(var i in List.bullet){
-		var b = List.bullet[i];
+		//cant put position update here cuz desync
 		Sprite.update(List.bullet[i]);
-		if(b.spd === null || b.sprite.dead) continue;
-		b.x += cos(b.angle)*b.spd;
-		b.y += sin(b.angle)*b.spd;	
 	}
 }
+
 
 Loop.main = function(){
 	for(var i in main.social.message.chat) Chat.receive(main.social.message.chat[i]);		

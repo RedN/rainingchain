@@ -53,6 +53,14 @@ try {
 		}
 	}
 	
+	//Update Bullet
+	for(var i in List.bullet){
+		var b = List.bullet[i];
+		if(b.spd === null || b.sprite.dead) continue;
+		b.x += cos(b.angle)*b.spd;
+		b.y += sin(b.angle)*b.spd;	
+	}
+
 } catch (err){ logError(err) }
 }
 

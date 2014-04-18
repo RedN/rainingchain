@@ -421,7 +421,7 @@ q.map.goblinLand = function(){
 		
 		//TEST
 		actorGroup(spot.n1,25*15,[
-			["orc","melee",1,{deathFunc:q.event.killOrc}],
+			["orc","melee",1,{abilityList:[]}],
 		]);	
 		//
 		

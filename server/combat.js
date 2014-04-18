@@ -137,7 +137,8 @@ Combat.collision = function(b,act){
 	
 	//Mods
 	if(b.leech.baseChance >= Math.random() || b.leech.chance >= Math.random()){ Combat.collision.leech(act,b) }
-	if(b.pierce.baseChance >= Math.random() || b.pierce.chance >= Math.random()){ Combat.collision.pierce(b) } else {b.toRemove = 1;};
+	if(b.pierce.baseChance >= Math.random() || b.pierce.chance >= Math.random()){ Combat.collision.pierce(b) } 
+	else {b.toRemove = 1;};
 	
 	if(b.onHit && b.onHit.chance >= Math.random()){	Combat.attack.simple(b,b.onHit.attack);}
 	
