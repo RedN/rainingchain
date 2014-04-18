@@ -335,7 +335,7 @@ q.dialogue['ringo'] = {'face':{'image':'villager-male.0','name':'Ringo'},
 
 //{Map
 q.map.goblinUnderground = function(){
-	var m = Init.db.map.baseMap();
+	var m = Init.db.map.model();
 	m.name = "GoblinUnderground";
 	m.graphic = "goblinUnderground";
 	m.lvl = 0;
@@ -363,7 +363,7 @@ q.map.goblinUnderground = function(){
 };
 
 q.map.goblinLand = function(){
-	var m = Init.db.map.baseMap();
+	var m = Init.db.map.model();
 	m.name = "Goblin Land";
 	m.tileset = "v1.1";
 	m.lvl = 0;
@@ -459,7 +459,7 @@ q.map.goblinLand = function(){
 };
 
 q.map.goblinCamp = function(){
-	var m = Init.db.map.baseMap();
+	var m = Init.db.map.model();
 	m.name = "Goblin Land";
 	m.tileset = "v1.1";
 	m.lvl = 0;

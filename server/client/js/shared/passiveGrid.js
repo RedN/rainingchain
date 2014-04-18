@@ -35,7 +35,7 @@ Init.db.passive = function(cb){
 			
 			
 			Db.passiveGrid = PassiveGrid.setGrid(Db.passiveGrid);	
-			Cycle.daily.passive();
+			Cycle.day.passive();
 			cb();
 		});
 	});

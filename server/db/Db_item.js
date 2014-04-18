@@ -25,8 +25,9 @@ a['testing']  = {   //testing is the item id
 */
 
 //Similar format than Equip
+Db.item = {};
 Init.db.item = function (cb){
-	Db.item = {}; var a = Db.item;
+	var a = Db.item;
 
 	//{Crafting					
 	a['shard-white'] = {'name':'White Shard','icon':'shard.white','stack':1}
@@ -79,9 +80,9 @@ Init.db.item = function (cb){
 			]};	
 	//}
 	
-	for(var i in Db.item){	
-		Db.item[i].id = i;
-		Item.creation(Db.item[i]);
+	for(var i in a){	
+		a[i].id = i;
+		Item.creation(a[i]);
 	}
 	
 	cb.call();
@@ -117,7 +118,7 @@ Item.template = function(){
 	return item;
 }
 
-Item.remove = function(id){	//need fix
+Item.remove = function(id){
 	db.remove('equip',{id:id});
 	db.remove('ability',{id:id});
 }

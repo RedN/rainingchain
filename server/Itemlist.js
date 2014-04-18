@@ -208,7 +208,7 @@ Itemlist.click.inventory = function(inv,side,slot,amount){
 		if(side === 'left'){ Itemlist.transfer(inv,list,id,1); }
 		
 		if(side === 'right'){ 
-			Button.optionList(key,{
+			Button.creation.optionList(key,{
 				'name':Db.item[id].name,
 				'option':[
 					{'name':'Deposit 5','func':Itemlist.transfer,'param':[list,id,5]},
@@ -247,7 +247,7 @@ Itemlist.click.inventory = function(inv,side,slot,amount){
 
 
 	if(side === 'right'){
-		Button.optionList(key,{'name':item.name,'option':item.option});
+		Button.creation.optionList(key,{'name':item.name,'option':item.option});
 	}
 }
 
@@ -262,7 +262,7 @@ Itemlist.click.bank = function(bank,side,slot,amount){
 		return;
 	}
 	if(side === 'right'){
-		Button.optionList(key,{
+		Button.creation.optionList(key,{
 			'name':Db.item[id].name,
 			'option':[
 				{'name':'Withdraw 5','func':Itemlist.transfer.bank,'param':[inv,id,5]},

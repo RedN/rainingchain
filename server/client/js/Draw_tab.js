@@ -410,7 +410,7 @@ Draw.tab.friend.rightClick = function(name){
 	};
 	
 	
-	Button.optionList(option);
+	Button.creation.optionList(option);
 }
 
 Draw.tab.pref = function(){ 

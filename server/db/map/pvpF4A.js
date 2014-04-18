@@ -1,4 +1,4 @@
-var m = Init.db.map.baseMap();
+var m = Init.db.map.model();
 m.name = "PvP Free For All";
 m.tileset = 'v1.1';
 

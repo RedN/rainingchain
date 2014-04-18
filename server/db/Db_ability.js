@@ -205,14 +205,12 @@ a['bulletMulti'] = {					//bulletMulti is the id of attack
 	{'stat':'hp-max','type':'+','value':1000,'time':50},
 ]	
 */	
-
+Db.ability = {};	//for quest
 Init.db.ability = function(cb){
-	Db.ability = {}; var abilityPreDb = {}; var a = abilityPreDb;
+	var abilityPreDb = {}; var a = abilityPreDb;
 	
 	db.find('ability',{},{'_id':0},function(err, results) { if(err) throw err
-		for(var i in results){
-			a[results[i].id] = results[i];
-		}
+		for(var i in results) a[results[i].id] = results[i];
 	
 	//Alt-03
 	//{ Pvp
@@ -755,11 +753,9 @@ Init.db.ability = function(cb){
 	};
 	
 	
-	if(server){
-		Init.db.ability.orb();
-		Init.db.ability.mod();
-		Init.db.ability.template();	
-	}
+	Init.db.ability.orb();
+	Init.db.ability.mod();
+	Init.db.ability.template();	
 	
 	for(var i in a){
 		a[i].id = i;
@@ -796,7 +792,7 @@ Init.db.ability.template = function(){
 		if(Db.abilityOrb[a[i].orb]){
 			a[i].orb = {'upgrade':{'amount':0,'bonus':a[i].orb}};	 
 		} else { 
-			//create a custom orb bonus only for this ability
+			//create a custom orb bonus only for this ability, a[i].orb must follow Db.abilityOrb model
 			Db.abilityOrb[a[i].id] = a[i].orb;
 			Db.abilityOrb[a[i].id].id = a[i].id;
 		}	

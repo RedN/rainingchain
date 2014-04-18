@@ -611,7 +611,7 @@ Draw.window.ability.generalInfo.upgrade = function(){
 		{'name':'Use 100 Orbs','func':Command.send,'param':['win,ability,upgrade,' + name + ',100']},
 		{'name':'Use X Orbs','func':Input.add,'param':['win,ability,upgrade,' + name + ',']},
 	]};
-	Button.optionList(option);
+	Button.creation.optionList(option);
 }
 
 Draw.window.ability.generalInfo.upMod = function(mod){	//unused
@@ -624,7 +624,7 @@ Draw.window.ability.generalInfo.upMod = function(mod){	//unused
 		{'name':'Use X Orbs','func':Input.add,'param':['win,ability,upMod,' + name + ',' + mod + ',']},
 	]};
 	
-	Button.optionList(option);
+	Button.creation.optionList(option);
 }
 
 Draw.window.ability.action = function(diffX,diffY){ ctxrestore();

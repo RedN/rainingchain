@@ -18,13 +18,12 @@ Chat.parse.item = function(id){
 }
 
 Chat.add = function(key,pack){
-	if(!List.main[key]) return;
-	var list = List.main[key].social.message;
-	list.chat = list.chat || [];
-	
+	var main = List.main[key];
+	if(!main) return;
+	main.social.message = main.social.message || [];
 	if(typeof pack === 'string') pack = {type:'game',text:pack};
-		
-	list.chat.push(pack);	
+	
+	main.social.message.push(pack);	
 }
 
 Chat.question = function(key,q){	//q:{text, func, param, repeat, [option]}
@@ -47,7 +46,6 @@ Chat.receive = function(d){	//data:{to,key,type,text,	[title,category for report
 	if(text !== d.text) d.item = 1;
 	d.text = text;
 	
-	console.log(1);
 	if(!d.type || !d.text || !d.to || !d.from){ return; }
 	if(d.to === d.from){ Chat.add(key,"Ever heard of thinking in your head?"); return; }
 	
@@ -126,10 +124,8 @@ Chat.receive.report = function(key,d){
 
 
 Chat.receive.offlinepm = function(key,d){
-	console.log(d);
 	db.findOne('main',{username:d.to},function(err, res) { if(err) throw err;
 		if(!res){Chat.add(key,"This player doesn't exist."); return; }
-		
 		
 		var main = Load.main.uncompress(res);
 		

@@ -1,7 +1,4 @@
-//Armor
-
-//Exact same system than Weapon.js
-Db.equip = {};
+Db.equip = {};	//for quest
 Init.db.equip = function (cb){
 	var pre = Db.equip;
 	db.find('equip',{},{'_id':0},function(err, results) { if(err) throw err
@@ -254,7 +251,6 @@ Equip.creation = function(equip){
 	Item.creation(item);
 	
 	db.upsert('equip',{'id':equip.id}, Equip.compress(equip), db.err);
-
 }
 
 Equip.creation.color = function(w){
@@ -296,9 +292,6 @@ Equip.uncompress.element = function(r){
 		}
 	}
 }
-
-//Add Default Weapon elements and init weapon
-	
 	
 //################################################
 
@@ -320,16 +313,12 @@ Equip.template = function(){
 	}
 }
 
-
 Equip.accountBound = function(key,eid){
 	var equip = Db.equip[eid];
 	
-	if(equip.accountBound){	//shouldnt happen
-		Chat.add(key,'This equip is already account bound.');
-		return;
-	}
+	if(equip.accountBound){	Chat.add(key,'This equip is already account bound.');	return;	}
 	
-	Craft.orb.boost(key,equip,1);
+	Craft.orb.boost(key,equip,1);	//add boost
 	
 	if(equip.creator === List.all[key].username){
 		for(var i in equip.boost)

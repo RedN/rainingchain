@@ -213,22 +213,20 @@ var mapList = [
 	'test',
 ];
 
-Init.db.map = function (){
+Init.db.map = function (){	
+	var a = Db.map;
 	
+	for(var i in mapList)	Db.map[mapList[i]] = require('./map/'+mapList[i]).map;		
 	
-	for(var i in mapList){
-		Db.map[mapList[i]] = require('./map/'+mapList[i]).map;
-	}		
-	
-	for(var m in Db.map){	
-		Db.map[m] = Db.map[m]();
-		Db.map[m].id = m;
-		Map.creation.model(Db.map[m]);
+	for(var m in a){	
+		a[m] = a[m]();
+		a[m].id = m;
+		Map.creation.model(a[m]);
 	}
 	
 }
 
-Init.db.map.baseMap = function(){
+Init.db.map.model = function(){
 	return {
 		addon:{},
 		name : "No Name Map",
@@ -240,8 +238,7 @@ Init.db.map.baseMap = function(){
 	}
 }
 
-Map.creation = function(namemodel,version,lvl){
-	//create a copy of a default map. used for instanced map. version is usually the player name
+Map.creation = function(namemodel,version,lvl){	//create instance of map. version is usually the player name
 	version = version || 'MAIN';
 	var newid = namemodel + '@' + version;
 	var model = Db.map[namemodel];
@@ -257,17 +254,17 @@ Map.creation = function(namemodel,version,lvl){
 	
 	var map = {
 		id:newid,
-		randomId:Math.randomId(),
 		name:model.name,
+		model:model.id,
 		version:version,
 		graphic:model.graphic,
 		grid:Db.map[model.graphic].grid,
-		model:model.id,
 		fall:model.fall,
-		timer:version === 'MAIN' ? 1/0 : 1000,// 5*60*1000/25,
-		list:{all:{},player:{},bullet:{},npc:{},anim:{},actor:{}},		//acts like List.all (for faster activeList and collisionRect)
 		lvl:lvl || model.lvl,
 		addon:newaddon,
+		timer:version === 'MAIN' ? 1/0 : 1000,// 5*60*1000/25,	//TOFIXTEST
+		list:{all:{},player:{},bullet:{},npc:{},anim:{},actor:{}},		//acts like List.all (for faster activeList and collisionRect)
+		
 	};
 	
 	List.map[newid] = map;
@@ -277,7 +274,7 @@ Map.creation = function(namemodel,version,lvl){
 }
 
 Map.creation.model = function(map){	//create the model that will be in Db.map | Model will then be modded by quest
-	var grid = [];	//for astart
+	var grid = [];	//for astar
 	for(var i = 0 ; i < map.grid.length; i++){	
 		grid[i] = [];
 		for(var j = 0 ; j < map.grid[i].length; j++){
@@ -301,14 +298,8 @@ Map.creation.model = function(map){	//create the model that will be in Db.map | 
 	return map;
 }
 
-Map.creation.all = function(){
-	for(var i in Db.map){
-		Map.creation(i);
-	}
-}
-
 Map.remove = function(map){
-	if(map.id === map.model) return; //cant delete main maps
+	if(map.id.have("@MAIN")) return; //cant delete main maps
 	for(var i in map.list){
 		for(var j in map.list[i]){
 			removeAny(List.all[j]);

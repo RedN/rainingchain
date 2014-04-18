@@ -209,7 +209,7 @@ Actor.click.drop.rightClick = function(act,pt){
 		}
 	}
 	
-	Button.optionList(key,ol);  
+	Button.creation.optionList(key,ol);  
 }
 
 Actor.click.player = function(act,eid){

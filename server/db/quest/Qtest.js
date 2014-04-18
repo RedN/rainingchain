@@ -24,8 +24,6 @@ q.event = {
 	}
 }
 
-
-
 q.item['generator'] = {'name':'Generator','icon':'magic.staff','stack':1,'drop':0,'option':[		
 	{'name':'Tele','param':[],'func':function(key){
 		Chat.question(key,{text:"x,y,map", func:function(key,x,y,map){
@@ -47,7 +45,6 @@ q.item['generator'] = {'name':'Generator','icon':'magic.staff','stack':1,'drop':
 	{'name':'Ability','param':[],'func':Test.setAbility},
 	{'name':'Invincible','param':[],'func':Test.invincible},
 ]};	
-
 
 q.item['equipGenerator'] = {'name':'Equip Gen','icon':'system.gold','stack':1,'option':[
 	{'name':'Craft Armor','func':'Plan.use','param':['randomArmor'],question:true,description:'Generate a armor'},
@@ -75,7 +72,7 @@ q.ability['simple'] = {'type':'attack','name':'Fire Basic','icon':'attackMagic.f
 
 //{Map
 q.map.test = function(){
-	var m = Init.db.map.baseMap();
+	var m = Init.db.map.model();
 	m.name = "Test Zone";
 	m.graphic = "pvpF4A";
 	m.tileset = 'v1.1';

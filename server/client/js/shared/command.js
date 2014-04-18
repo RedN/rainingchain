@@ -137,7 +137,6 @@ Command.list['fl,pm'].doc = {
 }
 
 Command.list['fl,offlinepm'] = function(key,to,text){
-	console.log(10);
 	Chat.receive({key:key,to:to,from:List.all[key].name,type:'offlinepm',text:text});
 }
 
@@ -579,7 +578,6 @@ Command.list['option'] = function(key,slot){
 	var opt = main.optionList.option[slot];
 	
 	applyFunc.key(key,opt.func,opt.param);	
-
 }
 Command.list['option'].doc = {
 	'description':"Select an option from the Right-Click Option List.",

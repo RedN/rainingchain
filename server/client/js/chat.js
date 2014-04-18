@@ -75,7 +75,6 @@ Chat.receive = function(pack){
 	if(pack.type === 'offlinepm')	Chat.receive.offlinepm(pack);	
 	if(pack.type === 'public') Chat.receive.public(pack);
 	if(pack.type === 'question') Chat.receive.question(pack);
-	console.log(pack);
 	
 	html.chat.text.scrollTop += 50;
 	html.pm.text.scrollTop += 50;
@@ -111,7 +110,7 @@ Chat.receive.public = function(pack){
 	html.chat.text.innerHTML += '<br>' + text; 
 }		
 Chat.receive.question = function(pack){	
-	if(pack.option === 'boolean') pack.option === ['yes','no'];
+	if(pack.option === true) pack.option === ['yes','no'];
 	pack.server = 1;
 	pack.client = 0;
 	
@@ -163,7 +162,7 @@ Chat.click.name = function(name){	//in public chat
 		'param':[name],	
 	};
 		
-	Button.optionList(option);
+	Button.creation.optionList(option);
 }
 
 Chat.add = function(text,txt){

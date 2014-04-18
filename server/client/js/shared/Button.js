@@ -7,6 +7,25 @@ Button.creation = function (key,data){
 	list.push(useTemplate(Button.template(),data));
 }
 
+Button.creation.optionList = function(key,option){
+	if(server){
+		var player = List.all[key];
+		option.x = player.mouseX;
+		option.y = player.mouseY,
+		option.client = option.client || 0;
+		option.count = 2;
+		List.main[key].optionList = option;
+	}
+	if(!server){
+		option = key;
+		option.x = Input.mouse.x;
+		option.y = Input.mouse.y;
+		option.client = 1;
+		option.count = 2;
+		main.optionList = option;
+	}
+}
+
 Button.template = function(){
 	return {
 		left:null,
@@ -71,26 +90,6 @@ Button.context = function (key){ 	//check every frame
 	if(server){ List.main[key].context = {'server':server,'text':''}; }
 	if(!server){ main.clientContext = {'server':server,'text':''}; }
 }
-
-Button.optionList = function(key,option){
-	if(server){
-		var player = List.all[key];
-		option.x = player.mouseX;
-		option.y = player.mouseY,
-		option.client = option.client || 0;
-		option.count = 2;
-		List.main[key].optionList = option;
-	}
-	if(!server){
-		option = key;
-		option.x = Input.mouse.x;
-		option.y = Input.mouse.y;
-		option.client = 1;
-		option.count = 2;
-		main.optionList = option;
-	}
-}
-
 
 Button.reset = function(key){	//called when player clicks. used to remove popup
 	if(server){	

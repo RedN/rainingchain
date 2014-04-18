@@ -207,7 +207,7 @@ Load = function (key,account,socket,cb){
 			var now = Date.now();
 			if(account.lastSignIn === null) Test.firstSignIn(key);
 			else if((new Date(account.lastSignIn)).toLocaleDateString() !== (new Date(now).toLocaleDateString()))
-				Cycle.daily.quest(key);
+				Cycle.day.quest(key);
 				
 			db.update('account',{username:player.username},{'$set':{online:1,key:key,lastSignIn:now}},function(err, res) { if(err) throw err
 				socket.emit('signIn', { success:1, key:key, data:Load.initData(key,player,main)});
@@ -398,8 +398,7 @@ Load.initData = function(key,player,main){
 		Db.passiveGrid.moddedGrid[main.passive.freeze[0] || Date.nowDate()],
 		Db.passiveGrid.moddedGrid[main.passive.freeze[1] || Date.nowDate()]
 	];
-	console.log(data);
-    return data;
+	return data;
 }
 
 
