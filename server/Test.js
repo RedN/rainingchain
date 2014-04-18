@@ -9,6 +9,10 @@ Test.serverStart = function(){
     
 }
 
+Test.no = {
+	npc:true,
+	attack:true,
+};
 
 Test.signIn = function(key){ //Called when player logs in
 	Test.signIn.hideHUD(key);

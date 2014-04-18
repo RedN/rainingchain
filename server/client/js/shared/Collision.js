@@ -61,7 +61,7 @@ Collision.anglePtPt = function(pt1,pt2){	//pt1 looking towards pt2
 }
 
 Collision.PosMap = function(pos,map,type){	//Test Collision between pos and map	
-	var grid = Db.map[Map.getModel(map)].grid[type];
+	var grid = List.map[map].grid[type];
 	return !grid[pos.y] || !+grid[pos.y][pos.x];		//return 1 if collision
 }
 
@@ -181,6 +181,9 @@ Collision.ActorMap = function(pos,map,player){
 	if(player.mapMod && player.mapMod[pos.x + '-' + pos.y]){
 		return player.mapMod[pos.x + '-' + pos.y];
 	}
+	
+	var bool = Collision.PosMap(pos,map,player.type || 'npc');
+	if(bool) console.log(pos,map,player.type);
 	return Collision.PosMap(pos,map,player.type || 'npc');
 };
 

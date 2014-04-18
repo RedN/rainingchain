@@ -7,10 +7,10 @@ Chat.parse = function(data){
 
 Chat.parse.item = function(id){
 	var item = Db.item[id];
-	if(!item || !item.type === 'armor' && !item.type === 'weapon') return '[' + id + ']';
+	if(!item || item.type !== 'equip') return '[' + id + ']';
 	
 	return '<span ' + 
-	'style="color:' + 'green' + '" ' +
+	'style="color:green" ' +
 	'onclick="main.popupList.equip = \'' + item.id + '\';' + '" ' + 
 	'onmouseout="main.popupList.equip = null;' + '" ' + 
 	'>[' + item.name + 

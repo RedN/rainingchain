@@ -1,4 +1,6 @@
 Actor.creation = function(d){	//d: x  y  map category variant lvl modAmount extra
+	if(Test.no.npc) return;
+	
 	Map.convertSpot(d);	
 	var data = useTemplate(Actor.creation.template(),d);
 	var e = Actor.creation.db(data);
@@ -33,7 +35,9 @@ Actor.creation.template = function(){
 }
 
 Actor.creation.group = function(gr,el){
-   	/*
+   	if(Test.no.npc) return;
+	
+	/*
 	gr: x y map respawn
     el: [  {'amount':1,"category":"slime","variant":"Big","lvl":0,'modAmount':1},
 		{'amount':10,"category":"troll","variant":"ice","lvl":0,'modAmount':1},	];

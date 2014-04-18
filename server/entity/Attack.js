@@ -96,6 +96,7 @@ Attack.template.boomerang = function(){
 }
 
 Attack.creation = function(player,s,extra){
+	if(Test.no.attack) return;
 	s = Attack.creation.info(player,s);
 	s = useTemplate(s,extra || {});
 	
