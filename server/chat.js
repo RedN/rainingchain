@@ -17,17 +17,15 @@ Chat.parse.item = function(id){
 	']</span>';
 }
 
-Chat.add = function(key,text,type,extra){	//add text to chat of player.
+Chat.add = function(key,pack){
 	if(!List.main[key]) return;
-	List.main[key].social.message.chat = List.main[key].social.message.chat || [];
-	type = type || 'game';
-	extra = extra || {};
+	var list = List.main[key].social.message;
+	list.chat = list.chat || [];
 	
-	extra.text = text;
-	extra.type = type;
-	List.main[key].social.message.chat.push(extra);	
+	if(typeof pack === 'string') pack = {type:'game',text:pack};
+		
+	list.chat.push(pack);	
 }
-
 
 Chat.question = function(key,q){	//q:{text, func, param, repeat, [option]}
 	q.param = q.param || [];
@@ -35,56 +33,56 @@ Chat.question = function(key,q){	//q:{text, func, param, repeat, [option]}
 	q.repeat = q.repeat || 0;
 	if(q.option === true) q.option = ['yes','no'];
 	List.main[key].question = q;
-	Chat.add(key,q.text,'question',{option:q.option});
+	Chat.add(key,{type:'question',option:q.option,text:q.text});
 }
 
 
 
-Chat.receive = function(data){	//when a player wants to send a text
-	var key = data.key;									//source (key)
+Chat.receive = function(d){	//data:{to,key,type,text,	[title,category for report]
+	var key = d.key;									//source (key)
 	if(List.main[key].social.muted) return;				//player is muted
-	var from = List.all[key].name;                     	//source (name)
-	var to = escape.quote(data.to);                     //destination (name)
-	var text = Chat.parse(escape.quote(data.text));     //text
-	var type = data.type;                				 //clan || pm || public
-			
-	if(!type || !text || !to || !from){ return; }
-	if(to === from){ Chat.add(key,"Ever heard of thinking in your head?"); return; }
+	d.from = List.all[key].name;                     	//source (name)
+	d.to = escape.quote(d.to);                     		//destination (name)
+	var text = Chat.parse(escape.quote(d.text));     		//text
+	if(text !== d.text) d.item = 1;
+	d.text = text;
 	
-	if(type === 'public') Chat.receive.public(key,text,to,type,from,data); 
-	else if(type === 'pm') Chat.receive.pm(key,text,to,type,from,data); 
-	else if(type === 'clan') Chat.receive.clan(key,text,to,type,from,data); 
-	else if(type === 'report') Chat.receive.report(key,data); 
+	console.log(1);
+	if(!d.type || !d.text || !d.to || !d.from){ return; }
+	if(d.to === d.from){ Chat.add(key,"Ever heard of thinking in your head?"); return; }
+	
+	if(d.type === 'public') Chat.receive.public(key,d); 
+	else if(d.type === 'pm') Chat.receive.pm(key,d); 
+	else if(d.type === 'clan') Chat.receive.clan(key,d); 
+	else if(d.type === 'report') Chat.receive.report(key,d); 
+	else if(d.type === 'offlinepm') Chat.receive.offlinepm(key,d); 
 		
 };
 
-Chat.receive.public = function(key,text,to,type,from,data){
+Chat.receive.public = function(key,d){
 	var act = List.all[key];
 	var main = List.main[key];
 	
-    if(text === data.text){	//if no item
-		act.chatHead = {'text':text,'timer':25*10};
-	}
-	var pack = {'from':from};
-	pack.symbol = main.social.symbol || null;
+    if(!d.item)	act.chatHead = {'text':d.text,'timer':25*10};
+	
+	var pack = {type:'public',from:d.from,text:d.text,symbol:main.social.symbol};
 	
 	//Send info
-	Chat.add(key,text,'public',pack);
+	Chat.add(key,pack);
 	for(var i in act.activeList)
-		if(List.main[i]) Chat.add(i,text,'public',pack);
+		if(List.main[i]) Chat.add(i,pack);
 		
 	for(var i in List.team[act.team])
-		if(List.main[i] && i !== key) Chat.add(i,text,'public',pack);
+		if(List.main[i] && i !== key) Chat.add(i,pack);
 	
 }
 
-Chat.receive.pm = function(key,text,to,type,from,data){
-    var res = Chat.receive.pm.test(from,to);
+Chat.receive.pm = function(key,d){
+    var res = Chat.receive.pm.test(d.from,d.to);
 	if(res){	
-		var pack = {'from':from,'to':to};
-		pack.symbol = List.main[key].social.symbol || null;
-		Chat.add(List.nameToKey[to],text,'pm',pack);
-		Chat.add(key,text,'pm',pack);
+		var pack = {type:'pm',from:d.from,to:d.to,symbol:List.main[key].social.symbol,text:d.text};
+		Chat.add(List.nameToKey[d.to],pack);
+		Chat.add(key,pack);
 	}
 	if(!res) Chat.add(key,"This player is offline.");
 }
@@ -97,39 +95,52 @@ Chat.receive.pm.test = function(from,to){ //test if player can send pm to anothe
 	return true;
 }
 
-Chat.receive.clan = function(key,text,to,type,from,data){	//to is the number of /
-    var clanName = List.main[key].social.list.clan[to];
+Chat.receive.clan = function(key,d){	//to is the number of /
+    var clanName = List.main[key].social.list.clan[d.to];
     		
     if(!clanName){ Chat.add(key,'You typed too many \"/\".'); return; }
     var clan = Db.clan[clanName];
     if(!clan){ Chat.add(key,'This clan doesn\'t exist. Strange...'); return; }
     
+	var pack = {type:'clan',from:d.from,clan:clan.nick,text:d.text}
     for(var i in clan.memberList){	//including speaker
     	if(clan.memberList[i].active && List.nameToKey[i]){
-    		Chat.add(List.nameToKey[i],text,'clan',{'from':from,'clan':clan.nick});
+			Chat.add(List.nameToKey[i],pack);
     	}
     }
     return;
 }    
 
-Chat.receive.report = function(key,data){
-	if(!Server.report) return;
-	if(data.text.length < 1000 && data.title.length < 100){
+Chat.receive.report = function(key,d){
+	if(!Server.report){ Chat.add(key,"Report system is down."); return;}
+	if(d.text.length < 1000 && d.title.length < 100){
 		db.insert('report',{
 			date:new Date().toLocaleString(),
 			user:List.all[key].username,
-			text:data.text,
-			title:data.title,
-			category:data.category,			
+			text:d.text,
+			title:d.title,
+			category:d.category,			
 		});
 	}
 }
 
 
-
-
-
-
+Chat.receive.offlinepm = function(key,d){
+	console.log(d);
+	db.findOne('main',{username:d.to},function(err, res) { if(err) throw err;
+		if(!res){Chat.add(key,"This player doesn't exist."); return; }
+		
+		
+		var main = Load.main.uncompress(res);
+		
+		if(!main.social.list.friend[d.from]){ Chat.add(key,"You can't send an offline PM to that player."); return; }
+		
+		main.social.message = main.social.message || [];
+		main.social.message.push({'type':'offlinepm','from':d.from,'text':d.text,'time':Date.now()});
+		Chat.add(key,"Offline PM sent.");
+		Save.main(main);
+	});
+}
 
 
 

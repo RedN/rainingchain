@@ -98,7 +98,7 @@ Init.game = function (data) {
 	html.chat.text.innerHTML = 'Welcome!';
 	html.pm.text.innerHTML = '<br>'
 	
-	for(var i in main.social.message.chat){Chat.receive(main.social.message.chat[i]);}	main.social.message.chat = [];   //for offline pm
+	for(var i in main.social.message){Chat.receive(main.social.message[i]);}	main.social.message = [];   //for offline pm
 	
 	//Note: a part of Init.db are directly in index.html
 	Init.db.customBoost();

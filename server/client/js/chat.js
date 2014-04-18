@@ -4,11 +4,12 @@ Chat = {};
 Chat.send = function(){
 	//Send message to server.
 	var text = html.chat.input.value;
+	Input.add('',false);
 	if(text[0] === '$'){  Command.send(text.slice(1)); return; }
 	
 	var pack = Chat.send.parse(text);
 	if(pack){ socket.emit('sendChat',pack);  }
-	Input.add(''); 
+	
 }
 
 Chat.send.parse = function(txt){
@@ -74,7 +75,7 @@ Chat.receive = function(pack){
 	if(pack.type === 'offlinepm')	Chat.receive.offlinepm(pack);	
 	if(pack.type === 'public') Chat.receive.public(pack);
 	if(pack.type === 'question') Chat.receive.question(pack);
-	
+	console.log(pack);
 	
 	html.chat.text.scrollTop += 50;
 	html.pm.text.scrollTop += 50;

@@ -11,53 +11,54 @@ Combat.attack.mod.bonus = function(bon,atk){
 	var bon = useTemplate(Actor.template.bonus(),bon,0);
 	
 	//Status Effect
-	var list = ['time','magn','chance'];
 	for(var i in Cst.status.list){
-		for(var j in list){
-			atk[Cst.status.list[i]][list[j]] *= bon[Cst.status.list[i]][list[j]];
-		}
+		var status = Cst.status.list[i];
+		atk[status].magn *= bon[status].magn;
+		atk[status].chance *= bon[status].chance;
+		atk[status].time *= bon[status].time;
 	}
-	for(var j in list){
-		atk.leech[list[j]] *= bon.leech[list[j]];
-	}
+	atk.leech.chance *= bon.leech.chance;
+	atk.leech.magn *= bon.leech.magn;
 	atk.crit.magn *= bon.crit.magn; atk.crit.chance *= bon.crit.chance;
 	
 	
-	if(atk.type === 'b' || atk.type === 'bullet'){
-		atk.amount *= bon.bullet.amount; if(Math.random() <= atk.amount%1){atk.amount += 1; } atk.amount = Math.floor(atk.amount);
+	if(atk.type === 'bullet'){
+		atk.amount *= bon.bullet.amount; atk.amount = Math.roundRandom(atk.amount);
 		atk.spd *= bon.bullet.spd;
 	}
-	if(atk.type === 's' || atk.type === 'strike'){
+	if(atk.type === 'strike'){
 		atk.width *= bon.strike.size; 
 		atk.height *= bon.strike.size; 
-		atk.maxHit *= bon.strike.maxHit; if(Math.random() <= atk.maxHit%1){atk.maxHit += 1; } atk.maxHit = Math.floor(atk.maxHit);
+		atk.maxHit *= bon.strike.maxHit; atk.maxHit = Math.roundRandom(atk.maxHit);
 		atk.maxRange *= bon.strike.range; 
 	}
 	return atk;
 }
 
-Combat.attack.mod.player = function(player,attack){
-	attack.dmg.main *= player.globalDmg;
+
+
+Combat.attack.mod.player = function(player,atk){
+	atk.dmg.main *= player.globalDmg;
 	
-	for(var i in attack.dmg.ratio){ 
-		attack.dmg.ratio[i] *= player.mastery.dmg[i].sum * player.mastery.dmg[i].mod;
+	for(var i in atk.dmg.ratio){ 
+		atk.dmg.ratio[i] *= player.mastery.dmg[i].sum * player.mastery.dmg[i].mod;
 	}
-	return attack;
+	return atk;
 }
 
-Combat.attack.mod.weapon = function(weaponid,attack){
+Combat.attack.mod.weapon = function(weaponid,atk){
 	if(server) var weapon = Db.equip[weaponid] || Db.equip['unarmed'];
 	if(!server) var weapon = Db.query('equip',player.weapon) || {main:1,ratio:Cst.element.template(1)};
 	
 	var sum = 0;
-	attack.dmg.main *= weapon.dmg.main;
-	for (var i in attack.dmg.ratio){ 
-		var val = Math.min(weapon.dmg.ratio[i],attack.dmg.ratio[i]);
-		attack.dmg.ratio[i] = val;
+	atk.dmg.main *= weapon.dmg.main;
+	for (var i in atk.dmg.ratio){ 
+		var val = Math.min(weapon.dmg.ratio[i],atk.dmg.ratio[i]);
+		atk.dmg.ratio[i] = val;
 		sum += val;
 	}
-	attack.weaponCompability = sum;
-	return	attack;
+	atk.weaponCompability = sum;
+	return	atk;
 }
 
 

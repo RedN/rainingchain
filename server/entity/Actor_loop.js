@@ -398,7 +398,7 @@ Actor.loop.friendList = function(act){
 
 Actor.loop.attackReceived = function(act){
 	for(var i in act.attackReceived){
-		act.attackReceived[i] -= 1;		//per second
+		act.attackReceived[i] -= 25;		//per second. doesnt depend on dmg, set at 500 on hit
 		if(act.attackReceived[i] <= 0){
 			delete act.attackReceived[i];
 		}

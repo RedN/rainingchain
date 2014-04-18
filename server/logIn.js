@@ -215,6 +215,7 @@ Load = function (key,account,socket,cb){
 			
 			var time = Math.floor(account.timePlayedThisWeek/Cst.HOUR) + 'h ' + Math.floor(account.timePlayedThisWeek%Cst.HOUR/Cst.MIN) + 'm';
 			Chat.add(key,"You have played " + time + " this week.");
+			//
 			
 			Test.signIn(key);
 			
@@ -269,7 +270,7 @@ Load.main.uncompress = function(main,key){
 		list: {
 		  friend: main.social.friend,
 		  mute: main.social.mute,
-		  clan: [ ]
+		  clan: []
 		},
 		status: "on",
 		symbol:main.social.symbol
@@ -397,7 +398,7 @@ Load.initData = function(key,player,main){
 		Db.passiveGrid.moddedGrid[main.passive.freeze[0] || Date.nowDate()],
 		Db.passiveGrid.moddedGrid[main.passive.freeze[1] || Date.nowDate()]
 	];
-	
+	console.log(data);
     return data;
 }
 

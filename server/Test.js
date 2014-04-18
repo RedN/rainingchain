@@ -97,6 +97,7 @@ Test.spawnEnemy = function(key,cat,variant){
 		"extra":{},
 	});
 }
+
 Test.invincible = function(key){
 	Actor.permBoost(List.all[key],'Test.invincible',[
 		{stat:'globalDef',value:1000,type:'+'},
@@ -153,7 +154,7 @@ Test.removeEquipInventory = function(key){
 	}
 }
 
-Test.a = function(type){
+Test.a = function(){
 	
 }
 Test.b = function(){}

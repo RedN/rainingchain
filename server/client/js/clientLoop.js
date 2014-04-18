@@ -48,9 +48,9 @@ Loop.bullet = function(){
 
 
 Loop.main = function(){
-	for(var i in main.social.message.chat) Chat.receive(main.social.message.chat[i]);		
+	for(var i in main.social.message) Chat.receive(main.social.message[i]);		
 	if(main.chatInput){	applyFunc(Input.add,main.chatInput);}
-	main.social.message.chat = [];
+	main.social.message = [];
 	main.chatInput = '';
 	
 	if(main.sfx) Sfx.play(main.sfx); main.sfx = '';
@@ -85,6 +85,6 @@ removeAny = function(i){
 Actor.loop = function(act){
 	Sprite.update(act);
 	if(!act.chatHead) return;
-	if(--act.chatHead.timer <= 0)	act.chatHead = '';	
+	if(--act.chatHead.timer <= 0)	act.chatHead = null;	
 }
 

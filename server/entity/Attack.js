@@ -11,6 +11,7 @@ Attack.template = function(type){
 	b.y = 0;
 	b.angle = 0;
 	b.crAngle = 0;
+	b.moveAngle = 0;	//where bullet moves (used for knock)
 	b.crX = 0;  //creation X
 	b.crY = 0;  //creation Y
 	b.map = 'test@MAIN';
@@ -70,7 +71,6 @@ Attack.template = function(type){
 	b.ghost = 0;
 	b.parabole = 0;
 	b.sin = 0;
-	b.moveAngle = 0;	//where bullet moves (not facing necesrraly)
 	b.mouseX = 0;	//strike and parabole
 	b.mouseY = 0;
 	b.sprite = {"name":"fireball","anim":"travel",'sizeMod':1};	
@@ -104,7 +104,9 @@ Attack.creation = function(player,s,extra){
 	s.hitId = Math.randomId();
 	
 	s.angle = (s.angle%360+360)%360;
-	
+	s.crAngle = s.angle; 
+	s.moveAngle = s.angle;
+
 	List.all[s.id] = s;
 	
 	if(s.type === 'strike'){ Attack.creation.strike(s);}
@@ -139,9 +141,7 @@ Attack.creation.info = function(act,b){
 
 
 Attack.creation.bullet = function(b){
-	b.crAngle = b.angle; 
-	b.moveAngle = b.angle;
-
+	
 	if(b.parabole){
 		b.parabole = useTemplate(Attack.template.parabole(),b.parabole);
 		var diff = Math.pyt(b.mouseX - Cst.WIDTH2,b.mouseY - Cst.HEIGHT2);
@@ -224,7 +224,6 @@ Attack.creation.neverbullet = function(s){
 	delete s.ghost;
 	delete s.parabole;
 	delete s.sin;
-	delete s.moveAngle;
 	delete s.mouseX;
 	delete s.mouseY;
 	delete s.sprite;

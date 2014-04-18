@@ -51,8 +51,8 @@ Init.db = function(data){
 		else DB[name].find(searchInfo,wantedData,cb);
 	}
 	db.findOne = function(name,searchInfo,wantedData,cb){
-		if(arguments.length === 3) DB[name].findOne(searchInfo,wantedData);
-		else DB[name].findOne(searchInfo,wantedData,cb);
+		if(arguments.length === 3) DB[name].findOne(searchInfo,{_id:0},wantedData);
+		else {	wantedData._id = 0; DB[name].findOne(searchInfo,wantedData,cb); }
 	}
 	db.save = function(name,info,cb){
 		DB[name].save(info,cb);

@@ -74,14 +74,6 @@ Cst.element = {
 	}
 }
 
-Cst.color = {
-	'green':'green',
-	'red':'red',
-
-	'test':function(bool){	return bool ? Cst.color.green : Cst.color.red;},
-}
-
-
 Cst.status = {
 	'list':["bleed","knock","drain","burn","chill","stun"],
 	'toElement':{"bleed":"melee","knock":"range","drain":"magic","burn":"fire","chill":"cold","stun":"lightning"},

@@ -329,7 +329,7 @@ Draw.tab.friend = function(){ ctxrestore();
 			'<br><span ' + 
 			'class="shadow" ' + 
 			'style="color:' + color + '" ' +
-			'onclick="Input.add(\'' + str2 + '\')' + '" ' + 
+			'onclick="Input.add(\'' + onclick + '\')' + '" ' + 
 			'oncontextmenu="Draw.tab.friend.rightClick(\'' + i + '\')' + '" ' + 
 			'title="'+ title + '" ' + 
 			'>' + i + 

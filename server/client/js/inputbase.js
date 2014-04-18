@@ -101,7 +101,9 @@ Input.save = function(){
 Input.add = function(text,focus,add){
 	if(add) {html.chat.input.value += text;}
 	else {html.chat.input.value = text;}
-	if(focus !== false){ html.chat.input.focus(); }
+	if(focus !== false){ html.chat.input.focus(); 
+		setTimeout(function(){ html.chat.input.focus();},50);
+	}
 }
 
 Input.event = {};

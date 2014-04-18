@@ -2,41 +2,28 @@
 Command = {};
 Command.list = {};
 
-//Receive command from client
-//format: data:{cmd:command_Name,param:[param1,param2]} io.sockets.on('connection', function (socket) {
-Command.receive = function(socket,data){
-	var key = socket.key;
-	var cmd = data.cmd;
-	var param = data.param;
-	param.unshift(key);
+
+Command.receive = function(socket,d){	//server	d:{cmd,param:[]}
+	d.param.unshift(socket.key);	
+	d.cmd = escape.quote(d.cmd);
+	for(var i in d.param){ d.param[i] = escape.quote(d.param[i]); }
 	
-	cmd = escape.quote(cmd);
-	for(var i in param){ param[i] = escape.quote(param[i]); }
-	
-	if(!Command.client.have(cmd) && Command.list[cmd]){
-		Command.list[cmd].apply(this,param);
+	if(!Command.client.have(d.cmd) && Command.list[d.cmd]){
+		Command.list[d.cmd].apply(this,d.param);
 	}
 }
 
 Command.send = function(text){
-	text = Command.send.parse(text);
-	if(text){ socket.emit('Command.send',text); }
-	if(text === false){ main.social.message.chat.push({'type':'client','text':'Invalid Command Entry.'}); } //only work if no message from server same frame
+	var pack = Command.send.parse(text);
+	if(pack) socket.emit('Command.send',pack); 
+	if(pack === false) Chat.add('Invalid Command Name.');
 }
 
 Command.send.parse = function(txt){
 	for(var i in Command.list){
 		if(txt.indexOf(i) === 0){	//valid cmd
 			var cmd = i;
-			var param = [];
-			var preParam = txt.slice(i.length+1) + ',';
-
-			while(preParam.indexOf(',') != -1){
-				var pos = preParam.indexOf(',');
-				var par = preParam.slice(0,pos);
-				param.push(par);
-				preParam = preParam.slice(pos+1);
-			}
+			var param = txt.slice(i.length+1).split(',');
 			
 			if(Command.client.have(cmd)){ 
 				applyFunc(Command.list[cmd],param);
@@ -51,24 +38,23 @@ Command.send.parse = function(txt){
 
 //{Fl
 Command.list['fl,add'] = function(key,user,nick,comment,color){
-	if(!nick){ nick = user;}
-	if(!comment){ comment = '';}
-	if(!color){ color = 'cyan'; }
-	if(user == List.all[key].name){ Chat.add(key,"You are either bored or very lonely for trying this."); return }
+	nick = nick || user;
+	comment = comment || '';
+	color = color || 'cyan';
+	if(user == List.all[key].name){ Chat.add(key,"You are either bored or very lonely for trying this."); return; }
 	
-	if(List.main[key].social.list.friend[user]){	Chat.add(key,"This player is already in your Friend List."); }
-	if(List.main[key].social.list.mute[user]){	Chat.add(key,"This player is in your Mute List."); }
+	var list = List.main[key].social.list;
+	if(list.friend[user]){	Chat.add(key,"This player is already in your Friend List."); return; }
+	if(list.mute[user]){	Chat.add(key,"This player is in your Mute List."); return; }
 	
 	
-	if(!List.main[key].social.list.mute[user] && !List.main[key].social.list.friend[user]){
-		db.find('account',{username:user},function(err, results) {
-			if(results[0]){
-				List.main[key].social.list.friend[user] = {'nick':nick,'comment':comment, 'color':color};
-				Chat.add(key,"Friend added.");
-			}
-			if(!results[0]){Chat.add(key,"This player doesn't exist.");}
-		});
-	}
+	db.findOne('account',{username:user},function(err, res) {
+		if(res){
+			List.main[key].social.list.friend[user] = {'nick':nick,'comment':comment, 'color':color};
+			Chat.add(key,"Friend added.");
+		}
+		else Chat.add(key,"This player doesn't exist.");
+	});
 }
 Command.list['fl,add'].doc = {
 	'description':'Add a new Friend to your Friend List',
@@ -83,9 +69,7 @@ Command.list['fl,remove'] = function(key,user){
 	if(List.main[key].social.list.friend[user]){
 		delete List.main[key].social.list.friend[user]
 		Chat.add(key, 'Friend deleted.');
-	} else {
-		Chat.add(key, 'This player is not in your Friend List.');		
-	}
+	} else Chat.add(key, 'This player is not in your Friend List.');
 }
 Command.list['fl,remove'].doc = {
 	'description':'Remove a Friend',
@@ -98,9 +82,7 @@ Command.list['fl,comment'] = function(key,user,comment){
 	if(List.main[key].social.list.friend[user]){
 		List.main[key].social.list.friend[user].comment = comment;
 		Chat.add(key, 'Friend Comment changed.');
-	} else {
-		Chat.add(key, 'This player is not in your Friend List.');
-	}
+	} else Chat.add(key, 'This player is not in your Friend List.');
 }
 Command.list['fl,comment'].doc = {
 	'description':'Set Comment of a friend',
@@ -114,9 +96,7 @@ Command.list['fl,nick'] = function(key,user,nick){
 	if(List.main[key].social.list.friend[user]){
 		List.main[key].social.list.friend[user].nick = nick;
 		Chat.add(key, 'Friend Nick changed.');
-	} else {
-		Chat.add(key, 'This player is not in your Friend List.');
-	}
+	} else Chat.add(key, 'This player is not in your Friend List.');
 }
 Command.list['fl,nick'].doc = {
 	'description':'Set Nickname for a friend',
@@ -130,9 +110,7 @@ Command.list['fl,color'] = function(key,user,color){
 	if(List.main[key].social.list.friend[user]){
 		List.main[key].social.list.friend[user].color = color;
 		Chat.add(key, 'Friend Color changed.');
-	} else {
-		Chat.add(key, 'This player is not in your Friend List.');
-	}
+	} else Chat.add(key, 'This player is not in your Friend List.');
 }
 Command.list['fl,color'].doc = {
 	'description':'Set Nickname for a friend',
@@ -144,11 +122,11 @@ Command.list['fl,color'].doc = {
 
 Command.list['fl,pm'] = function(key,setting){
 	var possible = ['on','off','friend'];
-	if(possible.indexOf(setting) != -1){
+	if(possible.have(setting)){
 		List.main[key].social.status = setting;
 		Chat.add(key, "Private Setting changed to " + setting + '.');
 	} else {
-		Chat.add(key, "Wrong Private Setting. Use one of the following: " + possible.toString());
+		Chat.add(key, "Wrong Private Setting. Use one of the following: " + possible.toString() + '.');
 	}
 }
 Command.list['fl,pm'].doc = {
@@ -159,33 +137,8 @@ Command.list['fl,pm'].doc = {
 }
 
 Command.list['fl,offlinepm'] = function(key,to,text){
-	Chat.add(key,"BROKEN");
-	return;
-	var from = List.all[key].name;
-	
-	text = escape.quote(text);
-	to = escape.quote(to);
-
-	if(!text || !to || !from){ return; }	
-	if(to === from){ Chat.add(key,"Ever heard of thinking in your head?"); }
-	
-	db.find('main',{username:to},function(err, res) { if(err) throw err;
-		if(res[0]){
-			var main = Load.main.uncompress(res[0]);
-			
-			if(main.social.list.friend[from]){ 
-				if(!main.social.message.chat){ main.social.message.chat = []; }
-				main.social.message.chat.push({'type':'offlinepm','from':from,'text':text,'time':Date.now()});
-				Chat.add(key,"Offline PM sent.");
-				Save.main(main);
-			}
-			
-			if(!main.social.list.friend[from]){ Chat.add(key,"You can't send an offline PM to that player.");}
-		
-		}
-		
-		if(!res[0]){Chat.add(key,"This player doesn't exist.");}
-	});
+	console.log(10);
+	Chat.receive({key:key,to:to,from:List.all[key].name,type:'offlinepm',text:text});
 }
 
 Command.list['fl,offlinepm'].doc = {
@@ -199,18 +152,16 @@ Command.list['fl,offlinepm'].doc = {
 Command.list['mute'] = function(key,user){
 	if(user == List.all[key].name){ Chat.add(key,"-.- Seriously?"); return }
 	
-	if(List.main[key].social.list.friend[user]){	Chat.add(key,"This player is in your Friend List."); }
-	if(List.main[key].social.list.mute[user]){ Chat.add(key,"This player is alraedy in your Mute List."); }
+	if(List.main[key].social.list.friend[user]){ Chat.add(key,"This player is in your Friend List."); return; }
+	if(List.main[key].social.list.mute[user]){ Chat.add(key,"This player is alraedy in your Mute List."); return; }
 		
-	if(!List.main[key].social.list.friend[user] && !List.main[key].social.list.mute[user]){
-		db.find('account',{username:user},function(err, results) {
-			if(results[0]){
-				List.main[key].social.list.mute[user] = {};
-				Chat.add(key,"Player muted.");
-			}
-			if(!results[0]){Chat.add(key,"This player doesn't exist.");}
-		});
-	}
+	db.findOne('account',{username:user},function(err, res) {
+		if(res){
+			List.main[key].social.list.mute[user] = {};
+			Chat.add(key,"Player muted.");
+		}
+		else Chat.add(key,"This player doesn't exist.");
+	});
 }
 Command.list['mute'].doc = {
 	'description':"Mute a player.",
@@ -234,6 +185,7 @@ Command.list['win,close'].doc = {
 Command.list['win,open'] = function(key,win,param0){
 	if(List.main[key].windowList[win] === undefined){ Chat.add(key,'Wrong Input'); return; }
 	if(win === 'bank'){ Chat.add(key,'Access denied.'); return;}
+	if(win === 'trade'){ Chat.add(key,'Access denied.'); return;}
 	if(win === 'quest' && Db.quest[param0] === undefined){ Chat.add(key,'Wrong Input'); return; }
 	
 	Main.openWindow(List.main[key],win,param0);

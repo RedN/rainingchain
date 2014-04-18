@@ -62,8 +62,8 @@ Combat.attack.perform = function(player,atk,extra){   //extra used for stuff lik
 	
 	for(var i = 0 ; i < atkList.length ; i ++){
 		atkList[i].angle = initAngle + atkAngle * (atk.amount-2*(i+0.5)) / (atk.amount*2);
-		atkList[i].num = i;
-		Attack.creation(player,atkList[i]);	//num used for parabole/sin
+		atkList[i].num = i;	//num used for parabole/sin
+		Attack.creation(player,atkList[i]);	
 	}
 }	
 	
@@ -71,7 +71,7 @@ Combat.attack.simple = function(player,attack,extra){
 	Combat.attack(player,useTemplate(Attack.template(),attack),deepClone(extra));	
 }
 	
-Combat.summon = function(key,action,enemy){
+Combat.summon = function(key,action,enemy){		//action:{name,maxChild,time,distance}
 	var name = action.name || Math.randomId();
 	action.maxChild = action.maxChild || 1;
 	action.time = action.time || Cst.bigInt;
@@ -80,10 +80,10 @@ Combat.summon = function(key,action,enemy){
 	
 	if(!master.summon[name]){	master.summon[name] = {'child':{}}; }
 	
-	amountMod = 1; 
-	timeMod = 1;
-	atkMod = 1;
-	defMod = 1;
+	var amountMod = 1; 
+	var timeMod = 1;
+	var atkMod = 1;
+	var defMod = 1;
 	
 	if(master.bonus && master.bonus.summon){
 		amountMod = master.bonus.summon.amount;
@@ -92,27 +92,28 @@ Combat.summon = function(key,action,enemy){
 		defMod = master.bonus.summon.def;
 	}
 	
-	if(action.maxChild*amountMod > Object.keys(master.summon[name].child).length){	
-		var param0 = {
-			'x':master.x,
-			'y':master.y,
-			'map':master.map,
-			'extra':{'deleteOnceDead':1,
-					'summoned':{'father':master.id,'time':action.time*timeMod,'distance':action.distance},
-					'targetIf':'summoned',
-					'damageIf':'summoned',
-					}
-		};
-		var childList = Actor.creation.group(param0,enemy);
-		
-		for(var i in childList){
-			var cid = childList[i];
-			master.summon[name].child[cid] = 1;	
-			
-			if(atkMod !== 1){ Actor.boost(List.all[cid],{'name':'summon','stat':'globalDmg','time':action.time*timeMod,'type':'*','amount':atkMod}); }
-			if(defMod !== 1){ Actor.boost(List.all[cid],{'name':'summon','stat':'globalDef','time':action.time*timeMod,'type':'*','amount':defMod}); }
-		
+	if(action.maxChild*amountMod < master.summon[name].child.$length()){ if(List.main[key]) Chat.add(key,"You already have maximum minions.");  return}	
+	var param0 = {'x':master.x,'y':master.y,'map':master.map};
+	
+	enemy = deepClone(arrayfy(enemy));
+	for(var i in enemy){
+		enemy[i].extra = {
+			'deleteOnceDead':1,
+			'summoned':{'father':master.id,'time':action.time*timeMod,'distance':action.distance},
+			'targetIf':'summoned',
+			'damageIf':'summoned',
 		}
+	}
+	var childList = Actor.creation.group(param0,enemy);
+	
+	
+	for(var i in childList){
+		var cid = childList[i];
+		master.summon[name].child[cid] = 1;	
+		
+		if(atkMod !== 1){ Actor.boost(List.all[cid],{'name':'summon','stat':'globalDmg','time':action.time*timeMod,'type':'*','amount':atkMod}); }
+		if(defMod !== 1){ Actor.boost(List.all[cid],{'name':'summon','stat':'globalDef','time':action.time*timeMod,'type':'*','amount':defMod}); }
+	
 	}	
 }
 
@@ -125,7 +126,7 @@ Combat.boost = function(key,info){
 //COLLISION//
 Combat.collision = function(b,act){
 	if(act.attackReceived[b.hitId]) return;    //for pierce
-    act.attackReceived[b.hitId] = 250;	//last for 10 sec
+    act.attackReceived[b.hitId] = 500;	//last for 20 sec
 	
 	if(b.hitImg){Anim.creation({name:b.hitImg.name,target:act.id,sizeMod:b.hitImg.sizeMod});}
 	if(b.healing){ Actor.changeResource(act,b.healing); return; }
@@ -151,14 +152,8 @@ Combat.collision = function(b,act){
 
 //Apply Status
 Combat.collision.status = function(dmg,b,target){
-	var ar = {	//could use Cst instead
-		'melee':'bleed',
-		'range':'knock',
-		'magic':'drain',
-		'fire':'burn',
-		'cold':'chill',
-		'lightning':'stun'
-	}
+	var ar = Cst.element.toStatus;
+	
 	for(var i in ar){
 		var maxToRoll = Math.probability(Math.pow(dmg[i] / target.resource.hp.max,1.5),b[ar[i]].chance);
 		if(Math.random() <= maxToRoll || Math.random() <= b[ar[i]].baseChance){ 
@@ -183,19 +178,19 @@ Combat.collision.status.stun = function(act,b){
 	
 	Actor.boost(act,[
 		{'stat':'maxSpd','type':"*",'value':0,'time':stun.time,'name':'stun'},
-		{'stat':'atkSpd-main','type':"*",'value':0.1,'time':stun.time,'name':'stun'}
+		{'stat':'atkSpd-main','type':"*",'value':0.25,'time':stun.time,'name':'stun'}
 	]); 
 	
 	for(var i in act.abilityChange.charge){
-		act.abilityChange.charge[i] /= stun.magn;
+		act.abilityChange.charge[i] /= Math.max(stun.magn,1);
 	}
 }
 
 Combat.collision.status.bleed = function(act,b,dmg){
 	var info = b.bleed;
 	var bleed = act.status.bleed;
-	
-	bleed.time = 25/info.time/(1-bleed.resist);	//shorter = better for atker
+
+	bleed.time = 25/ (info.time*(1-bleed.resist));	//shorter = better for atker
 	bleed.magn = info.magn*(1-bleed.resist) / bleed.time;
 }
 
@@ -203,12 +198,10 @@ Combat.collision.status.chill = function(act,b){
 	var info = b.chill;
 	var chill = act.status.chill;
 	
-	chill.time = b.chill.time*(1-chill.resist);
-	chill.magn = (1/b.chill.magn)*(1-chill.resist);
+	chill.time = info.time*(1-chill.resist);
+	chill.magn = (1/info.magn)*(1-chill.resist);
 	
-	Actor.boost(act,{'stat':'maxSpd','type':"*",'value':chill.magn,'time':chill.time,'name':'chill'}); 
-	
-	
+	Actor.boost(act,{'stat':'maxSpd','type':"*",'value':chill.magn,'time':chill.time,'name':'chill'}); 	
 }
 
 Combat.collision.status.knock = function(act,b){
@@ -217,7 +210,7 @@ Combat.collision.status.knock = function(act,b){
 	
 	knock.time = info.time*(1-knock.resist); 
 	knock.magn = info.magn*(1-knock.resist);	
-	knock.angle = b.moveAngle;
+	knock.angle = b.moveAngle || 0;
 }
 
 Combat.collision.status.drain = function(act,b){
@@ -225,7 +218,6 @@ Combat.collision.status.drain = function(act,b){
 	var drain = act.status.drain;
 	
 	var atker = List.all[b.parent]; if(!atker) return;
-	
 	
 	drain.time = info.time*(1-drain.resist); 
 	drain.magn = info.magn*(1-drain.resist);	
@@ -249,8 +241,7 @@ Combat.collision.curse = function(act,info){
 }
 
 Combat.collision.pierce = function(b){
-	b.pierce.amount--; 
-	if(b.pierce.amount <= 0){ b.pierce.chance = 0; }
+	if(--b.pierce.amount <= 0){ b.pierce.chance = 0; }
 	b.globalDmg *= b.pierce.dmgReduc;
 }
 
@@ -264,17 +255,17 @@ Combat.collision.leech = function(act,b){
 	
 }
 
-Combat.collision.reflect = function(dmg,bullet,act){
-	var attacker = List.all[bullet.parent];
-	if(attacker && attacker.hp){
-		var sum = 0;
-		for(var i in Cst.element.list){
-			sum += act.reflect[Cst.element.list[i]]*(dmg[Cst.element.list[i]] || 0);
-		}
-		sum /= attacker.globalDef;
-		sum = sum || 0;
-		Actor.changeHp(attacker,-sum);
-	}
+Combat.collision.reflect = function(dmg,b,def){
+	var atker = List.all[b.parent];
+	if(!atker || !atker.hp) return;
+	
+	var sum = 0;
+	for(var i in def.reflect)
+		sum += (def.reflect[i]*dmg[i]) || 0;
+
+	sum /= atker.globalDef;
+	sum = sum || 0;
+	Actor.changeHp(atker,-sum);
 }
 	
 Combat.collision.crit = function(b){
@@ -283,16 +274,17 @@ Combat.collision.crit = function(b){
 }
 
 //Damage
-Combat.collision.damage = function(bullet,player){
+Combat.collision.damage = function(atk,player){
 	var def = Actor.getDef(player);
-	var dmgInfo = Combat.collision.damage.calculate(bullet.dmg,def);
+	var dmgInfo = Combat.collision.damage.calculate(atk.dmg,def);
 	if(!dmgInfo.sum) return;
 	
 	Actor.changeHp(player,-dmgInfo.sum);
 	
-	if(player.damagedBy[bullet.parent] === undefined) { player.damagedBy[bullet.parent] = 0; }
-	player.damagedBy[bullet.parent] += dmgInfo.sum || 0;
-	
+	if(atk.parent){
+		player.damagedBy[atk.parent] = player.damagedBy[atk.parent] || 0;
+		player.damagedBy[atk.parent] += dmgInfo.sum;
+	}
 	return dmgInfo;
 }
 
@@ -352,16 +344,19 @@ Combat.damageIf = function(atk,def){
 	return hIf(def,atk);
 };
 
+
 Combat.targetIf.global = function(atk,def){
 	//Used first in every target if test
-	return atk && def && atk.id !== def.id 
+	return !!(atk && def && atk.id !== def.id 
 	&& atk.parent !== def.id 
 	&& !def.dead 
 	&& def.combat 
 	&& (def.type === 'player' || def.type === 'npc')
-	&& List.all[def.id]
-	&& true;	//to return bool, otherwise return last test
+	&& List.all[def.id])
+	
 }
+
+
 
 Combat.targetIf.list = {
 	//List of commons Target if 
@@ -402,9 +397,7 @@ Combat.targetIf.list = {
 		} catch(err) { logError(err); } //quickfix
 	}),
 	
-	'all':(function(def,atk){ return true }),
 	'true':(function(def,atk){ return true }),
-	'none':(function(def,atk){ return false }),
 	'false':(function(def,atk){ return false }),
 };
 
@@ -413,7 +406,7 @@ Combat.targetIf.list = {
 Combat.damageIf.global = Combat.targetIf.global;
 
 (function(){
-	for(var i in Combat.targetIf.list){Combat.targetIf.list[i].id = i;}
+	//for(var i in Combat.targetIf.list){Combat.targetIf.list[i].id = i;}	//no idea if useful?
 	Combat.damageIf.list = Combat.targetIf.list;
 })();
 

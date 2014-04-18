@@ -16,35 +16,6 @@ Collision.PtRect = function(pt,rect){	//pt:{x:1,y:1},rect:[minx,maxx,miny,maxy]
 	return (pt.x >= rect[0] && pt.x <= rect[1] && pt.y >= rect[2] && pt.y <= rect[3])
 }
 
-Collision.PosMap = function(pos,map,type){	//Test Collision between pos and map	
-	var grid = Db.map[Map.getModel(map)].grid[type];
-	return !grid[pos.y] || !+grid[pos.y][pos.x];		//return 1 if collision
-}
-
-Collision.ActorMap = function(pos,map,player){
-	if(player.ghost) return 0;
-
-	if(player.mapMod && player.mapMod[pos.x + '-' + pos.y]){
-		return player.mapMod[pos.x + '-' + pos.y];
-	}
-	return Collision.PosMap(pos,map,player.type || 'npc');
-};
-
-Collision.getSquareValue = function(pos,map,type){
-	var grid = Db.map[Map.getModel(map)].grid[type];
-	if(!grid[pos.y]) return null;
-	return grid[pos.y][pos.x];		//return 01234
-}
-
-
-Collision.getHitBox = function(player){
-	return [player.x + player.hitBox[2].x,player.x + player.hitBox[0].x,player.y + player.hitBox[3].y,player.y + player.hitBox[1].y];
-}
-
-Collision.getBumperBox = function(player){
-	return [player.x + player.bumperBox[2].x,player.x + player.bumperBox[0].x,player.y + player.bumperBox[3].y,player.y + player.bumperBox[1].y];
-}
-
 Collision.PtRRect = function(pt,rotRect){	//Collision Pt and Rotated Rect
 	//IF WANT REVAMP: local function isPointInsideRectangle(rectangle, x, y)$$$			local c = math.cos(-rectangle.rotation*math.pi/180)$$$			local s = math.sin(-rectangle.rotation*math.pi/180)$$$			$$$			-- UNrotate the point depending on the rotation of the rectangle$$$			local rotatedX = rectangle.x + c * (x - rectangle.x) - s * (y - rectangle.y)$$$			local rotatedY = rectangle.y + s * (x - rectangle.x) + c * (y - rectangle.y)$$$			$$$			-- perform a normal check if the new point is inside the $$$			-- bounds of the UNrotated rectangle$$$			local leftX = rectangle.x - rectangle.width / 2$$$			local rightX = rectangle.x + rectangle.width / 2$$$			local topY = rectangle.y - rectangle.height / 2$$$			local bottomY = rectangle.y + rectangle.height / 2$$$			$$$			return leftX <= rotatedX and rotatedX <= rightX and$$$					topY <= rotatedY and rotatedY <= bottomY$$$	end
 	
@@ -81,11 +52,60 @@ Collision.PtRRect = function(pt,rotRect){	//Collision Pt and Rotated Rect
 
 }
 
+Collision.distancePtPt = function(pt1,pt2){
+	return Math.sqrt(Math.pow(pt1.x - pt2.x,2) + Math.pow(pt1.y - pt2.y,2));
+}
+
+Collision.anglePtPt = function(pt1,pt2){	//pt1 looking towards pt2
+	return atan2(pt2.y-pt1.y,pt2.x-pt1.x);
+}
+
+Collision.PosMap = function(pos,map,type){	//Test Collision between pos and map	
+	var grid = Db.map[Map.getModel(map)].grid[type];
+	return !grid[pos.y] || !+grid[pos.y][pos.x];		//return 1 if collision
+}
+
+Collision.getPos = function(pt){
+	return {x:Math.floor(pt.x/32),y:Math.floor(pt.y/32)}
+}
+
+Collision.getSquareValue = function(pos,map,type){
+	var grid = Db.map[Map.getModel(map)].grid[type];
+	if(!grid[pos.y]) return null;
+	return grid[pos.y][pos.x];		//return 01234
+}
+
+Collision.getPath = function(pos1,pos2){	//straight forward path (linear)
+	var array = [];
+	for(var i = 0 ; i < 1000 && (pos1.x !== pos2.x || pos1.y !== pos2.y); i++){
+		if(pos1.x < pos2.x) pos1.x++;
+		else if(pos1.x > pos2.x) pos1.x--;
+		
+		array.push({x:pos1.x,y:pos1.y});
+		
+		if(pos1.y < pos2.y) pos1.y++;
+		else if(pos1.y > pos2.y) pos1.y--;
+		
+		array.push({x:pos1.x,y:pos1.y});
+	}
+	return array;
+}
+
+Collision.getHitBox = function(player){
+	return [player.x + player.hitBox[2].x,player.x + player.hitBox[0].x,player.y + player.hitBox[3].y,player.y + player.hitBox[1].y];
+}
+
+Collision.getBumperBox = function(player){
+	return [player.x + player.bumperBox[2].x,player.x + player.bumperBox[0].x,player.y + player.bumperBox[3].y,player.y + player.bumperBox[1].y];
+}
+
 Collision.getMouse = function(key){
 	if(server){ return {x:List.all[key].mouseX,y:List.all[key].mouseY}  }
 	else{ return {x:Input.mouse.x,y:Input.mouse.y} }
 }
 
+
+//
 Collision.BulletActor = function(b){
 	for(var i in b.viewedBy){ 
 		var player = List.all[i];
@@ -106,9 +126,6 @@ Collision.BulletActor.test = function(atk,def){
 	}
 	return (!atk.damageIfMod && normal) || (atk.damageIfMod && !normal); 
 }
-
-
-
 
 Collision.BulletMap = function(bullet){
 	if(bullet.ghost) return 0;
@@ -134,7 +151,6 @@ Collision.StrikeActor = function(atk){
 
 Collision.StrikeActor.test = Collision.BulletActor.test;
 
-
 Collision.StrikeActor.collision = function(atk,player){
 	//Test Center First with Rot Rect
 	if(Collision.PtRRect({'x':player.x,'y':player.y},[atk.point[2],atk.point[8],atk.point[0],atk.point[6]])) return true;	
@@ -148,36 +164,6 @@ Collision.StrikeActor.collision = function(atk,player){
 	return false;
 }
 
-
-
-Collision.distancePtPt = function(pt1,pt2){
-	return Math.sqrt(Math.pow(pt1.x - pt2.x,2) + Math.pow(pt1.y - pt2.y,2));
-}
-
-Collision.anglePtPt = function(pt1,pt2){	//pt1 looking towards pt2
-	return atan2(pt2.y-pt1.y,pt2.x-pt1.x);
-}
-
-Collision.getPos = function(pt){
-	return {x:Math.floor(pt.x/32),y:Math.floor(pt.y/32)}
-}
-
-Collision.getPath = function(pos1,pos2){	//straight forward path (linear)
-	var array = [];
-	for(var i = 0 ; i < 1000 && (pos1.x !== pos2.x || pos1.y !== pos2.y); i++){
-		if(pos1.x < pos2.x) pos1.x++;
-		else if(pos1.x > pos2.x) pos1.x--;
-		
-		array.push({x:pos1.x,y:pos1.y});
-		
-		if(pos1.y < pos2.y) pos1.y++;
-		else if(pos1.y > pos2.y) pos1.y--;
-		
-		array.push({x:pos1.x,y:pos1.y});
-	}
-	return array;
-}
-
 Collision.StrikeMap = function(strike,target){	//gets farthest position with no collision
 	var end = Collision.getPos(target);
 	var path = Collision.getPath(Collision.getPos(strike),end);
@@ -188,5 +174,16 @@ Collision.StrikeMap = function(strike,target){	//gets farthest position with no 
 
 	return end;
 }
+
+Collision.ActorMap = function(pos,map,player){
+	if(player.ghost) return 0;
+
+	if(player.mapMod && player.mapMod[pos.x + '-' + pos.y]){
+		return player.mapMod[pos.x + '-' + pos.y];
+	}
+	return Collision.PosMap(pos,map,player.type || 'npc');
+};
+
+
 
 

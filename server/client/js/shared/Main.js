@@ -31,10 +31,7 @@ Main.template = function(key){
 		'help':'',
 		'passive':Passive.template(),
 		'social':{
-			'message':{
-				'chat':[],
-				'pm':[],
-			},
+			'message':[],
 			'list':{
 				'friend':{},
 				'mute':{},

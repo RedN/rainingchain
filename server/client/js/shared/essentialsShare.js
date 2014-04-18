@@ -110,7 +110,10 @@ Math.randomId = function(num){
 	num = num || 9;
 	return Math.random().toString(36).slice(2,num+2);
 }
-
+Math.roundRandom = function(num){
+	if(num%1 > Math.random()) num++;
+	return Math.floor(num);
+}
 Math.randomML = function(num){
 	num = num || 1;
 	return (Math.random()*2-1)*num
