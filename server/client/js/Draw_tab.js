@@ -30,7 +30,7 @@ Draw.tab.main = function (){ ctxrestore();
 		
 		Button.creation(0,{
 			"rect":[numX,numX+24,numY,numY+24],
-			"left":{"func":Chat.send.command,"param":['$tab,open,' + Cst.tab.list[i]]},
+			"left":{"func":Command.send,"param":['tab,open,' + Cst.tab.list[i]]},
 			'text':Cst.tab.list[i].capitalize(),
 			'sfx':'menu',
 		});	
@@ -91,8 +91,8 @@ Draw.tab.equip = function (){ ctxrestore();
 			
 			Button.creation(0,{
 				"rect":[numX,numX+40,numY,numY+40],
-				"left":{"func":Chat.send.command,"param":['$tab,swapWeapon,' + piece]},
-				"right":{"func":Chat.send.command,"param":['$tab,removeEquip,' + piece]},
+				"left":{"func":Command.send,"param":['tab,swapWeapon,' + piece]},
+				"right":{"func":Command.send,"param":['tab,removeEquip,' + piece]},
 				"text":'Left: Swap Weapon | Right: Remove'
 			});
 		} else {
@@ -119,7 +119,7 @@ Draw.tab.equip = function (){ ctxrestore();
 			
 			Button.creation(0,{
 				"rect":[numX,numX+40,numY,numY+40],
-				"right":{"func":Chat.send.command,"param":['$tab,removeEquip,' + piece]},
+				"right":{"func":Command.send,"param":['tab,removeEquip,' + piece]},
 				"text":'Remove Equip'
 			});		
 			
@@ -154,7 +154,7 @@ Draw.tab.equip = function (){ ctxrestore();
 		ctx.fillText(capname,numX+vy,numY);
 		Button.creation(0,{
 			"rect":[numX,numX+80+vy,numY,numY+20],
-			"left":{"func":Chat.send.command,"param":['$win,open,' + name]},
+			"left":{"func":Command.send,"param":['win,open,' + name]},
 			"text":'Open ' + capname + ' Window'
 			});
 		numY += vy;
@@ -178,10 +178,10 @@ Draw.tab.inventory = function (){ ctxrestore();
 			
 			Button.creation(0,{
 				"rect":[numX,numX+32,numY,numY+32],
-				"left":{"func":Chat.send.command,"param":['$tab,inv,click,left,' + i]},
-				"right":{"func":Chat.send.command,"param":['$tab,inv,click,right,' + i]},
-				"shiftLeft":{"func":Chat.send.command,"param":['$tab,inv,click,shiftLeft,' + i + ',' + main.pref.bankTransferAmount]},
-				"shiftRight":{"func":Chat.send.command,"param":['$tab,inv,click,shiftLeft,' + i + ',' + 999999999]},
+				"left":{"func":Command.send,"param":['tab,inv,click,left,' + i]},
+				"right":{"func":Command.send,"param":['tab,inv,click,right,' + i]},
+				"shiftLeft":{"func":Command.send,"param":['tab,inv,click,shiftLeft,' + i + ',' + main.pref.bankTransferAmount]},
+				"shiftRight":{"func":Command.send,"param":['tab,inv,click,shiftLeft,' + i + ',' + 999999999]},
 				"text":text
 			});	
 			
@@ -226,7 +226,7 @@ Draw.tab.quest = function(){ ctxrestore();
 			'<br><span ' + 
 			'class="shadow" ' + 
 			'style="color:' + color + '" ' +
-			'onclick="Chat.send.command(\'' + '$win,open,quest,' + i + '\')' + '" ' + 
+			'onclick="Command.send(\'' + 'win,open,quest,' + i + '\')' + '" ' + 
 			'title="'+ i + '" ' 
 			+ '>' + i + 
 			'</span>';
@@ -315,25 +315,23 @@ Draw.tab.friend = function(){ ctxrestore();
 	hf.text.style.width = (s.w - 2*divX) + 'px'
 	hf.text.style.height = (s.h - iconY- 2*divY) + 'px'
 	
-	if(stringify(Draw.old.tab.friend) != stringify(list)){
+	if(stringify(Draw.old.tab.friend) !== stringify(list)){
 		Draw.old.tab.friend = list;
 		
 		hf.text.innerHTML = '<span style="color:white; text-decoration:underline;">' + 'Friend List' + '</span>';
 		
 		for(var i in list){
-			var color = '#FF4D49';
-			var str = i + ' : ' + list[i].nick + '  |  '+ list[i].comment;
-			var str2 = '$fl,offlinepm,' + i + ',';
+			var color = list[i].online ? '#00FF00' : '#FF4D49';
+			var title = i + ' : ' + list[i].nick + '  |  '+ list[i].comment;
+			var onclick = list[i].online ? '@' + i + ',' : '$fl,offlinepm,' + i + ',';
 			
-			if(list[i].online){ color = '#00FF00'; str2 = '@' + i + ','; }
-
 			hf.text.innerHTML += 
 			'<br><span ' + 
 			'class="shadow" ' + 
 			'style="color:' + color + '" ' +
 			'onclick="Input.add(\'' + str2 + '\')' + '" ' + 
 			'oncontextmenu="Draw.tab.friend.rightClick(\'' + i + '\')' + '" ' + 
-			'title="'+ str + '" ' + 
+			'title="'+ title + '" ' + 
 			'>' + i + 
 			'</span>';
 			
@@ -407,8 +405,8 @@ Draw.tab.friend.rightClick = function(name){
 	
 	option.option[4] = {
 		'name':'Remove Friend',
-		'func':Chat.send.command,
-		'param':['$fl,remove,' + name],	
+		'func':Command.send,
+		'param':['fl,remove,' + name],	
 	};
 	
 	
@@ -449,7 +447,7 @@ Draw.tab.pref = function(){
 		'<br><span ' + 
 		'class="shadow" ' + 
 		'style="color:' + 'white' + '" ' +
-		'onclick="Chat.send.command(\'' + '$win,open,binding' + '\')' + '" ' + 
+		'onclick="Command.send(\'' + 'win,open,binding' + '\')' + '" ' + 
 		'title="Change Key Bindings"' +
 		'>' +
 		'<font size="4">' +			

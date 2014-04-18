@@ -108,7 +108,7 @@ Draw.logout = function(){
 	Draw.icon('system.close',Cst.WIDTH-size,0,size);
 	Button.creation(0,{
 		'rect':[Cst.WIDTH-size,Cst.WIDTH,0,size],
-		"shiftLeft":{'func':Chat.send.command,'param':['$logout,' + i]},
+		"shiftLeft":{'func':Command.send,'param':['logout,' + i]},
 		'text':"Shift-Left Click to safely leave the game.",
 	});	
 	
@@ -190,7 +190,7 @@ Draw.optionList = function(){ ctxrestore();
 		}else {
 			Button.creation(0,{
 				'rect':[sx,sx+w,sy+nameY+optionY*i,sy+nameY+optionY*(i+1)],
-				"left":{'func':Chat.send.command,'param':['$option,' + i],question:option[i].question},
+				"left":{'func':Command.send,'param':['option,' + i],question:option[i].question},
 				'text':option[i].description || option[i].name,
 				});	
 		}
@@ -318,7 +318,7 @@ Draw.chat.dialogue = function(){
 	var str = dia.text;
 	for(var i in dia.option){
 		str  += '<br><span ' +
-			'onclick="Chat.send.command(\'$dialogue,option,' + i + '\');" ' +
+			'onclick="Command.send(\'dialogue,option,' + i + '\');" ' +
 			'>' +
 			'<font size="4">&nbsp; - ' + dia.option[i].text + '</font>' +
 			'</span>';
@@ -329,7 +329,7 @@ Draw.chat.dialogue = function(){
 	Draw.icon('system.close',s.w-24,s.y,24);
 	Button.creation(0,{
 		'rect':[s.w-24,s.w,s.y,s.y+24],
-		"left":{'func':Chat.send.command,'param':['$dialogue,option,-1']},
+		"left":{'func':Command.send,'param':['dialogue,option,-1']},
 		'text':"End dialogue.",
 	});	
 	

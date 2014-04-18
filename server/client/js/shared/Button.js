@@ -25,8 +25,7 @@ Button.template = function(){
 	};
 }
 
-Button.test = function (key,x,y,side){	//on click
-	//called everytime the player clicks. check the list of buttons at that frame and test for collision
+Button.test = function (key,x,y,side){	//called everytime the player clicks
 	var list = server ? List.btn[key] : List.btn;
 	for(var i = list.length-1 ; i >= 0 ; i--){
 		if(!list[i][side]) continue;
@@ -55,8 +54,7 @@ Button.test = function (key,x,y,side){	//on click
 	
 }
 
-Button.context = function (key){	//always
-	//check every frame if mouse is over something with a context (aka top left text)
+Button.context = function (key){ 	//check every frame
 
 	var list = server ? List.btn[key] : List.btn;	
 	var x = server ? List.all[key].mouseX : Input.mouse.x;
@@ -64,8 +62,9 @@ Button.context = function (key){	//always
 		
 	for(var i = list.length-1 ; i >= 0  ; i--){
 		if(Collision.PtRect({"x":x,'y':y},list[i].rect)){
-			if(server){ List.main[key].context = {'server':server,'text':list[i].text,'textTop':list[i].textTop}; }
-			if(!server){ main.clientContext = {'server':server,'text':list[i].text}; }
+			var tmp = {'server':server,'text':list[i].text,'textTop':list[i].textTop};
+			if(server) List.main[key].context = tmp; 
+			if(!server) main.clientContext = tmp; 
 			return;
 		}	
 	}
@@ -93,9 +92,8 @@ Button.optionList = function(key,option){
 }
 
 
-//called when player clicks. used to remove popup
-Button.reset = function(key){
-	if(server){
+Button.reset = function(key){	//called when player clicks. used to remove popup
+	if(server){	
 		var m = List.main[key];
 		
 		if(m.optionList){
@@ -103,13 +101,10 @@ Button.reset = function(key){
 			else {	m.optionList.count--; }
 		}
 		
-		for(var i in m.popupList){
-			m.popupList[i] = 0;
-		}
+		for(var i in m.popupList)	m.popupList[i] = 0;
 		
-		for(var i in m.temp.reset){
-			m.temp.reset[i]--;
-			if(m.temp.reset[i] < 0){
+		for(var i in m.temp.reset){	//TOFIX
+			if(--m.temp.reset[i] < 0){
 				delete m.temp[i];
 				delete m.temp.reset[i];
 			}

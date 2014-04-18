@@ -2,7 +2,7 @@
 
 
 dodge should avoid bullet collision
-
+main.temp = bad... only used for item on another item
 
 
 ===PRE SDK===

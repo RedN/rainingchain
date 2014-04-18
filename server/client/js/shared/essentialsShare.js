@@ -470,6 +470,7 @@ Object.defineProperty(Array.prototype, "insert", {
 
 
 
+
 //String
 String.prototype.replaceAll = function (find, replace) {
     var str = this;
@@ -590,3 +591,16 @@ String.prototype.have = function(name){
 String.prototype.set = function(pos,value){
 	return this.slice(0,pos) + value + this.slice(pos+1);
 }
+
+String.prototype.replacePattern = function(func){	//only works like [[sdadsa]]
+	var data = this;
+	for(var i = 0; i < 100; i++){
+		var data2 = data.replace(/(.*?)\[\[(.*?)\]\](.*)/, function(match, p1, p2, p3) {
+			return p1 + func(p2) + p3;
+		});
+		if(data2 === data) break;
+		data = data2;
+	}
+	return data;
+}
+

@@ -70,7 +70,7 @@ Input.init = function(setup,save){
 		{'key':17,'boost':10000,'symbol':'c'}	//ctrl
 	];
 	Input.key.custom = [
-		{'keyCode':[9],'func':(function(){ Chat.send.message.reply(); })},	//tab
+		{'keyCode':[9],'func':(function(){ Chat.send.reply(); })},	//tab
 		{'keyCode':[27],'func':(function(){ Input.add('',false); $(".ui-tooltip-content").parents('div').remove(); })}, //esc
 		{'keyCode':[38],'func':(function(){ $('#gameDiv')[0].scrollIntoView(true); })}, //up
 	];

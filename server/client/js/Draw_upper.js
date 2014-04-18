@@ -127,7 +127,7 @@ Draw.chrono = function(s){	//TOFIX
 		ctx.fillText(str,s.x+10,s.y);
 		
 		var right = null;
-		if(main.chrono[i]) right = {func: Chat.send.command,param:['$chrono,remove,' + i]};
+		if(main.chrono[i]) right = {func: Command.send,param:['chrono,remove,' + i]};
 		
 		Button.creation(0,{
 			'rect':[s.x+10,s.x+160,s.y,s.y+30],

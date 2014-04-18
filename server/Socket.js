@@ -34,7 +34,7 @@ io.sockets.on('connection', function (socket) {
     socket.on('disconnect', function (d) { Server.handleSocket('disconnect',socket,d);});
 	
     socket.on('sendChat', function (d) { Server.handleSocket('sendChat',socket,d);});
-    socket.on('Chat.send.command', function (d) { Server.handleSocket('Chat.send.command',socket,d);});
+    socket.on('Command.send', function (d) { Server.handleSocket('Command.send',socket,d);});
     socket.on('queryDb', function (d) { Server.handleSocket('queryDb',socket,d);});
     socket.on('testing', function (d) { Server.handleSocket('testing',socket,d);});
     socket.on('click', function (d) { 	Server.handleSocket('click',socket,d);});
@@ -83,7 +83,7 @@ Db.socket = {
 			Chat.receive(d);
 		},
 	},
-	'Chat.send.command':{
+	'Command.send':{
 		limitPerMin:30,
 		minInterval:0,
 		func:function(socket,d){

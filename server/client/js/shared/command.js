@@ -18,6 +18,37 @@ Command.receive = function(socket,data){
 	}
 }
 
+Command.send = function(text){
+	text = Command.send.parse(text);
+	if(text){ socket.emit('Command.send',text); }
+	if(text === false){ main.social.message.chat.push({'type':'client','text':'Invalid Command Entry.'}); } //only work if no message from server same frame
+}
+
+Command.send.parse = function(txt){
+	for(var i in Command.list){
+		if(txt.indexOf(i) === 0){	//valid cmd
+			var cmd = i;
+			var param = [];
+			var preParam = txt.slice(i.length+1) + ',';
+
+			while(preParam.indexOf(',') != -1){
+				var pos = preParam.indexOf(',');
+				var par = preParam.slice(0,pos);
+				param.push(par);
+				preParam = preParam.slice(pos+1);
+			}
+			
+			if(Command.client.have(cmd)){ 
+				applyFunc(Command.list[cmd],param);
+				return null;
+			}
+			return {'cmd':cmd,'param':param};
+		}		
+	}
+	return false;
+}
+
+
 //{Fl
 Command.list['fl,add'] = function(key,user,nick,comment,color){
 	if(!nick){ nick = user;}
@@ -128,6 +159,8 @@ Command.list['fl,pm'].doc = {
 }
 
 Command.list['fl,offlinepm'] = function(key,to,text){
+	Chat.add(key,"BROKEN");
+	return;
 	var from = List.all[key].name;
 	
 	text = escape.quote(text);
@@ -796,3 +829,5 @@ Main.template.pref = function(){
 }
 
 //}
+
+

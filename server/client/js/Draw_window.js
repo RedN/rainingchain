@@ -42,7 +42,7 @@ Draw.window.main = function(title){ ctxrestore();
 			str += 
 			'<span ' + 
 			'style="text-decoration:' + (title[i] ? 'underline' : 'none') + '" ' +
-			'onclick="' + "main.sfx='menu'; " + 'Chat.send.command(\'' + '$win,open,' + i + '\')' + '" ' + 
+			'onclick="' + "main.sfx='menu'; " + 'Command.send(\'' + 'win,open,' + i + '\')' + '" ' + 
 			'title="' + text + '"' +
 			'>' + i.capitalize() + 
 			'</span>';
@@ -61,7 +61,7 @@ Draw.window.main = function(title){ ctxrestore();
 	Draw.icon('system.close',s.x + s.w -20,s.y,20);	
 	Button.creation(0,{
 		"rect":[s.x + s.w -20,s.x + s.w,s.y,s.y+20],
-		"left":{"func":Chat.send.command,"param":['$win,close']},
+		"left":{"func":Command.send,"param":['win,close']},
 		'text':'Close',
 		'sfx':'close',
 	});
@@ -119,10 +119,10 @@ Draw.window.bank = function (){ ctxrestore();
 		
 		Button.creation(0,{
 			"rect":[numX,numX+32,numY,numY+32],
-			"left":{"func":Chat.send.command,"param":['$win,bank,click,left,' + i]},
-			"shiftLeft":{"func":Chat.send.command,"param":['$win,bank,click,shiftLeft,' + i+ ',' + main.pref.bankTransferAmount]},
-			"shiftRight":{"func":Chat.send.command,"param":['$win,bank,click,shiftLeft,' + i + ',' + 999999999]},
-			"right":{"func":Chat.send.command,"param":['$win,bank,click,right,' + i]},
+			"left":{"func":Command.send,"param":['win,bank,click,left,' + i]},
+			"shiftLeft":{"func":Command.send,"param":['win,bank,click,shiftLeft,' + i+ ',' + main.pref.bankTransferAmount]},
+			"shiftRight":{"func":Command.send,"param":['win,bank,click,shiftLeft,' + i + ',' + 999999999]},
+			"right":{"func":Command.send,"param":['win,bank,click,right,' + i]},
 			'text':'Withdraw ' + main.bankList[i][2]
 		});	
 		Draw.item(main.bankList[i],numX,numY);
@@ -406,7 +406,7 @@ Draw.window.ability.leftSide = function(){ ctxrestore();
 		
 		Button.creation(0,{
 			"rect":[numX, numX+45 + 32, numY, numY + 32 ],
-			"left":{"func":Chat.send.command,"param":['$win,ability,swap,' + Draw.old.abilityShowed.id + ',' + i ]},
+			"left":{"func":Command.send,"param":['win,ability,swap,' + Draw.old.abilityShowed.id + ',' + i ]},
 			'text':"Assign " + Draw.old.abilityShowed.name + " to " + button
 			});	
 	}
@@ -416,7 +416,7 @@ Draw.window.ability.leftSide = function(){ ctxrestore();
 	
 	Button.creation(0,{
 		"rect":[s.x + 12, s.x + 12+90, s.y + 100-65+250, s.y + 100-65+250+60 ],
-		"left":{"func":Chat.send.command,"param":['$win,open,binding']},
+		"left":{"func":Command.send,"param":['$win,open,binding']},
 		'text':"Open Key Bindings Window"
 		});	
 }
@@ -595,8 +595,8 @@ Draw.window.ability.upgrade = function(diffX,diffY){ //not longer used
 }
 
 Draw.window.ability.generalInfo.mod = function(){
-	if(html.chat.input.value.have('$win,ability,addMod,')){
-		Chat.send.command(html.chat.input.value + Draw.old.abilityShowed.id);
+	if(html.chat.input.value.have('win,ability,addMod,')){
+		Command.send(html.chat.input.value + Draw.old.abilityShowed.id);
 		html.chat.input.value = '';
 	} else {
 		Chat.add('Select an ability mod in your inventory first.');
@@ -606,10 +606,10 @@ Draw.window.ability.generalInfo.mod = function(){
 Draw.window.ability.generalInfo.upgrade = function(){
 	var name = Draw.old.abilityShowed.id;
 	var option = {'name':'Upgrade','count':1,'option':[
-		{'name':'Use 1 Orb','func':Chat.send.command,'param':['$win,ability,upgrade,' + name + ',1']},
-		{'name':'Use 10 Orbs','func':Chat.send.command,'param':['$win,ability,upgrade,' + name + ',10']},
-		{'name':'Use 100 Orbs','func':Chat.send.command,'param':['$win,ability,upgrade,' + name + ',100']},
-		{'name':'Use X Orbs','func':Input.add,'param':['$win,ability,upgrade,' + name + ',']},
+		{'name':'Use 1 Orb','func':Command.send,'param':['win,ability,upgrade,' + name + ',1']},
+		{'name':'Use 10 Orbs','func':Command.send,'param':['win,ability,upgrade,' + name + ',10']},
+		{'name':'Use 100 Orbs','func':Command.send,'param':['win,ability,upgrade,' + name + ',100']},
+		{'name':'Use X Orbs','func':Input.add,'param':['win,ability,upgrade,' + name + ',']},
 	]};
 	Button.optionList(option);
 }
@@ -618,10 +618,10 @@ Draw.window.ability.generalInfo.upMod = function(mod){	//unused
 	return;
 	var name = Draw.old.abilityShowed.id;
 	var option = {'name':'Upgrade Mod','count':1,'option':[
-		{'name':'Use 1 Orb','func':Chat.send.command,'param':['$win,ability,upMod,' + name + ',' + mod + ',1']},
-		{'name':'Use 10 Orbs','func':Chat.send.command,'param':['$win,ability,upMod,' + name + ',' + mod + ',10']},
-		{'name':'Use 100 Orbs','func':Chat.send.command,'param':['$win,ability,upMod,' + name + ',' + mod + ',100']},
-		{'name':'Use X Orbs','func':Input.add,'param':['$win,ability,upMod,' + name + ',' + mod + ',']},
+		{'name':'Use 1 Orb','func':Command.send,'param':['win,ability,upMod,' + name + ',' + mod + ',1']},
+		{'name':'Use 10 Orbs','func':Command.send,'param':['win,ability,upMod,' + name + ',' + mod + ',10']},
+		{'name':'Use 100 Orbs','func':Command.send,'param':['win,ability,upMod,' + name + ',' + mod + ',100']},
+		{'name':'Use X Orbs','func':Input.add,'param':['win,ability,upMod,' + name + ',' + mod + ',']},
 	]};
 	
 	Button.optionList(option);
@@ -883,10 +883,10 @@ Draw.window.quest.upper = function(s,q,mq,hq){
 	
 	if(!mq.started){
 		var second = $('<p class="u">Start Quest</p>')[0];
-		second.onclick = function(){Chat.send.command('$win,quest,start,' + q.id);}
+		second.onclick = function(){Command.send('win,quest,start,' + q.id);}
 	} else {
 		var second = $('<p class="u">Abandon Quest</p>')[0];
-		second.onclick = function(){Chat.send.command('$win,quest,abandon,' + q.id);}
+		second.onclick = function(){Command.send('win,quest,abandon,' + q.id);}
 	}
 	
 	hq.info.appendChild(first);
@@ -1028,7 +1028,7 @@ Draw.window.quest.bonus = function(s,q,mq,hq){
 			'<span ' + 
 			'class="shadow" ' + 
 			'style="color:' + color + '" ' +
-			'onclick="Chat.send.command(\'' + '$win,quest,toggleChallenge,' + q.id + ',' + i + '\')' + '" ' + 
+			'onclick="Command.send(\'' + 'win,quest,toggleChallenge,' + q.id + ',' + i + '\')' + '" ' + 
 			'title="Toggle Challenge"' +
 			'>' + b.info + ' - (x' + b.bonus + ')' +
 			'</span><br>';
@@ -1073,8 +1073,8 @@ Draw.window.trade = function (){ ctxrestore();
 		
 		Button.creation(0,{
 			"rect":[numX,numX+56,numY,numY+56],
-			"left":{"func":Chat.send.command,"param":['$win,trade,click,left,' + i]},
-			"right":{"func":Chat.send.command,"param":['$win,trade,click,right,' + i]},
+			"left":{"func":Command.send,"param":['win,trade,click,left,' + i]},
+			"right":{"func":Command.send,"param":['win,trade,click,right,' + i]},
 			'text':'Withdraw ' + main.bankList[i][2]
 		});	
 		
@@ -1107,7 +1107,7 @@ Draw.window.trade = function (){ ctxrestore();
 	Button.creation(0,{
 		"rect":[numX,numX+wi,numY,numY+he],
 		'text':trade.confirm.self ? 'Click to Refuse Trade' : 'Click to Accept Trade',
-		"left":{"func":Chat.send.command,"param":['$win,trade,toggle,']},
+		"left":{"func":Command.send,"param":['win,trade,toggle,']},
 	});
 	
 	
@@ -1234,7 +1234,7 @@ Draw.window.passive = function (){ ctxrestore();
 	var str = 'Page: ';
 	for(var i in main.passive.grid){
 		str += '<span ' + 
-		'onclick="Chat.send.command(\'$win,passive,page,' + i + '\');'+ '" ' +
+		'onclick="Command.send(\'win,passive,page,' + i + '\');'+ '" ' +
 		'style="text-decoration:' + (+i == main.passive.active ? 'underline' : 'none') + '" ' +
 		'title="Change Active Page ' + i + '" ' + 
 		'>' + i +
@@ -1246,13 +1246,13 @@ Draw.window.passive = function (){ ctxrestore();
 		str += 'Freeze: ' + main.passive.freeze[main.passive.active];	
 		str += '<br>';
 		str += 	'<span ' + 
-		'onclick="Chat.send.command(\'$win,passive,unfreeze,' +main.passive.active + '\');' + '" ' + 
+		'onclick="Command.send(\'win,passive,unfreeze,' +main.passive.active + '\');' + '" ' + 
 		'title="Unfreeze. Changes will go live upon relogging."' +
 		'>' + 'Unfreeze' + 
 		'</span>';
 	} else {
 		str += 	'<span ' + 
-		'onclick="Chat.send.command(\'$win,passive,freeze,' +main.passive.active + '\');' + '" ' + 
+		'onclick="Command.send(\'win,passive,freeze,' +main.passive.active + '\');' + '" ' + 
 		'title="You will keep this grid and values until you unfreeze. Future changes of popularity won\'t affect this grid if frozen."' +
 		'>' + 'Freeze' + 
 		'</span>';
@@ -1334,8 +1334,8 @@ Draw.window.passive.grid = function(){ ctxrestore();
 			ctx.globalAlpha = +pass[i][j] ? 1 : 0.5;
 			var name = Db.stat[boost.stat].icon;
 			Draw.icon(name,numX+border2,numY+border2,iconSize,{
-				"right":{"func":Chat.send.command,"param":['$win,passive,add,' + main.passive.active + ',' + i + ',' + j]},
-				"shiftRight":{"func":Chat.send.command,"param":['$win,passive,remove,' + main.passive.active + ',' + i + ',' + j]},
+				"right":{"func":Command.send,"param":['win,passive,add,' + main.passive.active + ',' + i + ',' + j]},
+				"shiftRight":{"func":Command.send,"param":['win,passive,remove,' + main.passive.active + ',' + i + ',' + j]},
 				'text':'Right: Choose ' + name + ' | Shift-Right: Remove',
 			});
 			
