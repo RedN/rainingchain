@@ -1,6 +1,6 @@
 Attack = {};
 
-Attack.template = function(){
+Attack.template = function(type){
 	var b = {};
 	//NO TOUCH
 	b.change = {};
@@ -10,6 +10,7 @@ Attack.template = function(){
 	b.x = 0;
 	b.y = 0;
 	b.angle = 0;
+	b.crAngle = 0;
 	b.crX = 0;  //creation X
 	b.crY = 0;  //creation Y
 	b.map = 'test@MAIN';
@@ -43,24 +44,26 @@ Attack.template = function(){
 	b.crit = {'baseChance':0,'chance':1,'magn':1};
 	b.leech = {'baseChance':0,'chance':1,'magn':1,'time':1};	
 	b.pierce = {'baseChance':0,'chance':0,'dmgReduc':0.5};		//will be overwrite completly
-	b.curse = 0;
-	b.onHit = 0;
+	b.curse = null;
+	b.onHit = null;
 	
 	//Strike
-	b.width = 10;      			 //width for strike
+	
+	b.width = 10;      			//width for strike
 	b.height = 10;       		//height for strike
-	b.delay = 0;   				 //delay between cast and dmg phase for strike
-	b.point = [{'x':10,'y':10}];	//used for collision
+	b.delay = 0;   				//delay between cast and dmg phase for strike
+	b.point = [];				//used for collision
 	b.minRange = 5;				//min distance player-strike
 	b.maxRange = 50;			//max distance player-strike
 	b.onStrike = 0;				//call another attack when strike goes live
 	
 	//Bullet
+	
 	b.maxTimer = 40;
 	b.timer = 0;
 	b.spd = 15;
 	
-	b.normal = 0;	//get set inside creation
+	b.normal = 0;	//for movement, get set inside creation
 	b.nova = 0;
 	b.boomerang = 0;
 	b.ghost = 0;
@@ -71,63 +74,58 @@ Attack.template = function(){
 	b.mouseY = 0;
 	b.sprite = {"name":"fireball","anim":"travel",'sizeMod':1};	
 	
+	return b;
+}; 
+
+
+Attack.creation = function(player,s,extra){
+	s = Attack.creation.info(player,s);
+	s = useTemplate(s,extra);
+	
+	s.id = Math.randomId();
+	s.publicId = Math.randomId(6);
+	s.hitId = Math.randomId();
+	
+	s.angle = (s.angle%360+360)%360;
+	
+	List.all[s.id] = s;
+	Activelist.add(s);
+	
+	if(s.type === 'strike'){ return Attack.creation.strike(s);}
+	else if(s.type === 'bullet'){ return Attack.creation.bullet(s);}
+}; 
+
+Attack.creation.info = function(act,b){
+	b.crX = b.x = act.x || 0;
+	b.crY = b.y = act.x || 0;
+	b.mouseX = act.mouseX || 0;
+	b.mouseY = act.mouseY || 0;
+	
+	b.map = act.map || 'test@MAIN';	
+	b.viewedIf = act.viewedIf || 'true';
+	b.damageIf = act.damageIf || 'act';
+	
+	b.angle = (act.angle || 0 +360)%360;
+	
+	if(b.nova || b.onHit || b.onStrike){
+		b.bonus = act.bonus || Actor.template.bonus();
+		b.weapon = act.weapon || Actor.template.weapon();
+		b.mastery = act.mastery || Actor.template.mastery();		
+	}
+	
+	b.parent = act.parent || act.id || null;
 	
 	return b;
 }; 
 
 
-Attack.creation = function(player,attack,extra){
-	if(player.xym){ player.x = player.xym.x; player.y = player.xym.y; player.map = player.xym.map; delete player.xym;}
-	
-	var s = attack;
-	s = Attack.creation.info(player,s);
-	
-	s.id = Math.randomId();
-	s.publicId = Math.randomId();
-	s.hitId = Math.randomId();
-	
-	attack = useTemplate(attack,extra); //need here so angle isnt always player angle
-	s.angle = (s.angle%360+360)%360
-	s.crAngle = s.angle; s.moveAngle = s.angle;
-
-	List.all[s.id] = s;
-	Activelist.add(s);
-	
-	if(attack.type === 'strike'){ return Attack.creation.strike(attack);}
-	if(attack.type === 'bullet'){ return Attack.creation.bullet(attack);}
-}; 
-
-Attack.creation.info = function(player,bullet){
-	bullet.x = player.x || 0;
-	bullet.y = player.y || 0;
-	bullet.crX = bullet.x;
-	bullet.crY = bullet.y;
-	bullet.mouseX = player.mouseX || 0;
-	bullet.mouseY = player.mouseY || 0;
-	
-	bullet.map = player.map || 'test@MAIN';	
-	bullet.viewedIf = player.viewedIf || 'true';
-	bullet.damageIf = player.damageIf || 'player';
-	
-	bullet.angle = (player.angle || 0 +360)%360;
-	
-	if(bullet.nova || bullet.onHit || bullet.onStrike){
-		bullet.bonus = player.bonus || Actor.template.bonus();
-		bullet.weapon = player.weapon || Actor.template.weapon();
-		bullet.mastery = player.mastery || Actor.template.mastery();		
-	}
-	
-	bullet.parent = player.parent || player.id || null;
-	
-	return bullet;
-}; 
-
-
 
 Attack.creation.bullet = function(b){
+	b.crAngle = b.angle; 
+	b.moveAngle = b.angle;
+
 	if(b.parabole){
-		var diffX = b.mouseX - Cst.WIDTH2;	var diffY = b.mouseY - Cst.HEIGHT2;
-		var diff = Math.sqrt(diffX*diffX+diffY*diffY);
+		var diff = Math.pyt(b.mouseX - Cst.WIDTH2,b.mouseY - Cst.HEIGHT2);
 		b.parabole.dist = diff.mm(b.parabole.min,b.parabole.max);
 		b.parabole.timer *= b.parabole.dist/b.parabole.max;
 	}
@@ -140,6 +138,8 @@ Attack.creation.bullet = function(b){
 	List.bullet[b.id] = b;
 	Map.enter(b);
 	
+	Attack.creation.neverstrike(b);
+	
 	return b;
 }; 
 
@@ -149,26 +149,18 @@ Attack.creation.strike = function(s){
 			
 	//Position
 	var dist = Math.pyt( s.mouseX-Cst.WIDTH2, s.mouseY-Cst.HEIGHT2);
-	var angle = s.angle;
+	dist = dist.mm(s.minRange,s.maxRange);
 	
-	if(s.middleX === undefined){ s.middleX = dist * cos(angle); }
-	if(s.middleY === undefined){ s.middleY = dist * sin(angle); }
+	if(s.middleX === undefined){ s.middleX = dist * cos(s.angle); }	//could be set in extra
+	if(s.middleY === undefined){ s.middleY = dist * sin(s.angle); }
 	
-	if(dist > s.maxRange){
-		s.middleX = s.middleX * s.maxRange / dist;
-		s.middleY = s.middleY * s.maxRange / dist
-	}
-	if(dist < s.minRange){
-		s.middleX = s.middleX * s.minRange / dist;
-		s.middleY = s.middleY * s.minRange / dist
-	}
-	var pos = Collision.StrikeMap(s,{x:s.x + s.middleX,y:s.y + s.middleY});
+	var pos = Collision.StrikeMap(s,{x:s.x + s.middleX,y:s.y + s.middleY});	//get farthest possible without touching wall
 	s.middleX = pos.x*32-s.x;
 	s.middleY = pos.y*32-s.y;
 	
 	//s.crX: where attack created (player position)
 	//s.middleX : when the strike is depending on mouseX. 
-	//then we check how far we can go in that direction until we face wall.
+	//then we check how far we can go in that direction until we face wall. (already done)
 	//after that, we place 9 points around this middleX. exact position depends on width and height of strike
 	
 	
@@ -178,25 +170,54 @@ Attack.creation.strike = function(s){
 	for(var k = 0 ; k < 9 ; k++){
 		var axeX = startX + (k % 3)*w;
 		var axeY = startY + Math.floor(k/3)*h;
-		var numX =  (axeX*cos(angle) - axeY * sin(angle));
-		var numY =  (axeX*sin(angle) + axeY * cos(angle));
+		var numX = (axeX*cos(s.angle) - axeY * sin(s.angle));
+		var numY = (axeX*sin(s.angle) + axeY * cos(s.angle));
 				
-		s.point[k] = 
-		{'x':numX + s.crX + s.middleX,'y':numY + s.crY + s.middleY};
+		s.point[k] = {'x':numX + s.crX + s.middleX,'y':numY + s.crY + s.middleY};
 	}
 	
-	if(s.preDelayAnim){ Anim.creation(s.preDelayAnim.name,{'x':s.crX + s.middleX,'y':s.crY + s.middleY,'map':s.map,'viewedIf':s.viewedIf},s.preDelayAnim.sizeMod);}
+	if(s.preDelayAnim){ 
+		Anim.creation({
+			name:s.preDelayAnim.name,
+			target:{'x':s.crX + s.middleX,'y':s.crY + s.middleY,'map':s.map,'viewedIf':s.viewedIf},
+			sizeMod:s.preDelayAnim.sizeMod}
+		);
+	}
 	
 	s.x = s.crX + s.middleX;
-	s,y = s.crY + s.middleY;
+	s.y = s.crY + s.middleY;
 	List.strike[s.id] = s;
 	
+	Attack.creation.neverbullet(s);
 	return s;
 }
 
 
+Attack.creation.neverbullet = function(s){
+	delete s.maxTimer;
+	delete s.timer;
+	delete s.spd;
+	delete s.normal;
+	delete s.nova;
+	delete s.boomerang;
+	delete s.ghost;
+	delete s.parabole;
+	delete s.sin;
+	delete s.moveAngle;
+	delete s.mouseX;
+	delete s.mouseY;
+	delete s.sprite;
+}
 
-
+Attack.creation.neverstrike = function(b){
+	delete b.width;
+	delete b.height;
+	delete b.delay;
+	delete b.point;
+	delete b.minRange;
+	delete b.maxRange;
+	delete b.onStrike;
+}
 
 
 

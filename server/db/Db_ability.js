@@ -43,7 +43,7 @@ a['bulletMulti'] = {					//bulletMulti is the id of attack
 				'name':"arrow",
 				'sizeMod':1
 			},
-			'delayAnim':{				//Anim.creation when delay is over (STRIKE ONLY)
+			'postDelayAnim':{				//Anim.creation when delay is over (STRIKE ONLY)
 				'name':"fire1",
 				'sizeMod':0.5
 			},
@@ -154,7 +154,7 @@ a['bulletMulti'] = {					//bulletMulti is the id of attack
 				'name':"attack1",
 				'sizeMod':0.5
 			},
-			'delayAnim':{				//anim where the player clicked sprite after the delay
+			'postDelayAnim':{				//anim where the player clicked sprite after the delay
 				'name':"attack1",
 				'sizeMod':0.5
 			},
@@ -278,7 +278,7 @@ Init.db.ability = function(cb){
 		'spd':{'main':1,'support':0},'period':{'own':25,'global':25},
 		'action':{'func':'Combat.action.attack','param':{
 			'type':"strike",'angle':0,'amount':1,
-			'delayAnim':{'name':"scratch",'sizeMod':0.5},
+			'postDelayAnim':{'name':"scratch",'sizeMod':0.5},
 			'hitImg':{'name':"strikeHit",'sizeMod':0.25},
 			'dmg':{'main':100,'ratio':{'melee':100,'range':0,'magic':0,'fire':0,'cold':0,'lightning':0}},
 			'width':50,
@@ -293,7 +293,7 @@ Init.db.ability = function(cb){
 		'spd':{'main':1,'support':0},'period':{'own':50,'global':50},
 		'action':{'func':'Combat.action.attack','param':{
 			'type':"strike",'angle':0,'amount':1,
-			'delayAnim':{'name':"scratch2",'sizeMod':0.5},
+			'postDelayAnim':{'name':"scratch2",'sizeMod':0.5},
 			'hitImg':{'name':"strikeHit",'sizeMod':0.25},
 			'dmg':{'main':200,'ratio':{'melee':100,'range':0,'magic':0,'fire':0,'cold':0,'lightning':0}},
 			'width':100,
@@ -523,7 +523,7 @@ Init.db.ability = function(cb){
 		'spd':{'main':1,'support':0},'period':{'own':50,'global':50},
 		'action':{'func':'Combat.action.attack','param':{
 			'type':"strike",'angle':0,'amount':1,
-			'delayAnim':{'name':"aura",'sizeMod':2},
+			'postDelayAnim':{'name':"aura",'sizeMod':2},
 			'dmg':{'main':0,'ratio':{'melee':0,'range':0,'magic':0,'fire':1,'cold':0,'lightning':0}},
 			'width':200,
 			'height':200,
@@ -569,7 +569,7 @@ Init.db.ability = function(cb){
 				rotation:0,
 				attack: {
 					'type':"strike",'angle':0,'amount':1,
-					'delayAnim':{'name':"lightningHit",'sizeMod':0.5},
+					'postDelayAnim':{'name':"lightningHit",'sizeMod':0.5},
 					'hitImg':{'name':"lightningHit",'sizeMod':0.25},
 					'dmg':{'main':200,'ratio':{'melee':0,'range':0,'magic':0,'fire':0,'cold':0,'lightning':1}},
 					'width':75,'height':75,'delay':0,
@@ -703,7 +703,7 @@ Init.db.ability = function(cb){
 		'spd':{'main':0.8,'support':0.2},'period':{'own':20,'global':10},
 		'action':{'func':'Combat.action.attack','param':{
 			'type':"strike",'angle':0,'amount':1,
-			'delayAnim':{'name':"lightningHit",'sizeMod':0.5},
+			'postDelayAnim':{'name':"lightningHit",'sizeMod':0.5},
 			'hitImg':{'name':"lightningHit",'sizeMod':0.2},
 			'preDelayAnim':{'name':"lightningHit",'sizeMod':0.5},
 			'dmg':{'main':100,'ratio':{'melee':0,'range':10,'magic':80,'fire':10,'cold':0,'lightning':0}},

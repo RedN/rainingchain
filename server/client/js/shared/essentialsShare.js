@@ -62,14 +62,6 @@ Date.nowDate = function(){
 	return new Date().toLocaleDateString();
 }
 
-function getParamNames(func) {
-	var STRIP_COMMENTS = /((\/\/.*$)|(\/\*[\s\S]*?\*\/))/mg;
-	var fnStr = func.toString().replace(STRIP_COMMENTS, '')
-	var result = fnStr.slice(fnStr.indexOf('(')+1, fnStr.indexOf(')')).match(/([^\s,]+)/g)
-	if(result === null)  result = []
-  return result
-}
-
 //Math
 sin = function (number){
 	return (Math.sin(number/180*Math.PI))
@@ -126,29 +118,6 @@ Math.randomML = function(num){
 Math.probability = function(base,mod){
 	return 1 - Math.pow(1-base,mod);
 }
-findMin = function(list,func){
-	var min = func(list[0]);
-	for(var i = 1 ; i  < list.length ; i++){
-		min = Math.min(min,func(list[i]));
-	}
-	return min;
-}
-findMax = function(list,func){
-	var max = func(list[0]);
-	for(var i = 1 ;i  < list.length ; i++){
-		max = Math.max(max,func(list[i]));
-	}
-	return max;
-}
-parseFloatInBase = function(n, radix) {
-	radix = radix || 10;
-    var nums = n.split(".");
-    var iPart = parseInt(nums[0], radix);
-	if(nums.length === 1) return iPart;
-    var fPart = parseInt(nums[1], radix) / Math.pow(radix, nums[1].length);
-	return iPart + fPart
-}
-
 	
 Object.defineProperty(Number.prototype, "mm", {
     enumerable: false,
@@ -238,17 +207,18 @@ isEqual = function(obj0,obj1){
 	if(obj0 === undefined || obj1 === undefined){ return false;}	
 	return obj0 == obj1;
 }
-JSONf = {};
-JSONf.stringify = function(obj) {
-	return JSON.stringify(obj,function(key, value){
-		return (typeof value === 'function' ) ? value.toString() : value;
-	});
-}
-JSONf.parse = function(str) {
-	return JSON.parse(str,function(key, value){
-		if(typeof value !== 'string') return value;
-		return ( value.substring(0,8) === 'function') ? eval('('+value+')') : value;
-	});
+JSONf = {
+	stringify:function(obj) {
+		return JSON.stringify(obj,function(key, value){
+			return (typeof value === 'function' ) ? value.toString() : value;
+		});
+	},
+	parse:function(str) {
+		return JSON.parse(str,function(key, value){
+			if(typeof value !== 'string') return value;
+			return ( value.substring(0,8) === 'function') ? eval('('+value+')') : value;
+		});
+	}
 }
 
 //Via Array
@@ -328,11 +298,184 @@ formatNum = function(num){
 	 return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
 
+
+
+//Testing
+eval('permCo' + 'nsoleLog = function(){ co' + 'nsole.log.apply(co' + 'nsole,arguments); }');
+logError = function(err) {	//ERROR
+	//permConsoleLog(err); return;
+	if (typeof err === 'object') {
+		if (err.message) { permConsoleLog('\nMessage: ' + err.message) }
+		if (err.stack) { permConsoleLog(err.stack); }
+	} else {
+		permConsoleLog('logError :: argument is not an object');
+	}
+}
+
+//Misc
+escape.quote = function(str){
+	if(typeof str !== 'string'){ return '' }
+	
+	str.replaceAll('"','\"');
+	str.replaceAll("'","\'");
+	return str;
+}
+
+escape.user = function(name){
+	return name.replace(/[^a-z0-9 ]/ig, '')
+}
+
+escape.email = function(str){
+	if(typeof str !== 'string'){ return '' }
+
+    var re = /[^\s@]+@[^\s@]+\.[^\s@]+/;
+    re.test(str) ? str : '';
+}
+
+changeVisibility = function(id){
+	var el = document.getElementById(id);
+	el.style.visibility = el.style.visibility === 'hidden' ? 'visible' : 'hidden';
+}
+
+useTemplate = function(temp,obj,deep,viaarray){
+	if(deep !== 0) obj = deepClone(obj); 
+	
+	if(viaarray){
+		for(var i in obj) viaArray.set({origin:temp,array:i.split(','),value:obj[i]});
+		return temp;
+	}
+	
+	for(var i in obj)	temp[i] = obj[i];	
+	return temp;
+}
+
+arrayfy = function(a){
+	return (a instanceof Array) ? a : [a];
+}
+
+convertRatio = function(ratio){
+	var sum = 0;
+	for(var i in ratio) sum += ratio[i];
+	for(var i in ratio) ratio[i] /= sum;
+	return ratio;
+}
+
+newImage = function(src){
+	var tmp = new Image();
+	tmp.src = '/' + src;
+	return tmp
+}
+
+
+//Prototype
+Object.defineProperty(Array.prototype, "random", {	// !name: return random element || name:  [{name:10},{name:1}] and return obj
+    enumerable: false,
+    value: function(name){
+		if(!this.length) return null;
+		if(!name) return this[Math.floor(this.length*Math.random())];
+		
+		var obj = {};	
+		for(var i in this) obj[i] = this[i][name];
+		var choosen = obj.random();
+		return choosen !== null ? this[choosen] : null
+	}
+});
+
+Object.defineProperty(Array.prototype, "normalize", {	// convertRatio for array
+    enumerable: false,
+    value: function(){
+		var sum = 0;
+		for(var i in this)
+			sum += this[i];
+		for(var i in this)
+			this[i] /= sum;
+	}
+});
+
+Object.defineProperty(Object.prototype, "random", {	//return attribute
+    enumerable: false,
+    value: function(name){
+		if(!Object.keys(this).length) return null;
+		
+		if(name){ var ratioed = {}; for(var i in this) ratioed[i] = this[i][name]; }
+		else { var ratioed = this;}
+		
+		
+		ratioed = convertRatio(ratioed);		
+		var a = Math.random();
+		for(var i in ratioed){
+			if(ratioed[i] >= a) return i;
+			a -= ratioed[i];
+		}
+		
+		return null;
+	}
+});
+
+Object.defineProperty(Object.prototype, "randomAttribute", {	//return random attribute
+    enumerable: false,
+    value: function(){
+		return Object.keys(this).random();
+	}
+});	
+	
+Object.defineProperty(Object.prototype, "$count", {
+    enumerable: false,
+    value: function(){
+		var count = 0;
+		for(var i in this) if(this[i]) count++;
+		return count;
+	}
+});	
+
+Object.defineProperty(Object.prototype, "$sum", {
+    enumerable: false,
+    value: function(){
+		var count = 0;
+		for(var i in this) count += this[i];
+		return count;
+	}
+});	
+	
+Object.defineProperty(Object.prototype, "$length", {
+    enumerable: false,
+    value: function(){
+		return Object.keys(this).length;
+	}
+});	
+
+Object.defineProperty(Object.prototype, "$toArray", {
+    enumerable: false,
+    value: function(){
+		var tmp = [];
+		for(var i in this)
+			tmp.push(this[i]);
+		return tmp;
+	}
+});	
+
+Object.defineProperty(Array.prototype, "have", {
+    enumerable: false,
+    value: function(name){
+		return this.indexOf(name) !== -1;
+	}
+});	
+
+Object.defineProperty(Array.prototype, "insert", {
+    enumerable: false,
+    value: function (index, item) {
+	  this.splice(index, 0, item);
+	}
+});
+
+
+
 //String
 String.prototype.replaceAll = function (find, replace) {
     var str = this;
     return str.replace(new RegExp(find, 'g'), replace);
 };
+
 String.prototype.keyCodeToName = function(full){	//TOFIX fusion bothfunctions
 	var charCode = Number(this);
 	var boost = '';
@@ -423,10 +566,6 @@ String.prototype.keyFullName = function(){
 	if(this == '_') return 'Space';
 	return this;
 }
-
-
-
-
  
 String.prototype.capitalize = function() {
 	if(!this.have(' '))    return this.charAt(0).toUpperCase() + this.slice(1);
@@ -435,6 +574,7 @@ String.prototype.capitalize = function() {
 	for(var i in array) array[i] = array[i].capitalize();
 	return array.join(' ');
 }
+
 String.prototype.numberOnly = function(num){
 	var sign = this[0] === '-';
 	var a = this.replace(/[^\d.]/g, "");
@@ -442,6 +582,7 @@ String.prototype.numberOnly = function(num){
 	if(num){ a = +a; }
 	return a;
 }
+
 String.prototype.have = function(name){
 	return this.indexOf(name) !== -1;
 }
@@ -449,183 +590,3 @@ String.prototype.have = function(name){
 String.prototype.set = function(pos,value){
 	return this.slice(0,pos) + value + this.slice(pos+1);
 }
-
-
-
-//Testing
-eval('permCo' + 'nsoleLog = function(){ co' + 'nsole.log.apply(co' + 'nsole,arguments); }');
-logError = function(err) {	//ERROR
-	//permConsoleLog(err); return;
-	if (typeof err === 'object') {
-		if (err.message) { permConsoleLog('\nMessage: ' + err.message) }
-		if (err.stack) { permConsoleLog(err.stack); }
-	} else {
-		permConsoleLog('logError :: argument is not an object');
-	}
-}
-
-//Misc
-escape.quote = function(str){
-	if(typeof str !== 'string'){ return '' }
-	
-	str.replaceAll('"','\"');
-	str.replaceAll("'","\'");
-	return str;
-}
-
-escape.user = function(name){
-	return name.replace(/[^a-z0-9 ]/ig, '')
-}
-escape.email = function(str){
-	if(typeof str !== 'string'){ return '' }
-
-    var re = /[^\s@]+@[^\s@]+\.[^\s@]+/;
-    re.test(str) ? str : '';
-}
-
-
-changeVisibility = function(id){
-	var el = document.getElementById(id);
-	el.style.visibility = el.style.visibility === 'hidden' ? 'visible' : 'hidden';
-}
-useTemplate = function(temp,obj,deep,viaarray){
-	if(deep !== 0) obj = deepClone(obj); 
-	
-	if(viaarray){
-		for(var i in obj) viaArray.set({origin:temp,array:i.split(','),value:obj[i]});
-		return temp;
-	}
-	
-	for(var i in obj)	temp[i] = obj[i];	
-	return temp;
-}
-
-
-arrayfy = function(a){
-	return (a instanceof Array) ? a : [a];
-}
-
-
-
-
-
-newImage = function(src){
-	var tmp = new Image();
-	tmp.src = '/' + src;
-	return tmp
-}
-
-
-Object.defineProperty(Array.prototype, "random", {	// !name: return random element || name:  [{name:10},{name:1}] and return obj
-    enumerable: false,
-    value: function(name){
-		if(!this.length) return null;
-		if(!name) return this[Math.floor(this.length*Math.random())];
-		
-		var obj = {};	
-		for(var i in this) obj[i] = this[i][name];
-		var choosen = obj.random();
-		return choosen !== null ? this[choosen] : null
-	}
-});
-
-Object.defineProperty(Array.prototype, "normalize", {	// convertRatio for array
-    enumerable: false,
-    value: function(){
-		var sum = 0;
-		for(var i in this)
-			sum += this[i];
-		for(var i in this)
-			this[i] /= sum;
-	}
-});
-
-
-
-Object.defineProperty(Object.prototype, "random", {	//return attribute
-    enumerable: false,
-    value: function(name){
-		if(!Object.keys(this).length) return null;
-		
-		if(name){ var ratioed = {}; for(var i in this) ratioed[i] = this[i][name]; }
-		else { var ratioed = this;}
-		
-		
-		ratioed = convertRatio(ratioed);		
-		var a = Math.random();
-		for(var i in ratioed){
-			if(ratioed[i] >= a) return i;
-			a -= ratioed[i];
-		}
-		
-		return null;
-	}
-});
-
-Object.defineProperty(Object.prototype, "randomAttribute", {	//return random attribute
-    enumerable: false,
-    value: function(){
-		return Object.keys(this).random();
-	}
-});	
-	
-Object.defineProperty(Object.prototype, "$count", {
-    enumerable: false,
-    value: function(){
-		var count = 0;
-		for(var i in this) if(this[i]) count++;
-		return count;
-	}
-});	
-
-Object.defineProperty(Object.prototype, "$sum", {
-    enumerable: false,
-    value: function(){
-		var count = 0;
-		for(var i in this) count += this[i];
-		return count;
-	}
-});	
-	
-Object.defineProperty(Object.prototype, "$length", {
-    enumerable: false,
-    value: function(){
-		return Object.keys(this).length;
-	}
-});	
-
-
-Object.defineProperty(Object.prototype, "$toArray", {
-    enumerable: false,
-    value: function(){
-		var tmp = [];
-		for(var i in this)
-			tmp.push(this[i]);
-		return tmp;
-	}
-});	
-
-	
-convertRatio = function(ratio){
-	var sum = 0;
-	for(var i in ratio) sum += ratio[i];
-	for(var i in ratio) ratio[i] /= sum;
-	return ratio;
-}
-
-
-
-Object.defineProperty(Array.prototype, "have", {
-    enumerable: false,
-    value: function(name){
-		return this.indexOf(name) !== -1;
-	}
-});	
-Object.defineProperty(Array.prototype, "insert", {
-    enumerable: false,
-    value: function (index, item) {
-	  this.splice(index, 0, item);
-	}
-});
-
-

@@ -621,7 +621,7 @@ Init.db.npc = function(){
 				'amount':7,angle:360,'burn,baseChance':1,'burn,magn':2,
 			}},
 			{'template':'scratch','aiChance':[0.4,0,0],'extra':{
-				'dmg,ratio,fire':1,'delayAnim,name':'slashFire',
+				'dmg,ratio,fire':1,'postDelayAnim,name':'slashFire',
 			}},
 			[0.5,0.5,0.5]
 		],
@@ -643,7 +643,7 @@ Init.db.npc = function(){
 				'amount':7,'angle':160,'bleed,baseChance':0.5,
 			}},
 			{'template':'scratchBig','aiChance':[1,0,0],'extra':{
-				'delayAnim,sizeMod':1.5,'dmg,main':200,
+				'postDelayAnim,sizeMod':1.5,'dmg,main':200,
 				'onStrike':{chance:0.5,attack:{
 						'type':"bullet",'angle':360,'amount':8,
 						'objImg':{'name':"rock",'sizeMod':0.8},'hitImg':{'name':"earthHit",'sizeMod':0.5},
@@ -668,10 +668,10 @@ Init.db.npc = function(){
 		'resource':{'hp':{'max':1000,'regen':3},'mana':{'max':100,'regen':1}},
 		"abilityList":[
 			{'template':'scratch','aiChance':[1,0,0],'extra':{
-				'leech,baseChance':1,'delayAnim,name':'cursePink',
+				'leech,baseChance':1,'postDelayAnim,name':'cursePink',
 			}},
 			{'template':'scratch','aiChance':[0.5,0,0],'extra':{
-				'chill,baseChance':1,'delayAnim,name':'slashCold',
+				'chill,baseChance':1,'postDelayAnim,name':'slashCold',
 			}},
 			{'template':'coldNova','aiChance':[0,0.2,0.4],'extra':{}},
 			{'template':'magicBomb','aiChance':[0,0.5,0.5],'extra':{
@@ -695,7 +695,7 @@ Init.db.npc = function(){
 		"abilityList":[
 			{'template':'windBomb','aiChance':[0.5,0.5,0.5],'extra':{}},
 			{'template':'scratch','aiChance':[0.5,0,0],'extra':{
-				'knock,baseChance':1,'delayAnim,name':'earthHit',
+				'knock,baseChance':1,'postDelayAnim,name':'earthHit',
 			}},
 			{'template':'windBullet','aiChance':[0,0.5,0.5],'extra':{
 				'amount':5,'angle':45,'sin':{"amp":2,"freq":2},'knock,baseChance':0.5,

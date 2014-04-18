@@ -265,7 +265,7 @@ Map.creation = function(namemodel,version,lvl){
 		model:model.id,
 		fall:model.fall,
 		timer:version === 'MAIN' ? 1/0 : 1000,// 5*60*1000/25,
-		list:{all:{},player:{},bullet:{},npc:{},anim:{}},		//acts like List.all (for faster activeList and collisionRect)
+		list:{all:{},player:{},bullet:{},npc:{},anim:{},actor:{}},		//acts like List.all (for faster activeList and collisionRect)
 		lvl:lvl || model.lvl,
 		addon:newaddon,
 	};

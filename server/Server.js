@@ -47,6 +47,7 @@ Server =  {
 
 
 Server.start = function(data){
+	if(Server.ready) return;
 	Init.db(data);
 	Init.email(data);
 	Init.server();

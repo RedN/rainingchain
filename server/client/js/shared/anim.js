@@ -25,7 +25,7 @@ Init.db.anim = function(){	//client
 		"magicHit":{'frame':9},
 		
 		"fireBomb":{'frame':30},
-		"fireBomb2":{'frame':6,spd:0.4},
+		"fireBomb2":{'frame':6,spd:0.4,'sfx':{name:'explosion',volume:0.5}},
 		"fireHit":{'frame':12},
 		"coldBomb":{'frame':9,spd:0.4},
 		"coldHit":{'frame':16},
@@ -33,7 +33,7 @@ Init.db.anim = function(){	//client
 		"lightningBomb2":{'frame':5},
 		"lightningHit":{'frame':6},
 		
-		"scratch":{'frame':6},
+		"scratch":{'frame':6,'sfx':{name:'sword',volume:0.2}},
 		"scratch2":{'frame':8},
 		
 		"slashCold":{'frame':13},
@@ -51,85 +51,108 @@ Init.db.anim = function(){	//client
 			
 			
 	for(var i in Db.anim){
-		var anim = Db.anim[i];
-		
-		anim.layer = anim.layer || 'a';
-		anim.frameX = anim.frameX || Math.min(anim.frame,5);
-		anim.spd = anim.spd || 1;
-		anim.size = anim.size || 4;
-		anim.startY = anim.startY || 0;
-		anim.src = anim.src || 'img/anim/' + i + '.png';
-		
-		anim.name = i;
-		anim.img = newImage(anim.src);
-		Img.preloader.push(anim.src);
+		Db.anim[i].name = i;
+		Init.db.anim.creation(Db.anim[i]);		
 	}
+}
+
+Init.db.anim.creation = function(anim){
+	anim.src = anim.src || 'img/anim/' + anim.name + '.png';
+	anim.frameX = anim.frameX || Math.min(anim.frame,5);
 	
+	anim = useTemplate(Init.db.anim.creation.template(),anim);		
+	anim.img = newImage(anim.src);
+	Img.preloader.push(anim.src);
+	Db.anim[anim.name] = anim;
+}
+Init.db.anim.creation.template = function(anim){
+	return {
+		layer:'a',
+		frameX:10,
+		spd:1,
+		size:4,
+		startY:0,
+		src:'img/anim/scratch.png',	
+		name:'scratch',
+		img:null,
+		sfx:null,	//{name:'asd',volume:0.5}
+	}
 }
 
 Anim = {};
-Anim.creation = function(name,target,sizeMod){	//server
-	//Add animation to the game. target = actor id OR an obj x,y,map,viewedIf
-	sizeMod = sizeMod || 1;
-	var id = 'a'+Math.randomId(5);	
-	var anim = {'sizeMod':sizeMod,'name':name,'target':target,'id':id};
+Anim.creation = function(d){	//server
+	//Add animation to the game. target = actor id OR an obj { x,y,map,viewedIf }
+	var anim = useTemplate(Anim.template(),d);
 	
-	if(typeof target === 'string') List.map[List.all[target].map].list.anim[id] = anim;
-	else List.map[target.map].list.anim[id] = anim;
+	if(typeof anim.target === 'string') List.map[List.all[anim.target].map].list.anim[anim.id] = anim;
+	else List.map[anim.target.map].list.anim[anim.id] = anim;
 	
-	return id;
+	return anim.id;
+}
+Anim.template = function(){
+	return {
+		sizeMod:1,
+		name:'scratch',
+		target:{x:1,y:1,map:'test@MAIN'},
+		id:'a'+Math.randomId(5),
+	}
 }
 
-Anim.clearList = function(){	//server
+Anim.removeAll = function(){	//server
 	for(var i in List.map){
 		List.map[i].list.anim = {};
 	}
 }
 
-Anim.loop = function (anim){	//client
-	var animFromDb = Db.anim[anim.name];
-	if(!animFromDb){ DEBUG(1,"anim not found" + anim.name); animFromDb = Db.anim['slashMelee']; }
-	
-	anim.timer += animFromDb.spd * anim.spdMod;
-	
-	anim.x = anim.target.x;
-	anim.y = anim.target.y;
-	
-	anim.slot = Math.floor(anim.timer);
-	if(anim.slot > animFromDb.frame){
-		delete List.anim[anim.id];
-	}	
-}
-
-
-
-
-
-if(!server){
-	Anim.creation = function(a){	//client side
-		if(typeof a.target === 'string'){
-			if(a.target === player.name){	a.target = player;
-			} else {a.target = List.all[a.target];}
-		}
+if(!server){	//client
+	Anim.loop = function (anim){	
+		var animFromDb = Db.anim[anim.name];
+		if(!animFromDb){ DEBUG(1,"anim not found" + anim.name); animFromDb = Db.anim['scratch']; }
 		
-		a.id = Math.randomId();
-		a.timer = 0;
-		a.sizeMod = a.sizeMod || 1;
-		a.spdMod = a.spdMod || 1;
-		if(a.target){  
-			a.x = a.target.x;
-			a.y = a.target.y;
-			a.slot = 0;			
-			List.anim[a.id] = a;
-		}
+		anim.timer += animFromDb.spd;
 		
-		var sfx = a.sfx || Db.anim[a.name].sfx;
-		if(sfx && a.sfx !== false){	
-			sfx.volume = sfx.volume || 1;
-			sfx.volume *= Math.max(0.1,1 - 0.2*Math.floor(Collision.distancePtPt(player,a)/50));	
-			Sfx.play(sfx);
+		anim.x = anim.target.x;
+		anim.y = anim.target.y;
+		
+		anim.slot = Math.floor(anim.timer);
+		if(anim.slot > animFromDb.frame){
+			Anim.remove(anim);
 		}	
 	}
+
+	Anim.remove = function(anim){	
+		delete List.anim[anim.id];
+	}
+
+	Anim.creation = function(a){
+		if(typeof a.target === 'string'){
+			a.target = a.target === player.name ? player : List.all[a.target];
+			if(!a.target) return;
+		}
+		a = useTemplate(Anim.template(),a);
+		
+		List.anim[a.id] = a;
+		
+		var sfx = Db.anim[a.name].sfx;
+		if(sfx){
+			var s = deepClone(sfx);
+			s.volume *= Math.max(0.1,1 - 0.2*Math.floor(Collision.distancePtPt(player,a.target)/50));
+			Sfx.creation(s);
+		}	
+	}
+	
+	Anim.template = function(){
+		return {
+			sizeMod:1,
+			name:'scratch',
+			target:{x:1,y:1,map:'test@MAIN'},
+			id:Math.randomId(),
+			sfx:null,
+			timer:0,
+			slot:0,
+		}
+	}
+	
 }
 
 

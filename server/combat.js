@@ -132,7 +132,7 @@ Combat.collision = function(b,act){
 	if(act.attackReceived[b.hitId]) return;    //for pierce
     act.attackReceived[b.hitId] = 250;	//last for 10 sec
 	
-	if(b.hitImg){Anim.creation(b.hitImg.name,act.id,b.hitImg.sizeMod || 1);}
+	if(b.hitImg){Anim.creation({name:b.hitImg.name,target:act.id,sizeMod:b.hitImg.sizeMod});}
 	if(b.healing){ Actor.changeResource(act,b.healing); return; }
 	
 	if(b.crit.baseChance >= Math.random() || b.crit.chance >= Math.random()){ b = Combat.collision.crit(b) }

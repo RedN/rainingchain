@@ -41,7 +41,6 @@ Change.send = function(){
 		
 		//Anim
 		//note: remove map and viewedif from .target and slot?
-		//ts("Anim.creation('fire2',{x:p.x,y:p.y,map:p.map,viewedIf:'true'})")	
 		for(var i in List.map[player.map].list.anim){
 			var anim = List.map[player.map].list.anim[i];
 			
@@ -132,7 +131,7 @@ Change.send.compressXYA = function(info){
 }
 
 Change.send.reset = function(){
-	Anim.clearList();
+	Anim.removeAll();
 	for(var i in List.all){ List.all[i].change = {}; }
 	for(var i in List.main){ 
 		List.main[i].change = {}; 

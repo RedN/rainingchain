@@ -98,7 +98,7 @@ Actor.performAbility = function(act,ab,mana,reset){
 	
 	//Anim
 	if(ab.action.anim) Sprite.change(act,{'anim':ab.action.anim});
-	if(ab.action.animOnSprite)	Anim.creation(ab.action.animOnSprite,act.id,1);
+	if(ab.action.animOnSprite)	Anim.creation({name:ab.action.animOnSprite,target:act.id});
 	
 	//Do Ability Action (ex: Combat.action.attack)
 	applyFunc.key(act.id,ab.action.func,ab.action.param);

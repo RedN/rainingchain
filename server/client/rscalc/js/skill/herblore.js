@@ -11,9 +11,11 @@ function initHerblore(){
 	//tick/h / ((t/a * a/i) + bank + timeInit) * a/i
 	var BANK = 6;
 
-	var POTPH = 6000 / ((3 * 9) + BANK + 0) * 9;
+	var POTPH = 6000 / ((3 * 14) + BANK + 0) * 14;
 	var HERBPH = 6000 / ((1 * 28) + BANK + 0) * 28;
 	var UNFPH = 6000 / ((2 * 14) + BANK + 0) * 14;
+	var POTPH2ING = 6000 / ((3 * 9) + BANK + 0) * 9;
+	var TAR = TAR;
 	
 	methodDb = [];
 	methodPreDb = 
@@ -39,10 +41,10 @@ function initHerblore(){
 {"exclude":0,"hide":0,"boost":['fpf','scroll',],"mod":{},"name":"Marrentill potion (unf)","icon":"marrentill potion (unf)","lvl":9,"input":{"clean marrentill":1,"vial of water":1},"output":{"marrentill potion (unf)":1},"expPa":[1],"actionPh":UNFPH},
 {"exclude":0,"hide":0,"boost":[],"mod":{},"name":"Clean tarromin","icon":"clean tarromin","lvl":11,"input":{"grimy tarromin":1},"output":{"clean tarromin":1},"expPa":[5],"actionPh":HERBPH},
 {"exclude":0,"hide":1,"boost":[],"mod":{},"name":"Strength mix (2)","icon":"strength mix (2)","lvl":14,"input":{"strength potion (2)":1,"roe":1},"output":{"strength mix (2)":1},"expPa":[17],"actionPh":POTPH},
-{"exclude":0,"hide":0,"boost":['fpf','scroll',],"mod":{},"name":"Serum 207 (3)","icon":"serum 207 (3)","lvl":15,"input":{"tarromin potion (unf)":1,"ashes":1},"output":{"serum 207 (3)":1},"expPa":[50],"actionPh":4200},
+{"exclude":0,"hide":0,"boost":['fpf','scroll',],"mod":{},"name":"Serum 207 (3)","icon":"serum 207 (3)","lvl":15,"input":{"tarromin potion (unf)":1,"ashes":1},"output":{"serum 207 (3)":1},"expPa":[50],"actionPh":UNFPH},
 {"exclude":0,"hide":0,"boost":['fpf','scroll',],"mod":{},"name":"Harralander potion (unf)","icon":"harralander potion (unf)","lvl":18,"input":{"clean harralander":1,"vial of water":1},"output":{"harralander potion (unf)":1},"expPa":[1],"actionPh":UNFPH},
 {"exclude":1,"hide":2,"boost":['fpf','scroll',],"mod":{},"name":"Guthix rest (3)","icon":"guthix rest (3)","lvl":18,"input":{"harralander potion (unf)":1,"clean marrentill":1},"output":{"guthix rest (3)":1},"expPa":[59.5],"actionPh":POTPH},
-{"exclude":1,"hide":2,"boost":[],"mod":{},"name":"Guam tar","icon":"guam tar","lvl":19,"input":{"clean guam":1,"swamp tar":1},"output":{"guam tar":15},"expPa":[30],"actionPh":1800},
+{"exclude":1,"hide":2,"boost":[],"mod":{},"name":"Guam tar","icon":"guam tar","lvl":19,"input":{"clean guam":1,"swamp tar":1},"output":{"guam tar":15},"expPa":[30],"actionPh":TAR},
 {"exclude":0,"hide":0,"boost":[],"mod":{},"name":"Clean harralander","icon":"clean harralander","lvl":20,"input":{"grimy harralander":1},"output":{"clean harralander":1},"expPa":[6.3],"actionPh":HERBPH},
 {"exclude":1,"hide":2,"boost":['fpf','scroll',],"mod":{},"name":"Guthix balance (3)","icon":"guthix balance (3)","lvl":22,"input":{"guthix balance (3) (unf)":1,"silver dust":1},"output":{"guthix balance (3)":1},"expPa":[25],"actionPh":POTPH},
 {"exclude":1,"hide":2,"boost":['fpf','scroll',],"mod":{},"name":"Guthix balance (3) (unf)","icon":"guthix balance (3) (unf)","lvl":22,"input":{"restore potion (3)":1,"garlic":1},"output":{"guthix balance (3) (unf)":1},"expPa":[25],"actionPh":POTPH},
@@ -55,7 +57,7 @@ function initHerblore(){
 {"exclude":0,"hide":0,"boost":[],"mod":{},"name":"Clean toadflax","icon":"clean toadflax","lvl":30,"input":{"grimy toadflax":1},"output":{"clean toadflax":1},"expPa":[8],"actionPh":HERBPH},
 {"exclude":0,"hide":1,"boost":['fpf','scroll',],"mod":{},"name":"Defence potion (3)","icon":"defence potion (3)","lvl":30,"input":{"ranarr potion (unf)":1,"white berries":1},"output":{"defence potion (3)":1},"expPa":[75],"actionPh":POTPH},
 {"exclude":0,"hide":0,"boost":['fpf','scroll',],"mod":{},"name":"Toadflax potion (unf)","icon":"toadflax potion (unf)","lvl":30,"input":{"clean toadflax":1,"vial of water":1},"output":{"toadflax potion (unf)":1},"expPa":[1],"actionPh":UNFPH},
-{"exclude":1,"hide":2,"boost":[],"mod":{},"name":"Marrentill tar","icon":"marrentill tar","lvl":31,"input":{"clean marrentill":1,"swamp tar":1},"output":{"marrentill tar":15},"expPa":[42.5],"actionPh":1800},
+{"exclude":1,"hide":2,"boost":[],"mod":{},"name":"Marrentill tar","icon":"marrentill tar","lvl":31,"input":{"clean marrentill":1,"swamp tar":1},"output":{"marrentill tar":15},"expPa":[42.5],"actionPh":TAR},
 {"exclude":1,"hide":2,"boost":[],"mod":{},"name":"Super fishing explosive","icon":"super fishing explosive","lvl":31,"input":{"guam potion (unf)":1,"rubium":1},"output":{"super fishing explosive":1},"expPa":[55],"actionPh":200},
 {"exclude":0,"hide":1,"boost":[],"mod":{},"name":"Defence mix (2)","icon":"defence mix (2)","lvl":33,"input":{"defence potion (2)":1,"caviar":1},"output":{"defence mix (2)":1},"expPa":[25],"actionPh":POTPH},
 {"exclude":0,"hide":0,"boost":['fpf','scroll',],"mod":{},"name":"Agility potion (3)","icon":"agility potion (3)","lvl":34,"input":{"toadflax potion (unf)":1,"toad's legs":1},"output":{"agility potion (3)":1},"expPa":[80],"actionPh":POTPH},
@@ -64,7 +66,7 @@ function initHerblore(){
 {"exclude":0,"hide":0,"boost":['fpf','scroll',],"mod":{},"name":"Combat potion (3)","icon":"combat potion (3)","lvl":36,"input":{"harralander potion (unf)":1,"goat horn dust":1},"output":{"combat potion (3)":1},"expPa":[84],"actionPh":POTPH},
 {"exclude":0,"hide":1,"boost":[],"mod":{},"name":"Agility mix (2)","icon":"agility mix (2)","lvl":37,"input":{"agility potion (2)":1,"caviar":1},"output":{"agility mix (2)":1},"expPa":[27],"actionPh":POTPH},
 {"exclude":0,"hide":0,"boost":['fpf','scroll',],"mod":{},"name":"Prayer potion (3)","icon":"prayer potion (3)","lvl":38,"input":{"ranarr potion (unf)":1,"snape grass":1},"output":{"prayer potion (3)":1},"expPa":[87.5],"actionPh":POTPH},
-{"exclude":1,"hide":2,"boost":[],"mod":{},"name":"Tarromin tar","icon":"tarromin tar","lvl":39,"input":{"clean tarromin":1,"swamp tar":1},"output":{"tarromin tarl":15},"expPa":[55],"actionPh":1800},
+{"exclude":1,"hide":2,"boost":[],"mod":{},"name":"Tarromin tar","icon":"tarromin tar","lvl":39,"input":{"clean tarromin":1,"swamp tar":1},"output":{"tarromin tarl":15},"expPa":[55],"actionPh":TAR},
 {"exclude":0,"hide":1,"boost":[],"mod":{},"name":"Combat mix (2)","icon":"combat mix (2)","lvl":40,"input":{"combat potion (2)":1,"caviar":1},"output":{"combat mix (2)":1},"expPa":[28],"actionPh":POTPH},
 {"exclude":1,"hide":2,"boost":['fpf','scroll',],"mod":{},"name":"Crafting potion (3)","icon":"crafting potion (3)","lvl":40,"input":{"wergali potion (unf)":1,"frog spawn":1},"output":{"crafting potion (3)":1},"expPa":[92],"actionPh":90},
 {"exclude":0,"hide":0,"boost":[],"mod":{},"name":"Clean irit","icon":"clean irit","lvl":40,"input":{"grimy irit":1},"output":{"clean irit":1},"expPa":[8.8],"actionPh":HERBPH},
@@ -73,7 +75,7 @@ function initHerblore(){
 {"exclude":0,"hide":0,"boost":[],"mod":{},"name":"Clean wergali","icon":"clean wergali","lvl":41,"input":{"grimy wergali":1},"output":{"clean wergali":1},"expPa":[9.5],"actionPh":HERBPH},
 {"exclude":1,"hide":2,"boost":['fpf','scroll',],"mod":{},"name":"Wergali potion (unf)","icon":"wergali potion (unf)","lvl":41,"input":{"clean wergali":1,"vial of water":1},"output":{"wergali potion (unf)":1},"expPa":[1],"actionPh":UNFPH},
 {"exclude":0,"hide":1,"boost":[],"mod":{},"name":"Prayer mix (2)","icon":"prayer mix (2)","lvl":42,"input":{"prayer potion (2)":1,"caviar":1},"output":{"prayer mix (2)":1},"expPa":[29],"actionPh":POTPH},
-{"exclude":1,"hide":2,"boost":[],"mod":{},"name":"Harralander tar","icon":"harralander tar","lvl":44,"input":{"clean harralander":1,"swamp tar":1},"output":{"harralander tar":1},"expPa":[72.5],"actionPh":1800},
+{"exclude":1,"hide":2,"boost":[],"mod":{},"name":"Harralander tar","icon":"harralander tar","lvl":44,"input":{"clean harralander":1,"swamp tar":1},"output":{"harralander tar":1},"expPa":[72.5],"actionPh":TAR},
 {"exclude":0,"hide":0,"boost":['fpf','scroll',],"mod":{},"name":"Super attack (3)","icon":"super attack (3)","lvl":45,"input":{"irit potion (unf)":1,"eye of newt":1},"output":{"super attack (3)":1},"expPa":[100],"actionPh":POTPH},
 {"exclude":0,"hide":1,"boost":[],"mod":{},"name":"Super attack mix (2)","icon":"super attack mix (2)","lvl":47,"input":{"super attack (2)":1,"caviar":1},"output":{"super attack mix (2)":1},"expPa":[33],"actionPh":POTPH},
 {"exclude":0,"hide":0,"boost":[],"mod":{},"name":"Clean avantoe","icon":"clean avantoe","lvl":48,"input":{"grimy avantoe":1},"output":{"clean avantoe":1},"expPa":[10],"actionPh":HERBPH},

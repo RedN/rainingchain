@@ -49,7 +49,7 @@ Map.loop = function(map){
 	}
 	
 	for(var j in map.addon){
-		if(map.addon[j].loop)
+		if(map.addon[j].loop && map.list.player.$length() !== 0)
 			map.addon[j].loop(map.addon[j].spot);
 	}
 }
@@ -88,6 +88,7 @@ Map.leave = function(act,map){
 				oldmap.addon[i].playerLeave(act.id,map,oldmap.addon[i].spot,oldmap.addon[i].variable,oldmap);
 	}
 	delete oldmap.list.all[act.id];
+	delete oldmap.list.actor[act.id];
 	if(oldmap.list[act.type]) delete oldmap.list[act.type][act.id];
 }
 
@@ -96,6 +97,8 @@ Map.enter = function(act,map){
 	var newmap = List.map[act.map];
 	newmap.list.all[act.id] = 1;
 	if(newmap.list[act.type]) newmap.list[act.type][act.id] = 1;
+	if(act.type === 'player' || act.type === 'npc') newmap.list.actor[act.id] = 1;
+	
 	
 	if(act.type === 'player'){
 		for(var i in newmap.addon)

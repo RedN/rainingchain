@@ -6,12 +6,11 @@ Init.db.sfx = function(){
 		
 		//Environement
 		'river':{src:'stream-1.ogg'},
-
-
-
-	
-
-
+		
+		'explosion':{src:'explosion.mp3','link':'SoundBible.com-1777900486'},
+		'swoosh':{src:'swoosh.mp3','link':'SoundBible.com-231145780'},
+		'sword':{src:'sword.ogg','link':'SoundBible.com-912903192'},
+		
 	}
 
 
@@ -19,7 +18,7 @@ Init.db.sfx = function(){
 		var s = Db.sfx[i];
 		s.src = s.src ? 'music/sfx/' + s.src : 'music/sfx/' + i + '.ogg';
 		s.volume = 	s.volume || 1;
-		s.delay = s.delay || 0;	//not used
+		s.delay = s.delay || 0;
 			
 		s.list = [];
 		for(var j = 0 ; j < 3 ; j++){	
@@ -38,19 +37,17 @@ Sfx.play = function(sfx,volume){
 	vol *= Db.sfx[id].volume;
 	vol *= main.pref.volumeSfx/100 * main.pref.volumeMaster/100;
 	
-	var i = 0;
-	while(Db.sfx[id].list[i]){
+	for(var i in Db.sfx[id].list){
 		if(Db.sfx[id].list[i].ended || !Db.sfx[id].list[i].currentTime){
 			var s = Db.sfx[id].list[i];
 			s.volume = vol;
 			s.play();
 			return;
 		}
-		i++;
 	}
 }
 
-Sfx.creation = function(sfx){	//not used
+Sfx.creation = function(sfx){		//used by anim
 	var s = useTemplate(Sfx.template(),sfx);
 	s.id = Math.randomId();
 	s.volume *= Db.sfx[s.name].volume;

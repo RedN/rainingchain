@@ -1,13 +1,6 @@
 nodejitsu = typeof process.env.NODEJITSU !== 'undefined';
 
-if(nodejitsu){
-	require('nodetime').profile({
-		accountKey: '7a06997db310e13bef9840cd1d8cfc1ea45fcc57', 
-		appName: 'Raining Chain'//'Node.js Application'
-	});
-}
-require('domain').create().on('error', function(err){ permConsoleLog('domain',err);});	//no idea if working
-
+if(nodejitsu) require('nodetime').profile({accountKey: '7a06997db310e13bef9840cd1d8cfc1ea45fcc57',appName: 'Raining Chain'});
 
 
 //Create Server
@@ -16,11 +9,11 @@ var path = require('path');
 var socketio = require('socket.io');
 var express = require('express');
 request = require('request');
-	
 crypto = require('crypto');
 astar = require('astar');
-app = express();
-serv = http.createServer(app);
+
+var app = express();
+var serv = http.createServer(app);
 io = socketio.listen(serv); io.set('log level', 1); io.set('heartbeat timeout', 20); io.set('heartbeat interval', 15);
 
 serv.listen(3000);
@@ -113,7 +106,7 @@ io.sockets.on('connection', function (socket) { socket.on('Server.start', Server
 if(!nodejitsu && !process.argv[4])	Server.start({
 	db:false,
 	localdb:+process.argv[2],
-	deletedb:process.argv[3],
+	deletedb:+process.argv[3],
 });
 
 

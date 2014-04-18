@@ -135,7 +135,13 @@ Strike.loop = function(s){
 	
 		Strike.loop.collision(s);
 		
-		if(s.delayAnim){ Anim.creation(s.delayAnim.name,{'x':s.crX + s.middleX,'y':s.crY + s.middleY,'map':s.map,'viewedIf':s.viewedIf},s.delayAnim.sizeMod);}
+		if(s.postDelayAnim){ 
+			Anim.creation({
+				name:s.postDelayAnim.name,
+				target:{'x':s.crX + s.middleX,'y':s.crY + s.middleY,'map':s.map,'viewedIf':s.viewedIf},
+				sizeMod:s.postDelayAnim.sizeMod
+			});
+		}
 		s.toRemove = 1;
 	}
 	s.delay--;

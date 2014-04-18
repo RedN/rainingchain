@@ -137,15 +137,15 @@ Activelist.test = function(act,obj){
 	return Collision.PtRect(pt,rect);
 }
 
-Activelist.add = function(bullet){
-	for(var i in List.actor){
+Activelist.add = function(b){
+	for(var i in List.map[b.map].list.actor){
 		var player = List.actor[i];
 		if(!player) continue;
 		
-		if(Activelist.test(player,bullet)){ 
-			player.activeList[bullet.id] = bullet.id;
-			if(player.type !== 'player' || bullet.type === 'strike'){ 
-				bullet.viewedBy[player.id] = 1; 
+		if(Activelist.test(player,b)){ 
+			player.activeList[b.id] = b.id;
+			if(player.type !== 'player' || b.type === 'strike'){ 
+				b.viewedBy[player.id] = 1; 
 			}
 		}
 	}
