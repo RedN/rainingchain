@@ -144,7 +144,7 @@ Draw.anim = function (layer){
 			ctx.drawImage(image,
 				sizeX*slotX,sizeY*slotY+startY,
 				sizeX,sizeY,
-				Cst.WIDTH2+anim.x-player.x-sizeX/2*size,Cst.HEIGHT2+anim.y-player.y-sizeY/2*size,
+				Cst.WIDTH2+anim.target.x-player.x-sizeX/2*size,Cst.HEIGHT2+anim.target.y-player.y-sizeY/2*size,
 				sizeX*size,sizeY*size
 				);
 		}

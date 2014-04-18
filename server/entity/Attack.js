@@ -89,15 +89,17 @@ Attack.creation = function(player,s,extra){
 	s.angle = (s.angle%360+360)%360;
 	
 	List.all[s.id] = s;
+	
+	if(s.type === 'strike'){ Attack.creation.strike(s);}
+	else if(s.type === 'bullet'){ Attack.creation.bullet(s);}
+	
 	Activelist.add(s);
 	
-	if(s.type === 'strike'){ return Attack.creation.strike(s);}
-	else if(s.type === 'bullet'){ return Attack.creation.bullet(s);}
 }; 
 
 Attack.creation.info = function(act,b){
 	b.crX = b.x = act.x || 0;
-	b.crY = b.y = act.x || 0;
+	b.crY = b.y = act.y || 0;
 	b.mouseX = act.mouseX || 0;
 	b.mouseY = act.mouseY || 0;
 	
@@ -110,7 +112,8 @@ Attack.creation.info = function(act,b){
 	if(b.nova || b.onHit || b.onStrike){
 		b.bonus = act.bonus || Actor.template.bonus();
 		b.weapon = act.weapon || Actor.template.weapon();
-		b.mastery = act.mastery || Actor.template.mastery();		
+		b.mastery = act.mastery || Actor.template.mastery();
+		b.globalDmg = act.globalDmg || 1;
 	}
 	
 	b.parent = act.parent || act.id || null;
@@ -131,7 +134,7 @@ Attack.creation.bullet = function(b){
 	}
 	if(b.nova){ b.angle = Math.random()*360;}	//otherwise, circle always the same. moveAngle is same tho
 	
-	if(!b.sin && !b.parabole && !b.boomerang) { b.normal = 1; }
+	b.normal = !b.sin && !b.parabole && !b.boomerang;
 	
 	Sprite.creation(b,{'name':b.objImg.name,'anim':"travel",'sizeMod':b.objImg.sizeMod});
 	

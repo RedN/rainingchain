@@ -57,7 +57,6 @@ Actor.loop.ability = {};
 Actor.loop.ability.charge = function(m){	//HOTSPOT
 	var alreadyBoosted = {};
 	var ma = m.abilityChange;
-	//if(m.type === 'player') console.log(100,m.abilityChange.charge);
 	ma.globalCooldown -= ABILITYINTERVAL;
 	ma.globalCooldown = ma.globalCooldown.mm(-100,250); 	//cuz if atkSpd is low, fuck everything with stun
 	var ab = Actor.getAbility(m);

@@ -75,7 +75,7 @@ Init.db.anim.creation.template = function(anim){
 		src:'img/anim/scratch.png',	
 		name:'scratch',
 		img:null,
-		sfx:null,	//{name:'asd',volume:0.5}
+		sfx:null,	// {name:'asd',volume:0.5}
 	}
 }
 
@@ -110,10 +110,8 @@ if(!server){	//client
 		if(!animFromDb){ DEBUG(1,"anim not found" + anim.name); animFromDb = Db.anim['scratch']; }
 		
 		anim.timer += animFromDb.spd;
-		
-		anim.x = anim.target.x;
-		anim.y = anim.target.y;
-		
+		console.log(anim.target.x,anim.target.y);
+	
 		anim.slot = Math.floor(anim.timer);
 		if(anim.slot > animFromDb.frame){
 			Anim.remove(anim);
@@ -125,11 +123,11 @@ if(!server){	//client
 	}
 
 	Anim.creation = function(a){
+		a = useTemplate(Anim.template(),a);
 		if(typeof a.target === 'string'){
 			a.target = a.target === player.name ? player : List.all[a.target];
 			if(!a.target) return;
 		}
-		a = useTemplate(Anim.template(),a);
 		
 		List.anim[a.id] = a;
 		

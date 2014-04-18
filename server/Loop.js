@@ -120,7 +120,7 @@ Loop.team = function(){
 }
 
 Activelist = {};	//Actor.loop.activeList is where the update happens
-Activelist.test = function(act,obj){
+Activelist.test = function(act,obj){	
 	//Test used to know if obj should be in activeList of act.
 	if(!obj){ return false; }
 	if(act.id === obj.id){ return false; }
@@ -131,11 +131,11 @@ Activelist.test = function(act,obj){
 	if(typeof obj.viewedIf === 'function' && !obj.viewedIf(act.id,obj.id)){ return false; }
 	if(typeof obj.viewedIf === 'object' && obj.viewedIf.indexOf(act.id) === -1){ return false; }
 	
-	var pt = {'x':obj.x,'y':obj.y};
 	var rect = [act.x-800,act.x+800,act.y-600,act.y+600];
 	
-	return Collision.PtRect(pt,rect);
+	return Collision.PtRect(obj,rect);
 }
+
 
 Activelist.add = function(b){
 	for(var i in List.map[b.map].list.actor){
