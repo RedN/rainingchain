@@ -146,10 +146,10 @@ var getEnemy = function(key,tag){
 
 //Map
 var bullet = function(spot,atk,angle,dif){
-	var act = {damageIf:dif || 'player-simple',spot:spot,angle:angle};
+	var act = {damageIf:dif || 'player-simple',spot:spot};
 	Map.convertSpot(act);
 	
-	Attack.creation(act,atk);
+	Attack.creation(act,atk,{angle:angle});
 }
 var strike = function(spot,atk,angle,dif,extra){
 	Combat.attack.simple({damageIf:dif || 'player-simple',spot:spot,angle:angle},atk,extra);

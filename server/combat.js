@@ -36,38 +36,34 @@ leech chance: unrelated to dmg. abilityMod [1] * playerMod [0]
 
 Combat = {};
 
-//NOTE: Combat.attack.mod is inside	Combat_sub.js
-
-//ACTION//
 Combat.attack = function(key,action,extra){   	
 	extra = extra || {};
 	var player = typeof key === 'string' ? List.all[key] : key;
 	
 	//Add Bonus and mastery
 	var atk = typeof action === 'function' ? action() : deepClone(action); 
-	atk = Combat.attack.mod(player,atk);
+	atk = Combat.attack.mod(player,atk);	//NOTE: Combat_sub.js
 	Combat.attack.perform(player,atk,extra);
 }
 
-Combat.attack.perform = function(player,attack,extra){   //extra used for stuff like boss loop
+Combat.attack.perform = function(player,atk,extra){   //extra used for stuff like boss loop
 	//At this point, player.bonus/mastery must be already applied
-	if(attack.func && attack.func.chance >= Math.random()){
-		applyFunc.key(player.id,attack.func.func,attack.func.param);
+	if(atk.func && atk.func.chance >= Math.random()){
+		applyFunc.key(player.id,atk.func.func,atk.func.param);
 	}
 
-	var atkList = [attack];
-	for(var i = 1 ; i < attack.amount ; i ++)
-		atkList.push(deepClone(attack));
+	var atkList = [atk];
+	for(var i = 1 ; i < atk.amount ; i ++)
+		atkList.push(deepClone(atk));
 	
 	var pAngle = extra.angle || player.angle;
-	var initAngle = pAngle + Math.randomML() * (attack.aim + player.aim) || 0;
-	var atkAngle = attack.angle; var atkAmount = attack.amount;
-
+	var initAngle = pAngle + Math.randomML() * (atk.aim + player.aim) || 0;
+	var atkAngle = atk.angle;	//required
+	
 	for(var i = 0 ; i < atkList.length ; i ++){
-		var angle = initAngle + atkAngle * (atkAmount-2*(i+1/2)) / (atkAmount*2) ;
-		angle = (angle+360) % 360;
-		
-		Attack.creation(player,atkList[i],{'angle':angle,'num':i});	//num used for parabole/sin
+		atkList[i].angle = initAngle + atkAngle * (atk.amount-2*(i+0.5)) / (atk.amount*2);
+		atkList[i].num = i;
+		Attack.creation(player,atkList[i]);	//num used for parabole/sin
 	}
 }	
 	
@@ -347,7 +343,13 @@ Combat.targetIf = function(act,target){
 	var hIf = typeof act.targetIf === 'function' ? act.targetIf : Combat.damageIf.list[act.targetIf];
 	return hIf(target,act);
 };
-Combat.damageIf = {};
+
+Combat.damageIf = function(atk,def){
+	if(!Combat.damageIf.global(atk,def)) return false;
+	
+	var hIf = typeof atk.damageIf === 'function' ? atk.damageIf : Combat.damageIf.list[atk.damageIf];
+	return hIf(def,atk);
+};
 
 Combat.targetIf.global = function(atk,def){
 	//Used first in every target if test
@@ -356,7 +358,8 @@ Combat.targetIf.global = function(atk,def){
 	&& !def.dead 
 	&& def.combat 
 	&& (def.type === 'player' || def.type === 'npc')
-	&& List.all[def.id];
+	&& List.all[def.id]
+	&& true;	//to return bool, otherwise return last test
 }
 
 Combat.targetIf.list = {

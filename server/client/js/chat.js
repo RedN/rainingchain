@@ -7,7 +7,6 @@ Chat.send = function(){
 	if(text[0] === '$'){  Command.send(text.slice(1)); return; }
 	
 	var pack = Chat.send.parse(text);
-	console.log(pack);
 	if(pack){ socket.emit('sendChat',pack);  }
 	Input.add(''); 
 }

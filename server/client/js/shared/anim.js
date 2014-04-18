@@ -110,8 +110,7 @@ if(!server){	//client
 		if(!animFromDb){ DEBUG(1,"anim not found" + anim.name); animFromDb = Db.anim['scratch']; }
 		
 		anim.timer += animFromDb.spd;
-		console.log(anim.target.x,anim.target.y);
-	
+		
 		anim.slot = Math.floor(anim.timer);
 		if(anim.slot > animFromDb.frame){
 			Anim.remove(anim);

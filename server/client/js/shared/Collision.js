@@ -7,19 +7,16 @@ pos: {x:1,y:23}			//grid position
 */
 
 
-Collision.RectRect = function(rect1,rect2){
-	//Test Collision between rect and rect. format: rect1:[minx,maxx,miny,maxy],rect2:[minx,maxx,miny,maxy]
+Collision.RectRect = function(rect1,rect2){	//rect1:[minx,maxx,miny,maxy],rect2:[minx,maxx,miny,maxy]
+	
 	return (rect1[0] <= rect2[1] &&	rect2[0] <= rect1[1] &&	rect1[2] <= rect2[3] &&	rect2[2] <= rect1[3]);
 }
 
-Collision.PtRect = function(pt,rect){
-	//Test Collision between point and rect. format: pt:{x:1,y:1},rect:[minx,maxx,miny,maxy]
+Collision.PtRect = function(pt,rect){	//pt:{x:1,y:1},rect:[minx,maxx,miny,maxy]
 	return (pt.x >= rect[0] && pt.x <= rect[1] && pt.y >= rect[2] && pt.y <= rect[3])
 }
 
-
-Collision.PosMap = function(pos,map,type){
-	//Test Collision between pt and map
+Collision.PosMap = function(pos,map,type){	//Test Collision between pos and map	
 	var grid = Db.map[Map.getModel(map)].grid[type];
 	return !grid[pos.y] || !+grid[pos.y][pos.x];		//return 1 if collision
 }
@@ -36,7 +33,7 @@ Collision.ActorMap = function(pos,map,player){
 Collision.getSquareValue = function(pos,map,type){
 	var grid = Db.map[Map.getModel(map)].grid[type];
 	if(!grid[pos.y]) return null;
-	return grid[pos.y][pos.x];		//return if in a falling zone
+	return grid[pos.y][pos.x];		//return 01234
 }
 
 
@@ -48,8 +45,9 @@ Collision.getBumperBox = function(player){
 	return [player.x + player.bumperBox[2].x,player.x + player.bumperBox[0].x,player.y + player.bumperBox[3].y,player.y + player.bumperBox[1].y];
 }
 
-Collision.PtRRect = function(pt,rotRect){	
-	//Collision Pt and Rotated Rect
+Collision.PtRRect = function(pt,rotRect){	//Collision Pt and Rotated Rect
+	//IF WANT REVAMP: local function isPointInsideRectangle(rectangle, x, y)$$$			local c = math.cos(-rectangle.rotation*math.pi/180)$$$			local s = math.sin(-rectangle.rotation*math.pi/180)$$$			$$$			-- UNrotate the point depending on the rotation of the rectangle$$$			local rotatedX = rectangle.x + c * (x - rectangle.x) - s * (y - rectangle.y)$$$			local rotatedY = rectangle.y + s * (x - rectangle.x) + c * (y - rectangle.y)$$$			$$$			-- perform a normal check if the new point is inside the $$$			-- bounds of the UNrotated rectangle$$$			local leftX = rectangle.x - rectangle.width / 2$$$			local rightX = rectangle.x + rectangle.width / 2$$$			local topY = rectangle.y - rectangle.height / 2$$$			local bottomY = rectangle.y + rectangle.height / 2$$$			$$$			return leftX <= rotatedX and rotatedX <= rightX and$$$					topY <= rotatedY and rotatedY <= bottomY$$$	end
+	
 	var x = pt.x;
 	var y = pt.y;
 	var pt0 = rotRect[0];
@@ -88,33 +86,24 @@ Collision.getMouse = function(key){
 	else{ return {x:Input.mouse.x,y:Input.mouse.y} }
 }
 
-Collision.BulletActor = function(atk){
-	for(var i in atk.viewedBy){ 
+Collision.BulletActor = function(b){
+	for(var i in b.viewedBy){ 
 		var player = List.all[i];
 		if(!player) continue;	//test target exist
-		if(!Combat.damageIf.global(atk,player)) continue;	//exist is same map, not himself etc
-		if(!Collision.BulletActor.test(atk,player)) continue;	//exist if can attack this type of player
-		if(!Collision.PtRect({'x':atk.x,'y':atk.y},Collision.getHitBox(player))) continue;	//test if nearby
+		if(!Collision.BulletActor.test(b,player)) continue;	//exist if can attack this type of player
+		if(!Collision.PtRect(b,Collision.getHitBox(player))) continue;	//test if nearby
 		
-		Combat.collision(atk,player);
+		Combat.collision(b,player);
 	}	
 }
 
-Collision.BulletActor.test = function(atk,player){
-	var normal = true;
-	if(!['map','true','all'].have(atk.damageIf)){	//no testing needed
-		if(['player-simple','npc-simple'].have(atk.damageIf)){	//only testing type
-			normal = Combat.damageIf.list[atk.damageIf](player);
-		} else {					
-			var hIf = typeof atk.damageIf == 'function' ? atk.damageIf : Combat.damageIf.list[atk.damageIf]; //testing type and summon
-			normal = List.all[atk.parent] && hIf(player,List.all[atk.parent])
-		}
-	}
-	if(player.damagedIf !== 'true'){
-		if(Array.isArray(player.damagedIf)) normal = player.damagedIf.have(atk.parent);
-		if(typeof player.damagedIf === 'function') normal = player.damagedIf(List.all[atk.parent]);
-	}
+Collision.BulletActor.test = function(atk,def){
+	var normal = Combat.damageIf(atk,def);
 	
+	if(normal && def.damagedIf !== 'true'){
+		if(Array.isArray(def.damagedIf)) normal = def.damagedIf.have(atk.parent);
+		if(typeof def.damagedIf === 'function') normal = def.damagedIf(List.all[atk.parent]);
+	}
 	return (!atk.damageIfMod && normal) || (atk.damageIfMod && !normal); 
 }
 
@@ -132,10 +121,9 @@ Collision.BulletMap = function(bullet){
 }
 
 Collision.StrikeActor = function(atk){
-	for(var j in atk.viewedBy){	//could be optimized with other function and return;
+	for(var j in atk.viewedBy){
 		var player = List.all[j];
 		if(!player) continue;	//test target exist
-		if(!Combat.damageIf.global(atk,player)) continue;	
 		if(!Collision.StrikeActor.test(atk,player)) continue;
 		if(!Collision.StrikeActor.collision(atk,player)) continue;
 		
@@ -152,8 +140,9 @@ Collision.StrikeActor.collision = function(atk,player){
 	if(Collision.PtRRect({'x':player.x,'y':player.y},[atk.point[2],atk.point[8],atk.point[0],atk.point[6]])) return true;	
 	
 	//Test 9 Pts
+	var hb = Collision.getHitBox(player);
 	for(var i = 0 ; i < atk.point.length; i++){
-		if(Collision.PtRect(atk.point[i],Collision.getHitBox(player))) return true;
+		if(Collision.PtRect(atk.point[i],hb)) return true;
 	}
 		
 	return false;
@@ -165,7 +154,7 @@ Collision.distancePtPt = function(pt1,pt2){
 	return Math.sqrt(Math.pow(pt1.x - pt2.x,2) + Math.pow(pt1.y - pt2.y,2));
 }
 
-Collision.anglePtPt = function(pt1,pt2){
+Collision.anglePtPt = function(pt1,pt2){	//pt1 looking towards pt2
 	return atan2(pt2.y-pt1.y,pt2.x-pt1.x);
 }
 
@@ -188,7 +177,6 @@ Collision.getPath = function(pos1,pos2){	//straight forward path (linear)
 	}
 	return array;
 }
-
 
 Collision.StrikeMap = function(strike,target){	//gets farthest position with no collision
 	var end = Collision.getPos(target);

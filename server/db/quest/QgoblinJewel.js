@@ -418,6 +418,13 @@ q.map.goblinLand = function(){
 			teleport:q.event.teleInCamp,
 		});
 		
+		
+		//TEST
+		actorGroup(spot.n1,25*15,[
+			["orc","melee",1,{deathFunc:q.event.killOrc}],
+		]);	
+		//
+		
 		/*
 		actor(spot.g1,"system","grave",{});
 		//actor(spot.M,"system","grave",{});

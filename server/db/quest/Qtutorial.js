@@ -211,7 +211,6 @@ q.map.tutorial = function(){
 		
 		if(Loop.interval(6)){
 			bullet(spot.a,v.arrow,0);
-			console.log(1);
 		}
 
 		if(Loop.interval(4)){

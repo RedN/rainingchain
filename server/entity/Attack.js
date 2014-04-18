@@ -19,6 +19,7 @@ Attack.template = function(type){
 	b.publicId = Math.randomId(6);
 	b.hitId = Math.randomId();
 	b.type = 'bullet';				//or strike
+	b.combat = 1;
 	//NO TOUCH
 	
 	
@@ -96,7 +97,7 @@ Attack.template.boomerang = function(){
 
 Attack.creation = function(player,s,extra){
 	s = Attack.creation.info(player,s);
-	s = useTemplate(s,extra);
+	s = useTemplate(s,extra || {});
 	
 	s.id = Math.randomId();
 	s.publicId = Math.randomId(6);
@@ -121,10 +122,8 @@ Attack.creation.info = function(act,b){
 	
 	b.map = act.map || 'test@MAIN';	
 	b.viewedIf = act.viewedIf || 'true';
-	b.damageIf = act.damageIf || 'act';
-	
-	b.angle = ((act.angle || 0) +360)%360;
-	
+	b.damageIf = act.damageIf || 'player';
+		
 	if(b.nova || b.onHit || b.onStrike){
 		b.bonus = act.bonus || Actor.template.bonus();
 		b.weapon = act.weapon || Actor.template.weapon();
