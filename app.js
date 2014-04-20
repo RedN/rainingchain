@@ -1,8 +1,5 @@
 nodejitsu = typeof process.env.NODEJITSU !== 'undefined';
 
-myData = 1;
-
-
 if(nodejitsu) require('nodetime').profile({accountKey: '7a06997db310e13bef9840cd1d8cfc1ea45fcc57',appName: 'Raining Chain'});
 
 //Create Server
@@ -20,9 +17,12 @@ io = socketio.listen(serv); io.set('log level', 1); io.set('heartbeat timeout', 
 
 serv.listen(3000);
 
-var clientPath = 'server/';
+var clientPath = './server/client/js/shared/';
+var serverPath = './server/';
+
+
 app.use(express.bodyParser());
-app.use(express.static(path.resolve(__dirname, clientPath + 'client')));
+app.use(express.static(path.resolve(__dirname, 'server/' + 'client')));	//need to be entered manually
 
 
 //Runescape Calculators:
@@ -32,77 +32,90 @@ app.post('/getExp', function(req, res){	require('./server/RS_calculators').appPo
 
 
 
+
+MODULEHAX = {
+	server:"if(server) var Collision = require('./client/js/shared/Collision').Collision;"
+}
+
 //Require
-require('./' + clientPath + 'client/js/shared/essentialsShare');
+require(clientPath + 'essentialsShare');
 
+
+var a = require('./server/moduleTest');
+a.x = 100;
 require('./server/Server');
-require('./server/db/Db');
-require('./server/main');
-require('./server/cycle');
-require('./server/Socket');
+console.log('last',a.x);
 
 
-require('./' + clientPath + 'client/js/shared/Actor_combat');
-require('./' + clientPath + 'client/js/shared/Actor_boost');
-require('./server/entity/Actor_interaction');
-require('./server/entity/Actor_death');
-require('./server/entity/Actor_ability');
-require('./server/entity/Actor_equip');
-require('./server/entity/Actor_loop');
-require('./server/entity/Actor_loop_ai');
-require('./server/entity/Actor_creation');
-require('./' + clientPath + 'client/js/shared/Main');
-require('./server/entity/Attack');
-require('./server/entity/Attack_loop');
-require('./server/entity/Actor_boss');
-require('./server/Loop');
-
-require('./server/Itemlist');
-require('./server/send');
-require('./server/update');
-require('./server/logIn');
-require('./server/combat');
-require('./server/map');
-require('./server/input');
-require('./server/chat');
-require('./server/dialogue');
-require('./server/craft');
-require('./server/drop');
-require('./server/Skill');
-require('./server/Test');
-require('./server/performance');
-require('./server/Draw');
-
-require('./server/db/Db_enemy');
-require('./server/db/Db_ability');
-require('./' + clientPath + 'client/js/shared/Db_ability_sub');
-require('./server/db/Db_item');
-require('./server/db/Db_plan');
-require('./server/db/Db_equip');
-require('./server/db/Db_boost');
-require('./server/db/Db_material');
-require('./server/db/Db_map');
-
-require('./server/db/Db_quest');
-require('./server/Quest');
 
 
-require('./' + clientPath + 'client/js/shared/customMod');
-require('./' + clientPath + 'client/js/shared/Collision');
-require('./' + clientPath + 'client/js/shared/Db_stat');
-require('./' + clientPath + 'client/js/shared/constant');
-require('./' + clientPath + 'client/js/shared/Button');
-require('./' + clientPath + 'client/js/shared/Db_sprite');
-require('./' + clientPath + 'client/js/shared/anim');
-require('./' + clientPath + 'client/js/shared/Actor_init');
-require('./' + clientPath + 'client/js/shared/command');
-require('./' + clientPath + 'client/js/shared/Combat_sub');
-require('./' + clientPath + 'client/js/shared/passiveGrid');
-require('./' + clientPath + 'client/js/shared/queryShare');
-require('./' + clientPath + 'client/js/shared/clanShare');
-require('./' + clientPath + 'client/js/shared/Db_customboost');
+require(serverPath + 'Db');
+require(serverPath + 'main');
+require(serverPath + 'cycle');
+require(serverPath + 'Socket');
 
-require('./server/db/Db_quest_middleware');
+
+require(clientPath + 'Actor_combat');
+require(clientPath + 'Actor_boost');
+require(serverPath + 'Actor_interaction');
+require(serverPath + 'Actor_death');
+require(serverPath + 'Actor_ability');
+require(serverPath + 'Actor_equip');
+require(serverPath + 'Actor_loop');
+require(serverPath + 'Actor_loop_ai');
+require(serverPath + 'Actor_creation');
+require(clientPath + 'Main');
+require(serverPath + 'Attack');
+require(serverPath + 'Attack_loop');
+require(serverPath + 'Actor_boss');
+require(serverPath + 'Loop');
+
+require(serverPath + 'Itemlist');
+require(serverPath + 'send');
+require(serverPath + 'update');
+require(serverPath + 'logIn');
+require(serverPath + 'combat');
+require(serverPath + 'map');
+require(serverPath + 'input');
+require(serverPath + 'chat');
+require(serverPath + 'dialogue');
+require(serverPath + 'craft');
+require(serverPath + 'drop');
+require(serverPath + 'Skill');
+require(serverPath + 'Test');
+require(serverPath + 'performance');
+require(serverPath + 'Draw');
+
+require(serverPath + 'Db_enemy');
+require(serverPath + 'Db_ability');
+require(clientPath + 'Db_ability_sub');
+require(serverPath + 'Db_item');
+require(serverPath + 'Db_plan');
+require(serverPath + 'Db_equip');
+require(serverPath + 'Db_boost');
+require(serverPath + 'Db_material');
+require(serverPath + 'Db_map');
+
+require(serverPath + 'Db_quest');
+require(serverPath + 'Quest');
+
+require(clientPath + 'customMod');
+require(clientPath + 'Collision');
+require(clientPath + 'Db_stat');
+require(clientPath + 'constant');
+require(clientPath + 'Button');
+require(clientPath + 'Db_sprite');
+require(clientPath + 'anim');
+require(clientPath + 'Actor_init');
+require(clientPath + 'command');
+require(clientPath + 'Combat_sub');
+require(clientPath + 'passiveGrid');
+require(clientPath + 'queryShare');
+require(clientPath + 'clanShare');
+require(clientPath + 'Db_customboost');
+
+
+
 
 
 

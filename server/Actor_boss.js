@@ -1,3 +1,4 @@
+if(server) var Collision = require('./client/js/shared/Collision').Collision;
 //boss
 Db.boss = {};
 Init.db.boss = function(){

@@ -1,3 +1,4 @@
+if(server) var Collision = require('./Collision').Collision;
 Button = {};
 
 //Button

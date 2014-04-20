@@ -9,6 +9,7 @@ exports.name = function(questname){
 	var itemExist = function(id){ return !!Db.item[id]; }
 	
 	var s = {};
+	
 	s.getSpot = function(id,addon,spot){
 		var a = Db.map[Map.getModel(id)].addon[addon].spot[spot];	//cant use list cuz map could not be created yet
 		if(!a){ DEBUG(0,'spot not found ' + id + addon + spot); return }

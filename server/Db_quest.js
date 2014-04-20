@@ -173,7 +173,3 @@ Quest.template.variable = function(){
 	};
 }
 
-
-require('fs').readFile('./server/db/Db_quest_eval.js', 'utf8', function (err,data) { if(err) throw err;	
-	Quest.template.eval = function(){ return deepClone(data); }
-});

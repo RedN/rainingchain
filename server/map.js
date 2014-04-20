@@ -1,3 +1,5 @@
+if(server) var Collision = require('./client/js/shared/Collision').Collision;
+
 /*
 Db.map loaded.
 Map model created

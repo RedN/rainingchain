@@ -1,8 +1,6 @@
 "use strict";
-var s = require('./../Db_quest_evalNew').name('testNew');
+var s = require('./../Db_quest_exports').name('testNew');
 var q = s.quest;
-
-
 
 
 

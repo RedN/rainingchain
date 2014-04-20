@@ -77,26 +77,25 @@ change ladder well cuz too detailed
 
 
 
+enemy that boost = boost atkspd
+enemy reflect
 
-	enemy that boost = boost atkspd
-	enemy reflect
+aquanite:		
+aquagoblin:		
+basilisk: 		
+draco: 		
 	
-	aquanite:		
-	aquagoblin:		
-	basilisk: 		
-	draco: 		
-		
-	dragon:		
-	dragonBaby:		
-	goddessFire:	knockback, big regen
-	goddessIce:
-	scorpion: 
-	birdBlue:
-	snake:		
-	werewolf:
-	
-	
-	troll:
+dragon:		
+dragonBaby:		
+goddessFire:	knockback, big regen
+goddessIce:
+scorpion: 
+birdBlue:
+snake:		
+werewolf:
+
+
+troll:
 
 
 

@@ -1,3 +1,4 @@
+if(server) var Collision = require('./client/js/shared/Collision').Collision;
 Draw = {};
 
 Draw.loop = function (key){

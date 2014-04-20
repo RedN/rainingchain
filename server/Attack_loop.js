@@ -1,3 +1,5 @@
+if(server) var Collision = require('./client/js/shared/Collision').Collision;
+
 //Update Bullet
 Bullet.loop = function(b){
 	Bullet.loop.collision(b);
