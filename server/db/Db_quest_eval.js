@@ -1,14 +1,27 @@
+
+var ArrayBuffer,  Int8Array,  Uint8Array,  Uint8ClampedArray,  Int16Array,  Uint16Array,  Int32Array,  Uint32Array,  Float32Array,  Float64Array,  DataView,  DTRACE_NET_SERVER_CONNECTION,  DTRACE_NET_STREAM_END,  DTRACE_NET_SOCKET_READ,  DTRACE_NET_SOCKET_WRITE,  DTRACE_HTTP_SERVER_REQUEST,  DTRACE_HTTP_SERVER_RESPONSE,  DTRACE_HTTP_CLIENT_REQUEST,  DTRACE_HTTP_CLIENT_RESPONSE,  COUNTER_NET_SERVER_CONNECTION,  COUNTER_NET_SERVER_CONNECTION_CLOSE,  COUNTER_HTTP_SERVER_REQUEST,  COUNTER_HTTP_SERVER_RESPONSE,  COUNTER_HTTP_CLIENT_REQUEST,  COUNTER_HTTP_CLIENT_RESPONSE,  global,  process,  GLOBAL,  root,  Buffer,  setTimeout,  setInterval,  clearTimeout,  clearInterval,  setImmediate,  clearImmediate,  nodejitsu,  request,  crypto,  astar,  serv,  io,  binarySearch,  applyFunc, isEqual,  JSONf,  viaArray,  changeVisibility,  convertRatio,  newImage,  Server,  Init,  ObjectKeys,  server,  Db,  List,  Cycle,  Actor,  Main,  Attack,  Bullet,  Strike,  Boss,   db, Loop,  Activelist,  removeAny,  Itemlist,  Change,  Sign,  Save,  Load,  Combat,  Map,  Input,  Chat,  Dialogue,  Craft,  Drop,  Skill,  SkillPlot,  Test,  Performance,  Draw,  Ability,  Item,  Plan,  Equip,  Quest,  customModHandling,  Collision,  Button,  Sprite,  Anim,  Command,  PassiveGrid,  Passive,  Clan;
+
+/*
+DEBUG,  LOG,  sin,  cos,  atan,  atan2,
+console,
+deepClone,  stringify,
+round,  formatNum,  permConsoleLog,  logError,
+useTemplate,  arrayfy,
+Cst,
+*/
+
+
 var Q = q.id;
-var List, Db, db;
+var MW = Middleware;
 
 var get = function(key,attr){
-	var mq = Quest.getMain(key,Q);
+	var mq = MW.Quest.getMain(key,Q);
 	var a = mq[attr];
-	return typeof a === 'object' ? deepClone(a) : a;	//prevent setting
+	return typeof a === 'object' ? MW.deepClone(a) : a;	//prevent setting
 }
 
 var set = function(key,attr,attr2,value){
-	var mq = Quest.getMain(key,Q);
+	var mq = MW.Quest.getMain(key,Q);
 	
 	if(attr === 'started'){
 		mq[attr] = true;
@@ -16,50 +29,50 @@ var set = function(key,attr,attr2,value){
 		return;
 	}	
 	if(!mq.started){
-		Chat.add(key,"You need to start this quest via the Quest Tab before making progress in it."); 
+		MW.Chat.add(key,"You need to start this quest via the Quest Tab before making progress in it."); 
 		return;
 	}
 	if(value === undefined) mq[attr] = attr2;	//aka deep = 1
 	else mq[attr][attr2] = value;
 	
-	if(attr === 'complete' && attr2)	Quest.complete(key,Q);
+	if(attr === 'complete' && attr2)	MW.Quest.complete(key,Q);
 }
 
 var getAct = function(key){
-	return Quest.getActor(key);
+	return MW.Quest.getActor(key);
 }
 
-var chat = Chat.add;
+var chat = MW.Chat.add;
 
 var dialogue = function(key,npc,convo,node){
-	Dialogue.start(key,{group:Q,npc:npc,convo:convo,node:node});
+	MW.Dialogue.start(key,{group:Q,npc:npc,convo:convo,node:node});
 }
 
 var teleport = function(key,map,letter,popup){	//type: 0=immediate, 1=popup
-	var spot = Map.getSpot(map,Q,letter);
+	var spot = MW.Map.getSpot(map,Q,letter);
 	
-	if(!popup) Actor.teleport(getAct(key),spot);
+	if(!popup) MW.Actor.teleport(getAct(key),spot);
 	else {
-		Chat.question(key,{
-			func:function(){Actor.teleport(getAct(key),spot);},
+		MW.Chat.question(key,{
+			func:function(){MW.Actor.teleport(getAct(key),spot);},
 			option:true,			
 		});
 	}
 }
 
 var respawn = function(key,map,letter,safe){	//must be same map
-	var spot = Map.getSpot(map,Q,letter);
-	if(spot) Actor.setRespawn(getAct(key),spot,safe);
+	var spot = MW.Map.getSpot(map,Q,letter);
+	if(spot) MW.Actor.setRespawn(getAct(key),spot,safe);
 }
 
 var getMapAddon = function(key){
-	return Map.getAddon(getAct(key).map,Q);
+	return MW.Map.getAddon(getAct(key).map,Q);
 }
 
 var sprite = function(key,name,size){
 	var tmp = {name:name};
 	if(size && size !== 1) tmp.sizeMod = size;
-	Sprite.change(getAct(key),tmp);
+	MW.Sprite.change(getAct(key),tmp);
 }
 
 //Item
@@ -70,7 +83,7 @@ var addItem = function(key,item,amount){
 	}
 
 	item = getItemName(item);
-	if(Quest.itemExist(item))	Itemlist.add(key,item,amount);
+	if(MW.Quest.itemExist(item))	MW.Itemlist.add(key,item,amount);
 	else chat(key,"BUG. ITEM DOES NOT EXIST @ " + item);
 }
 
@@ -81,7 +94,7 @@ var removeItem = function(key,item,amount){
 	}
 
 	item = getItemName(item);
-	if(Quest.itemExist(item))	Itemlist.remove(key,item,amount);
+	if(MW.Quest.itemExist(item))	MW.Itemlist.remove(key,item,amount);
 	else chat(key,"BUG. ITEM DOES NOT EXIST @ " + item);
 }
 
@@ -95,9 +108,9 @@ var haveItem = function(key,item,amount,removeifgood){
 	}
 
 	item = getItemName(item);
-	if(Quest.itemExist(item)){
-		var success = Itemlist.have(key,item,amount);
-		if(success && removeifgood) Itemlist.remove(key,item,amount);
+	if(MW.Quest.itemExist(item)){
+		var success = MW.Itemlist.have(key,item,amount);
+		if(success && removeifgood) MW.Itemlist.remove(key,item,amount);
 		return success;
 	}
 	else chat(key,"BUG. ITEM DOES NOT EXIST @ " + item);
@@ -111,14 +124,14 @@ var getItemName = function(name){
 
 var testItem = function (key,item,amount,addifgood){
 	if(typeof item === 'object'){
-		var success = Itemlist.test(key,Itemlist.objToArray(item));
+		var success = MW.Itemlist.test(key,Itemlist.objToArray(item));
 		if(amount) addItem(key,item);	//amount acts as addifgood
 		return true;
 	}
 	
 	
 	item = getItemName(item);
-	var success = Itemlist.test(key,[[item,amount || 1]]);
+	var success = MW.Itemlist.test(key,[[item,amount || 1]]);
 	if(success && addifgood) addItem(key,item,amount);
 	return success;
 }
@@ -126,36 +139,36 @@ var testItem = function (key,item,amount,addifgood){
 
 //Cutscene
 var cutscene = function(key,map,path){
-	Actor.setCutscene(getAct(key),q.map[map][Q].path[path]);
+	MW.Actor.setCutscene(getAct(key),q.map[map][Q].path[path]);
 	//ts("p.x = 1500; p.y = 3000;Actor.setCutscene(p,[{x:1600,y:3100},25*10,{x:1800,y:3200}]);")
 }
 
 var freeze = function(key,time,cb){
-	Actor.freeze(getAct(key),time,cb);
+	MW.Actor.freeze(getAct(key),time,cb);
 }
 var unfreeze = function(key){
-	Actor.freeze.remove(getAct(key));
+	MW.Actor.freeze.remove(getAct(key));
 }
 
 
 
 var getEnemy = function(key,tag){
-	return Map.getEnemy(getAct(key).map,tag);
+	return MW.Map.getEnemy(getAct(key).map,tag);
 }
 
 
 //Map
 var bullet = function(spot,atk,angle,dif){
 	var act = {damageIf:dif || 'player-simple',spot:spot};
-	Map.convertSpot(act);
+	MW.Map.convertSpot(act);
 	
-	Attack.creation(act,atk,{angle:angle});
+	MW.Attack.creation(act,atk,{angle:angle});
 }
 var strike = function(spot,atk,angle,dif,extra){
-	Combat.attack.simple({damageIf:dif || 'player-simple',spot:spot,angle:angle},atk,extra);
+	MW.Combat.attack.simple({damageIf:dif || 'player-simple',spot:spot,angle:angle},atk,extra);
 }
 var actor = function(spot,cat,variant,extra){
-	Actor.creation({spot:spot,category:cat,variant:variant,extra:(extra || {})});
+	MW.Actor.creation({spot:spot,category:cat,variant:variant,extra:(extra || {})});
 }
 
 var actorGroup = function(spot,respawn,list,extra){
@@ -166,13 +179,13 @@ var actorGroup = function(spot,respawn,list,extra){
 			"category":m[0],"variant":m[1],'amount':m[2] || 1,'modAmount':1,'extra':(m[3] || {})
 		});
 	}
-	Actor.creation.group({'spot':spot,'respawn':respawn},tmp);
+	MW.Actor.creation.group({'spot':spot,'respawn':respawn},tmp);
 }
 
 
 var collision = function(spot,cb){
 	if(!Loop.interval(5)) return;
-		Map.collisionRect(spot.map,spot,'player',cb);
+		MW.Map.collisionRect(spot.map,spot,'player',cb);
 }
 
 var block = function(zone,extra,image){
@@ -192,15 +205,24 @@ var block = function(zone,extra,image){
 
 var drop = function(key,spot,name,amount,time){
 	time = time || 25*120;
-	if(!Quest.itemExist(Q+ '-' + name)) return;
+	if(!MW.Quest.itemExist(Q+ '-' + name)) return;
 	
 	var tmp = {'spot':spot,"item":Q + '-' + name,"amount":amount,'timer':time};
 	if(typeof key === 'string') tmp.viewedIf = [key];
-	Drop.creation(tmp);	
+	MW.Drop.creation(tmp);	
 }
 
 
 //Boss
-var bossAttack = Boss.attack;
-var bossSummon = Boss.summon;
+var bossAttack = MW.Boss.attack;
+var bossSummon = MW.Boss.summon;
+
+
+
+//Init
+var map = MW.Init.db.map.model;
+var boss = MW.Boss.template;
+
+
+var questEval = MW.Quest.template.eval;
 

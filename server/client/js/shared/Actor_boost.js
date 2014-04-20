@@ -141,7 +141,7 @@ Actor.update.permBoost = function(act){
 	
 	for(var j in act.customBoost){ 
 		if(act.customBoost[j] > 0)
-			Db.customBoost[j].func(act.boost,act.id);
+			Db.customBoost[j].func(act.boost,act.customBoost[j],act.id);
 	}	
 }
 

@@ -183,7 +183,6 @@ Collision.ActorMap = function(pos,map,player){
 	}
 	
 	var bool = Collision.PosMap(pos,map,player.type || 'npc');
-	if(bool) console.log(pos,map,player.type);
 	return Collision.PosMap(pos,map,player.type || 'npc');
 };
 

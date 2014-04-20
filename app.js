@@ -1,7 +1,9 @@
 nodejitsu = typeof process.env.NODEJITSU !== 'undefined';
 
-if(nodejitsu) require('nodetime').profile({accountKey: '7a06997db310e13bef9840cd1d8cfc1ea45fcc57',appName: 'Raining Chain'});
+myData = 1;
 
+
+if(nodejitsu) require('nodetime').profile({accountKey: '7a06997db310e13bef9840cd1d8cfc1ea45fcc57',appName: 'Raining Chain'});
 
 //Create Server
 var http = require('http');
@@ -13,7 +15,7 @@ crypto = require('crypto');
 astar = require('astar');
 
 var app = express();
-var serv = http.createServer(app);
+serv = http.createServer(app);
 io = socketio.listen(serv); io.set('log level', 1); io.set('heartbeat timeout', 20); io.set('heartbeat interval', 15);
 
 serv.listen(3000);
@@ -84,6 +86,7 @@ require('./server/db/Db_map');
 require('./server/db/Db_quest');
 require('./server/Quest');
 
+
 require('./' + clientPath + 'client/js/shared/customMod');
 require('./' + clientPath + 'client/js/shared/Collision');
 require('./' + clientPath + 'client/js/shared/Db_stat');
@@ -98,6 +101,8 @@ require('./' + clientPath + 'client/js/shared/passiveGrid');
 require('./' + clientPath + 'client/js/shared/queryShare');
 require('./' + clientPath + 'client/js/shared/clanShare');
 require('./' + clientPath + 'client/js/shared/Db_customboost');
+
+require('./server/db/Db_quest_middleware');
 
 
 

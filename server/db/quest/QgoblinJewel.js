@@ -1,3 +1,4 @@
+//"use strict";
 var q = Quest.template('QgoblinJewel','v1.0');
 eval(Quest.template.eval(q));
 
@@ -335,7 +336,7 @@ q.dialogue['ringo'] = {'face':{'image':'villager-male.0','name':'Ringo'},
 
 //{Map
 q.map.goblinUnderground = function(){
-	var m = Init.db.map.model();
+	var m = map();
 	m.name = "GoblinUnderground";
 	m.graphic = "goblinUnderground";
 	m.lvl = 0;
@@ -363,7 +364,7 @@ q.map.goblinUnderground = function(){
 };
 
 q.map.goblinLand = function(){
-	var m = Init.db.map.model();
+	var m = map();
 	m.name = "Goblin Land";
 	m.tileset = "v1.1";
 	m.lvl = 0;
@@ -459,7 +460,7 @@ q.map.goblinLand = function(){
 };
 
 q.map.goblinCamp = function(){
-	var m = Init.db.map.model();
+	var m = map();
 	m.name = "Goblin Land";
 	m.tileset = "v1.1";
 	m.lvl = 0;
@@ -523,88 +524,88 @@ q.map.goblinCamp = function(){
 //}
 
 q.boss['test'] = function(){
-	var boss = Boss.template('v1.0');
+	var b = boss('v1.0');
 	
-	boss.opening = 20;
+	b.opening = 20;
 	
-	boss.attack['center'] = {
+	b.attack['center'] = {
 		'type':"bullet",'angle':20,'amount':10, 'aim': 0,
 		'objImg':{'name':"fireball",'sizeMod':1},
 		'dmg':{'main':100,'ratio':{'melee':0,'range':0,'magic':20,'fire':80,'cold':0,'lightning':0}},	
 		'spd':20
 	};
-	boss.attack['offcenter'] = {
+	b.attack['offcenter'] = {
 		'type':"bullet",'angle':20,'amount':10, 'aim': 0,
 		'objImg':{'name':"fireball",'sizeMod':1},
 		'dmg':{'main':200,'ratio':{'melee':0,'range':0,'magic':20,'fire':80,'cold':0,'lightning':0}},	
 		'spd':30
 	};
-	boss.attack['360fire'] =	{
+	b.attack['360fire'] =	{
 		'type':"bullet",'angle':360,'amount':36, 'aim': 0,
 		'objImg':{'name':"fireball",'sizeMod':1},
 		'dmg':{'main':100,'ratio':{'melee':0,'range':0,'magic':20,'fire':80,'cold':0,'lightning':0}},
 	};
-	boss.attack['slowfire'] = {
+	b.attack['slowfire'] = {
 		'type':"bullet",'angle':60,'amount':4, 'aim': 0,
 		'objImg':{'name':"fireball",'sizeMod':1.5},
 		'dmg':{'main':300,'ratio':{'melee':0,'range':0,'magic':20,'fire':80,'cold':0,'lightning':0}},	
 		'spd':15,'maxTimer':250,
 	};
-	boss.attack['weakfire'] = {
+	b.attack['weakfire'] = {
 		'type':"bullet",'angle':40,'amount':5, 'aim': 0,
 		'objImg':{'name':"fireball",'sizeMod':0.75},
 		'dmg':{'main':50,'ratio':{'melee':0,'range':0,'magic':20,'fire':80,'cold':0,'lightning':0}},	
 	};
 	
-	boss.phase[0] = {
-		loop:function(boss){
-			if(boss.frame % 25 !== 0) return;	//every 25 frame
+	b.phase[0] = {
+		loop:function(b){
+			if(b.frame % 25 !== 0) return;	//every 25 frame
 			
 			if(Math.random() < 0.5){
-				bossAttack(boss,'center',{'angle':boss.angle});			
+				bossAttack(b,'center',{'angle':b.angle});			
 			} else {
-				bossAttack(boss,'offcenter',{'angle':boss.angle+boss.opening});
-				bossAttack(boss,'offcenter',{'angle':boss.angle-boss.opening});			
+				bossAttack(b,'offcenter',{'angle':b.angle+b.opening});
+				bossAttack(b,'offcenter',{'angle':b.angle-b.opening});			
 			}	
 			
 		},
-		transitionTest:function(boss){
-			return boss.hpRatio < 0.50;
+		transitionTest:function(b){
+			return b.hpRatio < 0.50;
 		}
 	}
-	boss.phase[1] = {	//big
-		loop:function(boss){
-			if(boss.frame % 10 !== 0) return;	
-			bossAttack(boss,'slowfire',{'angle':boss.angle});
+	b.phase[1] = {	//big
+		loop:function(b){
+			if(b.frame % 10 !== 0) return;	
+			bossAttack(b,'slowfire',{'angle':b.angle});
 		},
-		transitionIn:function(boss){
-			bossAttack(boss,'360fire',{'angle':boss.angle});
-			boss.noattack = 25;
-			var act = getAct(boss.parent);
-			Sprite.change(act,{'sizeMod':2});
-			Actor.boost(act,[
-				{'stat':'globalDef','type':"*",'value':10,'time':250,'name':'boss'},
+		transitionIn:function(b){
+			bossAttack(b,'360fire',{'angle':b.angle});
+			b.noattack = 25;
+			var act = getAct(b.parent);
+			MW.Sprite.change(act,{'sizeMod':2});	//BUG
+			MW.Actor.boost(act,[	//BUG
+				{'stat':'globalDef','type':"*",'value':10,'time':250,'name':'b'},
 			]); 
 		},
-		transitionOut:function(boss){
-			var act = getAct(boss.parent);
-			Sprite.change(act,{'sizeMod':0.75});
+		transitionOut:function(b){
+			var act = getAct(b.parent);
+			MW.Sprite.change(act,{'sizeMod':0.75});	//BUG
 		},
-		transitionTest:function(boss){
-			return boss.frame % 250 === 0;
+		transitionTest:function(b){
+			return b.frame % 250 === 0;
 		}
 	}
-	boss.phase[2] = {	//small
-		loop:function(boss){
-			if(boss.frame % 25 !== 0) return;
-			bossAttack(boss,'weakfire',{'angle':boss.angle});
+	b.phase[2] = {	//small
+		loop:function(b){
+			if(b.frame % 25 !== 0) return;
+			bossAttack(b,'weakfire',{'angle':b.angle});
 		},
-		transitionTest:function(boss){
-			return (boss.frame % 100 === 0) ? 1 : false;
+		transitionTest:function(b){
+			return (b.frame % 100 === 0) ? 1 : false;
 		}
 	}
 	
-	return boss;
+	return b;
 }	
 
 exports.quest = q;

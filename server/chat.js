@@ -1,6 +1,5 @@
 //chat
 Chat = {};
-
 Chat.parse = function(data){
 	return data.replacePattern(Chat.parse.item);
 }

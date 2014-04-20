@@ -125,16 +125,16 @@ Init.email = function(data){
 	if(!data.email) return;
 	nodemailer = require("nodemailer").createTransport("SMTP",{service: "Gmail",auth: {user: "rainingchainmail@gmail.com",pass: data.email}});
 
-	nodemailer.email = function(to,subj,text){
-		db.find('account',{username:to},function(err, res) { if(err) throw err;
-			if(res[0] && res[0].email){
-				nodemailer.sendMail({
-					from: "Raining Chain <rainingchainmail@gmail.com>",
-					to: to + ' ' + res[0].email,
-					subject: subj, 
-					text: text
-				});	
-			}
+	nodemailer.email = function(to,title,text){
+		db.findOne('account',{username:to},function(err, res) { if(err) throw err;
+			if(!res || !res.email) return;
+			
+			nodemailer.sendMail({
+				from: "Raining Chain <rainingchainmail@gmail.com>",
+				to: to + ' ' + res[0].email,
+				subject: title, 
+				text: text
+			});	
 		});	
 	}
 }

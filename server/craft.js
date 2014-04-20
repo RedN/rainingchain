@@ -252,7 +252,7 @@ Craft.orb = function(key,orb,amount,wId,mod){	//would be better if split in mult
 
 	//Save the changes
 	Itemlist.remove(inv,orb + '_orb',amount);
-	Item.remove(equip.id);
+	Item.removeFromDb(equip.id);
 	Chat.add(key,amount + ' Orbs used on ' + equip.name);
 	equip.id = Math.randomId();
 	

@@ -1,24 +1,12 @@
 Db.boost = {};
-Db.boost.list = {};
+var a = Db.boost.list = {};
 
-Db.boost.list.all = [
-
-
+a.all = [
 
 ];
-Db.boost.list.test = {
-	all:[
-		{'stat':['dmg-+'],'valueMod':2,'chance':1},
-		{'stat':'item-rarity','valueMod':1,'chance':0.5},
-	],				
-	ruby:[
-		{'stat':['burn-all'],'valueMod':1.5,'chance':1},
-		{'stat':'burn-chance','valueMod':2,'chance':1},
-		
-	]
-};
 
-Db.boost.list.amulet = {
+
+a.amulet = {
 	all:[
 		{'stat':['dmg-+'],'valueMod':2,'chance':1},
 		{'stat':['def-+'],'valueMod':2,'chance':1},
@@ -42,7 +30,7 @@ Db.boost.list.amulet = {
 	],
 };
 
-Db.boost.list.ring = {
+a.ring = {
 	all:[
 		{'stat':['dmg-+'],'valueMod':2,'chance':1},
 		{'stat':['def-+'],'valueMod':2,'chance':1},
@@ -66,7 +54,7 @@ Db.boost.list.ring = {
 	],
 };
 
-Db.boost.list.bracelet = {
+a.bracelet = {
 	all:[
 		{'stat':['dmg-^'],'valueMod':2,'chance':1},
 		{'stat':['def-^'],'valueMod':2,'chance':1},
@@ -90,7 +78,7 @@ Db.boost.list.bracelet = {
 	],
 };
 
-Db.boost.list.helm = {
+a.helm = {
 	all:[
 		{'stat':['dmg-+'],'valueMod':2,'chance':1},
 		{'stat':['def-+'],'valueMod':2,'chance':1},
@@ -110,7 +98,7 @@ Db.boost.list.helm = {
 	],
 };
 
-Db.boost.list.body = {
+a.body = {
 	all:[
 		{'stat':['dmg-x'],'valueMod':2,'chance':1},
 		{'stat':['def-x'],'valueMod':2,'chance':1},
@@ -131,7 +119,7 @@ Db.boost.list.body = {
 	],
 };
 
-Db.boost.list.shield = {
+a.shield = {
 	all:[
 		{'stat':['dmg-*'],'valueMod':2,'chance':1},
 		{'stat':['def-*'],'valueMod':2,'chance':1},
@@ -152,7 +140,7 @@ Db.boost.list.shield = {
 	],
 };
 
-Db.boost.list.gloves = {
+a.gloves = {
 	all:[
 		{'stat':['dmg-+'],'valueMod':2,'chance':1},
 		{'stat':['def-+'],'valueMod':2,'chance':1},
@@ -174,7 +162,7 @@ Db.boost.list.gloves = {
 	],
 };
 
-Db.boost.list.pants = {
+a.pants = {
 	all:[
 		{'stat':['dmg-x'],'valueMod':2,'chance':1},
 		{'stat':['def-x'],'valueMod':2,'chance':1},
@@ -197,7 +185,7 @@ Db.boost.list.pants = {
 	],
 };
 
-Db.boost.list.boots = {
+a.boots = {
 	all:[
 		{'stat':['dmg-*'],'valueMod':2,'chance':1},
 		{'stat':['def-*'],'valueMod':2,'chance':1},
@@ -218,7 +206,7 @@ Db.boost.list.boots = {
 	],
 };
 
-Db.boost.list.melee = {
+a.melee = {
 	all:[
 		{'stat':['dmg'],'valueMod':1,'chance':1},
 		{'stat':['dmg-melee'],'valueMod':1,'chance':1},
@@ -239,7 +227,7 @@ Db.boost.list.melee = {
 	],
 };
 
-Db.boost.list.range = {
+a.range = {
 	all:[
 		{'stat':['dmg'],'valueMod':1,'chance':1},
 		{'stat':['dmg-range'],'valueMod':1,'chance':1},
@@ -255,11 +243,11 @@ Db.boost.list.range = {
 	],
 	crossbow:[	//speed
 		{'stat':'atkSpd-main','valueMod':5,'chance':10},
-		//{'stat':'atkSpd-support','valueMod':5,'chance':10},
+		// {'stat':'atkSpd-support','valueMod':5,'chance':10},
 	],
 };
 
-Db.boost.list.magic = {
+a.magic = {
 	all:[
 		{'stat':['dmg'],'valueMod':1,'chance':1},
 		{'stat':['dmg-magic'],'valueMod':1,'chance':1},
@@ -284,9 +272,15 @@ Db.boost.list.magic = {
 	],
 };
 
+
+
+
+
+
 Init.db.boost = function(){
-	//stats in [] are transformed into multiple stats using boostPreDbConvertList.
-	//value: [min,max], mod: chance to be picked
+	//stats from all are added to the type list
+	//stats in [] are transformed into multiple stats
+	//valueMod: used with the value from Db.boost.base to get [min,max]
 
 	Init.db.boost.base();
 	
@@ -315,6 +309,7 @@ Init.db.boost = function(){
 					})
 				}			
 			}
+			//remove stat[]
 			for(var k = typeList.length-1; k >= 0; k--){
 				if(typeof typeList[k].stat !== 'string') typeList.splice(k,1);
 			}	
@@ -331,9 +326,17 @@ Init.db.boost = function(){
 	
 }
 
+Init.db.boost.base = function(){	//Db.boost.group has info about groups but dont know the base stat value (ex: 0.01) for the boost
+	for(var i in Db.boost.base.group){
+		for(var j in Db.boost.group[i]){
+			Db.boost.base.normal[Db.boost.group[i][j]] = Db.boost.base.group[i];
+		}
+	}
+	Db.boost.base = Db.boost.base.normal;
+}
 
-//##############################################
-//##############################################
+
+
 
 Db.boost.group = {
 	//Dmg
@@ -393,7 +396,7 @@ Db.boost.group = {
 	
 }
 
-Db.boost.base = {
+Db.boost.base = {	//info about value (number) for each boost
 	group:{
 		'dmg-+':0.01,
 		'dmg-^':0.01,
@@ -430,17 +433,6 @@ Db.boost.base = {
 		'maxSpd':0.1,
 		'acc':0.01,
 	}
-}
-
-
-
-Init.db.boost.base = function(){
-	for(var i in Db.boost.base.group){
-		for(var j in Db.boost.group[i]){
-			Db.boost.base.normal[Db.boost.group[i][j]] = Db.boost.base.group[i];
-		}
-	}
-	Db.boost.base = Db.boost.base.normal;
 }
 
 

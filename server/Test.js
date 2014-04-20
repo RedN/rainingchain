@@ -10,8 +10,8 @@ Test.serverStart = function(){
 }
 
 Test.no = {
-	npc:true,
-	attack:true,
+	npc:false,
+	attack:false,
 };
 
 Test.signIn = function(key){ //Called when player logs in

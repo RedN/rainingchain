@@ -118,7 +118,7 @@ Item.template = function(){
 	return item;
 }
 
-Item.remove = function(id){
+Item.removeFromDb = function(id){
 	db.remove('equip',{id:id});
 	db.remove('ability',{id:id});
 }

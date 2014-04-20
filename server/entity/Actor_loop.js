@@ -1,7 +1,7 @@
 //####Update Actor####
 
-ABILITYINTERVAL = 3;
-SUMMONINTERVAL = 5;
+var ABILITYINTERVAL = 3;
+var SUMMONINTERVAL = 5;
 
 Actor.loop = function(act){	
 	if(++act.frame % 25 === 0) Actor.loop.activeList(act); 

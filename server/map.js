@@ -116,12 +116,10 @@ Map.enter = function(act,map){
 	}
 }
 
-
-//Quest related
 Map.collisionRect = function(id,rect,type,cb){	//used in map loop. return array is no cb, else call func foreach
 	var array = [];
 	for(var i in List.map[id].list[type]){
-		var act = List.all[i];		//TOFIX test if player exist
+		var act = List.all[i];
 		if(!act){ DEBUG(0,'act dont exist ' + id); continue; }
 		if(Collision.PtRect(act,rect)){
 			array.push(i);
@@ -130,31 +128,6 @@ Map.collisionRect = function(id,rect,type,cb){	//used in map loop. return array 
 	if(!cb) return array;
 	for(var i in array)	cb(array[i]);	
 }
-
-Map.getSpot = function(id,addon,spot){
-	var a = Db.map[Map.getModel(id)].addon[addon].spot[spot];	//cant use list cuz map could not be created yet
-	
-	if(!a){ DEBUG(0,'spot not found ' + id + addon + spot); return }
-	return {
-		x:a.x,
-		y:a.y,
-		map:id,
-	}
-}
-
-Map.getAddon = function(id,addon){
-	return List.map[id].addon[addon];	
-}
-
-Map.getEnemy = function(map,tag){
-	var list = List.map[map].list.npc;
-	for(var i in list){
-		if(List.all[i].tag === tag)
-			return List.all[i];
-	}
-	return null;
-}
-
 
 
 

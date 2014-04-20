@@ -1,10 +1,9 @@
-
-//Boost that grants a custom advanced special effect to a player. 
 Init.db.customBoost = function(){
-	var b = Db.customBoost = {};
+	var a = Db.customBoost = {};
+	//pb = player.boost ||| customBoost are added to Db.stat ||| location =  player.customBoost
 	
 	/*
-	b.balancedAtk = {
+	a.balancedAtk = {
 		'name':'Balanced Attack',
 		'description':'For each element, your damage mastery is equal to the lowest of the 4 damage masteries.',
 		'icon':'element.melee',
@@ -27,11 +26,11 @@ Init.db.customBoost = function(){
 		})
 	}
 	*/
-	b.balancedAtk = {
+	a.balancedAtk = {
 		'name':'Risk Taker',
 		'description':'x2 Life Leech. Cannot use Potions.',
 		'icon':'element.melee',
-		'func':(function(pb,key){
+		'func':(function(pb,value,key){
 			var mod;
 			var pbl = pb.list;
 			var array = ['x','*','^','+'];
@@ -50,11 +49,11 @@ Init.db.customBoost = function(){
 		})
 	}
 	
-	b.testing = {
+	a.testing = {
 		'name':'testing Taker',
 		'description':'testing.',
 		'icon':'element.melee',
-		'func':(function(pb,key){
+		'func':(function(pb,value,key){
 			var pbl = pb.list;
 			
 			pbl['maxSpd'].min = 0;

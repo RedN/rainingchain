@@ -237,16 +237,15 @@ Equip.creation = function(equip){
 		'icon':equip.piece + '.' + equip.type,
 		'type':'equip',
 		'id':equip.id,
+		'drop':0,
 		'option':[	
 			{'name':'Examine Equip','func':'Main.examine','param':['equip',equip.id]},
 			{'name':'Change Equip','func':'Actor.equip','param':[equip.id]},
 		],
 	};
-	if(!equip.accountBound && equip.creator !== null)
-		item.option.push({'name':'Account Bound','func':'Equip.accountBound','param':[equip.id]});
-	if(equip.salvagable)
-		item.option.push({'name':'Salvage','func':'Craft.equip.salvage','param':[equip.id]});
-			
+	if(!equip.accountBound && equip.creator !== null)	item.option.push({'name':'Account Bound','func':'Equip.accountBound','param':[equip.id]});
+	if(equip.salvagable)	item.option.push({'name':'Salvage','func':'Craft.equip.salvage','param':[equip.id]});
+	else item.destroy = 1;
 	
 	Item.creation(item);
 	
@@ -326,7 +325,7 @@ Equip.accountBound = function(key,eid){
 	}
 	
 	
-	Item.remove(equip.id);
+	Item.removeFromDb(equip.id);
 	Itemlist.remove(List.main[key].invList,equip.id);
 	Chat.add(key,'Equip succesfully account bound.');
 	equip.id = Math.randomId();

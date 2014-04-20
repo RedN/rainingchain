@@ -1,9 +1,16 @@
 ==REVAMP==
 SKIPPED: command, trade, craft,customMod,db.filter
 
+add description for each item
+
 dodge should avoid bullet collision
 main.temp = bad... only used for item on another item
 
+only save the active quest
+puush support
+email if server is down	//http://nodejs.org/api/domain.html
+
+real Middleware
 
 ===PRE SDK===
 transform not be overwrite if change equip

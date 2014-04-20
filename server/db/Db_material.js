@@ -1,7 +1,6 @@
 
 Init.db.material = function(){
 	Db.material = {
-		
 		//Mining
 		'metal-0':{'name':'Bronze Metal','icon':'metal.metal'},
 		'metal-20':{'name':'Iron Metal','icon':'metal.metal'},
@@ -58,25 +57,25 @@ Init.db.material = function(){
 	var tmp = {};
 		
 	for(var i in Db.material){
-		var entry = Db.material[i];
-		if(i.have('bone') || i.have('hide')) entry.skill = 'hunting';
-		if(i.have('wood' || i.have('leaf'))) entry.skill = 'woodcutting';
-		if(i.have('metal' || i.have('chain'))) entry.skill = 'mining';
-		if(typeof entry.lvl === 'undefined') entry.lvl = i.numberOnly();
+		var mat = Db.material[i];
+		if(i.have('bone') || i.have('hide')) mat.skill = 'hunting';
+		if(i.have('wood') || i.have('leaf')) mat.skill = 'woodcutting';
+		if(i.have('metal') || i.have('chain')) mat.skill = 'mining';
+		if(mat.lvl === undefined) mat.lvl = i.numberOnly();
 		
-		entry.id = i;
-		entry.icon = entry.icon || 'wood.wood';
-		entry.name = entry.name || 'Crytal';
+		mat.id = i;
+		mat.icon = mat.icon || 'wood.wood';
+		mat.name = mat.name || 'Crytal';
 		tmp[i] = 0;
 	}
 	
 	for(var i in Db.material){
-		var entry = Db.material[i];
+		var mat = Db.material[i];
 		
 		Item.creation({
 			'id':i,
-			'name':entry.name,
-			'icon':entry.icon,
+			'name':mat.name,
+			'icon':mat.icon,
 			'stack':1,
 			'type':'material',
 			'option': [
