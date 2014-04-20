@@ -1,5 +1,3 @@
-
-
 /*
 Db.map['test'] = function(){	//'test' = mapId
 	var m = {};

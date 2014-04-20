@@ -1,6 +1,5 @@
 server = true;
 
-
 Db = {};
 Db.dialogue = {};
 
@@ -38,6 +37,7 @@ Init.server = function (){
 		Init.db.quest.map();
 		Init.db.map();
 		
+		
 		Init.db.drop();
 		Change.update.init();
 		Init.db.boost();
@@ -47,7 +47,7 @@ Init.server = function (){
 		
 		Init.db.npc();
 		Init.db.boss();
-							
+				
 		
 		Init.db.dialogue();
 		for(var i in Db.map)	Map.creation(i);

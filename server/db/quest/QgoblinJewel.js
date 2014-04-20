@@ -1,7 +1,14 @@
-//"use strict";
 var q = Quest.template('QgoblinJewel','v1.0');
 eval(Quest.template.eval(q));
 
+q.mapCreate = map;
+
+var Q = q.id;
+
+(function(){
+"use strict";
+var bob = require('request');
+console.log(bob);
 /*
 ### STEPS ###
 talk ringo
@@ -336,7 +343,7 @@ q.dialogue['ringo'] = {'face':{'image':'villager-male.0','name':'Ringo'},
 
 //{Map
 q.map.goblinUnderground = function(){
-	var m = map();
+	var m = q.mapCreate();
 	m.name = "GoblinUnderground";
 	m.graphic = "goblinUnderground";
 	m.lvl = 0;
@@ -364,7 +371,7 @@ q.map.goblinUnderground = function(){
 };
 
 q.map.goblinLand = function(){
-	var m = map();
+	var m = q.mapCreate();
 	m.name = "Goblin Land";
 	m.tileset = "v1.1";
 	m.lvl = 0;
@@ -460,7 +467,7 @@ q.map.goblinLand = function(){
 };
 
 q.map.goblinCamp = function(){
-	var m = map();
+	var m = q.mapCreate();
 	m.name = "Goblin Land";
 	m.tileset = "v1.1";
 	m.lvl = 0;
@@ -611,7 +618,7 @@ q.boss['test'] = function(){
 exports.quest = q;
 
 
-
+})();
 
 
 

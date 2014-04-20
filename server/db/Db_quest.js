@@ -2,8 +2,9 @@ Db.quest = {};
 var questList = [
 	//'Qtutorial',
 	//'Qopenbeta2',
-	'Qtest',
-	'QgoblinJewel'
+	//'Qtest',
+	//'QgoblinJewel'
+	'testNew',
 ];
 Quest = {};
 Quest.test = 'QgoblinJewel';	//give player vaTester for this quest
