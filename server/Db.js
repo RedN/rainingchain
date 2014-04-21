@@ -141,8 +141,3 @@ Init.email = function(data){
 
 
 
-ObjectKeys = (function(){
-	return Object.keys(this);
-})();
-
-

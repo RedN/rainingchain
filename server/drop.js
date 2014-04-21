@@ -51,7 +51,7 @@ Drop.getCategoryList = function(drop,lvl,qu){
 			}
 		}
 		for(var j in highest.table){
-			var tmp = deepClone(highest.table[j]);
+			var tmp = Tk.deepClone(highest.table[j]);
 			tmp.chance *= drop[i];
 			tmp.chance = Math.pow(tmp.chance,1/qu);
 			list.push(tmp);		
@@ -63,7 +63,7 @@ Drop.getCategoryList = function(drop,lvl,qu){
 Drop.creation = function(d){
 	Map.convertSpot(d);
 	
-	var drop = useTemplate(Drop.template(),d);
+	var drop = Tk.useTemplate(Drop.template(),d);
 	
 	drop.x += Math.randomML(drop.vx);
 	drop.y += Math.randomML(drop.vx);

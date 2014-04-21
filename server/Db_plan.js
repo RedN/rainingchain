@@ -42,7 +42,7 @@ Plan.creation = function(preplan){
 	//seed: lvl, category,[ piece, type, rarity, quality,]
 	//extra: definitive, minBoost, maxBoost
 	
-	var plan = useTemplate(Plan.template(),preplan);
+	var plan = Tk.useTemplate(Plan.template(),preplan);
 	if(plan.category === 'equip' || plan.category === 'weapon' || plan.category === 'armor') 
 		plan = Plan.template.equip(plan);
 	if(plan.category === 'ability') 

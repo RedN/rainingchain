@@ -945,7 +945,7 @@ Init.db.npc = function(){
 }
 
 Init.db.npc.creation = function(e){
-	e = useTemplate(Actor.template('npc'),e,1,1);		//ability and abilityList as written in Db.npc 
+	e = Tk.useTemplate(Actor.template('npc'),e,1,1);		//ability and abilityList as written in Db.npc 
 	
 	e.context = e.name; 
 	for(var i in e.resource) e[i] = e.resource[i].max;
@@ -989,18 +989,18 @@ Init.db.npc.creation.ability = function(e){	//use abilityList to create custom a
 			continue;
 		}	
 				
-		var a = deepClone(Db.ability[e.abilityList[i].template]);
+		var a = Tk.deepClone(Db.ability[e.abilityList[i].template]);
 		var extra = e.abilityList[i].extra;
-		if(extra.global) a = useTemplate(a,a.action.param.global,1,1);
+		if(extra.global) a = Tk.useTemplate(a,a.action.param.global,1,1);
 		delete extra.global;
 		
 		
 		if(a.action.func === 'Combat.attack'){
-			a.action.param = useTemplate(Attack.template(),a.action.param,0);
-			a.action.param = useTemplate(a.action.param,extra,1,1);
+			a.action.param = Tk.useTemplate(Attack.template(),a.action.param,0);
+			a.action.param = Tk.useTemplate(a.action.param,extra,1,1);
 		}
 		if(a.action.func === 'Combat.boost' || a.action.func === 'Combat.summon'){		
-			a.action.param = deepClone(extra.param);
+			a.action.param = Tk.deepClone(extra.param);
 		}
 		
 		var id = Math.randomId();

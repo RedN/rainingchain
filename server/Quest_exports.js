@@ -15,7 +15,7 @@ exports.init = function(version,questname){	//}
 	s.get = function(key,attr){
 		var mq = List.main[key].quest[Q];		
 		var a = mq[attr];
-		return typeof a === 'object' ? deepClone(a) : a;	//prevent setting
+		return typeof a === 'object' ? Tk.deepClone(a) : a;	//prevent setting
 	}
 
 	s.set = function(key,attr,attr2,value){

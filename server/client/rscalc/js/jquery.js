@@ -3621,7 +3621,7 @@ function internalData( elem, name, data, pvt /* Internal Use Only */ ){
 
 	if ( !cache[ id ] ) {
 		// Avoid exposing jQuery metadata on plain JS objects when the object
-		// is serialized using stringify
+		// is serialized using Tk.stringify
 		cache[ id ] = isNode ? {} : { toJSON: jQuery.noop };
 	}
 

@@ -104,7 +104,7 @@ function initCooking(){
 
 	modList = {
 		'sc':(function(m){
-			var method = deepClone(m);
+			var method = Tk.deepClone(m);
 			method.mod = {};
 			method.name += ' SC';
 			

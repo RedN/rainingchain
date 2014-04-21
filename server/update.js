@@ -235,25 +235,25 @@ Change.update.watch = function(act,info,priv){
 	if(info.condition && !info.condition(act)) return; 
 
 	//Get Old and New Value and Set Old = to New
-	var valRaw = viaArray.get({'origin':act,'array':info.array});
+	var valRaw = Tk.viaArray.get({'origin':act,'array':info.array});
 	if(valRaw && info.filter) valRaw = info.filter(valRaw,act);
 	        
-	var val0 = stringify(valRaw);                                   //Get new
+	var val0 = Tk.stringify(valRaw);                                   //Get new
 	
 	
 	if(!priv){ var val1 = act.old[info.id]; }
     else { var val1 = act.privateOld[info.id]; }                      //Get old
 	
 	//Test !=
-	if(!isEqual(val0, val1)){
+	if(!Tk.isEqual(val0, val1)){
 		if(!priv){ act.old[info.id] = val0; }                  //Set Old
 		else { act.privateOld[info.id] = val0; }
 		
 		
 	    if(info.sendArray){                                                 //Modify array of what to send
-			var valRaw = viaArray.get({'origin':act,'array':info.sendArray});
+			var valRaw = Tk.viaArray.get({'origin':act,'array':info.sendArray});
 			if(info.sendFilter) valRaw = info.sendFilter(valRaw);
-			var val0 = stringify(valRaw);
+			var val0 = Tk.stringify(valRaw);
 		}
 		
 		if(!priv){ act.change[info.id] = valRaw; }          //Add to change list for send.js know
@@ -269,16 +269,16 @@ Change.update.exist = function(act,info,priv){
 	//Test condition to test
 	if(info.condition && !info.condition(act)) return; 
 
-	var valRaw = viaArray.get({'origin':act,'array':info.array});
+	var valRaw = Tk.viaArray.get({'origin':act,'array':info.array});
 	if(valRaw){
 	    if(Array.isArray(valRaw) && valRaw.length === 0) return;
-	    var val0 = stringify(valRaw); 
+	    var val0 = Tk.stringify(valRaw); 
 		
 		if(!priv){ act.change[info.id] = valRaw; }
 		else {	act.privateChange[info.id] = valRaw; }
 			
-		if(!info.reset){ viaArray.set({'origin':act,'array':info.array,'value':null}); }
-		else if(info.reset !== 'noreset'){ viaArray.set({'origin':act,'array':info.array,'value':deepClone(info.reset)}); }
+		if(!info.reset){ Tk.viaArray.set({'origin':act,'array':info.array,'value':null}); }
+		else if(info.reset !== 'noreset'){ Tk.viaArray.set({'origin':act,'array':info.array,'value':Tk.deepClone(info.reset)}); }
 		
 	}
 }

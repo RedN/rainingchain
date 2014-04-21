@@ -234,12 +234,12 @@ Change.send.convert.itemlist = function(inv){
 
 
 Change.send.convert.windowList = function(data){
-	if(data.trade)	data.trade = Change.send.convert.windowList.trade(deepClone(data.trade));
+	if(data.trade)	data.trade = Change.send.convert.windowList.trade(Tk.deepClone(data.trade));
 	return data;
 }
 
 Change.send.convert.windowList.trade = function(data){
-	var draw = deepClone(data);
+	var draw = Tk.deepClone(data);
 	draw.tradeList = Change.send.convert.itemlist(draw.tradeList);
 	draw.trader = List.all[draw.trader].publicId;
 	return draw;

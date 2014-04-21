@@ -81,7 +81,7 @@ function initMethodDb(){
 		
 		if(typeof m.expPa != 'object'){ m.expPa = [m.expPa]; }
 		m.id = m.name + m.lvl;
-		var temp = deepClone(m);
+		var temp = Tk.deepClone(m);
 		m.base = temp;
 		
 		if(m.warn == undefined){
@@ -105,7 +105,7 @@ function initMethodDb(){
 	/*
 	if(typeof m.actionPh == 'function'){
 		for(var i = m.lvl ; i <= 99 ; i++){
-			var newMethod = deepClone(m);
+			var newMethod = Tk.deepClone(m);
 			newMethod.lvl = i;
 			newMethod.nameBase = newMethod.name;
 			newMethod.name += ' Lv' + i;

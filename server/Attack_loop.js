@@ -14,7 +14,7 @@ Bullet.loop = function(b){
 Bullet.loop.nova = function(b){
 	b.angle += b.nova.rotation;
 	if(b.timer % b.nova.period === 0){
-		Combat.attack(b,useTemplate(Attack.template(),b.nova.attack));
+		Combat.attack(b,Tk.useTemplate(Attack.template(),b.nova.attack));
 	}
 
 }
@@ -27,15 +27,15 @@ Bullet.loop.move = function(b){
 }
 
 Bullet.loop.move.normal = function(b){
-	b.x += b.spd * cos(b.moveAngle);
-	b.y += b.spd * sin(b.moveAngle);
+	b.x += b.spd * Tk.cos(b.moveAngle);
+	b.y += b.spd * Tk.sin(b.moveAngle);
 }
 
 Bullet.loop.move.sin = function(b){
 	var axeX = b.timer;
-	var axeY = ((b.num%2)*2-1) * b.sin.amp * sin(b.timer*b.sin.freq*25);
-	var numX = b.spd *(axeX*cos(b.crAngle) - axeY * sin(b.crAngle));
-	var numY = b.spd *(axeX*sin(b.crAngle) + axeY * cos(b.crAngle));
+	var axeY = ((b.num%2)*2-1) * b.sin.amp * Tk.sin(b.timer*b.sin.freq*25);
+	var numX = b.spd *(axeX*Tk.cos(b.crAngle) - axeY * Tk.sin(b.crAngle));
+	var numY = b.spd *(axeX*Tk.sin(b.crAngle) + axeY * Tk.cos(b.crAngle));
 
 	b.x = b.crX + numX;
 	b.y = b.crY + numY;
@@ -50,8 +50,8 @@ Bullet.loop.move.parabole = function(b){
 	
 	var axeY = 	a * axeX * (axeX-b.parabole.dist);
 
-	var	numX = (axeX*cos(b.crAngle) - axeY* sin(b.crAngle));
-	var	numY = (axeX*sin(b.crAngle) + axeY* cos(b.crAngle));
+	var	numX = (axeX*Tk.cos(b.crAngle) - axeY* Tk.sin(b.crAngle));
+	var	numY = (axeX*Tk.sin(b.crAngle) + axeY* Tk.cos(b.crAngle));
 
 	b.x = b.crX + numX;
 	b.y = b.crY + numY;
@@ -62,8 +62,8 @@ Bullet.loop.move.boomerang = function(b){
 	var spdBoost = b.boomerang.spd*( Math.abs(b.timer - b.boomerang.comeBackTime/2)/b.boomerang.comeBackTime*2 )
 
 	if(b.timer < b.boomerang.comeBackTime/2){
-		b.x += b.spd * cos(b.moveAngle)*spdBoost;
-		b.y += b.spd * sin(b.moveAngle)*spdBoost;
+		b.x += b.spd * Tk.cos(b.moveAngle)*spdBoost;
+		b.y += b.spd * Tk.sin(b.moveAngle)*spdBoost;
 	}
 
 	if(b.timer >= b.boomerang.comeBackTime/2){		//AKA come back
@@ -81,11 +81,11 @@ Bullet.loop.move.boomerang = function(b){
 	
 		var diff = Math.sqrt(diffX*diffX + diffY *diffY);
 		
-		b.moveAngle = (atan2(diffY,diffX) + 360) % 360;
+		b.moveAngle = (Tk.atan2(diffY,diffX) + 360) % 360;
 		b.angle = b.moveAngle;
 		
-		b.x -= cos(b.moveAngle)*b.spd*spdBoost;
-		b.y -= sin(b.moveAngle)*b.spd*spdBoost;
+		b.x -= Tk.cos(b.moveAngle)*b.spd*spdBoost;
+		b.y -= Tk.sin(b.moveAngle)*b.spd*spdBoost;
 		
 		if(diff <= 10*spdBoost*b.boomerang.spdBack){ b.toRemove = 1;}
 		
@@ -128,7 +128,7 @@ Strike.loop = function(s){
 		if(s.postDelayAnim){ 
 			Anim.creation({
 				name:s.postDelayAnim.name,
-				target:{'x':s.x,'y':s.y,'map':s.map,'viewedIf':s.viewedIf},	//cant put all cuz deepClone
+				target:{'x':s.x,'y':s.y,'map':s.map,'viewedIf':s.viewedIf},	//cant put all cuz Tk.deepClone
 				sizeMod:s.postDelayAnim.sizeMod
 			});
 		}

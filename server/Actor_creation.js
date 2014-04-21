@@ -2,7 +2,7 @@ Actor.creation = function(d){	//d: x  y  map category variant lvl modAmount extr
 	if(Test.no.npc) return;
 	
 	Map.convertSpot(d);	
-	var data = useTemplate(Actor.creation.template(),d);
+	var data = Tk.useTemplate(Actor.creation.template(),d);
 	var e = Actor.creation.db(data);
 	e = Actor.creation.data(e,data);
 	e = Actor.creation.extra(e);
@@ -46,7 +46,7 @@ Actor.creation.group = function(gr,el){
 	var enemyIdList = [];
 	
 	Map.convertSpot(gr);
-	gr = useTemplate(Actor.creation.group.template(),gr);	
+	gr = Tk.useTemplate(Actor.creation.group.template(),gr);	
 	
 	List.group[id] = {
 		'id':id,
@@ -55,11 +55,11 @@ Actor.creation.group = function(gr,el){
 		'respawn':gr.respawn,   //time before respawn when all monster dead
 	};
 	
-	el = arrayfy(el);
+	el = Tk.arrayfy(el);
 	for(var i in el){
 		var amount = el[i].amount || 1;
 		for(var j = 0 ; j < amount; j++){
-			el[i] = useTemplate(el[i],gr);  //info about x,y,map
+			el[i] = Tk.useTemplate(el[i],gr);  //info about x,y,map
 			
 			var eid = Actor.creation(el[i]);
 			var e = List.all[eid];
@@ -79,14 +79,14 @@ Actor.creation.group.template = function(){
 
 Actor.creation.boost = function(e){
 	for(var i in e.boost.list){ 
-		e.boost.list[i].base = viaArray.get({'origin':e,'array':e.boost.list[i].stat});	
+		e.boost.list[i].base = Tk.viaArray.get({'origin':e,'array':e.boost.list[i].stat});	
 		e.boost.list[i].permBase = e.boost.list[i].base;
 	}
 	return e;
 }
 
 Actor.creation.db = function(cr){
-	var e = deepClone(Db.npc[cr.category][cr.variant]);
+	var e = Tk.deepClone(Db.npc[cr.category][cr.variant]);
 	e.lvl = Actor.creation.lvl(List.map[cr.map].lvl,cr.lvl); 
 	
 	e.id = Math.randomId();
@@ -209,7 +209,7 @@ Actor.creation.mod.list = {
 
 Actor.creation.extra = function(act){
 	if(typeof act.extra === 'function')	act.extra(act);
-	else act = useTemplate(act,act.extra,1,1);	
+	else act = Tk.useTemplate(act,act.extra,1,1);	
 	
 	delete act.extra;
 	return act;

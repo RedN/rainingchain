@@ -1009,7 +1009,7 @@ Init.db.stat.bonus = function(){
 			}
 		}
 	}
-	Actor.template.bonus = new Function('return ' + stringify(info));
+	Actor.template.bonus = new Function('return ' + Tk.stringify(info));
 }
 
 Init.db.stat.customBoost = function(){
@@ -1021,7 +1021,7 @@ Init.db.stat.customBoost = function(){
 			info[Db.stat[i].boost.stat[1]] = 0;
 		}
 	}
-	Actor.template.customBoost = new Function('return ' + stringify(info));
+	Actor.template.customBoost = new Function('return ' + Tk.stringify(info));
 }
 
 Init.db.stat.boost = function(){
@@ -1036,6 +1036,6 @@ Init.db.stat.boost = function(){
 		}
 	}
 
-	Actor.template.boost = new Function('type', 'return type === "player" ? ' + stringify(p) + ' : ' + stringify(e));
+	Actor.template.boost = new Function('type', 'return type === "player" ? ' + Tk.stringify(p) + ' : ' + Tk.stringify(e));
 }
 

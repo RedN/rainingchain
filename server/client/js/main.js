@@ -129,7 +129,7 @@ Init.game.main = function(data){
 	main.pref = JSON.parse(localStorage.getItem('pref')) || main.pref;
 }
 Init.game.player = function(data){  
-	player = useTemplate(Actor.template('player'),data.player);	
+	player = Tk.useTemplate(Actor.template('player'),data.player);	
 	$("#chatUserName")[0].innerHTML = player.name + ': '; 
 }
 Init.game.other = function(data){

@@ -18,8 +18,8 @@ Init.db.quest = function(){
 		questVar[i] = Db.quest[i].variable;
 	}
 	Main.template.quest = {};
-	Main.template.quest = new Function('return ' + stringify(questVar));	
-	for(var i in questVar)	Main.template.quest[i] = new Function('return ' + stringify(questVar[i]));	
+	Main.template.quest = new Function('return ' + Tk.stringify(questVar));	
+	for(var i in questVar)	Main.template.quest[i] = new Function('return ' + Tk.stringify(questVar[i]));	
 		
 }
 Init.db.quest.map = function(){	//called before Init.db.quest
@@ -38,11 +38,11 @@ Init.db.quest.map = function(){	//called before Init.db.quest
 
 
 Quest.creation = function(q){
-	q = useTemplate(Quest.template(),q)
+	q = Tk.useTemplate(Quest.template(),q)
 	if(Server.testing)	Quest.creation.tester(q);
 	
 	//Variable
-	q.variable = useTemplate(Quest.template.variable(),q.variable);
+	q.variable = Tk.useTemplate(Quest.template.variable(),q.variable);
 	for(var j in q.challenge){ q.variable.challenge[j] = 0; }	//0:non-active, 1:active
 	for(var j in q.requirement){ q.variable.requirement += '0'; }	//0:non-met, 1:met
 	

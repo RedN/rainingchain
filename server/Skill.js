@@ -21,12 +21,12 @@ Skill.updateLvl = function(key,sk){
 	var main = List.main[key];
 	
 	if(!sk) sk = Cst.skill.list;
-	sk = arrayfy(sk);
+	sk = Tk.arrayfy(sk);
 	
 	for(var i in sk){
 		var skill = sk[i];
 		if(player.skill.exp[skill] >= Cst.exp.list[player.skill.lvl[skill]+1]){
-			var newLvl = binarySearch(Cst.exp.list,player.skill.exp[skill]);
+			var newLvl = Tk.binarySearch(Cst.exp.list,player.skill.exp[skill]);
 			
 			var lvlDiff = newLvl-player.skill.lvl[skill];
 				
@@ -38,7 +38,7 @@ Skill.updateLvl = function(key,sk){
 }
 
 Skill.getLvlViaExp = function(exp){
-	return binarySearch(Cst.exp.list,exp)
+	return Tk.binarySearch(Cst.exp.list,exp)
 }
 
 

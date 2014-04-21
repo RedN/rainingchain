@@ -37,11 +37,11 @@ Actor.loop.input.move.sub = function(act){
 	if(typeof act.target.main === 'string'){
 		var target = List.all[act.target.main];
 		if(!target) return;
-		act.angle = atan2(target.y-act.y,target.x-act.x);
+		act.angle = Tk.atan2(target.y-act.y,target.x-act.x);
 		act.mouseX = target.x-act.x+Cst.WIDTH2;
 		act.mouseY = target.y-act.y+Cst.HEIGHT2;
 	} else if(diff  > 15){
-		act.angle = atan2(y,x);
+		act.angle = Tk.atan2(y,x);
 		for(var i in act.moveInput){	if(Math.random()< 0.05){ act.moveInput[i] = 1;} }	//little shake when stuck
 	}
 }
@@ -160,7 +160,7 @@ Actor.loop.setTarget.sub = function(act){
 	
 	var rayon = (Math.randomML()*act.moveRange.confort*2)+act.moveRange.ideal;
 	var angle = (act.angle+180) + Math.randomML()*act.target.maxAngleChange;
-	act.target.sub = {x:cos(angle)*rayon+cible.x,y:sin(angle)*rayon+cible.y};
+	act.target.sub = {x:Tk.cos(angle)*rayon+cible.x,y:Tk.sin(angle)*rayon+cible.y};
 } 
 
 Actor.loop.setTarget.stuck = function(act){
@@ -204,7 +204,7 @@ Actor.setCutscene = function(act, path, cb, boost){
 	act.target.cutscene = {
 		active:1,
 		time:0,
-		path:deepClone(path),
+		path:Tk.deepClone(path),
 		oldCombat:act.combat || 0,
 		func:cb,		
 	}

@@ -48,7 +48,7 @@ Sfx.play = function(sfx,volume){
 }
 
 Sfx.creation = function(sfx){		//used by anim
-	var s = useTemplate(Sfx.template(),sfx);
+	var s = Tk.useTemplate(Sfx.template(),sfx);
 	s.id = Math.randomId();
 	s.volume *= Db.sfx[s.name].volume;
 	s.delay += Db.sfx[s.name].delay;

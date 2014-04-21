@@ -292,8 +292,8 @@ Init.db.boost = function(){
 			var typeList = Db.boost.list[i][j];
 			
 			//Add stuff from all
-			for(var k in Db.boost.list.all)	typeList.push(deepClone(Db.boost.list.all[k]));
-			for(var k in Db.boost.list[i].all)	typeList.push(deepClone(Db.boost.list[i].all[k]));
+			for(var k in Db.boost.list.all)	typeList.push(Tk.deepClone(Db.boost.list.all[k]));
+			for(var k in Db.boost.list[i].all)	typeList.push(Tk.deepClone(Db.boost.list[i].all[k]));
 			
 			//Convert Group into individual
 			for(var k in typeList){

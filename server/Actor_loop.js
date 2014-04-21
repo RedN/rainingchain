@@ -175,8 +175,8 @@ Actor.loop.status.drain = function(act){act.status.drain.time--;}
 Actor.loop.status.knock = function(act){
 	var status = act.status.knock;
 	if(status.time-- > 0){ 
-		act.spdX = cos(status.angle)*status.magn;
-		act.spdY = sin(status.angle)*status.magn;
+		act.spdX = Tk.cos(status.angle)*status.magn;
+		act.spdY = Tk.sin(status.angle)*status.magn;
 	}
 }
 
@@ -306,7 +306,7 @@ Actor.loop.move = function(act){
 	act.spdY *= act.friction;
 	if (Math.abs(act.spdX) < 0.1){act.spdX = 0;}	
 	if (Math.abs(act.spdY) < 0.1){act.spdY = 0;}
-	if(act.spdX || act.spdY){ act.moveAngle = atan2(act.spdY,act.spdX); } 
+	if(act.spdX || act.spdY){ act.moveAngle = Tk.atan2(act.spdY,act.spdX); } 
 	
 	
 	

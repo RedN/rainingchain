@@ -63,16 +63,17 @@ Date.nowDate = function(){
 }
 
 //Math
-sin = function (number){
+Tk = {};
+Tk.sin = function (number){
 	return (Math.sin(number/180*Math.PI))
 }
-cos = function (number){
+Tk.cos = function (number){
 	return (Math.cos(number/180*Math.PI))
 }
-atan = function (number){
+Tk.atan = function (number){
 	return (Math.atan(number)/Math.PI*180)
 }
-atan2 = function (y,x){
+Tk.atan2 = function (y,x){
 	return ((Math.atan2(y,x)/Math.PI*180)+360)%360
 }
 Math.log10 = function(num){
@@ -85,7 +86,7 @@ Math.fact = function (num){
 	for(var start = 1; num > 1; num--){ start *= num;}
 	return start;
 };
-binarySearch = function(arr,value){
+Tk.binarySearch = function(arr,value){
 	var startIndex  = 0,
 		stopIndex   = arr.length - 1,
 		middle      = Math.floor((stopIndex + startIndex)/2);
@@ -174,7 +175,7 @@ applyFunc = function(func,param){
 			if(func.indexOf('Actor') === 0) param[0] = List.actor[param[0]]; 
 			else if(func.indexOf('Main') === 0) param[0] = List.main[param[0]];
 			
-			func = viaArray.get({'origin':this,'array':func.split('.')});
+			func = Tk.viaArray.get({'origin':this,'array':func.split('.')});
 		} else {
 			func = this[func];
 		}
@@ -190,23 +191,23 @@ applyFunc.key = function(key,func,param){
 
 //Copy
 
-deepClone = function(obj){
+Tk.deepClone = function(obj){
 	if(obj === null || typeof(obj) !== 'object')
         return obj;
 
     var temp = obj.constructor();
 
     for(var key in obj)
-        temp[key] = deepClone(obj[key]);
+        temp[key] = Tk.deepClone(obj[key]);
     return temp;
 }
-stringify = function(string,func){
+Tk.stringify = function(string,func){
 	if(func) return JSONf.stringify(string);
 	if(typeof string === 'string'){ return '"' + string + '"'; }
 	else if(typeof string === 'number'){ return string.toString(); }
 	else { return JSON.stringify(string); }
 }
-isEqual = function(obj0,obj1){
+Tk.isEqual = function(obj0,obj1){
 	if(obj0 === undefined || obj1 === undefined){ return false;}	
 	return obj0 == obj1;
 }
@@ -225,8 +226,8 @@ JSONf = {
 }
 
 //Via Array
-viaArray = {};
-viaArray.get = function(d){
+Tk.viaArray = {};
+Tk.viaArray.get = function(d){
 	try {
 		if(typeof d.array != 'object'){ return d.origin[array]; }
 		if(!d.origin){ d.origin = (server ? this : window);}
@@ -243,7 +244,7 @@ viaArray.get = function(d){
 		}
 	} catch (err) { logError(err); }
 }
-viaArray.set = function(d){
+Tk.viaArray.set = function(d){
 	try {
 		if(!d.origin){ d.origin = window;}
 		var a = d.array;
@@ -258,7 +259,7 @@ viaArray.set = function(d){
 		}	
 	} catch (err) { logError(err); }
 }
-viaArray.add = function(d){
+Tk.viaArray.add = function(d){
 	try {
 		if(!d.origin){ d.origin = window;}
 		var origin = d.origin;
@@ -297,7 +298,7 @@ round = function (num,decimals,str){
 	
 	return num;
 }
-formatNum = function(num){
+Tk.formatNum = function(num){
 	 return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
 
@@ -335,16 +336,11 @@ escape.email = function(str){
     re.test(str) ? str : '';
 }
 
-changeVisibility = function(id){
-	var el = document.getElementById(id);
-	el.style.visibility = el.style.visibility === 'hidden' ? 'visible' : 'hidden';
-}
-
-useTemplate = function(temp,obj,deep,viaarray){
-	if(deep !== 0) obj = deepClone(obj); 
+Tk.useTemplate = function(temp,obj,deep,viaarray){
+	if(deep !== 0) obj = Tk.deepClone(obj); 
 	
 	if(viaarray){
-		for(var i in obj) viaArray.set({origin:temp,array:i.split(','),value:obj[i]});
+		for(var i in obj) Tk.viaArray.set({origin:temp,array:i.split(','),value:obj[i]});
 		return temp;
 	}
 	
@@ -352,22 +348,18 @@ useTemplate = function(temp,obj,deep,viaarray){
 	return temp;
 }
 
-arrayfy = function(a){
+Tk.arrayfy = function(a){
 	return (a instanceof Array) ? a : [a];
 }
 
-convertRatio = function(ratio){
+Tk.convertRatio = function(ratio){
 	var sum = 0;
 	for(var i in ratio) sum += ratio[i];
 	for(var i in ratio) ratio[i] /= sum;
 	return ratio;
 }
 
-newImage = function(src){
-	var tmp = new Image();
-	tmp.src = '/' + src;
-	return tmp
-}
+
 
 
 //Prototype
@@ -384,7 +376,7 @@ Object.defineProperty(Array.prototype, "random", {	// !name: return random eleme
 	}
 });
 
-Object.defineProperty(Array.prototype, "normalize", {	// convertRatio for array
+Object.defineProperty(Array.prototype, "normalize", {	// Tk.convertRatio for array
     enumerable: false,
     value: function(){
 		var sum = 0;
@@ -404,7 +396,7 @@ Object.defineProperty(Object.prototype, "random", {	//return attribute
 		else { var ratioed = this;}
 		
 		
-		ratioed = convertRatio(ratioed);		
+		ratioed = Tk.convertRatio(ratioed);		
 		var a = Math.random();
 		for(var i in ratioed){
 			if(ratioed[i] >= a) return i;

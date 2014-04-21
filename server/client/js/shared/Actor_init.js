@@ -164,7 +164,7 @@ Init.actor = function(){
 		}
 		//}
 		for(var i in act.boost.list){  //init default Db.stat value
-			viaArray.set({'origin':act,'array':act.boost.list[i].stat,'value':act.boost.list[i].base});
+			Tk.viaArray.set({'origin':act,'array':act.boost.list[i].stat,'value':act.boost.list[i].base});
 		}
 		return act;
 	}
@@ -174,8 +174,8 @@ Init.actor = function(){
 	
 	var temp = Actor.template;
 	Actor.template = function(type){
-		if(type === 'player') return deepClone(p);
-		return deepClone(e);	
+		if(type === 'player') return Tk.deepClone(p);
+		return Tk.deepClone(e);	
 	}
 	for(var i in temp) Actor.template[i] = temp[i];
 }

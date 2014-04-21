@@ -124,6 +124,11 @@ CanvasRenderingContext2D.prototype.setFont = function(size){
 	this.font = size + 'px Kelly Slab'
 }
 
+var newImage = function(src){
+	var tmp = new Image();
+	tmp.src = '/' + src;
+	return tmp
+}
 
 
 

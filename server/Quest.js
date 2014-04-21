@@ -64,7 +64,7 @@ Quest.reward = function(key,id){
 	} 
 	
 	//Exp
-	var exp = deepClone(q.reward.exp);
+	var exp = Tk.deepClone(q.reward.exp);
 	for(var i in exp) exp[i] *= bonusSum;
 	Skill.addExp.bulk(key,exp,false);
 }

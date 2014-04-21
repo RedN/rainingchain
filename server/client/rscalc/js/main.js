@@ -145,14 +145,14 @@ function generateContent(headWant,selectedMethods){
 	//expT	
 		var xpWanted = 1; if(selectedMethods[i].exp){ xpWanted = selectedMethods[i].exp; }
 		var RexpT = xpWanted;
-		var FexpT = formatNum(round(xpWanted,0));
+		var FexpT = Tk.formatNum(round(xpWanted,0));
 		
 	//actionPh		
 		var RactionPh = m.actionPh;
-		var FactionPh = formatNum(round(RactionPh,0));
+		var FactionPh = Tk.formatNum(round(RactionPh,0));
 		
 		if(m.actionPhRange){
-			FactionPh = formatNum(round(m.actionPhRange[0],0)) + '-' + formatNum(round(m.actionPhRange[1],0));
+			FactionPh = Tk.formatNum(round(m.actionPhRange[0],0)) + '-' + Tk.formatNum(round(m.actionPhRange[1],0));
 		}
 		
 		
@@ -181,8 +181,8 @@ function generateContent(headWant,selectedMethods){
 		var Fexclude = '<input onchange="excludeList[\'' + m.id + '\'] = !excludeList[\'' + m.id + '\']; update();" type="checkbox" title="'+ Texclude +'" class="excludeInput" value="' + m.id + '"' + Rexclude + '>';
 	
 	//expPaP
-		var RexpPaP = IMG[skill] + ' ' + formatNum(round(m.expPa[0],0)) + ' ' + skill + ' Exp' + '<br>';
-		for(var j in m.expPa[1]){ RexpPaP += IMG[j] + ' ' + formatNum(round(m.expPa[1][j],0)) + ' ' + j + ' Exp' + '<br>';}
+		var RexpPaP = IMG[skill] + ' ' + Tk.formatNum(round(m.expPa[0],0)) + ' ' + skill + ' Exp' + '<br>';
+		for(var j in m.expPa[1]){ RexpPaP += IMG[j] + ' ' + Tk.formatNum(round(m.expPa[1][j],0)) + ' ' + j + ' Exp' + '<br>';}
 		var FexpPaP = RexpPaP.slice(0,-4); //aka remove last <br>
 		
 	//expPa	
@@ -194,14 +194,14 @@ function generateContent(headWant,selectedMethods){
 		var FexpPa	= '<span title="' + TexpPa + '">' + RexpPa + '</span>';
 		
 	//expPhP
-		var RexpPhP = IMG[skill] + ' ' + formatNum(round(m.expPa[0]*RactionPh,-3)) + ' ' + skill + ' Exp/H' + '<br>';
-		for(var j in m.expPa[1]){ RexpPhP += IMG[j] + ' ' + formatNum(round(m.expPa[1][j]*RactionPh,-3)) + ' ' + j + ' Exp/H' + '<br>';}
+		var RexpPhP = IMG[skill] + ' ' + Tk.formatNum(round(m.expPa[0]*RactionPh,-3)) + ' ' + skill + ' Exp/H' + '<br>';
+		for(var j in m.expPa[1]){ RexpPhP += IMG[j] + ' ' + Tk.formatNum(round(m.expPa[1][j]*RactionPh,-3)) + ' ' + j + ' Exp/H' + '<br>';}
 		var FexpPhP = RexpPhP.slice(0,-4); //aka remove last <br>
 		
 	//expPh	
 		var RexpPh = m.expPa[0]*RactionPh;
 		var TexpPh = convertLight(FexpPhP);
-		var FexpPh	= '<span title="' + TexpPh + '">' + formatNum(round(RexpPh,-3)) + '</span>';	
+		var FexpPh	= '<span title="' + TexpPh + '">' + Tk.formatNum(round(RexpPh,-3)) + '</span>';	
 		
 	//gpPa
 		var inputGp = 0; for(var j in m.input){inputGp += GEP[j] * m.input[j];}
@@ -209,20 +209,20 @@ function generateContent(headWant,selectedMethods){
 		
 		var RgpPa = outputGp-inputGp;
 		var TgpPa = outputGp + ' - ' + inputGp;
-		var FgpPa = '<span title="' + TgpPa + '">' + COIN+ colorSign(formatNum(round(RgpPa,0))) + '</span>';
+		var FgpPa = '<span title="' + TgpPa + '">' + COIN+ colorSign(Tk.formatNum(round(RgpPa,0))) + '</span>';
 		
 	//gpPe	
 		var RgpPe = RgpPa/RexpPa;
-		var TgpPe = formatNum(RgpPa) + ' Gp / ' + formatNum(RexpPa) + ' Exp'
-		var FgpPe = '<span title="' + TgpPe + '">' + COIN+ colorSign(formatNum(round(RgpPe,2))) + '</span>';	
+		var TgpPe = Tk.formatNum(RgpPa) + ' Gp / ' + Tk.formatNum(RexpPa) + ' Exp'
+		var FgpPe = '<span title="' + TgpPe + '">' + COIN+ colorSign(Tk.formatNum(round(RgpPe,2))) + '</span>';	
 	
 	//gpPh	
 		var RgpPh = RgpPa*RactionPh;
-		var FgpPh = COINS+ colorSign(formatNum(round(RgpPh,-3)));
+		var FgpPh = COINS+ colorSign(Tk.formatNum(round(RgpPh,-3)));
 		
 	//FgpPm
 		var RgpPm = MILLION*RgpPe;
-		var FgpPm = COINS+ colorSign(formatNum(round(RgpPm,-3)));
+		var FgpPm = COINS+ colorSign(Tk.formatNum(round(RgpPm,-3)));
 	
 	//timeGpPm
 		var RtimeGpPm = -RgpPm/RincomePh;
@@ -247,7 +247,7 @@ function generateContent(headWant,selectedMethods){
 			}
 			var amm = m.input[j];
 			if(amm < 0.1){ amm = '1/' + Math.round(1/amm) } else { amm = round(amm,2); }
-			RinputItem += image + '<span title="' + formatNum(Math.round(itemDb[j].price)) + ' Gp' + '">' + '  x' + amm + ' ' + itemDb[j].name + '</span><br>';
+			RinputItem += image + '<span title="' + Tk.formatNum(Math.round(itemDb[j].price)) + ' Gp' + '">' + '  x' + amm + ' ' + itemDb[j].name + '</span><br>';
 		}
 		var FinputItem = RinputItem.slice(0,-4); //aka remove last <br>
 	
@@ -261,7 +261,7 @@ function generateContent(headWant,selectedMethods){
 			}
 			var amm = m.output[j];
 			if(amm < 0.1){ amm = '1/' + Math.round(1/amm) } else { amm = round(amm,2); }
-			RoutputItem += image + '<span title="' + formatNum(Math.round(itemDb[j].price)) + ' Gp' + '">' + '  x' + amm + ' ' + itemDb[j].name + '</span><br>';
+			RoutputItem += image + '<span title="' + Tk.formatNum(Math.round(itemDb[j].price)) + ' Gp' + '">' + '  x' + amm + ' ' + itemDb[j].name + '</span><br>';
 		}
 		
 		var FoutputItem = RoutputItem.slice(0,-4); //aka remove last <br>
@@ -282,7 +282,7 @@ function generateContent(headWant,selectedMethods){
 		
 		var RgpPeP = RgpPa / totalExpPa;
 		var TgpPeP = TexpPa;
-		var FgpPeP =  '<span title="' + TgpPeP + '">' + COIN+ colorSign(formatNum(round(RgpPeP,2))) + '</span>';	
+		var FgpPeP =  '<span title="' + TgpPeP + '">' + COIN+ colorSign(Tk.formatNum(round(RgpPeP,2))) + '</span>';	
 		
 			
 	//Video
@@ -301,13 +301,13 @@ function generateContent(headWant,selectedMethods){
 	
 	//actionT
 		var RactionT = RexpT / RexpPa;
-		var FactionT = formatNum(round(RactionT,0));
+		var FactionT = Tk.formatNum(round(RactionT,0));
 		
 	//expTP
-		var RexpTP = IMG[skill] + ' ' + formatNum(round(RexpT,0)) + ' ' + skill + ' Exp' + '<br>';
+		var RexpTP = IMG[skill] + ' ' + Tk.formatNum(round(RexpT,0)) + ' ' + skill + ' Exp' + '<br>';
 		for(var j in m.expPa[1]){ 
 			var expOtherSkill = RexpT * m.expPa[1][j]/ RexpPa;
-			RexpTP += IMG[j] + ' ' + formatNum(round(expOtherSkill,0)) + ' ' + j + ' Exp' + '<br>';
+			RexpTP += IMG[j] + ' ' + Tk.formatNum(round(expOtherSkill,0)) + ' ' + j + ' Exp' + '<br>';
 		}
 		var FexpTP = RexpTP.slice(0,-4); //aka remove last <br>
 	
@@ -319,7 +319,7 @@ function generateContent(headWant,selectedMethods){
 				var str = ' style="border:2px solid ' + warnColor[itemDb[j].buy] + '" title="This item may be hard to buy."';
 				image = image.insertAt(4,str);
 			}
-			RinputItemT += image + '  x' + formatNum(round(m.input[j]*RactionT,0)) + ' ' + itemDb[j].name + '<br>';
+			RinputItemT += image + '  x' + Tk.formatNum(round(m.input[j]*RactionT,0)) + ' ' + itemDb[j].name + '<br>';
 			
 		}
 		var TinputItemT = convertLight(RinputItem);
@@ -333,7 +333,7 @@ function generateContent(headWant,selectedMethods){
 				var str = ' style="border:2px solid ' + warnColor[itemDb[j].sell] + '" title="This item may be hard to sell."';
 				image = image.insertAt(4,str);
 			}
-			RoutputItemT += image + '  x' + formatNum(round(m.output[j]*RactionT,0)) + ' ' + itemDb[j].name + '<br>';
+			RoutputItemT += image + '  x' + Tk.formatNum(round(m.output[j]*RactionT,0)) + ' ' + itemDb[j].name + '<br>';
 		}
 		
 		var ToutputItemT = convertLight(RoutputItem);
@@ -341,7 +341,7 @@ function generateContent(headWant,selectedMethods){
 	
 	//gpT
 		var RgpT = RexpT*RgpPe;
-		var FgpT = COINS+ colorSign(formatNum(round(RgpT,-3)));
+		var FgpT = COINS+ colorSign(Tk.formatNum(round(RgpT,-3)));
 	
 	//timeGpT
 		var RtimeGpT = -RgpT/RincomePh;
@@ -583,49 +583,49 @@ function generateSum(head,array,complexe){
 		
 		if(head[i] == 'Total Action'){ 
 			var temp = 0;for(var j = 0 ; j < array.length ; j++){temp += array[j].base['RactionT'];}
-			sum.push(formatNum(round(temp,0)));
+			sum.push(Tk.formatNum(round(temp,0)));
 		}
 		
 		if(head[i] == 'Total Time For Exp'){ 
 			var temp = 0;for(var j = 0 ; j < array.length ; j++){temp += array[j].base['RtimeExpT'];	}
-			sum.push(formatNum(round(temp,2)));
+			sum.push(Tk.formatNum(round(temp,2)));
 		}
 		
 		if(head[i] == 'Total Time For Gp'){ 
 			var temp = 0;for(var j = 0 ; j < array.length ; j++){temp += array[j].base['RtimeGpT'];}
-			sum.push(formatNum(round(temp,2)));
+			sum.push(Tk.formatNum(round(temp,2)));
 		}
 		
 		if(head[i] == 'Total Time'){ 
 			var temp = 0;for(var j = 0 ; j < array.length ; j++){temp += array[j].base['RtimeT'];}
-			sum.push(formatNum(round(temp,2)));
+			sum.push(Tk.formatNum(round(temp,2)));
 		}
 		
 		if(head[i] == 'Total Exp'){ 
 			var temp = 0;for(var j = 0 ; j < array.length ; j++){temp += array[j].base['RexpT'];}
-			sum.push(formatNum(round(temp,0)));
+			sum.push(Tk.formatNum(round(temp,0)));
 		}
 		
 		if(head[i] == 'Total Gp'){ 
 			var temp = 0;for(var j = 0 ; j < array.length ; j++){temp += array[j].base['RgpT'];}
-			sum.push(COINS + colorSign(formatNum(round(temp,-3))));
+			sum.push(COINS + colorSign(Tk.formatNum(round(temp,-3))));
 		}
 	
 		if(head[i] == 'Exp/H'){ 
 			var temp = 0; for(var j = 0 ; j < array.length ; j++){temp += array[j].base['RexpT'];}
 			var temp1 = 0;	for(var j = 0 ; j < array.length ; j++){temp1 += array[j].base['RtimeExpT'];	}
-			sum.push(formatNum(round(temp/temp1,-3)));
+			sum.push(Tk.formatNum(round(temp/temp1,-3)));
 		}
 		if(head[i] == 'Gp/H'){ 
 			var temp = 0; for(var j = 0 ; j < array.length ; j++){temp += array[j].base['RgpT'];}
 			var temp1 = 0;	for(var j = 0 ; j < array.length ; j++){temp1 += array[j].base['RtimeExpT'];	}
-			sum.push(COINS + colorSign(formatNum(round(temp,-3))));
+			sum.push(COINS + colorSign(Tk.formatNum(round(temp,-3))));
 		}
 		
 		if(head[i] == 'Gp/Exp'){ 
 			var temp = 0; for(var j = 0 ; j < array.length ; j++){temp += array[j].base['RgpT'];}
 			var temp1 = 0;	for(var j = 0 ; j < array.length ; j++){temp1 += array[j].base['RexpT'];	}
-			sum.push(COIN + colorSign(formatNum(round(temp/temp1,2))));
+			sum.push(COIN + colorSign(Tk.formatNum(round(temp/temp1,2))));
 		}		
 		
 		if(head[i] == 'Total Exp+'){ 
@@ -639,7 +639,7 @@ function generateSum(head,array,complexe){
 				if(info){for(var k in info){	exp[k] += info[k] * array[j].base['RactionT'];}	}
 			}
 			
-			for(var j in exp){if(exp[j]){str += IMG[j] + ' ' + formatNum(round(exp[j],0)) + ' ' + j + ' Exp' + '<br>';}}
+			for(var j in exp){if(exp[j]){str += IMG[j] + ' ' + Tk.formatNum(round(exp[j],0)) + ' ' + j + ' Exp' + '<br>';}}
 			
 			sum.push(str);
 		}
@@ -658,7 +658,7 @@ function generateSum(head,array,complexe){
 				if(info){for(var k in info){ total += info[k] * array[j].base['RactionT'];}	}
 			}
 			
-			sum.push(COIN + colorSign(formatNum(round(temp/total,2))));
+			sum.push(COIN + colorSign(Tk.formatNum(round(temp/total,2))));
 		}
 		
 		

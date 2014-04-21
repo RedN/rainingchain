@@ -817,7 +817,7 @@ Ability.creation = function(a){
 	//Setting Ability
 	db.upsert('ability',{'id':a.id}, a, db.err);	
 	
-	a.spd = convertRatio(a.spd);
+	a.spd = Tk.convertRatio(a.spd);
 	a.cost = a.cost || {};
 	a.reset = a.reset || {'attack':0};
 	a.period = a.period  || {};
@@ -833,7 +833,7 @@ Ability.creation = function(a){
 		if(aa.func === 'Combat.attack'){
 			if(aa.anim !== false && !aa.anim) aa.anim = 'attack';
 			
-			aa.param.dmg.ratio = convertRatio(aa.param.dmg.ratio);
+			aa.param.dmg.ratio = Tk.convertRatio(aa.param.dmg.ratio);
 		}
 		if(aa.func === 'Combat.boost'){
 			if(aa.animOnSprite !== false && !aa.animOnSprite) action.animOnSprite = 'boostWhite';
@@ -858,15 +858,15 @@ Ability.creation = function(a){
 }
 
 Ability.uncompress = function(name){	//turn ability into function. called when swapAbility
-	var ab = typeof name === 'object' ? name : deepClone(Db.ability[name]);
+	var ab = typeof name === 'object' ? name : Tk.deepClone(Db.ability[name]);
 	if(!ab) return null;
 	
 	ab = Ability.uncompress.mod(ab);
 	
 	if(ab.action && ab.action.func === 'Combat.attack'){
 		var at = ab.action.param;
-		at = useTemplate(Attack.template(),at);
-		ab.action.param = new Function('return ' + stringify(at));
+		at = Tk.useTemplate(Attack.template(),at);
+		ab.action.param = new Function('return ' + Tk.stringify(at));
 	}
 	return ab;
 }

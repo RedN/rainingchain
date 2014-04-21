@@ -1,17 +1,19 @@
+Tk = {};
+
 //Math
-sin = function (number){
+Tk.sin = function (number){
 	return (Math.sin(number/180*Math.PI))
 }
 
-cos = function (number){
+Tk.cos = function (number){
 	return (Math.cos(number/180*Math.PI))
 }
 
-atan = function (number){
+Tk.atan = function (number){
 	return (Math.atan(number)/Math.PI*180)
 }
 
-atan2 = function (y,x){
+Tk.atan2 = function (y,x){
 	return ((Math.atan2(y,x)/Math.PI*180)+360)%360
 }
 
@@ -23,9 +25,9 @@ innerFunction = function (func,param){
 }
 
 //Copy
-deepClone = function(info){
+Tk.deepClone = function(info){
 	if(typeof info == 'object'){
-		return JSON.parse(stringify(info));
+		return JSON.parse(Tk.stringify(info));
 	} else {
 		return info;
 	}
@@ -33,13 +35,13 @@ deepClone = function(info){
 
 deepString = function(info){
 	if(typeof info == 'object'){
-		return stringify(info);
+		return Tk.stringify(info);
 	} else {
 		return info;
 	}
 }
 
-stringify = function(string){
+Tk.stringify = function(string){
 	//return JSON.stringify(string);	
 	
 	if(typeof string == 'string'){ return '"' + string + '"'; }
@@ -47,7 +49,7 @@ stringify = function(string){
 	else { return JSON.stringify(string); }
 }
 
-isEqual = function(obj0,obj1){
+Tk.isEqual = function(obj0,obj1){
 	if(obj0 === undefined || obj1 == undefined){ return false;}	
 	return obj0 == obj1;
 }
@@ -152,7 +154,7 @@ round = function (num,decimals){
 
 
 
-formatNum = function(num){
+Tk.formatNum = function(num){
 	 return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
 

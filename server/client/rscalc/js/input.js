@@ -64,7 +64,7 @@ function updateIncomePh(){
 	var val = incomePhInput.value;
 	val = val.replace(/[^\d.]/g, "");
 	if(val <= 0){ val = 1000000; }
-	incomePhInput.value = formatNum(val);
+	incomePhInput.value = Tk.formatNum(val);
 	RincomePh = val;
 }
 
@@ -91,7 +91,7 @@ function updateStartEndExp(){
 	
 	start = Math.max(0,Math.min(start,200000000));
 	startExp = start;
-	startExpInput.value = formatNum(startExp);
+	startExpInput.value = Tk.formatNum(startExp);
 	
 	
 	//End
@@ -108,11 +108,11 @@ function updateStartEndExp(){
 	
 	end = Math.max(start,Math.min(end,200000000));
 	endExp = end;
-	endExpInput.value = formatNum(endExp);
+	endExpInput.value = Tk.formatNum(endExp);
 }
 
 function updateBoostList(){
-	methodList = deepClone(methodDb);
+	methodList = Tk.deepClone(methodDb);
 		
 	var boost = {};
 	var array = $(":checked.boostInput");

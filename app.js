@@ -29,19 +29,6 @@ app.post('/getPrice', function(req, res){	res.send(require('./server/RS_calculat
 app.post('/getExp', function(req, res){	require('./server/RS_calculators').appPostGetExp(req,res); });
 
 
-
-
-
-TESTFREEZE = function(){
-	var globalVariable = Object.keys(global);
-	var whiteList = ['List','Db','Actor'];
-	for(var i in globalVariable){
-		var obj = global[globalVariable[i]];
-		if(typeof obj === 'object' || typeof obj === 'function')
-			if(!whiteList.have(globalVariable[i]))	Object.freeze(obj);
-	}
-}
-
 //Require
 require(clientPath + 'essentialsShare');
 require(serverPath + 'Server');

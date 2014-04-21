@@ -648,8 +648,8 @@ Draw.window.ability.action.attack = function(diffX,diffY){  ctxrestore();
 	
 	
 	var ab = Draw.old.abilityShowed;
-	var preatk = deepClone(ab.action.param);
-	var atk = Combat.attack.mod(player,deepClone(preatk));
+	var preatk = Tk.deepClone(ab.action.param);
+	var atk = Combat.attack.mod(player,Tk.deepClone(preatk));
 	
 	var fontSize = 20;	
 	ctx.font = fontSize + 'px Kelly Slab';
@@ -856,7 +856,7 @@ Draw.window.quest.refresh = function(s,q){
 
 }
 Draw.window.quest.refreshIf = function(q,mq){
-	var str = stringify(q) + stringify(mq);
+	var str = Tk.stringify(q) + Tk.stringify(mq);
 	var bool = Draw.refresh.winQuest !== str;
 	Draw.refresh.winQuest = str;
 	return bool;

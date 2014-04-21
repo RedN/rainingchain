@@ -27,7 +27,7 @@ Db.query = function(d){
 	var info = list[d.db].source[d.id];
 	if(!info) return;
 
-	if(list[d.db].filter) info = list[d.db].filter(deepClone(info));
+	if(list[d.db].filter) info = list[d.db].filter(Tk.deepClone(info));
 	
 	d.info = info;
 	return d;
@@ -53,9 +53,9 @@ Db.query.plan = function(info){
 }
 
 Db.query.ability = function(info){
-	var ab = deepClone(info);
+	var ab = Tk.deepClone(info);
 	if(ab.action && ab.action.func === 'Combat.attack'){
-		ab.action.param = useTemplate(Attack.template(),ab.action.param);
+		ab.action.param = Tk.useTemplate(Attack.template(),ab.action.param);
 	}
 	return ab;
 }	
@@ -226,7 +226,7 @@ if(!server){
 		for(var i in Db.stat){
 			str.push({'stat':i,'value':Math.random()*2,'type':'+'});
 		}
-		str = stringify(str);
+		str = Tk.stringify(str);
 		
 		ts("Actor.permBoost(key,'super'," + str + ')');
 	}

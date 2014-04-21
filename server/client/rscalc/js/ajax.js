@@ -9,7 +9,7 @@ function getExp(name){
 			} else {
 				var obj = JSON.parse(data);
 				startExp = obj[skill];
-				startExpInput.value = formatNum(startExp);
+				startExpInput.value = Tk.formatNum(startExp);
 				update();				
 			}		
 		}

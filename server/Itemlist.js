@@ -157,7 +157,7 @@ Itemlist.transfer.bulk = function(inv,other,array_items,allornothing){
 	if(allornothing){
 		if((!Itemlist.test.transfer(other,array_items) || !Itemlist.have.bulk(inv,array_items)))		return false;
 	} else {
-		array_items = deepClone(array_items);
+		array_items = Tk.deepClone(array_items);
 		for(var i in array_items){
 			array_items[i][1] = Math.min((array_items[i][1] || 1),Itemlist.have(inv,array_items[i][0],0,'amount'));
 		}
@@ -283,8 +283,8 @@ Itemlist.click.trade = function(trade,side,slot){
 
 //Actual trade function is Command.list['win,trade,toggle']
 Itemlist.trade = function(trade,other){
-	var temp = deepClone(trade.data);
-	var temp2 = deepClone(other.data);
+	var temp = Tk.deepClone(trade.data);
+	var temp2 = Tk.deepClone(other.data);
 	other.data = temp;
 	trade.data = temp2;
 	Chat.add(trade.key,'Trade Accepted.');

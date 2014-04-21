@@ -26,7 +26,7 @@ Actor.getDef = function(act){
 	var defratio = server ? Actor.getEquip(act).def : player.equip.def;
 	var def = {
 		main:act.globalDef,
-		ratio:deepClone(defratio)
+		ratio:Tk.deepClone(defratio)
 	};
 	for(var i in def.ratio){
 		def.ratio[i] *= act.mastery.def[i].mod * act.mastery.def[i].sum;

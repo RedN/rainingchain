@@ -223,13 +223,13 @@ Db.equip["qjo3fpkpf"] = {"name":"Chain","piece":"boots","type":"chain","icon":"b
 Equip = {};
 
 Equip.creation = function(equip){
-	equip = useTemplate(Equip.template(),equip);
+	equip = Tk.useTemplate(Equip.template(),equip);
 	
 	equip.color = Equip.creation.color(equip);
 	equip.category = Cst.isWeapon(equip.piece) ? 'weapon' : 'armor';
 	
-	equip.def.ratio = convertRatio(equip.def.ratio);
-	equip.dmg.ratio = convertRatio(equip.dmg.ratio);
+	equip.def.ratio = Tk.convertRatio(equip.def.ratio);
+	equip.dmg.ratio = Tk.convertRatio(equip.dmg.ratio);
 
 	
 	Db.equip[equip.id] = equip;
@@ -261,7 +261,7 @@ Equip.creation.color = function(w){
 }
 
 Equip.compress = function(e){
-	e = deepClone(e);
+	e = Tk.deepClone(e);
 	e.dmg = Equip.compress.element(e.dmg);
 	e.def = Equip.compress.element(e.def);
 	return e;

@@ -57,7 +57,7 @@ Collision.distancePtPt = function(pt1,pt2){
 }
 
 Collision.anglePtPt = function(pt1,pt2){	//pt1 looking towards pt2
-	return atan2(pt2.y-pt1.y,pt2.x-pt1.x);
+	return Tk.atan2(pt2.y-pt1.y,pt2.x-pt1.x);
 }
 
 Collision.PosMap = function(pos,map,type){	//Test Collision between pos and map	

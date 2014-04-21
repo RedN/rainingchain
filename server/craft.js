@@ -174,7 +174,7 @@ Craft.equip.armor.mod = {
 	'shield':20,
 	'body':25,
 }
-Craft.equip.armor.mod  = convertRatio(Craft.equip.armor.mod);
+Craft.equip.armor.mod  = Tk.convertRatio(Craft.equip.armor.mod);
 
 
 Craft.equip.salvage = function(key,id){
@@ -199,7 +199,7 @@ Craft.boost = function(seed,boost){
 	seed.lvl = seed.lvl || 0;
 	seed.cap = seed.cap || 1;
 	
-	boost = deepClone(boost);
+	boost = Tk.deepClone(boost);
 	
 	var value = Craft.boost.roll(boost.value,seed.quality);
 	value = Math.min(value,boost.value[1]*seed.cap);	//for quest death for example
@@ -236,8 +236,8 @@ Craft.orb = function(key,orb,amount,wId,mod){	//would be better if split in mult
 	
 	//Know if ability or equip
 	var equip; var category;
-	if(Db.equip[wId]){		equip = deepClone(Db.equip[wId]); category = 'equip';}
-	if(Db.ability[wId]){	equip = deepClone(Db.ability[wId]); category = 'ability';}
+	if(Db.equip[wId]){		equip = Tk.deepClone(Db.equip[wId]); category = 'equip';}
+	if(Db.ability[wId]){	equip = Tk.deepClone(Db.ability[wId]); category = 'ability';}
 	if(!equip || (category === 'ability' && orb !== 'upgrade')){	//ability can only be modded by upgrade
 		Chat.add(key,"You can't use this orb on this item.");
 		return; 
@@ -322,7 +322,7 @@ Craft.ability.template = function(seed){
 	var qua = seed.quality || 0;
 	var an = seed.piece || 'fireball';
 
-	var ab = deepClone(Db.abilityTemplate[an]);
+	var ab = Tk.deepClone(Db.abilityTemplate[an]);
 	
 	if(typeof ab.period.global === 'object'){ ab.period.global = Craft.boost.roll(ab.period.global,qua); }
 	if(typeof ab.period.own === 'object'){ ab.period.own = Craft.boost.roll(ab.period.own,qua); }
@@ -337,7 +337,7 @@ Craft.ability.template = function(seed){
 		for(var i in atk.dmg.ratio){
 			if(typeof atk.dmg.ratio[i] === 'object'){ atk.dmg.ratio[i] = Craft.boost.roll(atk.dmg.ratio[i],qua); }
 		}
-		atk.dmg.ratio = convertRatio(atk.dmg.ratio);
+		atk.dmg.ratio = Tk.convertRatio(atk.dmg.ratio);
 		
 		//Status
 		for(var st in Cst.status.list){
@@ -374,7 +374,7 @@ Craft.ability.mod = function(key,id,mod){
 	//abid: Ability Id, mod: mod Id
 	
 	//Verify
-	var ab = deepClone(Db.ability[id]);
+	var ab = Tk.deepClone(Db.ability[id]);
 	if(ab.modList[mod] !== undefined){ Chat.add(key,'This ability already has this mod.'); return; }
 	if(Object.keys(ab.modList).length > 5){ Chat.add(key,'This ability already has the maximal amount of mods.'); return; }
 	

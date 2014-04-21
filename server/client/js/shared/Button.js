@@ -4,7 +4,7 @@ Button = {};
 Button.creation = function (key,data){
 	var list = server ? List.btn[key] : List.btn;
 	data.key = key;
-	list.push(useTemplate(Button.template(),data));
+	list.push(Tk.useTemplate(Button.template(),data));
 }
 
 Button.creation.optionList = function(key,option){

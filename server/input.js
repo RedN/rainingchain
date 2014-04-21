@@ -36,7 +36,7 @@ Input.key = function(socket,d){
 			player.mouseX = Math.min(Math.max(d.m[0],0),Cst.WIDTH);
 			player.mouseY = Math.min(Math.max(d.m[1],0),Cst.HEIGHT);
 		}
-		player.angle = atan2(player.mouseY - Cst.HEIGHT/2,player.mouseX - Cst.WIDTH/2);	
+		player.angle = Tk.atan2(player.mouseY - Cst.HEIGHT/2,player.mouseX - Cst.WIDTH/2);	
 			
 	} catch(err){ Sign.off(socket.key,'Reload the page');  } 
 

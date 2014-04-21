@@ -11,7 +11,7 @@ Init.db.boss = function(){
 Boss = {};
 
 Boss.creation = function(name,e){
-	var b = deepClone(Db.boss[name]);
+	var b = Tk.deepClone(Db.boss[name]);
 	b.parent = e.id;
 	return b;
 }
@@ -136,8 +136,8 @@ if(boss.frame % 1 == 0){
 	
 	for(var i = 0 ; i < 11 ; i++){
 		var dist = 0 + 55*i;
-		var middleX = cos(angle)*dist;
-		var middleY = sin(angle)*dist;
+		var middleX = Tk.cos(angle)*dist;
+		var middleY = Tk.sin(angle)*dist;
 			
 		if(i != boss.hole && i != boss.hole+1){
 			//addStrike(act,boss.attack['spiral'],{'middleX':middleX,'middleY':middleY});

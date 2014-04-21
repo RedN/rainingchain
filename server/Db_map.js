@@ -43,9 +43,9 @@ Db.map['test'] = function(){	//'test' = mapId
 		}
 		
 		//#####
-		//Via Array: If you want to access a sub-attribute, use viaArray
+		//Via Array: If you want to access a sub-attribute, use Tk.viaArray
 		extra:{
-			'viaArray':{
+			'Tk.viaArray':{
 				'target,sub,period,first':100,,
 			},
 			'normalAtt':value,
@@ -196,7 +196,7 @@ Db.map['test'] = function(){	//'test' = mapId
 				map:map,					//map
 				angle:Math.randomML()*2		//angle used to shoot bullets
 			},
-			useTemplate(Attack.template(),cst.arrow)	//attack information. use cst to generate attack that are often used
+			Tk.useTemplate(Attack.template(),cst.arrow)	//attack information. use cst to generate attack that are often used
 		);
 
 	}
@@ -243,7 +243,7 @@ Map.creation = function(namemodel,version,lvl){	//create instance of map. versio
 	var newid = namemodel + '@' + version;
 	var model = Db.map[namemodel];
 	
-	var newaddon = deepClone(model.addon);
+	var newaddon = Tk.deepClone(model.addon);
 	for(var i in newaddon){
 		for(var j in newaddon[i].spot){
 			newaddon[i].spot[j].map = newid;
@@ -285,7 +285,7 @@ Map.creation.model = function(map){	//create the model that will be in Db.map | 
 	map.graphic = map.graphic || map.id;
 	map.addon = map.addon || {};
 		
-	var strGrid = stringify(map.grid);
+	var strGrid = Tk.stringify(map.grid);
 	map.grid = {};
 	map.grid.astar = new astar.Graph(grid);
 	

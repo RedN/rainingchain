@@ -211,8 +211,8 @@ Draw.tab.quest = function(){ ctxrestore();
 	html.questTab.text.style.width = (s.w - 2*divX) + 'px'
 	html.questTab.text.style.height = (s.h - iconY- 2*divX) + 'px'
 	
-	if(Draw.old.tab.quest !== stringify(main.quest)){
-		Draw.old.tab.quest = stringify(main.quest);
+	if(Draw.old.tab.quest !== Tk.stringify(main.quest)){
+		Draw.old.tab.quest = Tk.stringify(main.quest);
 		
 		html.questTab.text.innerHTML = '<span style="color:white;text-decoration:underline;">' + 'Quest List' + '</span>';
 		
@@ -315,7 +315,7 @@ Draw.tab.friend = function(){ ctxrestore();
 	hf.text.style.width = (s.w - 2*divX) + 'px'
 	hf.text.style.height = (s.h - iconY- 2*divY) + 'px'
 	
-	if(stringify(Draw.old.tab.friend) !== stringify(list)){
+	if(Tk.stringify(Draw.old.tab.friend) !== Tk.stringify(list)){
 		Draw.old.tab.friend = list;
 		
 		hf.text.innerHTML = '<span style="color:white; text-decoration:underline;">' + 'Friend List' + '</span>';
@@ -437,8 +437,8 @@ Draw.tab.pref = function(){
 	hf.text.style.width = (s.w - 2*divX) + 'px'
 	hf.text.style.height = (s.h - iconY- 2*divY) + 'px'
 	
-	if(Draw.old.tab.pref !== stringify(main.pref)){
-		Draw.old.tab.pref = stringify(main.pref);
+	if(Draw.old.tab.pref !== Tk.stringify(main.pref)){
+		Draw.old.tab.pref = Tk.stringify(main.pref);
 		
 		hf.text.innerHTML = '<span style="color:white; text-decoration:underline;">' + 'Preferences' + '</span>';		
 		

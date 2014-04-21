@@ -98,7 +98,7 @@ Attack.template.boomerang = function(){
 Attack.creation = function(player,s,extra){
 	if(Test.no.attack) return;
 	s = Attack.creation.info(player,s);
-	s = useTemplate(s,extra || {});
+	s = Tk.useTemplate(s,extra || {});
 	
 	s.id = Math.randomId();
 	s.publicId = Math.randomId(6);
@@ -144,13 +144,13 @@ Attack.creation.info = function(act,b){
 Attack.creation.bullet = function(b){
 	
 	if(b.parabole){
-		b.parabole = useTemplate(Attack.template.parabole(),b.parabole);
+		b.parabole = Tk.useTemplate(Attack.template.parabole(),b.parabole);
 		var diff = Math.pyt(b.mouseX - Cst.WIDTH2,b.mouseY - Cst.HEIGHT2);
 		b.parabole.dist = diff.mm(b.parabole.min,b.parabole.max);
 		b.parabole.timer *= b.parabole.dist/b.parabole.max;
 	}
 	if(b.nova){ b.angle = Math.random()*360;}	//otherwise, circle always the same. moveAngle is same tho
-	if(b.boomerang) b.boomerang = useTemplate(Attack.template.boomerang(),b.boomerang);
+	if(b.boomerang) b.boomerang = Tk.useTemplate(Attack.template.boomerang(),b.boomerang);
 	
 	b.normal = !b.sin && !b.parabole && !b.boomerang;
 	
@@ -173,8 +173,8 @@ Attack.creation.strike = function(s){
 	var dist = Math.pyt( s.mouseX-Cst.WIDTH2, s.mouseY-Cst.HEIGHT2);
 	dist = dist.mm(s.minRange,s.maxRange);
 	
-	if(s.middleX === undefined){ s.middleX = dist * cos(s.angle); }	//could be set in extra
-	if(s.middleY === undefined){ s.middleY = dist * sin(s.angle); }
+	if(s.middleX === undefined){ s.middleX = dist * Tk.cos(s.angle); }	//could be set in extra
+	if(s.middleY === undefined){ s.middleY = dist * Tk.sin(s.angle); }
 	
 	var pos = Collision.StrikeMap(s,{x:s.x + s.middleX,y:s.y + s.middleY});	//get farthest possible without touching wall
 	s.middleX = pos.x*32-s.x;
@@ -192,8 +192,8 @@ Attack.creation.strike = function(s){
 	for(var k = 0 ; k < 9 ; k++){
 		var axeX = startX + (k % 3)*w;
 		var axeY = startY + Math.floor(k/3)*h;
-		var numX = (axeX*cos(s.angle) - axeY * sin(s.angle));
-		var numY = (axeX*sin(s.angle) + axeY * cos(s.angle));
+		var numX = (axeX*Tk.cos(s.angle) - axeY * Tk.sin(s.angle));
+		var numY = (axeX*Tk.sin(s.angle) + axeY * Tk.cos(s.angle));
 				
 		s.point[k] = {'x':numX + s.crX + s.middleX,'y':numY + s.crY + s.middleY};
 	}

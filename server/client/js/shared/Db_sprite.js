@@ -320,7 +320,7 @@ Init.db.sprite = function(){
 		spr.size = spr.size || 1;
     	spr.legs = spr.legs || 0;
 		
-		if(spr.preBumperBox) spr.preHitBox = spr.preHitBox || deepClone(spr.preBumperBox);
+		if(spr.preBumperBox) spr.preHitBox = spr.preHitBox || Tk.deepClone(spr.preBumperBox);
 		
     	for(var j in spr.anim){
     		var anim = spr.anim[j];
@@ -378,7 +378,7 @@ Sprite.creation = function(player,info){
 	info.oldAnim = info.anim;
 	info.initAnim = info.anim;
 	
-	player.sprite = useTemplate(Sprite.template(),info);
+	player.sprite = Tk.useTemplate(Sprite.template(),info);
 	if(server)	Sprite.updateBumper(player);
 }
 Sprite.template = function(){
@@ -417,8 +417,8 @@ Sprite.change = function(act,info){
 Sprite.updateBumper = function(player){		//server only
 	//Set the Sprite Bumper Box to fit the sizeMod
 	if(Db.sprite[player.sprite.name].hitBox){	//Attack Dont
-		player.hitBox = deepClone(Db.sprite[player.sprite.name].hitBox);
-		player.bumperBox = deepClone(Db.sprite[player.sprite.name].bumperBox);	
+		player.hitBox = Tk.deepClone(Db.sprite[player.sprite.name].hitBox);
+		player.bumperBox = Tk.deepClone(Db.sprite[player.sprite.name].bumperBox);	
 		
 		
 		for(var i = 0 ; i < player.hitBox.length ; i++){

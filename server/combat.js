@@ -41,7 +41,7 @@ Combat.attack = function(key,action,extra){
 	var player = typeof key === 'string' ? List.all[key] : key;
 	
 	//Add Bonus and mastery
-	var atk = typeof action === 'function' ? action() : deepClone(action); 
+	var atk = typeof action === 'function' ? action() : Tk.deepClone(action); 
 	atk = Combat.attack.mod(player,atk);	//NOTE: Combat_sub.js
 	Combat.attack.perform(player,atk,extra);
 }
@@ -54,7 +54,7 @@ Combat.attack.perform = function(player,atk,extra){   //extra used for stuff lik
 
 	var atkList = [atk];
 	for(var i = 1 ; i < atk.amount ; i ++)
-		atkList.push(deepClone(atk));
+		atkList.push(Tk.deepClone(atk));
 	
 	var pAngle = extra.angle || player.angle;
 	var initAngle = pAngle + Math.randomML() * (atk.aim + player.aim) || 0;
@@ -68,7 +68,7 @@ Combat.attack.perform = function(player,atk,extra){   //extra used for stuff lik
 }	
 	
 Combat.attack.simple = function(player,attack,extra){
-	Combat.attack(player,useTemplate(Attack.template(),attack),deepClone(extra));	
+	Combat.attack(player,Tk.useTemplate(Attack.template(),attack),Tk.deepClone(extra));	
 }
 	
 Combat.summon = function(key,action,enemy){		//action:{name,maxChild,time,distance}
@@ -95,7 +95,7 @@ Combat.summon = function(key,action,enemy){		//action:{name,maxChild,time,distan
 	if(action.maxChild*amountMod < master.summon[name].child.$length()){ if(List.main[key]) Chat.add(key,"You already have maximum minions.");  return}	
 	var param0 = {'x':master.x,'y':master.y,'map':master.map};
 	
-	enemy = deepClone(arrayfy(enemy));
+	enemy = Tk.deepClone(Tk.arrayfy(enemy));
 	for(var i in enemy){
 		enemy[i].extra = {
 			'deleteOnceDead':1,

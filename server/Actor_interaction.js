@@ -69,7 +69,7 @@ Actor.click.pushable = function(pusher,beingPushed){
 	var act = List.all[beingPushed];
 	if(!act.pushable) return
 	
-	var pusherAngle = atan2(act.y - pusher.y,act.x - pusher.x);			//only work with square block
+	var pusherAngle = Tk.atan2(act.y - pusher.y,act.x - pusher.x);			//only work with square block
 	var fact = 360/4;
 	var angle = Math.floor((pusherAngle+fact/2)/fact)*fact%360;
 	
@@ -227,15 +227,15 @@ Actor.removeOption = function(act,option){	//option is object or name
 }	
 
 Actor.setRespawn = function(act,spot,safe){
-	act.respawnLoc.recent = deepClone(spot);	//spot.map can have no @ cuz use Actor.teleport
+	act.respawnLoc.recent = Tk.deepClone(spot);	//spot.map can have no @ cuz use Actor.teleport
 	if(spot.map.have("@MAIN") || safe)
-		act.respawnLoc.safe = deepClone(spot);
+		act.respawnLoc.safe = Tk.deepClone(spot);
 }
 
 Actor.push = function(act,angle,magn,time){
 	act.friction = 1;
-	act.spdX = magn*cos(angle);
-	act.spdY = magn*sin(angle);
+	act.spdX = magn*Tk.cos(angle);
+	act.spdY = magn*Tk.sin(angle);
 	
 	Actor.setTimeOut(act,'push',time,function(eid){
 		List.all[eid].spdX = 0;

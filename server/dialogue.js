@@ -6,7 +6,7 @@ Dialogue.start = function(key,d){
 	
 	var dia = Db.dialogue[d.group][d.npc][d.convo][d.node];
 	var main = List.main[key];
-	main.dialogue = deepClone(dia);
+	main.dialogue = Tk.deepClone(dia);
 	main.dialogue.x = List.all[key].x;
 	main.dialogue.y = List.all[key].y;
 	

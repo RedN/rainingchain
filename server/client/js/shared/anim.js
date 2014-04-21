@@ -59,7 +59,7 @@ Init.db.anim.creation = function(anim){
 	anim.src = anim.src || 'img/anim/' + anim.name + '.png';
 	anim.frameX = anim.frameX || Math.min(anim.frame,5);
 	
-	anim = useTemplate(Init.db.anim.creation.template(),anim);		
+	anim = Tk.useTemplate(Init.db.anim.creation.template(),anim);		
 	anim.img = newImage(anim.src);
 	Img.preloader.push(anim.src);
 	Db.anim[anim.name] = anim;
@@ -81,7 +81,7 @@ Init.db.anim.creation.template = function(anim){
 Anim = {};
 Anim.creation = function(d){	//server
 	//Add animation to the game. target = actor id OR an obj { x,y,map,viewedIf }
-	var anim = useTemplate(Anim.template(),d);
+	var anim = Tk.useTemplate(Anim.template(),d);
 	
 	if(typeof anim.target === 'string') List.map[List.all[anim.target].map].list.anim[anim.id] = anim;
 	else List.map[anim.target.map].list.anim[anim.id] = anim;
@@ -121,7 +121,7 @@ if(!server){	//client
 	}
 
 	Anim.creation = function(a){
-		a = useTemplate(Anim.template(),a);
+		a = Tk.useTemplate(Anim.template(),a);
 		if(typeof a.target === 'string'){
 			a.target = a.target === player.name ? player : List.all[a.target];
 			if(!a.target) return;
@@ -131,7 +131,7 @@ if(!server){	//client
 		
 		var sfx = Db.anim[a.name].sfx;
 		if(sfx){
-			var s = deepClone(sfx);
+			var s = Tk.deepClone(sfx);
 			s.volume *= Math.max(0.1,1 - 0.2*Math.floor(Collision.distancePtPt(player,a.target)/50));
 			Sfx.creation(s);
 		}	

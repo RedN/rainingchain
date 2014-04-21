@@ -31,7 +31,7 @@ Init.db.passive = function(cb){
 	Init.db.passive.getCurrentCount(function(currentCount){
 		Init.db.passive.getOldCount(function(countList){
 			for(var i in Db.passiveGrid.count)
-				Db.passiveGrid.count[i] = countList[i] || deepClone(currentCount);	//if exist, use db otherwise use current
+				Db.passiveGrid.count[i] = countList[i] || Tk.deepClone(currentCount);	//if exist, use db otherwise use current
 			
 			
 			Db.passiveGrid = PassiveGrid.setGrid(Db.passiveGrid);	
@@ -121,7 +121,7 @@ PassiveGrid.setGrid = function(pg){		//at this point, count should be the one fr
 	for(var i in pg.count){
 		
 		for(var i in pg.count){
-			pg.moddedGrid[i] = deepClone(pg.count[i]);	//grid should have max/min/average
+			pg.moddedGrid[i] = Tk.deepClone(pg.count[i]);	//grid should have max/min/average
 			for(var j in pg.count[i].grid){
 				for(var k in pg.count[i].grid[j]){		//i:date, j:x, k:y
 					
@@ -268,7 +268,7 @@ Passive.template = function(){
 		'00000000000000000000',
 	];
 	return {
-		grid:[grid,deepClone(grid)],
+		grid:[grid,Tk.deepClone(grid)],
 		usablePt:0,
 		usedPt:[0,0],
 		removePt:0,
@@ -305,7 +305,7 @@ Passive.test.add = function(passive,i,j){
 Passive.test.remove = function(passive,yy,xx){
 	if(passive[yy][xx] === '2') return false;
 
-	var pass = deepClone(passive);
+	var pass = Tk.deepClone(passive);
 	pass[yy] = pass[yy].set(xx,'0');
 	
 	var listValid = {};

@@ -59,11 +59,7 @@ Init.server = function (){
 			setInterval(Loop,40);
 			
 			Server.ready = 1;
-			//Track Global Variables
-			var tmp = Object.keys(this); for(var i in ObjectKeys) tmp.splice(tmp.indexOf(ObjectKeys[i]),1);
-			//permConsoleLog(tmp);
-			
-			TESTFREEZE();
+						
 	
 		});
 	})})})});

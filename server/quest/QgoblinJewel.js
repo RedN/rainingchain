@@ -589,7 +589,7 @@ q.boss['test'] = function(){
 		},
 		transitionOut:function(b){
 			var act = s.getAct(b.parent);
-			s.sprite(act,{'sizeMod':0.75});	//BUG
+			s.sprite(act,{'sizeMod':0.75});
 		},
 		transitionTest:function(b){
 			return s.interval(250);

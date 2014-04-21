@@ -9,7 +9,7 @@ Actor.boost = function(act, boost){	//boost: { 'stat':'globalDmg','value':1,'typ
 		for(var i in boost) Actor.boost(act,boost[i]); return;
 	}
 	
-	var b = useTemplate(Actor.boost.template(),boost);
+	var b = Tk.useTemplate(Actor.boost.template(),boost);
 	b.id = b.stat + '@' + b.name;
 	
 	if(b.time > 250){ b.spd = 'slow'; }
@@ -67,7 +67,7 @@ Actor.boost.enemyPower = function(act,num){
 
 Actor.permBoost = function(act,source,boost){
 	//remove permBoost if boost undefined
-	if(boost){	act.permBoost[source] = arrayfy(boost);
+	if(boost){	act.permBoost[source] = Tk.arrayfy(boost);
 	} else { delete act.permBoost[source]; }
 	
 	Actor.update.permBoost(act);
@@ -157,7 +157,7 @@ Actor.update.boost = function(act,stat){	//for time manage, Actor.loop.boost
 		else if(boost.type === '*'){	sum += (boost.value-1)*stat.base; }
 	}
 	
-	viaArray.set({'origin':act,'array':stat.stat,'value':sum});
+	Tk.viaArray.set({'origin':act,'array':stat.stat,'value':sum});
 }
 
 

@@ -31,7 +31,7 @@ Test.signIn = function(key){ //Called when player logs in
 	]);	
 	
 	
-	Test.signIn.fixAbilityCharge(key);	//BUG
+	Test.signIn.fixAbilityCharge(key);	//BUG?
 }
 
 Test.firstSignIn = function(key){

@@ -229,13 +229,13 @@ Load = function (key,account,socket,cb){
 Load.main = function(key,account,cb){
     db.find('main',{username:account.username},{_id:0},function(err, db) { if(err) throw err;	
 		db = db[0];
-		var main = useTemplate(Main.template(key),Load.main.uncompress(db,key));
+		var main = Tk.useTemplate(Main.template(key),Load.main.uncompress(db,key));
 		cb(main);
 	});
 }
 
 Save.main.compress = function(mainn){
-	var main = deepClone(mainn);
+	var main = Tk.deepClone(mainn);
 	delete main.tradeList;
 	
 	main.invList = main.invList.data;
@@ -313,7 +313,7 @@ Load.player = function(key,account,cb){
 }
 
 Save.player.compress = function(playerr){
-	var player = deepClone(playerr);
+	var player = Tk.deepClone(playerr);
 	for(var i in player.ability.regular)	player.ability.regular[i] = player.ability.regular[i] ? player.ability.regular[i].id : 0;
 	player.ability = player.ability.regular;
 	

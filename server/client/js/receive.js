@@ -17,7 +17,7 @@ try {
 	
 	//Update Player Private
 	for(var j in data.p){
-	   viaArray.set({'origin':player,'array':j.split(','),'value':data.p[j]});	
+	   Tk.viaArray.set({'origin':player,'array':j.split(','),'value':data.p[j]});	
 	}
         
 
@@ -25,7 +25,7 @@ try {
 	for(var i in data.u){
 		var changeList = data.u[i];
 		for(var j in changeList){
-			viaArray.set({'origin':List.all[i],'array':j.split(','),'value':changeList[j]});
+			Tk.viaArray.set({'origin':List.all[i],'array':j.split(','),'value':changeList[j]});
 		}
 		if(List.all[i]) List.all[i].toRemove = 0; 	
 	}
@@ -39,7 +39,7 @@ try {
     
 	//Update Main List
 	for(var i in data.m){
-		viaArray.set({'origin':main,'array':i.split(','),'value':data.m[i]});	
+		Tk.viaArray.set({'origin':main,'array':i.split(','),'value':data.m[i]});	
 	}
 	
 	//Remove Inactive FullList
@@ -57,8 +57,8 @@ try {
 	for(var i in List.bullet){
 		var b = List.bullet[i];
 		if(b.spd === null || b.sprite.dead) continue;
-		b.x += cos(b.angle)*b.spd;
-		b.y += sin(b.angle)*b.spd;	
+		b.x += Tk.cos(b.angle)*b.spd;
+		b.y += Tk.sin(b.angle)*b.spd;	
 	}
 
 } catch (err){ logError(err) }
