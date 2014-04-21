@@ -1,4 +1,4 @@
-var m = Init.db.map.model();
+var m = Init.db.map.template();
 m.name = "Test";
 m.lvl = 0;
 m.graphic = 'goblinLand';

@@ -119,7 +119,7 @@ q.dialogue['jenny'] = {'face':{'image':'villager-female.0','name':'Jenny'},
 //{Map
 
 q.map.bobo = function(){
-	var m = Init.db.map.model();
+	var m = Init.db.map.template();
 	m.name = "Goblin Land";
 	m.tileset = "v1.1";
 	m.lvl = 0;
@@ -135,7 +135,7 @@ q.map.bobo = function(){
 	
 /*
 q.map.goblinLand = function(){
-	var m = Init.db.map.model();
+	var m = Init.db.map.template();
 	m.name = "Goblin Land";
 	m.tileset = "v1.1";
 	m.lvl = 0;

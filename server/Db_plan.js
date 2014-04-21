@@ -162,9 +162,7 @@ Plan.template.equip = function(plan){
 	if(plan.category === 'weapon' || plan.category === 'armor'){
 		plan.piece = plan.piece || Cst.equip[plan.category].piece.random();
 		plan.category = 'equip';
-	} else {	
-		plan.piece = plan.piece || Cst.equip.piece.random();
-	}
+	} else plan.piece = plan.piece || Cst.equip.piece.random();	//aka category already equip
 	
 	plan.name = 'Equip Plan';
 	plan.icon = 'plan.equip';
@@ -174,8 +172,8 @@ Plan.template.equip = function(plan){
 }
 
 Plan.template.ability = function(plan){
-
-
+	DEBUG(1,"NO SUPPORT for Plan.template.ability");
+	return plan;
 }
 
 Plan.use = function(key,id){	//when player tries to use plan
@@ -184,21 +182,19 @@ Plan.use = function(key,id){	//when player tries to use plan
 	
 	var inv = List.main[key].invList;
 	
-	if(Plan.test(key,plan.req)){ //meet req
-		Itemlist.remove.bulk(inv,plan.req.item);
-		
-		plan.creator = List.all[key].username;
-		var itemid;
-		if(plan.unique){ itemid = plan.unique }	//always give same items		
-		if(plan.category === 'equip') itemid = Craft.equip(plan); 
-		if(plan.category === 'ability') itemid = Craft.ability(plan); 
-		
-		Itemlist.add(inv, itemid);
-		LOG(1,key,'Plan.use',id,itemid);
-		return itemid;
-	} else { //dont meet
-		Chat.add(key,"You don't meet the requirements to use this plan.");
-	}
+	if(!Plan.test(key,plan.req)) return Chat.add(key,"You don't meet the requirements to use this plan.");
+	//
+	Itemlist.remove.bulk(inv,plan.req.item);
+	
+	plan.creator = List.all[key].username;
+	var itemid;
+	if(plan.unique){ itemid = plan.unique }	//always give same items		
+	if(plan.category === 'equip') itemid = Craft.equip(plan); 
+	if(plan.category === 'ability') itemid = Craft.ability(plan); 
+	
+	Itemlist.add(inv, itemid);
+	LOG(1,key,'Plan.use',id,itemid);
+	return itemid;
 }
 
 

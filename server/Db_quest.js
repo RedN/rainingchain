@@ -9,8 +9,6 @@ Quest = {};
 Quest.test = 'QgoblinJewel';	//give player vaTester for this quest
 
 
-
-
 Init.db.quest = function(){
 	var questVar = {};
 	for(var i in Db.quest){
@@ -22,6 +20,7 @@ Init.db.quest = function(){
 	for(var i in questVar)	Main.template.quest[i] = new Function('return ' + Tk.stringify(questVar[i]));	
 		
 }
+
 Init.db.quest.map = function(){	//called before Init.db.quest
 	for(var i in questList){
 		Db.quest[questList[i]] = require('./quest/'+questList[i]).quest;
@@ -35,7 +34,6 @@ Init.db.quest.map = function(){	//called before Init.db.quest
 		}
 	}
 }
-
 
 Quest.creation = function(q){
 	q = Tk.useTemplate(Quest.template(),q)
@@ -121,7 +119,6 @@ Quest.creation.tester = function(q){
 	Item.creation(item);
 }
 
-
 Quest.template = function(id,version){
 	return {
 		id:id || Math.random(),
@@ -149,6 +146,7 @@ Quest.template = function(id,version){
 		event:{},
 		skillPlot:[],
 		boss:{},
+		visible:true,
 	};
 }
 

@@ -19,7 +19,7 @@ Init.db.map = function (){
 	
 }
 
-Init.db.map.model = function(){
+Init.db.map.template = function(){
 	return {
 		addon:{},
 		name : "No Name Map",

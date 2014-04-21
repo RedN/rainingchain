@@ -22,8 +22,6 @@
 	}},
 */
 
-
-
 Init.db.sprite = function(){
 	
 	var a = Db.sprite =	{};
@@ -302,7 +300,7 @@ Init.db.sprite = function(){
     for(var i in Db.sprite){
 		var spr = Db.sprite[i];
     	
-		if(spr.rgpvx){
+		if(spr.rgpvx){	//cuz im lazy...
 			var src = spr.src;
 			spr = {"size":2,"side":[2,0,1,3],"hpBar":-22,"legs":16,
 			"preHitBox":[ -16,16,-16,16 ],"preBumperBox":[ -16,16,-16,16 ],
@@ -371,6 +369,29 @@ Init.db.sprite = function(){
 }
 
 
+Init.db.sprite.template = function(){
+	return {
+		src:"actor/main.png",
+		img:null,
+		size:1,
+		side:[0,1,2,3],
+		hpBar:0,
+		legs:0,
+		preHitBox:[-10,10,-10,10],
+		preBumperBox:[-10,10,-10,10],
+		bumperBox:[-10,10,-10,10],
+		hitBox:[-10,10,-10,10],
+		anim:{walk:Init.db.sprite.template.anim()},
+		defaultAnim:"walk",
+	
+
+	}
+}
+
+Init.db.sprite.template.anim = function(){
+	return {"startY":0,"frame":4,"sizeX":24,"sizeY":32,"dir":4,"spd":0.4,"walk":1,"next":"walk"};
+}
+
 Sprite = {};
 
 Sprite.creation = function(player,info){
@@ -381,6 +402,7 @@ Sprite.creation = function(player,info){
 	player.sprite = Tk.useTemplate(Sprite.template(),info);
 	if(server)	Sprite.updateBumper(player);
 }
+
 Sprite.template = function(){
 	return {
     	name:'mace',

@@ -226,7 +226,7 @@ exports.init = function(version,questname){	//}
 	s.bossSummon = Boss.summon;
 
 	//Init
-	s.map = Init.db.map.model;
+	s.map = Init.db.map.template;
 	s.boss = Boss.template;
 
 	return s;
