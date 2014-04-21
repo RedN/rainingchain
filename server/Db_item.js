@@ -102,7 +102,7 @@ Item.creation = function(item){
 }
 
 Item.template = function(){
-	var item = {
+	return {
 		'name':'buggedItem',
 		'icon':'system.square',
 		'trade':1, 
@@ -116,7 +116,6 @@ Item.template = function(){
 		'option': [],
 		'type':'item',
 	}
-	return item;
 }
 
 Item.removeFromDb = function(id){

@@ -15,23 +15,37 @@ Test.no = {
 };
 
 Test.signIn = function(key){ //Called when player logs in
+	var act = List.all[key];
 	Test.signIn.hideHUD(key);
 	Test.signIn.quest(key);
+	Test.signIn.teleport(key);
+	
 	if(Server.testing){
 		Db.quest["Qtest"].event.start(key);	//test
 		if(Quest.test){
 			Itemlist.add(key,Quest.test + '-QuestTester');
-			if(Db.quest[Quest.test].event.test && Db.quest[Quest.test].event.test.login)
-				Db.quest[Quest.test].event.test.login(key);
+			if(Db.quest[Quest.test].event.test && Db.quest[Quest.test].event.test.signIn)
+				Db.quest[Quest.test].event.test.signIn(key);
 		}
 	}
 
-	Actor.permBoost(List.all[key],'Player',[
+	Actor.permBoost(act,'Player',[
 		{stat:'bullet-spd',value:0.5,type:'+'},
 	]);	
 	
 	
+	
 	Test.signIn.fixAbilityCharge(key);	//BUG?
+}
+
+Test.signIn.teleport = function(key){
+	var act = List.all[key];
+	act.map = null;
+	
+	var recentmap = Actor.teleport.getMapName(act,act.respawnLoc.recent.map);
+	if(List.map[recentmap])
+		Actor.teleport(act,act.respawnLoc.recent);
+	else Actor.teleport(act,act.respawnLoc.safe);
 }
 
 Test.firstSignIn = function(key){
@@ -40,6 +54,13 @@ Test.firstSignIn = function(key){
 			
 	Chat.add(act.id,"Note: This is a very early beta. Expect things to change... A LOT.");
 	Chat.add(act.id,"Control: WADS. (For AZERTY users, change key binding via Pref Tab)");
+	
+	Actor.setRespawn(act,{x:1500,y:5000,map:'goblinLand@MAIN'});	//here if no Quest.test
+	if(Db.quest[Quest.test] && Db.quest[Quest.test].event.test && Db.quest[Quest.test].event.test.firstSignIn){
+		Db.quest[Quest.test].event.test.firstSignIn(key);
+	}
+	
+	
 }
 
 Test.signIn.fixAbilityCharge = function(key){

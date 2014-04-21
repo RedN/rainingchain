@@ -635,7 +635,7 @@ Command.list['team,tele'].doc = {
 
 Command.list['pvp'] = function(key){
 	var act = List.all[key];
-	if(act.map.have('pvpF4A')){
+	if(act.map.have('pvpF4A')){	//TOFIX
 		Actor.teleport(act,act.respawnLoc.safe);
 		Chat.add(key,"You can no longer attack or be attacked by other players.");
 	}

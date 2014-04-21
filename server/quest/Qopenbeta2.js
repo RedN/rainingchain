@@ -46,11 +46,7 @@ q.event = {
 	},
 	start:function(key){
 		var act = getAct(key);
-		/*
-		teleport(key,'goblinLand','a');
-		act.respawnLoc.recent = {x:1808,y:5712,map:'goblinLand@MAIN'};
-		act.respawnLoc.safe = {x:1808,y:5712,map:'goblinLand@MAIN'};
-		*/
+		
 		
 		addItem(key,'enemyLeft');
 		addItem(key,'pvp');

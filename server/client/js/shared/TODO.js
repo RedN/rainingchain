@@ -10,7 +10,17 @@ only save the active quest
 puush support
 email if server is down	//http://nodejs.org/api/domain.html
 
-real Middleware
+add ability with globalMod
+
+limit access for map in /map/ too
+
+quest visible
+
+ERROR() for error
+LOG() for tracking process
+s.ERROR for error in quest
+
+rename convention for enemy system
 
 ===PRE SDK===
 transform not be overwrite if change equip
@@ -53,7 +63,7 @@ boss documentation
 
 
 fix pvp map
-
+no more string for func for items
 
 
 

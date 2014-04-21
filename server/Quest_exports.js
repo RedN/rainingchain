@@ -53,15 +53,17 @@ exports.init = function(version,questname){	//}
 		if(!popup) Actor.teleport(s.getAct(key),spot);
 		else {
 			Chat.question(key,{
+				//could show text to where hes going
 				func:function(){Actor.teleport(s.getAct(key),spot);},
-				option:true,			
+				option:true,
 			});
 		}
 	}
 	
 	s.respawn = function(key,map,letter,safe){	//must be same map
 		var spot = s.getSpot(map,Q,letter);
-		if(spot) Actor.setRespawn(s.getAct(key),spot,safe);
+		if(!spot) return DEBUG(1,'no spot');
+		Actor.setRespawn(s.getAct(key),spot,safe);
 	}
 
 	s.getMapAddon = function(key){

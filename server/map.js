@@ -76,12 +76,10 @@ Map.instance.player = function(id){
 	return plist;
 }
 
-
-
 Map.leave = function(act,map){
 	map = map || act.map;
 	var oldmap = List.map[map];
-	
+	if(!oldmap) return;	//ex: login
 	if(act.type === 'player'){
 		for(var i in oldmap.addon)
 			if(oldmap.addon[i].playerLeave)

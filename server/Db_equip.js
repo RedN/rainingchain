@@ -2,59 +2,59 @@ var db = require('./db');
 
 Db.equip = {};	//for quest
 Init.db.equip = function (cb){
-	var pre = Db.equip;
+	var a = Db.equip;
 	db.find('equip',{},{'_id':0},function(err, results) { if(err) throw err
-		for(var i in results)	pre[results[i].id] = Equip.uncompress(results[i]);
+		for(var i in results)	a[results[i].id] = Equip.uncompress(results[i]);
 			
-	pre['unarmed'] = {		//DONT TOUCH
+	a['unarmed'] = {		//DONT TOUCH
 		'piece': 'melee','type': 'mace','icon':'melee.mace',
 		'name':"Mace",'sprite':{'name':"mace",'sizeMod':1},
 		'dmg':{'main':1,'ratio':{'melee':1,'range':1,'magic':1,'fire':1,'cold':1,'lightning':1}},
 	};					//DONT TOUCH
 	
 	
-	pre['metalbody'] = {'name':"Hello Kitty",'piece':'body','type':'metal','icon':'body.metal',
+	a['metalbody'] = {'name':"Hello Kitty",'piece':'body','type':'metal','icon':'body.metal',
 		'def':{'main':10,'ratio':{'melee':1,'range':1,'magic':1,'fire':1,'cold':1,'lightning':1}},
 		'boost':[]
 	}
 	
-	pre['metalhelm'] = {'name':"Hello Kitty",'piece':'helm','type':'metal','icon':'helm.metal',
+	a['metalhelm'] = {'name':"Hello Kitty",'piece':'helm','type':'metal','icon':'helm.metal',
 		'def':{'main':10,'ratio':{'melee':1,'range':1,'magic':1,'fire':1,'cold':1,'lightning':1}},
 		'boost':[]
 	}
 	
-	pre['metalshield'] = {'name':"Hello Kitty",'piece':'shield','type':'metal','icon':'shield.metal',
+	a['metalshield'] = {'name':"Hello Kitty",'piece':'shield','type':'metal','icon':'shield.metal',
 		'def':{'main':10,'ratio':{'melee':1,'range':1,'magic':1,'fire':1,'cold':1,'lightning':1}},
 		'boost':[]
 	}
 		
 	
-	pre['woodbody'] = {'name':"Hello Kitty",'piece':'body','type':'wood','icon':'body.wood',
+	a['woodbody'] = {'name':"Hello Kitty",'piece':'body','type':'wood','icon':'body.wood',
 		'def':{'main':10,'ratio':{'melee':1,'range':1,'magic':1,'fire':1,'cold':1,'lightning':1}},
 		'boost':[]
 	}
 	
-	pre['woodhelm'] = {'name':"Hello Kitty",'piece':'helm','type':'wood','icon':'helm.wood',
+	a['woodhelm'] = {'name':"Hello Kitty",'piece':'helm','type':'wood','icon':'helm.wood',
 		'def':{'main':10,'ratio':{'melee':1,'range':1,'magic':1,'fire':1,'cold':1,'lightning':1}},
 		'boost':[]
 	}
 	
-	pre['woodshield'] = {'name':"Hello Kitty",'piece':'shield','type':'wood','icon':'shield.wood',
+	a['woodshield'] = {'name':"Hello Kitty",'piece':'shield','type':'wood','icon':'shield.wood',
 		'def':{'main':10,'ratio':{'melee':1,'range':1,'magic':1,'fire':1,'cold':1,'lightning':1}},
 		'boost':[]
 	}
 	
-	pre['bonebody'] = {'name':"Hello Kitty",'piece':'body','type':'bone','icon':'body.bone',
+	a['bonebody'] = {'name':"Hello Kitty",'piece':'body','type':'bone','icon':'body.bone',
 		'def':{'main':10,'ratio':{'melee':1,'range':1,'magic':1,'fire':1,'cold':1,'lightning':1}},
 		'boost':[]
 	}
 	
-	pre['bonehelm'] = {'name':"Hello Kitty",'piece':'helm','type':'bone','icon':'helm.bone',
+	a['bonehelm'] = {'name':"Hello Kitty",'piece':'helm','type':'bone','icon':'helm.bone',
 		'def':{'main':10,'ratio':{'melee':1,'range':1,'magic':1,'fire':1,'cold':1,'lightning':1}},
 		'boost':[]
 	}
 	
-	pre['boneshield'] = {'name':"Hello Kitty",'piece':'shield','type':'bone','icon':'shield.bone',
+	a['boneshield'] = {'name':"Hello Kitty",'piece':'shield','type':'bone','icon':'shield.bone',
 		'def':{'main':10,'ratio':{'melee':1,'range':1,'magic':1,'fire':1,'cold':1,'lightning':1}},
 		'boost':[]
 	}
@@ -62,38 +62,38 @@ Init.db.equip = function (cb){
 
 	//
 	
-	pre['bracelet'] = {'name':"Hello Kitty",'piece':'bracelet','type':'ruby','icon':'bracelet.ruby',
+	a['bracelet'] = {'name':"Hello Kitty",'piece':'bracelet','type':'ruby','icon':'bracelet.ruby',
 		'def':{'main':10,'ratio':{'melee':1,'range':1,'magic':1,'fire':1,'cold':1,'lightning':1}},
 		'boost':[]
 	}
 	
-	pre['amulet'] = {'name':"Hello Kitty",'piece':'amulet','type':'ruby','icon':'amulet.ruby',
+	a['amulet'] = {'name':"Hello Kitty",'piece':'amulet','type':'ruby','icon':'amulet.ruby',
 		'def':{'main':10,'ratio':{'melee':1,'range':1,'magic':1,'fire':1,'cold':1,'lightning':1}},
 		'boost':[]
 	}
 	
-	pre['gloves'] = {'name':"Hello Kitty",'piece':'gloves','type':'chain','icon':'gloves.chain',
+	a['gloves'] = {'name':"Hello Kitty",'piece':'gloves','type':'chain','icon':'gloves.chain',
 		'def':{'main':10,'ratio':{'melee':1,'range':1,'magic':1,'fire':1,'cold':1,'lightning':1}},
 		'boost':[]
 	}
 	
-	pre['boots'] = {'name':"Hello Kitty",'piece':'boots','type':'chain','icon':'boots.chain',
+	a['boots'] = {'name':"Hello Kitty",'piece':'boots','type':'chain','icon':'boots.chain',
 		'def':{'main':10,'ratio':{'melee':1,'range':1,'magic':1,'fire':1,'cold':1,'lightning':1}},
 		'boost':[]
 	}
 	
-	pre['pants'] = {'name':"Hello Kitty",'piece':'pants','type':'chain','icon':'pants.chain',
+	a['pants'] = {'name':"Hello Kitty",'piece':'pants','type':'chain','icon':'pants.chain',
 		'def':{'main':10,'ratio':{'melee':1,'range':1,'magic':1,'fire':1,'cold':1,'lightning':1}},
 		'boost':[]
 	}
 	
-	pre['ring'] = {'name':"Hello Kitty",'piece':'ring','type':'ruby','icon':'ring.ruby',
+	a['ring'] = {'name':"Hello Kitty",'piece':'ring','type':'ruby','icon':'ring.ruby',
 		'def':{'main':10,'ratio':{'melee':1,'range':1,'magic':1,'fire':1,'cold':1,'lightning':1}},
 		'boost':[]
 	}
 	
 	//Add the default Weapons to the PreDb List
-	pre['summonWand'] = {
+	a['summonWand'] = {
 		'piece': 'magic','type':'wand','icon':'magic.wand',
 		'name':"Summon Wand",'sprite':{'name':"pWand",'sizeMod':1},
 		'dmg':{'main':10,'ratio':{'melee':0,'range':10,'magic':80,'fire':10,'cold':0,'lightning':0}},
@@ -106,7 +106,7 @@ Init.db.equip = function (cb){
 	
 	
 	
-	pre['mace'] = {
+	a['mace'] = {
 		'piece': 'melee','type': 'mace','icon':'melee.mace',
 		'name':"Mace",'sprite':{'name':"mace",'sizeMod':1},
 		'dmg':{'main':10,'ratio':{'melee':0,'range':10,'magic':80,'fire':10,'cold':0,'lightning':0}},
@@ -119,7 +119,7 @@ Init.db.equip = function (cb){
 
 
 
-	pre['spear'] = {
+	a['spear'] = {
 		'piece': 'melee','type': 'spear','icon': 'melee.spear',
 		'name':"Spear",'sprite':{'name':"spear",'sizeMod':1},
 		'dmg':{'main':10,'ratio':{'melee':0,'range':10,'magic':80,'fire':10,'cold':0,'lightning':0}},
@@ -127,7 +127,7 @@ Init.db.equip = function (cb){
 
 	}
 	
-	pre['sword'] = {
+	a['sword'] = {
 		'piece': 'melee','type': 'sword','icon': 'melee.sword',
 		'name':"Sword",'sprite':{'name':"sword",'sizeMod':1},
 		'dmg':{'main':10,'ratio':{'melee':0,'range':10,'magic':80,'fire':10,'cold':0,'lightning':0}},
@@ -135,7 +135,7 @@ Init.db.equip = function (cb){
 
 	}
 		
-	pre['bow'] = {
+	a['bow'] = {
 		'piece': 'range','type': 'bow','icon': 'range.bow',
 		'name':"Bow",'sprite':{'name':"bow",'sizeMod':1},
 		'dmg':{'main':10,'ratio':{'melee':0,'range':10,'magic':80,'fire':10,'cold':0,'lightning':0}},
@@ -143,7 +143,7 @@ Init.db.equip = function (cb){
 
 	}
 	
-	pre['boomerang'] = {
+	a['boomerang'] = {
 		'piece': 'range','type': 'boomerang','icon': 'range.boomerang',
 		'name':"Boomerang", 'sprite':{'name':"bow",'sizeMod':1},
 		'dmg':{'main':10,'ratio':{'melee':0,'range':10,'magic':80,'fire':10,'cold':0,'lightning':0}},
@@ -153,7 +153,7 @@ Init.db.equip = function (cb){
 
 	}
 	
-	pre['crossbow'] = {
+	a['crossbow'] = {
 		'piece': 'range','type': 'crossbow','icon': 'range.crossbow',
 		'name':"Crossbow", 'sprite':{'name':"bow",'sizeMod':1},
 		'dmg':{'main':10,'ratio':{'melee':0,'range':10,'magic':80,'fire':10,'cold':0,'lightning':0}},
@@ -161,7 +161,7 @@ Init.db.equip = function (cb){
 		
 	}
 	
-	pre['wand'] = {
+	a['wand'] = {
 		'piece': 'magic','type': 'wand','icon': 'magic.wand',
 		'name':"Wand", 'sprite':{'name':"wand",'sizeMod':1},
 		'dmg':{'main':10,'ratio':{'melee':0,'range':10,'magic':80,'fire':10,'cold':0,'lightning':0}},
@@ -169,7 +169,7 @@ Init.db.equip = function (cb){
 		
 	}
 	
-	pre['staff'] = {
+	a['staff'] = {
 		'piece': 'magic','type': 'staff','icon': 'magic.staff',
 		'name':"Staff", 'sprite':{'name':"wand",'sizeMod':1},
 		'dmg':{'main':10,'ratio':{'melee':0,'range':10,'magic':80,'fire':10,'cold':0,'lightning':0}},
@@ -177,7 +177,7 @@ Init.db.equip = function (cb){
 		
 	}
 
-	pre['orb'] = {
+	a['orb'] = {
 		'piece': 'magic','type': 'orb','icon': 'magic.orb',
 		'name':"Orb", 'type': 'orb','sprite':{'name':"wand",'sizeMod':1},
 		'dmg':{'main':10,'ratio':{'melee':0,'range':10,'magic':80,'fire':10,'cold':0,'lightning':0}},
@@ -185,7 +185,7 @@ Init.db.equip = function (cb){
 		
 	}
 	
-	pre['goddess'] = {
+	a['goddess'] = {
 		'piece': 'magic','type': 'orb','icon': 'magic.orb',
 		'name':"Wand", 'type': 'staff','sprite':{'name':"wand",'sizeMod':1},
 		'dmg':{'main':10,'ratio':{'melee':0,'range':10,'magic':80,'fire':10,'cold':0,'lightning':0}},
@@ -210,9 +210,9 @@ Db.equip["qjo3fpkpf"] = {"name":"Chain","piece":"boots","type":"chain","icon":"b
 */
 	
 	
-	for(var i in pre){	
-		pre[i].id = i;
-		Equip.creation(pre[i]);	
+	for(var i in a){	
+		a[i].id = i;
+		Equip.creation(a[i]);	
 	}
 	
 	cb.call();
@@ -315,6 +315,11 @@ Equip.template = function(){
 }
 
 Equip.accountBound = function(key,eid){
+	/*
+	when account bound =>add 1 bonus
+	if self found => all boost become *1.2
+	*/
+	
 	var equip = Db.equip[eid];
 	
 	if(equip.accountBound){	Chat.add(key,'This equip is already account bound.');	return;	}
@@ -338,10 +343,6 @@ Equip.accountBound = function(key,eid){
 	
 }
 
-/*
-when account bound =>add 1 bonus
-if self found => all boost become *1.2
-*/
-	
+
 
 

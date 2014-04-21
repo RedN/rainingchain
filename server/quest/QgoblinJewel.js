@@ -41,7 +41,10 @@ q.event = {
 		return "Good luck!";
 	},
 	test:{
-		login:function(key){
+		signIn:function(key){
+			
+		},
+		firstSignIn:function(key){
 			s.teleport(key,'goblinLand','n1');
 			s.respawn(key,'goblinLand','n1');
 		}
@@ -104,7 +107,7 @@ q.event = {
 	teleInUnderground:function(key){
 		if(s.get(key,'killGoblin') > 5){
 			s.teleport(key,'goblinUnderground','t1');
-			s.respawn(key,'goblinUnderground','t1');
+			s.respawn(key,'goblinUnderground','t1',true);
 		} else s.chat(key,"You should kill more goblins first to make them really angry with orcs.");
 	},
 	getJewel:function(key){
@@ -351,7 +354,7 @@ q.map.goblinUnderground = function(){
 			teleport:q.event.teleOutUnderground,
 		});
 		
-		s.actor(spot.g1,"system","grave",{});
+		s.actor(spot.g1,"system","graveSafe",{});
 		
 		s.actor(spot.q1,"system","chest",{
 			loot:q.event.getJewel

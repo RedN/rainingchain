@@ -50,7 +50,7 @@ Init.server = function (){
 				
 		
 		Init.db.dialogue();
-		for(var i in Db.map)	Map.creation(i);
+		//for(var i in Db.map)	Map.creation(i);
 		
 		Init.db.passive(function(){
 			Init.cycle();

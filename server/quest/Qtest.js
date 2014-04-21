@@ -13,8 +13,7 @@ q.event = {
 		s.addItem(key,'generator');
 		s.addItem(key,'equipGenerator');
 		Test.generateEquip(key,0,5);
-		
-		
+				
 		s.addItem(key,'weapon');
 		Actor.equip(act,'QtestEnemy-weapon');
 		

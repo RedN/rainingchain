@@ -24,9 +24,7 @@ Chat.add = function(key,pack){
 	main.social.message = main.social.message || [];
 	if(typeof pack === 'string') pack = {type:'game',text:pack};
 	
-	//console.log(main.social.message);
-	//console.log(main.social.message.hasOwnProperty());
-	main.social.message.push(pack);		//TOFIXBUG bug {chat:[],pm:[]}
+	main.social.message.push(pack);		
 }
 
 Chat.question = function(key,q){	//q:{text, func, param, repeat, [option]}

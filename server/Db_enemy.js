@@ -794,6 +794,15 @@ Init.db.npc = function(){
 		'nevermove':1,
 		"block":{condition:'true',pushable:0,size:[-1,1,-1,1]},
 	}; //}
+	a["system"]["graveSafe"] = {  //{
+		"name":"Grave",
+		'minimapIcon':'minimapIcon.grave',
+		"sprite":{'name':"grave",'sizeMod':1},
+		"waypoint":2,
+		'nevercombat':1,
+		'nevermove':1,
+		"block":{condition:'true',pushable:0,size:[-1,1,-1,1]},
+	}; //}
 	a["system"]["chest"] = {  //{
 		"name":"Chest",
 		'minimapIcon':'minimapIcon.chest',
@@ -982,7 +991,7 @@ Init.db.npc.creation.ability = function(e){	//use abilityList to create custom a
 	*/
 	
 	for(var i in e.abilityList){
-		if(!e.abilityList[i].template){
+		if(!e.abilityList[i].template){	//[0.2,0.5,0.3]
 			e.abilityAi.close['idle'] = e.abilityList[i][0];
 			e.abilityAi.middle['idle'] = e.abilityList[i][1];
 			e.abilityAi.far['idle'] = e.abilityList[i][2];
@@ -1014,8 +1023,6 @@ Init.db.npc.creation.ability = function(e){	//use abilityList to create custom a
 		Actor.ability.swap(e,a);
 	}
 	
-	var a = {};
-	for(var i in e.abilityList)	a[e.abilityList[i].id] = 1;
 	e.abilityList = Actor.template.ability(e.abilityList);
 	
 	return e;

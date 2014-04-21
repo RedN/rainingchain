@@ -159,7 +159,6 @@ Init.actor = function(){
 			act.pickRadius = 100;  //distance to pick items on ground
 			
 			act.respawnLoc = {safe:{x:act.x,y:act.y,map:act.map},recent:{x:act.x,y:act.y,map:act.map}};
-			
 			Sprite.creation(act,act.sprite);
 		}
 		//}

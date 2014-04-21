@@ -182,7 +182,6 @@ Load = function (key,account,socket,cb){
 			//Player
 			List.actor[key] = player;
 			List.all[key] = player;
-			List.map[player.map].list[player.id] = key;
 			List.nameToKey[player.name] = key;
 			
 			List.main[key] = main;
@@ -321,7 +320,7 @@ Save.player.compress = function(playerr){
 	player.respawnLoc.recent.y = Math.round(player.respawnLoc.recent.y);
 	player.respawnLoc.safe.x = Math.round(player.respawnLoc.safe.x);
 	player.respawnLoc.safe.y = Math.round(player.respawnLoc.safe.y);
-		
+	
 	//Skill
 	player.skill = player.skill.exp;
 	var tmp = [];
@@ -351,11 +350,7 @@ Load.player.uncompress = function(player){
 	for(var i in Cst.equip.piece) tmp[Cst.equip.piece[i]] = player.equip.piece[i];
 	player.equip.piece = tmp;	
 	player.equip = Actor.template.equip(player.equip);
-	
-	
-	player.respawnLoc = {safe:{x:player.x,y:player.y,map:player.map},
-							recent:{x:player.x,y:player.y,map:player.map}};
-							
+								
     for(var i in player.ability)	player.ability[i] = Ability.uncompress(player.ability[i]);
 	player.ability = Actor.template.ability(player.ability);
 	player.abilityChange = Actor.template.abilityChange(player.abilityList.regular);

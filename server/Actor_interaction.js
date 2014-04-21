@@ -41,7 +41,7 @@ Actor.teleport.selectInstance = function(act,eid){
 	Actor.teleport.click(act,eid);
 }
 
-Actor.teleport.join = function(act,mort2){
+Actor.teleport.join = function(act,mort2){	//TOFIX
 	if(mort2.map.have("@@")) return false;
 	
 	Actor.teleport(act,mort2.respawnLoc.recent);

@@ -150,7 +150,7 @@ Init.email = function(data){
 
 var dbVerify = function(){
 	var e = (new Error).stack;
-	if(e.have("\\quest") || e.have("\\map")){
+	if(e.have("\\quest\\") || e.have("\\map\\")){
 		permConsoleLog(e);
 		permConsoleLog("MAJOR ERROR. DB ACCESS REFUSED");
 		return false;
