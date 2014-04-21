@@ -37,7 +37,7 @@ Performance.bandwidth.upload = {'display':nodejitsu,'size':0,'limitTotal':1000*1
 Performance.bandwidth.download = {'display':nodejitsu,'size':0,'limitTotal':100*1000000,limitPerMin:100000};	//what client send
 Performance.bandwidth.frequence = 30*1000/40;
 Performance.bandwidth.getSize = function(obj){
-    return Tk.stringify(obj||0).length * 2;   //in bytes
+	return Tk.stringify(obj||0).length * 2;   //in bytes
 }  
 Performance.bandwidth.display = function(){
     if(Loop.frame % Performance.bandwidth.frequence === 0){
@@ -46,3 +46,6 @@ Performance.bandwidth.display = function(){
 		if(Performance.playerAmount)	permConsoleLog("Player Count: " + Object.keys(List.main).length);		
 	}
 }
+
+//3500 in 1 min
+

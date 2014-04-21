@@ -186,6 +186,5 @@ Collision.ActorMap = function(pos,map,player){
 	return Collision.PosMap(pos,map,player.type || 'npc');
 };
 
-exports.Collision = Collision;
 
 

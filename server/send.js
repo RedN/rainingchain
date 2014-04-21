@@ -1,3 +1,5 @@
+var BISON = require('./client/js/shared/BISON');
+
 Change = {};
 
 Change.send = function(){
@@ -66,6 +68,7 @@ Change.send = function(){
 		//if(Object.keys(sa).length === 0){ continue; }
 		
 		//Send
+		sa = BISON.encode(sa);
 		socket.emit('change', sa );
 		
 		if(key === Server.botwatch.watched){
@@ -77,7 +80,7 @@ Change.send = function(){
 			}
 		}
 		
-	    Performance.bandwidth('upload',sa,socket);
+		Performance.bandwidth('upload',sa,socket);
 	}
 	
 	Change.send.reset();

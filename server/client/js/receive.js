@@ -2,6 +2,7 @@
 Change = {};
 
 Receive = Change.receive = function(data){
+	data = BISON.decode(data);
 try {
 	if(Receive.showData) permConsoleLog(JSON.stringify(data));  //for testing
 	if(!data) return;
