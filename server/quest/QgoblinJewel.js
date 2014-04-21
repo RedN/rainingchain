@@ -29,7 +29,6 @@ cs 		cs[INFO]			=> cutscene
 talk	talk[WHO ACTION]	=> talk done
 */
 
-
 q.variable = {
 	killGoblin:0,
 	killGoblinBoss:0,

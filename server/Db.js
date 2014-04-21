@@ -46,34 +46,41 @@ Init.db = function(data){
 	
 	//intermediare db
 	exports.find = function(name,searchInfo,wantedData,cb){
+		if(!dbVerify()) return;
 		if(arguments.length === 3) DB[name].find(searchInfo,wantedData);
 		else DB[name].find(searchInfo,wantedData,cb);
 	}
 	exports.findOne = function(name,searchInfo,wantedData,cb){
+		if(!dbVerify()) return;
 		if(arguments.length === 3) DB[name].findOne(searchInfo,{_id:0},wantedData);
 		else {	wantedData._id = 0; DB[name].findOne(searchInfo,wantedData,cb); }
 	}
 	exports.save = function(name,info,cb){
+		if(!dbVerify()) return;
 		DB[name].save(info,cb);
 	}
 	exports.update = function(name,searchInfo,updateInfo,cb){
+		if(!dbVerify()) return;
 		if(arguments.length === 3) DB[name].update(searchInfo,updateInfo);
 		else DB[name].update(searchInfo,updateInfo,cb);
 	}
-	exports.upsert = function(name,searchInfo,updateInfo,cb){
+	exports.upsert = function(name,searchInfo,updateInfo,cb){	
+		if(!dbVerify()) return;
 		if(arguments.length === 3) DB[name].update(searchInfo,updateInfo,{upsert:true});
 		else DB[name].update(searchInfo,updateInfo,{upsert:true},cb);
 	}
 	exports.insert = function(name,updateInfo,cb){
+		if(!dbVerify()) return;
 		DB[name].insert(updateInfo,cb);
 	}
 	exports.remove = function(name,searchInfo,cb){
-		console.log(new Error);
+		if(!dbVerify()) return;
 		DB[name].remove(searchInfo,cb);
 	}
 	
 	//delete everything in db
 	exports.deleteAll = function(){
+		if(!dbVerify()) return;
 		for(var i in collections){
 			DB[collections[i]].remove();
 		}
@@ -83,6 +90,7 @@ Init.db = function(data){
 	//Clear Db of useless info. ex: weapon dropped by player
 	//TOFIX
 	exports.filterDb = function(){
+		if(!dbVerify()) return;
 		//fill bigList
 		var bigList = {};	//list of all equip used
 		exports.find('main',{},function(er,main){ if(er) throw er;
@@ -138,6 +146,23 @@ Init.email = function(data){
 		});	
 	}
 }
+
+
+var dbVerify = function(){
+	var e = (new Error).stack;
+	if(e.have("\\quest") || e.have("\\map")){
+		permConsoleLog(e);
+		permConsoleLog("MAJOR ERROR. DB ACCESS REFUSED");
+		return false;
+	}
+	return true;
+}
+
+
+
+
+
+
 
 
 
