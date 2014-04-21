@@ -1,3 +1,5 @@
+var db = require('./db');
+
 Init.cycle = function(){
 	Cycle.day.timeNext = new Date(Date.nowDate()).getTime() + Cst.DAY - 60000;	
 	var daysTilNextWeekUpdate = (11-new Date(Cycle.day.timeNext).getDay())%7;

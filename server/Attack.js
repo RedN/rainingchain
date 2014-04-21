@@ -1,5 +1,3 @@
-if(server) var Collision = require('./client/js/shared/Collision').Collision;
-
 Attack = {};
 
 Attack.template = function(type){

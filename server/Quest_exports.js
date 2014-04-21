@@ -1,4 +1,5 @@
-exports.name = function(questname){
+
+exports.init = function(version,questname){	//}
 	var Q = questname;
 	
 	var getItemName = function(name){
@@ -6,18 +7,11 @@ exports.name = function(questname){
 		else return Q + '-' + name;
 	}
 	
-	var itemExist = function(id){ return !!Db.item[id]; }
 	
-	var s = {};
-	
-	s.getSpot = function(id,addon,spot){
-		var a = Db.map[Map.getModel(id)].addon[addon].spot[spot];	//cant use list cuz map could not be created yet
-		if(!a){ DEBUG(0,'spot not found ' + id + addon + spot); return }
-		return {x:a.x,y:a.y,map:id}
-	}
-	
+	var s = {};	
 	s.quest = Quest.template(Q);
-
+	
+	s.interval = function(num){ return Loop.interval(num); }
 	s.get = function(key,attr){
 		var mq = List.main[key].quest[Q];		
 		var a = mq[attr];
@@ -47,13 +41,14 @@ exports.name = function(questname){
 	}
 
 	s.chat = Chat.add;
-
+	s.question = Chat.question;
+	
 	s.dialogue = function(key,npc,convo,node){
 		Dialogue.start(key,{group:Q,npc:npc,convo:convo,node:node});
 	}
 
 	s.teleport = function(key,map,letter,popup){	//type: 0=immediate, 1=popup
-		var spot = getSpot(map,Q,letter);
+		var spot = s.getSpot(map,Q,letter);
 		
 		if(!popup) Actor.teleport(s.getAct(key),spot);
 		else {
@@ -63,16 +58,22 @@ exports.name = function(questname){
 			});
 		}
 	}
-	//CHANGE m for s
+	
 	s.respawn = function(key,map,letter,safe){	//must be same map
-		var spot = getSpot(map,Q,letter);
+		var spot = s.getSpot(map,Q,letter);
 		if(spot) Actor.setRespawn(s.getAct(key),spot,safe);
 	}
 
 	s.getMapAddon = function(key){
 		return List.map[s.getAct(key).map].addon[Q];
 	}
-
+	
+	s.getSpot = function(id,addon,spot){
+		var a = Db.map[Map.getModel(id)].addon[addon].spot[spot];	//cant use list cuz map could not be created yet
+		if(!a){ DEBUG(0,'spot not found ' + id + addon + spot); return }
+		return {x:a.x,y:a.y,map:id}
+	}
+	
 	s.sprite = function(key,name,size){
 		var tmp = {name:name};
 		if(size && size !== 1) tmp.sizeMod = size;
@@ -87,7 +88,7 @@ exports.name = function(questname){
 		}
 
 		item = getItemName(item);
-		if(itemExist(item))	Itemlist.add(key,item,amount);
+		if(s.itemExist(item))	Itemlist.add(key,item,amount);
 		else Chat.add(key,"BUG. ITEM DOES NOT EXIST @ " + item);
 	}
 
@@ -98,7 +99,7 @@ exports.name = function(questname){
 		}
 
 		item = getItemName(item);
-		if(itemExist(item))	Itemlist.remove(key,item,amount);
+		if(s.itemExist(item))	Itemlist.remove(key,item,amount);
 		else Chat.add(key,"BUG. ITEM DOES NOT EXIST @ " + item);
 	}
 
@@ -112,7 +113,7 @@ exports.name = function(questname){
 		}
 
 		item = getItemName(item);
-		if(itemExist(item)){
+		if(s.itemExist(item)){
 			var success = Itemlist.have(key,item,amount);
 			if(success && removeifgood) Itemlist.remove(key,item,amount);
 			return success;
@@ -120,7 +121,6 @@ exports.name = function(questname){
 		else Chat.add(key,"BUG. ITEM DOES NOT EXIST @ " + item);
 		return false;
 	}
-
 
 	s.testItem = function (key,item,amount,addifgood){
 		if(typeof item === 'object'){
@@ -135,7 +135,9 @@ exports.name = function(questname){
 		if(success && addifgood) s.addItem(key,item,amount);
 		return success;
 	}
-
+	
+	s.itemExist = function(id){ return !!Db.item[id]; }
+	
 
 	//Cutscene
 	s.cutscene = function(key,map,path){
@@ -146,13 +148,12 @@ exports.name = function(questname){
 	s.freeze = function(key,time,cb){
 		Actor.freeze(s.getAct(key),time,cb);
 	}
+	
 	s.unfreeze = function(key){
 		Actor.freeze.remove(s.getAct(key));
 	}
 
-
-
-	s.getEnemy = function(key,tag){
+	s.getNpc = function(key,tag){
 		var list = List.map[s.getAct(key).map].list.npc;
 		for(var i in list){
 			if(List.all[i].tag === tag)
@@ -198,19 +199,19 @@ exports.name = function(questname){
 		extra = extra || {};
 		if(zone[2] === zone[3]){	//horizontal
 			for(var i = zone[0]; i <= zone[1]; i += 32){
-				actor({x:i+16,y:zone[2],map:zone.map,addon:zone.addon},'block',image,extra);
+				s.actor({x:i+16,y:zone[2],map:zone.map,addon:zone.addon},'block',image,extra);
 			}
 		}
 		if(zone[0] === zone[1]){
 			for(var i = zone[2]; i <= zone[3]; i += 32){
-				actor({x:zone[0],y:i+16,map:zone.map,addon:zone.addon},'block',image,extra);
+				s.actor({x:zone[0],y:i+16,map:zone.map,addon:zone.addon},'block',image,extra);
 			}	
 		}
 	}
 
 	s.drop = function(key,spot,name,amount,time){
 		time = time || 25*120;
-		if(!Quest.itemExist(Q+ '-' + name)) return;
+		if(!s.itemExist(Q+ '-' + name)) return;
 		
 		var tmp = {'spot':spot,"item":Q + '-' + name,"amount":amount,'timer':time};
 		if(typeof key === 'string') tmp.viewedIf = [key];

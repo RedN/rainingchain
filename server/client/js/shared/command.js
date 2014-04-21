@@ -1,3 +1,5 @@
+if(server) var db = require('./../../../db');
+
 //List of functions that the client can use.
 Command = {};
 Command.list = {};

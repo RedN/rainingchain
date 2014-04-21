@@ -1,5 +1,7 @@
-var q = Quest.template('QtestEnemy','v1.0');
-eval(Quest.template.eval(q));
+"use strict";
+var s = require('./../Quest_exports').init('v1.0','QtestEnemy');
+var q = s.quest;
+
 
 q.variable = {
 	
@@ -7,31 +9,31 @@ q.variable = {
 
 q.event = {
 	start:function(key){
-		var act = getAct(key);
-		addItem(key,'generator');
-		//addItem(key,'equipGenerator');
-		//Test.generateEquip(key,0,5);
+		var act = s.getAct(key);
+		s.addItem(key,'generator');
+		s.addItem(key,'equipGenerator');
+		Test.generateEquip(key,0,5);
 		
 		
-		addItem(key,'weapon');
-		//Actor.equip(act,'QtestEnemy-weapon');
+		s.addItem(key,'weapon');
+		Actor.equip(act,'QtestEnemy-weapon');
 		
-		//act.abilityList = {'QtestEnemy-simple':1};
-		//Actor.ability.swap(act,'QtestEnemy-simple',0);
+		act.abilityList = {'QtestEnemy-simple':1};
+		Actor.ability.swap(act,'QtestEnemy-simple',0);
 		
-		//Test.removeEquipInventory(key);
+		Test.removeEquipInventory(key);
 		
 	}
 }
-//BUG
+
 q.item['generator'] = {'name':'Generator','icon':'magic.staff','stack':1,'drop':0,'option':[		
 	{'name':'Tele','param':[],'func':function(key){
-		Chat.question(key,{text:"x,y,map", func:function(key,x,y,map){
-			Actor.teleport(getAct(key),{x:+x,y:+y,map:map});		
+		s.question(key,{text:"x,y,map", func:function(key,x,y,map){
+			Actor.teleport(s.getAct(key),{x:+x,y:+y,map:map});		
 		}});	
 	}},	
 	{'name':'Item','param':[],'func':function(key){
-		Chat.question(key,{text:"item,amount", func:function(key,item,amount){
+		s.question(key,{text:"item,amount", func:function(key,item,amount){
 			if(Db.item[item])	Itemlist.add(key,item,amount || 1);
 			else Chat.add(key,'wrong');
 		}});	
@@ -41,9 +43,9 @@ q.item['generator'] = {'name':'Generator','icon':'magic.staff','stack':1,'drop':
 			Test.spawnEnemy(key,cat,variant);		
 		}});	
 	}},
-	//{'name':'Equip','param':[],'func':Test.generateEquip},
-	//{'name':'Ability','param':[],'func':Test.setAbility},
-	//{'name':'Invincible','param':[],'func':Test.invincible},
+	{'name':'Equip','param':[],'func':Test.generateEquip},
+	{'name':'Ability','param':[],'func':Test.setAbility},
+	{'name':'Invincible','param':[],'func':Test.invincible},
 ]};	
 
 q.item['equipGenerator'] = {'name':'Equip Gen','icon':'system.gold','stack':1,'option':[
@@ -72,7 +74,7 @@ q.ability['simple'] = {'type':'attack','name':'Fire Basic','icon':'attackMagic.f
 
 //{Map
 q.map.test = function(){
-	var m = map();
+	var m = s.map();
 	m.name = "Test Zone";
 	m.graphic = "pvpF4A";
 	m.tileset = 'v1.1';

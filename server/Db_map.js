@@ -1,3 +1,5 @@
+var astar = require('astar');
+
 /*
 Db.map['test'] = function(){	//'test' = mapId
 	var m = {};

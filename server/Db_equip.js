@@ -1,3 +1,5 @@
+var db = require('./db');
+
 Db.equip = {};	//for quest
 Init.db.equip = function (cb){
 	var pre = Db.equip;

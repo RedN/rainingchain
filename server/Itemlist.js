@@ -202,8 +202,9 @@ Itemlist.click.inventory = function(inv,side,slot,amount){
 			
 	//If Bank Window
 	if(mw.bank || mw.trade){
-		if(mw.bank) list = m.bankList;
-		if(mw.trade){ list = m.tradeList; Itemlist.trade.reset(inv); }
+		if(mw.bank) var list = m.bankList;
+		if(mw.trade){ var list = m.tradeList; Itemlist.trade.reset(inv); }
+		
 		
 		if(side === 'left'){ Itemlist.transfer(inv,list,id,1); }
 		

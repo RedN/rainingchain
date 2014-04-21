@@ -1,4 +1,7 @@
-
+if(server){
+	var db = require('./../../../db');
+	var request = require('request');
+}
 if(!server){
 	
 readFiles = function(files) {

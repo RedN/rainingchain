@@ -45,35 +45,35 @@ Init.db = function(data){
 	
 	
 	//intermediare db
-	db = {};
-	db.find = function(name,searchInfo,wantedData,cb){
+	exports.find = function(name,searchInfo,wantedData,cb){
 		if(arguments.length === 3) DB[name].find(searchInfo,wantedData);
 		else DB[name].find(searchInfo,wantedData,cb);
 	}
-	db.findOne = function(name,searchInfo,wantedData,cb){
+	exports.findOne = function(name,searchInfo,wantedData,cb){
 		if(arguments.length === 3) DB[name].findOne(searchInfo,{_id:0},wantedData);
 		else {	wantedData._id = 0; DB[name].findOne(searchInfo,wantedData,cb); }
 	}
-	db.save = function(name,info,cb){
+	exports.save = function(name,info,cb){
 		DB[name].save(info,cb);
 	}
-	db.update = function(name,searchInfo,updateInfo,cb){
+	exports.update = function(name,searchInfo,updateInfo,cb){
 		if(arguments.length === 3) DB[name].update(searchInfo,updateInfo);
 		else DB[name].update(searchInfo,updateInfo,cb);
 	}
-	db.upsert = function(name,searchInfo,updateInfo,cb){
+	exports.upsert = function(name,searchInfo,updateInfo,cb){
 		if(arguments.length === 3) DB[name].update(searchInfo,updateInfo,{upsert:true});
 		else DB[name].update(searchInfo,updateInfo,{upsert:true},cb);
 	}
-	db.insert = function(name,updateInfo,cb){
+	exports.insert = function(name,updateInfo,cb){
 		DB[name].insert(updateInfo,cb);
 	}
-	db.remove = function(name,searchInfo,cb){
+	exports.remove = function(name,searchInfo,cb){
+		console.log(new Error);
 		DB[name].remove(searchInfo,cb);
 	}
 	
 	//delete everything in db
-	db.deleteAll = function(){
+	exports.deleteAll = function(){
 		for(var i in collections){
 			DB[collections[i]].remove();
 		}
@@ -82,15 +82,15 @@ Init.db = function(data){
 
 	//Clear Db of useless info. ex: weapon dropped by player
 	//TOFIX
-	db.filterDb = function(){
+	exports.filterDb = function(){
 		//fill bigList
 		var bigList = {};	//list of all equip used
-		db.find('main',{},function(er,main){ if(er) throw er;
+		exports.find('main',{},function(er,main){ if(er) throw er;
 			for(var i in main){
 				for(var j in main[i].invList) bigList[main[i].invList[j][0]] = 1;
 				for(var j in main[i].bankList) bigList[main[i].bankList[j][0]] = 1;
 			}
-			db.find('player',{},function(er,act){ if(er) throw er;
+			exports.find('player',{},function(er,act){ if(er) throw er;
 				for(var i in act){
 					for(var j in act[i].equip) bigList[act[i].equip[j]] = 1;
 				}
@@ -99,21 +99,21 @@ Init.db = function(data){
 				
 				//fill equipList
 				var equipList = {};	//list of all equip
-				db.find('equip',{},function(er,res){ if(er) throw er;
+				exports.find('equip',{},function(er,res){ if(er) throw er;
 					for(var i in res)	equipList[res[i].id] = 1;
 					for(var i in bigList)	delete equipList[i];
 					
 					permConsoleLog(Object.keys(equipList).length + 'unused equip\n',Object.keys(equipList));
-					for(var i in equipList) db.remove('equip',{'id':i});
+					for(var i in equipList) exports.remove('equip',{'id':i});
 				});
 			});
 		});
 
 	}
 
-	db.err = function(err){ if (err) throw err; }
+	exports.err = function(err){ if (err) throw err; }
 	
-	if(data.deletedb) db.deleteAll();
+	if(data.deletedb) exports.deleteAll();
 	//db.deleteAll();
 	//db.filterDb();
 	

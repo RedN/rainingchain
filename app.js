@@ -1,19 +1,17 @@
 nodejitsu = typeof process.env.NODEJITSU !== 'undefined';
+server = true;
 
 if(nodejitsu) require('nodetime').profile({accountKey: '7a06997db310e13bef9840cd1d8cfc1ea45fcc57',appName: 'Raining Chain'});
 
 //Create Server
 var http = require('http');
 var path = require('path');
-var socketio = require('socket.io');
 var express = require('express');
-request = require('request');
-crypto = require('crypto');
-astar = require('astar');
+
 
 var app = express();
-serv = http.createServer(app);
-io = socketio.listen(serv); io.set('log level', 1); io.set('heartbeat timeout', 20); io.set('heartbeat interval', 15);
+var serv = http.createServer(app);
+io = require('socket.io').listen(serv); io.set('log level', 1); io.set('heartbeat timeout', 20); io.set('heartbeat interval', 15);
 
 serv.listen(3000);
 
@@ -22,7 +20,7 @@ var serverPath = './server/';
 
 
 app.use(express.bodyParser());
-app.use(express.static(path.resolve(__dirname, 'server/' + 'client')));	//need to be entered manually
+app.use(express.static(path.resolve(__dirname, 'server/client')));	//need to be entered manually
 
 
 //Runescape Calculators:
@@ -33,22 +31,20 @@ app.post('/getExp', function(req, res){	require('./server/RS_calculators').appPo
 
 
 
-MODULEHAX = {
-	server:"if(server) var Collision = require('./client/js/shared/Collision').Collision;"
+
+TESTFREEZE = function(){
+	var globalVariable = Object.keys(global);
+	var whiteList = ['List','Db','Actor'];
+	for(var i in globalVariable){
+		var obj = global[globalVariable[i]];
+		if(typeof obj === 'object' || typeof obj === 'function')
+			if(!whiteList.have(globalVariable[i]))	Object.freeze(obj);
+	}
 }
 
 //Require
 require(clientPath + 'essentialsShare');
-
-
-var a = require('./server/moduleTest');
-a.x = 100;
-require('./server/Server');
-console.log('last',a.x);
-
-
-
-
+require(serverPath + 'Server');
 require(serverPath + 'Db');
 require(serverPath + 'main');
 require(serverPath + 'cycle');
@@ -98,6 +94,7 @@ require(serverPath + 'Db_map');
 
 require(serverPath + 'Db_quest');
 require(serverPath + 'Quest');
+require(serverPath + 'clan');
 
 require(clientPath + 'customMod');
 require(clientPath + 'Collision');
@@ -111,7 +108,6 @@ require(clientPath + 'command');
 require(clientPath + 'Combat_sub');
 require(clientPath + 'passiveGrid');
 require(clientPath + 'queryShare');
-require(clientPath + 'clanShare');
 require(clientPath + 'Db_customboost');
 
 

@@ -1,3 +1,6 @@
+var db = require('./db');
+var crypto = require('crypto');
+
 Sign = {};
 Sign.up = function(socket,d){
 	

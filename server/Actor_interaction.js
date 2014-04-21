@@ -1,5 +1,3 @@
-if(server) var Collision = require('./client/js/shared/Collision').Collision;
-
 var DIST = 150;
 var TOOFAR = function(key){
 	Chat.add(key,"You're too far away.");

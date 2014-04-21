@@ -1,3 +1,5 @@
+var db = require('./db');
+
 //chat
 Chat = {};
 Chat.parse = function(data){
@@ -22,7 +24,9 @@ Chat.add = function(key,pack){
 	main.social.message = main.social.message || [];
 	if(typeof pack === 'string') pack = {type:'game',text:pack};
 	
-	main.social.message.push(pack);	
+	//console.log(main.social.message);
+	//console.log(main.social.message.hasOwnProperty());
+	main.social.message.push(pack);		//TOFIXBUG bug {chat:[],pm:[]}
 }
 
 Chat.question = function(key,q){	//q:{text, func, param, repeat, [option]}

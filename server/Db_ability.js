@@ -1,3 +1,5 @@
+var db = require('./db');
+
 /*
 a['bulletMulti'] = {					//bulletMulti is the id of attack
     'type':'attack',                    //attack, buff, curse, heal or summon

@@ -2,9 +2,8 @@ Db.quest = {};
 var questList = [
 	//'Qtutorial',
 	//'Qopenbeta2',
-	//'Qtest',
-	//'QgoblinJewel'
-	'testNew',
+	'Qtest',
+	'QgoblinJewel',
 ];
 Quest = {};
 Quest.test = 'QgoblinJewel';	//give player vaTester for this quest
@@ -40,7 +39,8 @@ Init.db.quest.map = function(){	//called before Init.db.quest
 
 Quest.creation = function(q){
 	q = useTemplate(Quest.template(),q)
-
+	if(Server.testing)	Quest.creation.tester(q);
+	
 	//Variable
 	q.variable = useTemplate(Quest.template.variable(),q.variable);
 	for(var j in q.challenge){ q.variable.challenge[j] = 0; }	//0:non-active, 1:active
@@ -76,10 +76,8 @@ Quest.creation = function(q){
 		Plan.creation(q.plan[i]);
 	}
 	
-	if(Server.testing){
-		Quest.creation.tester(q);
-	}
-		
+	
+
 	return q;
 }
 

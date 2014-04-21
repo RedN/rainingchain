@@ -1,4 +1,4 @@
-eval(MODULEHAX.server);
+var astar = require('astar');
 
 Actor.loop.input = function(act){
 	if(act.type === 'npc' || act.target.cutscene.active){

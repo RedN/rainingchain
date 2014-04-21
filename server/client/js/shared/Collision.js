@@ -1,4 +1,4 @@
-var Collision = {};
+Collision = {};
 
 /*
 rect: [minx,maxx,miny, maxy]

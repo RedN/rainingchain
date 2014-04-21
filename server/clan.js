@@ -1,3 +1,5 @@
+var db = require('./db');
+
 Db.clan = {};
 
 Init.db.clan = function(){

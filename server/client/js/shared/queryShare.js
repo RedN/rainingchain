@@ -207,7 +207,7 @@ Db.query.admin = function(socket,d){
 		var act = p;
 		
 		var info = eval(d.command);
-		data = JSON.stringify(info);
+		var data = JSON.stringify(info);
 		permConsoleLog(info);
 		socket.emit('testing', {'data':data} );				
 	} catch (err){

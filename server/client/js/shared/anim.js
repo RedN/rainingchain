@@ -1,5 +1,3 @@
-if(server) var Collision = require('./Collision').Collision;
-
 Init.db.anim = function(){	//client
 	Db.anim ={
 		"aura":{'frame':30,'layer':'b'},
