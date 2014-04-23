@@ -97,6 +97,7 @@ Map.enter = function(act,map){
 	if(newmap.list[act.type]) newmap.list[act.type][act.id] = 1;
 	if(act.type === 'player' || act.type === 'npc') newmap.list.actor[act.id] = 1;
 	
+	Activelist.add(act);
 	
 	if(act.type === 'player'){
 		for(var i in newmap.addon)
@@ -118,10 +119,8 @@ Map.collisionRect = function(id,rect,type,cb){	//used in map loop. return array 
 	var array = [];
 	for(var i in List.map[id].list[type]){
 		var act = List.all[i];
-		if(!act){ DEBUG(0,'act dont exist ' + id); continue; }
-		if(Collision.PtRect(act,rect)){
-			array.push(i);
-		}
+		if(!act){ ERROR(3,'act dont exist ' + id); continue; }
+		if(Collision.PtRect(act,rect))	array.push(i);
 	}
 	if(!cb) return array;
 	for(var i in array)	cb(array[i]);	

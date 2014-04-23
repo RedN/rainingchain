@@ -28,7 +28,7 @@ Init.db.quest.map = function(){	//called before Init.db.quest
 	
 	for(var i in Db.quest){
 		for(var j in Db.quest[i].map){
-			if(Db.map[j]) permConsoleLog("MAJOR ERROR: THERES ALREADY A MAP WITH THAT NAME. " + j + ' '+ i); 
+			if(Db.map[j]) ERROR(1,"THERES ALREADY A MAP WITH THAT NAME. " + j + ' '+ i); 
 			Db.map[j] = Db.quest[i].map[j];
 			Db.quest[i].map[j] = Db.quest[i].map[j]().addon;
 		}
@@ -87,7 +87,7 @@ Quest.creation.tester = function(q){
 			try{ 
 				var spot = List.map[List.all[key].map].addon[q.id].spot[param];
 				Actor.teleport(List.all[key],spot);
-			} catch(err) { logError(err); Chat.add(key,"no found"); }
+			} catch(err) { ERROR.err(err); Chat.add(key,"no found"); }
 		}});
 	}});
 	

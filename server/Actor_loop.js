@@ -405,7 +405,7 @@ Actor.loop.attackReceived = function(act){
 	}
 }
 
-Actor.setTimeOut = function(act,name,time,cb){
+Actor.setTimeout = function(act,name,time,cb){
 	name = name || Math.randomId();
 	act.timeOut[name] = {timer:time,func:cb};
 }
@@ -413,7 +413,7 @@ Actor.setTimeOut = function(act,name,time,cb){
 Actor.freeze = function(act,time,cb){
 	act.move = 0;
 	time = time || Cst.MIN*10;	
-	Actor.setTimeOut(act,'freeze',time,function(key){
+	Actor.setTimeout(act,'freeze',time,function(key){
 		List.all[key].move = 1;
 		if(cb) cb(key);
 	});

@@ -1,5 +1,5 @@
 //Combat: Sub Functions
-if(!server) Combat = {attack:{}};
+if(!SERVER) Combat = {attack:{}};
 Combat.attack.mod = function(player,atk){
 	atk = Combat.attack.mod.bonus(player.bonus,atk);
 	atk = Combat.attack.mod.weapon(player.weapon,atk);
@@ -47,8 +47,8 @@ Combat.attack.mod.player = function(player,atk){
 }
 
 Combat.attack.mod.weapon = function(weaponid,atk){
-	if(server) var weapon = Db.equip[weaponid] || Db.equip['unarmed'];
-	if(!server) var weapon = Db.query('equip',player.weapon) || {main:1,ratio:Cst.element.template(1)};
+	if(SERVER) var weapon = Db.equip[weaponid] || Db.equip['unarmed'];
+	if(!SERVER) var weapon = Db.query('equip',player.weapon) || {main:1,ratio:Cst.element.template(1)};
 	
 	var sum = 0;
 	atk.dmg.main *= weapon.dmg.main;

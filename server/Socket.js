@@ -49,7 +49,7 @@ Db.socket = {
 		minInterval:1000,
 		func:function(socket,d){
 			if(Server.ready) Sign.up(socket,d); 
-			else socket.emit('signIn', { 'success':0,'message':'<font color="red">SERVER IS CLOSED. Next open beta should come soon.</font>' }); 
+			else socket.emit('signIn', { 'success':0,'message':'<font color="red">Server is closed. Next open beta should come soon.</font>' }); 
 		},
 	},
 	'signIn':{
@@ -57,7 +57,7 @@ Db.socket = {
 		minInterval:1000,
 		func:function(socket,d){
 			if(Server.ready) Sign.in(socket,d); 
-			else socket.emit('signIn', { 'success':0,'message':'<font color="red">SERVER IS CLOSED. Next open beta should come soon.</font>' }); 
+			else socket.emit('signIn', { 'success':0,'message':'<font color="red">Server is closed. Next open beta should come soon.</font>' }); 
 		},
 	},
 	'clientReady':{

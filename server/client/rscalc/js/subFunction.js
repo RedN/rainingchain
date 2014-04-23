@@ -72,7 +72,7 @@ function convertTime(time){
 	if(r.length == 1){ r = '0'+r; }
 	return hour + ':' + r;
 	*/
-	return round(time,2);
+	return Tk.round(time,2);
 }
 
 

@@ -172,7 +172,7 @@ Plan.template.equip = function(plan){
 }
 
 Plan.template.ability = function(plan){
-	DEBUG(1,"NO SUPPORT for Plan.template.ability");
+	ERROR(3,"NO SUPPORT for Plan.template.ability");
 	return plan;
 }
 
@@ -193,7 +193,7 @@ Plan.use = function(key,id){	//when player tries to use plan
 	if(plan.category === 'ability') itemid = Craft.ability(plan); 
 	
 	Itemlist.add(inv, itemid);
-	LOG(1,key,'Plan.use',id,itemid);
+	Server.log(3,key,'Plan.use',id,itemid);
 	return itemid;
 }
 
@@ -202,7 +202,7 @@ Plan.use.ability = function(key,seed){		//quickfix...
 	var id = Craft.ability(seed);
 	Actor.ability.add(List.all[key],id);
 	Itemlist.remove(List.main[key].invList,seed.item);
-	LOG(1,key,'Plan.use.ability',id);
+	Server.log(3,key,'Plan.use.ability',id);
 }
 
 Plan.test = function(key,req){	//test requirement

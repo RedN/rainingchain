@@ -103,10 +103,10 @@ Anim.removeAll = function(){	//server
 	}
 }
 
-if(!server){	//client
+if(!SERVER){	//client
 	Anim.loop = function (anim){	
 		var animFromDb = Db.anim[anim.name];
-		if(!animFromDb){ DEBUG(1,"anim not found" + anim.name); animFromDb = Db.anim['scratch']; }
+		if(!animFromDb){ ERROR(2,"anim not found" + anim.name); animFromDb = Db.anim['scratch']; }
 		
 		anim.timer += animFromDb.spd;
 		

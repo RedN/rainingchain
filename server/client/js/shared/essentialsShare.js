@@ -1,41 +1,19 @@
-//List of handy functions.
-
-DEBUG = function(lvl,text){ permConsoleLog(lvl + text); permConsoleLog(new Error().stack);}
-LOG = function(lvl,key,name,param){
-	/*
-	0:Very important
-	1:important (saved)
-	2:NOT really important (not saved)
-	*/
-	var act = List.all[key];
-	var id = act ? act.name : key;
+eval('INFO = function(){ co' + 'nsole.log.apply(co' + 'nsole,arguments); }');
+ERROR = function(lvl,text){ 
+	//1: fatal, reset server || 2: shouldnt happen || 3: warn, somewhat possible
+	if(lvl === undefined) lvl = 3;
 	
-	if(lvl > LOG.level) return;
-	
-	var param = '';
-	for(var i = 3; i < arguments.length; i++)	param += arguments[i];
-	
-	LOG.data.push({
-		time:Date.now(),
-		id:id,
-		name:name,
-		param:param,
-	});
+	var str = 'Error Level: ' + lvl + '\n';
+	for(var i = 1; i < arguments.length; i++)	str += ' ---- ' + arguments[i] + '\n';
+	str += ' #### \n';
+	str += new Error().stack;
+	INFO(str);
+}
+ERROR.err = function(err){
+	if(typeof err === 'object') INFO('\nMessage: ' + err.message + '\n' + err.stack)
+	else INFO('ERROR.err :: argument is not an object \n' + new Error().stack);
 }
 
-LOG.display = function(key){
-	if(!key){ permConsoleLog(LOG.data); return; }
-	
-	for(var i in LOG.data){
-		if(LOG.data[i].id === key){
-			var date = new Date(LOG.data[i].time).toLocaleString();
-			permConsoleLog(date,LOG.data[i].name,LOG.data[i].param);
-		}
-	}
-	
-}
-LOG.data = [];
-LOG.level = 2;
 
 
 
@@ -135,7 +113,7 @@ Object.defineProperty(Number.prototype, "mm", {
 Object.defineProperty(Number.prototype, "toPercent", {
     enumerable: false,
     value: function(num) {
-		return round(this*100,num || 0) + '%';
+		return Tk.round(this*100,num || 0) + '%';
 	}
 });	
 	
@@ -230,7 +208,7 @@ Tk.viaArray = {};
 Tk.viaArray.get = function(d){
 	try {
 		if(typeof d.array != 'object'){ return d.origin[array]; }
-		if(!d.origin){ d.origin = (server ? this : window);}
+		if(!d.origin){ d.origin = (SERVER ? this : window);}
 		var origin = d.origin;
 		var array = d.array;
 		switch (array.length) {
@@ -242,7 +220,7 @@ Tk.viaArray.get = function(d){
 			case 6: return origin[array[0]][array[1]][array[2]][array[3]][array[4]][array[5]];break;
 			default: break;
 		}
-	} catch (err) { logError(err); }
+	} catch (err) { ERROR.err(err); }
 }
 Tk.viaArray.set = function(d){
 	try {
@@ -257,7 +235,7 @@ Tk.viaArray.set = function(d){
 			case 6: d.origin[a[0]][a[1]][a[2]][a[3]][a[4]][a[5]] = d.value;break;
 			default: break;
 		}	
-	} catch (err) { logError(err); }
+	} catch (err) { ERROR.err(err); }
 }
 Tk.viaArray.add = function(d){
 	try {
@@ -274,11 +252,11 @@ Tk.viaArray.add = function(d){
 			case 6: origin[array[0]][array[1]][array[2]][array[3]][array[4]][array[5]] += value;break;
 			default:  break;
 		}
-	} catch (err) { logError(err); }
+	} catch (err) { ERROR.err(err); }
 }
 
 //Round
-round = function (num,decimals,str){
+Tk.round = function (num,decimals,str){
 	if(!str){ 
 		decimals = decimals || 0;
 		return Math.round(num*Math.pow(10,decimals))/Math.pow(10,decimals); 
@@ -287,7 +265,7 @@ round = function (num,decimals,str){
 	
 	
 	
-	var num = round(num,decimals).toString();
+	var num = Tk.round(num,decimals).toString();
 	
 	var dot = num.indexOf('.');
 	if(dot == -1){ num += '.'; dot = num.length-1; }
@@ -303,18 +281,6 @@ Tk.formatNum = function(num){
 }
 
 
-
-//Testing
-eval('permCo' + 'nsoleLog = function(){ co' + 'nsole.log.apply(co' + 'nsole,arguments); }');
-logError = function(err) {	//ERROR
-	//permConsoleLog(err); return;
-	if (typeof err === 'object') {
-		if (err.message) { permConsoleLog('\nMessage: ' + err.message) }
-		if (err.stack) { permConsoleLog(err.stack); }
-	} else {
-		permConsoleLog('logError :: argument is not an object');
-	}
-}
 
 //Misc
 escape.quote = function(str){

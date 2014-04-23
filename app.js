@@ -1,7 +1,7 @@
-nodejitsu = typeof process.env.NODEJITSU !== 'undefined';
-server = true;
+NODEJITSU = typeof process.env.NODEJITSU !== 'undefined';
+SERVER = true;
 
-if(nodejitsu) require('nodetime').profile({accountKey: '7a06997db310e13bef9840cd1d8cfc1ea45fcc57',appName: 'Raining Chain'});
+if(NODEJITSU) require('nodetime').profile({accountKey: '7a06997db310e13bef9840cd1d8cfc1ea45fcc57',appName: 'Raining Chain'});
 
 //Create Server
 var http = require('http');
@@ -104,7 +104,7 @@ require(clientPath + 'Db_customboost');
 
 io.sockets.on('connection', function (socket) { socket.on('Server.start', Server.start)});
 
-if(!nodejitsu && !process.argv[4])	Server.start({
+if(!NODEJITSU && !process.argv[4])	Server.start({
 	db:false,
 	localdb:+process.argv[2],
 	deletedb:+process.argv[3],

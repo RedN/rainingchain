@@ -780,7 +780,7 @@ Init.db.npc = function(){
 	
 	a["system"] = {}; //{
 	a["system"]["default"] = {  //{
-		"name":"I am ERROR",
+		"name":"I am bugged.",
 		"sprite":{'name':"grave",'sizeMod':1},
 		'nevercombat':1,
 		'nevermove':1,

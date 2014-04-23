@@ -16,7 +16,7 @@ Actor.death.summon = function(act){
 }
 
 Actor.death.player = function(act,killers){
-	LOG(2,act.id,'death');
+	Server.log(3,act.id,'death');
 	var key = act.id;
 	var main = List.main[key];
 	
@@ -158,7 +158,7 @@ Actor.death.respawn = function(act){	//for player
 		act[i] = act.resource[i].max;
 	act.dead = 0;
 	
-	LOG(2,act.id,'respawn',act.x,act.y,act.map);
+	Server.log(3,act.id,'respawn',act.x,act.y,act.map);
 	
 }
 //ts("Plan.creation({'rarity':0,'quality':0,'piece':'melee','lvl':10,'category':'equip',});")

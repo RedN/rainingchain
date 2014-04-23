@@ -1,4 +1,4 @@
-if(server) var db = require('./../../../db');
+if(SERVER) var db = require('./../../../db');
 
 //List of functions that the client can use.
 Command = {};
@@ -528,7 +528,7 @@ Command.list['question'] = function(key,param0){
 			Chat.add(key,'Invalid answer to server question.');
 			Chat.question(key,q);
 		} else List.main[key].question = null;
-	} catch(err){ logError(err); }
+	} catch(err){ ERROR.err(err); }
 	
 	
 }
@@ -758,7 +758,7 @@ Command.pref.verify = function(name,value){
 		if(value.toString() === 'NaN'){ return 'Invalid value.'; }
 		
 		value = value.mm(req.min,req.max);			
-		value = round(value,req.round || 0);
+		value = Tk.round(value,req.round || 0);
 		
 		return value;
 	}

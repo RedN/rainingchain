@@ -298,74 +298,13 @@ Init.db.sprite = function(){
     
     
     for(var i in Db.sprite){
-		var spr = Db.sprite[i];
-    	
-		if(spr.rgpvx){	//cuz im lazy...
-			var src = spr.src;
-			spr = {"size":2,"side":[2,0,1,3],"hpBar":-22,"legs":16,
-			"preHitBox":[ -16,16,-16,16 ],"preBumperBox":[ -16,16,-16,16 ],
-			"anim": {
-				"walk":{"startY":0,"frame":3,"sizeX":32,"sizeY":32,"dir":4,"spd":0.5,"walk":1,"next":"walk"},
-				"attack":{"startY":0,"frame":3,"sizeX":32,"sizeY":32,"dir":4,"spd":0.5,"next":"attack"},
-			}};
-			spr.src = src;
-			Db.sprite[i] = spr;
-		}
-		
-		
-		
-		spr.defaultAnim = spr.defaultAnim || Object.keys(spr.anim)[0];
-		spr.size = spr.size || 1;
-    	spr.legs = spr.legs || 0;
-		
-		if(spr.preBumperBox) spr.preHitBox = spr.preHitBox || Tk.deepClone(spr.preBumperBox);
-		
-    	for(var j in spr.anim){
-    		var anim = spr.anim[j];
-    		anim.startY = anim.startY || 0; 
-    		anim.spd = anim.spd || 1; 
-    		anim.next = anim.next || "walk";
-    	}
-		
-    
+		Db.sprite[i].id = i;
+    	Sprite.creation.model(Db.sprite[i]);    
     }
     
     
     
-    if(server){
-        //Prepare the bumperbox and hitbox of sprites
-        //hitbox: used for dmg collisions
-        //bumperbox: used for map collisions
-
-        for(var i in Db.sprite){
-    		var sp = Db.sprite[i];
-    		sp.sizeMod = 1;
-    		if(sp.preBumperBox){			
-    			sp.bumperBox = [];
-    			sp.bumperBox[0] = { "x":sp.preBumperBox[1]*sp.size,"y":(sp.preBumperBox[2]+sp.preBumperBox[3])/2*sp.size };
-    			sp.bumperBox[1] = { "x":(sp.preBumperBox[0]+sp.preBumperBox[1])/2*sp.size,"y":sp.preBumperBox[3]*sp.size };
-    			sp.bumperBox[2] = { "x":sp.preBumperBox[0]*sp.size,"y":(sp.preBumperBox[2]+sp.preBumperBox[3])/2*sp.size };
-    			sp.bumperBox[3] = { "x":(sp.preBumperBox[0]+sp.preBumperBox[1])/2*sp.size,"y":sp.preBumperBox[2]*sp.size };
-    		}
-			if(sp.preHitBox){
-    			sp.hitBox = []; 
-    			sp.hitBox[0] = { "x":sp.preHitBox[1]*sp.size,"y":(sp.preHitBox[2]-sp.preHitBox[3])/2*sp.size };
-    			sp.hitBox[1] = { "x":(sp.preHitBox[0]-sp.preHitBox[1])/2*sp.size,"y":sp.preHitBox[3]*sp.size };
-    			sp.hitBox[2] = { "x":sp.preHitBox[0]*sp.size,"y":(sp.preHitBox[2]-sp.preHitBox[3])/2*sp.size };
-    			sp.hitBox[3] = { "x":(sp.preHitBox[0]-sp.preHitBox[1])/2*sp.size,"y":sp.preHitBox[2]*sp.size };
-    		}
-			
-    	}
-    }
     
-    if(!server){
-        for(var i in Db.sprite){
-    		var sp = Db.sprite[i];
-			sp.src = 'img/sprite/' + sp.src
-    		sp.img = newImage(sp.src);
-    		Img.preloader.push(sp.src);
-    	}
-    }
 }
 
 
@@ -383,25 +322,64 @@ Init.db.sprite.template = function(){
 		hitBox:[-10,10,-10,10],
 		anim:{walk:Init.db.sprite.template.anim()},
 		defaultAnim:"walk",
-	
+		alpha:1,
 
 	}
 }
 
 Init.db.sprite.template.anim = function(){
-	return {"startY":0,"frame":4,"sizeX":24,"sizeY":32,"dir":4,"spd":0.4,"walk":1,"next":"walk"};
+	return {"startY":0,"frame":4,"sizeX":24,"sizeY":32,"dir":4,"spd":0.4,"walk":0,"next":"walk"};
 }
+Init.db.sprite.template.rpgvx = function(){
+	return {"size":2,"side":[2,0,1,3],"hpBar":-22,"legs":16,
+		"preHitBox":[ -16,16,-16,16 ],"preBumperBox":[ -16,16,-16,16 ],
+		"anim": {
+			"walk":{"startY":0,"frame":3,"sizeX":32,"sizeY":32,"dir":4,"spd":0.5,"walk":1,"next":"walk"},
+			"attack":{"startY":0,"frame":3,"sizeX":32,"sizeY":32,"dir":4,"spd":0.5,"next":"attack"},
+		}};
+}
+
 
 Sprite = {};
 
-Sprite.creation = function(player,info){
+Sprite.creation = function(act,info){
 	if(!info.anim) info.anim = Db.sprite[info.name || 'mace'].defaultAnim;
 	info.oldAnim = info.anim;
 	info.initAnim = info.anim;
 	
-	player.sprite = Tk.useTemplate(Sprite.template(),info);
-	if(server)	Sprite.updateBumper(player);
+	act.sprite = Tk.useTemplate(Sprite.template(),info);
+	if(SERVER)	Sprite.updateBumper(act);
 }
+
+Sprite.creation.model = function(sp){
+	if(sp.rgpvx)	sp = Tk.useTemplate(Init.db.sprite.template.rpgvx(),sp);	//cuz im lazy...'
+	sp = Tk.useTemplate(Init.db.sprite.template(),sp);
+	
+	for(var j in sp.anim)	sp.anim[j] = Tk.useTemplate(Init.db.sprite.template.anim(),sp.anim[j]);
+
+	if(SERVER){
+		//Prepare the bumperbox and hitbox of sprites       //hitbox: used for dmg collisions       //bumperbox: used for map collisions
+		sp.bumperBox = [];
+		sp.bumperBox[0] = { "x":sp.preBumperBox[1]*sp.size,"y":(sp.preBumperBox[2]+sp.preBumperBox[3])/2*sp.size };
+		sp.bumperBox[1] = { "x":(sp.preBumperBox[0]+sp.preBumperBox[1])/2*sp.size,"y":sp.preBumperBox[3]*sp.size };
+		sp.bumperBox[2] = { "x":sp.preBumperBox[0]*sp.size,"y":(sp.preBumperBox[2]+sp.preBumperBox[3])/2*sp.size };
+		sp.bumperBox[3] = { "x":(sp.preBumperBox[0]+sp.preBumperBox[1])/2*sp.size,"y":sp.preBumperBox[2]*sp.size };
+
+		sp.hitBox = []; 
+		sp.hitBox[0] = { "x":sp.preHitBox[1]*sp.size,"y":(sp.preHitBox[2]-sp.preHitBox[3])/2*sp.size };
+		sp.hitBox[1] = { "x":(sp.preHitBox[0]-sp.preHitBox[1])/2*sp.size,"y":sp.preHitBox[3]*sp.size };
+		sp.hitBox[2] = { "x":sp.preHitBox[0]*sp.size,"y":(sp.preHitBox[2]-sp.preHitBox[3])/2*sp.size };
+		sp.hitBox[3] = { "x":(sp.preHitBox[0]-sp.preHitBox[1])/2*sp.size,"y":sp.preHitBox[2]*sp.size };
+    }
+    
+    if(!SERVER){
+		sp.src = 'img/sprite/' + sp.src
+		sp.img = newImage(sp.src);
+		Img.preloader.push(sp.src);
+    }
+	Db.sprite[sp.id] = sp;
+}
+
 
 Sprite.template = function(){
 	return {
@@ -420,7 +398,7 @@ Sprite.template = function(){
 
 
 Sprite.change = function(act,info){
-    if(!act || !act.sprite) return;
+    if(!act || !act.sprite) return ERROR(5);
 
 	if(info.initAnim || info.anim){ 
 		act.sprite.initAnim = info.initAnim || act.sprite.initAnim;
@@ -438,17 +416,17 @@ Sprite.change = function(act,info){
 
 Sprite.updateBumper = function(player){		//server only
 	//Set the Sprite Bumper Box to fit the sizeMod
-	if(Db.sprite[player.sprite.name].hitBox){	//Attack Dont
-		player.hitBox = Tk.deepClone(Db.sprite[player.sprite.name].hitBox);
-		player.bumperBox = Tk.deepClone(Db.sprite[player.sprite.name].bumperBox);	
-		
-		
-		for(var i = 0 ; i < player.hitBox.length ; i++){
-			player.hitBox[i].x *= player.sprite.sizeMod;
-			player.hitBox[i].y *= player.sprite.sizeMod;
-			player.bumperBox[i].x *= player.sprite.sizeMod;
-			player.bumperBox[i].y *= player.sprite.sizeMod;	
-		}	
+	var dsp = Db.sprite[player.sprite.name];
+	if(!dsp.hitBox) return;	//Attack Dont
+	
+	player.hitBox = Tk.deepClone(dsp.hitBox);
+	player.bumperBox = Tk.deepClone(dsp.bumperBox);	
+	
+	for(var i = 0 ; i < player.hitBox.length ; i++){
+		player.hitBox[i].x *= player.sprite.sizeMod;
+		player.hitBox[i].y *= player.sprite.sizeMod;
+		player.bumperBox[i].x *= player.sprite.sizeMod;
+		player.bumperBox[i].y *= player.sprite.sizeMod;	
 	}
 }
 
@@ -456,24 +434,21 @@ Sprite.updateBumper = function(player){		//server only
 
 Sprite.update = function (act){	//client side only
 	if(!act.sprite) return;
-	var spriteFromDb = Db.sprite[act.sprite.name];
-	if(!spriteFromDb){ DEBUG(1,"sprite dont exist"); spriteFromDb = Db.sprite['mace'];}
+	var dsp = Db.sprite[act.sprite.name];
+	if(!dsp){ ERROR(2,"sprite dont exist"); dsp = Db.sprite['mace'];}
 	if(act.sprite.animOld !== act.sprite.anim){	//otherwise, animation can be cut if timer for walk is high 
 		act.sprite.animOld = act.sprite.anim;
 		Sprite.change(act,{'anim':act.sprite.anim});
 	}
-	var animFromDb = spriteFromDb.anim[act.sprite.anim];
-	
-	
-	
+	var animFromDb = dsp.anim[act.sprite.anim];	
 	
 	var mod = 1;
 	if(animFromDb.walk){    //if walking, the speed of animation depends on movement speed
 		var spd =  Math.max(Math.abs(act.spdX),Math.abs(act.spdY));
-		mod = Math.abs(spd/act.maxSpd);
+		mod = Math.abs(spd/act.maxSpd) || 0;
 	}
 	
-	act.sprite.timer += animFromDb.spd * mod;	if(!act.sprite.timer){act.sprite.timer = 0;}
+	act.sprite.timer += animFromDb.spd * mod;	
 	act.sprite.startX = Math.floor(act.sprite.timer);
 	
 	if(act.sprite.startX > animFromDb.frame-1){
@@ -481,9 +456,7 @@ Sprite.update = function (act){	//client side only
 	}
 	if(act.sprite.dead){
 		act.sprite.alpha -= act.sprite.dead;
-		if(act.sprite.alpha < 0){
-			removeAny(act.id);
-		}
+		if(act.sprite.alpha < 0)	removeAny(act.id);
 	}
 	
 }

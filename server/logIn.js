@@ -80,8 +80,8 @@ Sign.in = function(socket,d){
 	
 	if(!Server.admin.have(user) && Object.keys(List.main).length >= Server.maxPlayerAmount){
 		if(Server.loginMessage)		socket.emit('signIn', { 'success':0,'message':'<font color="red">' + Server.loginMessage + '</font>' }); 
-		else if(Server.maxPlayerAmount !== 0)	socket.emit('signIn', { 'success':0,'message':'<font color="red">SERVER IS FULL.</font>' }); 
-		else if(Server.maxPlayerAmount === 0)	socket.emit('signIn', { 'success':0,'message':'<font color="red">SERVER IS CLOSED. Next open beta should come soon.</font>' }); 
+		else if(Server.maxPlayerAmount !== 0)	socket.emit('signIn', { 'success':0,'message':'<font color="red">Server is full.</font>' }); 
+		else if(Server.maxPlayerAmount === 0)	socket.emit('signIn', { 'success':0,'message':'<font color="red">Server is closed. Next open beta should come soon.</font>' }); 
 		return;
 	}
 	db.findOne('account',{username:user},function(err, account) { if(err) throw err;

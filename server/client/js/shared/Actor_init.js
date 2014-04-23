@@ -185,8 +185,8 @@ Actor.template = {};
 Actor.template.skill = function(){
 	var value = Cst.exp.list[0];
 	return {
-		'exp':{'melee':value,'range':value,'magic':value,'metalwork':value,'woodwork':value,'leatherwork':value,'geology':value,'metallurgy':value,'trapping':value},
-		'lvl':{'melee':0,'range':0,'magic':0,'metalwork':0,'woodwork':0,'leatherwork':0,'geology':0,'metallurgy':0,'trapping':0},
+		'exp':{'melee':value,'range':value,'magic':value,'metalwork':value,'woodwork':value,'leatherwork':value,'mining':value,'woodcutting':value,'trapping':value},
+		'lvl':{'melee':0,'range':0,'magic':0,'metalwork':0,'woodwork':0,'leatherwork':0,'mining':0,'woodcutting':0,'trapping':0},
 	}; 
 };
 

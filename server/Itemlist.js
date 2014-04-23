@@ -7,7 +7,7 @@ Itemlist.add = function (inv,id,amount){
 	if(typeof inv === 'string') inv = List.main[inv].invList;
 	amount = amount || 1;
 	
-	if(!Db.item[id]){ DEBUG(0,'item dont exist' + id); return false;}
+	if(!Db.item[id]){ ERROR(3,'item dont exist' + id); return false;}
 	if(Db.item[id].stack || inv.alwaysStack){
 		if(Itemlist.have(inv,id)){
 			inv.data[Itemlist.have(inv,id,1,"position")][1] += amount;
@@ -62,7 +62,7 @@ Itemlist.remove = function (inv,id,amount){
 	if(typeof inv === 'string') inv = List.main[inv].invList;
 	
 	amount = amount || 1;
-	if(!Db.item[id]){ DEBUG(0,'item dont exist' + id); return false;}
+	if(!Db.item[id]){ ERROR(3,'item dont exist' + id); return false;}
 	if(Db.item[id].stack || inv.alwaysStack){
 		for(var i = 0 ; i < inv.data.length ; i ++){
 			if(inv.data[i][0] === id){
@@ -107,7 +107,7 @@ Itemlist.have = function (inv,id,amount,info){
 	
 	amount = amount || 1;
 	info = info || "bool";
-	if(!Db.item[id]){ DEBUG(0,'item dont exist ' + id); return false;}
+	if(!Db.item[id]){ ERROR(3,'item dont exist ' + id); return false;}
 	if(Db.item[id].stack || inv.alwaysStack){	
 		for(var i = 0 ; i < inv.data.length ; i++){
 			if(inv.data[i][0] === id){

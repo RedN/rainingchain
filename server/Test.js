@@ -114,7 +114,7 @@ Test.spawnEnemy = function(key,cat,variant){
 	variant = variant || 'normal';
 	
 	var player = List.all[key];
-	if(!Db.npc[cat][variant]){ DEBUG(1,"no npc with that cat and var"); return;}
+	if(!Db.npc[cat][variant]){ ERROR(4,"no npc with that cat and var"); return;}
 	Actor.creation({
 		'spot':{x:player.x,y:player.y,map:player.map},
 		"category":cat,		
@@ -135,7 +135,7 @@ Test.generateEquip = function(key,lvl,maxAmount){
 	var act = List.all[key];
 	
 	/*
-	if(!nodejitsu){
+	if(!NODEJITSU){
 		lvl = lvl || 0;
 		maxAmount = maxAmount || 5;
 		
@@ -161,7 +161,7 @@ Test.generateEquip = function(key,lvl,maxAmount){
 		}
 	}
 	
-	if(nodejitsu){
+	if(NODEJITSU){
 		act.equip.melee = "QtestEnemy-weapon";
 		//act.equip = {"piece":{"melee":"QtestEnemy-weapon","range":"24fvltcng","magic":"ipw6bxde4","amulet":"kc3fy1ltl","helm":"w74kcmoxj","ring":"xnpno7719","gloves":"5lzcbznld","body":"ub12yl35d","shield":"csb34pzva","bracelet":"ri7qsje6y","pants":"yk4w35h1k","boots":"qjo3fpkpf"},"dmg":{"melee":1,"range":1,"magic":1,"fire":1,"cold":1,"lightning":1},"def":{"melee":1.85622969311756,"range":1.2542729220383129,"magic":3.8250781267619787,"fire":1.1564167262496907,"cold":1.1299560920228722,"lightning":1.1757721163703236}};
 		Actor.update.equip(act);

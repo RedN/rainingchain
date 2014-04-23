@@ -39,7 +39,11 @@ exports.init = function(version,questname){	//}
 	s.getAct = function(key){
 		return List.all[key];
 	}
-
+	
+	s.setTimeOut = function(key,name,time,func){
+		Actor.setTimeout(getAct(key),Q + '-' + name,time,func);	
+	};
+	
 	s.chat = Chat.add;
 	s.question = Chat.question;
 	
@@ -60,9 +64,9 @@ exports.init = function(version,questname){	//}
 		}
 	}
 	
-	s.respawn = function(key,map,letter,safe){	//must be same map
+	s.setRespawn = function(key,map,letter,safe){	//must be same map
 		var spot = s.getSpot(map,Q,letter);
-		if(!spot) return DEBUG(1,'no spot');
+		if(!spot) return ERROR(3,'no spot');
 		Actor.setRespawn(s.getAct(key),spot,safe);
 	}
 
@@ -72,11 +76,11 @@ exports.init = function(version,questname){	//}
 	
 	s.getSpot = function(id,addon,spot){
 		var a = Db.map[Map.getModel(id)].addon[addon].spot[spot];	//cant use list cuz map could not be created yet
-		if(!a){ DEBUG(0,'spot not found ' + id + addon + spot); return }
+		if(!a){ ERROR(3,'spot not found ' + id + addon + spot); return }
 		return {x:a.x,y:a.y,map:id}
 	}
 	
-	s.sprite = function(key,name,size){
+	s.setSprite = function(key,name,size){
 		var tmp = {name:name};
 		if(size && size !== 1) tmp.sizeMod = size;
 		Sprite.change(s.getAct(key),tmp);
@@ -90,8 +94,8 @@ exports.init = function(version,questname){	//}
 		}
 
 		item = getItemName(item);
-		if(s.itemExist(item))	Itemlist.add(key,item,amount);
-		else Chat.add(key,"BUG. ITEM DOES NOT EXIST @ " + item);
+		if(s.existItem(item))	Itemlist.add(key,item,amount);
+		else Chat.add(key,"bug. ITEM DOES NOT EXIST @ " + item);
 	}
 
 	s.removeItem = function(key,item,amount){
@@ -101,8 +105,8 @@ exports.init = function(version,questname){	//}
 		}
 
 		item = getItemName(item);
-		if(s.itemExist(item))	Itemlist.remove(key,item,amount);
-		else Chat.add(key,"BUG. ITEM DOES NOT EXIST @ " + item);
+		if(s.existItem(item))	Itemlist.remove(key,item,amount);
+		else Chat.add(key,"bug. ITEM DOES NOT EXIST @ " + item);
 	}
 
 	s.haveItem = function(key,item,amount,removeifgood){
@@ -115,12 +119,12 @@ exports.init = function(version,questname){	//}
 		}
 
 		item = getItemName(item);
-		if(s.itemExist(item)){
+		if(s.existItem(item)){
 			var success = Itemlist.have(key,item,amount);
 			if(success && removeifgood) Itemlist.remove(key,item,amount);
 			return success;
 		}
-		else Chat.add(key,"BUG. ITEM DOES NOT EXIST @ " + item);
+		else Chat.add(key,"bug. ITEM DOES NOT EXIST @ " + item);
 		return false;
 	}
 
@@ -138,7 +142,7 @@ exports.init = function(version,questname){	//}
 		return success;
 	}
 	
-	s.itemExist = function(id){ return !!Db.item[id]; }
+	s.existItem = function(id){ return !!Db.item[id]; }
 	
 
 	//Cutscene
@@ -213,7 +217,7 @@ exports.init = function(version,questname){	//}
 
 	s.drop = function(key,spot,name,amount,time){
 		time = time || 25*120;
-		if(!s.itemExist(Q+ '-' + name)) return;
+		if(!s.existItem(Q+ '-' + name)) return;
 		
 		var tmp = {'spot':spot,"item":Q + '-' + name,"amount":amount,'timer':time};
 		if(typeof key === 'string') tmp.viewedIf = [key];
@@ -229,6 +233,10 @@ exports.init = function(version,questname){	//}
 	s.map = Init.db.map.template;
 	s.boss = Boss.template;
 
+	
+	s.ERROR = function(txt){
+		ERROR(3,txt);
+	}
 	return s;
 }
 

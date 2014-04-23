@@ -1,4 +1,4 @@
-if(server) var db = require('./../../../db');
+if(SERVER) var db = require('./../../../db');
 /*
 0 - dont have
 1 - have

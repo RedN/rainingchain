@@ -10,7 +10,7 @@ round = function (num,decimals,str){
 	
 	
 	
-	var num = round(num,decimals).toString();
+	var num = Tk.round(num,decimals).toString();
 	
 	var dot = num.indexOf('.');
 	if(dot == -1){ num += '.'; dot = num.length-1; }
@@ -24,7 +24,7 @@ round = function (num,decimals,str){
 Object.defineProperty(Number.prototype, "toPercent", {
     enumerable: false,
     value: function(num) {
-		return round(this*100,num || 0) + '%';
+		return Tk.round(this*100,num || 0) + '%';
 	}
 });	
 	

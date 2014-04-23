@@ -85,7 +85,7 @@ a.loop = function(map,spot,v,m){
 		}
 		
 		
-		} catch(err){ logError(err)}
+		} catch(err){ ERROR.err(err)}
 	}
 	
 

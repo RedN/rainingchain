@@ -4,7 +4,7 @@ var TOOFAR = function(key){
 }
 
 Actor.teleport = function(act,spot){
-	LOG(2,act.id,'teleport',spot);
+	Server.log(3,act.id,'teleport',spot);
 	
 	act.x = spot.x;
 	act.y = spot.y;
@@ -127,7 +127,7 @@ Actor.click.skillPlot = function(act,eid){
 	
 	Chat.add(key,"You manage to harvest this resource.");
 	
-	LOG(2,key,'harvest',item);
+	Server.log(3,key,'harvest',item);
 }
 
 Actor.click.waypoint = function(act,eid){
@@ -155,7 +155,7 @@ Actor.click.loot = function(act,eid){	//need work
 		e.loot.list.push(act.id);
 		Chat.add(act.id,"Nice loot!");
 	};
-	LOG(2,act.id,'openChest',eid);
+	Server.log(3,act.id,'openChest',eid);
 }
 
 Actor.click.switch = function(act,eid){
@@ -195,7 +195,7 @@ Actor.click.drop = function (act,id){
 	Itemlist.add(inv,drop.item,drop.amount);
 	Drop.remove(drop);	
 	
-	LOG(1,act.id,'pickDrop',drop);
+	Server.log(3,act.id,'pickDrop',drop);
 }
 
 Actor.click.drop.rightClick = function(act,pt){
@@ -237,7 +237,7 @@ Actor.push = function(act,angle,magn,time){
 	act.spdX = magn*Tk.cos(angle);
 	act.spdY = magn*Tk.sin(angle);
 	
-	Actor.setTimeOut(act,'push',time,function(eid){
+	Actor.setTimeout(act,'push',time,function(eid){
 		List.all[eid].spdX = 0;
 		List.all[eid].spdY = 0;
 		List.all[eid].friction = 0.9;

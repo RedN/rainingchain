@@ -1,8 +1,8 @@
-if(server){
+if(SERVER){
 	var db = require('./../../../db');
 	var request = require('request');
 }
-if(!server){
+if(!SERVER){
 	
 readFiles = function(files) {
 	for (var i in files) { //for multiple files          
@@ -28,11 +28,11 @@ readFiles.image = function(e) {
 	var array = name.split('_');
 	
 	if(array[0] === 'sprite'){
-		if(!Db.sprite[array[1]]) permConsoleLog('Wrong Name',this.fileName);
+		if(!Db.sprite[array[1]]) INFO('Wrong Name',this.fileName);
 		else Db.sprite[array[1]].img.src = this.result;
 	}
 	if(array[0] === 'anim'){
-		if(!Db.anim[array[1]]) permConsoleLog('Wrong Name',this.fileName);
+		if(!Db.anim[array[1]]) INFO('Wrong Name',this.fileName);
 		else Db.anim[array[1]].img.src = this.result;
 	}
 	if(array[0] === 'icon')

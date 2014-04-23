@@ -156,7 +156,7 @@ Draw.window.defensive = function (){ ctxrestore();
 		ctx.fillStyle = Cst.element.toColor[i];
 		ctx.roundRect(numX-5,numY,125,fontSize*1.1);
 		ctx.fillStyle = 'black';
-		ctx.fillText(i.capitalize() + ': ' + round(def.ratio[i]*def.main),numX,numY);		
+		ctx.fillText(i.capitalize() + ': ' + Tk.round(def.ratio[i]*def.main),numX,numY);		
 		count++;
 	}
 	ctx.fillStyle = 'black';
@@ -169,7 +169,7 @@ Draw.window.stat = function(type){ ctxrestore();
 	var obj = {'offensive':0,'defensive':0,'ability':0,'passive':0}; obj[type] = 1;
 	var s = Draw.window.main(obj);	
 	ctx = List.ctx.win;
-	if(server){ return; }
+	if(SERVER){ return; }
 	
 	ctx.setFont(22);
 	
@@ -216,9 +216,9 @@ Draw.window.stat.list = {
 	{'name':'Cold','icon':'element.cold','stat':[{'name':'x','stat':'dmg-cold-x'},{'name':'*','stat':'dmg-cold-*'},{'name':'^','stat':'dmg-cold-^'},{'name':'+','stat':'dmg-cold-+'}],'string':(function(){ return Draw.window.stat.list.element('dmg','cold')})},
 	{'name':'Lightning','icon':'element.lightning','stat':[{'name':'x','stat':'dmg-lightning-x'},{'name':'*','stat':'dmg-lightning-*'},{'name':'^','stat':'dmg-lightning-^'},{'name':'+','stat':'dmg-lightning-+'}],'string':(function(){ return Draw.window.stat.list.element('dmg','lightning')})},
 	
-	{'name':'Weapon','icon':'element.melee','stat':[{'name':'Mace','stat':'weapon-mace'},{'name':'Spear','stat':'weapon-spear'},{'name':'Sword','stat':'weapon-sword'}],'string':(function(){ return 'Mace: ' + round(player.boost.list['weapon-mace'].base,2,1) + ', Spear: ' + round(player.boost.list['weapon-spear'].base,2,1) + ', Sword: ' + round(player.boost.list['weapon-sword'].base,2,1)						})},
-	{'name':'Weapon','icon':'element.range','stat':[{'name':'Bow','stat':'weapon-bow'},{'name':'Boomerang','stat':'weapon-boomerang'},{'name':'Crossbow','stat':'weapon-crossbow'}],'string':(function(){ return 'Bow: ' + round(player.boost.list['weapon-bow'].base,2,1) + ', Boom.: ' + round(player.boost.list['weapon-boomerang'].base,2,1) + ', CBow: ' + round(player.boost.list['weapon-crossbow'].base,2,1)						})},
-	{'name':'Weapon','icon':'element.magic','stat':[{'name':'Wand','stat':'weapon-wand'},{'name':'Staff','stat':'weapon-staff'},{'name':'Orb','stat':'weapon-orb'}],'string':(function(){ return 'Wand: ' + round(player.boost.list['weapon-wand'].base,2,1) + ', Staff: ' + round(player.boost.list['weapon-staff'].base,2,1) + ', Orb: ' + round(player.boost.list['weapon-orb'].base,2,1)						})},
+	{'name':'Weapon','icon':'element.melee','stat':[{'name':'Mace','stat':'weapon-mace'},{'name':'Spear','stat':'weapon-spear'},{'name':'Sword','stat':'weapon-sword'}],'string':(function(){ return 'Mace: ' + Tk.round(player.boost.list['weapon-mace'].base,2,1) + ', Spear: ' + Tk.round(player.boost.list['weapon-spear'].base,2,1) + ', Sword: ' + Tk.round(player.boost.list['weapon-sword'].base,2,1)						})},
+	{'name':'Weapon','icon':'element.range','stat':[{'name':'Bow','stat':'weapon-bow'},{'name':'Boomerang','stat':'weapon-boomerang'},{'name':'Crossbow','stat':'weapon-crossbow'}],'string':(function(){ return 'Bow: ' + Tk.round(player.boost.list['weapon-bow'].base,2,1) + ', Boom.: ' + Tk.round(player.boost.list['weapon-boomerang'].base,2,1) + ', CBow: ' + Tk.round(player.boost.list['weapon-crossbow'].base,2,1)						})},
+	{'name':'Weapon','icon':'element.magic','stat':[{'name':'Wand','stat':'weapon-wand'},{'name':'Staff','stat':'weapon-staff'},{'name':'Orb','stat':'weapon-orb'}],'string':(function(){ return 'Wand: ' + Tk.round(player.boost.list['weapon-wand'].base,2,1) + ', Staff: ' + Tk.round(player.boost.list['weapon-staff'].base,2,1) + ', Orb: ' + Tk.round(player.boost.list['weapon-orb'].base,2,1)						})},
 	
 	{'name':'Burn','icon':'status.burn','stat':[{'name':'Chance','stat':'burn-chance'},{'name':'Magn','stat':'burn-magn'},{'name':'Time','stat':'burn-time'}],'string':(function(){ return Draw.window.stat.list.status('off','burn')})},
 	{'name':'Chill','icon':'status.chill','stat':[{'name':'Chance','stat':'chill-chance'},{'name':'Magn','stat':'chill-magn'},{'name':'Time','stat':'chill-time'}],'string':(function(){ return Draw.window.stat.list.status('off','chill')})},
@@ -228,14 +228,14 @@ Draw.window.stat.list = {
 	{'name':'Drain','icon':'status.drain','stat':[{'name':'Chance','stat':'drain-chance'},{'name':'Magn','stat':'drain-magn'},{'name':'Time','stat':'drain-time'}],'string':(function(){ return Draw.window.stat.list.status('off','drain')})},
 	
 	
-	{'name':'Leech Hp','icon':'resource.hp','stat':[{'name':'Chance','stat':'leech-chance'},{'name':'Magn','stat':'leech-magn'}],'string':(function(){ return 'Chance: ' + round(player.boost.list['leech-chance'].base,2,1) + ', Magn: ' + round(player.boost.list['leech-magn'].base,2,1); })},
-	{'name':'Critical','icon':'resource.hp','stat':[{'name':'Chance','stat':'crit-chance'},{'name':'Magn','stat':'crit-magn'}],'string':(function(){ return 'Chance: ' + round(player.boost.list['crit-chance'].base,2,1) + ', Magn: ' + round(player.boost.list['crit-magn'].base,2,1); })},
+	{'name':'Leech Hp','icon':'resource.hp','stat':[{'name':'Chance','stat':'leech-chance'},{'name':'Magn','stat':'leech-magn'}],'string':(function(){ return 'Chance: ' + Tk.round(player.boost.list['leech-chance'].base,2,1) + ', Magn: ' + Tk.round(player.boost.list['leech-magn'].base,2,1); })},
+	{'name':'Critical','icon':'resource.hp','stat':[{'name':'Chance','stat':'crit-chance'},{'name':'Magn','stat':'crit-magn'}],'string':(function(){ return 'Chance: ' + Tk.round(player.boost.list['crit-chance'].base,2,1) + ', Magn: ' + Tk.round(player.boost.list['crit-magn'].base,2,1); })},
 	
-	{'name':'Bullet','icon':'offensive.bullet','stat':[{'name':'Amount','stat':'bullet-amount'},{'name':'Spd','stat':'bullet-spd'}],'string':(function(){ return 'Amount: ' + round(player.boost.list['bullet-amount'].base,2,1) + ', Spd: ' + round(player.boost.list['bullet-spd'].base,2,1); })},
-	{'name':'Strike','icon':'offensive.bullet','stat':[{'name':'AoE','stat':'bullet-amount'},{'name':'Range','stat':'aim'},{'name':'Max','stat':'aim'}],'string':(function(){ return 'AoE: ' + round(player.boost.list['strike-size'].base,2,1) + ', Range: ' + round(player.boost.list['strike-range'].base,2,1) + ', Max: ' + round(player.boost.list['strike-maxHit'].base,2,1); })},
-	{'name':'Summon','icon':'summon.wolf','stat':[{'name':'Amount','stat':'summon-amount'},{'name':'Time','stat':'summon-time'},{'name':'Attack','stat':'summon-atk'},{'name':'Defence','stat':'summon-def'}],'string':(function(){ return '#:' + round(player.boost.list['summon-amount'].base,2,1) + ', Time:' + round(player.boost.list['summon-time'].base,2,1) + ', A:' + round(player.boost.list['summon-atk'].base,2,1)+ ', D:' + round(player.boost.list['summon-def'].base,2,1); })},
+	{'name':'Bullet','icon':'offensive.bullet','stat':[{'name':'Amount','stat':'bullet-amount'},{'name':'Spd','stat':'bullet-spd'}],'string':(function(){ return 'Amount: ' + Tk.round(player.boost.list['bullet-amount'].base,2,1) + ', Spd: ' + Tk.round(player.boost.list['bullet-spd'].base,2,1); })},
+	{'name':'Strike','icon':'offensive.bullet','stat':[{'name':'AoE','stat':'bullet-amount'},{'name':'Range','stat':'aim'},{'name':'Max','stat':'aim'}],'string':(function(){ return 'AoE: ' + Tk.round(player.boost.list['strike-size'].base,2,1) + ', Range: ' + Tk.round(player.boost.list['strike-range'].base,2,1) + ', Max: ' + Tk.round(player.boost.list['strike-maxHit'].base,2,1); })},
+	{'name':'Summon','icon':'summon.wolf','stat':[{'name':'Amount','stat':'summon-amount'},{'name':'Time','stat':'summon-time'},{'name':'Attack','stat':'summon-atk'},{'name':'Defence','stat':'summon-def'}],'string':(function(){ return '#:' + Tk.round(player.boost.list['summon-amount'].base,2,1) + ', Time:' + Tk.round(player.boost.list['summon-time'].base,2,1) + ', A:' + Tk.round(player.boost.list['summon-atk'].base,2,1)+ ', D:' + Tk.round(player.boost.list['summon-def'].base,2,1); })},
 
-	{'name':'Atk Spd','icon':'offensive.atkSpd','stat':[{'name':'Atk Spd','stat':'atkSpd-main'}],'string':(function(){ return round(player.boost.list['atkSpd-main'].base,2,1); })},
+	{'name':'Atk Spd','icon':'offensive.atkSpd','stat':[{'name':'Atk Spd','stat':'atkSpd-main'}],'string':(function(){ return Tk.round(player.boost.list['atkSpd-main'].base,2,1); })},
 	
 ],
 
@@ -247,33 +247,33 @@ Draw.window.stat.list = {
 	{'name':'Cold','icon':'element.cold','stat':[{'name':'x','stat':'def-cold-x'},{'name':'*','stat':'def-cold-*'},{'name':'^','stat':'def-cold-^'},{'name':'+','stat':'def-cold-+'}],'string':(function(){ return Draw.window.stat.list.element('def','cold')})},
 	{'name':'Lightning','icon':'element.lightning','stat':[{'name':'x','stat':'def-lightning-x'},{'name':'*','stat':'def-lightning-*'},{'name':'^','stat':'def-lightning-^'},{'name':'+','stat':'def-lightning-+'}],'string':(function(){ return Draw.window.stat.list.element('def','lightning')})},
 			
-	{'name':'Speed','icon':'defensive.speed','stat':[{'name':'Max','stat':'maxSpd'}],'string':(function(){ return round(player.boost.list['maxSpd'].base,2,1)})},
-	{'name':'Pick Radius','icon':'defensive.pickup','stat':[{'name':'Pick Radius','stat':'pickRadius'}],'string':(function(){ return round(player.boost.list['pickRadius'].base,2,1)})},
-	{'name':'Item Find','icon':'defensive.item','stat':[{'name':'Quality','stat':'item-quality'},{'name':'Quantity','stat':'item-quantity'},{'name':'Rarity','stat':'item-rarity'}],'string':(function(){ return 'Qual.: ' + round(player.boost.list['item-quality'].base,2,1) + ', Quant.: ' + round(player.boost.list['item-quantity'].base,2,1)+ ', Rarity: ' + round(player.boost.list['item-rarity'].base,2,1)})},
+	{'name':'Speed','icon':'defensive.speed','stat':[{'name':'Max','stat':'maxSpd'}],'string':(function(){ return Tk.round(player.boost.list['maxSpd'].base,2,1)})},
+	{'name':'Pick Radius','icon':'defensive.pickup','stat':[{'name':'Pick Radius','stat':'pickRadius'}],'string':(function(){ return Tk.round(player.boost.list['pickRadius'].base,2,1)})},
+	{'name':'Item Find','icon':'defensive.item','stat':[{'name':'Quality','stat':'item-quality'},{'name':'Quantity','stat':'item-quantity'},{'name':'Rarity','stat':'item-rarity'}],'string':(function(){ return 'Qual.: ' + Tk.round(player.boost.list['item-quality'].base,2,1) + ', Quant.: ' + Tk.round(player.boost.list['item-quantity'].base,2,1)+ ', Rarity: ' + Tk.round(player.boost.list['item-rarity'].base,2,1)})},
 
-	{'name':'Life','icon':'resource.hp','stat':[{'name':'Max','stat':'hp-max'},{'name':'Regen','stat':'hp-regen'}],'string':(function(){ return 'Max: ' + round(player.boost.list['hp-max'].base,0,1) + ', Regen: ' + round(player.boost.list['hp-regen'].base,2,1)})},
-	{'name':'Mana','icon':'resource.mana','stat':[{'name':'Max','stat':'mana-max'},{'name':'Regen','stat':'mana-regen'}],'string':(function(){ return 'Max: ' + round(player.boost.list['mana-max'].base,0,1) + ', Regen: ' + round(player.boost.list['mana-regen'].base,2,1)})},
+	{'name':'Life','icon':'resource.hp','stat':[{'name':'Max','stat':'hp-max'},{'name':'Regen','stat':'hp-regen'}],'string':(function(){ return 'Max: ' + Tk.round(player.boost.list['hp-max'].base,0,1) + ', Regen: ' + Tk.round(player.boost.list['hp-regen'].base,2,1)})},
+	{'name':'Mana','icon':'resource.mana','stat':[{'name':'Max','stat':'mana-max'},{'name':'Regen','stat':'mana-regen'}],'string':(function(){ return 'Max: ' + Tk.round(player.boost.list['mana-max'].base,0,1) + ', Regen: ' + Tk.round(player.boost.list['mana-regen'].base,2,1)})},
 	
 	
 	
 ],
 /*
-{'name':'Speed','icon':'defensive.speed','stat':[{'name':'Max','stat':'maxSpd'},{'name':'Acc.','stat':'acc'},{'name':'Fric.','stat':'friction'}],'string':(function(){ return 'Max: ' + round(player.boost.list['maxSpd'].base,2,1) + ', Acc.: ' + round(player.boost.list['acc'].base,2,1)+ ', Fric.: ' + round(player.boost.list['friction'].base,2,1)})},
-{'name':'Atk Spd','icon':'offensive.atkSpd','stat':[{'name':'Main','stat':'atkSpd-main'},{'name':'Support','stat':'atkSpd-support'}],'string':(function(){ return 'Main:' + round(player.boost.list['atkSpd-main'].base,2,1) + ', Support:' + round(player.boost.list['atkSpd-support'].base,2,1); })},
-{'name':'Fury','icon':'resource.fury','stat':[{'name':'Max','stat':'fury-max'},{'name':'Regen','stat':'fury-regen'}],'string':(function(){ return 'Max: ' + round(player.boost.list['fury-max'].base,0,1) + ', Regen: ' + round(player.boost.list['fury-regen'].base,2,1)})},
-{'name':'Dodge','icon':'resource.dodge','stat':[{'name':'Max','stat':'dodge-max'},{'name':'Regen','stat':'dodge-regen'}],'string':(function(){ return 'Max: ' + round(player.boost.list['dodge-max'].base,0,1) + ', Regen: ' + round(player.boost.list['dodge-regen'].base,2,1)})},
-{'name':'Heal','icon':'resource.heal','stat':[{'name':'Max','stat':'heal-max'},{'name':'Regen','stat':'heal-regen'}],'string':(function(){ return 'Max: ' + round(player.boost.list['heal-max'].base,0,1) + ', Regen: ' + round(player.boost.list['heal-regen'].base,2,1)})},
+{'name':'Speed','icon':'defensive.speed','stat':[{'name':'Max','stat':'maxSpd'},{'name':'Acc.','stat':'acc'},{'name':'Fric.','stat':'friction'}],'string':(function(){ return 'Max: ' + Tk.round(player.boost.list['maxSpd'].base,2,1) + ', Acc.: ' + Tk.round(player.boost.list['acc'].base,2,1)+ ', Fric.: ' + Tk.round(player.boost.list['friction'].base,2,1)})},
+{'name':'Atk Spd','icon':'offensive.atkSpd','stat':[{'name':'Main','stat':'atkSpd-main'},{'name':'Support','stat':'atkSpd-support'}],'string':(function(){ return 'Main:' + Tk.round(player.boost.list['atkSpd-main'].base,2,1) + ', Support:' + Tk.round(player.boost.list['atkSpd-support'].base,2,1); })},
+{'name':'Fury','icon':'resource.fury','stat':[{'name':'Max','stat':'fury-max'},{'name':'Regen','stat':'fury-regen'}],'string':(function(){ return 'Max: ' + Tk.round(player.boost.list['fury-max'].base,0,1) + ', Regen: ' + Tk.round(player.boost.list['fury-regen'].base,2,1)})},
+{'name':'Dodge','icon':'resource.dodge','stat':[{'name':'Max','stat':'dodge-max'},{'name':'Regen','stat':'dodge-regen'}],'string':(function(){ return 'Max: ' + Tk.round(player.boost.list['dodge-max'].base,0,1) + ', Regen: ' + Tk.round(player.boost.list['dodge-regen'].base,2,1)})},
+{'name':'Heal','icon':'resource.heal','stat':[{'name':'Max','stat':'heal-max'},{'name':'Regen','stat':'heal-regen'}],'string':(function(){ return 'Max: ' + Tk.round(player.boost.list['heal-max'].base,0,1) + ', Regen: ' + Tk.round(player.boost.list['heal-regen'].base,2,1)})},
 */
 
 };
 
 Draw.window.stat.list.element = function(type,name){
 	type += '-';
-	var b0 = round(player.boost.list[type + name + '-x'].base,2,1);
-	var b1 = round(player.boost.list[type + name + '-*'].base,2,1);
-	var b2 = round(player.boost.list[type + name + '-^'].base,2,1);
-	var b3 = round(player.boost.list[type + name + '-+'].base,2,1);
-	var sum = round(Math.pow(player.boost.list[type + name + '-x'].base*player.boost.list[type + name + '-*'].base,player.boost.list[type + name + '-^'].base) + player.boost.list[type + name + '-+'].base,3);
+	var b0 = Tk.round(player.boost.list[type + name + '-x'].base,2,1);
+	var b1 = Tk.round(player.boost.list[type + name + '-*'].base,2,1);
+	var b2 = Tk.round(player.boost.list[type + name + '-^'].base,2,1);
+	var b3 = Tk.round(player.boost.list[type + name + '-+'].base,2,1);
+	var sum = Tk.round(Math.pow(player.boost.list[type + name + '-x'].base*player.boost.list[type + name + '-*'].base,player.boost.list[type + name + '-^'].base) + player.boost.list[type + name + '-+'].base,3);
 	var string = '( ' + b0 + ' * ' + b1 + ' ) ^ ' + b2 + ' + ' + b3 + ' = ' + sum;
 	if(main.hideHUD.advancedStat) string = sum;
 	return string
@@ -281,15 +281,15 @@ Draw.window.stat.list.element = function(type,name){
 
 Draw.window.stat.list.status = function(type,name){
 	if(type === 'off'){
-		var b0 = round(player.boost.list[name + '-chance'].base,2,1);
-		var b1 = round(player.boost.list[name + '-magn'].base,2,1);
-		var b2 = round(player.boost.list[name + '-time'].base,2,1);
+		var b0 = Tk.round(player.boost.list[name + '-chance'].base,2,1);
+		var b1 = Tk.round(player.boost.list[name + '-magn'].base,2,1);
+		var b2 = Tk.round(player.boost.list[name + '-time'].base,2,1);
 
 		var string = '%: ' + b0 + ', Magn: ' + b1 + ', Time: ' + b2;
 		return string
 	}
 	if(type === 'def'){
-		var b0 = round(player.boost.list['resist-' + name].base,2,1);
+		var b0 = Tk.round(player.boost.list['resist-' + name].base,2,1);
 		
 		var string = 'Resist: ' + b0 
 		return string
@@ -325,7 +325,7 @@ Draw.window.stat.hover = function(hover,type){ ctxrestore();
 			if(i.indexOf('Q-') === 0){ continue; } //would spam with quest reward otherwise
 			for(var j in player.permBoost[i]){
 				if(player.permBoost[i][j].stat === statList[k].stat){
-					ctx.fillText(statList[k].name + ' : ' + i + ' => +' + round(player.permBoost[i][j].value,4,1),numX+25,numY);
+					ctx.fillText(statList[k].name + ' : ' + i + ' => +' + Tk.round(player.permBoost[i][j].value,4,1),numX+25,numY);
 					numY += 30;
 					count++;
 				}
@@ -507,10 +507,10 @@ Draw.window.ability.generalInfo = function(diffX,diffY){ ctxrestore();
 	
 	var	str = 
 	'<span style="font:30px Kelly Slab">' + ab.name + '</span>' + '<br>' +
-	' - Cast/S: ' + round(25/ab.period.own,2) + '<br>' +
+	' - Cast/S: ' + Tk.round(25/ab.period.own,2) + '<br>' +
 	' - Cost: ' ;
-	if(ab.cost.mana){ str += round(ab.cost.mana,1) + ' Mana'; }
-	if(ab.cost.hp){ str += ' + ' + round(ab.cost.hp,1) + ' Life'; }
+	if(ab.cost.mana){ str += Tk.round(ab.cost.mana,1) + ' Mana'; }
+	if(ab.cost.hp){ str += ' + ' + Tk.round(ab.cost.hp,1) + ' Life'; }
 	if(!ab.cost.mana && !ab.cost.hp) str += 'None';
 	
 	//Orb
@@ -660,7 +660,7 @@ Draw.window.ability.action.attack = function(diffX,diffY){  ctxrestore();
 		ctx.fillText(str,s.zx,s.zy);
 		var dist = 125;	
 		Draw.element(s.zx+dist,s.zy,length,fontSize,atk.dmg.ratio);
-		ctx.fillText('x' + round(atk.dmg.main,1),s.zx+150+dist+15,s.zy);
+		ctx.fillText('x' + Tk.round(atk.dmg.main,1),s.zx+150+dist+15,s.zy);
 	}
 	
 	helper(preatk,'Ability',150);
@@ -682,7 +682,7 @@ Draw.window.ability.action.attack = function(diffX,diffY){  ctxrestore();
 		ctx.fillStyle = Cst.element.toColor[i];
 		ctx.roundRect(numX-5,numY,125,fontSize*1.1);
 		ctx.fillStyle = 'black';
-		ctx.fillText(i.capitalize() + ': ' + round(atk.dmg.ratio[i]*atk.dmg.main),numX,numY);		
+		ctx.fillText(i.capitalize() + ': ' + Tk.round(atk.dmg.ratio[i]*atk.dmg.main),numX,numY);		
 		count++;
 	}
 	ctx.fillStyle = 'black';
@@ -695,7 +695,7 @@ Draw.window.ability.action.attack = function(diffX,diffY){  ctxrestore();
 	//General Info
 	var dmg = 0;	for(var i in atk.dmg.ratio){ dmg += atk.dmg.ratio[i]; } dmg *= atk.dmg.main;
 	str = 'x' + atk.amount + ' Bullet' + (atk.amount > 1 ? 's' : '') + ' @ ' + atk.angle + '°';
-	str += '  =>  DPS: ' + round(dmg / ab.period.own * 25,1);
+	str += '  =>  DPS: ' + Tk.round(dmg / ab.period.own * 25,1);
 	ctx.fillText(str,s.zx,s.zy);
 	s.zy += fontSize;
 	
@@ -748,24 +748,24 @@ Draw.window.ability.action.attack = function(diffX,diffY){  ctxrestore();
 
 Draw.window.ability.action.attack.modTo = {
 	'burn':{icon:'status.burn',
-			text:(function(a){ return round(a.chance*100,2) + '% Chance to Burn for ' + round(a.magn*100*a.time,2) + '% Hp of Monster\'s Remaining Hp over ' + round(a.time/25,2) + 's.'; }),},
+			text:(function(a){ return Tk.round(a.chance*100,2) + '% Chance to Burn for ' + Tk.round(a.magn*100*a.time,2) + '% Hp of Monster\'s Remaining Hp over ' + Tk.round(a.time/25,2) + 's.'; }),},
 	'chill':{icon:'status.chill',
-			text:(function(a){ return round(a.chance*100,2) + '% Chance to Chill, reducing Speed by -' + round(a.magn*100,2) + '% for ' + round(a.time/25,2) + 's.'; })},
+			text:(function(a){ return Tk.round(a.chance*100,2) + '% Chance to Chill, reducing Speed by -' + Tk.round(a.magn*100,2) + '% for ' + Tk.round(a.time/25,2) + 's.'; })},
 	'stun':{icon:'status.stun',
-			text:(function(a){ return round(a.chance*100,2) + '% Chance to Confuse for ' + round(a.time/25,2) + 's.'; })},
+			text:(function(a){ return Tk.round(a.chance*100,2) + '% Chance to Confuse for ' + Tk.round(a.time/25,2) + 's.'; })},
 	'bleed':{icon:'status.bleed',
-			text:(function(a){ return round(a.chance*100,2) + '% Chance to Bleed for ' + round(a.magn*100*a.time,2) + '% Initial Dmg over ' + round(a.time/25,2) + 's.'; })},
+			text:(function(a){ return Tk.round(a.chance*100,2) + '% Chance to Bleed for ' + Tk.round(a.magn*100*a.time,2) + '% Initial Dmg over ' + Tk.round(a.time/25,2) + 's.'; })},
 	'knock':{icon:'status.knock',
-			text:(function(a){ return round(a.chance*100,2) + '% Chance to Knockback by ' + round(a.magn*a.time,2) + ' pixel over ' + round(a.time/25,2) + 's.'; })},	
+			text:(function(a){ return Tk.round(a.chance*100,2) + '% Chance to Knockback by ' + Tk.round(a.magn*a.time,2) + ' pixel over ' + Tk.round(a.time/25,2) + 's.'; })},	
 	'drain':{icon:'status.drain',
-			text:(function(a){ return round(a.chance*100,2) + '% Chance to Drain ' + round(a.magn*100,2) + '% Mana.'; })},
+			text:(function(a){ return Tk.round(a.chance*100,2) + '% Chance to Drain ' + Tk.round(a.magn*100,2) + '% Mana.'; })},
 	'leech':{icon:'offensive.leech',
-			text:(function(a){ return round(a.chance*100,2) + '% Chance to Life Leech ' + round(a.magn*100,2) + '% Hp'; })},
+			text:(function(a){ return Tk.round(a.chance*100,2) + '% Chance to Life Leech ' + Tk.round(a.magn*100,2) + '% Hp'; })},
 	'pierce':{icon:'offensive.pierce',
-			text:(function(a){ return round(a.chance*100,2) + '% Chance to Pierce, reducing this attack damage by ' + round(100-a.dmgReduc*100,2) + '% Dmg.'; })},	
+			text:(function(a){ return Tk.round(a.chance*100,2) + '% Chance to Pierce, reducing this attack damage by ' + Tk.round(100-a.dmgReduc*100,2) + '% Dmg.'; })},	
 			
 	'curse':{icon:'curse.skull',
-			text:(function(a){ return round(a.chance*100,2) + '% Chance to Lower ' + Db.stat[a.boost[0].stat].name + ' by ' + round(100-a.boost[0].value*100,2) + '% for ' + round(a.boost[0].time/25,2) + 's.'; })},
+			text:(function(a){ return Tk.round(a.chance*100,2) + '% Chance to Lower ' + Db.stat[a.boost[0].stat].name + ' by ' + Tk.round(100-a.boost[0].value*100,2) + '% for ' + Tk.round(a.boost[0].time/25,2) + 's.'; })},
 	'sin':{icon:'offensive.bullet',
 			text:(function(a){ return 'Sin Bullet'; })},
 	'parabole':{icon:'offensive.bullet',
@@ -798,9 +798,9 @@ Draw.window.ability.action.boost = function(diffX,diffY){  ctxrestore();
 
 	for(var i in boost[0]){
 		Draw.icon(Db.stat[boost[0][i].stat].icon,s.zx,s.zy,fontSize);
-		var value = round(boost[0][i].value,2);
+		var value = Tk.round(boost[0][i].value,2);
 		if(+value >= + Cst.bigInt) value = 'Infinity';
-		var str = boost[0][i].type + value + ' ' + Db.stat[boost[0][i].stat].name + ' for ' + round(boost[0][i].time/25,2) + 's.';
+		var str = boost[0][i].type + value + ' ' + Db.stat[boost[0][i].stat].name + ' for ' + Tk.round(boost[0][i].time/25,2) + 's.';
 		ctx.fillText(str,s.zx+fontSize*1.2,s.zy);
 		s.zy += fontSize*1.5;
 	}
@@ -817,7 +817,7 @@ Draw.window.ability.action.summon = function(diffX,diffY){  ctxrestore();
 	var info = ab.action.param;
 	ctx.setFont(30);
 	
-	var str = 'Summon a ' + info[1].variant + ' ' + info[1].category + ' Level ' + info[1].lvl + ' for ' + round(info[0].time/25,2) + 's. (Up to ' + info[0].maxChild + ')';
+	var str = 'Summon a ' + info[1].variant + ' ' + info[1].category + ' Level ' + info[1].lvl + ' for ' + Tk.round(info[0].time/25,2) + 's. (Up to ' + info[0].maxChild + ')';
 	ctx.fillText(str,s.zx,s.zy);
 }
 
@@ -944,7 +944,7 @@ Draw.window.quest.upper.req = function(q,mq){
 
 Draw.window.quest.upper.reward = function(q,mq){
 	var reward = '<h3>Rewards:<h/3>';
-	var rewardstat = round(q.reward.boost.value[0],3,1) + ' - ' + round(q.reward.boost.value[1],3,1) + ' in ' + Db.stat[q.reward.boost.stat].name;
+	var rewardstat = Tk.round(q.reward.boost.value[0],3,1) + ' - ' + Tk.round(q.reward.boost.value[1],3,1) + ' in ' + Db.stat[q.reward.boost.stat].name;
 	reward += 'Stat: ' + rewardstat + '<br>';
 	
 	if(mq.reward){
@@ -1015,9 +1015,9 @@ Draw.window.quest.bonus = function(s,q,mq,hq){
 	hq.bonus.style.width = s.dw/2 + 'px'
 	hq.bonus.style.height = s.charY*(1+Object.keys(q.bonus).length*1.2) + 'px'
 	
-	var title = 'Challenge:' + round(mq.bonus.challenge,2) + ' * Orb:' + round(mq.bonus.orb,2) + ' * Cycle:' + round(mq.bonus.cycle,2) + ' + Complete:' + round(0.01*mq.complete,2);
+	var title = 'Challenge:' + Tk.round(mq.bonus.challenge,2) + ' * Orb:' + Tk.round(mq.bonus.orb,2) + ' * Cycle:' + Tk.round(mq.bonus.cycle,2) + ' + Complete:' + Tk.round(0.01*mq.complete,2);
 	var sum = mq.bonus.challenge*mq.bonus.orb*mq.bonus.cycle+(0.01*mq.complete);
-	var str = '<span class="u" title="' + title + '"> Bonus: x' + round(sum,3) + '</span><br>';
+	var str = '<span class="u" title="' + title + '"> Bonus: x' + Tk.round(sum,3) + '</span><br>';
 	
 	for(var i in q.challenge){
 		var b = q.challenge[i];
@@ -1399,9 +1399,9 @@ Draw.window.passive.hover = function(over){ ctxrestore();
 
 	var pop = 'Popularity: ';
 	var grid = Db.passiveGrid[main.passive.active];
-	pop += round(100*over.count/grid.average,1) + '%';
+	pop += Tk.round(100*over.count/grid.average,1) + '%';
 	ctx.fillText(pop,ssx + 5,ssy+1+25*1);
-	var value = 'Value: +' + round(over.value,5);
+	var value = 'Value: +' + Tk.round(over.value,5);
 	ctx.fillText(value,ssx + 5,ssy+1+25*2);
 	//TOFIX add description
 }

@@ -274,8 +274,8 @@ Equip.uncompress = function(e){
 }
 
 Equip.compress.element = function(e){
-	for(var i in e.ratio) e.ratio[i] = round(e.ratio[i],4);
-	e.main = round(e.main,4);
+	for(var i in e.ratio) e.ratio[i] = Tk.round(e.ratio[i],4);
+	e.main = Tk.round(e.main,4);
 	var r = e.ratio;
 	return [e.main,r.melee,r.range,r.magic,r.fire,r.cold,r.lightning];	
 }

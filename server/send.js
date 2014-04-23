@@ -18,15 +18,15 @@ Change.send = function(){
 		//Update Activelist AKA List.all
 		var array = [];
 		for (var i in player.activeList){
-			var bool = true;	
+			var needInit = true;	
 			var obj = List.all[i];
 			if(!obj){ delete player.activeList[i]; continue; }
 			
-			for(var j in obj.viewedBy){	if(j === player.id){bool = false;}}	//test if player is in viewedBy list of obj
+			for(var j in obj.viewedBy){	if(j === player.id){needInit = false;}}	//test if player is in viewedBy list of obj
 				
 			var id = obj.publicId || obj.id;
 			
-			if(bool){		//Need to Init
+			if(needInit){		//Need to Init
 				sa.i[id] = Change.send.init(obj);
 				obj.viewedBy[key] = player.id;		//Add so the next time it will update instead of init
 			} else {			//Only Update

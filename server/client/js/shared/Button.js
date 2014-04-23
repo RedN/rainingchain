@@ -2,13 +2,13 @@ Button = {};
 
 //Button
 Button.creation = function (key,data){
-	var list = server ? List.btn[key] : List.btn;
+	var list = SERVER ? List.btn[key] : List.btn;
 	data.key = key;
 	list.push(Tk.useTemplate(Button.template(),data));
 }
 
 Button.creation.optionList = function(key,option){
-	if(server){
+	if(SERVER){
 		var player = List.all[key];
 		option.x = player.mouseX;
 		option.y = player.mouseY,
@@ -16,7 +16,7 @@ Button.creation.optionList = function(key,option){
 		option.count = 2;
 		List.main[key].optionList = option;
 	}
-	if(!server){
+	if(!SERVER){
 		option = key;
 		option.x = Input.mouse.x;
 		option.y = Input.mouse.y;
@@ -45,21 +45,21 @@ Button.template = function(){
 }
 
 Button.test = function (key,x,y,side){	//called everytime the player clicks
-	var list = server ? List.btn[key] : List.btn;
+	var list = SERVER ? List.btn[key] : List.btn;
 	for(var i = list.length-1 ; i >= 0 ; i--){
 		if(!list[i][side]) continue;
 		if(!Collision.PtRect({"x":x,'y':y},list[i].rect)) continue;
 		
 		var opt = list[i][side];
 		if(opt.question){
-			var tmp = {server:server,func:opt.func,param:opt.param};
+			var tmp = {server:SERVER,func:opt.func,param:opt.param};
 			if(opt.question === true){	tmp.text = 'Are you sure?';	tmp.option = ['yes','no'];} 
 			else {	tmp.text = opt.question.text; tmp.option = opt.question.option;	}
 			Chat.question(key,tmp);
 			break;
 		}
 		
-		if(server) {
+		if(SERVER) {
 			applyFunc.key(key,opt.func,opt.param);
 			if(opt.help) List.main[key].help = opt.help;
 		} else {
@@ -75,24 +75,24 @@ Button.test = function (key,x,y,side){	//called everytime the player clicks
 
 Button.context = function (key){ 	//check every frame
 
-	var list = server ? List.btn[key] : List.btn;	
-	var x = server ? List.all[key].mouseX : Input.mouse.x;
-	var y = server ? List.all[key].mouseY : Input.mouse.y;
+	var list = SERVER ? List.btn[key] : List.btn;	
+	var x = SERVER ? List.all[key].mouseX : Input.mouse.x;
+	var y = SERVER ? List.all[key].mouseY : Input.mouse.y;
 		
 	for(var i = list.length-1 ; i >= 0  ; i--){
 		if(Collision.PtRect({"x":x,'y':y},list[i].rect)){
-			var tmp = {'server':server,'text':list[i].text,'textTop':list[i].textTop};
-			if(server) List.main[key].context = tmp; 
-			if(!server) main.clientContext = tmp; 
+			var tmp = {'server':SERVER,'text':list[i].text,'textTop':list[i].textTop};
+			if(SERVER) List.main[key].context = tmp; 
+			if(!SERVER) main.clientContext = tmp; 
 			return;
 		}	
 	}
-	if(server){ List.main[key].context = {'server':server,'text':''}; }
-	if(!server){ main.clientContext = {'server':server,'text':''}; }
+	if(SERVER){ List.main[key].context = {'server':SERVER,'text':''}; }
+	if(!SERVER){ main.clientContext = {'server':SERVER,'text':''}; }
 }
 
 Button.reset = function(key){	//called when player clicks. used to remove popup
-	if(server){	
+	if(SERVER){	
 		var m = List.main[key];
 		
 		if(m.optionList){
@@ -109,7 +109,7 @@ Button.reset = function(key){	//called when player clicks. used to remove popup
 			}
 		}
 	}
-	if(!server){
+	if(!SERVER){
 		if(!main.optionList || !main.optionList.count || main.optionList.count <= 0){ main.optionList = null;}
 		else {	main.optionList.count--; }
 	}

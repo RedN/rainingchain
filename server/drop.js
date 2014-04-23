@@ -69,6 +69,7 @@ Drop.creation = function(d){
 	drop.y += Math.randomML(drop.vx);
 	
 	List.drop[drop.id] = drop;
+	List.all[drop.id] = drop;
 	Map.enter(drop);
 }
 

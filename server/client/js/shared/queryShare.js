@@ -1,6 +1,6 @@
 //The client can make a query to the server database.
 //used when the client wants to draw something but doesnt have info about it
-if(server){
+if(SERVER){
 	
 	
 Db.query = function(d){
@@ -107,7 +107,7 @@ Db.query.quest.bonus = function(info){
 //##############################################
 //##############################################
 
-if(!server){
+if(!SERVER){
 
 
 Db.query = function(db,id){
@@ -208,17 +208,17 @@ Db.query.admin = function(socket,d){
 		
 		var info = eval(d.command);
 		var data = JSON.stringify(info);
-		permConsoleLog(info);
+		INFO(info);
 		socket.emit('testing', {'data':data} );				
 	} catch (err){
-		logError(err);
+		ERROR.err(err);
 		socket.emit('testing', 'failure');
 	}			
 }
 
 
 //Testing
-if(!server){
+if(!SERVER){
 	ts = function(command){socket.emit('testing', {'command':command});}
 	
 	tss = function(){
@@ -235,7 +235,7 @@ if(!server){
 		if(d && d.data){ 
 			try { 
 				ts.a = JSON.parse(d.data);
-				permConsoleLog(ts.a); } catch (err){ logError(err); }	}
+				INFO(ts.a); } catch (err){ ERROR.err(err); }	}
 	});
 }
 

@@ -7,7 +7,7 @@ Skill.addExp = function(key,skill,amount,bonus){
 	amount = typeof amount !== 'function' ? amount : amount(player.skill.lvl[skill],key);
 	player.skill.exp[skill] += amount * mod;		
 	Skill.updateLvl(key,skill);
-	LOG(2,key,'addExp',skill,amount);
+	Server.log(2,key,'addExp',skill,amount);
 }
 
 Skill.addExp.bulk = function(key,obj,bonus){
@@ -44,7 +44,7 @@ Skill.getLvlViaExp = function(exp){
 
 Skill.lvlUp = function(key,skill){
 	Chat.add(key,'You are level ' + List.all[key].skill.lvl[skill] + ' in ' + skill.capitalize() + '!');
-	LOG(0,key,'Skill.lvlUp',skill,List.all[key].skill.lvl[skill]);
+	Server.log(1,key,'Skill.lvlUp',skill,List.all[key].skill.lvl[skill]);
 }
 
 Skill.unlockableContent = function(key){

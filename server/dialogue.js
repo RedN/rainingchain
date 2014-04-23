@@ -12,7 +12,7 @@ Dialogue.start = function(key,d){
 	
 	if(dia.func) applyFunc.key(key,dia.func);	
 	
-	}catch(err){ logError(err);}
+	}catch(err){ ERROR.err(err);}
 }
 
 Dialogue.end = function(key){

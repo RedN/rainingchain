@@ -114,7 +114,7 @@ Chat.receive.question = function(pack){
 	pack.server = 1;
 	pack.client = 0;
 	
-	//Chat.question(0,{func:permConsoleLog,param:['1'],'server':0,'option':['yes','no']});
+	//Chat.question(0,{func:INFO,param:['1'],'server':0,'option':['yes','no']});
 	$( "#questionDiv" ).dialog( "open" );
 	$("#questionText")[0].innerHTML = pack.text;
 	

@@ -452,8 +452,8 @@ Draw.element = function(x,y,w,h,data,noover){
 	if(!noover && mouseOverRatio){
 		ctx = List.ctx['pop'];
 		var amount = data[mouseOverRatio];
-		if(amount < 1){ amount = round(data[mouseOverRatio]*100,0) + '%' }
-		else { amount = round(data[mouseOverRatio],0) }
+		if(amount < 1){ amount = Tk.round(data[mouseOverRatio]*100,0) + '%' }
+		else { amount = Tk.round(data[mouseOverRatio],0) }
 		
 		var text = mouseOverRatio.capitalize() + ': ' + amount;
 		var width = ctx.measureText(text).width;
@@ -479,8 +479,8 @@ Draw.convert.boost = function(boost){
 	var value = boost.value;
 	var rawValue = boost.value;
 	if(Math.abs(value) < 1){ 
-		value *= 100; value = round(value,2).toString() + '%';
-	} else { value = round(value,2)};
+		value *= 100; value = Tk.round(value,2).toString() + '%';
+	} else { value = Tk.round(value,2)};
 	
 	
 	var last = name[name.length-1];

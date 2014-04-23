@@ -10,7 +10,7 @@ reset pvp = bad
 */
 
 Server =  {
-	testing:!nodejitsu,		//will trigger special testing func
+	testing:!NODEJITSU,		//will trigger special testing func
 	frequence:{
 		save:Math.round(60*1000/40),
 		inactivity:10*60*1000,
@@ -22,7 +22,7 @@ Server =  {
 		active:1,	
 	},
 	ready:0,
-	maxPlayerAmount:nodejitsu ? 0 : 64,
+	maxPlayerAmount:NODEJITSU ? 0 : 64,
 	customMod:false,
 	report:false,
 	loginMessage:"Server is down. Come later.",
@@ -74,6 +74,41 @@ Server.mute = function(name){
 
 
 
+Server.log = function(lvl,key,type){	//only logs then, no display
+	/*
+	1:Very important
+	2:important (saved)
+	3:NOT really important (not saved but if had unlimited space, would save)
+	4:NOT important at all (wouldnt be saved ever)
+	*/
+	var act = List.all[key];
+	var username = act ? act.name : key;
+	
+	if(lvl > Server.log.level) return;
+	
+	var param = '';
+	for(var i = 3; i < arguments.length; i++)	param += arguments[i] + ' , ' ;
+	
+	Server.log.data.push({
+		time:Date.now(),
+		username:username,
+		type:type,
+		param:param,
+	});
+}
+Server.log.display = function(name){
+	if(!name){ INFO(Server.log.data); return; }
+		
+	for(var i in Server.log.data){
+		if(Server.log.data[i].username === name){
+			var date = new Date(Server.log.data[i].time).toLocaleString();
+			INFO(date + ': ' + Server.log.data[i].type + '\n  ---  ' + Server.log.data[i].param);
+		}
+	}
+	
+}
+Server.log.data = [];
+Server.log.level = 4;
 
 /*
 Server.ban = function(name){

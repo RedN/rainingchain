@@ -16,10 +16,7 @@ limit access for map in /map/ too
 
 quest visible
 
-ERROR() for error
-LOG() for tracking process
-s.ERROR for error in quest
-
+throw error instead of just bypassing !List.all[key]
 rename convention for enemy system
 
 ===PRE SDK===

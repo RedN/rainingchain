@@ -8,7 +8,7 @@ Actor.ability.remove = function(act,name){
 			ab[i] = null;
 		}
 	}
-	LOG(1,act.id,'removeAbility',name);
+	Server.log(1,act.id,'removeAbility',name);
 }
 
 Actor.ability.swap = function(act,name,position){
@@ -32,7 +32,7 @@ Actor.ability.add = function(act,name){
 	if(!Db.ability[name]) return;
 	Chat.add(act.id,"You have learnt a new ability: \"" + Db.ability[name].name + '".');
 	Actor.getAbilityList(act)[name] = 1;
-	LOG(1,act.id,'learnAbility',name);
+	Server.log(1,act.id,'learnAbility',name);
 }
 
 

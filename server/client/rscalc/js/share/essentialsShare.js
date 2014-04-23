@@ -136,7 +136,7 @@ stringToArray = function(string){
 
 //Round
 stringRound = function (num,decimals){
-	var num = round(num,decimals).toString();
+	var num = Tk.round(num,decimals).toString();
 	
 	var dot = num.indexOf('.');
 	if(dot == -1){ num += '.'; dot = num.length-1; }

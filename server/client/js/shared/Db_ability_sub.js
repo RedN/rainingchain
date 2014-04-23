@@ -1,4 +1,4 @@
-if(!server) Init.db.ability = function(){ Init.db.ability.mod();Init.db.ability.orb();};
+if(!SERVER) Init.db.ability = function(){ Init.db.ability.mod();Init.db.ability.orb();};
 
 Init.db.ability.mod = function(){	//needed by client
 	var a = Db.abilityMod = {};
@@ -15,7 +15,7 @@ Init.db.ability.mod = function(){	//needed by client
 		}
 	};	
 	
-	if(!server) return;
+	if(!SERVER) return;
 	for(var i in Db.abilityMod){
 	
 		Item.creation({

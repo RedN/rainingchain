@@ -111,10 +111,7 @@ Attack.creation = function(player,s,extra){
 	List.all[s.id] = s;
 	
 	if(s.type === 'strike'){ Attack.creation.strike(s);}
-	else if(s.type === 'bullet'){ Attack.creation.bullet(s);}
-	
-	Activelist.add(s);
-	
+	else if(s.type === 'bullet'){ Attack.creation.bullet(s);}	
 }; 
 
 Attack.creation.info = function(act,b){
@@ -209,6 +206,7 @@ Attack.creation.strike = function(s){
 	s.x = s.crX + s.middleX;
 	s.y = s.crY + s.middleY;
 	List.strike[s.id] = s;
+	Activelist.add(s);	//could use Map.enter instead
 	
 	Attack.creation.neverbullet(s);
 	return s;

@@ -2,9 +2,9 @@
 Change = {};
 
 Receive = Change.receive = function(data){
-	data = BISON.decode(data);
 try {
-	if(Receive.showData) permConsoleLog(JSON.stringify(data));  //for testing
+	data = BISON.decode(data);
+	if(Receive.showData) INFO(JSON.stringify(data));  //for testing
 	if(!data) return;
 	data = Receive.parse(data);
  
@@ -62,7 +62,7 @@ try {
 		b.y += Tk.sin(b.angle)*b.spd;	
 	}
 
-} catch (err){ logError(err) }
+} catch (err){ ERROR.err(err) }
 }
 
 socket.on('change', Receive);

@@ -71,7 +71,7 @@ Draw.tab.equip = function (){ ctxrestore();
 	ctx = List.ctx.stage;
 	
 	//Weapon
-	if(!server && typeof main.popupList.equip !== 'object') main.popupList.equip = 0;
+	if(!SERVER && typeof main.popupList.equip !== 'object') main.popupList.equip = 0;
 	for (var i = 0 ; i < Cst.equip.weapon.piece.length ; i++){
 		var numX = s.x + 10;
 		var numY = s.y + 7 + 5 + 45 * i;
@@ -277,7 +277,7 @@ Draw.tab.skill = function(){ ctxrestore();
 		var lvl = player.skill.lvl[sk];
 		var exp = player.skill.exp[sk];
 		var expMod = player.bonus.exp[sk];
-		expMod = expMod == 1 ? '' : '  *' + round(expMod,2)
+		expMod = expMod == 1 ? '' : '  *' + Tk.round(expMod,2)
 		
 		Draw.icon('skill.' + sk,ssx+5,ssy+1,20);
 		ctx.fillTextU(sk.capitalize(),ssx + 5 + 30,ssy+1);

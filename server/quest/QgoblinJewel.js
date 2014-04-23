@@ -25,7 +25,7 @@ talk ringo
 got		got[ITEMID]			=> received item
 kill 	kill[ENEMY CATVAR]	=> have killed (both bool and count)
 item 	item[ITEMID]		=> use item
-cs 		cs[INFO]			=> cutscene
+cs 		cs[CONTEXT]			=> cutscene
 talk	talk[WHO ACTION]	=> talk done
 */
 
@@ -46,7 +46,7 @@ q.event = {
 		},
 		firstSignIn:function(key){
 			s.teleport(key,'goblinLand','n1');
-			s.respawn(key,'goblinLand','n1');
+			s.setRespawn(key,'goblinLand','n1');
 		}
 	},	
 	signIn:function(key){
@@ -64,7 +64,7 @@ q.event = {
 		if(!s.get(key,'started')){ s.dialogue(key,'ringo','intro','first'); return; }
 		if(s.haveItem(key,'jewel')){ 
 			if(s.get(key,'killGoblinBoss')) s.dialogue(key,'ringo','intro','second-postJewel'); 
-			else s.chat(key,'QUEST BUG, please send bug report. You can reset quest via the Quest Tab.');
+			else s.chat(key,'bug, please send bug report. You can reset quest via the Quest Tab.');
 			return; 
 		}
 		if(!s.haveItem(key,'potion')){  s.dialogue(key,'ringo','intro','second-prePotion'); return; }
@@ -97,7 +97,7 @@ q.event = {
 		if(s.haveItem(key,'potion')){
 			s.chat(key,"You drank the potion and entered the camp."); 
 			s.teleport(key,'goblinCamp@','t3');
-			s.sprite(key,'orcMelee');
+			s.setSprite(key,'orcMelee');
 		}
 		else s.chat(key,"You don't want the goblins to be even more mad against human.");
 	},
@@ -107,14 +107,14 @@ q.event = {
 	teleInUnderground:function(key){
 		if(s.get(key,'killGoblin') > 5){
 			s.teleport(key,'goblinUnderground','t1');
-			s.respawn(key,'goblinUnderground','t1',true);
+			s.setRespawn(key,'goblinUnderground','t1',true);
 		} else s.chat(key,"You should kill more goblins first to make them really angry with orcs.");
 	},
 	getJewel:function(key){
 		return s.testItem(key,'jewel',1,true);
 	},
 	teleOutUnderground:function(key){
-		if(s.haveItem(key,'jewel')) teleport(key,'goblinCamp@','t2');
+		if(s.haveItem(key,'jewel')) s.teleport(key,'goblinCamp@','t2');
 		else s.chat(key,"You should get the jewel first.");
 	},
 	csTestBoss:function(key){
@@ -349,6 +349,7 @@ q.map.goblinUnderground = function(){
 	a.path = {}
 	a.variable = {}; 
 	a.load = function(spot){
+		/*
 		s.actor(spot.t1,"teleport","zone",{
 			angle:90,
 			teleport:q.event.teleOutUnderground,
@@ -359,7 +360,7 @@ q.map.goblinUnderground = function(){
 		s.actor(spot.q1,"system","chest",{
 			loot:q.event.getJewel
 		});
-		
+		*/
 	
 	} 
 	return m;
@@ -520,7 +521,7 @@ q.map.goblinCamp = function(){
 		s.collision(spot.q2,q.event.csTestBoss);	
 	}
 	a.playerLeave = function(key){
-		s.sprite(key,'mace');	
+		s.setSprite(key,'mace');	
 		s.set(key,'csInBoss',false);
 	}
 	
@@ -588,14 +589,14 @@ q.boss['test'] = function(){
 			s.bossAttack(b,'360fire',{'angle':b.angle});
 			b.noattack = 25;
 			var act = s.getAct(b.parent);
-			s.sprite(act,{'sizeMod':2});
+			s.setSprite(act,{'sizeMod':2});
 			s.boost(act,[	
 				{'stat':'globalDef','type':"*",'value':10,'time':250,'name':'b'},
 			]); 
 		},
 		transitionOut:function(b){
 			var act = s.getAct(b.parent);
-			s.sprite(act,{'sizeMod':0.75});
+			s.setSprite(act,{'sizeMod':0.75});
 		},
 		transitionTest:function(b){
 			return s.interval(250);

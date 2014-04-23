@@ -1,6 +1,6 @@
 
-//if not playerOnly : cant be boosted with equip/curse for non player
 Init.db.stat = function(){
+	//if not playerOnly : cant be boosted with equip/curse for non player
 	Db.stat = {
 	
 	//ATL-4	
@@ -9,7 +9,7 @@ Init.db.stat = function(){
 		'icon':'defensive.speed',
 		'name':'Max Speed',
 		'boost':{'base':12,'stat':['maxSpd'],'min':0,},
-		'description':"Movement Speed. If facing and moving at opposite direction, your Max Speed is reduced.",
+		'description':"Movement Speed.",
 		},
 	'acc':{
 		'icon':'defensive.speed',
@@ -22,7 +22,7 @@ Init.db.stat = function(){
 		'name':'Friction',
 		'boost':{'base':0.9,'stat':['friction'],'min':0,'max':1},
 		'playerOnly':1,
-		'description':"",
+		'description':"Movement Friction",
 		},
 	//}
 	
@@ -407,17 +407,17 @@ Init.db.stat = function(){
 		'playerOnly':1,
 		'description':"",
 		},
-	'exp-geology':{
-		'icon':'skill.geology',
+	'exp-mining':{
+		'icon':'skill.mining',
 		'name':'Geology Exp',
-		'boost':{'base':1,'stat':['bonus','exp','geology'],},
+		'boost':{'base':1,'stat':['bonus','exp','mining'],},
 		'playerOnly':1,
 		'description':"",
 		},
-	'exp-metallurgy':{
-		'icon':'skill.metallurgy',
-		'name':'Metallurgy Exp',
-		'boost':{'base':1,'stat':['bonus','exp','metallurgy'],},
+	'exp-woodcutting':{
+		'icon':'skill.woodcutting',
+		'name':'Woodcutting Exp',
+		'boost':{'base':1,'stat':['bonus','exp','woodcutting'],},
 		'playerOnly':1,
 		'description':"",
 		},	
@@ -970,23 +970,45 @@ Init.db.stat = function(){
 	
 	
 	for(var i in Db.stat){
-		Db.stat[i].description = Db.stat[i].description || Db.stat[i].name;
-		var s = Db.stat[i].boost;
+		var s = Db.stat[i];
+		s.description = s.description || s.name;
+		s = Tk.useTemplate(Init.db.stat.template(),s);
+		s.boost = Tk.useTemplate(Init.db.stat.template.boost(),s.boost);
+		s.boost.permMax = s.boost.max;
+		s.boost.permMin = s.boost.min;
+		s.boost.permBase = s.boost.base;
 		
-		s.name = {};
-		s.max = typeof s.max !== 'undefined' ? s.max : 100000;
-		s.permMax = s.max;
-		s.min = typeof s.min !== 'undefined' ? s.min : -100000;
-		s.permMin = s.min;
-		s.base = typeof s.base !== 'undefined' ? s.base : 0;
-		s.permBase = s.base;
-		
+		Db.stat[i] = s;
 	}
 	
 	Init.db.stat.bonus();
 	Init.db.stat.boost();
 	Init.db.stat.customBoost();
 }
+Init.db.stat.template = function(){
+	return {
+		icon:'summon.wolf',
+		name:'I am bugged',
+		boost:Init.db.stat.template.boost(),
+		playerOnly:0,	
+		description:"Affect the overall defence of your summons.",
+	}
+}
+Init.db.stat.template.boost = function(){
+	return {
+		stat:['bug'],
+		name:{},
+		base:0,
+		permBase:0,	
+		max:100000,
+		permMax:100000,
+		min:-100000,
+		permMin:-100000,
+		custom:0,
+	}
+}
+
+
 
 	
 Init.db.stat.bonus = function(){

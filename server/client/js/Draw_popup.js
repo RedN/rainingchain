@@ -81,7 +81,7 @@ Draw.popup.equip.top = function(s){
 	
 	ctx.setFont(15);
 	var string = 'Lv:' + s.equip.lvl;
-	if(!main.hideHUD.equipOrb) string += '  Orb: +' + round(s.equip.orb.upgrade.bonus*100-100,2) + '% | ' + s.equip.orb.upgrade.amount;
+	if(!main.hideHUD.equipOrb) string += '  Orb: +' + Tk.round(s.equip.orb.upgrade.bonus*100-100,2) + '% | ' + s.equip.orb.upgrade.amount;
 	ctx.fillText(string,s.x+50+5,s.y+28);
 	
 	//Draw Def/Dmg
@@ -90,8 +90,8 @@ Draw.popup.equip.top = function(s){
 	var bar = s.equip.category === 'armor' ? s.equip.def.ratio  : s.equip.dmg.ratio;
 	var num = s.equip.category === 'armor' ? s.equip.def.main :  s.equip.dmg.main;
 	num *= s.equip.orb.upgrade.bonus;
-	num = num < 1 ? (num < 0.1 ? round(num,2) : round(num,1) ) : round(num,0);
-	ctx.fillText(round(num,0),s.x+25,s.y+50);
+	num = num < 1 ? (num < 0.1 ? Tk.round(num,2) : Tk.round(num,1) ) : Tk.round(num,0);
+	ctx.fillText(Tk.round(num,0),s.x+25,s.y+50);
 	Draw.element(s.x+52,s.y+50,190,25,bar);
 	
 	
@@ -175,7 +175,7 @@ Draw.popup.plan.top = function(s){
 	ctx.fillStyle = 'white';
 	
 	ctx.setFont(15);
-	var str = 'Lv:' + s.equip.lvl + ', Rar.: ' + round(s.equip.rarity*100,0) + '%, Qual.:' + round(s.equip.quality*100,0) + '%';
+	var str = 'Lv:' + s.equip.lvl + ', Rar.: ' + Tk.round(s.equip.rarity*100,0) + '%, Qual.:' + Tk.round(s.equip.quality*100,0) + '%';
 	ctx.fillText(str,s.x+50+5,s.y+28);
 	
 	//Piece Type

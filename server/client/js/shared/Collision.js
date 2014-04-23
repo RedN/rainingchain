@@ -100,7 +100,7 @@ Collision.getBumperBox = function(player){
 }
 
 Collision.getMouse = function(key){
-	if(server){ return {x:List.all[key].mouseX,y:List.all[key].mouseY}  }
+	if(SERVER){ return {x:List.all[key].mouseX,y:List.all[key].mouseY}  }
 	else{ return {x:Input.mouse.x,y:Input.mouse.y} }
 }
 

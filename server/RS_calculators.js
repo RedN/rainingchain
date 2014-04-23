@@ -120,7 +120,7 @@ var stringToArray = function(string){
 
 //Round
 var stringRound = function (num,decimals){
-	var num = round(num,decimals).toString();
+	var num = Tk.round(num,decimals).toString();
 	
 	var dot = num.indexOf('.');
 	if(dot == -1){ num += '.'; dot = num.length-1; }
@@ -171,7 +171,6 @@ var updateItemDb = function (){
 			count++;
 		} else {
 			count = 0;
-			//permConsoleLog(JSON.stringify(itemDb));
 			clearInterval( interval );
 		}	
 	}, 5000);
@@ -182,7 +181,6 @@ var updatePrice = function (id){
 	str += id;
 	str += '.json';
 	
-	////permConsoleLog(str);
 	
 	request(str, function (e, res, body) {
 		try {
@@ -193,9 +191,7 @@ var updatePrice = function (id){
 		
 			for(var i in itemDb){ if(itemDb[i].id == id){ break; }}
 			itemDb[i].price = price;
-			////permConsoleLog(i,itemDb[i].price);
 		} catch (err) {
-			////permConsoleLog(err);			
 		}
 	});
 }

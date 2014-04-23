@@ -52,7 +52,7 @@ Quest.reward = function(key,id){
 	
 	var boost = Craft.boost(seed,q.reward.boost);
 	
-	Chat.add(key,"The quest reward is " + round(boost.value,4) + ' in ' + Db.stat[boost.stat].name + '.');
+	Chat.add(key,"The quest reward is " + Tk.round(boost.value,4) + ' in ' + Db.stat[boost.stat].name + '.');
 	
 	if(mq.reward === null || boost.value >= mq.reward.value){
 		Chat.add(key,"Congratulations! Your character grows stronger.");
@@ -104,7 +104,7 @@ Quest.complete = function(key,id){
 	
 	Quest.reward(key,id);
 	Quest.reset(key,id);
-	LOG(0,key,'Quest.complete',id);
+	Server.log(1,key,'Quest.complete',id);
 }
 
 Quest.reset = function(key,qid,abandon){

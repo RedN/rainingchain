@@ -236,7 +236,7 @@ Combat.collision.curse = function(act,info){
 		var boost = info.boost[i];
 		Actor.boost(act,{'stat':boost.stat,'type':boost.type,'value':boost.value,'time':boost.time,'name':'curse'}); 
 		
-		act.curseClient[boost.stat] = boost.type + round(boost.value,2);
+		act.curseClient[boost.stat] = boost.type + Tk.round(boost.value,2);
 	}
 }
 
@@ -376,7 +376,7 @@ Combat.targetIf.list = {
 			var hIf = typeof atk.damageIf === 'function' ? atk.damageIf : Combat.damageIf.list[atk.damageIf];
 			return hIf(List.all[def.summoned.father],atk);
 			
-		} catch(err) { logError(err); }
+		} catch(err) { ERROR.err(err); }
 	}),
 	'npc':(function(def,atk){ 
 		try {
@@ -386,7 +386,7 @@ Combat.targetIf.list = {
 			var hIf = typeof atk.damageIf === 'function' ? atk.damageIf : Combat.damageIf.list[atk.damageIf];
 			return hIf(List.all[def.summoned.father],atk);
 			
-		} catch(err) { logError(err); }
+		} catch(err) { ERROR.err(err); }
 	}),
 	'summoned':(function(def,atk){
 		try {
@@ -394,7 +394,7 @@ Combat.targetIf.list = {
 			var master = List.all[atk.summoned.father];
 			var hIf = typeof master.damageIf === 'function' ? master.damageIf : Combat.damageIf.list[master.damageIf];
 			return hIf(def,master);
-		} catch(err) { logError(err); } //quickfix
+		} catch(err) { ERROR.err(err); } //quickfix
 	}),
 	
 	'true':(function(def,atk){ return true }),

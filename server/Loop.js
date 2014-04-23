@@ -16,7 +16,7 @@ Loop = function(){
 	Change.send();
 	
 	Loop.logOut();
-	} catch(err){ logError(err); }
+	} catch(err){ ERROR.err(err); }
 }
 Loop.frame = 0; 
 
@@ -137,7 +137,7 @@ Activelist.test = function(act,obj){
 }
 
 
-Activelist.add = function(b){
+Activelist.add = function(b){		//set the viewedBy of b AND add b to activeList of surrounding actors
 	for(var i in List.map[b.map].list.actor){
 		var player = List.actor[i];
 		if(!player) continue;

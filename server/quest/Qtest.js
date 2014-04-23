@@ -17,8 +17,8 @@ q.event = {
 		s.addItem(key,'weapon');
 		Actor.equip(act,'QtestEnemy-weapon');
 		
-		act.abilityList = {'QtestEnemy-simple':1};
-		Actor.ability.swap(act,'QtestEnemy-simple',0);
+		//act.abilityList = {'QtestEnemy-simple':1};
+		//Actor.ability.swap(act,'QtestEnemy-simple',0);
 		
 		Test.removeEquipInventory(key);
 		

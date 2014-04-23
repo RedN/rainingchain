@@ -134,7 +134,7 @@ Actor.update.permBoost = function(act){
 		pb[i].base += pb[i].pp;
 		pb[i].base *= pb[i].xxx;
 		pb[i].base = Math.max(pb[i].base,pb[i].min);
-		pb[i].base = Math.min(pb[i].base,pb[i].max);	
+		pb[i].base = Math.min(pb[i].base,pb[i].max);
 	}
 	
 	Actor.update.boost(act,'all');

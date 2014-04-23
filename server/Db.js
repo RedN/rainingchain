@@ -4,7 +4,7 @@ node app.js : connect to local db
 node app.js 1 : connect mongohq
 node app.js x 1: deleteDb
 
-if using nodejitsu: 
+if using NODEJITSU: 
 if try login with rc: connect to public
 for real: need to emit info
 
@@ -84,7 +84,7 @@ Init.db = function(data){
 		for(var i in collections){
 			DB[collections[i]].remove();
 		}
-		permConsoleLog('DELETED EVERYTHING IN DATABASE!');
+		INFO('DELETED EVERYTHING IN DATABASE!');
 	}
 
 	//Clear Db of useless info. ex: weapon dropped by player
@@ -103,7 +103,7 @@ Init.db = function(data){
 					for(var j in act[i].equip) bigList[act[i].equip[j]] = 1;
 				}
 			
-				permConsoleLog('list of used equip:\n',Object.keys(bigList));
+				INFO('list of used equip:\n',Object.keys(bigList));
 				
 				//fill equipList
 				var equipList = {};	//list of all equip
@@ -111,7 +111,7 @@ Init.db = function(data){
 					for(var i in res)	equipList[res[i].id] = 1;
 					for(var i in bigList)	delete equipList[i];
 					
-					permConsoleLog(Object.keys(equipList).length + 'unused equip\n',Object.keys(equipList));
+					INFO(Object.keys(equipList).length + 'unused equip\n',Object.keys(equipList));
 					for(var i in equipList) exports.remove('equip',{'id':i});
 				});
 			});
@@ -151,8 +151,7 @@ Init.email = function(data){
 var dbVerify = function(){
 	var e = (new Error).stack;
 	if(e.have("\\quest\\") || e.have("\\map\\")){
-		permConsoleLog(e);
-		permConsoleLog("MAJOR ERROR. DB ACCESS REFUSED");
+		ERROR(1,"UNAUTHORIZED DB ACCESS");
 		return false;
 	}
 	return true;
