@@ -96,16 +96,27 @@ Draw.sprite = function (act){
 	var sizeMod = spriteFromDb.size * spriteServer.sizeMod;
 	
 	ctx.globalAlpha = spriteServer.alpha;
+	var posX = Cst.WIDTH2-animFromDb.sizeX/2*sizeMod + act.x-player.x;
+	var posY = Cst.HEIGHT2-animFromDb.sizeY/2*sizeMod + act.y-player.y;
 	ctx.drawImage(image, 
-		startX,
-		startY,
-		animFromDb.sizeX,
-		animFromDb.sizeY,
-		Cst.WIDTH2-animFromDb.sizeX/2*sizeMod + act.x-player.x,
-		Cst.HEIGHT2-animFromDb.sizeY/2*sizeMod + act.y-player.y,
-		animFromDb.sizeX * sizeMod,
-		animFromDb.sizeY * sizeMod);
+		startX,startY,
+		animFromDb.sizeX,animFromDb.sizeY,
+		posX,posY,
+		animFromDb.sizeX * sizeMod,animFromDb.sizeY * sizeMod
+	);
 	ctx.globalAlpha = 1;
+	
+	if(act.context && act !== player && act.hitBox){
+		var x = Cst.WIDTH2 + act.x - player.x;
+		var y = Cst.HEIGHT2 + act.y - player.y;
+	
+		Button.creation(0,{
+			rect:Collision.getHitBox({x:x,y:y,hitBox:act.hitBox}),
+			text:act.context,			
+			textTop:1,
+		});	
+	}
+	
 }
 
 Draw.drop = function(){
@@ -117,7 +128,7 @@ Draw.drop = function(){
 		var numX = Cst.WIDTH2 + drop.x - player.x;
 		var numY = Cst.HEIGHT2 + drop.y - player.y;
 		
-		Draw.item(drop.item,numX,numY);
+		Draw.item(drop.item,numX,numY,32,drop.context);	
 	}
 }
 

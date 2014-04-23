@@ -391,33 +391,31 @@ Draw.icon = function(info,x,y,size,text){
 }
 
 
-Draw.item = function(info,x,y,size){
+Draw.item = function(info,x,y,size,cb){
 	size = size || 32;
 	info = typeof info === 'string' ? [info,1] : info;
 	
-	Draw.icon(info[0],x,y,size);
+	Draw.icon(info[0],x,y,size,cb);
 	var amount = info[1];
 	
-	if(amount > 1){
-		if(amount >= 100000){
-			amount = Math.floor(amount/1000);
-			if(amount >= 10000){
-				amount = Math.floor(amount/1000);
-				amount = amount + "M";} 
-			else { amount = amount + "K";}
-		}
-			
-		ctx.globalAlpha = 0.8;
-		ctx.fillStyle = "black";
-		ctx.strokeStyle = "white";
-		ctx.roundRect(x-2,y+size-2,size+4,15);
-		ctx.globalAlpha = 1;
-		
-				
-		ctx.fillStyle = "yellow";
-		ctx.setFont(size/32*13);
-		ctx.fillText(amount,x,y+size-2);
+	if(amount === 1) return;
+	
+	if(amount >= 100000){
+		amount = Math.floor(amount/1000);
+		if(amount >= 10000)	amount = Math.floor(amount/1000) + "M";
+		else amount = amount + "K";
 	}
+		
+	ctx.globalAlpha = 0.8;
+	ctx.fillStyle = "black";
+	ctx.strokeStyle = "white";
+	ctx.roundRect(x-2,y+size-2,size+4,15);
+	ctx.globalAlpha = 1;
+	
+			
+	ctx.fillStyle = "yellow";
+	ctx.setFont(size/32*13);
+	ctx.fillText(amount,x,y+size-2);
 	
 }
 
@@ -522,7 +520,7 @@ Draw.gradientRG = function(n){
 
 Draw.context = function (){ ctxrestore();
 	var text = main.context.text || main.clientContext.text || main.permContext.text;
-	var top = main.context.textTop;
+	var top = main.context.textTop || main.clientContext.textTop;
 	var hc = html.context.div;
 	
 	if(!hc.innerHTML || hc.innerHTML !== text){

@@ -175,6 +175,7 @@ Change.send.init.actor = function(act){	//For Init
 	draw.maxSpd = Math.round(act.maxSpd);
 	draw.type = act.type;
 	draw.combat = act.combat;
+	draw.context = act.context;
 	if(act.minimapIcon){ draw.minimapIcon = act.minimapIcon; }
 	return draw;
 }
@@ -186,6 +187,7 @@ Change.send.init.drop = function(drop){
 	draw.id = drop.publicId;
 	draw.type = drop.type;
 	draw.item = Db.item[drop.item].icon;
+	draw.context = Db.item[drop.item].name;
 	
 	return draw;
 }
@@ -235,7 +237,6 @@ Change.send.convert.itemlist = function(inv){
 	return draw;
 }
 
-
 Change.send.convert.windowList = function(data){
 	if(data.trade)	data.trade = Change.send.convert.windowList.trade(Tk.deepClone(data.trade));
 	return data;
@@ -256,6 +257,7 @@ Change.send.convert.ability = function(ab,act){
 	}
 	return tmp;
 }
+
 Change.send.convert.abilityList = function(ab,act){
 	return ab[act.combatContext || 'regular'];
 }

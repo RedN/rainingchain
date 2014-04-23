@@ -16,17 +16,14 @@ Dialogue.start = function(key,d){
 }
 
 Dialogue.end = function(key){
-	List.main[key].dialogue = '';
+	List.main[key].dialogue = null;
 }
 
 Dialogue.option = function(key,option){
 	if(option.func)	applyFunc.key(key,option.func,option.param);
 	
-	if(option.next){
-		Dialogue.start(key,option.next);
-	} else {
-		List.main[key].dialogue = '';
-	}
+	if(option.next)	Dialogue.start(key,option.next);
+	else Dialogue.end(key);
 }
 
 Init.db.dialogue = function(){

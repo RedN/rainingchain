@@ -3,9 +3,9 @@ ERROR = function(lvl,text){
 	//1: fatal, reset server || 2: shouldnt happen || 3: warn, somewhat possible
 	if(lvl === undefined) lvl = 3;
 	
-	var str = 'Error Level: ' + lvl + '\n';
-	for(var i = 1; i < arguments.length; i++)	str += ' ---- ' + arguments[i] + '\n';
-	str += ' #### \n';
+	var str = '###################################\n';
+	'Error Level ' + lvl + ': \n';
+	for(var i = 1; i < arguments.length; i++)	str += ' -- ' + arguments[i] + '\n';
 	str += new Error().stack;
 	INFO(str);
 }

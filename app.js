@@ -67,7 +67,6 @@ require(serverPath + 'drop');
 require(serverPath + 'Skill');
 require(serverPath + 'Test');
 require(serverPath + 'performance');
-require(serverPath + 'Draw');
 
 require(serverPath + 'Db_enemy');
 require(serverPath + 'Db_ability');

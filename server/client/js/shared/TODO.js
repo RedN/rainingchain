@@ -19,6 +19,14 @@ quest visible
 throw error instead of just bypassing !List.all[key]
 rename convention for enemy system
 
+
+server: dont draw unless click. sends context to client
+
+rightclick drop not working
+can pick drop any distance
+weird click priority for optionlist on npc
+top context for npc not working
+
 ===PRE SDK===
 transform not be overwrite if change equip
 new sprite change system: sprite.normal and sprite.custom

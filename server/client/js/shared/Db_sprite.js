@@ -348,7 +348,7 @@ Sprite.creation = function(act,info){
 	info.initAnim = info.anim;
 	
 	act.sprite = Tk.useTemplate(Sprite.template(),info);
-	if(SERVER)	Sprite.updateBumper(act);
+	Sprite.updateBumper(act);
 }
 
 Sprite.creation.model = function(sp){
@@ -357,20 +357,18 @@ Sprite.creation.model = function(sp){
 	
 	for(var j in sp.anim)	sp.anim[j] = Tk.useTemplate(Init.db.sprite.template.anim(),sp.anim[j]);
 
-	if(SERVER){
-		//Prepare the bumperbox and hitbox of sprites       //hitbox: used for dmg collisions       //bumperbox: used for map collisions
-		sp.bumperBox = [];
-		sp.bumperBox[0] = { "x":sp.preBumperBox[1]*sp.size,"y":(sp.preBumperBox[2]+sp.preBumperBox[3])/2*sp.size };
-		sp.bumperBox[1] = { "x":(sp.preBumperBox[0]+sp.preBumperBox[1])/2*sp.size,"y":sp.preBumperBox[3]*sp.size };
-		sp.bumperBox[2] = { "x":sp.preBumperBox[0]*sp.size,"y":(sp.preBumperBox[2]+sp.preBumperBox[3])/2*sp.size };
-		sp.bumperBox[3] = { "x":(sp.preBumperBox[0]+sp.preBumperBox[1])/2*sp.size,"y":sp.preBumperBox[2]*sp.size };
+	//Prepare the bumperbox and hitbox of sprites       //hitbox: used for dmg collisions       //bumperbox: used for map collisions
+	sp.bumperBox = [];
+	sp.bumperBox[0] = { "x":sp.preBumperBox[1]*sp.size,"y":(sp.preBumperBox[2]+sp.preBumperBox[3])/2*sp.size };
+	sp.bumperBox[1] = { "x":(sp.preBumperBox[0]+sp.preBumperBox[1])/2*sp.size,"y":sp.preBumperBox[3]*sp.size };
+	sp.bumperBox[2] = { "x":sp.preBumperBox[0]*sp.size,"y":(sp.preBumperBox[2]+sp.preBumperBox[3])/2*sp.size };
+	sp.bumperBox[3] = { "x":(sp.preBumperBox[0]+sp.preBumperBox[1])/2*sp.size,"y":sp.preBumperBox[2]*sp.size };
 
-		sp.hitBox = []; 
-		sp.hitBox[0] = { "x":sp.preHitBox[1]*sp.size,"y":(sp.preHitBox[2]-sp.preHitBox[3])/2*sp.size };
-		sp.hitBox[1] = { "x":(sp.preHitBox[0]-sp.preHitBox[1])/2*sp.size,"y":sp.preHitBox[3]*sp.size };
-		sp.hitBox[2] = { "x":sp.preHitBox[0]*sp.size,"y":(sp.preHitBox[2]-sp.preHitBox[3])/2*sp.size };
-		sp.hitBox[3] = { "x":(sp.preHitBox[0]-sp.preHitBox[1])/2*sp.size,"y":sp.preHitBox[2]*sp.size };
-    }
+	sp.hitBox = []; 
+	sp.hitBox[0] = { "x":sp.preHitBox[1]*sp.size,"y":(sp.preHitBox[2]-sp.preHitBox[3])/2*sp.size };
+	sp.hitBox[1] = { "x":(sp.preHitBox[0]-sp.preHitBox[1])/2*sp.size,"y":sp.preHitBox[3]*sp.size };
+	sp.hitBox[2] = { "x":sp.preHitBox[0]*sp.size,"y":(sp.preHitBox[2]-sp.preHitBox[3])/2*sp.size };
+	sp.hitBox[3] = { "x":(sp.preHitBox[0]-sp.preHitBox[1])/2*sp.size,"y":sp.preHitBox[2]*sp.size };
     
     if(!SERVER){
 		sp.src = 'img/sprite/' + sp.src
@@ -414,19 +412,19 @@ Sprite.change = function(act,info){
 	
 }
 
-Sprite.updateBumper = function(player){		//server only
+Sprite.updateBumper = function(act){		//server only
 	//Set the Sprite Bumper Box to fit the sizeMod
-	var dsp = Db.sprite[player.sprite.name];
+	var dsp = Db.sprite[act.sprite.name];
 	if(!dsp.hitBox) return;	//Attack Dont
 	
-	player.hitBox = Tk.deepClone(dsp.hitBox);
-	player.bumperBox = Tk.deepClone(dsp.bumperBox);	
+	act.hitBox = Tk.deepClone(dsp.hitBox);
+	act.bumperBox = Tk.deepClone(dsp.bumperBox);	
 	
-	for(var i = 0 ; i < player.hitBox.length ; i++){
-		player.hitBox[i].x *= player.sprite.sizeMod;
-		player.hitBox[i].y *= player.sprite.sizeMod;
-		player.bumperBox[i].x *= player.sprite.sizeMod;
-		player.bumperBox[i].y *= player.sprite.sizeMod;	
+	for(var i = 0 ; i < act.hitBox.length ; i++){
+		act.hitBox[i].x *= act.sprite.sizeMod;
+		act.hitBox[i].y *= act.sprite.sizeMod;
+		act.bumperBox[i].x *= act.sprite.sizeMod;
+		act.bumperBox[i].y *= act.sprite.sizeMod;	
 	}
 }
 

@@ -43,7 +43,6 @@ Actor.loop = function(act){
 	}
 	if(act.type === 'player'){
 		if(interval(3)) Actor.loop.fall(act);						//test if fall
-		if(interval(2)) Draw.loop(act.id);     						//draw everything and add button
 		if(interval(25)) Actor.loop.friendList(act);   				//check if any change in friend list
 		if(interval(5)) Actor.loop.trade(act); ;    
 		if(interval(5))	Actor.loop.dialogue(act); 

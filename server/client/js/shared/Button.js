@@ -45,7 +45,9 @@ Button.template = function(){
 }
 
 Button.test = function (key,x,y,side){	//called everytime the player clicks
+	if(SERVER) Button.updateList(key);
 	var list = SERVER ? List.btn[key] : List.btn;
+	
 	for(var i = list.length-1 ; i >= 0 ; i--){
 		if(!list[i][side]) continue;
 		if(!Collision.PtRect({"x":x,'y':y},list[i].rect)) continue;
@@ -115,6 +117,50 @@ Button.reset = function(key){	//called when player clicks. used to remove popup
 	}
 }
 
+Button.updateList = function (key){	//server
+	List.btn[key] = [];
+	Button.updateList.drop(key);
+	Button.updateList.actor(key);	
+}
+
+Button.updateList.actor = function (key){
+	var player = List.all[key];
+	for(var i in player.activeList){
+		var act = List.actor[i];
+		if(!act || act.dead || i === key || !act.hitBox) continue;
+			
+		var x = Cst.WIDTH2 + act.x - player.x;
+		var y = Cst.HEIGHT2 + act.y - player.y;
+		
+		var info = {
+			"rect":Collision.getHitBox({x:x,y:y,hitBox:act.hitBox}),
+		};
+		
+		if(act.optionList && !act.combat){
+			info['right'] = {'func':'Button.creation.optionList','param':act.optionList};
+		}
+		for(var i in act.onclick){
+			info[i] = {'func':act.onclick[i].func,'param':act.onclick[i].param};
+		}
+		Button.creation(key,info);
+	}		
+}	
+	
+Button.updateList.drop = function(key){
+	var act = List.actor[key];
+	for(var i in act.activeList){
+		var drop = List.drop[i];
+		if(!drop){ continue; }
+		var numX = Cst.WIDTH2 + drop.x - List.actor[key].x;
+		var numY = Cst.HEIGHT2 + drop.y - List.actor[key].y;
+		
+		Button.creation(key,{
+			"rect":[numX,numX+32,numY,numY+32],
+			"left":{"func":'Actor.click.drop',"param":[i]},
+			'right':{'func':'Actor.click.drop.rightClick','param':[{x:drop.x,y:drop.y}]},
+		});	
+	}
+}
 
 
 
