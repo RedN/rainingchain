@@ -8,7 +8,7 @@
 	var array = {'sell':[1,2,3],'buy':[1,2,3]};
 	for(var i in array){
 		for(var j in array[i]){
-			IMG[i+array[i][j]] = '<img title="Warning: Some items may be hard to ' + i + '." src="/img/' + i+array[i][j] + '.png' + '" alt="" height=' + ICON/1.2 + ' width=' + ICON/1.2 + '></img>';
+			IMG[i+array[i][j]] = '<img title="Warning: Some items may be hard to ' + i + '." src="/rscalc/img/' + i+array[i][j] + '.png' + '" alt="" height=' + ICON/1.2 + ' width=' + ICON/1.2 + '></img>';
 		}
 	}
 
@@ -45,6 +45,12 @@ function initAll(){
 	initBoostInput();	
 	methodList = initMethodDb();
 	update();
+	
+	
+	//quickfix image
+	for(var i in  IMG) IMG[i] = '';
+	
+	
 }
 
 function initBoostInput(){
@@ -136,10 +142,10 @@ function initItem(i,data){
 	
 	GEP[i] = data.price;
 	
-	if(data.price == 0){
-		IMG[i] = '<img src="/img/items/' + data.id + '.png" alt=" =/ "  onerror="imgError(this);" itemId="' + data.id + '"height=' + ICON + ' width=' + ICON + '>';
+	if(data.price == 0){	//quickfix image
+		IMG[i] = '';//'<img src="/img/items/' + data.id + '.png" alt=" =/ "  onerror="imgError(this);" itemId="' + data.id + '"height=' + ICON + ' width=' + ICON + '>';
 	} else {
-		IMG[i] = '<img src="http://services.runescape.com/m=itemdb_rs/4213_obj_sprite.gif?id=' + data.id + '" itemId="' + data.id + '" alt=" =/ " onerror="imgError(this);" height=' + ICON + ' width=' + ICON + '>';
+		IMG[i] = '';//'<img src="http://services.runescape.com/m=itemdb_rs/4213_obj_sprite.gif?id=' + data.id + '" itemId="' + data.id + '" alt=" =/ " onerror="imgError(this);" height=' + ICON + ' width=' + ICON + '>';
 	}
 	itemDb[i].image = IMG[i];
 }
@@ -152,6 +158,7 @@ updatePrice((function(){ initCrafting(); initAll();}));
 
 
 function imgError(image) {
+	return;	//quickfix image
 	if(image.errorCount === undefined){ image.errorCount = 0; }
 	image.errorCount++;
 	

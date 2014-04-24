@@ -74,6 +74,7 @@
 		<script src="/js/main.js"></script>
 		<script src="/js/Map.js"></script>
 		<script src="/js/shared/queryShare.js"></script>
+		<script src="/js/shared/ts.js"></script>
 	
 		<div id="startDiv">
 			<a href="http://rainingchain.com/rs">Runescape Calculators</a>
@@ -209,7 +210,12 @@
 				<span id="warningText"></span></p>
 			</div>
 		</div>
-	
+		
+		<!-- ts -->
+		<div id="tsDiv" style="visibility:hidden">
+			<form id='tsForm'><input id="tsInput" type="text" size="100" style="font-size: 30px;"></form>		
+		</div>
+		
 		<!-- Dialogue Box from Jquery -->
 		<div id="help" title="Raining Chain Documentation"></div>
 		<div id="questionDiv" title="Server Question">
@@ -270,6 +276,11 @@
 		
 		$('#chatForm').submit(function(e) {
 			Chat.send();
+			e.preventDefault();
+		});
+		$('#tsForm').submit(function(e) {
+			ts($('#tsInput')[0].value);
+			$('#tsInput')[0].value = '';
 			e.preventDefault();
 		});
 		$("#lg-username")[0].value = localStorage.getItem('username') || $("#lg-username")[0].value;

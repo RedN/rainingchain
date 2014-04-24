@@ -26,6 +26,7 @@ Dialogue.option = function(key,option){
 	else Dialogue.end(key);
 }
 
+Db.dialogue = {};
 Init.db.dialogue = function(){
 	for(var i in Db.dialogue){
 		var group = Db.dialogue[i];

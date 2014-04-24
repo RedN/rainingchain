@@ -12,10 +12,10 @@ reset pvp = bad
 Server =  {
 	testing:!NODEJITSU,		//will trigger special testing func
 	frequence:{
-		save:Math.round(60*1000/40),
-		inactivity:10*60*1000,
-		disconnect:6*60*60*1000,
-		db:60*1000,
+		save:Math.round(60*1000/40),	//save player
+		inactivity:10*60*1000,			//quit if no input
+		disconnect:6*60*60*1000,		//quit
+		db:60*1000,						//refresh db link
 	},	
 	timeLimit:{
 		perWeek:24*60*60*1000,
@@ -23,8 +23,8 @@ Server =  {
 	},
 	ready:0,
 	maxPlayerAmount:NODEJITSU ? 0 : 64,
-	customMod:false,
-	report:false,
+	customMod:false,					//accept customMod
+	report:false,						//accept report
 	loginMessage:"Server is down. Come later.",
 }
 
@@ -87,7 +87,7 @@ Server.log = function(lvl,key,type){	//only logs then, no display
 	if(lvl > Server.log.level) return;
 	
 	var param = '';
-	for(var i = 3; i < arguments.length; i++)	param += arguments[i] + ' , ' ;
+	for(var i = 3; i < arguments.length; i++)	param += arguments[i] + ', ' ;
 	
 	Server.log.data.push({
 		time:Date.now(),

@@ -91,15 +91,18 @@ Loop.logOut = function(){
 	//Check inactivity of players 
 	for(var i in List.socket){
 		var socket = List.socket[i];
-		socket.timer += 40;		
+		socket.timer += 40;		//gets reset when input
 		socket.globalTimer += 40;		
 		if((socket.timer >= Server.frequence.inactivity || socket.globalTimer >= Server.frequence.disconnect || socket.toRemove) && !socket.beingRemoved){
 			Sign.off(i,'Disconnected due to inactivity.');
 		}
 		if(socket.removed)	Sign.off.remove(i);
 	}
-	for(var i in List.main)	if(!List.socket[i]){
-		Sign.off.remove.safe(i);
+	for(var i in List.main){
+		if(!List.socket[i]){
+			ERROR(2,'socket disconnect but main not removed');
+			Sign.off.remove.safe(i);
+		}
 	}
 }
 
@@ -108,11 +111,9 @@ Loop.team = function(){
 	if(!Loop.interval(50)) return;
 	List.team = {};
 	for(var i in List.main){
-		if(List.actor[i]){
-			var team = List.actor[i].team;
-			List.team[team] = List.team[team] || {};
-			List.team[team][i] = i;
-		}
+		var team = List.actor[i].team;
+		List.team[team] = List.team[team] || {};
+		List.team[team][i] = i;
 	}
 
 }
@@ -134,11 +135,10 @@ Activelist.test = function(act,obj){
 	return Collision.PtRect(obj,rect);
 }
 
-
 Activelist.add = function(b){		//set the viewedBy of b AND add b to activeList of surrounding actors
 	for(var i in List.map[b.map].list.actor){
 		var player = List.actor[i];
-		if(!player) continue;
+		if(!player){ ERROR(2,'player dont exist'); continue; }
 		
 		if(Activelist.test(player,b)){ 
 			player.activeList[b.id] = b.id;
@@ -150,9 +150,9 @@ Activelist.add = function(b){		//set the viewedBy of b AND add b to activeList o
 }
 
 Activelist.remove = function(b){
-	if(!b) return;
+	if(!b){ ERROR(2,'actor dont exist'); return; }
 	for(var i in b.viewedBy){
-		if(!List.all[i]) continue;	//quick fix
+		if(!List.all[i]){ ERROR(2,'actor dont exist'); continue; }
 		if(List.all[i].removeList) List.all[i].removeList.push(b.publicId || b.id);
         delete List.all[i].activeList[b.id];
 	}
@@ -160,7 +160,7 @@ Activelist.remove = function(b){
 
 removeAny = function(act){
 	if(typeof act === 'string') act = List.all[act];
-	if(!act) return;
+	if(!act) { ERROR(2,'actor dont exist'); return; }
 	if(act.type === 'bullet') Bullet.remove(act);
 	else if(act.type === 'npc') Actor.remove(act);
 	else if(act.type === 'player') Sign.off(act.id);

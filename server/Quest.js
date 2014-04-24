@@ -1,8 +1,6 @@
 Quest.challenge = {};
-Quest.challenge.toggle = function(key,qid,bid){
-	//when a player click on a quest bonus
+Quest.challenge.toggle = function(key,qid,bid){	//when a player click on a quest bonus
 	var mq = List.main[key].quest[qid];
-	
 	mq.challenge[bid] = !mq.challenge[bid];
 	
 	if(mq.challenge[bid]){
@@ -37,8 +35,7 @@ Quest.challenge.update = function(key,qid){
 	mq.bonus.challenge = mod;
 }
 
-Quest.reward = function(key,id){
-	//roll the perm stat bonus and check if last one was better
+Quest.reward = function(key,id){	//roll the perm stat bonus and check if last one was better	
 	var mq = List.main[key].quest[id];
 	var q = Db.quest[id];
 	
@@ -119,7 +116,6 @@ Quest.reset = function(key,qid,abandon){
 	var newmq = Main.template.quest[qid]();
 	for(var i in tmp) newmq[i] = tmp[i];
 	
-	
 	for(var i in Db.quest[qid].item){
 		Itemlist.remove(main.invList,qid + '-' + i, 10000);
 		Itemlist.remove(main.bankList,qid + '-' + i, 10000);
@@ -128,7 +124,7 @@ Quest.reset = function(key,qid,abandon){
 	
 }
 
-Quest.orb = function(key,quest,amount){
+Quest.orb = function(key,quest,amount){	//when using orb on quest
 	var mq = List.main[key].quest[quest];
 	mq.orbAmount += amount;
 	mq.bonus.orb = Craft.orb.upgrade.formula(mq.orbAmount);

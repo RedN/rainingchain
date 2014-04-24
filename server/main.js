@@ -1,34 +1,17 @@
 var db = require('./db');
 
 Db = {};
-Db.dialogue = {};
-
-
-List = {
-	all:{},		//EVERYTHING (player id refers to actor)
-	actor:{},	//all mortals (player,enemy)
-	bullet:{},	//all bullet
-	strike:{},	//all strike
-	group:{},	//all enemy group
-	drop:{},	//all drop
-	map:{},		//all animation
-	main:{},	//all List.main of player. (player id) List.main[id].something on server => window.something on client
-	map:{},		//all maps including instance 
-	socket:{},	//all socket (player id),
-	nameToKey:{},	//used to convert a player name into the player key
-	btn:{},		//all buttons
-	map:{},		//all maps
-};
+List = {all:{},actor:{},bullet:{},strike:{},group:{},drop:{},map:{},main:{},socket:{},nameToKey:{},btn:{}};
 
 
 
 //Sync DB and Server when Server starts
 Init.server = function (){
-	Init.db.item(function(){
 	Init.db.equip(function(){
 	Init.db.ability(function(){
 	Init.db.plan(function(){
    
+		Init.db.item();
 		Init.db.customBoost();
 		Init.db.stat();
 		Init.db.material();
@@ -47,22 +30,20 @@ Init.server = function (){
 		
 		Init.db.npc();
 		Init.db.boss();
-				
 		
 		Init.db.dialogue();
-		//for(var i in Db.map)	Map.creation(i);
+		Init.db.clan();
 		
 		Init.db.passive(function(){
 			Init.cycle();
-			Init.db.clan();
+			
 			Test.serverStart();
 			setInterval(Loop,40);
 			
 			Server.ready = 1;
-						
 	
 		});
-	})})})});
+	})})});
 	
 	db.update('account',{},{'$set':{online:0}},{multi:true},function(err, results) { if(err) throw err });   //set all players offline
 }

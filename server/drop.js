@@ -92,10 +92,9 @@ Drop.template = function(){
 }
 
 Drop.remove = function(drop){
-	Activelist.remove(drop);
+	Map.leave(drop);
 	delete List.all[drop.id];
 	delete List.drop[drop.id];
-	Map.leave(drop);
 }
 
 

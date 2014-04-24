@@ -47,5 +47,4 @@ Performance.bandwidth.display = function(){
 	}
 }
 
-//3500 in 1 min
 

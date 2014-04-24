@@ -8,7 +8,7 @@ var innerFunction = function (func,param){
 }
 
 //Copy
-Tk = {};
+var Tk = {};
 Tk.deepClone = function(info){
 	if(typeof info == 'object'){
 		return JSON.parse(Tk.stringify(info));
@@ -132,12 +132,10 @@ var stringRound = function (num,decimals){
 	return num;
 }
 
-var round = function (num,decimals){
+Tk.round = function (num,decimals){
 	return Math.round(num*Math.pow(10,decimals))/Math.pow(10,decimals);
 }
 
-
-Tk = {};
 Tk.formatNum = function(num){
 	 return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }

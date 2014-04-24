@@ -242,8 +242,6 @@ Attack.creation.neverstrike = function(b){
 
 Bullet = {};
 Bullet.remove = function(b){
-	Activelist.remove(b);
-	
 	Map.leave(b);
 	delete List.bullet[b.id];
 	delete List.all[b.id];

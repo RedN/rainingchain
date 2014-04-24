@@ -21,7 +21,7 @@ Init.db.sfx = function(){
 		s.delay = s.delay || 0;
 			
 		s.list = [];
-		for(var j = 0 ; j < 3 ; j++){	
+		for(var j = 0 ; j < 3 ; j++){	//cant only use 1 copy otherwise impossible to play 2 times same sfx same time	
 			var a = new Audio();
 			a.src = s.src;
 			s.list.push(a);
@@ -36,6 +36,7 @@ Sfx.play = function(sfx,volume){
 	var vol = sfx.volume || volume || 1;
 	vol *= Db.sfx[id].volume;
 	vol *= main.pref.volumeSfx/100 * main.pref.volumeMaster/100;
+	if(vol === 0) return;
 	
 	for(var i in Db.sfx[id].list){
 		if(Db.sfx[id].list[i].ended || !Db.sfx[id].list[i].currentTime){
@@ -47,8 +48,8 @@ Sfx.play = function(sfx,volume){
 	}
 }
 
-Sfx.creation = function(sfx){		//used by anim
-	var s = Tk.useTemplate(Sfx.template(),sfx);
+Sfx.creation = function(s){		//used by anim
+	s = Tk.useTemplate(Sfx.template(),s);
 	s.id = Math.randomId();
 	s.volume *= Db.sfx[s.name].volume;
 	s.delay += Db.sfx[s.name].delay;
@@ -58,7 +59,7 @@ Sfx.creation = function(sfx){		//used by anim
 	List.sfx[s.id] = s;
 }
 
-Sfx.template = function(){
+Sfx.template = function(){	//template for List.sfx. (not Db.sfx)
 	return {
 		'id':'fire1',
 		'delay':0,

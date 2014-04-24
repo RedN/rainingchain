@@ -12,52 +12,43 @@ try {
 	for(var i in data.a) Anim.creation(data.a[i]);	
 	
 	//Init Full List aka never seen before
-	for(var i in data.i){
-		Receive.init(data.i[i],i);
-	}
+	for(var i in data.i) Receive.init(data.i[i],i);
 	
 	//Update Player Private
-	for(var j in data.p){
-	   Tk.viaArray.set({'origin':player,'array':j.split(','),'value':data.p[j]});	
-	}
-        
+	for(var j in data.p)   Tk.viaArray.set({'origin':player,'array':j.split(','),'value':data.p[j]});	       
 
 	//Update Full List
 	for(var i in data.u){
+		if(List.all[i]) List.all[i].toRemove = 0; 	
+		else { ERROR(2,'no act'); continue;}
+		
 		var changeList = data.u[i];
 		for(var j in changeList){
 			Tk.viaArray.set({'origin':List.all[i],'array':j.split(','),'value':changeList[j]});
 		}
-		if(List.all[i]) List.all[i].toRemove = 0; 	
 	}
     	
-	for(var i in data.r){
+	for(var i in data.r){	//remove
 		var id = data.r[i];
 		if(List.all[id] && List.all[id].sprite){ 
-			List.all[id].sprite.dead = List.all[id].type === 'npc' ? 1/12 : 1/3;
+			List.all[id].sprite.dead = List.all[id].type === 'npc' ? 1/12 : 1/3;	//ratio will impact alpha or fade out
 		} else{removeAny(id);}			
 	}
     
 	//Update Main List
-	for(var i in data.m){
-		Tk.viaArray.set({'origin':main,'array':i.split(','),'value':data.m[i]});	
-	}
+	for(var i in data.m)	Tk.viaArray.set({'origin':main,'array':i.split(','),'value':data.m[i]});	
 	
 	//Remove Inactive FullList
 	for(var i in List.all){
 		var act = List.all[i];
-		if(act){	
-			act.toRemove++;
-			if(act.toRemove > 40){ //&& (!act.sprite || (act.sprite && act.sprite.anim && !act.sprite.anim.remove))){
-				removeAny(i);
-			}
-		}
+		if(!act){continue; }
+		if(++act.toRemove > 40){ removeAny(i);}	//aka no update for 1 sec
 	}
 	
 	//Update Bullet
-	for(var i in List.bullet){
+	for(var i in List.bullet){	//need to be here so same tempo than server
 		var b = List.bullet[i];
-		if(b.spd === null || b.sprite.dead) continue;
+		if(b.spd === null || b.sprite.dead) continue;	//spd null if boomerang etc...
 		b.x += Tk.cos(b.angle)*b.spd;
 		b.y += Tk.sin(b.angle)*b.spd;	
 	}

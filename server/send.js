@@ -16,22 +16,17 @@ Change.send = function(){
 		sa.p = Change.send.compressXYA(sa.p);
 		
 		//Update Activelist AKA List.all
-		var array = [];
 		for (var i in player.activeList){
-			var needInit = true;	
 			var obj = List.all[i];
-			if(!obj){ delete player.activeList[i]; continue; }
+			if(!obj){ delete player.activeList[i]; ERROR(2,'no act'); continue; }
 			
-			for(var j in obj.viewedBy){	if(j === player.id){needInit = false;}}	//test if player is in viewedBy list of obj
-				
 			var id = obj.publicId || obj.id;
 			
-			if(needInit){		//Need to Init
+			if(!obj.viewedBy[key]){		//Need to Init
 				sa.i[id] = Change.send.init(obj);
-				obj.viewedBy[key] = player.id;		//Add so the next time it will update instead of init
+				obj.viewedBy[key] = key;		//Add so the next time it will update instead of init
 			} else {			//Only Update
-				sa.u[id] = obj.change;
-				sa.u[id] = Change.send.compressXYA(sa.u[id]);
+				sa.u[id] = Change.send.compressXYA(obj.change);
 			}
 			
 		}
@@ -48,16 +43,14 @@ Change.send = function(){
 			
 			if(typeof anim.target === 'string'){	//aka target is an obj
 				var targ = List.all[anim.target];
-				if(!targ) continue;
+				if(!targ){ ERROR(2,'noact'); continue; }
 				if(player.id === targ.id || Activelist.test(player,targ)){
-					anim = Change.send.init.anim(anim);
-					sa.a.push(anim); 
+					sa.a.push(Change.send.init.anim(anim)); 
 				}
 			}
 			if(typeof anim.target !== 'string'){	//aka target is already in form {x:1,y:1,map:1}
 				if(Activelist.test(player,anim.target)){
-					anim = Change.send.init.anim(anim);
-					sa.a.push(anim); 
+					sa.a.push(Change.send.init.anim(anim)); 
 				}
 			}
 		}
@@ -65,7 +58,7 @@ Change.send = function(){
 		
 		//Delete things that are empty
 		sa = Change.send.clearEmpty(sa);
-		//if(Object.keys(sa).length === 0){ continue; }
+		//if(Object.keys(sa).length === 0){ continue; }	//cuz need to send something to update bullet
 		
 		//Send
 		if(BISON.active) sa = BISON.encode(sa);
@@ -144,8 +137,7 @@ Change.send.reset = function(){
 }
 
 //####################################
-Change.send.init = function(obj){
-	//convertInit: create object that has all needed information for the client to init the object. these information are only sent when init.
+Change.send.init = function(obj){ //create object that has all info for the client to init the object
 	if(obj.type == 'bullet'){return Change.send.init.bullet(obj)}
 	if(obj.type == 'drop'){return Change.send.init.drop(obj)}
 	if(obj.type == 'npc' || obj.type == 'player'){	return Change.send.init.actor(obj)}

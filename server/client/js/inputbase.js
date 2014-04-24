@@ -106,7 +106,8 @@ Input.add = function(text,focus,add){	//input chat
 Input.event = {};
 Input.event.typeNormal = function(){
 	return $("#chatBoxInput").is(":focus") || $("#questionInput").is(":focus")
-			|| $("#contactMeTitle").is(":focus") || $("#contactMeText").is(":focus");
+			|| $("#contactMeTitle").is(":focus") || $("#contactMeText").is(":focus")
+			|| $("#tsInput").is(":focus");
 }
 Input.event.key = function(code,dir,event){
 	var start = +Input.event.typeNormal();

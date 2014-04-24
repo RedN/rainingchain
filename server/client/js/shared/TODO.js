@@ -1,5 +1,5 @@
 ==REVAMP==
-SKIPPED: command, trade, craft,customMod,db.filter
+SKIPPED: command, trade, craft,customMod,db.filter, passive
 
 add description for each item
 
@@ -14,12 +14,17 @@ add ability with globalMod
 
 limit access for map in /map/ too
 
-quest visible
+quest visible, send quest list when server starts
+
+make preset challenge for time, 1 hp,  etc...
+change quest reward for no luck.
+quest bonus split in exp, item, stat
+quest req, cant test if done other quest cuz exports. make preset for quest done, lvl
 
 throw error instead of just bypassing !List.all[key]
 rename convention for enemy system
 
-
+server ban
 server: dont draw unless click. sends context to client
 
 rightclick drop not working

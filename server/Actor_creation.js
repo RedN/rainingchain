@@ -315,7 +315,6 @@ Actor.creation.nevermove = function(act){
 }
 
 Actor.remove = function(act){
-	Activelist.remove(act);
 	Map.leave(act);
 	delete List.actor[act.id];
 	delete List.all[act.id]

@@ -22,7 +22,8 @@ Map.creation = function(name,info){
 	var m = {};
 	m.name = name;
 	m.img = {'a':[],'b':[],m:null};	//a: above, b:below
-
+	
+	//layer
 	for(var layer in {a:1,b:1}){
 		for(var i = 0 ; i <= info[0]; i++){
 			m.img[layer][i] = [];
@@ -34,6 +35,7 @@ Map.creation = function(name,info){
 			}
 		}
 	}
+	//minimap
 	var str = "img/map/" + name + "/" + name + 'M.png';
 	var im = newImage(str);
 	Img.preloader.push(str);

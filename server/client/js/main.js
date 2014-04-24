@@ -22,14 +22,7 @@ List = {
 	sfx:{}, 	//all sfx
 };
 //local compilation of information so server doesnt send many times the same info
-if(typeof Db === 'undefined') Db = {};
-Db.equip = {};
-Db.ability = {};
-Db.item = {};
-Db.plan = {};
-Db.quest = {};
-Db.customMod = {};
-Db.customImg = {};
+Db = {equip:{},ability:{},item:{},plan:{},quest:{},customMod:{},customImg:{}};
 
 
 
@@ -64,8 +57,8 @@ Sign.log = function(text){
 
 
 socket.on('signIn', function (data) {
-	if(data.success){ /*id = data.key;*/ Init.game(data.data);  }
-	else { Sign.log(data.message);  } 	
+	if(data.success) Init.game(data.data); 
+	else Sign.log(data.message); 
 	
 });
 
@@ -104,10 +97,8 @@ Init.game = function (data) {
 	Init.db.customBoost();
 	Init.db.stat();
 	Init.actor();
-	//Init.db.quest();
-	Init.db.ability();
+	Init.db.ability();	//for orb/mod stuff
 	
-	//initAbilityModDb();   //need fixing
 	Img.preload(Img.preloader,function(){   //load images
 		$("#startDiv")[0].style.display = "none"; 	//remove enter user and psw
 		$("#gameDiv")[0].style.display = "inline";  //show game
@@ -154,14 +145,15 @@ Init.game.addCanvas = function(name,id,z){
 	cv.onmousedown = function(e) {e.preventDefault();	return false; };
 	$("#canvasDiv")[0].appendChild(cv);
 	
-	List.ctx[name] = cv.getContext("2d");
-	List.ctx[name].name = name;
-	List.ctx[name].font = '20px Kelly Slab';
-	List.ctx[name].fillStyle = 'black';
-	List.ctx[name].textAlign = 'left';
-	List.ctx[name].textBaseline = 'top';
-	List.ctx[name].canvas = cv;
-	List.ctx[name].save();
+	var ctx = cv.getContext("2d");
+	ctx.canvas = cv;
+	ctx.name = name;
+	ctx.font = '20px Kelly Slab';
+	ctx.fillStyle = 'black';
+	ctx.textAlign = 'left';
+	ctx.textBaseline = 'top';
+	ctx.save();
+	List.ctx[name] = ctx;
 }
 
 

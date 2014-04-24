@@ -95,6 +95,7 @@ require(clientPath + 'command');
 require(clientPath + 'Combat_sub');
 require(clientPath + 'passiveGrid');
 require(clientPath + 'queryShare');
+require(clientPath + 'ts');
 require(clientPath + 'Db_customboost');
 
 

@@ -6,7 +6,7 @@ Load.enterGame = function(key,account,act,main,socket){ //Called when player log
 		Cycle.day.quest(key);
 		
 	db.update('account',{username:account.username},{'$set':{online:1,lastSignIn:Date.now()}},function(err, res) { if(err) throw err
-		socket.emit('signIn', { success:1, key:key, data:Load.enterGame.initData(key,act,main)});
+		socket.emit('signIn', { success:1, data:Load.enterGame.initData(key,act,main)});
 	});
 	
 	var time = Math.floor(account.timePlayedThisWeek/Cst.HOUR) + 'h ' + Math.floor(account.timePlayedThisWeek%Cst.HOUR/Cst.MIN) + 'm';

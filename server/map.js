@@ -38,13 +38,11 @@ Map.load = function(map){
 
 Map.loop = function(map){
 	//Time Out Instance
-	if(Loop.interval(60*1000/40)){		//each min
+	if(Loop.interval(60*1000/25)){		//each min
 		if(map.list.player.$length() === 0){
 			map.timer -= 60*1000/25;
-			if(map.timer <= 0){
-				Map.remove(map);
-			}
-			return;		//no addon if nobody in map
+			if(map.timer <= 0)	Map.remove(map);
+			return;
 		}	
 	}
 	
@@ -55,23 +53,21 @@ Map.loop = function(map){
 }
 
 Map.instance = {};
-Map.instance.list = function(model){
+Map.instance.list = function(model){	//return array of map with model
 	var list = [];
 	for(var i in List.map){
-		if(List.map[i].model === model){
+		if(Map.getModel(i) === model){
 			list.push(List.map[i].id);
 		}
 	}
 	return list;
 }
 
-Map.instance.player = function(id){
-	//return list of players NAME that are in a certain model of instance
+Map.instance.player = function(id){ 	//return list of players NAME that are in a certain model of instance
 	var plist = [];
 	for(var i in List.map[id].list.player){
-		if(List.all[i]){
-			plist.push(List.all[i].name);
-		}
+		if(!List.all[i]){ ERROR(2,'no act'); continue;}
+		plist.push(List.all[i].name);
 	}
 	return plist;
 }
@@ -79,7 +75,10 @@ Map.instance.player = function(id){
 Map.leave = function(act,map){
 	map = map || act.map;
 	var oldmap = List.map[map];
-	if(!oldmap) return;	//ex: login
+	if(!oldmap) return;	//ex: teleport after login
+	
+	Activelist.remove(act);
+	
 	if(act.type === 'player'){
 		for(var i in oldmap.addon)
 			if(oldmap.addon[i].playerLeave)

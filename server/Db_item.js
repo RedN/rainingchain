@@ -27,7 +27,7 @@ a['testing']  = {   //testing is the item id
 
 //Similar format than Equip
 Db.item = {};
-Init.db.item = function (cb){
+Init.db.item = function (){
 	var a = Db.item;
 
 	//{Crafting					
@@ -84,10 +84,7 @@ Init.db.item = function (cb){
 	for(var i in a){	
 		a[i].id = i;
 		Item.creation(a[i]);
-	}
-	
-	cb.call();
-	
+	}	
 }
 
 
