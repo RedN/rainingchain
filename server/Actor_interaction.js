@@ -186,8 +186,7 @@ Actor.click.drop = function (act,id){
 	if(!drop) return;
 	
 	if(!Collision.distancePtPt(act,drop) > act.pickRadius) return TOOFAR(act.id);
-
-	if(!Itemlist.test(inv,[[List.drop[id].item,List.drop[id].amount]])){
+	if(!Itemlist.test(inv,drop.item,drop.amount)){
 		Chat.add(act.id,"Inventory full.");
 		return;
 	}

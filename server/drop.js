@@ -36,11 +36,11 @@ Init.db.drop = function(){
 
 
 Drop = {};	
-Drop.timer = 25*30;	
+Drop.timer = 25*60;	
 
 Drop.getCategoryList = function(drop,lvl,qu){
 	var list = [];
-	qu = qu || 1;
+	qu = qu || 1;	//quantity
 	
 	for(var i in drop){
 		var highest = {lvl:0};

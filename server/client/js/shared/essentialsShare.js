@@ -87,7 +87,8 @@ Math.pyt = function(a,b){
 }
 Math.randomId = function(num){
 	num = num || 9;
-	return Math.random().toString(36).slice(2,num+2);
+	var id = Math.random().toString(36).slice(2,num+2);
+	return List.all[id] ? Math.randomId(num) : id;	//if id is already picked send new one
 }
 Math.roundRandom = function(num){
 	if(num%1 > Math.random()) num++;
@@ -434,8 +435,7 @@ Object.defineProperty(Array.prototype, "insert", {
 
 //String
 String.prototype.replaceAll = function (find, replace) {
-    var str = this;
-    return str.replace(new RegExp(find, 'g'), replace);
+    return this.replace(new RegExp(find, 'g'), replace);
 };
 
 String.prototype.keyCodeToName = function(full){	//TOFIX fusion bothfunctions

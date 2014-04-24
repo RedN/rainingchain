@@ -76,7 +76,7 @@ exports.init = function(version,questname){	//}
 	
 	s.getSpot = function(id,addon,spot){
 		var a = Db.map[Map.getModel(id)].addon[addon].spot[spot];	//cant use list cuz map could not be created yet
-		if(!a){ ERROR(3,'spot not found ' + id + addon + spot); return }
+		if(!a){ ERROR(3,'spot not found ',id,addon,spot); return }
 		return {x:a.x,y:a.y,map:id}
 	}
 	
@@ -87,62 +87,35 @@ exports.init = function(version,questname){	//}
 	}
 
 	//Item
+	s.itemFormat = function(item,amount){
+		var list = Itemlist.format(item,amount,false);
+		var goodList = {};
+		for(var i in list) goodList[getItemName(i)] = list[i];
+		return goodList;
+	}
+	
 	s.addItem = function(key,item,amount){
-		if(typeof item === 'object'){
-			for(var i in item) s.addItem(key,i,item[i]);
-			return;
-		}
-
-		item = getItemName(item);
-		if(s.existItem(item))	Itemlist.add(key,item,amount);
-		else Chat.add(key,"bug. ITEM DOES NOT EXIST @ " + item);
+		Itemlist.add(key,s.itemFormat(item,amount));
 	}
 
 	s.removeItem = function(key,item,amount){
-		if(typeof item === 'object'){
-			for(var i in item) s.removeItem(key,i,item[i]);
-			return;
-		}
-
-		item = getItemName(item);
-		if(s.existItem(item))	Itemlist.remove(key,item,amount);
-		else Chat.add(key,"bug. ITEM DOES NOT EXIST @ " + item);
+		Itemlist.remove(key,s.itemFormat(item,amount));
 	}
 
 	s.haveItem = function(key,item,amount,removeifgood){
-		if(typeof item === 'object'){
-			for(var i in item){
-				if(!s.haveItem(key,i,item[i])) return false;
-			}
-			if(amount) s.removeItem(key,item);	//amount acts as removeifgood
-			return true;
-		}
-
-		item = getItemName(item);
-		if(s.existItem(item)){
-			var success = Itemlist.have(key,item,amount);
-			if(success && removeifgood) Itemlist.remove(key,item,amount);
-			return success;
-		}
-		else Chat.add(key,"bug. ITEM DOES NOT EXIST @ " + item);
-		return false;
+		var list = s.itemFormat(item,amount);
+		var success = Itemlist.have(key,list);
+		if(success && removeifgood) Itemlist.remove(key,list);
+		return success;
 	}
 
 	s.testItem = function (key,item,amount,addifgood){
-		if(typeof item === 'object'){
-			var success = Itemlist.test(key,Itemlist.objToArray(item));
-			if(amount) s.addItem(key,item);	//amount acts as addifgood
-			return true;
-		}
-		
-		
-		item = getItemName(item);
-		var success = Itemlist.test(key,[[item,amount || 1]]);
-		if(success && addifgood) s.addItem(key,item,amount);
+		var list = s.itemFormat(item,amount);
+		var success = Itemlist.test(key,list);
+		if(success && removeifgood) Itemlist.add(key,list);
 		return success;
 	}
 	
-	s.existItem = function(id){ return !!Db.item[id]; }
 	
 
 	//Cutscene

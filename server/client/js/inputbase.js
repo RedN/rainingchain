@@ -1,5 +1,3 @@
-//### Start Customization###
-
 Input = {};
 Input.mouse = {x:0,y:0,drag:{active:0,sx:0,sy:0,vx:0,vy:0},left:0,right:0};
 
@@ -86,22 +84,21 @@ Input.key.move = JSON.parse(localStorage.getItem('bindingMove')) || Input.key.mo
 Input.key.ability = JSON.parse(localStorage.getItem('bindingAbility')) || Input.key.ability;
 //a	 65$$$b	 66$$$c	 67$$$d	 68$$$e	 69$$$f	 70$$$g	 71$$$h	 72$$$i	 73$$$j	 74$$$k	 75$$$l	 76$$$m	 77$$$n	 78$$$o	 79$$$p	 80$$$q	 81$$$r	 82$$$s	 83$$$t	 84$$$u	 85$$$v	 86$$$w	 87$$$x	 88$$$y	 89$$$z	 90$$$$$$backspace	 8$$$tab	 9$$$enter	 13$$$shift	 16$$$ctrl	 17$$$alt	 18$$$pause/break	 19$$$caps lock	 20$$$escape	 27$$$page up	 33$$$page down	 34$$$end	 35$$$home	 36$$$left arrow	 37$$$up arrow	 38$$$right arrow	 39$$$down arrow	 40$$$insert	 45$$$delete	 46$$$0	 48$$$1	 49$$$2	 50$$$3	 51$$$4	 52$$$5	 53$$$6	 54$$$7	 55$$$8	 56$$$9	 57$$$left window key	 91$$$right window key	 92$$$select key	 93$$$numpad 0	 96$$$numpad 1	 97$$$numpad 2	 98$$$numpad 3	 99$$$numpad 4	 100$$$numpad 5	 101$$$numpad 6	 102$$$numpad 7	 103$$$numpad 8	 104$$$numpad 9	 105$$$multiply	 106$$$add	 107$$$subtract	 109$$$decimal point	 110$$$divide	 111$$$f1	 112$$$f2	 113$$$f3	 114$$$f4	 115$$$f5	 116$$$f6	 117$$$f7	 118$$$f8	 119$$$f9	 120$$$f10	 121$$$f11	 122$$$f12	 123$$$num lock	 144$$$scroll lock	 145$$$semi-colon	 186$$$equal sign	 187$$$comma	 188$$$dash	 189$$$period	 190$$$forward slash	 191$$$grave accent	 192$$$open bracket	 219$$$back slash	 220$$$close braket	 221$$$single quote	 222$$$
 
-
-//### End Customization###
 Input.reset = function(){ Input.press = {'move':[0,0,0,0],'ability':[0,0,0,0,0,0],'combo':[0,0]}; }
 window.onblur = Input.reset;
 
-Input.binding = {move:null,ability:null};
+Input.binding = {move:null,ability:null};	//used to know if currently binding change
 
 Input.save = function(){
 	localStorage.setItem('bindingMove',JSON.stringify(Input.key.move));
 	localStorage.setItem('bindingAbility',JSON.stringify(Input.key.ability));
 }
 
-Input.add = function(text,focus,add){
+Input.add = function(text,focus,add){	//input chat
 	if(add) {html.chat.input.value += text;}
 	else {html.chat.input.value = text;}
-	if(focus !== false){ html.chat.input.focus(); 
+	if(focus !== false){ 
+		html.chat.input.focus(); 
 		setTimeout(function(){ html.chat.input.focus();},50);
 	}
 }
@@ -151,9 +148,8 @@ Input.event.key = function(code,dir,event){
 		}
 	}
 	
-	if(code !== 16 && code !== 1016 && code !== 10016 && code !== 11016
-		&& code !== 17 && code !== 1017 && code !== 10017 && code !== 11017){
-		
+	var blackList = [16,17,1016,1017,10016,11016,17,1017,10017,11017];	//prevent binding plain shift or ctrl to ability
+	if(!blackList.have(code)){
 		if(Input.binding.move !== null) Input.key.move[Input.binding.move][0] = code;
 		if(Input.binding.ability !== null) Input.key.ability[Input.binding.ability][0] = code;
 		Input.binding.move = null;
@@ -202,7 +198,7 @@ Input.event.mouse.click = function(code,dir){
 			case 10003: side = 'ctrlRight'; break;
 		}
 		
-		socket.emit('click', [side,Input.mouse.x,Input.mouse.y]);
+		if(gameStarted) socket.emit('click', [side,Input.mouse.x,Input.mouse.y]);
 		Button.reset();
 		Button.test(0,Input.mouse.x,Input.mouse.y,side);
 	}
@@ -263,7 +259,7 @@ $(document).ready(function(){
 //Send
 Input.send = function(){
 	if(Input.event.typeNormal() && Input.press.move.toString() !== "0,0,0,0"){ 
-		//so he moves fast
+		//facing right direction if typing and using secondary move
 		Input.mouse.x = Cst.WIDTH2 + 10*Input.press.move[0] - 10*Input.press.move[2];
 		Input.mouse.y = Cst.HEIGHT2 + 10*Input.press.move[1] - 10*Input.press.move[3];		
 	}

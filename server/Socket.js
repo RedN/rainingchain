@@ -2,27 +2,47 @@ Server.handleSocket = function(name,socket,d){
 	var event = Db.socket[name];
 	if(!event) return;
 	
+	if(event.online && !List.main[socket.key]){ socket.disconnect(); return; }
+	
 	var time = Date.now();
 	if(socket.emitCount[name] /Math.max(socket.globalTimer/Cst.MIN,5) > event.limitPerMin) return;
 	if(time-socket.emitLast[name] < event.minInterval) return;
 	
 	socket.emitLast[name] = time;
 	socket.emitCount[name]++;
-	event.func(socket,d);
+	try {	event.func(socket,d); }
+	catch (err){	
+		console.log(err);
+		if(socket.key) Sign.off(socket.key,'Error. Reload the page'); 
+		else socket.disconnect();
+	}
 	
 	Performance.bandwidth('download',d,socket);
 }
 
 Init.socket = function(socket){
-	socket.emitCount = {};
-	socket.emitLast = {};
-	for(var i in Db.socket){
-		socket.emitCount[i] = 0;
-		socket.emitLast[i] = 0;
-	}
-	socket.bandwidth = {upload:0,download:0};
+	var t = Init.socket.template();
+	for(var i in t) socket[i] = t[i];
+	
 	return socket;
 }
+Init.socket.template = function(){
+	var a = {};	for(var i in Db.socket) a[i] = 0;
+	
+	return {
+		emitCount:a,
+		emitLast:Tk.deepClone(a),
+		toRemove:0,
+		timer:0,
+		globalTimer:0,
+		beingRemoved:0,
+		removed:0,
+		clientReady:0,
+		bandwidth:{upload:0,download:0},
+		key:null	//set when sign in
+	}
+}
+
 
 io.sockets.on('connection', function (socket) {
 	socket = Init.socket(socket);
@@ -47,6 +67,7 @@ Db.socket = {
 	'signUp':{
 		limitPerMin:1,
 		minInterval:1000,
+		online:0,
 		func:function(socket,d){
 			if(Server.ready) Sign.up(socket,d); 
 			else socket.emit('signIn', { 'success':0,'message':'<font color="red">Server is closed. Next open beta should come soon.</font>' }); 
@@ -55,6 +76,7 @@ Db.socket = {
 	'signIn':{
 		limitPerMin:1,
 		minInterval:1000,
+		online:0,
 		func:function(socket,d){
 			if(Server.ready) Sign.in(socket,d); 
 			else socket.emit('signIn', { 'success':0,'message':'<font color="red">Server is closed. Next open beta should come soon.</font>' }); 
@@ -63,6 +85,7 @@ Db.socket = {
 	'clientReady':{
 		limitPerMin:1,
 		minInterval:1000,
+		online:0,
 		func:function(socket,d){
 			if(!List.socket[socket.key]) return;
 			List.socket[socket.key].clientReady = 1; 
@@ -71,6 +94,7 @@ Db.socket = {
 	'disconnect':{
 		limitPerMin:1,
 		minInterval:1000,
+		online:0,
 		func:function(socket,d){
 			socket.toRemove = 1;
 		},
@@ -78,6 +102,7 @@ Db.socket = {
 	'sendChat':{
 		limitPerMin:100,
 		minInterval:500,
+		online:1,
 		func:function(socket,d){
 			d.key = socket.key;
 			Chat.receive(d);
@@ -86,6 +111,7 @@ Db.socket = {
 	'Command.send':{
 		limitPerMin:30,
 		minInterval:0,
+		online:1,
 		func:function(socket,d){
 			Command.receive(socket,d);
 		},
@@ -93,6 +119,7 @@ Db.socket = {
 	'queryDb':{
 		limitPerMin:20,
 		minInterval:0,
+		online:1,
 		func:function(socket,d){
 			var toreturn = Db.query(d);
 			if(toreturn) socket.emit('queryDb',toreturn); 
@@ -102,6 +129,7 @@ Db.socket = {
 	'testing':{
 		limitPerMin:20,
 		minInterval:0,
+		online:1,
 		func:function(socket,d){
 			var act = List.all[socket.key];
 			if(act && act.name && Server.admin.have(act.name))
@@ -111,6 +139,7 @@ Db.socket = {
 	'click':{
 		limitPerMin:60*1000/40,
 		minInterval:10,
+		online:1,
 		func:function(socket,d){
 			Input.click(socket,d);
 		},
@@ -118,6 +147,7 @@ Db.socket = {
 	'input':{
 		limitPerMin:60*1000/40,
 		minInterval:10,
+		online:1,
 		func:function(socket,d){
 			Input.key(socket,d);
 		},
@@ -125,6 +155,7 @@ Db.socket = {
 	'uploadMod':{
 		limitPerMin:2,
 		minInterval:1000,
+		online:0,
 		func:function(socket,d){
 			customModHandling(socket,d);
 		},

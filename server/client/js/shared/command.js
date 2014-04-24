@@ -578,7 +578,6 @@ Command.list['option'] = function(key,slot){
 	var main = List.main[key];
 	if(!main.optionList ||  !main.optionList.option[slot]){ return; }
 	var opt = main.optionList.option[slot];
-	
 	applyFunc.key(key,opt.func,opt.param);	
 }
 Command.list['option'].doc = {

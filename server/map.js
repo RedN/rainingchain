@@ -119,7 +119,7 @@ Map.collisionRect = function(id,rect,type,cb){	//used in map loop. return array 
 	var array = [];
 	for(var i in List.map[id].list[type]){
 		var act = List.all[i];
-		if(!act){ ERROR(3,'act dont exist ' + id); continue; }
+		if(!act){ ERROR(3,'act dont exist',id,i); continue; }
 		if(Collision.PtRect(act,rect))	array.push(i);
 	}
 	if(!cb) return array;

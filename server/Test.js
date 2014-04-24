@@ -114,7 +114,7 @@ Test.spawnEnemy = function(key,cat,variant){
 	variant = variant || 'normal';
 	
 	var player = List.all[key];
-	if(!Db.npc[cat][variant]){ ERROR(4,"no npc with that cat and var"); return;}
+	if(!Db.npc[cat][variant]){ ERROR(4,"no npc",cat,variant); return;}
 	Actor.creation({
 		'spot':{x:player.x,y:player.y,map:player.map},
 		"category":cat,		

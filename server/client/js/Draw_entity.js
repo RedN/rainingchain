@@ -137,7 +137,7 @@ Draw.anim = function (layer){
 	
 	for(var i in List.anim){
 		var a = Db.anim[List.anim[i].name];
-		if(!a){ ERROR(2,"anim not found" + anim.name); a = Db.anim['slashMelee']; }
+		if(!a){ ERROR(2,"anim not found",anim.name); a = Db.anim['slashMelee']; }
 		if(Db.anim[List.anim[i].name].layer === layer){
 			
 			var anim = List.anim[i];

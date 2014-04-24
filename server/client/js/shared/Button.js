@@ -75,36 +75,30 @@ Button.test = function (key,x,y,side){	//called everytime the player clicks
 	
 }
 
-Button.context = function (key){ 	//check every frame
-
-	var list = SERVER ? List.btn[key] : List.btn;	
-	var x = SERVER ? List.all[key].mouseX : Input.mouse.x;
-	var y = SERVER ? List.all[key].mouseY : Input.mouse.y;
+Button.context = function (key){ 	//client only
+	var list = List.btn;	
+	var x = Input.mouse.x;
+	var y = Input.mouse.y;
 		
 	for(var i = list.length-1 ; i >= 0  ; i--){
 		if(Collision.PtRect({"x":x,'y':y},list[i].rect)){
 			var tmp = {'server':SERVER,'text':list[i].text,'textTop':list[i].textTop};
-			if(SERVER) List.main[key].context = tmp; 
-			if(!SERVER) main.clientContext = tmp; 
+			main.clientContext = tmp; 
 			return;
 		}	
 	}
-	if(SERVER){ List.main[key].context = {'server':SERVER,'text':''}; }
-	if(!SERVER){ main.clientContext = {'server':SERVER,'text':''}; }
+	main.clientContext = {'server':SERVER,'text':''};
 }
 
 Button.reset = function(key){	//called when player clicks. used to remove popup
 	if(SERVER){	
 		var m = List.main[key];
 		
-		if(m.optionList){
-			if(m.optionList.count <= 0){ m.optionList = null; } 
-			else {	m.optionList.count--; }
-		}
+		if(m.optionList && --m.optionList.count < 0)	m.optionList = null; 
 		
 		for(var i in m.popupList)	m.popupList[i] = 0;
 		
-		for(var i in m.temp.reset){	//TOFIX
+		for(var i in m.temp.reset){	//TOFIX only used for selectInv
 			if(--m.temp.reset[i] < 0){
 				delete m.temp[i];
 				delete m.temp.reset[i];
@@ -112,8 +106,7 @@ Button.reset = function(key){	//called when player clicks. used to remove popup
 		}
 	}
 	if(!SERVER){
-		if(!main.optionList || !main.optionList.count || main.optionList.count <= 0){ main.optionList = null;}
-		else {	main.optionList.count--; }
+		if(!main.optionList || !main.optionList.count || --main.optionList.count < 0) main.optionList = null;
 	}
 }
 

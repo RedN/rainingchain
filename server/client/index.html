@@ -25,7 +25,7 @@
 		<script>
 		var SERVER = false;
 		var socket = io.connect();
-		//var socket = io.connect('http://localhost:3000');
+		//var socket = io.connect('http://localhost:3000');	//if via ip
 		Init = {};
 		Init.db = {};
 		</script>
@@ -203,13 +203,14 @@
 		</div>
 		
 		<!-- Warning -->
-		<div class="ui-widget" id="warningDiv">
+		<div class="ui-widget" id="warningDiv" style="visibility:hidden">
 			<div class="ui-state-error ui-corner-all" style="padding: 0 .7em;">
 				<p><span class="ui-icon ui-icon-alert" style="float: left; margin-right: .3em;"></span>
 				<span id="warningText"></span></p>
 			</div>
 		</div>
 	
+		<!-- Dialogue Box from Jquery -->
 		<div id="help" title="Raining Chain Documentation"></div>
 		<div id="questionDiv" title="Server Question">
 			<div id="questionText" class='onlyText'></div>
@@ -220,7 +221,6 @@
 		</div>
 		
 		<div id="customMod" title="Use Custom Mods"></div>
-	
 	
 		<div id="hax" title="Hax List"></div>
 		
@@ -272,7 +272,6 @@
 			Chat.send();
 			e.preventDefault();
 		});
-		$("#warningDiv")[0].style.visibility = 'hidden';
 		$("#lg-username")[0].value = localStorage.getItem('username') || $("#lg-username")[0].value;
 		
 		var html = {

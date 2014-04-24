@@ -477,14 +477,17 @@
     }
 
     // Exports
+	var active = false;	//RAININGCHAIN
     if (typeof exports !== 'undefined') {
         exports.encode = encode;
         exports.decode = decode;
+		exports.active = active;	//RAININGCHAIN
 
     } else {
         window.BISON = {
             encode: encode,
-            decode: decode
+            decode: decode,
+			active:active,	//RAININGCHAIN
         };
     }
 

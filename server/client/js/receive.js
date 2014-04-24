@@ -3,7 +3,7 @@ Change = {};
 
 Receive = Change.receive = function(data){
 try {
-	data = BISON.decode(data);
+	if(BISON.active) data = BISON.decode(data);
 	if(Receive.showData) INFO(JSON.stringify(data));  //for testing
 	if(!data) return;
 	data = Receive.parse(data);

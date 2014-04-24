@@ -26,6 +26,10 @@ rightclick drop not working
 can pick drop any distance
 weird click priority for optionlist on npc
 top context for npc not working
+no more context from server, no need for clientContext
+BISON doesnt send dialogue if too close from npc? it returns undefined
+
+trading is broken
 
 ===PRE SDK===
 transform not be overwrite if change equip

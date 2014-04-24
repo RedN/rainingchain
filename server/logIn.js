@@ -3,7 +3,6 @@ var crypto = require('crypto');
 
 Sign = {};
 Sign.up = function(socket,d){
-	
     var user = escape.quote(d.username);    
 	var pass = escape.quote(d.password);
 	var email = escape.email(d.email);
@@ -36,7 +35,9 @@ Sign.up.create = function(user,pass,email,salt,socket){
 	p.id = Math.randomId();
 	p.publicId = Math.randomId(6);
 	
-    var m = Main.template(key); m.name = user; m.username = user;
+    var m = Main.template(key); 
+	m.name = user; 
+	m.username = user;
 	
 	var activationKey = Math.randomId();
     var obj = {
@@ -93,7 +94,6 @@ Sign.in = function(socket,d){
 		
 			if(pass !== account.password){ socket.emit('signIn', { 'success':0,'message':'<font color="red">Wrong Password or Username.</font>' }); return; }
 			
-			
 			if(account.timePlayedThisWeek >= Server.timeLimit.perWeek){ 
 				socket.emit('signIn', { 'success':0,'message':'<font color="red">You have already played over 24 hours this week.</font>' }); return; }
 
@@ -106,7 +106,7 @@ Sign.in = function(socket,d){
 
 Sign.off = function(key,message){
 	var socket = List.socket[key];
-	if(!socket) return;
+	if(!socket) return ERROR(2,'no socket');
 	socket.beingRemoved = 1;
 	if(message){ socket.emit('warning',{signOff:1,text:'You have been disconnected: ' + message});}
 
@@ -119,7 +119,7 @@ Sign.off = function(key,message){
 }
 
 Sign.off.remove = function(key){
-	var socket = List.socket[key]; if(!socket){ Sign.off.remove.safe(key); return; }
+	var socket = List.socket[key]; if(!socket){ Sign.off.remove.safe(key); ERROR(2,'no socket'); return; }
 	
 	var act = List.all[key];
 	Actor.remove(act);
@@ -132,9 +132,10 @@ Sign.off.remove = function(key){
 
 Sign.off.remove.safe = function(key){
 	var act = List.all[key];
-	if(act) delete List.nameToKey[List.all[key].name];
-	
-	if(act && List.map[act.map])	delete List.map[act.map].list[key];
+	if(act){
+		delete List.nameToKey[act.name];
+		Map.leave(act);
+	}
 	
 	delete List.actor[key];
 	delete List.socket[key];
@@ -157,9 +158,8 @@ Save.player = function(key,updateDb){
     var toSave = ['respawnLoc','username','name','weapon','equip','skill','ability','abilityList'];
     for(var i in toSave){	save[toSave[i]] = player[toSave[i]]; }
 	
-    if(updateDb !== false){
-        db.update('player',{username:player.username},save,db.err);
-    } else { return save; }	//when sign up
+    if(updateDb !== false) db.update('player',{username:player.username},save,db.err);
+    else return save;	//when sign up
 }
 
 
@@ -170,9 +170,8 @@ Save.main = function(key,updateDb){
     var toSave = ['invList','bankList','tradeList','quest','username','name','social','passive','chrono'];
     for(var i in toSave){ save[toSave[i]] = main[toSave[i]]; }
 
-    if(updateDb !== false){
-        db.update('main',{username:main.username},save,db.err);
-    } else { return save; } //when sign up
+    if(updateDb !== false)	db.update('main',{username:main.username},save,db.err);
+    else return save; //when sign up
 }
 
 //Load Account
@@ -196,12 +195,6 @@ Load = function (key,account,socket,cb){
 			
 			//Init Socket
 			socket.key = key;
-			socket.toRemove = 0;
-			socket.timer = 0;
-			socket.globalTimer = 0;
-			socket.beingRemoved = 0;
-			socket.removed = 0;
-			socket.clientReady = 0;
 			List.socket[key] = socket;
 			
 			

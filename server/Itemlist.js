@@ -3,17 +3,39 @@
 
 Itemlist = {};
 
-Itemlist.add = function (inv,id,amount){
-	if(typeof inv === 'string') inv = List.main[inv].invList;
-	amount = amount || 1;
-	
-	if(!Db.item[id]){ ERROR(3,'item dont exist' + id); return false;}
-	if(Db.item[id].stack || inv.alwaysStack){
-		if(Itemlist.have(inv,id)){
-			inv.data[Itemlist.have(inv,id,1,"position")][1] += amount;
-		} else if(Itemlist.empty(inv,1)){
-			inv.data[Itemlist.firstEmpty(inv)] = [id,amount];
+Itemlist.format = function(id,amount,verify){	//verify is for quest, verification be done later
+	var tmp = {};
+	if(Array.isArray(id)){
+		for(var i in id){
+			tmp[id[i][0]] = tmp[id[i][0]] || 0;
+			tmp[id[i][0]] += id[i][1] || 1;
+			console.log(tmp[id[i][0]]);
 		}
+	}
+	else if(typeof id === 'string')	tmp[id] = amount || 1;
+	else if(typeof id === 'object') tmp = id;
+	
+	for(var i in tmp){
+		if(verify !== false && !Db.item[i]){ ERROR(3,'item dont exist',i,tmp); delete tmp[i]; }
+		if(Math.floor(tmp[i]) !== tmp[i]){ ERROR(3,'item amount isnt whole',i,tmp[i]); delete tmp[i]; }
+	}
+	return tmp;
+}
+
+Itemlist.add = function (inv,id,amount){	//only preparing
+	if(typeof inv === 'string') inv = List.main[inv].invList;
+	var list = Itemlist.format(id,amount);	
+	for(var i in list) Itemlist.add.action(inv,i,list[i]);	
+}
+
+Itemlist.add.action = function(inv,id,amount){
+	if(Db.item[id].stack || inv.alwaysStack){
+		var pos = Itemlist.getPosition(inv,id);
+		if(pos !== null){ inv.data[pos][1] += amount; return; }
+		
+		pos = Itemlist.firstEmpty(inv);
+		if(pos === null) return;	//no space
+		inv.data[pos] = [id,amount];
 	} else {
 		amount = Math.min(amount,Itemlist.empty(inv));
 		for(var i = 0 ; i < amount ; i++){
@@ -22,53 +44,19 @@ Itemlist.add = function (inv,id,amount){
 	}
 }
 
-Itemlist.add.bulk = function (inv,array_items){
-	for(var i in array_items){
-		Itemlist.add(inv,array_items[i][0],array_items[i][1] || 1);
-	}	
-}
-
-Itemlist.test = function (inv,array_items){ //Test if theres enough place for all the items (array of items)
-	if(typeof inv === 'string') inv = List.main[inv].invList;
-	
-	//Fast Test this
-	if(array_items.length <= Itemlist.empty(inv)){	//no true if element is not stackable	//TOFIX
-		return true;
-	} 
-	var spaceNeeded = 0;
-	for(var i in array_items){
-		var item = array_items[i];
-		if(typeof item[0] !== 'string'){ item[0] = item[0].id; }	//Case put obj instead of id
-		if(!item[1]){ item[1] = 1; }
-		
-		if( (!Db.item[item[0]].stack && (!inv.bank || inv.bank && !Itemlist.have(inv,item[0]))) ||
-		        (Db.item[item[0]].stack && !Itemlist.have(inv,item[0]))  ){
-			spaceNeeded++;
-		}	
-	}
-	return spaceNeeded <= Itemlist.empty(inv);
-}
-
-Itemlist.firstEmpty = function(inv){ //Return first position of first empty slot
-    for(var i = 0; i < inv.data.length; i++){
-	    if(inv.data[i].length === 0){ 
-		    return i;	
-		}
-	}
-	return -1;
-}
-
 Itemlist.remove = function (inv,id,amount){
 	if(typeof inv === 'string') inv = List.main[inv].invList;
-	
-	amount = amount || 1;
-	if(!Db.item[id]){ ERROR(3,'item dont exist' + id); return false;}
+	var list = Itemlist.format(id,amount);	
+	for(var i in list) Itemlist.remove.action(inv,i,list[i]);		
+}
+
+Itemlist.remove.action = function (inv,id,amount){
 	if(Db.item[id].stack || inv.alwaysStack){
 		for(var i = 0 ; i < inv.data.length ; i ++){
 			if(inv.data[i][0] === id){
 				inv.data[i][1] -= amount;
 				if(inv.data[i][1] <= 0){
-					inv.data[i] = '';
+					inv.data[i] = [];
 					break;
 				}
 			}
@@ -76,95 +64,87 @@ Itemlist.remove = function (inv,id,amount){
 	} else {
 		for(var i = 0 ; i < inv.data.length && amount > 0 ; i ++){
 			if(inv.data[i][0] === id){
-				inv.data[i] = '';
+				inv.data[i] = [];
 				amount--;
-				i--;
 			}
 		}
 	}
-	
 }
 
-Itemlist.remove.bulk = function (inv,array_items){
-	for(var i in array_items){
-		Itemlist.remove(inv,array_items[i][0],array_items[i][1] || 1);
-	}	
+
+
+
+Itemlist.test = function (inv,id,amount){ //test if enouhg space
+	if(typeof inv === 'string') inv = List.main[inv].invList;
+	var list = Itemlist.format(id,amount);	
+	
+	var spaceNeeded = 0;
+	for(var i in list){
+		if(Db.item[i].stack || inv.alwaysStack)	spaceNeeded += Itemlist.have(inv,i) ? 0 : 1;
+		else spaceNeeded += tmp[i];
+	}
+	return spaceNeeded <= Itemlist.empty(inv);
 }
+
+Itemlist.firstEmpty = function(inv){ //Return first position of first empty slot
+    for(var i in inv.data)  if(inv.data[i].length === 0)	return +i;
+	return null;
+}
+
 
 
 Itemlist.empty = function (inv,amount){ //Return amount of empty slots. (If amount is speficied, return if empty
 	var empty = 0;
-	for(var i in inv.data){
-		if(inv.data[i].length === 0){ empty++; }
-	}
-
-	if(!amount){return empty} 
-	else {return (empty >= amount)}	
+	for(var i in inv.data)	if(inv.data[i].length === 0) empty++; 
+	if(amount === undefined) return empty;
+	else return empty >= amount;
 }
 
-Itemlist.have = function (inv,id,amount,info){
+Itemlist.getAmount = function(inv,id){
 	if(typeof inv === 'string') inv = List.main[inv].invList;
 	
-	amount = amount || 1;
-	info = info || "bool";
-	if(!Db.item[id]){ ERROR(3,'item dont exist ' + id); return false;}
-	if(Db.item[id].stack || inv.alwaysStack){	
-		for(var i = 0 ; i < inv.data.length ; i++){
-			if(inv.data[i][0] === id){
-				if(info == "bool"){	return (inv.data[i][1] >= amount)} 
-				if(info == "amount"){return inv.data[i][1]}
-				if(info == "position"){	return i}
-				break;
-			}
-		}
+	if(!Db.item[id]){ ERROR(3,'item dont exist',id); return 0;}
+	if(Db.item[id].stack || inv.alwaysStack){
+		for(var i in inv.data)	if(inv.data[i][0] === id) return inv.data[i][1];
+		return 0;
 	} else {
-		var num = 0;
-		for(var i = 0 ; i < inv.data.length ; i++){
-			if(inv.data[i][0] === id){
-				num += 1;
-			}
-		}
-		if(info == "bool"){	return (num >= amount)} 
-		if(info == "amount"){return num}
-		if(info == "position"){	return i}
+		var count = 0;
+		for(var i in inv.data)	if(inv.data[i][0] === id) count++;
+		return count;
 	}
-		
-	if(info == "bool"){	return false} 
-	if(info == "amount"){return 0}
-	if(info == "position"){	return null	}
-
 }
 
-Itemlist.have.bulk = function (inv,array_items){
-	for(var i in array_items){
-		if(!Itemlist.have(inv,array_items[0],array_items[1] || 1)) return false;
-	}	
+Itemlist.getPosition = function(inv,id){
+	if(typeof inv === 'string') inv = List.main[inv].invList;
+	for(var i in inv.data)	if(inv.data[i][0] === id) return +i;
+	return null;
+}
+
+
+
+Itemlist.have = function (inv,id,amount){
+	if(typeof inv === 'string') inv = List.main[inv].invList;
+	var list = Itemlist.format(id,amount);	
+	
+	for(var i in list) if(Itemlist.getAmount(inv,i) < list[i]) return false;
 	return true;
 }
 
-Itemlist.transfer = function(inv,other,id,amount){
-	amount = Math.min(amount || 1,Itemlist.have(inv,id,0,'amount'));
-	if(!Itemlist.test(other,[[id,amount]]) || amount === 0){
-		return false;
-	} 
-	Itemlist.remove(inv,id,amount);
-	Itemlist.add(other,id,amount);	
-	return true;
-}
-
-Itemlist.transfer.bulk = function(inv,other,array_items,allornothing){
-	allornothing = allornothing || true;
-	if(allornothing){
-		if((!Itemlist.test.transfer(other,array_items) || !Itemlist.have.bulk(inv,array_items)))		return false;
-	} else {
-		array_items = Tk.deepClone(array_items);
-		for(var i in array_items){
-			array_items[i][1] = Math.min((array_items[i][1] || 1),Itemlist.have(inv,array_items[i][0],0,'amount'));
-		}
+Itemlist.transfer = function(inv,other,id,amount,allornothing){
+	var list = Itemlist.format(id,amount);	
+	
+	var a = stringify(list);
+	for(var i in list){
+		list[i] = Math.min(list[i],Itemlist.getAmount(inv,i));
+		if(list[i] < 0) delete list[i];
 	}
-	Itemlist.remove.bulk(inv,array_items);
-	Itemlist.add.bulk(other,array_items);
-	return true;	
+	
+	if(allornothing && a !== stringify(list)) return false;
+	if(!Itemlist.test(other,list)) return false;
+	
+	Itemlist.remove(inv,list);
+	Itemlist.add(other,list);	
+	return true;
 }
 
 Itemlist.transfer.bank = function(key,inv,id,amount){
@@ -235,33 +215,25 @@ Itemlist.click.inventory = function(inv,side,slot,amount){
 			applyFunc.key(key,List.main[key].temp.selectInv.func,array);
 			return;
 		}
-		
-		if(item.option[0] && item.option[0].name !== 'Drop' && item.option[0].func && !item.option[0].client){
-			applyFunc.key(key,item.option[0].func,item.option[0].param); 
+		var opt = item.option[0];
+		if(opt && opt.name !== 'Drop' && opt.name !== 'Destroy' && opt.func && !opt.client){
+			applyFunc.key(key,opt.func,opt.param); 
 			if(item.remove){ Itemlist.remove(inv,item.id); }
 		}	
 	}
 
-	if(side === 'shiftLeft'){
-		List.main[key].chatInput = ['[[' + item.id + ']]',0,1];
-	}
-
-
-	if(side === 'right'){
-		Button.creation.optionList(key,{'name':item.name,'option':item.option});
-	}
+	if(side === 'shiftLeft')	List.main[key].chatInput = ['[[' + item.id + ']]',0,1];
+	if(side === 'right')	Button.creation.optionList(key,{'name':item.name,'option':item.option});
 }
 
-Itemlist.click.bank = function(bank,side,slot,amount){
+Itemlist.click.bank = function(bank,side,slot,amount){	//amount is from pref
 	if(!bank.data[slot] || !bank.data[slot].length){ return; }
-	var inv = List.main[bank.key].invList;
-	var id = bank.data[slot][0];
 	var key = bank.key;
+	var inv = List.main[key].invList;
+	var id = bank.data[slot][0];
 		
-	if(side === 'left'){
-		Itemlist.transfer(bank,inv,id,1);
-		return;
-	}
+	if(side === 'left'){ Itemlist.transfer(bank,inv,id,1);	return;}
+	if(side === 'shiftLeft'){ Itemlist.transfer(bank,inv,id,amount); return; }		
 	if(side === 'right'){
 		Button.creation.optionList(key,{
 			'name':Db.item[id].name,
@@ -273,7 +245,6 @@ Itemlist.click.bank = function(bank,side,slot,amount){
 			]
 		});
 	}
-	if(side === 'shiftLeft'){ Itemlist.transfer(bank,inv,id,amount);}		
 }
 
 Itemlist.click.trade = function(trade,side,slot){
@@ -299,17 +270,5 @@ Itemlist.trade.reset = function(trade){
 }
 
 
-
-
-Itemlist.arrayToObj = function(list){
-	var tmp = {};
-	for(var i in list)	tmp[list[i][0]] = list[i][1];
-	return tmp;
-}
-Itemlist.objToArray = function(list){
-	var tmp = [];
-	for(var i in list)	tmp.push([i,list[i]]);
-	return tmp;
-}
 
 

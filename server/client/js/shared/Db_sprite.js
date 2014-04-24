@@ -433,7 +433,7 @@ Sprite.updateBumper = function(act){		//server only
 Sprite.update = function (act){	//client side only
 	if(!act.sprite) return;
 	var dsp = Db.sprite[act.sprite.name];
-	if(!dsp){ ERROR(2,"sprite dont exist"); dsp = Db.sprite['mace'];}
+	if(!dsp){ ERROR(2,"sprite dont exist",act.sprite.name); dsp = Db.sprite['mace'];}
 	if(act.sprite.animOld !== act.sprite.anim){	//otherwise, animation can be cut if timer for walk is high 
 		act.sprite.animOld = act.sprite.anim;
 		Sprite.change(act,{'anim':act.sprite.anim});

@@ -68,7 +68,7 @@ Change.send = function(){
 		//if(Object.keys(sa).length === 0){ continue; }
 		
 		//Send
-		sa = BISON.encode(sa);
+		if(BISON.active) sa = BISON.encode(sa);
 		socket.emit('change', sa );
 		
 		if(key === Server.botwatch.watched){

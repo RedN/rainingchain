@@ -28,7 +28,7 @@ Init.db.quest.map = function(){	//called before Init.db.quest
 	
 	for(var i in Db.quest){
 		for(var j in Db.quest[i].map){
-			if(Db.map[j]) ERROR(1,"THERES ALREADY A MAP WITH THAT NAME. " + j + ' '+ i); 
+			if(Db.map[j]) ERROR(1,"THERES ALREADY A MAP WITH THAT NAME.",j,i); 
 			Db.map[j] = Db.quest[i].map[j];
 			Db.quest[i].map[j] = Db.quest[i].map[j]().addon;
 		}
