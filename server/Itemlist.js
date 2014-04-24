@@ -9,7 +9,6 @@ Itemlist.format = function(id,amount,verify){	//verify is for quest, verificatio
 		for(var i in id){
 			tmp[id[i][0]] = tmp[id[i][0]] || 0;
 			tmp[id[i][0]] += id[i][1] || 1;
-			console.log(tmp[id[i][0]]);
 		}
 	}
 	else if(typeof id === 'string')	tmp[id] = amount || 1;
@@ -133,13 +132,13 @@ Itemlist.have = function (inv,id,amount){
 Itemlist.transfer = function(inv,other,id,amount,allornothing){
 	var list = Itemlist.format(id,amount);	
 	
-	var a = stringify(list);
+	var a = Tk.stringify(list);
 	for(var i in list){
 		list[i] = Math.min(list[i],Itemlist.getAmount(inv,i));
 		if(list[i] < 0) delete list[i];
 	}
 	
-	if(allornothing && a !== stringify(list)) return false;
+	if(allornothing && a !== Tk.stringify(list)) return false;
 	if(!Itemlist.test(other,list)) return false;
 	
 	Itemlist.remove(inv,list);

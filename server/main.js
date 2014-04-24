@@ -22,7 +22,7 @@ Init.server = function (){
 		
 		
 		Init.db.drop();
-		Change.update.init();
+		Init.changeUpdate();
 		Init.db.boost();
 		Init.actor();
 		

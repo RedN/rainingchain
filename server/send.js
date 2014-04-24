@@ -282,3 +282,11 @@ Change.send.convert.equip = function(eq,act){
 }
 
 
+Change.send.convert.resource = function(w){
+	for(var i in w)
+		for(var j in w[i])
+			w[i][j] = Math.round(w[i][j]); 
+	return w;				
+}
+
+

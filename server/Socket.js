@@ -12,7 +12,6 @@ Server.handleSocket = function(name,socket,d){
 	socket.emitCount[name]++;
 	try {	event.func(socket,d); }
 	catch (err){	
-		console.log(err);
 		if(socket.key) Sign.off(socket.key,'Error. Reload the page'); 
 		else socket.disconnect();
 	}

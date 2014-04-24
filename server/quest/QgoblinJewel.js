@@ -36,6 +36,11 @@ q.variable = {
 };
 
 q.event = {
+	demo:function(key){
+		s.teleport(key,'goblinLand','n1');
+		s.cutscene(key,'goblinLand','blue');	
+	},
+	
 	hint:function(key){
 		if(!s.get(key,'started')) return 'You can start this quest by talking to the guy south west of Goblin Land';
 		return "Good luck!";
@@ -375,7 +380,15 @@ q.map.goblinLand = function(){
 	
 	var a = m.addon[q.id] = {};
 	a.spot = {"s1":{"x":816,"y":240},"ed":{"x":3248,"y":368},"q1":{"x":2192,"y":560},"ek":{"x":5424,"y":560},"ec":{"x":4592,"y":1200},"ef":{"x":2640,"y":1232},"e1":{"x":5552,"y":1264},"t2":{"x":1456,"y":1584},"eh":{"x":1616,"y":1680},"ee":{"x":3408,"y":1744},"b2":[1568,2400,1920,1920],"b3":[1472,1472,2112,2720],"ei":{"x":912,"y":2224},"g2":{"x":3728,"y":2320},"eg":{"x":1808,"y":2352},"q2":[1600,2400,2432,2720],"ej":{"x":1968,"y":2576},"b1":[1792,2080,2848,2848],"t3":{"x":1968,"y":2928},"b4":[1792,2080,2976,2976],"eb":{"x":4944,"y":2992},"e6":{"x":2768,"y":3888},"ea":{"x":5296,"y":4080},"s3":{"x":4912,"y":4144},"e5":{"x":1616,"y":4240},"e4":{"x":656,"y":4528},"e7":{"x":3696,"y":4624},"e8":{"x":5456,"y":4912},"e3":{"x":1104,"y":5264},"g1":{"x":1744,"y":5488},"n1":{"x":2096,"y":5520},"s2":{"x":4304,"y":6000},"t1":{"x":2576,"y":6096}}
-	a.path = {};
+	a.path = {
+		blue:[
+			{"x":1800,"y":5550},
+			25,
+			{"x":1700,"y":5300},
+			50,
+			{"x":1500,"y":5100},
+		],	
+	};
 	
 	a.load = function(spot){
 		//Grave
@@ -426,12 +439,12 @@ q.map.goblinLand = function(){
 		s.actorGroup(spot.q1,25*15,[
 			["dragon","king",10,{deathFunc:q.event.killOrc}],
 		]);	
-		*/
+		
 
 		s.actorGroup(spot.n1,25*5,[
 			["orc","melee",2,{abilityList:[]}],
 		]);	
-		
+		*/
 		//
 		
 		/*

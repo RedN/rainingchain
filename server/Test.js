@@ -37,6 +37,7 @@ Test.setAbility = function(key){
 	
 }
 
+
 Test.spawnEnemy = function(key,cat,variant){
 	cat = cat || 'bat';
 	variant = variant || 'normal';

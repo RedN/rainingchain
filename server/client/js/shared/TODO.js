@@ -1,3 +1,7 @@
+
+
+
+
 ==REVAMP==
 SKIPPED: command, trade, craft,customMod,db.filter, passive
 
@@ -35,6 +39,10 @@ no more context from server, no need for clientContext
 BISON doesnt send dialogue if too close from npc? it returns undefined
 
 trading is broken
+
+add more Skill.unlockableContent
+
+tooltip not disappearing
 
 ===PRE SDK===
 transform not be overwrite if change equip

@@ -1,4 +1,4 @@
-var TIMER = {'priority':1,'reg':5,'slow':25};
+var TIMER = {'fast':1,'reg':5,'slow':25};
 
 
 //not compress in old. use a custom isequal
@@ -9,46 +9,44 @@ Change.update = function(){
 	//Entity
 	for(var i in List.all){
 		var act = List.all[i];
-		if(!act.dead && act.active !== false){
-		    for(var m in Change.update.list[act.type]){         //m = watch or exist
-    		    for (var k in Change.update.list[act.type][m]){     //k = priority , reg , slow
-    		        if(Loop.frame % TIMER[k] === 0){
-		            	for(var j in Change.update.list[act.type][m][k])
-		            	    Change.update[m](act,Change.update.list[act.type][m][k][j]);	
-    }}}}}
+		if(act.dead || act.active === false) continue;
+		for(var m in Change.update.list[act.type]){         //m = watch or exist
+			for (var k in Change.update.list[act.type][m]){     //k = priority , reg , slow
+				if(Loop.frame % TIMER[k] !== 0) continue;
+				for(var j in Change.update.list[act.type][m][k])
+					Change.update[m](act,Change.update.list[act.type][m][k][j]);	
+    }}}
 	//MainList
 	for(var i in List.main){
 		var act = List.main[i];
 		for(var m in Change.update.list.main){
     		for (var k in Change.update.list.main[m]){
-    	        if(Loop.frame % TIMER[k] === 0){
-	            	for(var j in Change.update.list.main[m][k])
-			            Change.update[m](act,Change.update.list.main[m][k][j]);	
-    }}}}
+    	        if(Loop.frame % TIMER[k] !== 0) continue;
+				for(var j in Change.update.list.main[m][k])
+					Change.update[m](act,Change.update.list.main[m][k][j]);	
+    }}}
 	//Private
 	for(var i in List.main){
 		var act = List.all[i];
     	for(var m in Change.update.list.priv){		
     	    for (var k in Change.update.list.priv[m]){
-    	        if(Loop.frame % TIMER[k] === 0){
-	            	for(var j in Change.update.list.priv[m][k])
-			            Change.update[m](act,Change.update.list.priv[m][k][j],true);	
-    }}}}
+    	        if(Loop.frame % TIMER[k] !== 0) continue;
+				for(var j in Change.update.list.priv[m][k])
+					Change.update[m](act,Change.update.list.priv[m][k][j],true);	
+    }}}
 	
 	
 }
 
-
-
-
-Change.update.init = function(){
+Init.changeUpdate = function(){
 	//NOTE: for .e being in 2 category, must put r:noreset. otherwise, second wont get
 	//MEANS PRIVATE MUST BE LAST
 	
 	Change.update.list = {};
 	//Fulllist
 	Change.update.list['npc'] = {
-		'watch':{'priority':[
+		'watch':{
+			'fast':[
 				{'array':['x'],'filter':Math.round},
 				{'array':['y'],'filter':Math.round},
 				{'array':['angle'],'filter':Math.round},
@@ -73,7 +71,8 @@ Change.update.init = function(){
 	};
 		
 	Change.update.list['bullet'] = {
-		'watch':{'priority':[
+		'watch':{
+			'fast':[
 				{'array':['x'],'filter':Math.round,'condition':(function(e){ return !e.normal; })},
 				{'array':['y'],'filter':Math.round,'condition':(function(e){ return !e.normal; })},
 				{'array':['angle'],'filter':Math.round,'condition':(function(e){ return !e.normal; })},
@@ -81,7 +80,8 @@ Change.update.init = function(){
 		}
 	};
 	Change.update.list['player'] = {
-		'watch':{'priority':[
+		'watch':{
+			'fast':[
 				{'array':['x'],'filter':Math.round},
 				{'array':['y'],'filter':Math.round},
 				{'array':['angle'],'filter':Math.round},
@@ -101,7 +101,8 @@ Change.update.init = function(){
 			]
 			
 			},	
-		'exist':{'reg':[
+		'exist':{
+			'reg':[
 				{'array':['sprite','anim'],'reset':'noreset'},
 				{'array':['chatHead'],'reset':'noreset'},
 			]}
@@ -109,7 +110,8 @@ Change.update.init = function(){
 	
 	//Main
 	Change.update.list['main'] = {
-		'watch':{'priority':[],
+		'watch':{
+			'fast':[],
 			'reg':[
 				{'array':['currentTab']},
 				{'array':['context']},
@@ -140,7 +142,7 @@ Change.update.init = function(){
 			},	
 		'exist':{
 			'reg':[
-				{'array':['social','message'],'reset':[]},
+				{'array':['social','message'],'reset':''},
 				{'array':['chatInput'],'reset':''},
 				{'array':['screenEffect']},
 			],
@@ -156,7 +158,8 @@ Change.update.init = function(){
 	
 	//Private
 	Change.update.list['priv'] = {
-		'watch':{'priority':[
+		'watch':{
+			'fast':[
 				{'array':['x'],'filter':Math.round},
 				{'array':['y'],'filter':Math.round},
 				{'array':['angle'],'filter':Math.round},
@@ -183,11 +186,11 @@ Change.update.init = function(){
 				
 			],
 			'slow':[
-				{'array':['resource'],'filter':(function(w){ for(var i in w){ for(var j in w[i]){ w[i][j] = Math.round(w[i][j]); return w; }} })},
+				{'array':['resource'],'filter':Change.send.convert.resource},
 				
 				{'array':['permBoost']},
-				//{'array':['equip','def']},
-				//{'array':['equip','dmg']},
+				// {'array':['equip','def']},
+				// {'array':['equip','dmg']},
 				{'array':['def']},
 						
 				
@@ -198,7 +201,8 @@ Change.update.init = function(){
 				{'array':['skill','lvl']},
 			]
 			},	
-		'exist':{'reg':[
+		'exist':{
+			'reg':[
 				{'array':['sprite','anim']},
 				{'array':['chatHead']},
 			]}
@@ -207,28 +211,25 @@ Change.update.init = function(){
 	Change.update.list['drop'] = null;
 	
 	for(var i in Change.update.list){
-		if(!Change.update.list[i]){ Change.update.list[i] = {'watch':{'priority':[],'reg':[],'slow':[]},'exist':{'priority':[],'reg':[],'slow':[]}}; }
+		if(!Change.update.list[i]){ Change.update.list[i] = {'watch':{'fast':[],'reg':[],'slow':[]},'exist':{'fast':[],'reg':[],'slow':[]}}; }
 		
 		for(var j in Change.update.list[i]){
 		    var w = Change.update.list[i][j];
-			w.priority = w.priority || []; 
+			w.fast = w.fast || []; 
 			w.reg = w.reg || []; 
 			w.slow = w.slow || []; 
 			
 			for(var k in w){
 				for(var m in w[k]){
-				    w[k][m].id = w[k][m].sendArray ? w[k][m].sendArray.toString() : w[k][m].array.toString()
+				    w[k][m].id = w[k][m].sendArray ? w[k][m].sendArray.toString() : w[k][m].array.toString();
 				}
 			}
 		}
 	}
 	
 }
-/*
-{'array':['dodge'],'filter':Math.round},
-{'array':['fury'],'filter':Math.round},
-{'array':['heal'],'filter':Math.round},
-*/
+
+
 
 Change.update.watch = function(act,info,priv){
 	//Test condition to test
@@ -238,47 +239,40 @@ Change.update.watch = function(act,info,priv){
 	var valRaw = Tk.viaArray.get({'origin':act,'array':info.array});
 	if(valRaw && info.filter) valRaw = info.filter(valRaw,act);
 	        
-	var val0 = Tk.stringify(valRaw);                                   //Get new
-	
-	
-	if(!priv){ var val1 = act.old[info.id]; }
-    else { var val1 = act.privateOld[info.id]; }                      //Get old
+	var val0 = Tk.stringify(valRaw);                              		//Get new
+	var val1 = priv ? act.privateOld[info.id] : act.old[info.id]; 		//Get old
 	
 	//Test !=
-	if(!Tk.isEqual(val0, val1)){
-		if(!priv){ act.old[info.id] = val0; }                  //Set Old
-		else { act.privateOld[info.id] = val0; }
-		
-		
-	    if(info.sendArray){                                                 //Modify array of what to send
-			var valRaw = Tk.viaArray.get({'origin':act,'array':info.sendArray});
-			if(info.sendFilter) valRaw = info.sendFilter(valRaw);
-			var val0 = Tk.stringify(valRaw);
-		}
-		
-		if(!priv){ act.change[info.id] = valRaw; }          //Add to change list for send.js know
-		else {	act.privateChange[info.id] = valRaw; }
+	if(Tk.isEqual(val0, val1)) return;
+	
+	if(!priv){ act.old[info.id] = val0; }                  //Set Old
+	else { act.privateOld[info.id] = val0; }
+
+	if(info.sendArray){                                                 //Modify array of what to send
+		var valRaw = Tk.viaArray.get({'origin':act,'array':info.sendArray});
+		if(info.sendFilter) valRaw = info.sendFilter(valRaw);
+		var val0 = Tk.stringify(valRaw);
 	}
+	
+	if(!priv){ act.change[info.id] = valRaw; }          //Add to change list for send.js know
+	else {	act.privateChange[info.id] = valRaw; }
+
 }	
-
-
-
-
 
 Change.update.exist = function(act,info,priv){
 	//Test condition to test
 	if(info.condition && !info.condition(act)) return; 
 
 	var valRaw = Tk.viaArray.get({'origin':act,'array':info.array});
-	if(valRaw){
-	    if(Array.isArray(valRaw) && valRaw.length === 0) return;
-	    var val0 = Tk.stringify(valRaw); 
+	if(!valRaw) return;
+	if(Array.isArray(valRaw) && valRaw.length === 0) return;
+	
+	var val0 = Tk.stringify(valRaw); 
+	
+	if(!priv){ act.change[info.id] = valRaw; }
+	else {	act.privateChange[info.id] = valRaw; }
 		
-		if(!priv){ act.change[info.id] = valRaw; }
-		else {	act.privateChange[info.id] = valRaw; }
-			
-		if(!info.reset){ Tk.viaArray.set({'origin':act,'array':info.array,'value':null}); }
-		else if(info.reset !== 'noreset'){ Tk.viaArray.set({'origin':act,'array':info.array,'value':Tk.deepClone(info.reset)}); }
+	if(!info.reset){ Tk.viaArray.set({'origin':act,'array':info.array,'value':null}); }
+	else if(info.reset !== 'noreset'){ Tk.viaArray.set({'origin':act,'array':info.array,'value':Tk.deepClone(info.reset)}); }
 		
-	}
 }

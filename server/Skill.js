@@ -10,6 +10,7 @@ Skill.addExp = function(key,skill,amount,bonus){
 	Server.log(2,key,'addExp',skill,amount);
 }
 
+
 Skill.addExp.bulk = function(key,obj,bonus){
 	for(var i in obj){
 		Skill.addExp(key,i,obj[i],bonus);
@@ -17,22 +18,20 @@ Skill.addExp.bulk = function(key,obj,bonus){
 }
 
 Skill.updateLvl = function(key,sk){
-	var player = List.all[key];
+	var ps = List.all[key].skill;
 	var main = List.main[key];
 	
-	if(!sk) sk = Cst.skill.list;
+	if(!sk) sk = Cst.skill.list;	//if no sk, update all skills
 	sk = Tk.arrayfy(sk);
 	
 	for(var i in sk){
-		var skill = sk[i];
-		if(player.skill.exp[skill] >= Cst.exp.list[player.skill.lvl[skill]+1]){
-			var newLvl = Tk.binarySearch(Cst.exp.list,player.skill.exp[skill]);
+		var s = sk[i];
+		if(ps.exp[s] >= Cst.exp.list[ps.lvl[s]+1]){
+			var newLvl = Skill.getLvlViaExp(ps.exp[s]);			
+			var lvlDiff = newLvl-ps.lvl[s];
 			
-			var lvlDiff = newLvl-player.skill.lvl[skill];
-				
-			player.skill.lvl[skill] = newLvl;
-			Skill.lvlUp(key,skill);
-			
+			ps.lvl[s] = newLvl;
+			Skill.lvlUp(key,s);
 		}
 	}
 }
@@ -43,28 +42,27 @@ Skill.getLvlViaExp = function(exp){
 
 
 Skill.lvlUp = function(key,skill){
-	Chat.add(key,'You are level ' + List.all[key].skill.lvl[skill] + ' in ' + skill.capitalize() + '!');
-	Server.log(1,key,'Skill.lvlUp',skill,List.all[key].skill.lvl[skill]);
+	var sk = List.all[key].skill;
+	Chat.add(key,'You are level ' + sk.lvl[skill] + ' in ' + skill.capitalize() + '!');
+	Server.log(1,key,'Skill.lvlUp',skill,sk.lvl[skill]);
 }
 
 Skill.unlockableContent = function(key){
 	var total = Skill.getTotalLvl(key);
-	//TOFIX
+	var m = List.main[key];
+	
 	switch (total){
-		case 10: Chat.add(key,"You have unlocked the Passive Grid! You can access it via the Equip Tab. The Passive Grid allows you to customize your character when you level up."); List.main[key].hideHUD.passive = 0; break;
-		case 15: Chat.add(key,"The offensive and defensive windows now display the complete Elemental Dmg and Def formula! You can access it via the Equip Tab."); List.main[key].hideHUD.advancedStat = 0; break;
-		case 20: Chat.add(key,"You can now increase the quest difficulty by activating Quest Challenges via the Quest Window."); List.main[key].hideHUD.questChallenge = 0; break;
-		case 25: Chat.add(key,"You can now use Quest Orbs to increase your quest reward via the Quest Window."); List.main[key].hideHUD.questOrb = 0; break;
-		case 30: Chat.add(key,"You can now use Upgrade Orbs to improve your equipment."); List.main[key].hideHUD.equipOrb = 0; break;
-		case 40: Chat.add(key,"You can now use Upgrade Orbs to improve your abilities."); List.main[key].hideHUD.advancedAbility = 0; break;
+		case 10: Chat.add(key,"You have unlocked the Passive Grid! You can access it via the Equip Tab. The Passive Grid allows you to customize your character when you level up."); m.hideHUD.passive = 0; break;
+		case 15: Chat.add(key,"The offensive and defensive windows now display the complete Elemental Dmg and Def formula! You can access it via the Equip Tab."); m.hideHUD.advancedStat = 0; break;
+		case 20: Chat.add(key,"You can now increase the quest difficulty by activating Quest Challenges via the Quest Window."); m.hideHUD.questChallenge = 0; break;
+		case 25: Chat.add(key,"You can now use Quest Orbs to increase your quest reward via the Quest Window."); m.hideHUD.questOrb = 0; break;
+		case 30: Chat.add(key,"You can now use Upgrade Orbs to improve your equipment."); m.hideHUD.equipOrb = 0; break;
+		case 40: Chat.add(key,"You can now use Upgrade Orbs to improve your abilities."); m.hideHUD.advancedAbility = 0; break;
 	}
-		
-	
-	
 	
 }
 
-Skill.testLvl = function(key,sk,lvl){
+Skill.testLvl = function(key,sk,lvl){	//for req
 	var player = List.all[key];
 	
 	if(typeof sk !== 'object'){	var skill = {};	skill[sk] = lvl;	} 
@@ -92,6 +90,7 @@ Db.skillPlot = {
 		variant:'red',
 		lvl:0,
 		skill:'woodcutting',
+		exp:100,
 		chance:function(lvl){
 			return 1;			
 		},
@@ -107,6 +106,7 @@ SkillPlot = {};
 SkillPlot.creation = function(data){	//spot, type, num, quest
 	var plot = Db.skillPlot[data.type];
 	
+	//create 2 copy. if not harvest, view up tree. else view down
 	var id = Actor.creation({'spot':data.spot,
 		"category":plot.category,"variant":plot.variant,"extra":{
 			skillPlot:{
