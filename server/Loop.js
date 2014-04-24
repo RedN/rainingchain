@@ -142,7 +142,7 @@ Activelist.add = function(b){		//set the viewedBy of b AND add b to activeList o
 		
 		if(Activelist.test(player,b)){ 
 			player.activeList[b.id] = b.id;
-			if(player.type !== 'player' || b.type === 'strike'){ 
+			if(player.type !== 'player'){ 
 				b.viewedBy[player.id] = 1; 
 			}
 		}

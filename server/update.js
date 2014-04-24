@@ -3,7 +3,6 @@ var TIMER = {'fast':1,'reg':5,'slow':25};
 
 //not compress in old. use a custom isequal
 
-//Complex system to track the data that has changed and that need to be send to the client.
 
 Change.update = function(){
 	//Entity
@@ -276,3 +275,4 @@ Change.update.exist = function(act,info,priv){
 	else if(info.reset !== 'noreset'){ Tk.viaArray.set({'origin':act,'array':info.array,'value':Tk.deepClone(info.reset)}); }
 		
 }
+

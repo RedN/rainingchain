@@ -18,7 +18,7 @@ serv.listen(3000);
 var clientPath = './server/client/js/shared/';
 var serverPath = './server/';
 
-
+app.use(express.compress());
 app.use(express.bodyParser());
 app.use(express.static(path.resolve(__dirname, 'server/client')));	//need to be entered manually
 

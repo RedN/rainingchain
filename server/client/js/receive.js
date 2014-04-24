@@ -20,7 +20,7 @@ try {
 	//Update Full List
 	for(var i in data.u){
 		if(List.all[i]) List.all[i].toRemove = 0; 	
-		else { ERROR(2,'no act'); continue;}
+		else { ERROR(2,'no act',JSON.stringify(data.u),i); continue;}
 		
 		var changeList = data.u[i];
 		for(var j in changeList){

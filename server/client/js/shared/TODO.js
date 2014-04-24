@@ -3,7 +3,7 @@
 
 
 ==REVAMP==
-SKIPPED: command, trade, craft,customMod,db.filter, passive
+SKIPPED: command, trade, craft,db.filter, passive
 
 add description for each item
 
@@ -44,6 +44,8 @@ add more Skill.unlockableContent
 
 tooltip not disappearing
 
+only preload maps used
+
 ===PRE SDK===
 transform not be overwrite if change equip
 new sprite change system: sprite.normal and sprite.custom
@@ -82,7 +84,7 @@ revamp a*
 hide quest in quest tab
 
 boss documentation
-
+customMod,
 
 fix pvp map
 no more string for func for items

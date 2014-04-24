@@ -36,6 +36,10 @@ Loop.player = function(){
 		Loop.player.old.permBoost = player.permBoost;
 		Actor.update.permBoost(player);	
 	}
+	
+	if(!Db.map[player.map])
+		Map.creation(player.map);
+	
 }
 Loop.player.old = {};
 
