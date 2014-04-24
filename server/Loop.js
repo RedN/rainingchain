@@ -48,8 +48,7 @@ Loop.strike = function(){
 Loop.drop = function(){
 	for(var i in List.drop){ 
 		var drop = List.drop[i];
-		drop.timer--; 
-		if(drop.timer <= 0){ Drop.remove(drop); }
+		if(--drop.timer <= 0){ Drop.remove(drop); }
 	}
 }
 
@@ -63,25 +62,24 @@ Loop.group = function(){
 	for(var i in List.group){
 		var g = List.group[i];
 		var list = g.list;
-		var bool = true;
+		var alldead = true;
 		
 		for(var j in list){
-			var e = list[j];
-			if(!e){ delete list[j];  continue; }
-			if(!e.dead){ bool = false; }
+			var e = List.actor[j];
+			if(!e){ delete list[j]; ERROR(2,'no actor');  continue; }
+			if(!e.dead){ alldead = false; }
 			if(e.dead && e.deleteOnceDead){
 				Actor.remove(e);
 				delete list[j];
 				continue;
 			}
 		}
-		if(!Object.keys(g.list)){ delete List.group[i]; continue; } //if deleted all enemies in group
+		if(Object.keys(g.list).length === 0){ delete List.group[i]; continue; } //get removed if no longer in List or deleteOnceDead
 		
-		if(bool){ //aka all dead
-			g.respawn--;
-			if(g.respawn <= 0){
+		if(alldead){ //aka all dead
+			if(--g.respawn <= 0){
 				Actor.creation.group.apply(this,g.param); 
-				for(var j in list) Actor.remove(list[j]);				
+				for(var j in list) Actor.remove(List.actor[j]);				
 				delete List.group[i];
 				continue;
 			}

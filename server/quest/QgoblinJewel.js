@@ -414,6 +414,7 @@ q.map.goblinLand = function(){
 		
 		
 		//TEST
+		/*
 		s.actorGroup(spot.ed,25*15,[
 			["orc","melee",12,{deathFunc:q.event.killOrc}],
 			["orc","range",11,{deathFunc:q.event.killOrc}],
@@ -425,12 +426,12 @@ q.map.goblinLand = function(){
 		s.actorGroup(spot.q1,25*15,[
 			["dragon","king",10,{deathFunc:q.event.killOrc}],
 		]);	
-		
-		/*
-		s.actorGroup(spot.n1,25*15,[
-			["orc","melee",1,{abilityList:[]}],
-		]);	
 		*/
+
+		s.actorGroup(spot.n1,25*5,[
+			["orc","melee",2,{abilityList:[]}],
+		]);	
+		
 		//
 		
 		/*

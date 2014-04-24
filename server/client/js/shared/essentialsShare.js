@@ -36,8 +36,8 @@ valueOf 			1396998305249
 Date.prototype.toLocaleDateString = function(){	//cuz nodejs sucks
 	return this.getMonth()+1 + '/' + this.getDate() + '/' + this.getFullYear();
 }
-Date.nowDate = function(){
-	return new Date().toLocaleDateString();
+Date.nowDate = function(num){
+	return new Date(num || Date.now()).toLocaleDateString();
 }
 
 //Math

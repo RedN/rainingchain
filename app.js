@@ -57,6 +57,7 @@ require(serverPath + 'Itemlist');
 require(serverPath + 'send');
 require(serverPath + 'update');
 require(serverPath + 'logIn');
+require(serverPath + 'Entergame');
 require(serverPath + 'combat');
 require(serverPath + 'map');
 require(serverPath + 'input');

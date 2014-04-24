@@ -32,6 +32,7 @@ Sign.up.create = function(user,pass,email,salt,socket){
 	p.name = user; 
 	p.username = user; 
 	p.context = user;
+	p.team = user;
 	p.id = Math.randomId();
 	p.publicId = Math.randomId(6);
 	
@@ -155,7 +156,7 @@ Save.player = function(key,updateDb){
 	var player = typeof key === 'string' ? List.all[key] : key;
 	player = Save.player.compress(player);
 	var save = {};
-    var toSave = ['respawnLoc','username','name','weapon','equip','skill','ability','abilityList'];
+    var toSave = ['respawnLoc','username','name','weapon','equip','skill','ability','abilityList','team'];
     for(var i in toSave){	save[toSave[i]] = player[toSave[i]]; }
 	
     if(updateDb !== false) db.update('player',{username:player.username},save,db.err);
@@ -167,7 +168,7 @@ Save.main = function(key,updateDb){
 	var main = typeof key === 'string' ? List.main[key] : key;
     main = Save.main.compress(main);
     var save = {};
-    var toSave = ['invList','bankList','tradeList','quest','username','name','social','passive','chrono'];
+    var toSave = ['invList','bankList','quest','username','name','social','passive','chrono'];
     for(var i in toSave){ save[toSave[i]] = main[toSave[i]]; }
 
     if(updateDb !== false)	db.update('main',{username:main.username},save,db.err);
@@ -199,36 +200,20 @@ Load = function (key,account,socket,cb){
 			
 			
 			//Cycle
-			var now = Date.now();
-			if(account.lastSignIn === null) Test.firstSignIn(key);
-			else if((new Date(account.lastSignIn)).toLocaleDateString() !== (new Date(now).toLocaleDateString()))
-				Cycle.day.quest(key);
-				
-			db.update('account',{username:player.username},{'$set':{online:1,key:key,lastSignIn:now}},function(err, res) { if(err) throw err
-				socket.emit('signIn', { success:1, key:key, data:Load.initData(key,player,main)});
-			});
-			
-			var time = Math.floor(account.timePlayedThisWeek/Cst.HOUR) + 'h ' + Math.floor(account.timePlayedThisWeek%Cst.HOUR/Cst.MIN) + 'm';
-			Chat.add(key,"You have played " + time + " this week.");
-			//
-			
-			Test.signIn(key);
+			Load.enterGame(key,account,player,main,socket);
 			
 		});	
 	});	
 }
 
 Load.main = function(key,account,cb){
-    db.find('main',{username:account.username},{_id:0},function(err, db) { if(err) throw err;	
-		db = db[0];
-		var main = Tk.useTemplate(Main.template(key),Load.main.uncompress(db,key));
-		cb(main);
+    db.findOne('main',{username:account.username},{_id:0},function(err, db) { if(err) throw err;	
+		cb(Tk.useTemplate(Main.template(key),Load.main.uncompress(db,key)));
 	});
 }
 
-Save.main.compress = function(mainn){
-	var main = Tk.deepClone(mainn);
-	delete main.tradeList;
+Save.main.compress = function(main){
+	main = Tk.deepClone(main);
 	
 	main.invList = main.invList.data;
 	for(var i = main.invList.length-1; i>=0; i--){
@@ -287,111 +272,69 @@ Load.main.uncompress = function(main,key){
 }
 
 Load.player = function(key,account,cb){
-   db.find('player',{username:account.username},{_id:0},function(err, db) { if(err) throw err;
-		db = db[0];
-		
-		var player = Actor.template('player');   //set default player
-		db = Load.player.uncompress(db);      //use info from the db
-
-		for (var i in db) { player[i] = db[i]; }
+   db.findOne('player',{username:account.username},{_id:0},function(err, db) { if(err) throw err;
+		var player = Tk.useTemplate(Actor.template('player'),Load.player.uncompress(db));
 		player.context = player.name;
 		player.id = key;
 		player.publicId = player.name;
-		player.team = player.name;
 		player = Actor.creation.optionList(player);
 	
 		cb(player);
 	});
 }
 
-Save.player.compress = function(playerr){
-	var player = Tk.deepClone(playerr);
-	for(var i in player.ability.regular)	player.ability.regular[i] = player.ability.regular[i] ? player.ability.regular[i].id : 0;
-	player.ability = player.ability.regular;
+Save.player.compress = function(p){
+	p = Tk.deepClone(p);
 	
-	player.respawnLoc.recent.x = Math.round(player.respawnLoc.recent.x);
-	player.respawnLoc.recent.y = Math.round(player.respawnLoc.recent.y);
-	player.respawnLoc.safe.x = Math.round(player.respawnLoc.safe.x);
-	player.respawnLoc.safe.y = Math.round(player.respawnLoc.safe.y);
+	//Ability
+	p.ability = p.ability.regular;
+	for(var i in p.ability)	p.ability[i] = p.ability[i] ? p.ability[i].id : 0;
+	p.abilityList = Object.keys(p.abilityList.regular);
+	
+	
+	p.respawnLoc.recent.x = Math.round(p.respawnLoc.recent.x);
+	p.respawnLoc.recent.y = Math.round(p.respawnLoc.recent.y);
+	p.respawnLoc.safe.x = Math.round(p.respawnLoc.safe.x);
+	p.respawnLoc.safe.y = Math.round(p.respawnLoc.safe.y);
 	
 	//Skill
-	player.skill = player.skill.exp;
 	var tmp = [];
-	for(var i in Cst.skill.list) tmp.push(player.skill[Cst.skill.list[i]]);
-	player.skill = tmp;
+	for(var i in Cst.skill.list) tmp.push(p.skill.exp[Cst.skill.list[i]]);	//must use cst for order
+	p.skill = tmp;
 	
 	//Equip
-	player.equip = player.equip.regular.piece;
 	var tmp = [];
-	for(var i in Cst.equip.piece) tmp.push(player.equip[Cst.equip.piece[i]]);
-	player.equip = tmp;
+	for(var i in Cst.equip.piece) tmp.push(p.equip.regular.piece[Cst.equip.piece[i]]);
+	p.equip = tmp;
 	
-    return player;
+	
+    return p;
 }
 
-Load.player.uncompress = function(player){
+Load.player.uncompress = function(p){
 	//Skill
-	player.skill = {exp:player.skill,lvl:{}};
+	p.skill = {exp:p.skill,lvl:{}};
 	var tmp = {};
-	for(var i in Cst.skill.list) tmp[Cst.skill.list[i]] = player.skill.exp[i];
-	player.skill.exp = tmp;
-	for(var i in player.skill.exp) player.skill.lvl[i] = Skill.getLvlViaExp(player.skill.exp[i]);
+	for(var i in Cst.skill.list) tmp[Cst.skill.list[i]] = p.skill.exp[i];
+	p.skill.exp = tmp;
+	for(var i in p.skill.exp) p.skill.lvl[i] = Skill.getLvlViaExp(p.skill.exp[i]);
 	
 	//Equip
-	player.equip = {piece:player.equip,dmg:Cst.element.template(1),def:Cst.element.template(1)}
+	p.equip = {piece:p.equip,dmg:Cst.element.template(1),def:Cst.element.template(1)}
 	var tmp = {};
-	for(var i in Cst.equip.piece) tmp[Cst.equip.piece[i]] = player.equip.piece[i];
-	player.equip.piece = tmp;	
-	player.equip = Actor.template.equip(player.equip);
+	for(var i in Cst.equip.piece) tmp[Cst.equip.piece[i]] = p.equip.piece[i];
+	p.equip.piece = tmp;	
+	p.equip = Actor.template.equip(p.equip);
 								
-    for(var i in player.ability)	player.ability[i] = Ability.uncompress(player.ability[i]);
-	player.ability = Actor.template.ability(player.ability);
-	player.abilityChange = Actor.template.abilityChange(player.abilityList.regular);
-	return player;
+    for(var i in p.ability)	p.ability[i] = Ability.uncompress(p.ability[i]);
+	p.ability = Actor.template.ability(p.ability);
+	p.abilityChange = Actor.template.abilityChange(p.abilityList.regular);
+	
+	var tmp = {};	for(var i in p.abilityList) tmp[p.abilityList[i]] = 1;
+	p.abilityList = Actor.template.abilityList(tmp);
+	
+	return p;
 }
-
-Load.initData = function(key,player,main){
-	//Value sent to client when starting game
-    var data = {'player':{},'main':{},'other':{}};
-    var obj = {'player':player, 'main':main}
-
-    var array = {
-        'player':{
-            'name':0,
-            'x':0,
-            'y':0,
-            'map':Change.send.convert.map,
-            'equip':Change.send.convert.equip,
-            'weapon':0,
-            'skill':0,
-            'ability':Change.send.convert.ability,
-            'abilityList':Change.send.convert.abilityList,
-			'permBoost':0,
-        },
-        'main':{
-            'passive':0,
-            'social':0,
-            'quest':0,
-			'invList':Change.send.convert.itemlist,
-			'bankList':Change.send.convert.itemlist,
-			'tradeList':Change.send.convert.itemlist,
-			'hideHUD':0,			
-        }
-    }
-    for(var i in array){
-        for(var j in array[i]){
-            if(array[i][j]){ data[i][j] = array[i][j](obj[i][j],player);  continue;}
-            data[i][j] = obj[i][j];
-        }
-    }
-		
-	data.other.passiveGrid = [
-		Db.passiveGrid.moddedGrid[main.passive.freeze[0] || Date.nowDate()],
-		Db.passiveGrid.moddedGrid[main.passive.freeze[1] || Date.nowDate()]
-	];
-	return data;
-}
-
 
 
 

@@ -42,12 +42,13 @@ Actor.creation.group = function(gr,el){
     el: [  {'amount':1,"category":"slime","variant":"Big","lvl":0,'modAmount':1},
 		{'amount':10,"category":"troll","variant":"ice","lvl":0,'modAmount':1},	];
 	*/
-	var id = Math.randomId();
 	var enemyIdList = [];
 	
 	Map.convertSpot(gr);
 	gr = Tk.useTemplate(Actor.creation.group.template(),gr);	
+	el = Tk.arrayfy(el);
 	
+	var id = gr.group;
 	List.group[id] = {
 		'id':id,
 		'param':[gr,el],        //used to revive group
@@ -55,18 +56,14 @@ Actor.creation.group = function(gr,el){
 		'respawn':gr.respawn,   //time before respawn when all monster dead
 	};
 	
-	el = Tk.arrayfy(el);
 	for(var i in el){
 		var amount = el[i].amount || 1;
+		el[i] = Tk.useTemplate(el[i],gr);  //info about x,y,map
 		for(var j = 0 ; j < amount; j++){
-			el[i] = Tk.useTemplate(el[i],gr);  //info about x,y,map
-			
 			var eid = Actor.creation(el[i]);
-			var e = List.all[eid];
+			List.group[id].list[eid] = 1;
 			
 			enemyIdList.push(eid);
-			List.group[id].list[eid] = e;
-			e.group = id;
 		}
 	}
 	return enemyIdList;
@@ -74,7 +71,7 @@ Actor.creation.group = function(gr,el){
 }
 
 Actor.creation.group.template = function(){
-	return {'x':0,'y':0,'v':25,'map':'test@MAIN','respawn':100}
+	return {'x':0,'y':0,'v':25,'map':'test@MAIN','respawn':100,group:Math.randomId()}
 }
 
 Actor.creation.boost = function(e){
@@ -134,6 +131,7 @@ Actor.creation.data = function(e,cr){
 	e.variant = cr.variant; 
 	e.modAmount = cr.modAmount;
 	e.extra = cr.extra;
+	e.group = cr.group || '';
 	
 	e.target.main = {x:e.x,y:e.y};
 	e.data = cr;

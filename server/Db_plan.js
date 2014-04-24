@@ -184,7 +184,7 @@ Plan.use = function(key,id){	//when player tries to use plan
 	
 	if(!Plan.test(key,plan.req)) return Chat.add(key,"You don't meet the requirements to use this plan.");
 	//
-	Itemlist.remove.bulk(inv,plan.req.item);
+	Itemlist.remove(inv,plan.req.item);
 	
 	plan.creator = List.all[key].username;
 	var itemid;

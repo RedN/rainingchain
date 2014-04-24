@@ -23,7 +23,7 @@ Actor.changeResource = function(act,heal){
 }
 
 Actor.getDef = function(act){
-	var defratio = server ? Actor.getEquip(act).def : player.equip.def;
+	var defratio = SERVER ? Actor.getEquip(act).def : player.equip.def;
 	var def = {
 		main:act.globalDef,
 		ratio:Tk.deepClone(defratio)

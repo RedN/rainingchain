@@ -23,7 +23,7 @@ exports.init = function(version,questname){	//}
 		
 		if(attr === 'started'){
 			mq[attr] = true;
-			Chat.add(key,"You started the quest '" + q.name + "'.");
+			Chat.add(key,"You started the quest '" + s.quest.name + "'.");
 			return;
 		}	
 		if(!mq.started){
@@ -120,7 +120,7 @@ exports.init = function(version,questname){	//}
 
 	//Cutscene
 	s.cutscene = function(key,map,path){
-		Actor.setCutscene(s.getAct(key),q.map[map][Q].path[path]);
+		Actor.setCutscene(s.getAct(key),s.quest.map[map][Q].path[path]);
 		//ts("p.x = 1500; p.y = 3000;Actor.setCutscene(p,[{x:1600,y:3100},25*10,{x:1800,y:3200}]);")
 	}
 
