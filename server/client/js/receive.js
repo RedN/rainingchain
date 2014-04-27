@@ -72,12 +72,13 @@ Receive.parse = function(data){
 
 //format [x,y,angle] becomes {x:1,y:1,angle:1}
 Receive.parse.xya = function(info){
-	if(info[0] && info.length == 3){info = {'x':info[0],'y':info[1],'angle':info[2]};}
-	else if(info[0] && info.length == 2){info = {'x':info[0],'y':info[1]};}
+	if(info[0] && info.length === 3) info = {'x':info[0],'y':info[1],'angle':info[2]};
+	else if(info[0] && info.length === 2) info = {'x':info[0],'y':info[1]};
 	else if(info.xya){ info.x = info.xya[0]; info.y = info.xya[1]; info.angle = info.xya[2]; delete info.xya }
 	else if(info.xy){ info.x = info.xy[0]; info.y = info.xy[1]; delete info.xy }
 	return info;
 }
+
 Receive.parse.chargeClient = function(info){	//could be used when needed instead of all the time
 	if(typeof info['abilityChange,chargeClient'] === 'string'){
 		var charge = info['abilityChange,chargeClient'];
@@ -92,9 +93,10 @@ Receive.parse.chargeClient = function(info){	//could be used when needed instead
 
 
 Receive.init = function(obj,id){
-	if(obj[0] === 'b'){	Receive.init.bullet(obj,id);}	
-	if(obj.type === 'npc' || obj.type === 'player'){ Receive.init.actor(obj); }	
-	else if(obj.type === 'drop'){	Receive.init.drop(obj);	}
+	if(obj[0] === 'b')	Receive.init.bullet(obj,id);
+	else if(obj[0] === 's')	Receive.init.strike(obj,id);	
+	else if(obj.type === 'npc' || obj.type === 'player') Receive.init.actor(obj); 
+	else if(obj.type === 'drop')	Receive.init.drop(obj);	
 }
 
 Receive.init.actor = function(act){
@@ -104,6 +106,27 @@ Receive.init.actor = function(act){
 	List.all[act.id] = act;	
 	
 }
+Receive.init.strike = function(s,id){
+
+	var st = {
+		type:'strike',
+		id:id,
+		delay:s[1],
+		point:[
+			{x:s[2],y:s[3]},
+			{x:s[4],y:s[5]},
+			{x:s[6],y:s[7]},
+			{x:s[8],y:s[9]},
+		],	
+	}
+	
+	
+	List.strike[id] = st;
+	List.all[id] = st;
+
+
+}
+
 
 Receive.init.bullet = function(obj,id){
 	/*

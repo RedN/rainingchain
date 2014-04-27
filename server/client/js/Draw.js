@@ -22,7 +22,8 @@ Draw.loop = function (){
 	Draw.map('b');   //below player
 	Draw.anim('b');  //below player
 	Draw.drop();
-	Draw.actor();  		
+	Draw.strike();
+	Draw.actor();
 	Draw.bullet();
 	Draw.anim('a');  //above player
 	Draw.map('a');   //above player

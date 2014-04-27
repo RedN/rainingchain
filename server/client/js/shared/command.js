@@ -698,7 +698,7 @@ Command.list['pref'] = function(name,value){
 	
 	if(main.pref[name] === undefined){ Chat.add('Invalid name.'); return; }
 	value = Command.pref.verify(name,value);
-	if(value === 'Invalid value.'){ Chat.add('Invalid value.'); return; }
+	if(value === false){ Chat.add('Invalid value.'); return; }
 	
 	main.pref[name] = value;
 	if(Command.pref.list[name].func) Command.pref.list[name].func(value);
@@ -739,6 +739,7 @@ Command.list['music,info'].doc = {
 //{Pref
 Command.pref = {};
 Command.pref.list = {
+	'displayAoE':{name:'Display AoE',initValue:0,min:0,max:1,description:'Display Damage Zone For Strikes. 0=false, 1=true' },
 	'volumeSong':{name:'Volume Song',initValue:20,min:0,max:100,description:'Volume Song.','func':function(value){ Song.beingPlayed.song.volume = value/100 * main.pref.volumeMaster/100; }},
 	'volumeSfx':{name:'Volume Effects',initValue:100,min:0,max:100,description:'Volume Sound Effects.'},
 	'volumeMaster':{name:'Volume Master',initValue:100,min:0,max:100,description:'Volume Master. 0:Mute','func':function(value){ Song.beingPlayed.song.volume = value/100 * main.pref.volumeSong/100; }},
@@ -752,25 +753,10 @@ Command.pref.list = {
 Command.pref.verify = function(name,value){
 	var req = Command.pref.list[name];
 
-	if(!req.type || req.type === 'number'){ 
-		value = Number(value); 
-		if(value.toString() === 'NaN'){ return 'Invalid value.'; }
-		
-		value = value.mm(req.min,req.max);			
-		value = Tk.round(value,req.round || 0);
-		
-		return value;
-	}
-	if(req.type === 'string'){
-		if(req.option.have(value)){
-			return value;
-		} else {
-			return 'Invalid value.';
-		}
-	}
+	value = +value; 
+	if(value.toString() === 'NaN') return false;
 	
-	if(req.type && typeof value !== req.type) return 'Invalid value.'; 
-	
+	return value.mm(req.min,req.max);	
 }
 
 Main.template.pref = function(){

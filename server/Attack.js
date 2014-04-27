@@ -136,8 +136,6 @@ Attack.creation.info = function(act,b){
 	return b;
 }; 
 
-
-
 Attack.creation.bullet = function(b){
 	
 	if(b.parabole){
@@ -162,10 +160,8 @@ Attack.creation.bullet = function(b){
 }; 
 
 
-
 //need to remove player.bonus to pre-atk
 Attack.creation.strike = function(s){
-			
 	//Position
 	var dist = Math.pyt( s.mouseX-Cst.WIDTH2, s.mouseY-Cst.HEIGHT2);
 	dist = dist.mm(s.minRange,s.maxRange);

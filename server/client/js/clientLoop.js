@@ -84,6 +84,7 @@ removeAny = function(i){
 	delete List.actor[i];
 	delete List.drop[i]; 
 	delete List.all[i]; 
+	delete List.strike[i]; 
 }
 
 Actor.loop = function(act){

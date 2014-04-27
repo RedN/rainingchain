@@ -134,7 +134,6 @@ Draw.drop = function(){
 
 Draw.anim = function (layer){
 	ctx = List.ctx.stage;
-	
 	for(var i in List.anim){
 		var a = Db.anim[List.anim[i].name];
 		if(!a){ ERROR(2,"anim not found",anim.name); a = Db.anim['slashMelee']; }
@@ -161,5 +160,39 @@ Draw.anim = function (layer){
 		}
 	}
 }
+
+
+Draw.strike = function(){
+	if(!main.pref.displayAoE) return;
+	
+	ctx.fillStyle = 'red';
+	for(var i in List.strike){
+		var s = List.strike[i];
+		var p = s.point;
+		
+		var x = Cst.WIDTH2 - player.x;
+		var y = Cst.HEIGHT2 - player.y;
+		
+		
+		ctx.globalAlpha = Math.min(0.5,1/Math.abs(s.delay));
+		
+		ctx.beginPath();
+		ctx.moveTo(x+p[0].x,y+p[0].y);
+		ctx.lineTo(x+p[1].x,y+p[1].y);
+		ctx.lineTo(x+p[2].x,y+p[2].y);
+		ctx.lineTo(x+p[3].x,y+p[3].y);
+		ctx.lineTo(x+p[0].x,y+p[0].y);
+		ctx.closePath();
+		ctx.fill();
+		
+		if(--s.delay < -4) removeAny(s);
+	}
+	ctx.fillStyle = 'black';
+	ctx.globalAlpha = 1;
+	
+	
+}
+
+
 
 

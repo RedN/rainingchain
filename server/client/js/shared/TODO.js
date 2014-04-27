@@ -5,6 +5,9 @@
 ==REVAMP==
 SKIPPED: command, trade, craft,db.filter, passive
 
+
+quest gives passive pts.
+
 add description for each item
 
 dodge should avoid bullet collision

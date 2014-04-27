@@ -138,9 +138,10 @@ Change.send.reset = function(){
 
 //####################################
 Change.send.init = function(obj){ //create object that has all info for the client to init the object
-	if(obj.type == 'bullet'){return Change.send.init.bullet(obj)}
-	if(obj.type == 'drop'){return Change.send.init.drop(obj)}
-	if(obj.type == 'npc' || obj.type == 'player'){	return Change.send.init.actor(obj)}
+	if(obj.type == 'bullet') return Change.send.init.bullet(obj);
+	else if(obj.type == 'strike') return Change.send.init.strike(obj);
+	else if(obj.type == 'drop') return Change.send.init.drop(obj);
+	else if(obj.type == 'npc' || obj.type == 'player')	return Change.send.init.actor(obj);
 }
 
 Change.send.init.bullet = function(bullet){	//For Init
@@ -156,6 +157,22 @@ Change.send.init.bullet = function(bullet){	//For Init
 	
 	return draw;
 }
+
+Change.send.init.strike = function(s){	//TOFIX send all to test
+	var p = s.point;
+	var r = Math.round;
+	
+	return [
+		's',
+		s.delay,
+		r(p[0].x),r(p[0].y),
+		r(p[2].x),r(p[2].y),
+		r(p[8].x),r(p[8].y),
+		r(p[6].x),r(p[6].y),
+	];
+}
+
+
 
 Change.send.init.actor = function(act){	//For Init
 	var draw = {};
