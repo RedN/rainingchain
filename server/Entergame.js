@@ -74,6 +74,10 @@ Load.enterGame.initData = function(key,player,main){
 		Db.passiveGrid.moddedGrid[main.passive.freeze[0] || Date.nowDate()],
 		Db.passiveGrid.moddedGrid[main.passive.freeze[1] || Date.nowDate()]
 	];
+	
+	var q = {};	for(var i in Db.quest) if(Db.quest[i].visible) q[i] = Db.quest[i].name;
+	data.other.quest = q;
+	
 	return data;
 }
 

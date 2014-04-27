@@ -120,6 +120,7 @@ Collision.BulletActor = function(b){
 Collision.BulletActor.test = function(atk,def){
 	var normal = Combat.damageIf(atk,def);
 	
+	if(def.damagedIf === 'false') return false;
 	if(normal && def.damagedIf !== 'true'){
 		if(Array.isArray(def.damagedIf)) normal = def.damagedIf.have(atk.parent);
 		if(typeof def.damagedIf === 'function') normal = def.damagedIf(List.all[atk.parent]);

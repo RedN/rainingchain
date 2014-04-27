@@ -129,6 +129,23 @@ Init.db.npc = function(){
 	var a = Db.npc;
 
 	//ALT-2
+	a["test"] = {}; //{
+	a["test"]["test"] = {  //{
+		"name":"Test",
+		"sprite":{'name':"bat",'sizeMod':1},
+		"abilityList":[
+			{'template':'fireBullet','aiChance':[0.4,0.4,1],'extra':{}},
+			[0.4,0.4,1]
+		],
+		"mastery":{'def':{'melee':2,'range':2,'magic':2,'fire':1,'cold':0.5,'lightning':1},
+					'dmg':{'melee':1,'range':1,'magic':1,'fire':1,'cold':1,'lightning':1}},	
+		"acc":0,
+		"maxSpd":0,
+		"moveRange":{'ideal':50,"confort":25,"aggressive":500,"farthest":600},	
+	}; //}	
+	//}
+	
+	
 	a["bat"] = {}; //{
 	a["bat"]["normal"] = {  //{
 		"name":"Bat",

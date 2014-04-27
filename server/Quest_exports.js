@@ -11,6 +11,7 @@ exports.init = function(version,questname){	//}
 	var s = {};	
 	s.quest = Quest.template(Q);
 	
+	
 	s.interval = function(num){ return Loop.interval(num); }
 	s.get = function(key,attr){
 		var mq = List.main[key].quest[Q];		

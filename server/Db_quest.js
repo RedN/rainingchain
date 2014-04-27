@@ -146,7 +146,7 @@ Quest.template = function(id,version){
 		event:{},
 		skillPlot:[],
 		boss:{},
-		visible:true,
+		visible:id[0] !== 'M',
 	};
 }
 

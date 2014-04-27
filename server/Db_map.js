@@ -1,17 +1,14 @@
 var astar = require('astar');
 
 Db.map = {};
-var mapList = [
-	'pvpF4A',
-	'test',
-];
+//var mapList = [];
 
 Init.db.map = function (){	
 	var a = Db.map;
 	
-	for(var i in mapList)	Db.map[mapList[i]] = require('./map/'+mapList[i]).map;		
+	//for(var i in mapList)	Db.map[mapList[i]] = require('./map/'+mapList[i]).map;		//not longer using. each map must be a quest
 	
-	for(var m in a){	
+	for(var m in a){
 		a[m] = a[m]();
 		a[m].id = m;
 		Map.creation.model(a[m]);

@@ -1,59 +1,68 @@
+==PRESDK==
 
-
-
-
-==REVAMP==
 SKIPPED: command, trade, craft,db.filter, passive
 
 
-quest gives passive pts.
 
-add description for each item
 
-dodge should avoid bullet collision
-main.temp = bad... only used for item on another item
 
-only save the active quest
-puush support
-email if server is down	//http://nodejs.org/api/domain.html
 
-add ability with globalMod
 
-limit access for map in /map/ too
+quest:
+db saved any quest: 
+	passivept, amount complete, skillPlot, challenge done, bonus
+	
+db not saved current quest: 
+	htin, requirement, 
+	
+main.activeQuest
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 quest visible, send quest list when server starts
 
+
 make preset challenge for time, 1 hp,  etc...
+
+
+
+quest gives passive pts.
 change quest reward for no luck.
 quest bonus split in exp, item, stat
 quest req, cant test if done other quest cuz exports. make preset for quest done, lvl
 
-throw error instead of just bypassing !List.all[key]
-rename convention for enemy system
 
-server ban
-server: dont draw unless click. sends context to client
+rename convention for enemy system
 
 rightclick drop not working
 can pick drop any distance
-weird click priority for optionlist on npc
-top context for npc not working
-no more context from server, no need for clientContext
-BISON doesnt send dialogue if too close from npc? it returns undefined
 
-trading is broken
 
-add more Skill.unlockableContent
 
-tooltip not disappearing
-
-only preload maps used
-
-===PRE SDK===
 transform not be overwrite if change equip
 new sprite change system: sprite.normal and sprite.custom
 
-call function on disconnect quest
 some dialogue cant be ended
 
 nicer chat question
@@ -62,19 +71,44 @@ nicer chat question
 can use whole quest file for testing dialogue
 boss summon
 
-change optionlist name for chest for something general ex flower
 
 give basic equip always
 
 
-normalize block and sprite name
-```
 lvl for monsters
 
 exp after completing quest for enemy
 
 
 
+==REVAMP==
+
+
+tooltip not disappearing
+
+main.temp = bad... only used for item on another item
+
+only save the active quest
+puush support
+email if server is down	//http://nodejs.org/api/domain.html
+
+add ability with globalMod
+
+
+
+throw error instead of just bypassing !List.all[key]
+
+server ban
+
+no more context from server, no need for clientContext
+BISON doesnt send dialogue if too close from npc? it returns undefined
+
+trading is broken
+
+add more Skill.unlockableContent
+
+
+only preload maps used
 
 
 

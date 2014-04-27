@@ -260,16 +260,12 @@ Init.db.ability = function(cb){
 		
 	a['pvp-heal'] = {'type':'heal','name':'Regen','icon':'heal.plus',
 		'spd':{'main':1,'support':0},'period':{'own':250,'global':50},'cost':{},
-		'action':{'animOnSprite':'boostRed','func':'Actor.changeHp','param':[
-			1000
-		]}
+		'action':{'animOnSprite':'boostRed','func':'Actor.changeHp','param':[1000]}
 	};
 	
 	a['pvp-invincibility'] = {'type':'dodge','name':'Invincibility','icon':'blessing.spike',
 		'spd':{'main':1,'support':0},'period':{'own':25,'global':25,'bypassGlobalCooldown':true},'cost':{"mana":50},
-		'action':{'animOnSprite':'boostWhite','func':'Actor.boost','param':[[
-			{"stat":"globalDef","type":"+","value":Cst.bigInt,"time":4,"name":"Dodge"},
-		]]}
+		'action':{'animOnSprite':'boostWhite','func':'Actor.dodge','param':[4]}
 	};
 	//}
 	
