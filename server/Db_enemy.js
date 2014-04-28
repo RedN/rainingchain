@@ -739,15 +739,26 @@ Init.db.npc = function(){
 	
 
 	//{NPC
-	a["npc"] = {}; //{
-	a["npc"]["ringo"] = {  //{
+	a["warrior"] = {}; //{
+	a["warrior"]["male0"] = {  //{
 		"name":"Ringo",
-		"sprite":{'name':"jenny",'sizeMod':1},
+		"sprite":{'name':"warrior-male0",'sizeMod':1},
 		'nevercombat':1,
 		"acc":0.5,
 		"maxSpd":3,
 	}; //}
 	//}
+	
+	
+	a["npc"] = {}; //{
+	a["npc"]["regular"] = {  //{
+		"name":"Ringo",
+		"sprite":{'name':"villager-male0",'sizeMod':1},
+		'nevercombat':1,
+		"acc":0.5,
+		"maxSpd":3,
+	}; //}
+	
 	//}
 	
 	//{System 

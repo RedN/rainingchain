@@ -59,10 +59,17 @@ Init.db.sprite = function(){
 		
 	//}
     //{ NPC
-    a["jenny"] ={"src":"actor/jenny.png","size":2,"side":[0,1,2,3],"hpBar":-22,"legs":16,
+   
+	
+	var list = {'warrior-male':6,'warrior-female':5,'villager-male':10,'villager-female':9,'villager-child':6,'fairy':8,'bad-monster':3,'bad-human':5};
+	for(var i in list)	for(var j = 0; j < list[i]; j++) a[i + j] = {"src":"actor/" + i + j +".png",rgpvx:1};
+
+	a["villager-female1"] ={"src":"actor/villager-female1.png","size":2,"side":[0,1,2,3],"hpBar":-22,"legs":16,
     	"preHitBox":[ -16,16,-16,16 ],"preBumperBox":[ -16,16,-16,16 ],"anim": {
     		"walk":{"startY":0,"frame":3,"sizeX":32,"sizeY":32,"dir":4,"spd":0.5,"walk":1,"next":"walk"},
     	}};
+	
+		
     //}	
     //{ ENEMY
     a["slime"] ={"src":"actor/slimeJerome.png","size":1,"side":[0,1,2,3],"hpBar":-110,"legs":70,

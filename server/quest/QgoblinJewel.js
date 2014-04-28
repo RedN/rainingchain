@@ -379,9 +379,9 @@ q.map.goblinUnderground = function(){
 			teleport:q.event.teleOutUnderground,
 		});
 		
-		s.actor(spot.g1,"system","graveSafe",{});
+		s.actor(spot.g1,"waypoint","graveSafe",{});
 		
-		s.actor(spot.q1,"system","chest",{
+		s.actor(spot.q1,"loot","chest",{
 			loot:q.event.getJewel
 		});
 		*/
@@ -412,14 +412,16 @@ q.map.goblinLand = function(){
 	a.load = function(spot){
 		//Grave
 		
-		s.actor(spot.n1,"npc","ringo",{
+		s.actor(spot.n1,"npc","regular",{
+			name:'Ringo',
+			'sprite,name':"villager-male0",
 			angle:90,
 			nevermove:1,
 			dialogue:q.event.talkRingo,
 		});
 		
 		
-		s.actor(spot.q1,"system","chest",{	//TOFIX LOOK
+		s.actor(spot.q1,"loot","chest",{	//TOFIX LOOK
 			angle:90,
 			nevermove:1,
 			loot:q.event.getFlower,

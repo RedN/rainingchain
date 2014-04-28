@@ -130,11 +130,11 @@ q.map.tutorial = function(){
 		
 		
 		//grave
-		actor(spot.h,"system","grave",{});
-		actor(spot.q,"system","grave",{});
+		actor(spot.h,"waypoint","grave",{});
+		actor(spot.q,"waypoint","grave",{});
 		
 		//chest
-		actor(spot.m,"system","chest",{
+		actor(spot.m,"loot","chest",{
 			'loot':function(key){
 				addItem(get,'Aiceshard',1);
 				return true;
@@ -149,10 +149,10 @@ q.map.tutorial = function(){
 		});		
 		
 		//block for switch
-		actor(spot.b,"block","2x2",{});
+		actor(spot.b,"pushable","rock2x2",{});
 		
 		//Block to block arrow
-		actor(spot.f,"block","2x2",{});
+		actor(spot.f,"pushable","rock2x2",{});
 		
 		
 		//Block that disppear when bee dead
@@ -185,7 +185,7 @@ q.map.tutorial = function(){
 		});
 		
 		//Switch
-		actor(spot.c,"system","switch",{
+		actor(spot.c,"switch","box",{
 			'switch':{on:q.event.switchActivate},
 		});
 		
