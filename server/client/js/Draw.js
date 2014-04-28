@@ -327,15 +327,15 @@ Draw.chat.dialogue = function(){
 	Draw.setInnerHTML(html.dialogue.text,str);
 	
 	
-	Draw.icon('system.close',s.w-24,s.y,24);
-	Button.creation(0,{
-		'rect':[s.w-24,s.w,s.y,s.y+24],
-		"left":{'func':Command.send,'param':['dialogue,option,-1']},
-		'text':"End dialogue.",
-	});	
-	
+	if(dia.exit !== 0){
+		Draw.icon('system.close',s.w-24,s.y,24,{
+			"left":{'func':Command.send,'param':['dialogue,option,-1']},
+			'text':"End dialogue.",
+		});	
+	}
 	
 }
+
 
 Draw.chat.constant = function(){
 	return  {

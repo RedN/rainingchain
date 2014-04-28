@@ -129,7 +129,7 @@ Actor.creation.data = function(e,cr){
 	
 	e.category = cr.category; 
 	e.variant = cr.variant; 
-	e.modAmount = cr.modAmount;
+	e.modAmount = Actor.creation.data.modAmount(cr.modAmount);
 	e.extra = cr.extra;
 	e.group = cr.group || '';
 	
@@ -137,6 +137,19 @@ Actor.creation.data = function(e,cr){
 	e.data = cr;
 	
 	return e;
+}
+
+Actor.creation.data.modAmount = function(num){
+	if(typeof num === 'number') return num;
+	
+	if(num === true){
+		var a = Math.random();
+		if(a > 1/2) return 0;
+		if(a > 1/8) return 1;
+		if(a > 1/32) return 2;
+		return 3;
+	}
+	return 0;
 }
 
 Actor.creation.data.position = function(cr){

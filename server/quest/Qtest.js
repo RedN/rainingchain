@@ -75,7 +75,7 @@ q.ability['simple'] = {'type':'attack','name':'Fire Basic','icon':'attackMagic.f
 q.map.test = function(){
 	var m = s.map();
 	m.name = "Test Zone";
-	m.graphic = "pvpF4A";
+	m.graphic = "goblinLand";
 	m.tileset = 'v1.1';
 	m.lvl = 0;	
 

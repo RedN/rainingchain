@@ -39,11 +39,11 @@ q.reward = {
 	passive:{min:0.1,max:0.5,mod:10},
 };
 
-q.challenge.speedrunner = Quest.challenge.template.speedrun('1:05:10.10');
+q.challenge.speedrunner = s.challenge.speedrun('1:05:10.10');
 
 q.requirement = [
-	Quest.requirement.template.quest("Qtest"),
-	Quest.requirement.template.skill("melee",1)
+	s.requirement.quest("Qtest"),
+	s.requirement.skill("melee",1)
 ];
 	
 
@@ -216,6 +216,7 @@ q.dialogue['ringo'] = {'face':{'image':'villager-male.0','name':'Ringo'},
 	'intro':{
 		'first':{
 			'text':"Hey! My name's Ringo! Guess what, I need your help! Wanna help me out real quick, man?",
+			'exit':0,
 			'option':[
 				{'text':"Sure. Why not!",next:{node:'yes'}},
 				{'text':"No",next:{node:'no'}},

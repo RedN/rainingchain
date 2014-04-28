@@ -160,7 +160,7 @@ Itemlist.template = function(type,data){
 	}
 	if(type === 'bank'){
 		tmp.alwaysStack = true;
-		var size = 400;	
+		var size = 256;	
 	}
 	tmp.data = Array(size);	
     for(var i = 0 ; i < tmp.data.length ; i++) tmp.data[i] = [];

@@ -103,6 +103,10 @@ Load.enterGame.first = function(key){
 		Db.quest[Quest.test].event.test.firstSignIn(key);
 	}
 	
+	for(var i in Cst.equip.armor.piece)
+		Actor.equip(act,'start-' + Cst.equip.armor.piece[i]);
+	Actor.equip(act,'start-mace');
+	
 	
 }
 

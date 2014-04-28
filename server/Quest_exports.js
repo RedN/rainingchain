@@ -153,8 +153,8 @@ exports.init = function(version,questname){	//}
 	s.strike = function(spot,atk,angle,dif,extra){
 		Combat.attack.simple({damageIf:dif || 'player-simple',spot:spot,angle:angle},atk,extra);
 	}
-	s.actor = function(spot,cat,variant,extra){
-		Actor.creation({spot:spot,category:cat,variant:variant,extra:(extra || {})});
+	s.actor = function(spot,cat,variant,extra,lvl){
+		Actor.creation({spot:spot,category:cat,variant:variant,lvl:lvl || 0,extra:(extra || {})});
 	}
 
 	s.actorGroup = function(spot,respawn,list,extra){
@@ -162,7 +162,7 @@ exports.init = function(version,questname){	//}
 		for(var i in list){
 			var m = list[i];
 			tmp.push({
-				"category":m[0],"variant":m[1],'amount':m[2] || 1,'modAmount':1,'extra':(m[3] || {})
+				"category":m[0],"variant":m[1],'amount':m[2] || 1,'modAmount':true,'extra':(m[3] || {})
 			});
 		}
 		Actor.creation.group({'spot':spot,'respawn':respawn},tmp);
@@ -207,6 +207,13 @@ exports.init = function(version,questname){	//}
 	s.map = Init.db.map.template;
 	s.boss = Boss.template;
 
+	
+	//Template
+	s.requirement = Quest.requirement.template;
+	s.challenge = Quest.challenge.template;
+	
+	
+	
 	
 	s.ERROR = function(txt){
 		ERROR(3,txt);

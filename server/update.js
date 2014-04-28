@@ -2,8 +2,6 @@ var TIMER = {'fast':1,'reg':5,'slow':25};
 
 
 //not compress in old. use a custom isequal
-
-
 Change.update = function(){
 	//Entity
 	for(var i in List.all){

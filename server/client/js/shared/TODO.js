@@ -1,44 +1,17 @@
 ==PRESDK==
 
-SKIPPED: command, trade, craft,db.filter, passive
+SKIPPED: trade, craft,db.filter, passive
 
 
-
-
-
-
-
-
-
-rename convention for enemy system
-
-rightclick drop not working
-can pick drop any distance
-
-
-
-transform not be overwrite if change equip
-new sprite change system: sprite.normal and sprite.custom
-
-some dialogue cant be ended
-
-nicer chat question
 
 
 can use whole quest file for testing dialogue
-boss summon
 
-
-give basic equip always
-
-
-lvl for monsters
-
-exp after completing quest for enemy
 
 
 
 ==REVAMP==
+boss summon
 
 
 tooltip not disappearing

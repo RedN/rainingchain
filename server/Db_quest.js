@@ -4,6 +4,7 @@ var questList = [
 	//'Qopenbeta2',
 	'Qtest',
 	'QgoblinJewel',
+	'Mtest',
 ];
 Quest = {};
 Quest.test = 'QgoblinJewel';	//give player vaTester for this quest

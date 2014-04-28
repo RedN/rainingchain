@@ -17,7 +17,7 @@ Main.template = function(key){
 		'invList': [],
 		'bankList':[],
 		'tradeList':[],
-		'dialogue':0,
+		'dialogue':null,
 		'name':'player000',		
 		'username':'player000',	
 		'sfx':'',

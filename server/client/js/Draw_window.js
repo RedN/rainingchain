@@ -897,7 +897,7 @@ Draw.window.quest.start = function(s,q,mq,hq){
 	
 	if(!mq.active){
 		var second = $('<p class="u">Start Quest</p>')[0];
-		second.onclick = function(){ Command.send('win,quest,start,' + q.id); console.log(q.id);};
+		second.onclick = function(){ Command.send('win,quest,start,' + q.id); };
 		second.title = "Start this quest.";
 	} else {
 		var second = $('<p class="u">Abandon Quest</p>')[0];

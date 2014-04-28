@@ -53,7 +53,7 @@ Map.creation = function(namemodel,version,lvl){	//create instance of map. versio
 		lvl:lvl || model.lvl,
 		addon:newaddon,
 		timer:version === 'MAIN' ? 1/0 : 1000,// 5*60*1000/25,	//TOFIXTEST
-		list:{all:{},player:{},bullet:{},npc:{},anim:{},actor:{}},		//acts like List.all (for faster activeList and collisionRect)
+		list:{all:{},player:{},bullet:{},npc:{},anim:{},actor:{},drop:{}},		//acts like List.all (for faster activeList and collisionRect)
 		
 	};
 	

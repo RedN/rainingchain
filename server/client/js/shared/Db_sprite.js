@@ -389,15 +389,15 @@ Sprite.creation.model = function(sp){
 Sprite.template = function(){
 	return {
     	name:'mace',
-		initAnim:"walk",			//info about anim sent to client when init. use when anim is constant (ex: switch off)
-    	anim:"walk",				//normally null. change for 1 frame when attack etc... changing initAnim will also change anim
-    	sizeMod : 1,
-    	oldAnim:"walk",				//client stuff
-		startX : 0,
+		initAnim:"walk",	//info about anim sent to client when init. use when anim is constant (ex: switch off)
+    	anim:"walk",		//normally null. change for 1 frame when attack etc... changing initAnim will also change anim
+    	oldAnim:"walk",		//client stuff
+		sizeMod : 1,
+    	startX : 0,
     	timer : 0,
-    	walk : 0,	//??
 		alpha: 1,
-		dead: 0,
+		dead: 0,			//used to change alpha
+		regular:1,			//appearance depends on equip
 	}
 }
 
@@ -408,15 +408,22 @@ Sprite.change = function(act,info){
 	if(info.initAnim || info.anim){ 
 		act.sprite.initAnim = info.initAnim || act.sprite.initAnim;
 		act.sprite.anim = info.initAnim || info.anim;
-		
 		act.sprite.startX = 0;
 		act.sprite.timer = 0;
 	}
-	act.sprite.name = info.name || act.sprite.name || 'mace';
-	act.sprite.sizeMod = info.sizeMod || act.sprite.sizeMod || 1;
+	act.sprite.name = info.name || act.sprite.name;
+	act.sprite.sizeMod = info.sizeMod || act.sprite.sizeMod;
+	if(info.regular !== undefined) act.sprite.regular = info.regular;
+	
+	if(act.type === 'player' && act.sprite.regular)	act.sprite.name = Sprite.getRegular(act);
 	
 	if(info.sizeMod || info.name) Sprite.updateBumper(act);
 	
+}
+
+
+Sprite.getRegular = function(act){	//check equip
+	return 'mace';
 }
 
 Sprite.updateBumper = function(act){		//server only

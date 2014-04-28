@@ -6,14 +6,43 @@ Command.list = {};
 
 
 Command.receive = function(socket,d){	//server	d:{cmd,param:[]}
+	d = Command.receive.verifyInput(d);
+	if(!d) return;
 	d.param.unshift(socket.key);	
-	d.cmd = escape.quote(d.cmd);
-	for(var i in d.param){ d.param[i] = escape.quote(d.param[i]); }
 	
-	if(!Command.client.have(d.cmd) && Command.list[d.cmd]){
-		Command.list[d.cmd].apply(this,d.param);
-	}
+	Command.list[d.cmd].apply(this,d.param);
 }
+
+Command.receive.verifyInput = function(d){
+	d.cmd = escape.quote(d.cmd);
+	if(Command.client.have(d.cmd) || !Command.list[d.cmd] || !Array.isArray(d.param)) return null;
+	
+	var p = d.param;
+	var doc = Command.list[d.cmd].doc.param;
+		
+	for(var i = 0 ; i< p.length && i < doc.length; i++){ 
+		p[i] = escape.quote(p[i]); 
+		
+		if(p[i] === undefined && !doc[i].optional) return null;
+		
+		if(p[i] !== undefined && doc[i].type === 'Number'){
+			p[i] = Math.round(+p[i]).mm(doc[i].min || 0,doc[i].max);
+			if(isNaN(p[i])) return null;
+		}	
+
+		if(p[i] !== undefined && doc[i].type === 'Letters'){
+			if(doc[i].whiteList && !doc[i].whiteList.have(p[i])) return null;
+			if(doc[i].blackList && doc[i].blackList.have(p[i])) return null;
+		}
+	}
+	for(++i;i < doc.length; i++){
+		if(!doc[i].optional) return null;
+		if(doc[i].default) p[i] = doc[i].default;
+	} 
+	
+	return d;
+}
+
 
 Command.send = function(text){
 	var pack = Command.send.parse(text);
@@ -43,11 +72,11 @@ Command.list['fl,add'] = function(key,user,nick,comment,color){
 	nick = nick || user;
 	comment = comment || '';
 	color = color || 'cyan';
-	if(user == List.all[key].name){ Chat.add(key,"You are either bored or very lonely for trying this."); return; }
+	if(user === List.all[key].name) return Chat.add(key,"You are either bored or very lonely for trying this.");
 	
 	var list = List.main[key].social.list;
-	if(list.friend[user]){	Chat.add(key,"This player is already in your Friend List."); return; }
-	if(list.mute[user]){	Chat.add(key,"This player is in your Mute List."); return; }
+	if(list.friend[user]) return Chat.add(key,"This player is already in your Friend List."); 
+	if(list.mute[user]) return Chat.add(key,"This player is in your Mute List.");
 	
 	
 	db.findOne('account',{username:user},function(err, res) {
@@ -151,10 +180,10 @@ Command.list['fl,offlinepm'].doc = {
 }
 
 Command.list['mute'] = function(key,user){
-	if(user == List.all[key].name){ Chat.add(key,"-.- Seriously?"); return }
+	if(user === List.all[key].name) return Chat.add(key,"-.- Seriously?");
 	
-	if(List.main[key].social.list.friend[user]){ Chat.add(key,"This player is in your Friend List."); return; }
-	if(List.main[key].social.list.mute[user]){ Chat.add(key,"This player is alraedy in your Mute List."); return; }
+	if(List.main[key].social.list.friend[user]) return Chat.add(key,"This player is in your Friend List.");
+	if(List.main[key].social.list.mute[user]) return Chat.add(key,"This player is alraedy in your Mute List.");
 		
 	db.findOne('account',{username:user},function(err, res) {
 		if(res){
@@ -184,34 +213,28 @@ Command.list['win,close'].doc = {
 	],
 }
 Command.list['win,open'] = function(key,win,param0){
-	if(List.main[key].windowList[win] === undefined){ Chat.add(key,'Wrong Input'); return; }
-	if(win === 'bank'){ Chat.add(key,'Access denied.'); return;}
-	if(win === 'trade'){ Chat.add(key,'Access denied.'); return;}
-	if(win === 'quest' && Db.quest[param0] === undefined){ Chat.add(key,'Wrong Input'); return; }
+	if(win === 'quest' && !Db.quest[param0]){ Chat.add(key,'Wrong Input'); return; }
 	
 	Main.openWindow(List.main[key],win,param0);
 }
 Command.list['win,open'].doc = {
 	'description':"Open a window.",
 	'help':0,'param':[
-		{type:'Letters',name:'Window Name',optional:0},
+		{type:'Letters',name:'Window Name',optional:0,whiteList:['passive','quest','offensive','defensive','ability','binding']},
 	],
 }
 
 Command.list['win,bank,click'] = function(key,side,slot,amount){
 	var m = List.main[key];
 	if(!m.windowList.bank){ Chat.add(key,'Access denied.'); return;}
-	amount = +amount || 1;
-	if(typeof amount !== 'number') amount = 1;
-	amount = Math.round(amount.mm(1));
 	Itemlist.click.bank(m.bankList,side,+slot,amount);
 }
 Command.list['win,bank,click'].doc = {
 	'description':"Withdraw Items from Bank.",
 	'help':0,'param':[
-		{type:'Letters',name:'Mouse Button',optional:0},
-		{type:'Number',name:'Bank Slot',optional:0},
-		{type:'Number',name:'Amount to withdraw',optional:1},
+		{type:'Letters',name:'Mouse Button',optional:0,whiteList:['left','right','shiftLeft','shiftRight']},
+		{type:'Number',name:'Bank Slot',optional:0,max:255},
+		{type:'Number',name:'Amount to withdraw',optional:1,default:1},
 	],
 }
 
@@ -223,8 +246,8 @@ Command.list['win,trade,click'] = function(key,side,slot){
 Command.list['win,trade,click'].doc = {
 	'description':"Withdraw Items from Trade.",
 	'help':0,'param':[
-		{type:'Letters',name:'Mouse Button',optional:0},
-		{type:'Number',name:'Trade Slot',optional:0},
+		{type:'Letters',name:'Mouse Button',optional:0,whiteList:['left','right','shiftLeft','shiftRight']},
+		{type:'Number',name:'Trade Slot',optional:0,max:19},
 	],
 }
 Command.list['win,trade,toggle'] = function(key){
@@ -280,6 +303,7 @@ Command.list['win,quest,orb'].doc = {
 	'help':0,'param':[
 		{type:'Letters',name:'Quest Id',optional:0},
 		{type:'Letters',name:'Bonus Id',optional:0},
+		{type:'Number',name:'Amount',optional:1,default:1},
 	],
 }
 
@@ -325,9 +349,9 @@ Command.list['win,passive,add'] = function(key,num,i,j){
 Command.list['win,passive,add'].doc = {
 	'description':"Select a Passive",
 	'help':0,'param':[
-		{type:'Number',name:'Which Page',optional:0},
-		{type:'Number',name:'Position Y',optional:0},
-		{type:'Number',name:'Position X',optional:0},
+		{type:'Number',name:'Which Page',optional:0,max:1},
+		{type:'Number',name:'Position Y',optional:0,max:19},
+		{type:'Number',name:'Position X',optional:0,max:19},
 	],
 }
 Command.list['win,passive,remove'] = function(key,num,i,j){
@@ -339,9 +363,9 @@ Command.list['win,passive,remove'] = function(key,num,i,j){
 Command.list['win,passive,remove'].doc = {
 	'description':"Remove a Passive",
 	'help':0,'param':[
-		{type:'Number',name:'Which Page',optional:0},
-		{type:'Number',name:'Position Y',optional:0},
-		{type:'Number',name:'Position X',optional:0},
+		{type:'Number',name:'Which Page',optional:0,max:1},
+		{type:'Number',name:'Position Y',optional:0,max:19},
+		{type:'Number',name:'Position X',optional:0,max:19},
 	],
 }
 Command.list['win,passive,page'] = function(key,num){
@@ -353,7 +377,7 @@ Command.list['win,passive,page'] = function(key,num){
 Command.list['win,passive,page'].doc = {
 	'description':"Change Active Passive Page",
 	'help':0,'param':[
-		{type:'Number',name:'Which Page',optional:0},
+		{type:'Number',name:'Which Page',optional:0,max:1},
 	],
 }
 
@@ -365,7 +389,7 @@ Command.list['win,passive,freeze'] = function(key,num){
 Command.list['win,passive,freeze'].doc = {
 	'description':"Freeze a page.",
 	'help':0,'param':[
-		{type:'Number',name:'Which Page',optional:0},
+		{type:'Number',name:'Which Page',optional:0,max:1},
 	],
 }
 Command.list['win,passive,unfreeze'] = function(key,num){
@@ -392,12 +416,11 @@ Command.list['win,ability,swap'].doc = {
 	'description':"Set an Ability to a Key",
 	'help':0,'param':[
 		{type:'Letters',name:'Ability Id',optional:0},
-		{type:'Number',name:'Key Position (0-6)',optional:0},
+		{type:'Number',name:'Key Position (0-5)',optional:0,max:5},
 	],
 }
 Command.list['win,ability,upgrade'] = function(key,abid,amount){
-	amount = +amount;
-	if(!amount || !Actor.getAbilityList(List.all[key])[abid] || amount < 1){ Chat.add(key,'Wrong'); return;}
+	if(!Actor.getAbilityList(List.all[key])[abid]){ Chat.add(key,'Wrong'); return;}
 	Craft.orb(key,'upgrade',amount,abid);
 }
 Command.list['win,ability,upgrade'].doc = {
@@ -421,8 +444,7 @@ Command.list['win,ability,addMod'].doc = {
 	],
 }
 Command.list['win,ability,upMod'] = function(key,abid,mod,amount){	//cant be named upgradeMod cuz inteference with ability,upgrade
-	amount = +amount;
-	if(!amount || !Actor.getAbilityList(List.all[key])[abid] || amount < 1){ Chat.add(key,'Wrong'); return;}
+	if(!Actor.getAbilityList(List.all[key])[abid]){ Chat.add(key,'Wrong'); return;}
 	Craft.orb(key,'upgrade',amount,abid,mod);	
 }
 Command.list['win,ability,upMod'].doc = {
@@ -430,58 +452,52 @@ Command.list['win,ability,upMod'].doc = {
 	'help':0,'param':[
 		{type:'Letters',name:'Ability Id',optional:0},
 		{type:'Letters',name:'Mod Id',optional:0},
-		{type:'Number',name:'Amount of Orbs Used',optional:0},
+		{type:'Number',name:'Amount of Orbs Used',optional:1,default:1},
 	],
 }
 //}
 
 //{Tab
 Command.list['tab,open'] = function(key,tab){
-	if(Cst.tab.list.indexOf(tab) === -1){ Chat.add(key,'Wrong Input'); return; }
 	List.main[key].currentTab = tab;
 }
 Command.list['tab,open'].doc = {
 	'description':"Open a Tab",
 	'help':0,'param':[
-		{type:'Letters',name:'Tab Name',optional:0},
+		{type:'Letters',name:'Tab Name',optional:0,whiteList:Cst.tab.list},
 	],
 }
 Command.list['tab,inv,click'] = function(key,side,slot,amount){
 	if(List.main[key].currentTab !== 'inventory'){ Chat.add(key,'Access denied.'); return;}
-	amount = +amount || 1;
-	if(typeof amount !== 'number') amount = 1;
-	amount = Math.round(amount.mm(1));
 	Itemlist.click.inventory(List.main[key].invList,side,slot,amount);
 }
 Command.list['tab,inv,click'].doc = {
 	'description':"Deposit/Use Items in Inventory.",
 	'help':0,'param':[
-		{type:'Letters',name:'Mouse Button',optional:0},
-		{type:'Number',name:'Inventory Slot',optional:0},
-		{type:'Number',name:'Amount to withdraw',optional:1},
+		{type:'Letters',name:'Mouse Button',optional:0,whiteList:['left','right','shiftLeft','shiftRight']},
+		{type:'Number',name:'Inventory Slot',optional:0,max:19},
+		{type:'Number',name:'Amount to withdraw',optional:1,default:1},
 	],
 }
 Command.list['tab,swapWeapon'] = function(key,piece){
-	if(['melee','range','magic'].have(piece)){ Chat.add(key,'Invalid Param.'); return;}
 	Actor.equip.weapon(List.all[key],piece);
 }
 Command.list['tab,swapWeapon'].doc = {
 	'description':"Change Weapon for another already Equipped",
 	'help':0,'param':[
-		{type:'Letters',name:'New Weapon Type',optional:0},
+		{type:'Letters',name:'New Weapon Type',optional:0,whiteList:['melee','range','magic']},
 	],
 }
 
 
 Command.list['tab,removeEquip'] = function(key,piece){
-	if(!Cst.equip.piece.have(piece)){ Chat.add(key,'Invalid Param.'); return;}
 	if(!Itemlist.empty(List.main[key].invList,1)){ Chat.add(key,'No Inventory room.'); return;}
 	Actor.equip.remove(List.all[key],piece);
 }
 Command.list['tab,removeEquip'].doc = {
 	'description':"Remove a piece of equipment",
 	'help':0,'param':[
-		{type:'Letters',name:'Equipement Piece',optional:0},
+		{type:'Letters',name:'Equipement Piece',optional:0,whiteList:Cst.equip.piece},
 	],
 }
 
@@ -562,7 +578,7 @@ Command.list['logout'] = function(key){
 	Sign.off(key,"You safely quit the game.");
 }
 Command.list['logout'].doc = {
-	'description':"Safe way to log uut of the game",
+	'description':"Safe way to log out of the game",
 	'help':0,'param':[
 	],
 }
@@ -570,7 +586,7 @@ Command.list['logout'].doc = {
 
 Command.list['dialogue,option'] = function(key,slot){
 	var main = List.main[key];
-	if(slot === '-1'){ Dialogue.end(key); return; }
+	if(slot === -1 && main.dialogue && main.dialogue.exit !== 0){ Dialogue.end(key); return; }
 	if(main.dialogue && main.dialogue.option[slot]){
 		Dialogue.option(key,main.dialogue.option[slot]);
 	}	
@@ -578,7 +594,7 @@ Command.list['dialogue,option'] = function(key,slot){
 Command.list['dialogue,option'].doc = {
 	'description':"Choose a dialogue option.",
 	'help':0,'param':[
-		{type:'Number',name:'Dialogue Option #',optional:0},
+		{type:'Number',name:'Dialogue Option #',optional:0,min:-1},
 	],
 }
 Command.list['option'] = function(key,slot){
@@ -640,6 +656,7 @@ Command.list['team,tele'].doc = {
 
 
 Command.list['pvp'] = function(key){
+	return;
 	var act = List.all[key];
 	if(act.map.have('pvpF4A')){	//TOFIX
 		Actor.teleport(act,act.respawnLoc.safe);
@@ -650,7 +667,7 @@ Command.list['pvp'] = function(key){
 Command.list['pvp'].doc = {
 	'description':"Teleport/Quit to PvP Zone.",
 	'help':1,'param':[
-		{type:'Number',name:'0:Free For All. 1:Ranked. 2:Custom',optional:1},
+		{type:'Number',name:'0:Free For All. 1:Ranked. 2:Custom',optional:1,max:2},
 	],
 }
 
@@ -761,7 +778,7 @@ Command.pref.verify = function(name,value){
 	var req = Command.pref.list[name];
 
 	value = +value; 
-	if(value.toString() === 'NaN') return false;
+	if(isNaN(value)) return false;
 	
 	return value.mm(req.min,req.max);	
 }

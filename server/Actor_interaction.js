@@ -185,7 +185,7 @@ Actor.click.drop = function (act,id){
 	var drop = List.drop[id];
 	if(!drop) return;
 	
-	if(!Collision.distancePtPt(act,drop) > act.pickRadius) return TOOFAR(act.id);
+	if(Collision.distancePtPt(act,drop) > act.pickRadius) return TOOFAR(act.id);
 	if(!Itemlist.test(inv,drop.item,drop.amount)){
 		Chat.add(act.id,"Inventory full.");
 		return;
@@ -203,9 +203,8 @@ Actor.click.drop.rightClick = function(act,pt){
 	var list = List.map[act.map].list.drop;
 	for(var i in list){
 		var d = List.drop[i];
-		if(Collision.distancePtPt(d,pt) < 48){
+		if(Collision.distancePtPt(d,pt) < 48)
 			ol.option.push({'name':'Pick ' + Db.item[d.item].name,'func':'Actor.click.drop','param':[i]});
-		}
 	}
 	
 	Button.creation.optionList(key,ol);  

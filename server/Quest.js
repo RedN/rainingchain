@@ -5,11 +5,8 @@ Quest.reward = function(key,id){	//roll the perm stat bonus and check if last on
 	var bonus = Quest.getBonus(key,id);
 	var reward = Quest.getReward(q,bonus);
 	
-	console.log(mq.rewardScore,reward.passive);
 	mq.rewardScore += reward.passive;
-	console.log(mq.rewardScore,reward.passive);
 	mq.rewardScore = Quest.getRewardScore(q.reward.passive,mq.rewardScore);
-	console.log(mq.rewardScore,reward.passive);
 	
 	mq.rewardPt = Quest.getRewardPt(q.reward.passive,mq.rewardScore);
 	Itemlist.add(key,reward.item);	//TOFIX test if space
