@@ -250,7 +250,7 @@ Command.list['win,quest,toggleChallenge'] = function(key,id,challenge){
 	var q = Db.quest[id].challenge[challenge];
 	if(!q){ Chat.add(key,'Wrong Input.'); return; }
 	
-	if(mq.started){
+	if(mq.active){
 		Chat.add(key,'You have already started this quest. You can\'t change challenges anymore.');
 		return;
 	}
@@ -275,7 +275,7 @@ Command.list['win,quest,orb'] = function(key,id,amount){
 	if(!amount){ Chat.add(key,'You have no orb.'); return; }
 	Quest.orb(key,id,amount);
 }
-Command.list['win,quest,toggleChallenge'].doc = {
+Command.list['win,quest,orb'].doc = {
 	'description':"Toggle a Quest Bonus.",
 	'help':0,'param':[
 		{type:'Letters',name:'Quest Id',optional:0},
@@ -285,7 +285,13 @@ Command.list['win,quest,toggleChallenge'].doc = {
 
 Command.list['win,quest,start'] = function(key,id,amount){
 	var mq = List.main[key].quest[id];
-	if(!mq){ Chat.add(key,'Wrong Input.'); return; }	
+	if(!mq) return Chat.add(key,'Wrong Input.');
+	
+	if(List.main[key].questActive) return Chat.add(key,'You can only have 1 active quest at once. Finish or abandon the quest "' + Db.quest[List.main[key].questActive].name + '" before starting a new one.');
+	
+	
+	Quest.requirement.update(key,id);
+	for(var i in mq.requirement) if(mq.requirement[i] === '0') return Chat.add(key,'You do not meet the requirements to start this quest.');
 	
 	Quest.start(key,id);
 }
@@ -298,6 +304,7 @@ Command.list['win,quest,start'].doc = {
 Command.list['win,quest,abandon'] = function(key,id){
 	var mq = List.main[key].quest[id];
 	if(!mq){ Chat.add(key,'Wrong Input.'); return; }	
+	if(!mq.active){ Chat.add(key,"You can't abandon a quest you haven't even started yet."); return; }	
 	
 	Quest.abandon(key,id);
 }

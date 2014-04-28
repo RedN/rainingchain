@@ -1,5 +1,5 @@
 "use strict";
-var s = require('./../Quest_exports').init('v1.0','QtestEnemy');
+var s = require('./../Quest_exports').init('v1.0','Qtest');
 var q = s.quest;
 
 
@@ -15,10 +15,10 @@ q.event = {
 		Test.generateEquip(key,0,5);
 				
 		s.addItem(key,'weapon');
-		Actor.equip(act,'QtestEnemy-weapon');
+		Actor.equip(act,'Qtest-weapon');
 		
-		//act.abilityList = {'QtestEnemy-simple':1};
-		//Actor.ability.swap(act,'QtestEnemy-simple',0);
+		//act.abilityList = {'Qtest-simple':1};
+		//Actor.ability.swap(act,'Qtest-simple',0);
 		
 		Test.removeEquipInventory(key);
 		

@@ -208,8 +208,11 @@ Passive.getUsedPt = function(p){
 }
 
 Passive.getUsablePt = function(key){
-	var total = Math.floor(Skill.getTotalLvl(key)/5);
-	return total;
+	var sum = 0; 
+	var mq = List.main[key].quest;
+	for(var i in mq) sum += mq[i].rewardPt;
+	
+	return Math.floor(sum);
 }
 
 

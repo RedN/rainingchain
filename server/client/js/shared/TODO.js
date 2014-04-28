@@ -8,49 +8,6 @@ SKIPPED: command, trade, craft,db.filter, passive
 
 
 
-quest:
-db saved any quest: 
-	passivept, amount complete, skillPlot, challenge done, bonus
-	
-db not saved current quest: 
-	htin, requirement, 
-	
-main.activeQuest
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-quest visible, send quest list when server starts
-
-
-make preset challenge for time, 1 hp,  etc...
-
-
-
-quest gives passive pts.
-change quest reward for no luck.
-quest bonus split in exp, item, stat
-quest req, cant test if done other quest cuz exports. make preset for quest done, lvl
 
 
 rename convention for enemy system

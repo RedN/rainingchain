@@ -168,7 +168,7 @@ Save.main = function(key,updateDb){
 	var main = typeof key === 'string' ? List.main[key] : key;
     main = Save.main.compress(main);
     var save = {};
-    var toSave = ['invList','bankList','quest','username','name','social','passive','chrono'];
+    var toSave = ['invList','bankList','quest','questActive','username','name','social','passive','chrono'];
     for(var i in toSave){ save[toSave[i]] = main[toSave[i]]; }
 
     if(updateDb !== false)	db.update('main',{username:main.username},save,db.err);
@@ -190,7 +190,6 @@ Load = function (key,account,socket,cb){
 			//Main
 			Passive.updateBoost(key);
 			Actor.update.equip(player);
-			Actor.permBoost(player,'Quest',Quest.reward.stack(main.quest));
 			Quest.challenge.signIn(key);
 			
 			
@@ -231,6 +230,23 @@ Save.main.compress = function(main){
 		message:main.social.message,
 		symbol:main.social.symbol,
 	}
+	
+	
+	//quest
+	for(var i in main.quest){
+		var mq = main.quest[i];
+		if(i !== main.questActive)
+			main.quest[i] = {
+				reward:mq.reward,
+				complete:mq.complete,
+				skillPlot:mq.skillPlot,
+				challengeDone:mq.challengeDone,
+				bonus:mq.bonus,
+			}
+	}
+	
+	
+	
 	
     return main;
 }

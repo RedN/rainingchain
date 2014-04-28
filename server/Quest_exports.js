@@ -22,12 +22,12 @@ exports.init = function(version,questname){	//}
 	s.set = function(key,attr,attr2,value){
 		var mq = List.main[key].quest[Q];	
 		
-		if(attr === 'started'){
+		if(attr === 'active'){
 			mq[attr] = true;
 			Chat.add(key,"You started the quest '" + s.quest.name + "'.");
 			return;
 		}	
-		if(!mq.started){
+		if(!mq.active){
 			Chat.add(key,"You need to start this quest via the Quest Tab before making progress in it."); 
 			return;
 		}

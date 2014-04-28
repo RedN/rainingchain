@@ -40,7 +40,7 @@ Actor.creation.group = function(gr,el){
 	/*
 	gr: x y map respawn
     el: [  {'amount':1,"category":"slime","variant":"Big","lvl":0,'modAmount':1},
-		{'amount':10,"category":"troll","variant":"ice","lvl":0,'modAmount':1},	];
+		{'amount':10,"category":"bat","variant":"normal","lvl":0,'modAmount':1},	];
 	*/
 	var enemyIdList = [];
 	

@@ -14,9 +14,9 @@ Main.template = function(key){
 		"popupList":{'equip':0,'plan':0},
 		'hideHUD':{'tab':0,'chat':0,'window':0,'popup':0,'minimap':0,'state':0,'advancedStat':0,'passive':0,'advancedAbility':0,questChallenge:0,questOrb:0,equipOrb:0},	
 		
-		'invList': ['','','','','','','','','','','','','','','','','','','','','','','',''],
+		'invList': [],
 		'bankList':[],
-		'tradeList':['','','','','','','','','','','','','','','','','','','','','','','',''],
+		'tradeList':[],
 		'dialogue':0,
 		'name':'player000',		
 		'username':'player000',	
@@ -40,8 +40,10 @@ Main.template = function(key){
 			'symbol':'',
 			'status':'on',
 			'muted':0,
-		}
+		},
 		
+		questActive:'',
+		quest:{},
 		
 	};
 	if(SERVER){
@@ -86,9 +88,6 @@ Main.passiveRemove = function(main,num,i,j){
 	Passive.updateBoost(key);
 }
 
-
-
-
 Main.closeAllWindow = function(main){
 	if(main.windowList.trade.trader){ List.main[main.windowList.trade.trader].windowList.trade = 0; }
 	
@@ -105,7 +104,7 @@ Main.openWindow = function(main,name,param){
 	
 	if(name === 'quest'){
 		main.windowList.quest = param;
-		Quest.req.update(key,param);
+		Quest.requirement.update(key,param);
 		Quest.hint(key,param);
 	}
 	if(name === 'trade'){
@@ -128,9 +127,6 @@ Main.examine = function(main, type, id){
 	Main.openPopup(main,type,id);
 }
 
-Actor.examineAbility = function(act){}
-
-
 Main.selectInv = function(main,obj){
 	main.temp.selectInv = obj;
 	main.temp.reset.selectInv = 1;
@@ -145,22 +141,19 @@ Main.abilityModClick = function(main,id){
 	}	
 }
 
-
 Main.chrono = function(main,name,action,text){
 	var chrono = main.chrono;
 	if(action === 'start')
 		chrono[name] = {start:Date.now(),active:1,text:text || ''};
 	if(action === 'stop'){
 		if(!chrono[name]) return;
+		if(chrono[name].active) chrono[name].end = Date.now(); 
 		chrono[name].active = 0;
-		chrono[name].end = Date.now(); 
 		return chrono[name].end - chrono[name].start;
 	}
 	if(action === 'remove')
 		delete chrono[name];
 }
-
-
 
 Main.dropInv = function(main,id,amount){
 	var inv = main.invList;
@@ -183,7 +176,6 @@ Main.destroyInv = function(main,id,amount){
 	Server.log(3,main.id,'destroyInv',id,amount);
 	return true;
 }
-
 
 Main.screenEffect = function(main,info){
 	main.screenEffect = info;

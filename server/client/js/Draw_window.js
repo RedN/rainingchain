@@ -824,18 +824,17 @@ Draw.window.ability.action.summon = function(diffX,diffY){  ctxrestore();
 //}
 
 
-//{quest
+// {quest
 Draw.window.quest = function (){ ctxrestore();
 	var q = Db.query('quest',main.windowList.quest);
+	var s = Draw.window.main('Quest: ' + (q ? q.name : ''));	
 	if(!q) return;
-	
-	var s = Draw.window.main('Quest: ' + q.name);	
 	ctx = List.ctx.win;
 	
 	var hq = html.questWin;	
 	hq.div.style.visibility = 'visible';
 	
-	Draw.icon(q.icon,s.zx,s.zy,22*4);	//TOFIX rushed
+	Draw.icon(q.icon,s.zx,s.zy,22*4);	//TOFIX rushed cuz this needs to be drawn every frame
 	
 	if(Draw.window.quest.refreshIf(q,main.quest[main.windowList.quest])) Draw.window.quest.refresh(s,q)
 }
@@ -848,13 +847,13 @@ Draw.window.quest.refresh = function(s,q){
 	var mq = main.quest[main.windowList.quest];
 	
 	s.charY = 22;
-	Draw.window.quest.upper(s,q,mq,hq);
-	Draw.window.quest.hint(s,q,mq,hq);
-	Draw.window.quest.description(s,q,mq,hq);
-	//Draw.window.quest.req(s,q,mq,hq);
-	Draw.window.quest.bonus(s,q,mq,hq);
+	Draw.window.quest.start(s,q,mq,hq);
+	Draw.window.quest.info(s,q,mq,hq);
+	Draw.window.quest.right(s,q,mq,hq);
+	Draw.window.quest.left(s,q,mq,hq);
 
 }
+
 Draw.window.quest.refreshIf = function(q,mq){
 	var str = Tk.stringify(q) + Tk.stringify(mq);
 	var bool = Draw.refresh.winQuest !== str;
@@ -863,7 +862,7 @@ Draw.window.quest.refreshIf = function(q,mq){
 
 }
 
-Draw.window.quest.upper = function(s,q,mq,hq){
+Draw.window.quest.info = function(s,q,mq,hq){
 	var icon = s.charY*4;
 	
 	//Icon
@@ -874,170 +873,118 @@ Draw.window.quest.upper = function(s,q,mq,hq){
 	hq.info.style.top = 0 + 'px'; 
 	
 	hq.info.style.font = s.charY + 'px Kelly Slab';
-	hq.info.style.width = s.dw/2 - icon - 5 + 'px';
+	hq.info.style.width = s.dw - icon - 5 + 'px';
 	hq.info.style.height = s.charY*3*1.2 + 'px';
+	
+	
+	var str = '';
+	str += 'Quest Created by: ' + Tk.stringify(q.author) + ' | Difficulty: ' + q.difficulty + ' (Lvl ' + q.lvl + ')';
+	str += '<br>';
+	str += 'Hint: ' + mq.hint;
+	hq.info.innerHTML = str;
+	
 
-	hq.info.innerHTML = '';
+}
+
+Draw.window.quest.start = function(s,q,mq,hq){
 	
-	var first = $('<p>Difficulty: ' + q.difficulty + ' (Lvl ' + q.lvl + ')</p>')[0];
+	hq.start.style.left = 200 + 50 + s.dw/2 + 'px'; 
+	hq.start.style.top = -40 + 'px'; 
 	
-	if(!mq.started){
+	hq.start.style.font = s.charY*1.5 + 'px Kelly Slab';
+	hq.start.style.width = s.dw - 100 - 5 + 'px';
+	hq.start.style.height = s.charY*1.5*1.2 + 'px';
+	
+	if(!mq.active){
 		var second = $('<p class="u">Start Quest</p>')[0];
-		second.onclick = function(){Command.send('win,quest,start,' + q.id);}
+		second.onclick = function(){ Command.send('win,quest,start,' + q.id); console.log(q.id);};
+		second.title = "Start this quest.";
 	} else {
 		var second = $('<p class="u">Abandon Quest</p>')[0];
 		second.onclick = function(){Command.send('win,quest,abandon,' + q.id);}
+		second.title = "Abandon this quest. You will lose your progression and be teleported to the starting location.";
 	}
-	
-	hq.info.appendChild(first);
-	hq.info.appendChild(second);
-	
-	//'<span style="color:' + color + '" class="u" onclick="main.context=Draw.old.winQuestReq">Requirements</span>';
-	
-	//TOFIX
-	
-	
-	//hq.info.innerHTML = str;
-	
-	/*
-	str += Draw.window.quest.upper.reward(q,mq);
-	str += Draw.window.quest.upper.req(q,mq);
-	*/
-	/*
-	var state = mq.complete ? 'Complete (x' + mq.complete + ')' : (mq.started ? 'Started' : 'Not Started');
-	str += 'State: ' + state + '<br>';
-	
-	
-	str += 'Reward: ' + rewardstat + '<br>';
-	
-	var str2 = '';
-	for(var i in q.reward.exp) str2 += q.reward.exp[i] + ' ' + i.capitalize() + ' Exp,';
-	str2 = str2.slice(0,-1);
-	if(!str2) str2 = 'None';
-	str += 'Exp Reward: <span class="u" title="' + str2 + '">List<span> <br>'
-	*/
-	
-	
+	hq.start.innerHTML = '';
+	hq.start.appendChild(second);
+}	
 
-}
-
-
-
-
-Draw.window.quest.upper.req = function(q,mq){
-	if(!q.req || !q.req.length){ return false; }
+Draw.window.quest.left = function(s,q,mq,hq){
+	hq.left.style.left = 0 + 'px'; 
+	hq.left.style.top = 90 + 'px'; 
 	
-	var returnStr = '<h3>Requirements:</h3>';
-	for(var i in q.req){
-		var text = q.req[i].text;
-		if(+mq.req[i]) returnStr += '<del>' + text + '</del>';	//if requirement is met
-		else {
-			returnStr += text;
+	hq.left.style.font = s.charY + 'px Kelly Slab';
+	hq.left.style.width = s.dw/2 - 5 + 'px';
+	hq.left.style.height = 500 + 'px';
+	
+	var str = '';
+	//requirements
+	if(q.requirement && q.requirement.length){ 
+		str += '<h2 class="u">Requirements:</h2>';
+		for(var i in q.requirement){
+			var text = '<span title="' + q.requirement[i].description + '"> - ' + q.requirement[i].name + '</span>';
+			if(+mq.requirement[i]) str += '<del>' + text + '</del>';	//if requirement is met
+			else str += text;
+			
+			str += '<br>';
 		}
-		returnStr += '<br>';
+		str += '<br><br>';
 	}
 	
-	return $('<div>' + returnStr + '</div>')[0];
+	//reward
+	str +=  '<h2 class="u">Rewards:</h2>';
+	str += ' - Passive: ' + Tk.round(mq.rewardPt,4) + '/' + q.reward.passive.max + ' (Score: ' + Tk.round(mq.rewardScore) + ')<br>';
+	str += ' - Exp: ' + Tk.stringify(q.reward.exp) + '<br>';
+	str += ' - Item: ' + Tk.stringify(q.reward.item) + '<br>';
 	
+	hq.left.innerHTML = str;
 }
 
-
-Draw.window.quest.upper.reward = function(q,mq){
-	var reward = '<h3>Rewards:<h/3>';
-	var rewardstat = Tk.round(q.reward.boost.value[0],3,1) + ' - ' + Tk.round(q.reward.boost.value[1],3,1) + ' in ' + Db.stat[q.reward.boost.stat].name;
-	reward += 'Stat: ' + rewardstat + '<br>';
+Draw.window.quest.right = function(s,q,mq,hq){
+	hq.right.style.left = s.dw/2 + 'px'; 
+	hq.right.style.top = 90 + 'px'; 
 	
-	if(mq.reward){
-		var boost = Draw.convert.boost(mq.reward);
-		var current = boost[1] + ' in ' + boost[0] + '(' + mq.rewardTier.toPercent(1) + ')';
-		reward += 'Current: ' + current + '<br>';
+	hq.right.style.font = s.charY + 'px Kelly Slab';
+	hq.right.style.width = s.dw/2 - 5 + 'px';
+	hq.right.style.height = 500 + 'px';
+	
+	var str = '';
+	//challenge
+	if(q.challenge && q.challenge.$length()){ 
+		str += '<h2 class="u">Challenges:</h2>';
+		for(var i in q.challenge){
+			var c = q.challenge[i];
+			
+			var color = mq.challenge[i] ? '#00AA00' : '#FF0000';
+			
+			document.createElement('span');
+			str += 
+				'<span ' + 
+				'class="shadow" ' + 
+				'style="color:' + color + '" ' +
+				'onclick="Command.send(\'' + 'win,quest,toggleChallenge,' + q.id + ',' + i + '\')' + '" ' + 
+				'title="' + c.description + '"' +
+				'>' + c.name + ' - (x' + c.bonus.success.passive + ')' +	//TOFIX only showing passive
+				'</span><br>';
+		}
+		str += '<br><br>';
 	}
-	reward += '<br>';
 	
-	Draw.old.winQuestReq = {server:0,text:reward};
-	return '<span class="u" onclick="main.context=Draw.old.winQuestReq">Rewards</span>';
+	//bonus
+	str += '<h2 class="u">Bonus:</h2>';
+	var b = mq.bonus;
+	var p = Tk.round(b.challenge.passive * b.orb.passive * b.cycle.passive,3);
+	var e = Tk.round(b.challenge.exp * b.orb.exp * b.cycle.exp,3);
+	var i = Tk.round(b.challenge.item * b.orb.item * b.cycle.item,3);
 	
+	str += ' - Passive: <span title="' + Tk.round(b.challenge.passive,4) + '*' + Tk.round(b.orb.passive,4) + Tk.round(b.cycle.passive,4) + '"> x' + p + '</span><br>';
+	str += ' - Exp: <span title="' + Tk.round(b.challenge.exp,4) + '*' + Tk.round(b.orb.exp,4) + Tk.round(b.cycle.exp,4) + '"> x' + e + '</span><br>';
+	str += ' - Item: <span title="' + Tk.round(b.challenge.Item,4) + '*' + Tk.round(b.orb.Item,4) + Tk.round(b.cycle.Item,4) + '"> x' + i + '</span><br>';
 	
-}
-
-
-Draw.window.quest.hint = function(s,q,mq,hq){
-	//Hint
-	var diffY = 10 + hq.info.style.top.numberOnly(1) + hq.info.style.height.numberOnly(1);
-	
-	ctx.font = s.charY-2 + 'px Kelly Slab';
-	ctx.fillStyle = 'black';
-	
-	ctx.fillTextU('Hint:',s.zx-2,s.zy+diffY);
-	hq.hint.style.left = 0 + 'px'; 
-	hq.hint.style.top = diffY + s.charY + 'px'; 
-	
-	hq.hint.style.font = s.charY + 'px Kelly Slab';
-	hq.hint.style.width = s.dw/2 -10 + 'px'
-	hq.hint.style.height = s.charY*2*1.2 + 'px'
-	
-	hq.hint.innerHTML = mq.hint;
-
-}
-
-Draw.window.quest.description = function(s,q,mq,hq){
-	//Description
-	var diffY = 30 + hq.hint.style.top.numberOnly(1) + hq.hint.style.height.numberOnly(1);
-	
-	ctx.font = s.charY-2 + 'px Kelly Slab';
-	ctx.fillStyle = 'black';
-	
-	ctx.fillTextU('Description:',s.zx-2,s.zy+diffY);
-	hq.description.style.left = 0 + 'px'; 
-	hq.description.style.top = diffY + s.charY + 'px'; 
-	
-	hq.description.style.font = s.charY + 'px Kelly Slab';
-	hq.description.style.width = s.dw/2 -10 + 'px'
-	hq.description.style.height = s.charY*5*1.2 + 'px'
-	
-	hq.description.innerHTML = q.description;
+	hq.right.innerHTML = str;
 }
 
 
 
-Draw.window.quest.bonus = function(s,q,mq,hq){
-	//Bonus	
-	var diffY = 30 + hq.requirement.style.top.numberOnly(1) + hq.requirement.style.height.numberOnly(1);
-	
-	ctx.font = s.charY-2 + 'px Kelly Slab';
-	ctx.fillStyle = 'black';
-	ctx.textAlign = 'left';
-	
-	hq.bonus.style.left = s.mdx + 'px'; 
-	hq.bonus.style.top = diffY + s.charY + 'px'; 
-	
-	hq.bonus.style.font = s.charY + 'px Kelly Slab';
-	hq.bonus.style.width = s.dw/2 + 'px'
-	hq.bonus.style.height = s.charY*(1+Object.keys(q.bonus).length*1.2) + 'px'
-	
-	var title = 'Challenge:' + Tk.round(mq.bonus.challenge,2) + ' * Orb:' + Tk.round(mq.bonus.orb,2) + ' * Cycle:' + Tk.round(mq.bonus.cycle,2) + ' + Complete:' + Tk.round(0.01*mq.complete,2);
-	var sum = mq.bonus.challenge*mq.bonus.orb*mq.bonus.cycle+(0.01*mq.complete);
-	var str = '<span class="u" title="' + title + '"> Bonus: x' + Tk.round(sum,3) + '</span><br>';
-	
-	for(var i in q.challenge){
-		var b = q.challenge[i];
-		
-		var color = mq.challenge[i] ? '#00FF00' : '#FF0000';
-		
-		str += 
-			'<span ' + 
-			'class="shadow" ' + 
-			'style="color:' + color + '" ' +
-			'onclick="Command.send(\'' + 'win,quest,toggleChallenge,' + q.id + ',' + i + '\')' + '" ' + 
-			'title="Toggle Challenge"' +
-			'>' + b.info + ' - (x' + b.bonus + ')' +
-			'</span><br>';
-		
-	}
-	str = str.slice(0,-4);
-	Draw.setInnerHTML(hq.bonus,str);	
-		
-}
 //}
 
 Draw.window.trade = function (){ ctxrestore();

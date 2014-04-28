@@ -36,7 +36,6 @@ Init.db.quest.map = function(){	//called before Init.db.quest
 }
 
 Quest.creation = function(q){
-	q = Tk.useTemplate(Quest.template(),q)
 	if(Server.testing)	Quest.creation.tester(q);
 	
 	//Variable
@@ -126,8 +125,9 @@ Quest.template = function(id,version){
 		name:'Default Quest',
 		icon:'skill.melee',
 		reward:{
-			boost:{'stat':'dmg-fire-+','value':[0.05,0.10]},
-			exp:{}
+			passive:{max:1,base:0.25,mod:10},
+			exp:{},
+			item:{},
 		},
 		description:"Default Description",
 		lvl:0,
@@ -147,21 +147,22 @@ Quest.template = function(id,version){
 		skillPlot:[],
 		boss:{},
 		visible:id[0] !== 'M',
+		author:'rc',
 	};
 }
 
 Quest.template.variable = function(){
 	return {
 		hint:'None.',
-		rewardTier:0,
-		reward:null,
+		rewardScore:0,
+		rewardPt:0,
 		complete:0,
-		started:0,
+		active:0,
 		deathCount:0,
 		bonus:{
-			challenge:1,
-			orb:1,
-			cycle:1
+			challenge:{passive:1,exp:1,item:1},
+			orb:{passive:1,exp:1,item:1},
+			cycle:{passive:1,exp:1,item:1},
 		},
 		challenge:{},
 		requirement:'',

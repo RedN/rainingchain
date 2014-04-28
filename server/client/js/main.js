@@ -127,6 +127,9 @@ Init.game.other = function(data){
 	Db.passiveGrid = data.other.passiveGrid;
 	Db.passiveGrid.height = 20;
 	Db.passiveGrid.width = 20;
+	
+	Db.questNameConvert = data.other.quest;	//TOFIX
+	
 }
 Init.game.addCanvas = function(name,id,z){
 	//To add a canvas to the game

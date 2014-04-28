@@ -129,23 +129,7 @@ Init.db.npc = function(){
 	var a = Db.npc;
 
 	//ALT-2
-	a["test"] = {}; //{
-	a["test"]["test"] = {  //{
-		"name":"Test",
-		"sprite":{'name':"bat",'sizeMod':1},
-		"abilityList":[
-			{'template':'fireBullet','aiChance':[0.4,0.4,1],'extra':{}},
-			[0.4,0.4,1]
-		],
-		"mastery":{'def':{'melee':2,'range':2,'magic':2,'fire':1,'cold':0.5,'lightning':1},
-					'dmg':{'melee':1,'range':1,'magic':1,'fire':1,'cold':1,'lightning':1}},	
-		"acc":0,
-		"maxSpd":0,
-		"moveRange":{'ideal':50,"confort":25,"aggressive":500,"farthest":600},	
-	}; //}	
-	//}
-	
-	
+	//{ Enemy
 	a["bat"] = {}; //{
 	a["bat"]["normal"] = {  //{
 		"name":"Bat",
@@ -751,39 +735,10 @@ Init.db.npc = function(){
 	}; //}
 	//}
 	
-	//###################
+	//}###################
 	
-	a["troll"] = {}; //{
-	a["troll"]["ice"] = {  //{
-		"name":"Ice Troll",
-		"sprite":{'name':"troll",'sizeMod':1},
-		
-		
-		'resource':{'hp':{'max':1000,'regen':1},'mana':{'max':100,'regen':1}},
-		
-		'globalDef':1,
-		'globalDmg':1,
-		
-		"mastery":{'def':{'melee':1,'range':1,'magic':1,'fire':1,'cold':1,'lightning':1},
-					'dmg':{'melee':1,'range':1,'magic':1,'fire':1,'cold':1,'lightning':1}},
 
-		"acc":2,
-		"maxSpd":5,
-		"moveRange":{'ideal':200,"confort":50,"aggressive":400,"farthest":600},	
-		'drop':{'category':{'regular':1},'plan':{'melee':1/10,'helm':1/10}},
-	}; //}
-	//}
-	
-	a["neutral"] = {}; //{
-	a["neutral"]["jenny"] = {  //{
-		"name":"Jenny",
-		"sprite":{'name':"jenny",'sizeMod':1},
-		'nevercombat':1,
-		"acc":0.5,
-		"maxSpd":3,
-	}; //}
-	//}
-	
+	//{NPC
 	a["npc"] = {}; //{
 	a["npc"]["ringo"] = {  //{
 		"name":"Ringo",
@@ -793,16 +748,11 @@ Init.db.npc = function(){
 		"maxSpd":3,
 	}; //}
 	//}
+	//}
 	
-	
-	a["system"] = {}; //{
-	a["system"]["default"] = {  //{
-		"name":"I am bugged.",
-		"sprite":{'name':"grave",'sizeMod':1},
-		'nevercombat':1,
-		'nevermove':1,
-	}; //}
-	a["system"]["grave"] = {  //{
+	//{System 
+	a['waypoint'] = {}; //{
+	a["waypoint"]["grave"] = {  //{
 		"name":"Grave",
 		'minimapIcon':'minimapIcon.grave',
 		"sprite":{'name':"grave",'sizeMod':1},
@@ -811,7 +761,7 @@ Init.db.npc = function(){
 		'nevermove':1,
 		"block":{condition:'true',pushable:0,size:[-1,1,-1,1]},
 	}; //}
-	a["system"]["graveSafe"] = {  //{
+	a["waypoint"]["graveSafe"] = {  //{
 		"name":"Grave",
 		'minimapIcon':'minimapIcon.grave',
 		"sprite":{'name':"grave",'sizeMod':1},
@@ -820,24 +770,59 @@ Init.db.npc = function(){
 		'nevermove':1,
 		"block":{condition:'true',pushable:0,size:[-1,1,-1,1]},
 	}; //}
-	a["system"]["chest"] = {  //{
+	
+	
+	//}
+		
+	a["loot"] = {}; //{
+	a["loot"]["chest"] = {  //{
 		"name":"Chest",
 		'minimapIcon':'minimapIcon.chest',
 		"sprite":{'name':"chest",'sizeMod':1},
 		'nevercombat':1,
 		'nevermove':1,
+		"block":{condition:'true',size:[-1,1,-1,1]},
 	}; //}
-	a["system"]["switch"] = {  //{
+	//}
+	
+	a["switch"] = {}; //{
+	a["switch"]["box"] = {  //{
 		"name":"Switch",
 		'minimapIcon':'minimapIcon.switch',
 		"sprite":{'name':"switchBox",'sizeMod':1},
 		'nevercombat':1,
 		'nevermove':1,
+		"block":{condition:'true',size:[-0,0,-0,0]},
 	}; //}
 	//}
+		
+	a["system"] = {}; //{
+	a["system"]["default"] = {  //{
+		"name":"I am bugged.",
+		"sprite":{'name':"grave",'sizeMod':1},
+		'nevercombat':1,
+		'nevermove':1,
+	}; //}
+	a["system"]["test"] = {  //{
+		"name":"Test",
+		"sprite":{'name':"bat",'sizeMod':1},
+		"abilityList":[
+			{'template':'fireBullet','aiChance':[0.4,0.4,1],'extra':{}},
+			[0.4,0.4,1]
+		],
+		"mastery":{'def':{'melee':2,'range':2,'magic':2,'fire':1,'cold':0.5,'lightning':1},
+					'dmg':{'melee':1,'range':1,'magic':1,'fire':1,'cold':1,'lightning':1}},	
+		"acc":0,
+		"maxSpd":0,
+		"moveRange":{'ideal':50,"confort":25,"aggressive":500,"farthest":600},	
+	}; //}	
+	//}
 	
-	a["block"] = {}; //{
-	a["block"]["1x1"] = {  //{
+	
+	
+	
+	a['pushable'] = {}; //{
+	a["pushable"]["rock1x1"] = {  //{
 		"name":"Block",
 		'minimapIcon':'',
 		"sprite":{'name':"block1x1",'sizeMod':1},
@@ -847,37 +832,17 @@ Init.db.npc = function(){
 		"pushable":{magn:4,time:16},
 		"bounce":0,
 	}; //}
-	
-	a["block"]["2x2"] = {  //{
+	a["pushable"]["rock2x2"] = {  //{
 		"name":"Block",
 		'minimapIcon':'',
 		"sprite":{'name':"block1x1",'sizeMod':2},
 		'nevercombat':1,
 		'moveSelf':0,
-		"block":{condition:'true',size:[-1,0,-1,0]},	//TOFIX that would be 3x3
+		"block":{condition:'true',size:[-1,0,-1,0]},
 		"pushable":{magn:4,time:16},
 		"bounce":0,
 	}; //}
-	
-	a["block"]["barrier"] = {  //{
-		"name":"Barrier",
-		'minimapIcon':'',
-		"sprite":{'name':"barrier",'sizeMod':1.5},
-		'nevercombat':1,
-		'nevermove':1,
-		"block":{condition:'true',size:[-2,2,-1,1]},
-	}; //}
-	
-	a["block"]["2x2Fix"] = {  //{
-		"name":"Block",
-		'minimapIcon':'',
-		"sprite":{'name':"block1x1-black",'sizeMod':2},
-		'nevercombat':1,
-		'nevermove':1,
-		"block":{condition:'true',size:[-1,0,-1,0]},
-	}; //}
-
-	a["block"]["3x3"] = {  //{
+	a["pushable"]["rock3x3"] = {  //{
 		"name":"Block",
 		'minimapIcon':'',
 		"sprite":{'name':"block1x1",'sizeMod':3},
@@ -888,7 +853,7 @@ Init.db.npc = function(){
 		"bounce":0,
 	}; //}
 	
-	a["block"]["4x4"] = {  //{
+	a["pushable"]["4x4"] = {  //{
 		"name":"Block",
 		'minimapIcon':'',
 		"sprite":{'name':"block1x1",'sizeMod':4},
@@ -897,6 +862,28 @@ Init.db.npc = function(){
 		"block":{condition:'true',size:[-1,1,-1,1]},
 		"pushable":{magn:4,time:16},
 		"bounce":0,
+	}; //}
+	//}
+	
+	
+	
+	a["block"] = {}; //{	
+	a["block"]["rock2x2"] = {  //{
+		"name":"Block",
+		'minimapIcon':'',
+		"sprite":{'name':"block1x1-black",'sizeMod':2},
+		'nevercombat':1,
+		'nevermove':1,
+		"block":{condition:'true',size:[-1,0,-1,0]},
+	}; //}
+	
+	a["block"]["barrier"] = {  //{
+		"name":"Barrier",
+		'minimapIcon':'',
+		"sprite":{'name':"barrier",'sizeMod':1.5},
+		'nevercombat':1,
+		'nevermove':1,
+		"block":{condition:'true',size:[-2,2,-1,1]},
 	}; //}
 	
 	a["block"]["spike"] = {  //{
@@ -959,7 +946,13 @@ Init.db.npc = function(){
 	}; //}
 	//}
 	
-	//Turn Object into function
+	//}
+	
+	
+	
+	
+	
+	
 	for(var i in a){ 
 		for(var j in a[i]){
 			a[i][j].category = i;

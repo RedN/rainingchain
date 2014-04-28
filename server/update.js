@@ -228,8 +228,6 @@ Init.changeUpdate = function(){
 	
 }
 
-
-
 Change.update.watch = function(act,info,priv){
 	//Test condition to test
 	if(info.condition && !info.condition(act)) return; 

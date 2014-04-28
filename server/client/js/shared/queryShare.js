@@ -52,6 +52,7 @@ Db.query.quest = function(info){
 		'reward':0,
 		'description':0,
 		'variable':0,
+		'author':0,
 		'requirement':Db.query.quest.req,
 		'challenge':Db.query.quest.challenge,
 		lvl:0,
@@ -69,7 +70,10 @@ Db.query.quest = function(info){
 Db.query.quest.req = function(info){
 	var tmp = [];
 	for(var i in info){
-		tmp[i] = {text:info[i].text};
+		tmp[i] = {
+			description:info[i].description,
+			name:info[i].name,
+		};
 	}
 	return tmp;
 }	
@@ -79,7 +83,7 @@ Db.query.quest.challenge = function(info){	//dunno if good
 	for(var i in info){
 		tmp[i] = {
 			name:info[i].name,
-			info:info[i].info,
+			description:info[i].description,
 			bonus:info[i].bonus,
 		};
 	}

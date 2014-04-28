@@ -565,3 +565,24 @@ String.prototype.replacePattern = function(func){	//only works like [[sdadsa]]
 	return data;
 }
 
+
+
+String.prototype.chronoToTime = function(func){	//1:04:10.10
+	var array = this.split(":");
+	var time = (+array[array.length-1] * Cst.SEC) || 0;
+	time += (+array[array.length-2] * Cst.MIN) || 0;
+	time += (+array[array.length-3] * Cst.HOUR) || 0;
+	return time;
+}
+
+
+
+
+
+
+
+
+
+
+
+

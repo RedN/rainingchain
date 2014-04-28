@@ -2,6 +2,8 @@
 var s = require('./../Quest_exports').init('v1.0','QgoblinJewel');
 var q = s.quest;
 
+q.name = "Goblin Jewel";
+
 /*
 ### STEPS ###
 talk ringo
@@ -29,6 +31,23 @@ cs 		cs[CONTEXT]			=> cutscene
 talk	talk[WHO ACTION]	=> talk done
 */
 
+
+
+q.reward = {
+	exp:{},
+	item:{},
+	passive:{min:0.1,max:0.5,mod:10},
+};
+
+q.challenge.speedrunner = Quest.challenge.template.speedrun('1:05:10.10');
+
+q.requirement = [
+	Quest.requirement.template.quest("Qtest"),
+	Quest.requirement.template.skill("melee",1)
+];
+	
+
+
 q.variable = {
 	killGoblin:0,
 	killGoblinBoss:0,
@@ -42,7 +61,7 @@ q.event = {
 	},
 	
 	hint:function(key){
-		if(!s.get(key,'started')) return 'You can start this quest by talking to the guy south west of Goblin Land';
+		if(!s.get(key,'active')) return 'You can start this quest by talking to the guy south west of Goblin Land';
 		return "Good luck!";
 	},
 	test:{
@@ -66,7 +85,7 @@ q.event = {
 	},
 	
 	talkRingo:function(key){
-		if(!s.get(key,'started')){ s.dialogue(key,'ringo','intro','first'); return; }
+		if(!s.get(key,'active')){ s.dialogue(key,'ringo','intro','first'); return; }
 		if(s.haveItem(key,'jewel')){ 
 			if(s.get(key,'killGoblinBoss')) s.dialogue(key,'ringo','intro','second-postJewel'); 
 			else s.chat(key,'bug, please send bug report. You can reset quest via the Quest Tab.');
@@ -77,7 +96,7 @@ q.event = {
 		
 	},
 	getPotionUnf:function(key){
-		s.set(key,'started',true);
+		s.set(key,'active',true);
 		s.addItem(key,'potion_unf');
 	},
 	getFlower:function(key){

@@ -23,7 +23,7 @@ Actor.death.player = function(act,killers){
 	Main.screenEffect(main,{'name':'fadeout','time':50,'maxTimer':50,'color':'black'});
 	
 	//Quest
-	for(var i in main.quest)	if(main.quest[i].started)	main.quest[i].deathCount++;	
+	if(main.quest[i].active) main.quest[main.quest[i].active].deathCount++;	
 	
 	//Message
 	var string = 'You are dead... ';

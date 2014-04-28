@@ -28,8 +28,10 @@ Cycle.day.passive = function(day){
 Cycle.day.quest = function(key){
 	var mq = List.main[key].quest;
 	for(var i in mq){
-		mq[i].bonus.cycle += 0.02;
-	}	
+		mq[i].bonus.cycle.item += 0.02;
+		mq[i].bonus.cycle.passive += 0.04;
+		mq[i].bonus.cycle.exp += 0.08;
+	}
 }
 
 Cycle.week = function(){

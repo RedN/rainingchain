@@ -218,8 +218,9 @@ Draw.tab.quest = function(){ ctxrestore();
 		
 		for(var i in main.quest){
 			var q = main.quest[i];
+			var name = Db.questNameConvert[i];
 			
-			var color = q.complete ? '#00FF00' : (q.started ? 'yellow' : 'red');
+			var color = q.active ? 'yellow' : ( q.complete ? '#00FF00' : 'red');
 			
 			
 			html.questTab.text.innerHTML += 
@@ -227,8 +228,8 @@ Draw.tab.quest = function(){ ctxrestore();
 			'class="shadow" ' + 
 			'style="color:' + color + '" ' +
 			'onclick="Command.send(\'' + 'win,open,quest,' + i + '\')' + '" ' + 
-			'title="'+ i + '" ' 
-			+ '>' + i + 
+			'title="Check '+ name + '" ' 
+			+ '>' + name + 
 			'</span>';
 			
 		}

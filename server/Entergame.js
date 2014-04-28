@@ -122,11 +122,10 @@ Load.enterGame.hideHUD = function(key){
 }
 
 Load.enterGame.quest = function(key){
-	var mq = List.main[key].quest;
-	for(var i in mq){
-		if(mq[i].started && Db.quest[i].event.signIn)
-			Db.quest[i].event.signIn(key);	
-	}
+	var mq = List.main[key].questActive;
+	
+	if(mq && Db.quest[mq].event.signIn)
+		Db.quest[mq].event.signIn(key);	
 }
 
 
