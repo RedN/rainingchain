@@ -11,9 +11,13 @@ exports.init = function(version,questname){	//}
 	var s = {};	
 	s.quest = Quest.template(Q);
 	
+	s.startQuest = function(key){
+		Main.openWindow(List.main[key],'quest',Q);	
+	}
 	
 	s.interval = function(num){ return Loop.interval(num); }
 	s.get = function(key,attr){
+		if(!List.main[key]) return;	//case enemy
 		var mq = List.main[key].quest[Q];		
 		var a = mq[attr];
 		return typeof a === 'object' ? Tk.deepClone(a) : a;	//prevent setting
@@ -41,8 +45,8 @@ exports.init = function(version,questname){	//}
 		return List.all[key];
 	}
 	
-	s.setTimeOut = function(key,name,time,func){
-		Actor.setTimeout(getAct(key),Q + '-' + name,time,func);	
+	s.setTimeout = function(key,name,time,func){
+		Actor.setTimeout(s.getAct(key),Q + '-' + name,time,func);	
 	};
 	
 	s.chat = Chat.add;
@@ -106,18 +110,21 @@ exports.init = function(version,questname){	//}
 	s.haveItem = function(key,item,amount,removeifgood){
 		var list = s.itemFormat(item,amount);
 		var success = Itemlist.have(key,list);
-		if(success && removeifgood) Itemlist.remove(key,list);
+		if(success && (removeifgood || amount === true)) Itemlist.remove(key,list);
 		return success;
 	}
 
 	s.testItem = function (key,item,amount,addifgood){
 		var list = s.itemFormat(item,amount);
 		var success = Itemlist.test(key,list);
-		if(success && removeifgood) Itemlist.add(key,list);
+		if(success && (addifgood || amount === true)) Itemlist.add(key,list);
 		return success;
 	}
 	
+	s.getTeam = function(key){	//TODO
+		//for(var i in List.team[
 	
+	}
 
 	//Cutscene
 	s.cutscene = function(key,map,path){
@@ -153,9 +160,17 @@ exports.init = function(version,questname){	//}
 	s.strike = function(spot,atk,angle,dif,extra){
 		Combat.attack.simple({damageIf:dif || 'player-simple',spot:spot,angle:angle},atk,extra);
 	}
+	
 	s.actor = function(spot,cat,variant,extra,lvl){
 		Actor.creation({spot:spot,category:cat,variant:variant,lvl:lvl || 0,extra:(extra || {})});
 	}
+	
+	s.actorEvent = function(key,spot,cat,variant,extra,lvl){
+		var spot = s.getSpot(s.getAct(key).map,Q,spot);
+		console.log(100,spot);
+		Actor.creation({spot:spot,category:cat,variant:variant,lvl:lvl || 0,extra:(extra || {})});
+	}
+	
 
 	s.actorGroup = function(spot,respawn,list,extra){
 		var tmp = [];
@@ -209,8 +224,14 @@ exports.init = function(version,questname){	//}
 
 	
 	//Template
-	s.requirement = Quest.requirement.template;
-	s.challenge = Quest.challenge.template;
+	s.requirement = function(){
+		if(Quest.requirement.template[arguments[0]])
+			return Quest.requirement.template[arguments[0]](arguments[1],arguments[2],arguments[3],arguments[4]);	
+	}
+	s.challenge = function(){
+		if(Quest.challenge.template[arguments[0]])
+			return Quest.challenge.template[arguments[0]](arguments[1],arguments[2],arguments[3],arguments[4]);	
+	}
 	
 	
 	

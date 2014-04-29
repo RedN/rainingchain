@@ -53,10 +53,14 @@ Test.spawnEnemy = function(key,cat,variant){
 }
 
 Test.invincible = function(key){
-	Actor.permBoost(List.all[key],'Test.invincible',[
-		{stat:'globalDef',value:1000,type:'+'},
-		{stat:'globalDmg',value:1000,type:'+'},
-	]);	
+	if(List.all[key].globalDef < 500){
+		Actor.permBoost(List.all[key],'Test.invincible',[
+			{stat:'globalDef',value:1000,type:'+'},
+			{stat:'globalDmg',value:1000,type:'+'},
+		]);	
+	} else {
+		Actor.permBoost(List.all[key],'Test.invincible');
+	}
 }
 
 

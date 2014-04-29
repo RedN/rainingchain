@@ -99,7 +99,7 @@ Sign.in = function(socket,d){
 				socket.emit('signIn', { 'success':0,'message':'<font color="red">You have already played over 24 hours this week.</font>' }); return; }
 
 			//Success!
-			var key = "p" + Math.randomId();
+			var key = "P" + Math.randomId();
 			Load(key,account,socket);
 		});
 	});

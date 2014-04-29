@@ -403,7 +403,7 @@ Sprite.template = function(){
 
 
 Sprite.change = function(act,info){
-    if(!act || !act.sprite) return ERROR(5);
+    if(!act || !act.sprite) return ERROR(5,'no sprite');
 
 	if(info.initAnim || info.anim){ 
 		act.sprite.initAnim = info.initAnim || act.sprite.initAnim;
@@ -411,11 +411,19 @@ Sprite.change = function(act,info){
 		act.sprite.startX = 0;
 		act.sprite.timer = 0;
 	}
-	act.sprite.name = info.name || act.sprite.name;
-	act.sprite.sizeMod = info.sizeMod || act.sprite.sizeMod;
-	if(info.regular !== undefined) act.sprite.regular = info.regular;
 	
-	if(act.type === 'player' && act.sprite.regular)	act.sprite.name = Sprite.getRegular(act);
+	if(info.name){
+		if(info.name === 'regular')  act.sprite.regular = 1;
+		else {
+			act.sprite.name = info.name;
+			act.sprite.regular = 0;
+		}
+	}
+	act.sprite.sizeMod = info.sizeMod || act.sprite.sizeMod;
+	
+	if(act.type === 'player' && act.sprite.regular && SERVER){
+		act.sprite.name = Sprite.getRegular(act);
+	}
 	
 	if(info.sizeMod || info.name) Sprite.updateBumper(act);
 	

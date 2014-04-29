@@ -251,7 +251,7 @@ $(document).ready(function(){
 	document.onmousewheel = function(event){Input.event.mouse.wheel(event.wheelDeltaY > 0 ? 1 : -1);}
 	document.addEventListener('keydown', function(event) {	Input.event.key(event.keyCode,'down',event);});
 	document.addEventListener('keyup', function(event) {Input.event.key(event.keyCode,'up',event);});
-	document.activeElement.addEventListener("mousemove", Input.event.mouse.move);
+	document.addEventListener("mousemove", Input.event.mouse.move);
 	$(document).bind('contextmenu', function(e){return false;});	//Disable Right Click Context Menu and Lose Focus
 	//$(window).keydown(function(e) { if(e.ctrlKey) { e.preventDefault();}});	//Disable Ctrl Shortcut
 });

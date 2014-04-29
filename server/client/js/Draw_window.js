@@ -824,7 +824,7 @@ Draw.window.ability.action.summon = function(diffX,diffY){  ctxrestore();
 //}
 
 
-// {quest
+//{quest
 Draw.window.quest = function (){ ctxrestore();
 	var q = Db.query('quest',main.windowList.quest);
 	var s = Draw.window.main('Quest: ' + (q ? q.name : ''));	

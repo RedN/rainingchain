@@ -89,7 +89,7 @@ Main.passiveRemove = function(main,num,i,j){
 }
 
 Main.closeAllWindow = function(main){
-	if(main.windowList.trade.trader){ List.main[main.windowList.trade.trader].windowList.trade = 0; }
+	if(main.windowList.trade && main.windowList.trade.trader){ List.main[main.windowList.trade.trader].windowList.trade = 0; }
 	
 	for(var i in main.windowList){
 		main.windowList[i] = 0;
@@ -108,12 +108,11 @@ Main.openWindow = function(main,name,param){
 		Quest.hint(key,param);
 	}
 	if(name === 'trade'){
-		tradermain = List.main[param];
-		if(!tradermain.windowList.trade){
-			Main.closeAllWindow(tradermain);
-			main.windowList.trade = {'trader':param,'tradeList':tradermain.tradeList,'confirm':{'self':0,'other':0}};
-			tradermain.windowList.trade = {'trader':key,'tradeList':main.tradeList,'confirm':{'self':0,'other':0}};
-		} else { Chat.add(key,'This player is busy.');}
+		var tradermain = List.main[param];
+		if(tradermain.windowList.trade || tradermain.windowList.bank) return Chat.add(key,'This player is busy.');
+		Main.closeAllWindow(tradermain);
+		main.windowList.trade = {'trader':param,'tradeList':tradermain.tradeList,'confirm':{'self':0,'other':0}};
+		tradermain.windowList.trade = {'trader':key,'tradeList':main.tradeList,'confirm':{'self':0,'other':0}};		
 	}
 }
 

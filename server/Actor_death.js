@@ -6,7 +6,6 @@ Actor.death = function(act){
 	if(act.type === 'player') Actor.death.player(act,killers);
 }
 
-
 Actor.death.summon = function(act){
 	for(var i in act.summon){
 		for(var j in act.summon[i].child){
@@ -23,7 +22,7 @@ Actor.death.player = function(act,killers){
 	Main.screenEffect(main,{'name':'fadeout','time':50,'maxTimer':50,'color':'black'});
 	
 	//Quest
-	if(main.quest[i].active) main.quest[main.quest[i].active].deathCount++;	
+	if(main.questActive) main.quest[main.questActive].deathCount++;	
 	
 	//Message
 	var string = 'You are dead... ';

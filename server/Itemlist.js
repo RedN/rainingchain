@@ -70,9 +70,6 @@ Itemlist.remove.action = function (inv,id,amount){
 	}
 }
 
-
-
-
 Itemlist.test = function (inv,id,amount){ //test if enouhg space
 	if(typeof inv === 'string') inv = List.main[inv].invList;
 	var list = Itemlist.format(id,amount);	
@@ -80,7 +77,7 @@ Itemlist.test = function (inv,id,amount){ //test if enouhg space
 	var spaceNeeded = 0;
 	for(var i in list){
 		if(Db.item[i].stack || inv.alwaysStack)	spaceNeeded += Itemlist.have(inv,i) ? 0 : 1;
-		else spaceNeeded += tmp[i];
+		else spaceNeeded += list[i];
 	}
 	return spaceNeeded <= Itemlist.empty(inv);
 }

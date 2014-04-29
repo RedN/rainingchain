@@ -78,8 +78,8 @@ Loop.group = function(){
 		
 		if(alldead){ //aka all dead
 			if(--g.respawn <= 0){
-				Actor.creation.group.apply(this,g.param); 
-				for(var j in list) Actor.remove(List.actor[j]);				
+				for(var j in list) Actor.remove(List.actor[j]);		
+				Actor.creation.group.apply(this,g.param); 		
 				delete List.group[i];
 				continue;
 			}
@@ -142,16 +142,15 @@ Activelist.add = function(b){		//set the viewedBy of b AND add b to activeList o
 		
 		if(Activelist.test(player,b)){ 
 			player.activeList[b.id] = b.id;
-			if(player.type !== 'player'){ 
-				b.viewedBy[player.id] = 1; 
-			}
+			if(player.type === 'player') b.viewedBy[player.id] = 0; 
+			else b.viewedBy[player.id] = 0; 
 		}
 	}
 }
 
 Activelist.remove = function(b){
 	if(!b){ ERROR(2,'actor dont exist'); return; }
-	for(var i in b.viewedBy){
+	for(var i in b.viewedBy){	//problem probably if add to activeList but die so fast its not in viewedBy
 		if(!List.all[i]){ ERROR(2,'actor dont exist'); continue; }
 		if(List.all[i].removeList) List.all[i].removeList.push(b.publicId || b.id);
         delete List.all[i].activeList[b.id];

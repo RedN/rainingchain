@@ -141,7 +141,7 @@ Collision.BulletMap = function(bullet){
 Collision.StrikeActor = function(atk){
 	for(var j in atk.viewedBy){
 		var player = List.all[j];
-		if(!player) continue;	//test target exist
+		if(!player){ ERROR(3,'no act'); continue; }	//test target exist
 		if(!Collision.StrikeActor.test(atk,player)) continue;
 		if(!Collision.StrikeActor.collision(atk,player)) continue;
 		

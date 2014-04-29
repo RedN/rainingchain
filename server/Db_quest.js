@@ -14,7 +14,7 @@ Init.db.quest = function(){
 	var questVar = {};
 	for(var i in Db.quest){
 		Db.quest[i] = Quest.creation(Db.quest[i]);
-		questVar[i] = Db.quest[i].variable;
+		if(Db.quest[i].visible) questVar[i] = Db.quest[i].variable;
 	}
 	Main.template.quest = {};
 	Main.template.quest = new Function('return ' + Tk.stringify(questVar));	
@@ -110,7 +110,12 @@ Quest.creation.tester = function(q){
 	item.option.push({name:'Change Var','func':function(key){
 		Chat.question(key,{text:'variable,value',func:function(key,param,param1){
 			var mq = List.main[key].quest[q.id];
-			if(mq[param] !== undefined) mq[param] = param1;
+			if(mq[param] !== undefined){
+				if(param1 === 'true') mq[param] = true;
+				else if(param1 === 'false') mq[param] = false;
+				else if(!isNaN(param1)) mq[param] = +param1;
+				else mq[param] = param1;
+			}
 			else Chat.add(key,"bad name");
 		}});
 	}});

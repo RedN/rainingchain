@@ -2,13 +2,16 @@
 
 SKIPPED: trade, craft,db.filter, passive
 
-
+teleport everyone in map to this spot
 
 
 can use whole quest file for testing dialogue
 
 
+loop 155 on safe logout
 
+chest dont change look
+sprite to orc not working
 
 ==REVAMP==
 boss summon

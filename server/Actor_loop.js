@@ -3,20 +3,20 @@
 var ABILITYINTERVAL = 3;
 var SUMMONINTERVAL = 5;
 
-Actor.loop = function(act){	
-	if(++act.frame % 25 === 0) Actor.loop.activeList(act); 
-	if(!act.active) return;
-	
-	var interval = function(num){
-		return act.frame % num === 0;
-	};
-	
-	Actor.loop.timeOut(act);
+Actor.loop = function(act){
 	if(act.dead){
 		if(act.type === 'player' && --act.respawn < 0)
 			Actor.death.respawn(act);
 		return;
 	}
+	Actor.loop.timeOut(act);
+	
+	if(++act.frame % 25 === 0) Actor.loop.activeList(act); 
+	if(!act.active) return;
+	
+	var interval = function(num){	return act.frame % num === 0; };
+	
+	
 	if(act.combat){
 		if(act.hp <= 0) Actor.death(act);
 		if(act.boss){ Boss.loop(act.boss);}
@@ -123,8 +123,9 @@ Actor.performAbility.resource = function(act,cost){
 Actor.loop.timeOut = function(act){
 	for(var i in act.timeOut){
 		if(--act.timeOut[i].timer < 0){
-			act.timeOut[i].func(act.id);
-			delete act.timeOut[i];		
+			try {act.timeOut[i].func(act.id);
+			}catch(err){ ERROR.err(err); }
+			finally{	delete act.timeOut[i];	}			
 		}	
 	}
 }

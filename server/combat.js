@@ -125,6 +125,7 @@ Combat.boost = function(key,info){
 
 //COLLISION//
 Combat.collision = function(b,act){
+	if(!act.attackReceived){ ERROR(3,'no attackreceived',act); return; }
 	if(act.attackReceived[b.hitId]) return;    //for pierce
     act.attackReceived[b.hitId] = 500;	//last for 20 sec
 	
