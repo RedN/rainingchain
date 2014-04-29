@@ -7,11 +7,12 @@ Actor.loop = function(act){
 	if(act.dead){
 		if(act.type === 'player' && --act.respawn < 0)
 			Actor.death.respawn(act);
+		if(act.deleteOnceDead) Actor.remove(act);
 		return;
 	}
 	Actor.loop.timeOut(act);
 	
-	if(++act.frame % 25 === 0) Actor.loop.activeList(act); 
+	if(++act.frame % 25 === 0) Activelist.update(act); 
 	if(!act.active) return;
 	
 	var interval = function(num){	return act.frame % num === 0; };
@@ -335,30 +336,9 @@ Actor.loop.move.aim = function (act){
 //}
 
 
-Actor.loop.activeList = function(act){	
-	//Test Already in List if they deserve to stay
-	for(var j in act.activeList){
-		if(!List.all[j]){
-			delete act.activeList[j];
-			continue;
-		}
-		if(!Activelist.test(act,List.all[j])){
-			delete List.all[j].viewedBy[act.id];
-			delete act.activeList[j];
-			if(act.type === 'player') act.removeList.push(List.all[j].publicId || j);
-		}
-	}
-	
-	//Add New Boys
-	for(var j in List.map[act.map].list.all){
-		if(Activelist.test(act,List.all[j])){
-			act.activeList[j] = 1;
-			if(act.type !== 'player'){ List.all[j].viewedBy[act.id] = 1;}	//for player, viewedBy is used in send init data
-		}
-	}
-	act.active = Object.keys(act.activeList).length || act.type === 'player';
 
-}
+
+
 
 Actor.loop.trade = function(act){	//BAD
 	var key = act.id;

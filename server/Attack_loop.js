@@ -145,7 +145,7 @@ Strike.loop.collision = function(atk){
 
 
 Strike.remove = function(strike){
-	Activelist.remove(strike);
+	Activelist.clear(strike);
 	
 	delete List.strike[strike.id];
 	delete List.all[strike.id]

@@ -107,7 +107,7 @@ Collision.getMouse = function(key){
 
 //
 Collision.BulletActor = function(b){
-	for(var i in b.viewedBy){ 
+	for(var i in b.activeList){ 
 		var player = List.all[i];
 		if(!player) continue;	//test target exist
 		if(!Collision.BulletActor.test(b,player)) continue;	//exist if can attack this type of player
@@ -118,6 +118,7 @@ Collision.BulletActor = function(b){
 }
 
 Collision.BulletActor.test = function(atk,def){
+	if(!atk.combat || !def.combat) return;
 	var normal = Combat.damageIf(atk,def);
 	
 	if(def.damagedIf === 'false') return false;
@@ -139,7 +140,7 @@ Collision.BulletMap = function(bullet){
 }
 
 Collision.StrikeActor = function(atk){
-	for(var j in atk.viewedBy){
+	for(var j in atk.activeList){
 		var player = List.all[j];
 		if(!player){ ERROR(3,'no act'); continue; }	//test target exist
 		if(!Collision.StrikeActor.test(atk,player)) continue;

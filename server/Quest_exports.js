@@ -86,11 +86,16 @@ exports.init = function(version,questname){	//}
 	}
 	
 	s.setSprite = function(key,name,size){
-		var tmp = {name:name};
-		if(size && size !== 1) tmp.sizeMod = size;
+		var tmp = {};
+		if(name) tmp.name = name;
+		if(size) tmp.sizeMod = size;
 		Sprite.change(s.getAct(key),tmp);
 	}
 
+	s.boost = function(key,boost){
+		Actor.boost(s.getAct(key),boost);	
+	}
+	
 	//Item
 	s.itemFormat = function(item,amount){
 		var list = Itemlist.format(item,amount,false);
@@ -167,7 +172,6 @@ exports.init = function(version,questname){	//}
 	
 	s.actorEvent = function(key,spot,cat,variant,extra,lvl){
 		var spot = s.getSpot(s.getAct(key).map,Q,spot);
-		console.log(100,spot);
 		Actor.creation({spot:spot,category:cat,variant:variant,lvl:lvl || 0,extra:(extra || {})});
 	}
 	

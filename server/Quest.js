@@ -9,6 +9,7 @@ Quest.reward = function(key,id){	//roll the perm stat bonus and check if last on
 	mq.rewardScore = Quest.getRewardScore(q.reward.passive,mq.rewardScore);
 	
 	mq.rewardPt = Quest.getRewardPt(q.reward.passive,mq.rewardScore);
+	Chat.add(key,"You total quest score is " + Tk.round(mq.rewardScore,1) + " equivalent to " + Tk.round(mq.rewardPt,3) + " passive point. Repeat the quest to improve your reward.");
 	Itemlist.add(key,reward.item);	//TOFIX test if space
 	Skill.addExp.bulk(key,reward.exp,false);
 }

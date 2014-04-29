@@ -7,7 +7,7 @@ Init.db.map = function(){
 		'tutorial':[1,5],
 		'pvpF4A':[1,2],
 		'goblinLand':[4,8],
-		'goblinUnderground':[0,1],
+		'goblinUnderground':[1,2],
 	}
 	//map are loaded when needed. check Loop.actor
 }

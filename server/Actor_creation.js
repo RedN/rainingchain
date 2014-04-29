@@ -19,7 +19,7 @@ Actor.creation = function(d){	//d: x  y  map category variant lvl modAmount extr
 	if(e.nevermove){ Actor.creation.nevermove(e); }
 	if(e.nevercombat){ Actor.creation.nevercombat(e); }	
 	else {
-		e = Actor.creation.mod(e,data); 
+		e = Actor.creation.mod(e); 
 		e = Actor.creation.boost(e);
 	}
 	
@@ -129,7 +129,7 @@ Actor.creation.data = function(e,cr){
 	
 	e.category = cr.category; 
 	e.variant = cr.variant; 
-	e.modAmount = Actor.creation.data.modAmount(cr.modAmount);
+	e.modAmount = e.modAmount === false ? 0 : Actor.creation.data.modAmount(cr.modAmount);
 	e.extra = cr.extra;
 	e.group = cr.group || '';
 	
@@ -144,7 +144,7 @@ Actor.creation.data.modAmount = function(num){
 	
 	if(num === true){
 		var a = Math.random();
-		if(a > 1/2) return 0;
+		if(a > 1/4) return 0;
 		if(a > 1/8) return 1;
 		if(a > 1/32) return 2;
 		return 3;
@@ -166,8 +166,8 @@ Actor.creation.data.position = function(cr){
 }
 
 
-Actor.creation.mod = function(e,d){
-	for(var i = 0 ; i < d.modAmount ; i++){
+Actor.creation.mod = function(e){
+	for(var i = 0 ; i < e.modAmount ; i++){
 		var choosen = Actor.creation.mod.list.random('chance');
 		if(e.modList.have(choosen)){ i -= 0.99; continue; }
 		
@@ -331,6 +331,7 @@ Actor.remove = function(act){
 	Map.leave(act);
 	delete List.actor[act.id];
 	delete List.all[act.id]
+	if(act.group) delete List.group[act.group].list[act.id];
 }
 
 

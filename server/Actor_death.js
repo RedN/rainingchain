@@ -67,7 +67,7 @@ Actor.death.npc = function(act,killers){
 	if(act.deathFunc) for(var i in killers) act.deathFunc(killers[i],act,act.map); 
 		
 	Actor.death.performAbility(act);				//custom death ability function
-	Activelist.remove(act);
+	Activelist.clear(act);
 }
 
 Actor.death.performAbility = function(act){

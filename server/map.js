@@ -77,7 +77,7 @@ Map.leave = function(act,map){
 	var oldmap = List.map[map];
 	if(!oldmap) return;	//ex: teleport after login
 	
-	Activelist.remove(act);
+	Activelist.clear(act);
 	
 	if(act.type === 'player'){
 		for(var i in oldmap.addon)
@@ -96,7 +96,7 @@ Map.enter = function(act,map){
 	if(newmap.list[act.type]) newmap.list[act.type][act.id] = 1;
 	if(act.type === 'player' || act.type === 'npc') newmap.list.actor[act.id] = 1;
 	
-	Activelist.add(act);
+	Activelist.update(act);
 	
 	if(act.type === 'player'){
 		for(var i in newmap.addon)

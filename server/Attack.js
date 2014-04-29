@@ -5,7 +5,7 @@ Attack.template = function(type){
 	//NO TOUCH
 	b.change = {};
 	b.old = {};
-	b.viewedBy = {};
+	b.activeList = {};
 	b.viewedIf = 'true';
 	b.x = 0;
 	b.y = 0;
@@ -202,7 +202,7 @@ Attack.creation.strike = function(s){
 	s.x = s.crX + s.middleX;
 	s.y = s.crY + s.middleY;
 	List.strike[s.id] = s;
-	Activelist.add(s);	//could use Map.enter instead
+	Activelist.update(s);	//could use Map.enter instead
 	
 	Attack.creation.neverbullet(s);
 	return s;

@@ -22,12 +22,10 @@ Change.send = function(){
 			
 			var id = obj.publicId || obj.id;
 			
-			if(!obj.viewedBy[key]){		//Need to Init
+			if(player.activeList[i] === 1){		//Need to Init
 				sa.i[id] = Change.send.init(obj);
-				obj.viewedBy[key] = key;		//Add so the next time it will update instead of init
-			} else {			//Only Update
-				sa.u[id] = Change.send.compressXYA(obj.change);
-			}
+				player.activeList[i] = 2;
+			} else sa.u[id] = Change.send.compressXYA(obj.change);	//Only Update
 			
 		}
 		//Remove List

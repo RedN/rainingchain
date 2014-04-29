@@ -1,11 +1,18 @@
 eval('INFO = function(){ co' + 'nsole.log.apply(co' + 'nsole,arguments); }');
-ERROR = function(lvl,text){ 
+ERROR = function(lvl){ 
 	//1: fatal, reset server || 2: shouldnt happen || 3: warn, somewhat possible
 	if(lvl === undefined) lvl = 3;
 	
-	var str = '###################################\n';
-	'Error Level ' + lvl + ': \n';
-	for(var i = 1; i < arguments.length; i++)	str += ' -- ' + arguments[i] + '\n';
+	var str = '###################################\n' + 'Error Level ' + lvl + ': \n';
+	
+	
+	for(var i = 1; i < arguments.length; i++){
+		try { arguments[i] = typeof arguments[i] === 'object' ? JSON.stringify(arguments[i]) : arguments[i] } catch(err){}
+	}
+		
+	
+	for(var i = 1; i < arguments.length; i++) str += ' -- ' + arguments[i] + '\n';
+		
 	str += new Error().stack;
 	INFO(str);
 }

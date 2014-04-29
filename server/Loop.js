@@ -123,6 +123,24 @@ Activelist.test = function(act,obj){
 	//Test used to know if obj should be in activeList of act.
 	if(!obj){ return false; }
 	if(act.id === obj.id){ return false; }
+	if(!obj.viewedIf || !act.viewedIf){ return false; }
+	if(obj.viewedIf === 'false' || act.viewedIf === 'false'){ return false; }
+	if(act.map !== obj.map){ return false; }
+	if(obj.dead || act.dead){ return false; }
+	if(typeof obj.viewedIf === 'function' && !obj.viewedIf(act.id,obj.id)){ return false; }
+	if(typeof act.viewedIf === 'function' && !act.viewedIf(obj.id,act.id)){ return false; }
+	if(typeof obj.viewedIf === 'object' && obj.viewedIf.indexOf(act.id) === -1){ return false; }
+	if(typeof act.viewedIf === 'object' && act.viewedIf.indexOf(obj.id) === -1){ return false; }
+	
+	var rect = [act.x-800,act.x+800,act.y-600,act.y+600];
+	
+	return Collision.PtRect(obj,rect);
+	
+	
+	/*
+	//Test used to know if obj should be in activeList of act.
+	if(!obj){ return false; }
+	if(act.id === obj.id){ return false; }
 	if(!obj.viewedIf){ return false; }
 	if(obj.viewedIf === 'false'){ return false; }
 	if(act.map !== obj.map){ return false; }
@@ -133,28 +151,48 @@ Activelist.test = function(act,obj){
 	var rect = [act.x-800,act.x+800,act.y-600,act.y+600];
 	
 	return Collision.PtRect(obj,rect);
+	*/
 }
 
-Activelist.add = function(b){		//set the viewedBy of b AND add b to activeList of surrounding actors
-	for(var i in List.map[b.map].list.actor){
-		var player = List.actor[i];
-		if(!player){ ERROR(2,'player dont exist'); continue; }
-		
-		if(Activelist.test(player,b)){ 
-			player.activeList[b.id] = b.id;
-			if(player.type === 'player') b.viewedBy[player.id] = 0; 
-			else b.viewedBy[player.id] = 0; 
+Activelist.update = function(act){	//called by attack on creation only, called by npc in loop
+	//Test Already in List if they deserve to stay
+	for(var j in act.activeList){
+		if(!Activelist.test(act,List.all[j])){
+			delete List.all[j].activeList[act.id];
+			delete act.activeList[j];
+			if(act.type === 'player') act.removeList.push(List.all[j].publicId || j);
 		}
 	}
+	
+	//Add New Boys
+	var range = 'all';
+	if(act.type === 'bullet' || act.type === 'strike') range = 'actor';	//attack only need to check actor
+	
+	for(var j in List.map[act.map].list[range]){
+		if(act.activeList[j]) continue;	//no need to test again
+
+		if(Activelist.test(act,List.all[j])){
+			act.activeList[j] = 1;			//for player, if 1:need init, if 2:just update
+			List.all[j].activeList[act.id] = 1;	
+		}
+	}
+	act.active = act.activeList.$length() || act.type === 'player';
+
 }
 
-Activelist.remove = function(b){
+
+
+
+Activelist.clear = function(b){	//called when living forever
 	if(!b){ ERROR(2,'actor dont exist'); return; }
-	for(var i in b.viewedBy){	//problem probably if add to activeList but die so fast its not in viewedBy
-		if(!List.all[i]){ ERROR(2,'actor dont exist'); continue; }
-		if(List.all[i].removeList) List.all[i].removeList.push(b.publicId || b.id);
-        delete List.all[i].activeList[b.id];
+	
+	for(var i in b.activeList){
+		var viewer = List.all[i];
+		if(!viewer){ ERROR(2,'actor dont exist'); continue; }
+		if(viewer.type === 'player') viewer.removeList.push(b.publicId || b.id);
+        delete viewer.activeList[b.id];
 	}
+	b.activeList = {};	
 }
 
 removeAny = function(act){

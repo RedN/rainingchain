@@ -11,7 +11,7 @@ Actor.teleport = function(act,spot){
 	var map = Actor.teleport.getMapName(act,spot.map);
 	
 	if(act.map === map){ 			//regular teleport
-		Activelist.remove(act);
+		Activelist.update(act);
 		return; 
 	}
 	
@@ -23,7 +23,7 @@ Actor.teleport = function(act,spot){
 	act.map = map;
 	Map.enter(act);	
 			
-	Activelist.remove(act);
+	Activelist.update(act);
 
 	Chat.add(act.id,"You enter " + List.map[act.map].name + '.');
 }

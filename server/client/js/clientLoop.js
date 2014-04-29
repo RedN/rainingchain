@@ -79,12 +79,12 @@ Loop.sfx = function(){
 }
 
 removeAny = function(i){
-	i = i.id || i;
-	delete List.bullet[i]; 
-	delete List.actor[i];
-	delete List.drop[i]; 
-	delete List.all[i]; 
-	delete List.strike[i]; 
+	var id = i.id || i;
+	delete List.bullet[id]; 
+	delete List.actor[id];
+	delete List.drop[id]; 
+	delete List.all[id]; 
+	delete List.strike[id]; 
 }
 
 Actor.loop = function(act){

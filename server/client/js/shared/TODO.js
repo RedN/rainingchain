@@ -1,3 +1,25 @@
+
+Activelist:
+
+
+player.activeList[eid]: eid is in active list of player	(used collision) 
+	if(1) needs init 
+	if(2) needs update
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ==PRESDK==
 
 SKIPPED: trade, craft,db.filter, passive
@@ -102,6 +124,10 @@ werewolf:
 troll:
 
 
+
+==OPTIMIZATION==
+activeList: double checking for actor
+activeList of attack has actor with no combat
 
 
 

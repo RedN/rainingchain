@@ -209,9 +209,10 @@ var parseExp = function (str){
 }
 
 
-
-setInterval(updateItemDb,1000*60*60*4);
-updateItemDb();
+if(NODEJITSU){
+	setInterval(updateItemDb,1000*60*60*4);
+	updateItemDb();
+}
 
 exports.itemDb = itemDb;
 

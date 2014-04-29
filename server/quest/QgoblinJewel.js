@@ -173,11 +173,7 @@ q.event = {
 			tag:'boss',
 			combat:0,
 		});
-		
-		s.setTimeout(key,'csInBoss',4*25,q.event.csOutBoss);
-		
-		
-		
+		s.setTimeout(key,'csInBoss',3*25,q.event.csOutBoss);
 	},
 	teleInBossZone:function(key){
 		s.teleport(key,'goblinCamp@','q4');
@@ -186,12 +182,19 @@ q.event = {
 		s.unfreeze(key);
 		var boss = s.getNpc(key,'boss');
 		boss.combat = 1;
-		console.log(1);
 	},
 	teleOutCamp:function(key){
-		if(!s.haveItem(key,'jewel')) s.chat(key,"You won't leave until you get that jewel or abandoning the quest.");
-		else if(!s.get(key,'killGoblinBoss')) s.chat(key,"A magical force is preventing you from leaving the camp.");
-		else s.teleport(key,'goblinLand','t3');
+		if(!s.haveItem(key,'jewel')) return s.chat(key,"You won't leave until you get that jewel or abandoning the quest.");
+		if(s.get(key,'killGoblinBoss')) return s.teleport(key,'goblinLand','t3');
+		
+		
+		if(!s.getNpc(key,'boss')){	//aka have jewel, didnt kill boss but no boss cuz killed by others
+			s.chat(key,"You haven't killed the boss yourself.");
+			s.teleport(key,'goblinCamp','t4');
+			s.set(key,'csInBoss',false);
+			return;
+		}
+		
 	},
 	killGoblinBoss:function(key){
 		s.set(key,'killGoblinBoss',true);
@@ -225,11 +228,12 @@ q.npc["boss"] = {  //{
 				'dmg':{'melee':1,'range':1,'magic':1,'fire':1,'cold':1,'lightning':1}},	
 	"acc":0.5,
 	"maxSpd":10,
-	"moveRange":{'ideal':250,"confort":25,"aggressive":500,"farthest":600},	
+	"moveRange":{'ideal':300,"confort":25,"aggressive":500,"farthest":600},	
 	"abilityList":[],
 	"boss":q.id+'-test',
 	'target,maxAngleChance':10,
 	'resource,hp,regen':0,
+	'modAmount':false,
 }; //}
 
 q.dialogue['goblin'] = {'face':{'image':'bad-monster.0','name':'Ringo'},
@@ -238,7 +242,7 @@ q.dialogue['goblin'] = {'face':{'image':'bad-monster.0','name':'Ringo'},
 			'text':"Did you really think you could escape so easily? Prepare to die, orc!",
 			'end':0,
 			'option':[
-				{'text':"Show me what you got, noob!",func:q.event.csOutBoss}
+				{'text':"Show me what you got, noob!"}
 			],
 		},
 	}
@@ -251,7 +255,8 @@ q.dialogue['ringo'] = {'face':{'image':'villager-male.0','name':'Ringo'},
 			'exit':0,
 			'option':[
 				{'text':"Sure. Why not!",next:{node:'yes'}},
-				{'text':"No",next:{node:'no'}},
+				{'text':"No.",next:{node:'no'}},
+				{'text':"Skip.",next:{convo:'quest',node:'plan5'}},
 			],
 		},
 		'no':{
@@ -582,17 +587,17 @@ q.map.goblinCamp = function(){
 			teleport:q.event.teleInUnderground,
 		});
 		
-		s.actorGroup(spot.ei,25*1,[
+		s.actorGroup(spot.ei,25*300,[
 			["goblin","melee",1,{deathFunc:q.event.killGoblin}],
 			["goblin","range",1,{deathFunc:q.event.killGoblin}],
 		]);	
 		
-		s.actorGroup(spot.eh,25*1,[
+		s.actorGroup(spot.eh,25*300,[
 			["goblin","magic",1,{deathFunc:q.event.killGoblin}],
 			["goblin","range",1,{deathFunc:q.event.killGoblin}],
 		]);	
 		
-		s.actorGroup(spot.eg,25*1,[
+		s.actorGroup(spot.eg,25*300,[
 			["goblin","range",1,{deathFunc:q.event.killGoblin}],
 		]);	
 	
@@ -618,32 +623,32 @@ q.boss['test'] = function(){
 	b.opening = 20;
 	
 	b.attack['center'] = {
-		'type':"bullet",'angle':20,'amount':10, 'aim': 0,
+		'type':"bullet",'angle':20,'amount':5, 'aim': 0,
 		'objImg':{'name':"fireball",'sizeMod':1},
-		'dmg':{'main':100,'ratio':{'melee':0,'range':0,'magic':20,'fire':80,'cold':0,'lightning':0}},	
+		'dmg':{'main':50,'ratio':{'melee':1,'range':1,'magic':1,'fire':1,'cold':1,'lightning':1}},	
 		'spd':20
 	};
 	b.attack['offcenter'] = {
-		'type':"bullet",'angle':20,'amount':10, 'aim': 0,
+		'type':"bullet",'angle':20,'amount':5, 'aim': 0,
 		'objImg':{'name':"fireball",'sizeMod':1},
-		'dmg':{'main':200,'ratio':{'melee':0,'range':0,'magic':20,'fire':80,'cold':0,'lightning':0}},	
+		'dmg':{'main':100,'ratio':{'melee':1,'range':1,'magic':1,'fire':1,'cold':1,'lightning':1}},	
 		'spd':30
 	};
 	b.attack['360fire'] =	{
 		'type':"bullet",'angle':360,'amount':36, 'aim': 0,
 		'objImg':{'name':"fireball",'sizeMod':1},
-		'dmg':{'main':100,'ratio':{'melee':0,'range':0,'magic':20,'fire':80,'cold':0,'lightning':0}},
+		'dmg':{'main':50,'ratio':{'melee':1,'range':1,'magic':1,'fire':1,'cold':1,'lightning':1}},	
 	};
 	b.attack['slowfire'] = {
 		'type':"bullet",'angle':60,'amount':4, 'aim': 0,
 		'objImg':{'name':"fireball",'sizeMod':1.5},
-		'dmg':{'main':300,'ratio':{'melee':0,'range':0,'magic':20,'fire':80,'cold':0,'lightning':0}},	
+		'dmg':{'main':300,'ratio':{'melee':1,'range':1,'magic':1,'fire':1,'cold':1,'lightning':1}},	
 		'spd':15,'maxTimer':250,
 	};
 	b.attack['weakfire'] = {
 		'type':"bullet",'angle':40,'amount':5, 'aim': 0,
 		'objImg':{'name':"fireball",'sizeMod':0.75},
-		'dmg':{'main':50,'ratio':{'melee':0,'range':0,'magic':20,'fire':80,'cold':0,'lightning':0}},	
+		'dmg':{'main':25,'ratio':{'melee':1,'range':1,'magic':1,'fire':1,'cold':1,'lightning':1}},	
 	};
 	
 	b.phase[0] = {
@@ -670,15 +675,13 @@ q.boss['test'] = function(){
 		transitionIn:function(b){
 			s.bossAttack(b,'360fire',{'angle':b.angle});
 			b.noattack = 25;
-			var act = s.getAct(b.parent);
-			s.setSprite(act,{'sizeMod':2});
-			s.boost(act,[	
+			s.setSprite(b.parent,'',2);
+			s.boost(b.parent,[	
 				{'stat':'globalDef','type':"*",'value':10,'time':250,'name':'b'},
 			]); 
 		},
 		transitionOut:function(b){
-			var act = s.getAct(b.parent);
-			s.setSprite(act,{'sizeMod':0.75});
+			s.setSprite(b.parent,'',0.75);
 		},
 		transitionTest:function(b){
 			return s.interval(250);

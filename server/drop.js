@@ -82,7 +82,7 @@ Drop.template = function(){
 		type:'drop',
 		change:{},
 		old:{},
-		viewedBy:{},
+		activeList:{},
 		viewedIf:'true',
 		x:0,
 		y:0,
