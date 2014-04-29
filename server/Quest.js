@@ -5,24 +5,16 @@ Quest.reward = function(key,id){	//roll the perm stat bonus and check if last on
 	var bonus = Quest.getBonus(key,id);
 	var reward = Quest.getReward(q,bonus);
 	
+	if(mq.rewardScore === 0) mq.rewardScore = Math.pow(10,4*q.reward.passive.min/q.reward.passive.max);
 	mq.rewardScore += reward.passive;
-	mq.rewardScore = Quest.getRewardScore(q.reward.passive,mq.rewardScore);
 	
-	mq.rewardPt = Quest.getRewardPt(q.reward.passive,mq.rewardScore);
+	mq.rewardPt = Math.min(Math.log10(mq.rewardScore)/4,1) * q.reward.passive.max;
+	
 	Chat.add(key,"You total quest score is " + Tk.round(mq.rewardScore,1) + " equivalent to " + Tk.round(mq.rewardPt,3) + " passive point. Repeat the quest to improve your reward.");
 	Itemlist.add(key,reward.item);	//TOFIX test if space
 	Skill.addExp.bulk(key,reward.exp,false);
 }
 
-Quest.getRewardScore = function(qp,num){
-	var minScore = Math.pow(10,4*qp.min/qp.max);	 
-	return Math.max(num,minScore);
-}
-
-Quest.getRewardPt = function(qp,num){
-	var pourcent = Math.min(Math.log10(num)/4,1);	//aka num = 10000 => pourcent = 1
-	return pourcent * qp.max;
-}
 
 Quest.getBonus = function(key,id){
 	var mq = List.main[key].quest[id];

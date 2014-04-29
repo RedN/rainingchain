@@ -1,5 +1,8 @@
 //Enemy
-
+var template = function(temp,diff){
+	if(typeof diff === 'string') diff = {'sprite,name':diff};
+	return Tk.useTemplate(Tk.deepClone(temp),diff,0,1);
+}	
 /*
 ePreDb["troll"]["ice"] = {  //{		//troll is category, ice is variant
 	"name":"Ice Troll",				//name	
@@ -410,7 +413,7 @@ Init.db.npc = function(){
 	a["orc"] = {}; //{
 	a["orc"]["melee"] = {  //{
 		"name":"Goblin",
-		"sprite":{'name':"orcMelee",'sizeMod':1},
+		"sprite":{'name':"orc-melee",'sizeMod':1},
 		"abilityList":[
 			{'template':'scratch','aiChance':[1,0.5,0],'extra':{
 				'objImg,name':'slashMelee',
@@ -438,7 +441,7 @@ Init.db.npc = function(){
 	}; //}
 	a["orc"]["range"] = {  //{
 		"name":"Orc",
-		"sprite":{'name':"orcRange",'sizeMod':1},
+		"sprite":{'name':"orc-range",'sizeMod':1},
 		"abilityList":[
 			{'template':'arrowBullet','aiChance':[0,0.5,0.5],'extra':{
 				'objImg,sizeMod':1.5,'amount':3,'angle':30,'pierce,baseChance':1,'dmg,main':200,
@@ -461,7 +464,7 @@ Init.db.npc = function(){
 	}; //}
 	a["orc"]["magic"] = {  //{ //TODO
 		"name":"Orc",
-		"sprite":{'name':"orcMagic",'sizeMod':1},
+		"sprite":{'name':"orc-magic",'sizeMod':1},
 		"abilityList":[
 			{'template':'coldBomb','aiChance':[0,0.5,0.5],'extra':{
 				'chill,baseChance':1,
@@ -758,25 +761,17 @@ Init.db.npc = function(){
 		"acc":0.5,
 		"maxSpd":3,
 	}; //}
+	//}
 	
 	//}
 	
-	//{System 
+	// {System 
 	a['waypoint'] = {}; //{
 	a["waypoint"]["grave"] = {  //{
 		"name":"Grave",
 		'minimapIcon':'minimapIcon.grave',
-		"sprite":{'name':"grave",'sizeMod':1},
+		"sprite":{'name':"waypoint-grave",'sizeMod':1},
 		"waypoint":1,
-		'nevercombat':1,
-		'nevermove':1,
-		"block":{condition:'true',pushable:0,size:[-1,1,-1,1]},
-	}; //}
-	a["waypoint"]["graveSafe"] = {  //{
-		"name":"Grave",
-		'minimapIcon':'minimapIcon.grave',
-		"sprite":{'name':"grave",'sizeMod':1},
-		"waypoint":2,
 		'nevercombat':1,
 		'nevermove':1,
 		"block":{condition:'true',pushable:0,size:[-1,1,-1,1]},
@@ -786,31 +781,33 @@ Init.db.npc = function(){
 	//}
 		
 	a["loot"] = {}; //{
-	a["loot"]["chest"] = {  //{
+	a["loot"]["chestOff"] = {  //{
 		"name":"Chest",
 		'minimapIcon':'minimapIcon.chest',
-		"sprite":{'name':"chest",'sizeMod':1},
+		"sprite":{'name':"loot-chestOff",'sizeMod':1},
 		'nevercombat':1,
 		'nevermove':1,
 		"block":{condition:'true',size:[-1,1,-1,1]},
 	}; //}
+	a["loot"]["chestOn"] = template(a["loot"]["chestOff"],'loot-chestOn');	
 	//}
 	
-	a["switch"] = {}; //{
-	a["switch"]["box"] = {  //{
+	a["toggle"] = {}; //{
+	a["toggle"]["boxOff"] = {  //{
 		"name":"Switch",
-		'minimapIcon':'minimapIcon.switch',
-		"sprite":{'name':"switchBox",'sizeMod':1},
+		'minimapIcon':'minimapIcon.toggle',
+		"sprite":{'name':"toggle-boxOff",'sizeMod':1},
 		'nevercombat':1,
 		'nevermove':1,
 		"block":{condition:'true',size:[-0,0,-0,0]},
 	}; //}
+	a["toggle"]["boxOn"] = template(a["toggle"]["boxOff"],'toggle-boxOn');	
 	//}
 		
 	a["system"] = {}; //{
 	a["system"]["default"] = {  //{
 		"name":"I am bugged.",
-		"sprite":{'name':"grave",'sizeMod':1},
+		"sprite":{'name':"waypoint-grave",'sizeMod':1},
 		'nevercombat':1,
 		'nevermove':1,
 	}; //}
@@ -836,7 +833,7 @@ Init.db.npc = function(){
 	a["pushable"]["rock1x1"] = {  //{
 		"name":"Block",
 		'minimapIcon':'',
-		"sprite":{'name':"block1x1",'sizeMod':1},
+		"sprite":{'name':"pushable-rock1x1",'sizeMod':1},
 		'nevercombat':1,
 		'moveSelf':0,
 		"block":{condition:'true',size:[-1,1,-1,1]},
@@ -846,7 +843,7 @@ Init.db.npc = function(){
 	a["pushable"]["rock2x2"] = {  //{
 		"name":"Block",
 		'minimapIcon':'',
-		"sprite":{'name':"block1x1",'sizeMod':2},
+		"sprite":{'name':"pushable-rock1x1",'sizeMod':2},
 		'nevercombat':1,
 		'moveSelf':0,
 		"block":{condition:'true',size:[-1,0,-1,0]},
@@ -856,7 +853,7 @@ Init.db.npc = function(){
 	a["pushable"]["rock3x3"] = {  //{
 		"name":"Block",
 		'minimapIcon':'',
-		"sprite":{'name':"block1x1",'sizeMod':3},
+		"sprite":{'name':"pushable-rock1x1",'sizeMod':3},
 		'nevercombat':1,
 		'moveSelf':0,
 		"block":{condition:'true',size:[-1,1,-1,1]},
@@ -867,7 +864,7 @@ Init.db.npc = function(){
 	a["pushable"]["4x4"] = {  //{
 		"name":"Block",
 		'minimapIcon':'',
-		"sprite":{'name':"block1x1",'sizeMod':4},
+		"sprite":{'name':"pushable-rock1x1",'sizeMod':4},
 		'nevercombat':1,
 		'moveSelf':0,
 		"block":{condition:'true',size:[-1,1,-1,1]},
@@ -882,7 +879,7 @@ Init.db.npc = function(){
 	a["block"]["rock2x2"] = {  //{
 		"name":"Block",
 		'minimapIcon':'',
-		"sprite":{'name':"block1x1-black",'sizeMod':2},
+		"sprite":{'name':"block-rock1x1",'sizeMod':2},
 		'nevercombat':1,
 		'nevermove':1,
 		"block":{condition:'true',size:[-1,0,-1,0]},
@@ -891,7 +888,7 @@ Init.db.npc = function(){
 	a["block"]["barrier"] = {  //{
 		"name":"Barrier",
 		'minimapIcon':'',
-		"sprite":{'name':"barrier",'sizeMod':1.5},
+		"sprite":{'name':"block-barrier",'sizeMod':1.5},
 		'nevercombat':1,
 		'nevermove':1,
 		"block":{condition:'true',size:[-2,2,-1,1]},
@@ -900,7 +897,7 @@ Init.db.npc = function(){
 	a["block"]["spike"] = {  //{
 		"name":"Spike",
 		'minimapIcon':'',
-		"sprite":{'name':"spike",'sizeMod':1},
+		"sprite":{'name':"block-spike",'sizeMod':1},
 		'nevercombat':1,
 		'nevermove':1,
 		"block":{condition:'true',size:[0,0,0,0]},
@@ -920,38 +917,33 @@ Init.db.npc = function(){
 	a["tree"]["red"] = {  //{
 		"name":"Red Tree",
 		'minimapIcon':'minimapIcon.tree',
-		"sprite":{'name':"treeRed",'sizeMod':1},
+		"sprite":{'name':"tree-red",'sizeMod':1},
 		'nevercombat':1,
 		'nevermove':1,
+		"block":{condition:'true',size:[-1,1,-2,0]},
 	}; //}
-	a["tree"]["down"] = {  //{
-		"name":"Tree",
-		'minimapIcon':'minimapIcon.tree',
-		"sprite":{'name':"block1x1",'sizeMod':1},
-		'nevercombat':1,
-		'nevermove':1,
-	}; //}
+	a["tree"]["down"] = template(a["tree"]["red"],'tree-down');	
 	//}
 
 	a["teleport"] = {}; //{
 	a["teleport"]["door"] = {  //{
 		"name":"Door",
 		'minimapIcon':'minimapIcon.door',
-		"sprite":{'name':"door",'sizeMod':1},
+		"sprite":{'name':"teleport-door",'sizeMod':1},
 		'nevercombat':1,
 		'nevermove':1,
 	}; //}
 	a["teleport"]["zone"] = {  //{
 		"name":"Map Transition",
 		'minimapIcon':'minimapIcon.door',
-		"sprite":{'name':"teleZone",'sizeMod':1.5},
+		"sprite":{'name':"teleport-zone",'sizeMod':1.5},
 		'nevercombat':1,
 		'nevermove':1,
 	}; //}
 	a["teleport"]["underground"] = {  //{
 		"name":"Underground",
 		'minimapIcon':'minimapIcon.door',
-		"sprite":{'name':"underground",'sizeMod':1},
+		"sprite":{'name':"teleport-underground",'sizeMod':1},
 		'nevercombat':1,
 		'nevermove':1,
 	}; //}
@@ -1012,7 +1004,7 @@ Init.db.npc.creation.ability = function(e){	//use abilityList to create custom a
 	*/
 	
 	for(var i in e.abilityList){
-		if(!e.abilityList[i].template){	//[0.2,0.5,0.3]
+		if(!e.abilityList[i].template){	// [0.2,0.5,0.3]
 			e.abilityAi.close['idle'] = e.abilityList[i][0];
 			e.abilityAi.middle['idle'] = e.abilityList[i][1];
 			e.abilityAi.far['idle'] = e.abilityList[i][2];

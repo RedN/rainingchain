@@ -1,39 +1,24 @@
-
-Activelist:
-
-
-player.activeList[eid]: eid is in active list of player	(used collision) 
-	if(1) needs init 
-	if(2) needs update
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 ==PRESDK==
 
 SKIPPED: trade, craft,db.filter, passive
 
 teleport everyone in map to this spot
 
+call q.event.death when dying quest
+deathFuncArray
 
-can use whole quest file for testing dialogue
+talk about naing convention
 
-
-loop 155 on safe logout
 
 chest dont change look
-sprite to orc not working
+
+
+
+
+
+
+
+
 
 ==REVAMP==
 boss summon

@@ -13,7 +13,6 @@ Actor.creation = function(d){	//d: x  y  map category variant lvl modAmount extr
 	Map.enter(e);
 	
 	if(e.loot) e.loot = {func:e.loot,list:[]};
-	if(e.switch) e.switch.state = e.switch.state || 'off';
 	
 	
 	if(e.nevermove){ Actor.creation.nevermove(e); }
@@ -241,9 +240,8 @@ Actor.creation.optionList = function(e){
 		//ol.option.push({'name':'Select Instance',"func":'Actor.teleport.selectInstance',"param":[e.id]});
 		e.onclick.shiftLeft = info;
 	}
-	if(e.switch){
-		ol.option.push({'name':'Pull Switch',"func":'Actor.click.switch',"param":[e.id]});
-	}	
+	if(e.toggle)	ol.option.push({'name':'Pull Switch',"func":'Actor.click.toggle',"param":[e.id]});
+	
 	if(e.pushable){
 		var info = {'name':'Push',"func":'Actor.click.pushable',"param":[e.id]};
 		ol.option.push(info);

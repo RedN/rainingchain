@@ -158,26 +158,16 @@ Actor.click.loot = function(act,eid){	//need work
 	Server.log(3,act.id,'openChest',eid);
 }
 
-Actor.click.switch = function(act,eid){
+Actor.click.toggle = function(act,eid){
 	var e = List.all[eid];
 	
 	if(Collision.distancePtPt(act,e) > DIST) return TOOFAR(act.id);
 	
-	var sw = e.switch;
-	if(!sw) return;
-	var oldstate = sw.state;
-	sw.state = sw.state === 'off' ? 'on' : 'off';
+	var sw = e.toggle;
+	if(!sw) return ERROR(3,'not a toggle',e);
 	
-	if(sw[sw.state]) sw[sw.state](act.id);
-	
-	Sprite.change(e,{'initAnim':sw.state});
-	Chat.add(act.id,"You turned the switch " + sw.state + '.');
-		
-	if(!sw[oldstate]){
-		Actor.removeOption(e,'Pull Switch');
-	}
-
-
+	e.toggle(act.id,e,List.map[e.map]);
+	Chat.add(act.id,"You pulled the toggle.");
 }
 
 Actor.click.drop = function (act,id){
@@ -241,8 +231,6 @@ Actor.push = function(act,angle,magn,time){
 		List.all[eid].friction = 0.9;
 	});
 }
-
-
 
 
 

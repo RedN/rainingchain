@@ -156,6 +156,9 @@ q.event = {
 		if(s.haveItem(key,'jewel')){ s.chat(key,'The chest is empty.'); return false; }
 		return s.testItem(key,'jewel',1,true);
 	},
+	dontHaveJewel:function(key){
+		return !s.haveItem(key,'jewel');
+	},
 	teleOutUnderground:function(key){
 		if(s.haveItem(key,'jewel')) s.teleport(key,'goblinCamp@','t2');
 		else s.chat(key,"You should get the jewel first.");
@@ -410,15 +413,21 @@ q.map.goblinUnderground = function(){
 			teleport:q.event.teleOutUnderground,
 		});
 		
-		s.actor(spot.g1,"waypoint","graveSafe",{});
 		
+		
+		s.waypoint(spot.g1,true);
+		
+		s.loot(spot.q1,q.event.dontHaveJewel,q.event.getJewel)
+		/*
 		s.actor(spot.q1,"loot","chest",{
 			loot:q.event.getJewel
 		});
-	
-		s.actor(spot.q2,"switch","box",{
-			switch:{on:q.event.swChestOn},
-		});
+		*/
+		/*	//TOFIX
+		
+		*/
+		
+		s.toggle(spot.q2,q.event.seeBlockChest,q.event.swChestOn);
 		
 		s.actor(spot.b1,"pushable","rock2x2",{});
 		s.actor(spot.b2,"pushable","rock2x2",{});
@@ -428,7 +437,7 @@ q.map.goblinUnderground = function(){
 		s.actor(spot.b6,"pushable","rock2x2",{});
 		
 		
-		s.block(spot.b7,{viewedIf:q.event.seeBlockChest});
+		s.block(spot.b7,q.event.seeBlockChest);
 	
 	} 
 	a.loop = function(spot){
@@ -473,12 +482,15 @@ q.map.goblinLand = function(){
 			dialogue:q.event.talkRingo,
 		});
 		
+	
 		
+		/*
 		s.actor(spot.q1,"loot","chest",{	//TOFIX LOOK
 			angle:90,
 			nevermove:1,
 			loot:q.event.getFlower,
 		});
+		*/
 		
 		s.actorGroup(spot.e1,25*15,[
 			["orc","melee",2,{deathFunc:q.event.killOrc}],
@@ -491,7 +503,7 @@ q.map.goblinLand = function(){
 		
 		
 		
-		s.block(spot.b1,{},'invisible');
+		s.block(spot.b1,null,'invisible');
 		
 		s.actor(spot.t3,"teleport","zone",{
 			angle:270,
@@ -567,9 +579,9 @@ q.map.goblinCamp = function(){
 	
 	a.load = function(spot){
 					
-		s.block(spot.b2,{viewedIf:q.event.seeBlockBoss});
-		s.block(spot.b3,{viewedIf:q.event.seeBlockBoss});
-		s.block(spot.b4,{},'invisible');
+		s.block(spot.b2,q.event.seeBlockBoss);
+		s.block(spot.b3,q.event.seeBlockBoss);
+		s.block(spot.b4,null,'invisible');
 		
 		s.actor(spot.t3,"teleport","zone",{
 			angle:90,
@@ -582,7 +594,7 @@ q.map.goblinCamp = function(){
 			viewedIf:q.event.seeBlockBoss,
 		});
 		
-		s.actor(spot.t2,"teleport","zone",{	//changed tiled project but didnt update image on client. ladder is part of map
+		s.actor(spot.t2,"teleport","underground",{	//changed tiled project but didnt update image on client. ladder is part of map
 			angle:90,
 			teleport:q.event.teleInUnderground,
 		});
@@ -610,7 +622,7 @@ q.map.goblinCamp = function(){
 		s.setSprite(key,'regular');
 	}
 	a.playerEnter = function(key){
-		s.setSprite(key,'orcMelee');
+		s.setSprite(key,'orc-melee');
 	}
 	return m;
 };
@@ -677,7 +689,7 @@ q.boss['test'] = function(){
 			b.noattack = 25;
 			s.setSprite(b.parent,'',2);
 			s.boost(b.parent,[	
-				{'stat':'globalDef','type':"*",'value':10,'time':250,'name':'b'},
+				{'stat':'globalDef','type':"*",'value':10,'time':250,'name':'boss'},
 			]); 
 		},
 		transitionOut:function(b){

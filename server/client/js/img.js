@@ -58,7 +58,7 @@ Img.icon = [];
 	'resource':{'y':system+6,'x':['hp','mana','fury','dodge','heal']},
 	'skill':{'y':system+7,'x':['melee','range','magic','metalwork','woodwork','leatherwork','mining','woodcutting','trapping']},
 	'friend':{'y':system+8,'x':['friend','mute','add','remove']},
-	'minimapIcon':{'y':system+9,'x':['enemy','quest','good','friend','tree','trap','rock','grave','chest','switch','door']},
+	'minimapIcon':{'y':system+9,'x':['enemy','quest','good','friend','tree','trap','rock','grave','chest','toggle','door']},
 	'offensive':{'y':system+10,'x':['pierce','bullet','strike','leech','atkSpd']},
 	'defensive':{'y':system+11,'x':['speed','pickup','life','item']},
 	

@@ -85,17 +85,17 @@ Init.db.sprite = function(){
     	}};
     	
 		
-	a["orcMagic"] ={"src":"actor/orcMagic.png","size":2,"side":[2,0,1,3],"hpBar":-30,"legs":25,
+	a["orc-magic"] ={"src":"actor/orc-magic.png","size":2,"side":[2,0,1,3],"hpBar":-30,"legs":25,
     	"preHitBox":[ -20,20,-10,25 ],"preBumperBox":[ -20,20,-10,25 ],"anim": {
     		"walk":{"startY":0,"frame":4,"sizeX":32,"sizeY":48,"dir":4,"spd":0.25,"walk":1,"next":"walk"},
     		"attack":{"startY":0,"frame":4,"sizeX":32,"sizeY":48,"dir":4,"spd":0.25,"next":"walk"},
     	}};
-	a["orcMelee"] ={"src":"actor/orcMelee.png","size":2,"side":[2,0,1,3],"hpBar":-30,"legs":25,
+	a["orc-melee"] ={"src":"actor/orc-melee.png","size":2,"side":[2,0,1,3],"hpBar":-30,"legs":25,
     	"preHitBox":[ -20,20,-10,25 ],"preBumperBox":[ -20,20,-10,25 ],"anim": {
     		"walk":{"startY":0,"frame":4,"sizeX":32,"sizeY":48,"dir":4,"spd":0.25,"walk":1,"next":"walk"},
     		"attack":{"startY":0,"frame":4,"sizeX":32,"sizeY":48,"dir":4,"spd":0.25,"next":"walk"},
     	}};
-	a["orcRange"] ={"src":"actor/orcRange.png","size":2,"side":[2,0,1,3],"hpBar":-30,"legs":25,
+	a["orc-range"] ={"src":"actor/orc-range.png","size":2,"side":[2,0,1,3],"hpBar":-30,"legs":25,
     	"preHitBox":[ -20,20,-10,25 ],"preBumperBox":[ -20,20,-10,25 ],"anim": {
     		"walk":{"startY":0,"frame":4,"sizeX":32,"sizeY":48,"dir":4,"spd":0.25,"walk":1,"next":"walk"},
     		"attack":{"startY":0,"frame":4,"sizeX":32,"sizeY":48,"dir":4,"spd":0.25,"next":"walk"},
@@ -241,65 +241,31 @@ Init.db.sprite = function(){
 
     //}	
     //{ System
-	a["block1x1"] ={"src":"picture/block2x2.png","size":0.5,"side":[0],
-		"preBumperBox":[ -26,26,-26,26 ],"preHitBox":[ -26,26,-26,26 ],"anim": {
-    		"walk":{"startY":0,"frame":1,"sizeX":64,"sizeY":64,"dir":1,"spd":0,"next":"walk"},    	
-    	}};
-		
-	a["grave"] ={"src":"picture/grave.png","size":2,"side":[0],
-    	"preBumperBox":[ -16,16,-16,16 ],"preHitBox":[ -16,16,-16,16 ],"anim": {
-    		"walk":{"startY":0,"frame":1,"sizeX":32,"sizeY":32,"dir":1,"spd":0,"next":"walk"},    	
-    	}};
-		
-	a["chest"] ={"src":"picture/chest.png","size":2,"side":[0],
-    	"preBumperBox":[ -16,16,-16,16 ],"preHitBox":[ -16,16,-16,16 ],'defaultAnim':'off',"anim": {
-    		"on":{"startY":32,"frame":1,"sizeX":32,"sizeY":32,"dir":1,"spd":0,"next":"on"},
-			"off":{"startY":0,"frame":1,"sizeX":32,"sizeY":32,"dir":1,"spd":0,"next":"off"},			
-    	}};
-		
-	a["block1x1-black"] ={"src":"picture/block2x2Fix.png","size":0.5,"side":[0],
-    	"preBumperBox":[ -26,26,-26,26 ],"preHitBox":[ -26,26,-26,26 ],"anim": {
-    		"walk":{"startY":0,"frame":1,"sizeX":64,"sizeY":64,"dir":1,"spd":0,"next":"walk"},    	
-    	}};
-		
-	a["treeRed"] ={"src":"picture/treeRed.png","size":2,"side":[0],
-    	"preBumperBox":[ -32,32,-40,40 ],"preHitBox":[ -32,32,-40,40 ],'defaultAnim':'on',"anim": {
-    		"on":{"startY":0,"frame":1,"sizeX":64,"sizeY":80,"dir":1,"spd":0,"next":"on"},
-			"off":{"startY":80,"frame":1,"sizeX":64,"sizeY":80,"dir":1,"spd":0,"next":"off"},  		  			
-    	}};
-		
-	a["switchBox"] ={"src":"picture/switch.png","size":2,"side":[0],
-    	"preBumperBox":[ -16,16,-16,16 ],"preHitBox":[ -16,16,-16,16 ],'defaultAnim':'off',"anim": {	
-			"on":{"startY":64,"frame":1,"sizeX":32,"sizeY":32,"dir":1,"spd":0,"next":"on"},	
-    		"off":{"startY":0,"frame":1,"sizeX":32,"sizeY":32,"dir":1,"spd":0,"next":"off"},						
-    	}};
 	
-	a["door"] ={"src":"picture/door.png","size":1,"side":[0],
-    	"preBumperBox":[ -16,16,-8,40 ],"preHitBox":[ -16,16,-8,40 ],"anim": {
-    		"walk":{"startY":0,"frame":1,"sizeX":32,"sizeY":80,"dir":1,"spd":0,"next":"walk"},  
-    	}};
-		
-	a["teleZone"] ={"src":"picture/teleZone.png","size":1.5,"side":[0,1,2,3],
-    	"preBumperBox":[ -16,16,-16,16 ],"preHitBox":[ -16,16,-16,16 ],"anim": {
-    		"walk":{"startY":0,"frame":1,"sizeX":32,"sizeY":32,"dir":4,"spd":0,"next":"walk"},  
-    	}};
+	a["pushable-rock1x1"] ={"src":"picture/pushable-rock2x2.png","size":0.5,"preBumperBox":[ -32,32,-32,32 ]};
+	a["waypoint-grave"] ={"src":"picture/waypoint-grave.png","size":2,"preBumperBox":[ -16,16,-16,16 ]};
 	
-	a["barrier"] ={"src":"picture/barrier.png","size":1,"side":[0],
-    	"preBumperBox":[ -64,64,-32,32 ],"preHitBox":[ -64,64,-32,32 ],"anim": {
-    		"walk":{"startY":0,"frame":1,"sizeX":128,"sizeY":64,"dir":1,"spd":0,"next":"walk"},  
-    	}};
-	a["spike"] ={"src":"picture/spike.png","size":1,"side":[0],"legs":32,
-    	"preBumperBox":[ -16,16,-32,32 ],"preHitBox":[ -16,16,-32,32 ],"anim": {
-    		"walk":{"startY":0,"frame":1,"sizeX":32,"sizeY":64,"dir":1,"spd":0,"next":"walk"},  
-    	}};
-	a["invisible"] ={"src":"picture/invisible.png","size":1,"side":[0],"legs":0,
-    	"preBumperBox":[ -16,16,-16,16 ],"preHitBox":[ -16,16,-16,16 ],"anim": {
-    		"walk":{"startY":0,"frame":1,"sizeX":32,"sizeY":32,"dir":1,"spd":0,"next":"walk"},  
-    	}};
-	a["underground"] ={"src":"picture/barrier.png","size":2,"side":[0],
-    	"preBumperBox":[ -16,16,-16,16 ],"preHitBox":[ -16,16,-16,16 ],"anim": {
-    		"walk":{"startY":0,"frame":1,"sizeX":32,"sizeY":32,"dir":1,"spd":0,"next":"walk"},  
-    	}};
+	a["loot-chestOn"] ={"src":"picture/loot-chestOn.png","size":2,"preBumperBox":[ -16,16,-16,16 ]};
+	a["loot-chestOff"] ={"src":"picture/loot-chestOff.png","size":2,"preBumperBox":[ -16,16,-16,16 ]};
+	
+	a["toggle-boxOff"] ={"src":"picture/toggle-boxOff.png","size":2,"preBumperBox":[ -16,16,-16,16 ]};
+	a["toggle-boxOn"] ={"src":"picture/toggle-boxOn.png","size":2,"preBumperBox":[ -16,16,-16,16 ]};
+	a["toggle-wallOff"] ={"src":"picture/toggle-wallOff.png","size":2,"preBumperBox":[ -16,16,-16,16 ]};
+	a["toggle-wallOn"] ={"src":"picture/toggle-wallOn.png","size":2,"preBumperBox":[ -16,16,-16,16 ]};
+	
+	a["tree-red"] ={"src":"picture/tree-red.png","size":2,"preBumperBox":[ -32,32,-40,40 ]};
+	a["tree-down"] ={"src":"picture/tree-down.png","size":2,"preBumperBox":[ -32,32,-40,40 ]};
+	
+	a["teleport-door"] ={"src":"picture/teleport-door.png","size":1,"preBumperBox":[ -16,16,-8,40 ]};
+	a["teleport-zone"] ={"src":"picture/teleport-zone.png","size":1.5,"side":[0,1,2,3],"preBumperBox":[ -16,16,-16,16 ]};
+	a["teleport-underground"] ={"src":"picture/teleport-underground.png","size":1,"preBumperBox":[ -16,16,-16,16 ]};
+	
+	a["block-rock1x1"] ={"src":"picture/block-rock2x2.png","size":0.5,"preBumperBox":[ -32,32,-32,32 ]};
+	a["block-barrier"] ={"src":"picture/block-barrier.png","size":1,"preBumperBox":[ -64,64,-32,32 ]};
+	a["block-spike"] ={"src":"picture/block-spike.png","size":1,"preBumperBox":[ -16,16,-32,32 ]};
+	
+	a["invisible"] ={"src":"picture/invisible.png","size":1,"preBumperBox":[ -16,16,-16,16 ]};
+	
 	
 	//}
     
@@ -349,7 +315,7 @@ Init.db.sprite.template.rpgvx = function(){
 
 Sprite = {};
 
-Sprite.creation = function(act,info){
+Sprite.creation = function(act,info){	
 	if(!info.anim) info.anim = Db.sprite[info.name || 'mace'].defaultAnim;
 	info.oldAnim = info.anim;
 	info.initAnim = info.anim;
@@ -360,6 +326,11 @@ Sprite.creation = function(act,info){
 
 Sprite.creation.model = function(sp){
 	if(sp.rgpvx)	sp = Tk.useTemplate(Init.db.sprite.template.rpgvx(),sp);	//cuz im lazy...'
+	
+	if(!sp.side) sp.side = [0];
+	if(!sp.preHitBox && sp.preBumperBox) sp.preHitBox = Tk.deepClone(sp.preBumperBox);
+	if(!sp.anim) sp.anim = {"walk":{"startY":0,"frame":1,"sizeX":sp.preHitBox[1]*2,"sizeY":sp.preHitBox[3]*2,"dir":sp.side.length,"spd":0,"walk":0,"next":"walk"}};
+	
 	sp = Tk.useTemplate(Init.db.sprite.template(),sp);
 	
 	for(var j in sp.anim)	sp.anim[j] = Tk.useTemplate(Init.db.sprite.template.anim(),sp.anim[j]);

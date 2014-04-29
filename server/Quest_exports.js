@@ -133,7 +133,9 @@ exports.init = function(version,questname){	//}
 
 	//Cutscene
 	s.cutscene = function(key,map,path){
-		Actor.setCutscene(s.getAct(key),s.quest.map[map][Q].path[path]);
+		var act = s.getAct(key);
+		if(Map.getModel(act.map) !== map){ ERROR(3,'act in wrong map for cutscene'); return; }
+		Actor.setCutscene(act,s.quest.map[map][Q].path[path]);
 		//ts("p.x = 1500; p.y = 3000;Actor.setCutscene(p,[{x:1600,y:3100},25*10,{x:1800,y:3200}]);")
 	}
 
@@ -193,22 +195,24 @@ exports.init = function(version,questname){	//}
 			Map.collisionRect(spot.map,spot,'player',cb);
 	}
 
-	s.block = function(zone,extra,image){
-		image = image || 'spike';
+	s.block = function(zone,viewedIf,sprite,extra){
 		extra = extra || {};
+		if(viewedIf) extra.viewedIf = viewedIf;
+		if(sprite) extra['sprite,name'] = sprite;
+		
 		if(zone[2] === zone[3]){	//horizontal
 			for(var i = zone[0]; i <= zone[1]; i += 32){
-				s.actor({x:i+16,y:zone[2],map:zone.map,addon:zone.addon},'block',image,extra);
+				s.actor({x:i+16,y:zone[2],map:zone.map,addon:zone.addon},'block','spike',extra);
 			}
 		}
 		if(zone[0] === zone[1]){
 			for(var i = zone[2]; i <= zone[3]; i += 32){
-				s.actor({x:zone[0],y:i+16,map:zone.map,addon:zone.addon},'block',image,extra);
+				s.actor({x:zone[0],y:i+16,map:zone.map,addon:zone.addon},'block','spike',extra);
 			}	
 		}
 	}
 
-	s.drop = function(key,spot,name,amount,time){
+	s.drop = function(key,spot,name,amount,time){	//TOFIX
 		time = time || 25*120;
 		if(!s.existItem(Q+ '-' + name)) return;
 		
@@ -216,8 +220,58 @@ exports.init = function(version,questname){	//}
 		if(typeof key === 'string') tmp.viewedIf = [key];
 		Drop.creation(tmp);	
 	}
+	
+	s.toggle = function(spot,condition,on,off,sprite,extraOff,extraOn){
+		sprite = sprite || 'box';
+		//Off
+		extraOff = extraOff || {};
+		extraOff.viewedIf = function(key){
+			if(s.getAct(key).type !== 'player') return true;
+			return condition(key);
+		};
+		extraOff.toggle = on;
 
+		s.actor(spot,'toggle',sprite+'Off',extraOff);
 
+		//On
+		extraOn = extraOn || {};
+		extraOn.viewedIf = function(key){
+			if(s.getAct(key).type !== 'player') return true;
+			return !condition(key);
+		};
+		if(off) extraOn.toggle = off;
+		
+		s.actor(spot,'toggle',sprite + 'On',extraOn);
+	}
+	
+	s.waypoint = function(spot,safe,extra){
+		extra = extra || {};
+		if(safe) extra.waypoint = 2;
+		s.actor(spot,'waypoint','grave',extra);
+	}
+	
+	s.loot = function(spot,condition,open,sprite,extraOff,extraOn){
+		sprite = sprite || 'chest';
+		//Off
+		extraOff = extraOff || {};
+		extraOff.viewedIf = function(key){
+			if(s.getAct(key).type !== 'player') return true;
+			return condition(key);
+		};
+		extraOff.loot = open;
+
+		s.actor(spot,'loot',sprite + 'Off',extraOff);
+
+		//On
+		extraOn = extraOn || {};
+		extraOn.viewedIf = function(key){
+			if(s.getAct(key).type !== 'player') return true;
+			return !condition(key);
+		};
+		
+		s.actor(spot,'loot',sprite + 'On',extraOn);
+	}
+	
 	//Boss
 	s.bossAttack = Boss.attack;
 	s.bossSummon = Boss.summon;
