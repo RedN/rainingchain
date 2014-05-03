@@ -291,9 +291,8 @@ function initSmithing(){
 
 
 
-	boostList = {
+	Skill.boostList = {
 		'urn':{'check':1,'func':(function(method){ method.expPa[0] += method.base.expPa[0] * 0.20; return method; })},
-		'outfit':{'check':0,'func':(function(method){ method.expPa[0] += method.base.expPa[0] * 0.05; return method; })},
 		'yak':{'check':1,'func':(function(method){ 
 			if(method.actionPh == SMITH3){ method.actionPh = SMITH3YAK; }
 			if(method.actionPh == SMITH5){ method.actionPh = SMITH5YAK; }

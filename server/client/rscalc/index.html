@@ -19,7 +19,7 @@
 				<option value="Fletching">Fletching</option>
 				<option value="Divination">Divination</option>
 			</select>
-			<input id="helpInput" type="button"  value="Help!" onclick="help();">
+			<input id="helpInput" type="button"  value="Help!" onclick="Sub.help();">
 			<div id="helpDiv" hidden>
 				<br>
 				<span style="text-decoration: underline;">First Table:</span> Recommended Ways to train. Depends on your Start/Goal Exp, Income/Hour and Excluded methods.<br>
@@ -44,8 +44,8 @@
 		Speed:<input id="speedInput" title="% of the Max Action/H used for calculations." size="1" type="text" onchange="update();" value="90">
 		Bonus Exp:<input id="bonusExpInput" title="% Bonus Exp (Ex: Avatar, SoF Outfit)" size="1" type="text" onchange="update();" value="3">
 		
-		<input type="submit" title="Minimize Tables" value="Min" onclick="minimizeTable = !minimizeTable; update(); return false">
-		<input type="submit" title="Hide First Table" value="Hide" onclick="mainDiv99.hidden = !mainDiv99.hidden; return false">
+		<input type="submit" title="Minimize Tables" value="Min" onclick="Input.minimizeTable = !Input.minimizeTable; update(); return false">
+		<input type="submit" title="Hide First Table" value="Hide" onclick="Html.mainDiv99.hidden = !Html.mainDiv99.hidden; return false">
 		</div>
 		
 		
@@ -80,7 +80,7 @@
 		
 		<script src="/rscalc/js/constant.js"></script>
 		
-		<script src="/rscalc/js/ajax.js"></script>
+		<script src="/rscalc/js/init.js"></script>
 		<script src="/rscalc/js/main.js"></script>	
 		<script src="/rscalc/js/input.js"></script>
 		<script src="/rscalc/js/subFunction.js"></script>
@@ -92,8 +92,9 @@
 		<script src="/rscalc/js/skill/cooking.js"></script>
 		<script src="/rscalc/js/skill/divination.js"></script>
 		
-		<script src="/rscalc/js/init.js"></script>
-		
+		<script>
+		Init();
+		</script>
 		
 		<h2>
 		Please, post here if there's a wrong/missing method or for any other suggestion.<br>

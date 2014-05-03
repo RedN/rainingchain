@@ -1,77 +1,94 @@
-function updateInput(){
-	updateSpeed();
-	updateBonusExp();
-	updateIncomePh();
-	updateStartEndExp();
-	updateVisibleLvl();
+Input = {
+	RincomePh:1000000,
+	speedFact:90,
+	bonusExpFact:3,
+	visibleLevel:0,
+	excludeList:{},
+	startExp:skillList[1],
+	endExp:skillList[99],
+	sortSign:1,
+	sortBy:"Level",
+	minimizeTable:false,
+	headerWanted:[],
+	headerWanted99:[],
+	html:{
+		RincomePh:doc.get('incomePhInput'),
+		speedFact:doc.get('speedInput'),
+		bonusExpFact:doc.get('bonusExpInput'),
+		visibleLevel:doc.get('visibleInput'),
+		startExp:doc.get('startExpInput'),
+		endExp:doc.get('endExpInput'),
+	}
+};
+
+Input.update = function(){
+	Input.update.speedFact();
+	Input.update.bonusExpFact();
+	Input.update.RincomePh();
 	
-	updateWantedList(); 
-	updateBoostList();
+	Input.update.startEndExp();
+	
+	Input.update.visibleLevel();
+	
+	Input.update.headerWanted(); 
+	Input.update.applyBoost();	//act as filter, also does speedFact and bonus
 	//updateExcludeList();
 
 
 
 }
 
-function updateVisibleLvl(){
-	var lvl = visibleInput.value;
+Input.update.visibleLevel = function(){
+	var lvl = Input.html.visibleLevel.value;
 	if(isNaN(Number(lvl))){
 		lvl = 0;		
 	} 
-	visibleInput.value = Number(lvl);
-	visibleLevel = visibleInput.value;
+	Input.visibleLevel.value = Number(lvl);
+	Input.html.visibleLevel = visibleLevel.value;
 
 }
 
-function updateSpeed(){
-	var lvl = speedInput.value;
+Input.update.speedFact = function(){
+	var lvl = Input.html.speedFact.value;
 	if(isNaN(Number(lvl))){
 		lvl = 90;		
 	} 
 	lvl = Math.max(0,Math.min(100,Number(lvl)));
-	speedFact = lvl;
-	speedInput.value = lvl;
+	Input.speedFact = lvl;
+	Input.html.speedFact.value = lvl;
 }
 
-function updateBonusExp(){
-	var bonus = bonusExpInput.value;
+Input.update.bonusExpFact = function(){
+	var bonus = bonusExpFact.value;
 	if(isNaN(Number(bonus))){
 		bonus = 3;		
 	} 
 	bonus = Math.max(0,Math.min(10000,Number(bonus)));
-	bonusExpFact = bonus;
-	bonusExpInput.value = bonus;
+	Input.bonusExpFact = bonus;
+	Input.html.bonusExpFact.value = bonus;
 }
 
-function updateWantedList(){
-	headerWanted = [];
+Input.update.headerWanted = function(){
+	Input.headerWanted = [];
 	var array = $(":checked.headerInput");
-	array.each(
-		function(i) {
-			headerWanted.push(array[i].value);	
-		}
-	);
+	array.each(	function(i) { Input.headerWanted.push(array[i].value);});
 	
-	headerWanted99 = [];
+	Input.headerWanted99 = [];
 	var array = $(":checked.headerInput99");
-	array.each(
-		function(i) {
-			headerWanted99.push(array[i].value);	
-		}
-	);
+	array.each(function(i) { Input.headerWanted99.push(array[i].value);});
 }
 
-function updateIncomePh(){
-	var val = incomePhInput.value;
+Input.update.RincomePh = function(){
+	var val = Input.html.RincomePh.value;
 	val = val.replace(/[^\d.]/g, "");
 	if(val <= 0){ val = 1000000; }
-	incomePhInput.value = Tk.formatNum(val);
-	RincomePh = val;
+	Input.html.RincomePh.value = Tk.formatNum(val);
+	Input.RincomePh = val;
 }
 
-function updateStartEndExp(){
+Input.update.startEndExp = function(){
 	//Start
-	var start = startExpInput.value;
+	var start = Input.html.startExpInput.value;
 	start = start.replaceAll(',','');
 	
 	if(!isNaN(Number(start))){
@@ -80,23 +97,19 @@ function updateStartEndExp(){
 		
 		if(start <= 99 && start % 1 == 0){ start = lvlList[start]; }
 	} else {
-		var bool = true;
-		
-		if(start.length > 15){ bool = false; }
-		var test = start.replace(/[|&;$%@"<>()+,]/g, "");
-		if(test != start){ bool = false; }
-	
-		if(bool){getExp(start); start = 0; } //temp 
-		else {start = 0;}
+		if(start.length < 15 && start === start.replace(/[|&;$%@"<>()+,]/g, "")){	//doing request to server to get exp for player name
+			getExp(start);
+		}
+		 start = 0;
 	}
 	
 	start = Math.max(0,Math.min(start,200000000));
-	startExp = start;
-	startExpInput.value = Tk.formatNum(startExp);
+	Input.startExp = start;
+	Input.html.startExpInput.value = Tk.formatNum(start);
 	
 	
 	//End
-	var end = endExpInput.value;
+	var end = Input.html.endExp.value;
 	end = end.replaceAll(',','');
 	
 	if(!isNaN(Number(end))){
@@ -108,27 +121,23 @@ function updateStartEndExp(){
 	} else { end = lvlList[99]; }
 	
 	end = Math.max(start,Math.min(end,200000000));
-	endExp = end;
-	endExpInput.value = Tk.formatNum(endExp);
+	Input.endExp = end;
+	Input.html.endExp.value = Tk.formatNum(end);
 }
 
-function updateBoostList(){
-	methodList = Tk.deepClone(methodDb);
+Input.update.applyBoost = function(){	//act as filter
+	methodList = Tk.deepClone(Skill.methodDb);
 		
 	var boost = {};
 	var array = $(":checked.boostInput");
-	array.each(
-		function(i) {
-			boost[array[i].value] = 1;
-		}
-	);
+	array.each(	function(i) {boost[array[i].value] = 1;	});
 	
 	for(var i in boost){
 		for(var j in methodList){
 			for(var k in methodList[j].boost){
 				var name = methodList[j].boost[k];
 				if(name == i){
-					methodList[j] = boostList[methodList[j].boost[k]].func(methodList[j]);
+					methodList[j] = Skill.boostList[methodList[j].boost[k]].func(methodList[j]);
 				}
 			}
 		
@@ -136,38 +145,33 @@ function updateBoostList(){
 	}
 	
 	for(var i in methodList){
-		methodList[i].actionPh *= speedFact /100;
+		methodList[i].actionPh *= Input.speedFact /100;
 	}
 	for(var i in methodList){
-		methodList[i].expPa[0] *= 1 + bonusExpFact /100;
+		methodList[i].expPa[0] *= 1 + Input.bonusExpFact /100;
 	}
 }
 
-/*
-function updateExcludeList(){
-	var array = $(".excludeInput");
-	array.each(
-		function(i){
-			excludeList[array[i].value] = array[i].checked;
-					
-		}
-	);
+
+Input.changeSort = function (newSort){
+	Input.sortBy = newSort;
+	Input.sortSign *= -1;
+	update();
 }
-*/
 
 
-function getExp(name){
+Input.requestPlayerExp = function(name){
 	$.ajax( {
 		url: '/getExp',
 		data: {name:name},
 		type: 'POST',
 		success: function(data) {
 			if(data == 'error'){
-				startExp = skillList[1];				
+				Input.startExp = skillList[1];				
 			} else {
 				var obj = JSON.parse(data);
-				startExp = obj[skill];
-				startExpInput.value = Tk.formatNum(startExp);
+				Input.startExp = obj[skill];
+				Input.htmlstartExp.value = Tk.formatNum(obj[skill]);
 				update();				
 			}		
 		}

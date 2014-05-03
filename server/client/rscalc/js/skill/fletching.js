@@ -148,8 +148,8 @@ function initFletching(){
 
 
 
-	boostList = {
-		'outfit':{'check':0,'func':(function(method){ method.expPa[0] += method.base.expPa[0] * 0.05; return method; })}
+	Skill.boostList = {
+		
 	};
 
 	modList = {

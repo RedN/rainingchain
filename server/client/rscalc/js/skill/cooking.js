@@ -1,7 +1,9 @@
-function initCooking(){
-	videoId = 'f6-3fywubCI';
-	skill = 'Cooking';
-
+Init.skill.cooking = function(){
+	Skill = {};
+	Skill.name = 'Cooking';
+	Skill.id = 'cooking';
+	Skill.videoId = 'f6-3fywubCI';
+	
 	//Format: actionPh = 
 	//tick/h / ((t/a * a/i) + bank + timeInit) * a/i
 	var BANK = 6;
@@ -9,8 +11,8 @@ function initCooking(){
 	var FISHPH = 6000 / ((4 * 27) + BANK + 0) * 27;
 	var WINEPH = 6000 / ((1 * 14) + BANK + 0) * 14;
 
-	methodDb = [];
-	methodPreDb = 
+	Skill.methodDb = [];
+	Skill.methodPreDb = 
 [
 {"exclude":0,"hide":0,"boost":['urn','bonfire','dwarven'],"name":"Crayfish","icon":"crayfish","lvl":1,"input":{"raw crayfish":1},"output":{"crayfish":1},"expPa":[30],"actionPh":FISHPH},
 {"exclude":0,"hide":0,"boost":['urn','bonfire','dwarven'],"name":"Shrimps","icon":"shrimps","lvl":1,"input":{"raw shrimps":1},"output":{"shrimps":1},"expPa":[30],"actionPh":FISHPH},
@@ -96,13 +98,13 @@ function initCooking(){
 
 
 
-	boostList = {
+	Skill.boostList = {
 		'urn':{'check':1,'func':(function(method){ method.expPa[0] += method.base.expPa[0] * 0.20; return method; })},
 		'bonfire':{'check':1,'func':(function(method){ method.expPa[0] += method.base.expPa[0] * 0.10; return method; })},
 		'dwarven':{'check':1,'func':(function(method){ method.expPa[0] += 3; return method; })},
 	}
 
-	modList = {
+	Skill.modList = {
 		'sc':(function(m){
 			var method = Tk.deepClone(m);
 			method.mod = {};

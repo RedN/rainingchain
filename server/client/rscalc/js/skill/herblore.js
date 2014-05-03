@@ -162,7 +162,7 @@ var OVLPH = 1000/TOTALTIME1kOVL;
 
 
 
-	boostList = {
+	Skill.boostList = {
 		'fpf':{'check':1,'func':(function(method){ 
 			for(var i in method.output){
 				method.output[i] *= 31/30;

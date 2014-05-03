@@ -88,7 +88,7 @@ function initDivination(){
 
 
 
-	boostList = {
+	Skill.boostList = {
 		
 	};
 

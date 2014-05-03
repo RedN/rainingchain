@@ -206,7 +206,7 @@ function initCrafting(){
 ];
 
 
-	boostList = {
+	Skill.boostList = {
 		
 	};
 
