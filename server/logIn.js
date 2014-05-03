@@ -1,4 +1,4 @@
-var db = require('./db');
+var db = require('./Db');
 var crypto = require('crypto');
 
 Sign = {};

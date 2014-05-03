@@ -72,17 +72,17 @@ Update.table99.getUseList = function(){	//return array of methods to use
 	return array;
 }
 
-Update.table99.getBest99(s,e,ar){
+Update.table99.getBest99 = function(s,e,ar){
 	var startLvl = Sub.getLvlViaExp(s);
-	var diffS = s - lvlList[startLvl];
+	var diffS = s - Cst.lvlList[startLvl];
 	
 	var endLvl = Sub.getLvlViaExp(e); 
-	var diffE = e - lvlList[endLvl];
+	var diffE = e - Cst.lvlList[endLvl];
 	
 	var best = [];
 	
-	var array = generateContent(['Id','Level','Time/1M Exp'],ar);
-	array = sortContent(array,2,1);
+	var array = Update.getContent(['Id','Level','Time/1M Exp'],ar);
+	array = Update.sortContent(array,2,1);
 		
 	for(var i = 0; i < array.length ; i++){
 		for(var j = 0; j < array[i].length ; j++){
@@ -120,7 +120,6 @@ Update.table99.getBest99(s,e,ar){
 }
 
 Update.getContent = function(headWant,selectedMethods){
-	
 	//Prepare list of method
 	var list = [];
 	for(var i in selectedMethods){
@@ -133,10 +132,11 @@ Update.getContent = function(headWant,selectedMethods){
 	}
 	
 	//Generate info
+	var array = [];		//array containing everything
+	
 	for(var i in list){ 
 		var m = list[i];
 		
-	
 	//
 	
 	//expT	
@@ -160,11 +160,6 @@ Update.getContent = function(headWant,selectedMethods){
 		var Tname = '';
 		var IEname = '  ';
 		
-		if(m.warn.buy){ IEname += IMG['buy'+m.warn.buy]; }
-		if(m.warn.sell){ IEname += IMG['sell'+m.warn.sell];}
-		
-		
-		
 		var Fname = IHname + ' <span title="' + Tname + '" style="border-bottom: 3px solid">' + Rname + '</span>' + IEname;
 		
 	//id
@@ -175,10 +170,10 @@ Update.getContent = function(headWant,selectedMethods){
 		var Rexclude = '';
 		if(Input.excludeList[m.id]){ Rexclude = 'checked'; }
 		var Texclude = 'Exclude this method from the Level 1-99 Table.';
-		var Fexclude = '<input onchange="Input.excludeList[\'' + m.id + '\'] = !Input.excludeList[\'' + m.id + '\']; update();" type="checkbox" title="'+ Texclude +'" class="excludeInput" value="' + m.id + '" ' + Rexclude + '>';
+		var Fexclude = '<input onchange="Input.excludeList[\'' + m.id + '\'] = !Input.excludeList[\'' + m.id + '\']; Update();" type="checkbox" title="'+ Texclude +'" class="excludeInput" value="' + m.id + '" ' + Rexclude + '>';
 	
 	//expPaP
-		var RexpPaP = IMG[skill] + ' ' + Tk.formatNum(Tk.round(m.expPa[0],0)) + ' ' + skill + ' Exp' + '<br>';
+		var RexpPaP = IMG[Skill.name] + ' ' + Tk.formatNum(Tk.round(m.expPa[0],0)) + ' ' + Skill.name + ' Exp' + '<br>';
 		for(var j in m.expPa[1]){ RexpPaP += IMG[j] + ' ' + Tk.formatNum(Tk.round(m.expPa[1][j],0)) + ' ' + j + ' Exp' + '<br>';}
 		var FexpPaP = RexpPaP.slice(0,-4); //aka remove last <br>
 		
@@ -191,7 +186,7 @@ Update.getContent = function(headWant,selectedMethods){
 		var FexpPa	= '<span title="' + TexpPa + '">' + RexpPa + '</span>';
 		
 	//expPhP
-		var RexpPhP = IMG[skill] + ' ' + Tk.formatNum(Tk.round(m.expPa[0]*RactionPh,-3)) + ' ' + skill + ' Exp/H' + '<br>';
+		var RexpPhP = IMG[Skill.name] + ' ' + Tk.formatNum(Tk.round(m.expPa[0]*RactionPh,-3)) + ' ' + Skill.name + ' Exp/H' + '<br>';
 		for(var j in m.expPa[1]){ RexpPhP += IMG[j] + ' ' + Tk.formatNum(Tk.round(m.expPa[1][j]*RactionPh,-3)) + ' ' + j + ' Exp/H' + '<br>';}
 		var FexpPhP = RexpPhP.slice(0,-4); //aka remove last <br>
 		
@@ -222,7 +217,7 @@ Update.getContent = function(headWant,selectedMethods){
 		var FgpPm = IMG.COINS+ Sub.colorSign(Tk.formatNum(Tk.round(RgpPm,-3)));
 	
 	//timeGpPm
-		var RtimeGpPm = -RgpPm/RincomePh;
+		var RtimeGpPm = -RgpPm/Input.RincomePh;
 		var FtimeGpPm = Sub.convertTime(RtimeGpPm,2);
 	
 	//timeExpPm
@@ -238,10 +233,6 @@ Update.getContent = function(headWant,selectedMethods){
 		var RinputItem = '';	
 		for(var j in m.input){	
 			var image = IMG[j];
-			if(IDB[j].buy){ 
-				var str = ' style="border:2px solid ' + warnColor[IDB[j].buy] + '" title="This item may be hard to buy."';
-				image = image.insertAt(4,str);
-			}
 			var amm = m.input[j];
 			if(amm < 0.1){ amm = '1/' + Math.round(1/amm) } else { amm = Tk.round(amm,2); }
 			RinputItem += image + '<span title="' + Tk.formatNum(Math.round(IDB[j].price)) + ' Gp' + '">' + '  x' + amm + ' ' + IDB[j].name + '</span><br>';
@@ -252,10 +243,6 @@ Update.getContent = function(headWant,selectedMethods){
 		var RoutputItem = ''; 
 		for(var j in m.output){	
 			var image = IMG[j];
-			if(IDB[j].sell){ 
-				var str = ' style="border:2px solid ' + warnColor[IDB[j].sell] + '" title="This item may be hard to sell."';
-				image = image.insertAt(4,str);
-			}
 			var amm = m.output[j];
 			if(amm < 0.1){ amm = '1/' + Math.round(1/amm) } else { amm = Tk.round(amm,2); }
 			RoutputItem += image + '<span title="' + Tk.formatNum(Math.round(IDB[j].price)) + ' Gp' + '">' + '  x' + amm + ' ' + IDB[j].name + '</span><br>';
@@ -301,7 +288,7 @@ Update.getContent = function(headWant,selectedMethods){
 		var FactionT = Tk.formatNum(Tk.round(RactionT,0));
 		
 	//expTP
-		var RexpTP = IMG[skill] + ' ' + Tk.formatNum(Tk.round(RexpT,0)) + ' ' + skill + ' Exp' + '<br>';
+		var RexpTP = IMG[Skill.name] + ' ' + Tk.formatNum(Tk.round(RexpT,0)) + ' ' + Skill.name + ' Exp' + '<br>';
 		for(var j in m.expPa[1]){ 
 			var expOtherSkill = RexpT * m.expPa[1][j]/ RexpPa;
 			RexpTP += IMG[j] + ' ' + Tk.formatNum(Tk.round(expOtherSkill,0)) + ' ' + j + ' Exp' + '<br>';
@@ -312,10 +299,6 @@ Update.getContent = function(headWant,selectedMethods){
 		var RinputItemT = '';	
 		for(var j in m.input){	
 			var image = IMG[j];
-			if(IDB[j].buy){ 
-				var str = ' style="border:2px solid ' + warnColor[IDB[j].buy] + '" title="This item may be hard to buy."';
-				image = image.insertAt(4,str);
-			}
 			RinputItemT += image + '  x' + Tk.formatNum(Tk.round(m.input[j]*RactionT,0)) + ' ' + IDB[j].name + '<br>';
 			
 		}
@@ -326,10 +309,6 @@ Update.getContent = function(headWant,selectedMethods){
 		var RoutputItemT = ''; 
 		for(var j in m.output){ 
 			var image = IMG[j];
-			if(IDB[j].sell){ 
-				var str = ' style="border:2px solid ' + warnColor[IDB[j].sell] + '" title="This item may be hard to sell."';
-				image = image.insertAt(4,str);
-			}
 			RoutputItemT += image + '  x' + Tk.formatNum(Tk.round(m.output[j]*RactionT,0)) + ' ' + IDB[j].name + '<br>';
 		}
 		
@@ -341,7 +320,7 @@ Update.getContent = function(headWant,selectedMethods){
 		var FgpT = IMG.COINS+ Sub.colorSign(Tk.formatNum(Tk.round(RgpT,-3)));
 	
 	//timeGpT
-		var RtimeGpT = -RgpT/RincomePh;
+		var RtimeGpT = -RgpT/Input.RincomePh;
 		var FtimeGpT = Sub.convertTime(RtimeGpT,2);
 	
 	//timeExpT
@@ -401,17 +380,14 @@ Update.getContent = function(headWant,selectedMethods){
 			
 		};
 		
-		var array = [];		
-		var index = array.push([])-1;	//wtf
+		
+		var toadd = [];
 		for(var j = 0 ; j < headWant.length ; j++){
-			array[index][j] = head[headWant[j]];		
+			toadd[j] = head[headWant[j]];		
 		}
 		
-		
-		array[index].method = m;
-		
-		
-		array[index].base = {
+		toadd.method = m;		
+		toadd.base = {
 			'Rname':Rname,
 			'RexpPa':RexpPa,
 			'RexpPaP':RexpPaP,
@@ -454,7 +430,7 @@ Update.getContent = function(headWant,selectedMethods){
 			
 			
 		}
-		
+		array.push(toadd);
 		
 		
 		
@@ -463,7 +439,6 @@ Update.getContent = function(headWant,selectedMethods){
 	
 	return array;
 }
-
 
 Update.sortContent = function(array,by,sign){
 	array.sort(function(a,b){
@@ -628,9 +603,9 @@ Update.table99.generateSum = function(head,array,complexe){
 		
 		if(head[i] == 'Total Exp+'){ 
 			var str = '';
-			var exp = {}; for(var j in skillList){ exp[skillList[j]] = 0; }
+			var exp = {}; for(var j in Cst.skillList){ exp[Cst.skillList[j]] = 0; }
 			var mainExp = 0; for(var j = 0 ; j < array.length ; j++){mainExp += array[j].base['RexpT'];}
-			exp[skill] = mainExp;
+			exp[Skill.name] = mainExp;
 			
 			for(var j = 0 ; j < array.length ; j++){
 				var info = array[j].base['expPa'][1];	

@@ -1,4 +1,4 @@
-var db = require('./db');
+var db = require('./Db');
 
 Db = {};
 List = {all:{},actor:{},bullet:{},strike:{},group:{},drop:{},map:{},main:{},socket:{},nameToKey:{},btn:{}};

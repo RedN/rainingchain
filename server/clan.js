@@ -1,4 +1,4 @@
-var db = require('./db');
+var db = require('./Db');
 
 Db.clan = {};
 

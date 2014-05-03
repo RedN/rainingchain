@@ -1,7 +1,8 @@
-function initCrafting(){
-	videoId = 'f6-3fywubCI';
-	skill = 'Crafting';
-
+Init.skill.crafting = function(){
+	Skill.videoId = 'f6-3fywubCI';
+	Skill.name = 'Crafting';
+	Skill.id = 'crafting';
+	
 	//Format: actionPh = 
 	//tick/h / ((t/a * a/i) + bank + timeInit) * a/i
 	var BANK = 6;
@@ -25,8 +26,8 @@ function initCrafting(){
 	var HIDE15PH = 6000 / ((3 * 1) + BANK + 0) * 1;
 	
 	
-	methodDb = [];
-	methodPreDb = 
+	Skill.methodDb = [];
+	Skill.methodPreDb = 
 	[
 {"exclude":0,"hide":1,"boost":[],"mod":{},"name":"Ball of wool","icon":"ball of wool","lvl":1,"input":{"wool":1},"output":{"ball of wool":1},"expPa":[2.5],"actionPh":1150},
 {"exclude":0,"hide":0,"boost":[],"mod":{},"name":"Beer glass","icon":"beer glass","lvl":1,"input":{"molten glass":1},"output":{"beer glass":1},"expPa":[17.5],"actionPh":HIDE1PH},
@@ -210,7 +211,7 @@ function initCrafting(){
 		
 	};
 
-	modList = {
+	Skill.modList = {
 		'sc':(function(m){
 			var method = Tk.deepClone(m);
 			method.mod = {};
@@ -228,7 +229,7 @@ function initCrafting(){
 			'timePt':1/5,
 			}
 			
-			var actionPt = SC.expPt[skill] / method.expPa[0];
+			var actionPt = SC.expPt[Skill.name] / method.expPa[0];
 			var toolUsedPh = method.actionPh / actionPt;
 			var timeToolPh = toolUsedPh * SC.timePt;
 			

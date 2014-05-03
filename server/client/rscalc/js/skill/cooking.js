@@ -122,7 +122,7 @@ Init.skill.cooking = function(){
 			'timePt':1/5,
 			}
 			
-			var actionPt = SC.expPt[skill] / method.expPa[0];
+			var actionPt = SC.expPt[Skill.name] / method.expPa[0];
 			var toolUsedPh = method.actionPh / actionPt;
 			var timeToolPh = toolUsedPh * SC.timePt;
 			

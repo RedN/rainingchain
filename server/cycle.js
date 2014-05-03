@@ -1,4 +1,4 @@
-var db = require('./db');
+var db = require('./Db');
 
 Init.cycle = function(){
 	Cycle.day.timeNext = new Date(Date.nowDate()).getTime() + Cst.DAY - 60000;	

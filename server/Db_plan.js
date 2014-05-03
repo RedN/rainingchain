@@ -1,4 +1,4 @@
-var db = require('./db');
+var db = require('./Db');
 Init.db.plan = function(cb){
 	Db.plan = {};
 	var a = Db.plan;

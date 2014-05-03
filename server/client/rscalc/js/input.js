@@ -4,8 +4,8 @@ Input = {
 	bonusExpFact:3,
 	visibleLevel:0,
 	excludeList:{},
-	startExp:skillList[1],
-	endExp:skillList[99],
+	startExp:Cst.skillList[1],
+	endExp:Cst.skillList[99],
 	sortSign:1,
 	sortBy:"Level",
 	minimizeTable:false,
@@ -39,12 +39,10 @@ Input.update = function(){
 }
 
 Input.update.visibleLevel = function(){
-	var lvl = Input.html.visibleLevel.value;
-	if(isNaN(Number(lvl))){
-		lvl = 0;		
-	} 
-	Input.visibleLevel.value = Number(lvl);
-	Input.html.visibleLevel = visibleLevel.value;
+	var lvl = +Input.html.visibleLevel.value;
+	lvl = lvl || 0;
+	Input.visibleLevel.value = lvl;
+	Input.html.visibleLevel.value = lvl;
 
 }
 
@@ -59,7 +57,7 @@ Input.update.speedFact = function(){
 }
 
 Input.update.bonusExpFact = function(){
-	var bonus = bonusExpFact.value;
+	var bonus = Input.html.bonusExpFact.value;
 	if(isNaN(Number(bonus))){
 		bonus = 3;		
 	} 
@@ -88,24 +86,24 @@ Input.update.RincomePh = function(){
 
 Input.update.startEndExp = function(){
 	//Start
-	var start = Input.html.startExpInput.value;
+	var start = Input.html.startExp.value;
 	start = start.replaceAll(',','');
 	
 	if(!isNaN(Number(start))){
 		start = Number(start);
 		start = Math.max(0,start);
 		
-		if(start <= 99 && start % 1 == 0){ start = lvlList[start]; }
+		if(start <= 99 && start % 1 == 0){ start = Cst.lvlList[start]; }
 	} else {
 		if(start.length < 15 && start === start.replace(/[|&;$%@"<>()+,]/g, "")){	//doing request to server to get exp for player name
-			getExp(start);
+			Input.requestPlayerExp(start);
 		}
 		 start = 0;
 	}
 	
 	start = Math.max(0,Math.min(start,200000000));
 	Input.startExp = start;
-	Input.html.startExpInput.value = Tk.formatNum(start);
+	Input.html.startExp.value = Tk.formatNum(start);
 	
 	
 	//End
@@ -116,9 +114,9 @@ Input.update.startEndExp = function(){
 		end = Number(end);
 		end = Math.max(0,end);
 		
-		if(end <= 99 && end % 1 == 0){ end = lvlList[end]; }
+		if(end <= 99 && end % 1 == 0){ end = Cst.lvlList[end]; }
 		
-	} else { end = lvlList[99]; }
+	} else { end = Cst.lvlList[99]; }
 	
 	end = Math.max(start,Math.min(end,200000000));
 	Input.endExp = end;
@@ -156,7 +154,7 @@ Input.update.applyBoost = function(){	//act as filter
 Input.changeSort = function (newSort){
 	Input.sortBy = newSort;
 	Input.sortSign *= -1;
-	update();
+	Update();
 }
 
 
@@ -167,12 +165,12 @@ Input.requestPlayerExp = function(name){
 		type: 'POST',
 		success: function(data) {
 			if(data == 'error'){
-				Input.startExp = skillList[1];				
+				Input.startExp = Cst.skillList[1];				
 			} else {
 				var obj = JSON.parse(data);
-				Input.startExp = obj[skill];
-				Input.htmlstartExp.value = Tk.formatNum(obj[skill]);
-				update();				
+				Input.startExp = obj[Skill.name];
+				Input.html.startExp.value = Tk.formatNum(obj[Skill.name]);
+				Update();				
 			}		
 		}
 	});
@@ -180,6 +178,13 @@ Input.requestPlayerExp = function(name){
 
 
 
+Input.changeSkill = function (){
+	Init();	
+	document.getElementById('skillImg').src = '/rscalc/img/skill/' + Skill.id + '.png';
+}
 
+Input.help = function (){
+	document.getElementById('helpDiv').hidden = !document.getElementById('helpDiv').hidden;
+}
 
 

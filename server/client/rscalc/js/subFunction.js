@@ -1,7 +1,8 @@
 
 //Sub Function
+Sub = {};
 Sub.expBetweenLvl = function(start,end){
-	return lvlList[end]-lvlList[start];
+	return Cst.lvlList[end]-Cst.lvlList[start];
 }
 
 Sub.setYoutube = function(info){
@@ -51,7 +52,7 @@ Sub.getLvlViaExp = function (exp){
 	exp = Math.max(0,Math.min(200000000,exp));
 	
 	var lvl = 0;
-	while(exp >= lvlList[lvl]){
+	while(exp >= Cst.lvlList[lvl]){
 		lvl++;
 	}
 	lvl
@@ -67,24 +68,11 @@ Sub.minTable = function (div){
 	str = str.replace(/<img[^>]*>/g,'');
 	str = str.replace(/<\/img[^>]*>/g,'');
 	
-	for(var i in minConvert){str = str.replaceAll(i,minConvert[i]);}
+	for(var i in Cst.minConvert){str = str.replaceAll(i,Cst.minConvert[i]);}
 
 	div.innerHTML = str;
 
 }
-
-Sub.changeSkill = function (){
-	var newskill = Html.skillInput.value;
-	Init.skill[newskill]();
-	Init();
-	
-	document.getElementById('skillImg').src = IMG[newskill];
-}
-
-Sub.help = function (){
-	document.getElementById('helpDiv').hidden = !document.getElementById('helpDiv').hidden;
-}
-
 
 
 

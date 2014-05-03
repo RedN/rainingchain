@@ -24,9 +24,10 @@ app.use(express.static(path.resolve(__dirname, 'server/client')));	//need to be 
 
 
 //Runescape Calculators:
+RSCALC = require('./server/RS_calculators');
 app.get('/rs', function (req, res) { res.sendfile(__dirname  + '/server/client/rscalc/index.html');});
-app.post('/getPrice', function(req, res){	res.send(require('./server/RS_calculators').itemDb);});
-app.post('/getExp', function(req, res){	require('./server/RS_calculators').appPostGetExp(req,res); });
+app.post('/getPrice', function(req, res){	res.send({itemDb:RSCALC.itemDb,lastUpdate:RSCALC.lastUpdate});});
+app.post('/getExp', function(req, res){	RSCALC.appPostGetExp(req,res); });
 
 
 //Require

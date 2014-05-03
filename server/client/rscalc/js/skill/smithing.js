@@ -1,7 +1,8 @@
-function initSmithing(){
-	videoId = 'f6-3fywubCI';
-	skill = 'Smithing';
-
+Init.skill.smithing = function(){
+	Skill.videoId = 'f6-3fywubCI';
+	Skill.name = 'Smithing';
+	Skill.id = 'smithing';
+	
 	//Format: actionPh = 
 	//tick/h / ((t/a * a/i) + bank + timeInit) * a/i
 	var BANK = 6;
@@ -17,8 +18,8 @@ function initSmithing(){
 	var BURIAL = 360;
 	var CEREMONIAL = 50;
 
-	methodDb = [];
-	methodPreDb = 
+	Skill.methodDb = [];
+	Skill.methodPreDb = 
 	[
 {"exclude":0,"hide":0,"boost":['scroll','yak'],"mod":{},"name":"Bronze dagger","icon":"bronze dagger","lvl":1,"input":{"bronze bar":1},"output":{"bronze dagger":1},"expPa":[12.5],"actionPh":SMITH1},
 {"exclude":0,"hide":0,"boost":['scroll','yak'],"mod":{},"name":"Off-hand bronze dagger","icon":"off-hand bronze dagger","lvl":1,"input":{"bronze bar":1},"output":{"off-hand bronze dagger":1},"expPa":[12.5],"actionPh":SMITH1},
@@ -310,7 +311,7 @@ function initSmithing(){
 		
 	};
 
-	modList = {
+	Skill.modList = {
 		'sc':(function(m){
 			var method = Tk.deepClone(m);
 			method.mod = {};
@@ -328,7 +329,7 @@ function initSmithing(){
 			'timePt':1/5,
 			}
 			
-			var actionPt = SC.expPt[skill] / method.expPa[0];
+			var actionPt = SC.expPt[Skill.name] / method.expPa[0];
 			var toolUsedPh = method.actionPh / actionPt;
 			var timeToolPh = toolUsedPh * SC.timePt;
 			

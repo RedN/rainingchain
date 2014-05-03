@@ -1,7 +1,8 @@
-function initFletching(){
-	videoId = 'f6-3fywubCI';
-	skill = 'Fletching';
-
+Init.skill.fletching = function(){
+	Skill.videoId = 'f6-3fywubCI';
+	Skill.name = 'Fletching';
+	Skill.id = 'fletching';
+	
 	//Format: actionPh = 
 	//tick/h / ((t/a * a/i) + bank + timeInit) * a/i
 	var BANK = 6;
@@ -17,8 +18,8 @@ function initFletching(){
 	var BOLTTIPSPH = 6000 / ((4 * 28) + BANK + 0) * 28*12;
 
 		
-	methodDb = [];
-	methodPreDb = 
+	Skill.methodDb = [];
+	Skill.methodPreDb = 
 [
 {"exclude":0,"hide":0,"boost":[],"mod":{},"name":"Arrow shaft","icon":"arrow shaft","lvl":1,"input":{"logs":1/15},"output":{"arrow shaft":1},"expPa":[0.333],"actionPh":26250},
 {"exclude":0,"hide":0,"boost":[],"mod":{},"name":"Headless arrow","icon":"headless arrow","lvl":1,"input":{"arrow shaft":1,"feather":1},"output":{"headless arrow":1},"expPa":[1],"actionPh":ARROWPH},
@@ -152,7 +153,7 @@ function initFletching(){
 		
 	};
 
-	modList = {
+	Skill.modList = {
 		'sc':(function(m){
 			var method = Tk.deepClone(m);
 			method.mod = {};
@@ -170,7 +171,7 @@ function initFletching(){
 			'timePt':1/5,
 			}
 			
-			var actionPt = SC.expPt[skill] / method.expPa[0];
+			var actionPt = SC.expPt[Skill.name] / method.expPa[0];
 			var toolUsedPh = method.actionPh / actionPt;
 			var timeToolPh = toolUsedPh * SC.timePt;
 			

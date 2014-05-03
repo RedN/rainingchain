@@ -1,7 +1,8 @@
-function initDivination(){
-	videoId = 'f6-3fywubCI';
-	skill = 'Divination';
-
+Init.skill.divination = function(){
+	Skill.videoId = 'f6-3fywubCI';
+	Skill.name = 'Divination';
+	Skill.id = 'divination';
+	
 	//Format: actionPh = 
 	//tick/h / ((t/a * a/i) + bank + timeInit) * a/i
 	var DIV3 = 1200;
@@ -9,8 +10,8 @@ function initDivination(){
 	var DIV6 = 800;
 	var COLLECT = 1100*1.1;
 	
-	methodDb = [];
-	methodPreDb = 
+	Skill.methodDb = [];
+	Skill.methodPreDb = 
 [
 
 {"name":"Draynor Rift (Own)","icon":"pale energy","lvl":1,"input":{},"output":{},"expPa":[4.55490909090909],"actionPh":COLLECT},
@@ -92,7 +93,7 @@ function initDivination(){
 		
 	};
 
-	modList = {
+	Skill.modList = {
 		'sc':(function(m){
 			var method = Tk.deepClone(m);
 			method.mod = {};
@@ -110,7 +111,7 @@ function initDivination(){
 			'timePt':1/5,
 			}
 			
-			var actionPt = SC.expPt[skill] / method.expPa[0];
+			var actionPt = SC.expPt[Skill.name] / method.expPa[0];
 			var toolUsedPh = method.actionPh / actionPt;
 			var timeToolPh = toolUsedPh * SC.timePt;
 			

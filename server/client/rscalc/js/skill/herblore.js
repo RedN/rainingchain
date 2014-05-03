@@ -1,7 +1,7 @@
-function initHerblore(){
-	videoId = 'f6-3fywubCI';
-	skill = 'Herblore';
-
+Init.skill.herblore = function(){
+	Skill.videoId = 'f6-3fywubCI';
+	Skill.name = 'Herblore';
+	Skill.id = 'herblore';
 	/*
 	prayer renwe legs
 	
@@ -31,8 +31,8 @@ var OVLPH = 1000/TOTALTIME1kOVL;
 	
 	
 	
-	methodDb = [];
-	methodPreDb = 
+	Skill.methodDb = [];
+	Skill.methodPreDb = 
 [
 {"exclude":0,"hide":0,"boost":[],"mod":{},"name":"Clean guam","icon":"clean guam","lvl":1,"input":{"grimy guam":1},"output":{"clean guam":1},"expPa":[2.5],"actionPh":HERBPH},
 {"exclude":1,"hide":0,"boost":['fpf','scroll',],"mod":{},"name":"Guam potion (unf)","icon":"guam potion (unf)","lvl":1,"input":{"clean guam":1,"vial of water":1},"output":{"guam potion (unf)":1},"expPa":[1],"actionPh":UNFPH},
@@ -186,7 +186,7 @@ var OVLPH = 1000/TOTALTIME1kOVL;
 	
 	};
 
-	modList = {
+	Skill.modList = {
 		'sc':(function(m){
 			var method = Tk.deepClone(m);
 			method.mod = {};
@@ -204,7 +204,7 @@ var OVLPH = 1000/TOTALTIME1kOVL;
 			'timePt':1/5,
 			}
 			
-			var actionPt = SC.expPt[skill] / method.expPa[0];
+			var actionPt = SC.expPt[Skill.name] / method.expPa[0];
 			var toolUsedPh = method.actionPh / actionPt;
 			var timeToolPh = toolUsedPh * SC.timePt;
 			

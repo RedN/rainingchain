@@ -5,14 +5,17 @@ var IDB = {};	//item db
 var MDB = {};	//method db
 
 Init = function(){
-	Init.fetchPrice(function(){
-		Init.methodDb();
-		Init.image();
-		Init.headerHtml();
-		Init.boostHtml();
-	});
+	Init.skill[Html.skillInput.value]();
+	Init.methodDb();
+	Init.image();
+	Init.headerHtml();
+	Init.boostHtml();
+	Update();
 };
+
+
 Init.skill = {};
+Skill = {};
 
 Init.fetchPrice = function(cb){
 	if(ONLINE == 1){
@@ -21,9 +24,14 @@ Init.fetchPrice = function(cb){
 			data: 'hello',
 			type: 'POST',
 			success: function(data) {
-				for(var i in data){
-					Init.item(i,data[i]);
-				}
+				ITEMDB = Tk.deepClone(data.itemDb);
+				for(var i in data.itemDb)	Init.item(i,data.itemDb[i]);
+				//Time
+				var timeDiff = Date.now() - data.lastUpdate;
+				var str = "Last Price Update: " + Math.floor(timeDiff/(1000*60*60)) + " hours ago.";
+				if(timeDiff > 1000*60*60 * 120) str = '<span title="The server was reset recently and is currently updating the prices. Come back in couple minutes.">' + str + '</span>';
+				doc.get('lastUpdate').innerHTML = str;
+				
 				cb();
 			}
 		});
@@ -52,22 +60,15 @@ Init.item = function(i,data){
 }
 
 Init.image = function(){
-	for(var i in skillList)	IMG[i] = '<img src="' + skillList[i] + '" alt="" height=' + ICON + ' width=' + ICON + '></img>';
+	IMG.COINS = ' <img src="/rscalc/img/COINS.png" alt="" height=' + ICON + ' width=' + ICON + '></img>  ';
+	IMG.COIN = ' <img src="/rscalc/img/COIN.png" alt="" height=' + ICON + ' width=' + ICON + '></img>  ';
+	IMG.QUEST = ' <img src="/rscalc/img/QUEST.png" alt="" height=' + ICON + ' width=' + ICON + '></img>  ';
 	
 	
-	var array = {'sell':[1,2,3],'buy':[1,2,3]};
-	for(var i in array){
-		for(var j in array[i]){
-			var name = i+array[i][j];
-			IMG[name] = '<img title="Warning: Some items may be hard to ' + i + '." src="/rscalc/img/' + name + '.png' + '" alt="" height=' + ICON/1.2 + ' width=' + ICON/1.2 + '></img>';
-		}
+	for(var i in Cst.skillList){
+		var skill = Cst.skillList[i];
+		IMG[skill] = '<img src="rscalc/img/skill/' + skill.toLowerCase() + '.png" alt="" height=' + ICON + ' width=' + ICON + '></img>';
 	}
-	
-	IMG.COINS = ' <img src="http://images3.wikia.nocookie.net/__cb20120509113360/runescape/images/3/30/Coins_10000.png" alt="" height=' + ICON + ' width=' + ICON + '></img>  ';
-	IMG.COIN = ' <img src="http://images4.wikia.nocookie.net/__cb20110806164215/runescape/images/b/b6/Coins_100.png" alt="" height=' + ICON + ' width=' + ICON + '></img>  ';
-	IMG.QUEST = ' <img src="http://images2.wikia.nocookie.net/__cb20120131231040/runescape/images/0/05/Quest_icon.png" alt="" height=' + ICON + ' width=' + ICON + '></img>  ';
-
-	
 }
 
 
@@ -122,7 +123,7 @@ Init.headerHtml = function(){
 	var str = '<form>'; 
 	for(var i in headerList){
 		var checkStatus = headerList[i] ? 'checked' : '';
-		str += '<input onchange="update();" type="checkbox" title="'+ i +'" class="headerInput" value="' + i + '"' + checkStatus + '>' + minConvert[i] +' ';
+		str += '<input onchange="Update();" type="checkbox" title="'+ i +'" class="headerInput" value="' + i + '"' + checkStatus + '>' + Cst.minConvert[i] +' ';
 	}
 	str += '</form>'; 
 	Html.wantedHeaderDiv.innerHTML = str;
@@ -131,7 +132,7 @@ Init.headerHtml = function(){
 	var str = '<form>'; 
 	for(var i in headerList99){
 		var checkStatus = headerList99[i] ? 'checked' : '';
-		str += '<input onchange="update();" type="checkbox" title="'+ i +'" class="headerInput99" value="' + i + '"' + checkStatus + '>' + minConvert[i] +' ';
+		str += '<input onchange="Update();" type="checkbox" title="'+ i +'" class="headerInput99" value="' + i + '"' + checkStatus + '>' + Cst.minConvert[i] +' ';
 	}
 	str += '</form>'; 
 	wantedHeaderDiv99.innerHTML = str;
@@ -140,9 +141,9 @@ Init.headerHtml = function(){
 Init.boostHtml = function(){
 	var str = 'Boost: ';
 	for(var i in Skill.boostList){
-		var name = i; if(minConvert[i]){ name = minConvert[i]; }
+		var name = i; if(Cst.minConvert[i]){ name = Cst.minConvert[i]; }
 		var checkStatus = ''; if(Skill.boostList[i].check){ checkStatus = 'checked'; }
-		str += '<input onchange="update();" type="checkbox" title="'+ i +'" class="boostInput" value="' + i + '"' + checkStatus + '>' + name +' ';
+		str += '<input onchange="Update();" type="checkbox" title="'+ i +'" class="boostInput" value="' + i + '"' + checkStatus + '>' + name +' ';
 	}
 	Html.boostDiv.innerHTML = str;
 } 
@@ -171,7 +172,7 @@ Init.methodDb = function(){
 		if(m.video == undefined){ m.video = ''; }
 		
 		if(typeof m.expPa != 'object'){ m.expPa = [m.expPa]; }
-		m.id = m.name + m.lvl;
+		m.id = escape(m.name + m.lvl);
 		m.base = Tk.deepClone(m);
 		
 		if(m.warn == undefined){

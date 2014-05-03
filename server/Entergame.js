@@ -1,4 +1,4 @@
-var db = require('./db');
+var db = require('./Db');
 
 Load.enterGame = function(key,account,act,main,socket){ //Called when player logs in
 	if(account.lastSignIn === null) Load.enterGame.first(key,account);

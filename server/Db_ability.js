@@ -1,4 +1,4 @@
-var db = require('./db');
+var db = require('./Db');
 
 /*
 a['bulletMulti'] = {					//bulletMulti is the id of attack
