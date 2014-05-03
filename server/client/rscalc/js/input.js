@@ -22,6 +22,7 @@ function updateVisibleLvl(){
 	visibleLevel = visibleInput.value;
 
 }
+
 function updateSpeed(){
 	var lvl = speedInput.value;
 	if(isNaN(Number(lvl))){
@@ -155,7 +156,23 @@ function updateExcludeList(){
 */
 
 
-
+function getExp(name){
+	$.ajax( {
+		url: '/getExp',
+		data: {name:name},
+		type: 'POST',
+		success: function(data) {
+			if(data == 'error'){
+				startExp = skillList[1];				
+			} else {
+				var obj = JSON.parse(data);
+				startExp = obj[skill];
+				startExpInput.value = Tk.formatNum(startExp);
+				update();				
+			}		
+		}
+	});
+}
 
 
 
