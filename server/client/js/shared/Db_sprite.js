@@ -274,10 +274,7 @@ Init.db.sprite = function(){
 		Db.sprite[i].id = i;
     	Sprite.creation.model(Db.sprite[i]);    
     }
-    
-    
-    
-    
+        
 }
 
 

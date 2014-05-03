@@ -1,4 +1,3 @@
-
 exports.init = function(version,questname){	//}
 	var Q = questname;
 	
@@ -164,6 +163,7 @@ exports.init = function(version,questname){	//}
 		
 		Attack.creation(act,atk,{angle:angle});
 	}
+	
 	s.strike = function(spot,atk,angle,dif,extra){
 		Combat.attack.simple({damageIf:dif || 'player-simple',spot:spot,angle:angle},atk,extra);
 	}
@@ -299,6 +299,17 @@ exports.init = function(version,questname){	//}
 	}
 	return s;
 }
+
+
+
+
+
+
+
+
+
+
+
 
 
 

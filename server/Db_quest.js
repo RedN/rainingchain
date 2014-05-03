@@ -38,7 +38,7 @@ Init.db.quest.map = function(){	//called before Init.db.quest
 
 Quest.creation = function(q){
 	if(Server.testing)	Quest.creation.tester(q);
-	
+		
 	//Variable
 	q.variable = Tk.useTemplate(Quest.template.variable(),q.variable);
 	for(var j in q.challenge){ q.variable.challenge[j] = 0; }	//0:non-active, 1:active

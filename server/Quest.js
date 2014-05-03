@@ -271,7 +271,7 @@ Quest.requirement.template = {}
 Quest.requirement.template.skill = function(skill,lvl){
 	return {
 		func:function(key){
-			return List.all[key].skill.lvl[skill] >= lvl;		
+			return List.all[key].skill.lvl[skill] >= lvl;
 		},		
 		name:'Level ' + lvl + ' ' + skill.capitalize(),
 		description:'Having at least level ' + lvl + ' in ' + skill.capitalize() + '.',	

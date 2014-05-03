@@ -31,7 +31,7 @@ Actor.death.player = function(act,killers){
 		"You just got a free teleport to a safe place. Lucky you.",
 		"Try harder next time.",
 		"You're feeling giddy!",
-		"Is that all you got?",
+		"Is that all what you got?",
 		"This game is harder than it looks.",
 		"If someone asks, just say you died on purpose.",	
 	];
