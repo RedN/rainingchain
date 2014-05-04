@@ -88,7 +88,6 @@ q.event = {
 		s.set(key,'complete',true);
 		s.setRespawn(key,'goblinLand','n1');
 	},
-	
 	talkRingo:function(key){
 		if(!s.get(key,'active')){ s.startQuest(key); return; }
 		if(!s.get(key,'talkRingo')){ s.dialogue(key,'ringo','intro','first'); return; }
@@ -165,7 +164,7 @@ q.event = {
 		s.set(key,'csInBoss',true);
 		s.dialogue(key,'goblin','intro','first');
 		s.actor(key,'ej',q.id,'boss',{
-			deathFunc:q.event.killGoblinBoss,
+			deathEvent:q.event.killGoblinBoss,
 			tag:'boss',
 			combat:0,
 		});
@@ -333,7 +332,7 @@ q.dialogue['ringo'] = {'face':{'image':'villager-male.0','name':'Ringo'},
 		},
 		'plan5':{
 			'text':"Here take this unfinished potion. Once you got the orc clothing and the Mystical Flower, complete the potion and use it.",
-			func:q.event.getPotionUnf,
+			event:q.event.getPotionUnf,
 			'option':[
 				{'text':"Where can I find orcs?",next:{convo:'question',node:'orc'}},
 				{'text':"Where can I find the Mystical Flower?",next:{convo:'question',node:'flower'}},
@@ -355,7 +354,7 @@ q.dialogue['ringo'] = {'face':{'image':'villager-male.0','name':'Ringo'},
 		'complete3':{
 			'text':"Okay... Fine... I will increase your maximum HP.",
 			'option':[
-				{'text':"Thanks.",func:q.event.complete},
+				{'text':"Thanks.",event:q.event.complete},
 			],
 		},
 	},
@@ -483,11 +482,11 @@ q.map.goblinLand = function(){
 		*/
 		
 		m.actorGroup(spot.e1,25*15,[
-			["orc","melee",2,{deathFunc:q.event.killOrc}],
-			["orc","range",1,{deathFunc:q.event.killOrc}],
+			["orc","melee",2,{deathEvent:q.event.killOrc}],
+			["orc","range",1,{deathEvent:q.event.killOrc}],
 		]);	
 		m.actorGroup(spot.ek,25*15,[
-			["orc","magic",3,{deathFunc:q.event.killOrc}],
+			["orc","magic",3,{deathEvent:q.event.killOrc}],
 		]);	
 		
 		
@@ -502,15 +501,15 @@ q.map.goblinLand = function(){
 		//TEST
 		/*
 		m.actorGroup(spot.ed,25*15,[
-			["orc","melee",12,{deathFunc:q.event.killOrc}],
-			["orc","range",11,{deathFunc:q.event.killOrc}],
+			["orc","melee",12,{deathEvent:q.event.killOrc}],
+			["orc","range",11,{deathEvent:q.event.killOrc}],
 		]);	
 		m.actorGroup(spot.s1,25*15,[
-			["orc","magic",13,{deathFunc:q.event.killOrc}],
+			["orc","magic",13,{deathEvent:q.event.killOrc}],
 		]);	
 		
 		m.actorGroup(spot.q1,25*15,[
-			["dragon","king",10,{deathFunc:q.event.killOrc}],
+			["dragon","king",10,{deathEvent:q.event.killOrc}],
 		]);	
 		
 
@@ -576,17 +575,17 @@ q.map.goblinCamp = function(){
 		m.teleport(spot.t2,q.event.teleInUnderground,"underground",{angle:90});	//changed tiled project but didnt update image on client. ladder is part of map
 		
 		m.actorGroup(spot.ei,25*300,[
-			["goblin","melee",1,{deathFunc:q.event.killGoblin}],
-			["goblin","range",1,{deathFunc:q.event.killGoblin}],
+			["goblin","melee",1,{deathEvent:q.event.killGoblin}],
+			["goblin","range",1,{deathEvent:q.event.killGoblin}],
 		]);	
 		
 		m.actorGroup(spot.eh,25*300,[
-			["goblin","magic",1,{deathFunc:q.event.killGoblin}],
-			["goblin","range",1,{deathFunc:q.event.killGoblin}],
+			["goblin","magic",1,{deathEvent:q.event.killGoblin}],
+			["goblin","range",1,{deathEvent:q.event.killGoblin}],
 		]);	
 		
 		m.actorGroup(spot.eg,25*300,[
-			["goblin","range",1,{deathFunc:q.event.killGoblin}],
+			["goblin","range",1,{deathEvent:q.event.killGoblin}],
 		]);	
 	
 	}

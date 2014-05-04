@@ -127,8 +127,8 @@ Init.actor = function(){
 		act.dialogue = null;      //function used to trigger dialogue
 		act.chatHead = "";     //is talking?
 		act.deathAbility = [];
-		act.deathFunc = null;	//function param = id of each killer
-		act.deathFuncArray = null;	//function param = array id of killers
+		act.deathEvent = null;	//function param = id of each killer
+		act.deathEventArray = null;	//function param = array id of killers
 		act.combat = 1;
 		act.deleteOnceDead = 0;
 		act.damageIf = 'player';

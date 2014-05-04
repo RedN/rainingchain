@@ -16,8 +16,11 @@ q.challenge = {
 
 q.variable = {
 	killTarget:0,
+	time:0,
 };
-
+q.highscore = {
+	time:{name:'Fastest Time','sort':'ascending'},
+}
 
 var TARGETAMOUNT = 10;
 
@@ -45,16 +48,24 @@ q.event = {
 	abandon:function(key){
 		s.teleport(key,'goblinLand','n1');
 		s.setRespawn(key,'goblinLand','n1');
-	},
-	complete:function(key){
 		s.chrono(key,'timer','remove');
 	},
+	complete:function(key){
+		
+		
+	},
+	highscore:function(key){
+		return {
+			time:s.get(key,'time'),		
+		};	
+	},
 	talkJenny:function(key){
+		if(!s.get(key,'active')){ s.startQuest(key); return; }
 		s.dialogue(key,'jenny','intro','first');
 	},
 	teleportCourse:function(key){
 		s.teleport(key,'btt001@@','q1');
-		s.freeze(key,2*1000,q.event.startCourse);
+		s.freeze(key,2*25,q.event.startCourse);
 	},
 	startCourse:function(key){
 		s.chat(key,"GO!");
@@ -62,7 +73,7 @@ q.event = {
 	},
 	killTarget:function(key){
 		s.set(key,'killTarget','+1');
-		if(s.get(key,'killTarget') === TARGETAMOUNT){
+		if(s.get(key,'killTarget') >= TARGETAMOUNT){
 			q.event.endCourse(key);
 		}
 	},
@@ -70,6 +81,7 @@ q.event = {
 		var time = s.chrono(key,'timer','stop');
 		s.chat(key,'Your time is : ' + time + ' milliseconds.');
 		s.set(key,'complete',true);
+		s.teleport(key,'goblinLand','n1');
 	},
 };	
 
@@ -115,16 +127,16 @@ q.map.btt001 = function(){
 	a.variable = {}; 
 	a.load = function(spot){
 	
-		m.actor(spot.e1,q.id,"target",{deathFunc:q.event.killTarget});
-		m.actor(spot.e2,q.id,"target",{deathFunc:q.event.killTarget});
-		m.actor(spot.e3,q.id,"target",{deathFunc:q.event.killTarget});
-		m.actor(spot.e4,q.id,"target",{deathFunc:q.event.killTarget});
-		m.actor(spot.e5,q.id,"target",{deathFunc:q.event.killTarget});
-		m.actor(spot.e6,q.id,"target",{deathFunc:q.event.killTarget});
-		m.actor(spot.e7,q.id,"target",{deathFunc:q.event.killTarget});
-		m.actor(spot.e8,q.id,"target",{deathFunc:q.event.killTarget});
-		m.actor(spot.ea,q.id,"target",{deathFunc:q.event.killTarget});
-		m.actor(spot.eb,q.id,"target",{deathFunc:q.event.killTarget});	
+		m.actor(spot.e1,q.id,"target",{deathEvent:q.event.killTarget});
+		m.actor(spot.e2,q.id,"target",{deathEvent:q.event.killTarget});
+		m.actor(spot.e3,q.id,"target",{deathEvent:q.event.killTarget});
+		m.actor(spot.e4,q.id,"target",{deathEvent:q.event.killTarget});
+		m.actor(spot.e5,q.id,"target",{deathEvent:q.event.killTarget});
+		m.actor(spot.e6,q.id,"target",{deathEvent:q.event.killTarget});
+		m.actor(spot.e7,q.id,"target",{deathEvent:q.event.killTarget});
+		m.actor(spot.e8,q.id,"target",{deathEvent:q.event.killTarget});
+		m.actor(spot.ea,q.id,"target",{deathEvent:q.event.killTarget});
+		m.actor(spot.eb,q.id,"target",{deathEvent:q.event.killTarget});	
 	
 	} 
 	a.loop = function(spot){} 

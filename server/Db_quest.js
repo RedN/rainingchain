@@ -137,6 +137,7 @@ Quest.creation.tester = function(q){
 	item.option.push({name:'Change Var','func':function(key){
 		Chat.question(key,{text:'variable,value',func:function(key,param,param1){
 			var mq = List.main[key].quest[q.id];
+			if(param1 === undefined)	return Chat.add(key,param + ' : ' + mq[param]);
 			if(mq[param] !== undefined){
 				if(param1 === 'true') mq[param] = true;
 				else if(param1 === 'false') mq[param] = false;

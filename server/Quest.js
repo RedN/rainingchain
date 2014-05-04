@@ -67,6 +67,8 @@ Quest.complete = function(key,id){
 	Chat.add(key,"Congratulations! You have completed the quest \"" + q.name + '\"!');
 	mq.complete++;
 	
+	if(q.event.complete) q.event.complete(key); 
+	
 	Quest.reward(key,id);
 	Quest.reset(key,id);
 	Server.log(1,key,'Quest.complete',id);
@@ -108,14 +110,15 @@ Quest.orb = function(key,quest,amount){	//when using orb on quest, only boost pa
 
 
 Quest.start = function(key,id){	//verification done in command
+	var q = Db.quest[id];
 	var mq = List.main[key].quest[id];
 	mq.active = 1;
 	List.main[key].questActive = id;
 	
-	if(Db.quest[id].event.start)	Db.quest[id].event.start(key);	
+	if(q.event.start)	q.event.start(key);	
 	
 	for(var i in mq.challenge){
-		if(mq.challenge[i])	Db.quest[id].challenge[i].on(key,id);
+		if(mq.challenge[i])	q.challenge[i].on(key,id);
 	}
 	
 }

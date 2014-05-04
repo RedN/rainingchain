@@ -63,7 +63,7 @@ exports.init = function(version,questname){	//}
 			Chat.add(key,"You need to start this quest via the Quest Tab before making progress in it."); 
 			return;
 		}
-		if(typeof value === 'string' && typeof mq[attr] === 'number' && (value[0] = '+' || value[0] = '-') && !isNaN(value))	mq[attr] += +value;
+		if(typeof value === 'string' && typeof mq[attr] === 'number' && !isNaN(value) && (value[0] === '+' || value[0] === '-'))	mq[attr] += (+value);
 		else mq[attr] = value;
 		
 		if(attr === 'complete' && value === true)	Quest.complete(key,Q);

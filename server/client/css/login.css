@@ -1,5 +1,5 @@
 .lg-container{
-width:375px;
+width:575px;
 margin:100px auto;
 padding:20px 40px;
 border:1px solid #f4f4f4;
@@ -11,10 +11,17 @@ border-radius:10px;
 -webkit-box-shadow: 0 0 2px #aaa;
 -moz-box-shadow: 0 0 2px #aaa;
 box-shadow: 0 0 2px #aaa;
+white-space:normal
 }
 .lg-container h1{
 font-size:50px;
 text-align:center;
+}
+.lg-container a{
+font-family:Kelly Slab;
+font-size:20px;
+text-decoration:underline;
+color:black;
 }
 .success {
 color: green;
@@ -22,6 +29,11 @@ color: green;
 .error {
 color: red;
 }
+.lg-container div{
+font-family:Kelly Slab;
+font-size:20px;
+}
+
 #lg-form > div {
 margin:10px 5px;
 padding:5px 0;

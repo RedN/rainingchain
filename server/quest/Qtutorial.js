@@ -166,19 +166,19 @@ q.map.tutorial = function(){
 				
 		//First bee
 		actor(spot.i,"Qtutorial","bee",{
-			'deathFunc':function(key){
+			'deathEvent':function(key){
 				set(key,'beeDead',true);				
 			}	
 		});
 		
 		//Bees Near Chest
 		actorGroup(spot.l,25*100,[
-			["Qtutorial","bee",3,{deathFunc:q.event.enemyKilled}],
+			["Qtutorial","bee",3,{deathEvent:q.event.enemyKilled}],
 		]);
 		
 		//Boss Fire
 		actor(spot.k,"Qtutorial","demon",{
-			'deathFunc':function(key){
+			'deathEvent':function(key){
 				set(key,'bossDead',true);				
 			},
 			lvl:'+100',

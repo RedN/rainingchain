@@ -42,8 +42,8 @@ Actor.death.player = function(act,killers){
 	act.dead = 1;
 	act.respawn = 25;
 	
-	if(act.deathFunc && killers[0]) 
-		act.deathFunc(act.id,killers[0]);	
+	if(act.deathEvent && killers[0]) 
+		act.deathEvent(act.id,killers[0]);	
 	
 }
 
@@ -64,7 +64,7 @@ Actor.death.getKillers = function(act){
 Actor.death.npc = function(act,killers){
 	act.dead = 1;
 	
-	if(act.deathFunc) for(var i in killers) act.deathFunc(killers[i],act,act.map); 
+	if(act.deathEvent) for(var i in killers) act.deathEvent(killers[i],act,act.map); 
 		
 	Actor.death.performAbility(act);				//custom death ability function
 	Activelist.clear(act);

@@ -38,7 +38,7 @@ q.map.pvpF4A = function(){
 		
 		act.respawnLoc.recent = m.addon.pvpRespawn.spot;
 		
-		act.deathFunc = v.pvpKill;
+		act.deathEvent = v.pvpKill;
 		
 		
 		
@@ -55,7 +55,7 @@ q.map.pvpF4A = function(){
 		Actor.permBoost(act,'pvp');	
 		act.damageIf = 'npc';	
 		act.respawnLoc.recent = Tk.deepClone(act.respawnLoc.safe);
-		act.deathFunc = null;
+		act.deathEvent = null;
 	}
 
 	a.loop = function(map,spot,v,m){

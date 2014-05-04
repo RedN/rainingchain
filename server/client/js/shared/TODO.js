@@ -5,14 +5,13 @@ SKIPPED: trade, craft,db.filter, passive
 teleport everyone in map to this spot
 
 call q.event.death when dying quest
-deathFuncArray
+deathEventArray
 
 talk about naing convention
 
 
-chest dont change look
 
-
+highscore
 
 
 

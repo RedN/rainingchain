@@ -20,7 +20,7 @@ Dialogue.end = function(key){
 }
 
 Dialogue.option = function(key,option){
-	if(option.func)	applyFunc.key(key,option.func,option.param);
+	if(option.event)	applyFunc.key(key,option.event);
 	
 	if(option.next)	Dialogue.start(key,option.next);
 	else Dialogue.end(key);
