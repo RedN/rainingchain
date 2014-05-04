@@ -1,14 +1,14 @@
 "use strict";
 var s = require('./../Quest_exports').init('v1.0','Mtest');
-var q = s.quest;
+var q = s.quest; var m = s.map; var b = s.boss;
 
 q.map.test2 = function(){
-	var m = s.map();
-	m.name = "Test";
-	m.lvl = 0;
-	m.graphic = 'goblinLand';
-	m.tileset = 'v1.1';	
-	return m;
+	var map = m.init();
+	map.name = "Test";
+	map.lvl = 0;
+	map.graphic = 'goblinLand';
+	map.tileset = 'v1.1';	
+	return map;
 }
 
 exports.quest = q;

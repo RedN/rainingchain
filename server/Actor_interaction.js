@@ -144,17 +144,9 @@ Actor.click.loot = function(act,eid){	//need work
 	
 	if(Collision.distancePtPt(act,e) > DIST) return TOOFAR(act.id);
 	
-	if(!e.loot) return;
-	if(e.loot.list.have(act.id)){
-		Chat.add(act.id,"You have already looted that.");
-		return;
-	}
-		
 	if(e.loot.func(act.id) !== false){
-		Sprite.change(e,{'initAnim':'off'});
-		e.loot.list.push(act.id);
 		Chat.add(act.id,"Nice loot!");
-	};
+	}
 	Server.log(3,act.id,'openChest',eid);
 }
 

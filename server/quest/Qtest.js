@@ -1,6 +1,6 @@
 "use strict";
 var s = require('./../Quest_exports').init('v1.0','Qtest');
-var q = s.quest;
+var q = s.quest; var m = s.map; var b = s.boss;
 
 
 q.variable = {
@@ -73,14 +73,14 @@ q.ability['simple'] = {'type':'attack','name':'Fire Basic','icon':'attackMagic.f
 
 //{Map
 q.map.test = function(){
-	var m = s.map();
-	m.name = "Test Zone";
-	m.graphic = "goblinLand";
-	m.tileset = 'v1.1';
-	m.lvl = 0;	
+	var map = m.init();
+	map.name = "Test Zone";
+	map.graphic = "goblinLand";
+	map.tileset = 'v1.1';
+	map.lvl = 0;	
 
-	var a = m.addon.main = {};
-	return m;
+	var a = map.addon.main = {};
+	return map;
 };
 
 

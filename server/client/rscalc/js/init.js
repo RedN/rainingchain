@@ -51,7 +51,7 @@ Init.item = function(i,data){
 	data.price = data.price || 0;
 	data.id = data.id || 555;
 	data.name = data.name || i.capitalize();
-	data.image = '<img src="/rscalc/img/items/' + data.id + '.png" alt=" =/ "  onerror="imgError(this);" id="IMG' + data.id + '"height=' + ICON + ' width=' + ICON + '>';
+	data.image = '<img src="/rscalc/img/items/' + data.id + '.png" alt=" =/ " id="IMG' + data.id + '"height=' + ICON + ' width=' + ICON + '>';
 	
 	
 	IDB[i] = data;
@@ -179,11 +179,9 @@ Init.methodDb = function(){
 			m.warn = {'sell':0,'buy':0};
 			for(var i in m.input){
 				if(!IDB[i]){	Init.item(i); }
-				if(IDB[i].buy){ m.warn.buy = Math.max(m.warn.buy,IDB[i].buy); }
 			}
 			for(var i in m.output){
 				if(!IDB[i]){	Init.item(i); }
-				if(IDB[i].sell){ m.warn.sell = Math.max(m.warn.sell,IDB[i].sell); }
 			}
 		}
 		
@@ -202,11 +200,6 @@ Html = {
 	skillInput:document.getElementById('skillInput'),
 }
 
-
-
-function imgError(image) {
-	image.src = 'http://services.runescape.com/m=itemdb_rs/4443_obj_sprite.gif?id=' + image.id.slice(3);
-}
 
 
 
