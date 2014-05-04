@@ -317,7 +317,7 @@ Actor.creation.nevermove = function(act){
 	delete act.spdY; 
 	delete act.moveInput; 
 	delete act.bumper; 
-	delete act.moveRange;
+	//delete act.moveRange;
 	
 	//For update:
 	act.spdX = 0;

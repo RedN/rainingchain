@@ -57,10 +57,6 @@ q.variable = {
 };
 
 q.event = {
-	demo:function(key){
-		s.teleport(key,'goblinLand','n1');
-		s.cutscene(key,'goblinLand','blue');	
-	},
 	hint:function(key){
 		if(!s.get(key,'active')) return 'You can start this quest by talking to the guy south west of Goblin Land';
 		return "Good luck!";
@@ -113,10 +109,9 @@ q.event = {
 	getFlower:function(key){
 		return s.testItem(key,'flower',1,true);
 	},
-	killOrc:function(key){
-		if(Math.random()<0.50){
-			s.addItem(key,'orc_sock');
-			s.chat(key,"You managed to grab his socks!");
+	killOrc:function(key,e){
+		if(Math.random() < 0.50){
+			s.drop(key,e,'orc_sock');
 		}
 	},
 	itemPotionUnf:function(key){
@@ -394,7 +389,7 @@ q.dialogue['ringo'] = {'face':{'image':'villager-male.0','name':'Ringo'},
 
 //{Map
 q.map.goblinUnderground = function(){
-	var map = m.init();
+	var map = m.map();
 	map.name = "Goblin Underground";
 	map.graphic = "goblinUnderground";
 	map.lvl = 0;
@@ -448,7 +443,7 @@ q.map.goblinUnderground = function(){
 };
 
 q.map.goblinLand = function(){
-	var map = m.init();
+	var map = m.map();
 	map.name = "Goblin Land";
 	map.tileset = "v1.1";
 	map.lvl = 0;
@@ -559,7 +554,7 @@ q.map.goblinLand = function(){
 };
 
 q.map.goblinCamp = function(){
-	var map = m.init();
+	var map = m.map();
 	map.name = "Goblin Land";
 	map.tileset = "v1.1";
 	map.lvl = 0;

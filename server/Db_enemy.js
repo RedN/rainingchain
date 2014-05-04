@@ -974,12 +974,14 @@ Init.db.npc.creation = function(e){
 
 	e = Init.db.npc.creation.ability(e);
 	
+	e.mastery = e.mastery || {'def':{'melee':1,'range':1,'magic':1,'fire':1,'cold':1,'lightning':1},'dmg':{'melee':1,'range':1,'magic':1,'fire':1,'cold':1,'lightning':1}};
 	var tmp = {def:{},dmg:{}};
 	for(var i in e.mastery.def){
 		tmp.def[i] = {sum:e.mastery.def[i],mod:1};
 		tmp.dmg[i] = {sum:e.mastery.dmg[i],mod:1};
 	}
 	e.mastery = tmp;
+	
 	
 	Db.npc[e.category][e.variant] = e;		
 	

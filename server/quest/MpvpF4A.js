@@ -3,7 +3,7 @@ var s = require('./../Quest_exports').init('v1.0','MpvpF4A');
 var q = s.quest; var m = s.map; var b = s.boss;
 
 q.map.pvpF4A = function(){
-	var map = m.init();
+	var map = m.map();
 	map.name = "PvP Free For All";
 	map.graphic = "pvpF4A";
 	map.tileset = 'v1.1';

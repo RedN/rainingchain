@@ -125,7 +125,7 @@ Actor.loop.setTarget = function(act){
 	//Stuck	
 	return;	//TOFIX
 	if(act.frame % tar.period.stuck === 0){
-		tar.isStuck = Actor.isStuck(act,List.all[act.target.main]);
+		tar.isStuck = Actor.isStuck(act,List.all[tar.main]);
 		if(tar.isStuck) Actor.loop.setTarget.stuck(act);
 		else tar.stuck = [];
 	}

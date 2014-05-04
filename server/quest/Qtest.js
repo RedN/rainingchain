@@ -73,7 +73,7 @@ q.ability['simple'] = {'type':'attack','name':'Fire Basic','icon':'attackMagic.f
 
 //{Map
 q.map.test = function(){
-	var map = m.init();
+	var map = m.map();
 	map.name = "Test Zone";
 	map.graphic = "goblinLand";
 	map.tileset = 'v1.1';

@@ -19,10 +19,12 @@ var updateItemDb = function (){
 			if(exports.displayUpdate >= 1) INFO('Item Database Updated');
 			exports.lastUpdate = Date.now();
 		}	
-	}, 4000);
+	}, 5000);
 }
 
 var updatePrice = function (id){
+	if(idToObj[id].price === 0) return;
+	
 	var str = 'http://services.runescape.com/m=itemdb_rs/api/graph/' + id + '.json';
 	
 	request(str, function (e, res, body) {

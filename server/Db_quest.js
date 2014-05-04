@@ -5,9 +5,10 @@ var questList = [
 	'Qtest',
 	'QgoblinJewel',
 	'Mtest',
+	'Qbtt',
 ];
 Quest = {};
-Quest.test = 'QgoblinJewel';	//give player vaTester for this quest
+Quest.test = 'Qbtt';	//give player vaTester for this quest
 
 
 Init.db.quest = function(){
@@ -39,10 +40,36 @@ Init.db.quest.map = function(){	//called before Init.db.quest
 Quest.creation = function(q){
 	if(Server.testing)	Quest.creation.tester(q);
 		
+	//Default Event
+	for(var i in q.variable){
+		(function(i){
+			q.event['$GET_' + i] = function(key){ 
+				if(List.all[key].type !== 'player') return true;
+				return List.main[key].quest[q.id][i];
+			}
+			q.event['$GET_!' + i] = function(key){
+				if(List.all[key].type !== 'player') return true;
+				return !List.main[key].quest[q.id][i];
+			}
+			q.event['$SET_' + i] = function(key){ 
+				if(List.all[key].type !== 'player') return;
+				List.main[key].quest[q.id][i] = true;
+			}
+			q.event['$SET_!' + i] = function(key){ 
+				if(List.all[key].type !== 'player') return;
+				List.main[key].quest[q.id][i] = false;
+			}
+		}(i));
+	}
+	
 	//Variable
 	q.variable = Tk.useTemplate(Quest.template.variable(),q.variable);
 	for(var j in q.challenge){ q.variable.challenge[j] = 0; }	//0:non-active, 1:active
 	for(var j in q.requirement){ q.variable.requirement += '0'; }	//0:non-met, 1:met
+	
+	
+	
+	
 	
 	Db.dialogue[q.id] = {};
 	for(var i in q.dialogue)	Db.dialogue[q.id][i] = q.dialogue[i];		

@@ -8,6 +8,7 @@ Init.db.map = function(){
 		'pvpF4A':[1,2],
 		'goblinLand':[4,8],
 		'goblinUnderground':[1,2],
+		'btt001':[1,2],
 	}
 	//map are loaded when needed. check Loop.actor
 }

@@ -7,12 +7,41 @@ exports.init = function(version,questname){	//}
 	}
 	
 	
+	var convertSetEvent = function(event){
+		if(typeof event !== 'string') return event;
+		if(s.quest.event['$SET_' + event]) return s.quest.event['$SET_' + event]
+	}
+	var convertGetEvent = function(event){
+		if(typeof event !== 'string') return event;
+		if(s.quest.event['$GET_' + event]) return s.quest.event['$GET_' + event]
+	}
+	
+	var parseViewedIf = function(vif){
+		if(typeof vif !== 'string') return vif;
+		else return convertGetEvent(vif);
+	}
+	var parseEvent = function(event){
+		if(typeof event !== 'string') return event;
+		else return convertSetEvent(event);
+	}
+	var parseExtra = function(extra){
+		if(!extra) return {};
+		if(extra.viewedIf) extra.viewedIf = parseViewedIf(extra.viewedIf);
+		return extra;
+	}
+	
+	
 	var s = {};	
-
+	s.interval = function(num){ return Loop.interval(num); }
+	
 	s.quest = Quest.template(Q);
 	
 	s.startQuest = function(key){
 		Main.openWindow(List.main[key],'quest',Q);	
+	}
+	
+	s.abandonQuest = function(key){
+		Quest.abandon(key,Q);
 	}
 	
 	s.get = function(key,attr){
@@ -22,7 +51,7 @@ exports.init = function(version,questname){	//}
 		return typeof a === 'object' ? Tk.deepClone(a) : a;	//prevent setting
 	}
 
-	s.set = function(key,attr,attr2,value){
+	s.set = function(key,attr,value){
 		var mq = List.main[key].quest[Q];	
 		
 		if(attr === 'active'){
@@ -34,10 +63,10 @@ exports.init = function(version,questname){	//}
 			Chat.add(key,"You need to start this quest via the Quest Tab before making progress in it."); 
 			return;
 		}
-		if(value === undefined) mq[attr] = attr2;	//aka deep = 1
-		else mq[attr][attr2] = value;
+		if(typeof value === 'string' && typeof mq[attr] === 'number' && (value[0] = '+' || value[0] = '-') && !isNaN(value))	mq[attr] += +value;
+		else mq[attr] = value;
 		
-		if(attr === 'complete' && attr2)	Quest.complete(key,Q);
+		if(attr === 'complete' && value === true)	Quest.complete(key,Q);
 	}
 
 	s.getAct = function(key){
@@ -159,14 +188,25 @@ exports.init = function(version,questname){	//}
 
 	s.actor = function(key,spot,cat,variant,extra,lvl){
 		var spot = s.getSpot(s.getAct(key).map,Q,spot);
-		Actor.creation({spot:spot,category:cat,variant:variant,lvl:lvl || 0,extra:(extra || {})});
+		Actor.creation({spot:spot,category:cat,variant:variant,lvl:lvl || 0,extra:parseExtra(extra)});
 	}
 	
+	s.drop = function(key,e,item,amount){
+		item = getItemName(item);
+		amount = amount || 1;
+		
+		var tmp = {'x':e.x,y:e.y,map:e.map,"item":item,"amount":amount};
+		tmp.viewedIf = Tk.arrayfy(key);	//key can be string or array of keys
+		Drop.creation(tmp);			
+	}
+	
+	s.chrono = function(key,name,action,text){
+		return Main.chrono(List.main[key],Q + '-' + name, action, text);
+	}
 	
 	//Map
 	var m = s.map = {};
-	m.init = Init.db.map.template;
-	m.interval = function(num){ return Loop.interval(num); }
+	m.map = Init.db.map.template;
 	m.bullet = function(spot,atk,angle,dif){
 		var act = {damageIf:dif || 'player-simple',spot:spot};
 		Map.convertSpot(act);
@@ -175,11 +215,11 @@ exports.init = function(version,questname){	//}
 	}
 	
 	m.strike = function(spot,atk,angle,dif,extra){
-		Combat.attack.simple({damageIf:dif || 'player-simple',spot:spot,angle:angle},atk,extra);
+		Combat.attack.simple({damageIf:dif || 'player-simple',spot:spot,angle:angle},atk,parseExtra(extra));
 	}
 	
 	m.actor = function(spot,cat,variant,extra,lvl){
-		Actor.creation({spot:spot,category:cat,variant:variant,lvl:lvl || 0,extra:(extra || {})});
+		Actor.creation({spot:spot,category:cat,variant:variant,lvl:lvl || 0,extra:parseExtra(extra)});
 	}
 	
 	
@@ -187,9 +227,7 @@ exports.init = function(version,questname){	//}
 		var tmp = [];
 		for(var i in list){
 			var m = list[i];
-			tmp.push({
-				"category":m[0],"variant":m[1],'amount':m[2] || 1,'modAmount':true,'extra':(m[3] || {})
-			});
+			tmp.push({"category":m[0],"variant":m[1],'amount':m[2] || 1,'modAmount':true,'extra':parseExtra(m[3])});
 		}
 		Actor.creation.group({'spot':spot,'respawn':respawn},tmp);
 	}
@@ -207,12 +245,12 @@ exports.init = function(version,questname){	//}
 		
 		if(zone[2] === zone[3]){	//horizontal
 			for(var i = zone[0]; i <= zone[1]; i += 32){
-				m.actor({x:i+16,y:zone[2],map:zone.map,addon:zone.addon},'block','spike',extra);
+				m.actor({x:i+16,y:zone[2],map:zone.map,addon:zone.addon},'block','spike',parseExtra(extra));
 			}
 		}
 		if(zone[0] === zone[1]){
 			for(var i = zone[2]; i <= zone[3]; i += 32){
-				m.actor({x:zone[0],y:i+16,map:zone.map,addon:zone.addon},'block','spike',extra);
+				m.actor({x:zone[0],y:i+16,map:zone.map,addon:zone.addon},'block','spike',parseExtra(extra));
 			}	
 		}
 	}
@@ -226,25 +264,27 @@ exports.init = function(version,questname){	//}
 		Drop.creation(tmp);	
 	}
 	
-	m.toggle = function(spot,condition,on,off,sprite,extraOff,extraOn){
+	m.toggle = function(spot,viewedIf,on,off,sprite,extraOff,extraOn){
 		sprite = sprite || 'box';
+		viewedIf = parseViewedIf(viewedIf);
+		
 		//Off
-		extraOff = extraOff || {};
+		extraOff = parseExtra(extraOff);
 		extraOff.viewedIf = function(key){
 			if(s.getAct(key).type !== 'player') return true;
-			return condition(key);
+			return viewedIf(key);
 		};
-		extraOff.toggle = on;
+		extraOff.toggle = parseEvent(on);
 
 		m.actor(spot,'toggle',sprite+'Off',extraOff);
 
 		//On
-		extraOn = extraOn || {};
+		extraOn = parseExtra(extraOn);
 		extraOn.viewedIf = function(key){
 			if(s.getAct(key).type !== 'player') return true;
-			return !condition(key);
+			return !viewedIf(key);
 		};
-		if(off) extraOn.toggle = off;
+		if(off) extraOn.toggle = parseEvent(off);
 		
 		m.actor(spot,'toggle',sprite + 'On',extraOn);
 	}
@@ -256,28 +296,30 @@ exports.init = function(version,questname){	//}
 	}
 	
 	m.waypoint = function(spot,safe,extra){
-		extra = extra || {};
+		extra = parseExtra(extra);
 		if(safe) extra.waypoint = 2;
 		m.actor(spot,'waypoint','grave',extra);
 	}
 	
-	m.loot = function(spot,condition,open,sprite,extraOff,extraOn){
+	m.loot = function(spot,viewedIf,open,sprite,extraOff,extraOn){
 		sprite = sprite || 'chest';
+		viewedIf = parseViewedIf(viewedIf);
+		
 		//Off
-		extraOff = extraOff || {};
+		extraOff = parseExtra(extraOff);
 		extraOff.viewedIf = function(key){
 			if(s.getAct(key).type !== 'player') return true;
-			return condition(key);
+			return viewedIf(key);
 		};
 		extraOff.loot = open;
 
 		m.actor(spot,'loot',sprite + 'Off',extraOff);
 
 		//On
-		extraOn = extraOn || {};
+		extraOn = parseExtra(extraOn);
 		extraOn.viewedIf = function(key){
 			if(s.getAct(key).type !== 'player') return true;
-			return !condition(key);
+			return !viewedIf(key);
 		};
 		
 		m.actor(spot,'loot',sprite + 'On',extraOn);

@@ -97,7 +97,7 @@ Actor.death.performAbility = function(act){
 		if(Math.random() < item.chance){	//quantity applied in Drop.getList
 			var killer = killers.random();
 			var amount = Math.round(item.amount[0] + Math.random()*(item.amount[1]-item.amount[0]));	
-			Drop.creation({'x':act.x,'y':act.y,'map':act.map,'item':item.name,'amount':amount,'timer':Drop.timer,'viewedIf':[killer]});			
+			Drop.creation({'x':act.x,'y':act.y,'map':act.map,'item':item.name,'amount':amount,'timer':Drop.TIMER,'viewedIf':[killer]});			
 		}
 	}
 		
@@ -121,7 +121,7 @@ Actor.death.performAbility = function(act){
 					'maxAmount':0,
 				});
 			
-				Drop.creation({'x':act.x,'y':act.y,'map':act.map,'item':id,'amount':1,'timer':Drop.timer,'viewedIf':[killer]});	
+				Drop.creation({'x':act.x,'y':act.y,'map':act.map,'item':id,'amount':1,'timer':Drop.TIMER,'viewedIf':[killer]});	
 			}	
 
 			if(Math.pow(Math.random(),quantity) < drop.plan[i][j]){
@@ -136,7 +136,7 @@ Actor.death.performAbility = function(act){
 					'category':'equip',
 				});
 			
-				Drop.creation({'x':act.x,'y':act.y,'map':act.map,'item':id,'amount':1,'timer':Drop.timer,'viewedIf':[killer]});	
+				Drop.creation({'x':act.x,'y':act.y,'map':act.map,'item':id,'amount':1,'timer':Drop.TIMER,'viewedIf':[killer]});	
 				break planLoop;
 			}
 		}

@@ -36,7 +36,7 @@ Init.db.drop = function(){
 
 
 Drop = {};	
-Drop.timer = 25*60;	
+Drop.TIMER = 25*60;	
 
 Drop.getCategoryList = function(drop,lvl,qu){
 	var list = [];
