@@ -123,7 +123,7 @@ Actor.click.skillPlot = function(act,eid){
 	var item = plot.item.random();
 	Itemlist.add(inv,item,1);
 	
-	main.quest[e.skillPlot.quest].skillPlot[e.skillPlot.num] = 1;
+	main.quest[e.skillPlot.quest]._skillPlot[e.skillPlot.num] = 1;
 	
 	Chat.add(key,"You manage to harvest this resource.");
 	

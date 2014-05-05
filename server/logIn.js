@@ -237,11 +237,12 @@ Save.main.compress = function(main){
 		var mq = main.quest[i];
 		if(i !== main.questActive)
 			main.quest[i] = {
-				reward:mq.reward,
-				complete:mq.complete,
-				skillPlot:mq.skillPlot,
-				challengeDone:mq.challengeDone,
-				bonus:mq.bonus,
+				_rewardScore:mq._rewardScore,
+				_rewardPt:mq._rewardPt,
+				_complete:mq._complete,
+				_skillPlot:mq._skillPlot,
+				_challengeDone:mq._challengeDone,
+				_bonus:mq._bonus,
 			}
 	}
 	

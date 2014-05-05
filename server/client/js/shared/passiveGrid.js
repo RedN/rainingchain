@@ -210,7 +210,7 @@ Passive.getUsedPt = function(p){
 Passive.getUsablePt = function(key){
 	var sum = 0; 
 	var mq = List.main[key].quest;
-	for(var i in mq) sum += mq[i].rewardPt;
+	for(var i in mq) sum += mq[i]._rewardPt;
 	
 	return Math.floor(sum);
 }

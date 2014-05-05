@@ -217,10 +217,10 @@ Draw.tab.quest = function(){ ctxrestore();
 		html.questTab.text.innerHTML = '<span style="color:white;text-decoration:underline;">' + 'Quest List' + '</span>';
 		
 		for(var i in main.quest){
-			var q = main.quest[i];
+			var mq = main.quest[i];
 			var name = Db.questNameConvert[i];
 			
-			var color = q.active ? 'yellow' : ( q.complete ? '#00FF00' : 'red');
+			var color = mq._active ? 'yellow' : ( mq._complete ? '#00FF00' : 'red');
 			
 			
 			html.questTab.text.innerHTML += 

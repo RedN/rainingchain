@@ -27,11 +27,11 @@ Load.enterGame = function(key,account,act,main,socket){ //Called when player log
 }
 
 Load.enterGame.testing = function(key){
-	Db.quest["Qtest"].event.start(key);	//test
+	Db.quest["Qtest"].event._start(key);	//test
 	if(Quest.test){
 		Itemlist.add(key,Quest.test + '-QuestTester');
-		if(Db.quest[Quest.test].event.test && Db.quest[Quest.test].event.test.signIn)
-			Db.quest[Quest.test].event.test.signIn(key);
+		if(Db.quest[Quest.test].event._test && Db.quest[Quest.test].event._test.signIn)
+			Db.quest[Quest.test].event._test.signIn(key);
 	}
 }
 
@@ -99,8 +99,8 @@ Load.enterGame.first = function(key){
 	Chat.add(act.id,"Control: WADS. (For AZERTY users, change key binding via Pref Tab)");
 	
 	Actor.setRespawn(act,{x:1500,y:5000,map:'goblinLand@MAIN'});	//here if no Quest.test
-	if(Db.quest[Quest.test] && Db.quest[Quest.test].event.test && Db.quest[Quest.test].event.test.firstSignIn){
-		Db.quest[Quest.test].event.test.firstSignIn(key);
+	if(Db.quest[Quest.test] && Db.quest[Quest.test].event._test && Db.quest[Quest.test].event._test.firstSignIn){
+		Db.quest[Quest.test].event._test.firstSignIn(key);
 	}
 	
 	for(var i in Cst.equip.armor.piece)
@@ -128,8 +128,8 @@ Load.enterGame.hideHUD = function(key){
 Load.enterGame.quest = function(key){
 	var mq = List.main[key].questActive;
 	
-	if(mq && Db.quest[mq].event.signIn)
-		Db.quest[mq].event.signIn(key);	
+	if(mq && Db.quest[mq].event._signIn)
+		Db.quest[mq].event._signIn(key);	
 }
 
 

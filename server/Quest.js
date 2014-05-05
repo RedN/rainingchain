@@ -5,12 +5,12 @@ Quest.reward = function(key,id){	//roll the perm stat bonus and check if last on
 	var bonus = Quest.getBonus(key,id);
 	var reward = Quest.getReward(q,bonus);
 	
-	if(mq.rewardScore === 0) mq.rewardScore = Math.pow(10,4*q.reward.passive.min/q.reward.passive.max);
-	mq.rewardScore += reward.passive;
+	if(mq._rewardScore === 0) mq._rewardScore = Math.pow(10,4*q.reward.passive.min/q.reward.passive.max);
+	mq._rewardScore += reward.passive;
 	
-	mq.rewardPt = Math.min(Math.log10(mq.rewardScore)/4,1) * q.reward.passive.max;
+	mq._rewardPt = Math.min(Math.log10(mq._rewardScore)/4,1) * q.reward.passive.max;
 	
-	Chat.add(key,"You total quest score is " + Tk.round(mq.rewardScore,1) + " equivalent to " + Tk.round(mq.rewardPt,3) + " passive point. Repeat the quest to improve your reward.");
+	Chat.add(key,"You total quest score is " + Tk.round(mq._rewardScore,1) + " equivalent to " + Tk.round(mq._rewardPt,3) + " passive point. Repeat the quest to improve your reward.");
 	Itemlist.add(key,reward.item);	//TOFIX test if space
 	Skill.addExp.bulk(key,reward.exp,false);
 }
@@ -20,15 +20,15 @@ Quest.getBonus = function(key,id){
 	var mq = List.main[key].quest[id];
 	var q = Db.quest[id];
 	var r = q.reward;
-	var b = mq.bonus;
+	var b = mq._bonus;
 	
 	var tmp = {
 		item:b.orb.item * b.cycle.item ,
 		exp:b.orb.exp * b.cycle.exp ,
 		passive:b.orb.passive * b.cycle.passive,
 	};
-	for(var i in mq.challenge){
-		if(!mq.challenge[i]) continue;
+	for(var i in mq._challenge){
+		if(!mq._challenge[i]) continue;
 		if(q.challenge[i].successIf(key)){
 			tmp.item *= q.challenge[i].bonus.success.item;
 			tmp.exp *= q.challenge[i].bonus.success.exp;
@@ -58,16 +58,16 @@ Quest.getReward = function(q,bonus){	//TODO item
 
 
 Quest.hint = function(key,id){
-	if(Db.quest[id].event.hint) List.main[key].quest[id].hint = Db.quest[id].event.hint(key);
+	if(Db.quest[id].event._hint) List.main[key].quest[id]._hint = Db.quest[id].event._hint(key);
 }
 
 Quest.complete = function(key,id){
 	var mq = List.main[key].quest[id];
 	var q = Db.quest[id];
 	Chat.add(key,"Congratulations! You have completed the quest \"" + q.name + '\"!');
-	mq.complete++;
+	mq._complete++;
 	
-	if(q.event.complete) q.event.complete(key); 
+	if(q.event._complete) q.event._complete(key); 
 	
 	Quest.reward(key,id);
 	Quest.reset(key,id);
@@ -78,8 +78,8 @@ Quest.reset = function(key,qid,abandon){
 	var main = List.main[key];
 	var mq = main.quest[qid];
 	
-	var keep = ['rewardScore','rewardPt','complete','challengeDone'];
-	if(abandon) keep.push('skillPlot');
+	var keep = ['_rewardScore','_rewardPt','_complete','_challengeDone'];
+	if(abandon) keep.push('_skillPlot');
 	var tmp = {};
 	for(var i in keep) tmp[keep[i]] = mq[keep[i]];
 	
@@ -90,8 +90,8 @@ Quest.reset = function(key,qid,abandon){
 		Itemlist.remove(main.bankList,qid + '-' + i, 10000);
 	}
 	
-	for(var i in mq.challenge){
-		if(mq.challenge[i]) Db.quest[qid].challenge[i].off(key,qid);
+	for(var i in mq._challenge){
+		if(mq._challenge[i]) Db.quest[qid].challenge[i].off(key,qid);
 	}
 	
 	var newmq = Main.template.quest[qid]();
@@ -104,37 +104,37 @@ Quest.reset = function(key,qid,abandon){
 
 Quest.orb = function(key,quest,amount){	//when using orb on quest, only boost passive
 	var mq = List.main[key].quest[quest];
-	mq.orbAmount += amount;
-	mq.bonus.orb.passive = Craft.orb.upgrade.formula(mq.orbAmount);
+	mq._orbAmount += amount;
+	mq._bonus.orb.passive = Craft.orb.upgrade.formula(mq._orbAmount);
 }
 
 
 Quest.start = function(key,id){	//verification done in command
 	var q = Db.quest[id];
 	var mq = List.main[key].quest[id];
-	mq.active = 1;
+	mq._active = 1;
 	List.main[key].questActive = id;
 	
-	if(q.event.start)	q.event.start(key);	
+	if(q.event._start)	q.event._start(key);	
 	
-	for(var i in mq.challenge){
-		if(mq.challenge[i])	q.challenge[i].on(key,id);
+	for(var i in mq._challenge){
+		if(mq._challenge[i]) q.challenge[i].on(key,id);
 	}
 	
 }
 
 Quest.abandon = function(key,id){
 	Quest.reset(key,id,1);
-	if(Db.quest[id].event.abandon)	Db.quest[id].event.abandon(key);
+	if(Db.quest[id].event._abandon)	Db.quest[id].event._abandon(key);
 }
 
 
 Quest.challenge = {};
 Quest.challenge.toggle = function(key,qid,bid){	//when a player click on a quest bonus
 	var mq = List.main[key].quest[qid];
-	mq.challenge[bid] = !mq.challenge[bid];
+	mq._challenge[bid] = !mq._challenge[bid];
 	
-	if(mq.challenge[bid])	Chat.add(key,'Bonus Turned On.');	//function activate when starting quest
+	if(mq._challenge[bid])	Chat.add(key,'Bonus Turned On.');	//function activate when starting quest
 	else 	Chat.add(key,'Bonus Turned Off.');
 	
 	Quest.challenge.update(key,qid);	
@@ -143,8 +143,8 @@ Quest.challenge.signIn = function(key){
 	var mq = List.main[key].quest;
 	var qa = List.main[key].questActive;
 	if(!qa) return;
-	for(var i in mq[qa].challenge){
-		if(mq[qa].challenge[i])		Db.quest[qa].challenge[i].on(key,qa);
+	for(var i in mq[qa]._challenge){
+		if(mq[qa]._challenge[i])		Db.quest[qa].challenge[i].on(key,qa);
 	}
 
 }
@@ -152,14 +152,14 @@ Quest.challenge.signIn = function(key){
 Quest.challenge.update = function(key,qid){	//only used for visual, assume success
 	var mq = List.main[key].quest[qid];
 	
-	mq.bonus.challenge.item = 1;
-	mq.bonus.challenge.passive = 1;
-	mq.bonus.challenge.exp = 1;
+	mq._bonus.challenge.item = 1;
+	mq._bonus.challenge.passive = 1;
+	mq._bonus.challenge.exp = 1;
 	
-	for(var i in mq.challenge){
-		if(mq.challenge[i]){	//active
+	for(var i in mq._challenge){
+		if(mq._challenge[i]){	//active
 			for(var j in Db.quest[qid].challenge[i].bonus.success)
-				mq.bonus.challenge[j] *= Db.quest[qid].challenge[i].bonus.success[j];
+				mq._bonus.challenge[j] *= Db.quest[qid].challenge[i].bonus.success[j];
 		}	
 	}
 }
@@ -207,7 +207,7 @@ Quest.challenge.template.survivor = function(amount,bonus){
 		on:function(key,qid){},
 		off:function(key,qid){},
 		successIf:function(key,qid){
-			return List.main[key].quest[qid].deathCount < this.deathLimit;
+			return List.main[key].quest[qid]._deathCount < this.deathLimit;
 		},
 		deathLimit:amount,
 		bonus:bonus || {
@@ -284,7 +284,7 @@ Quest.requirement.template.skill = function(skill,lvl){
 Quest.requirement.template.quest = function(quest){
 	return {
 		func:function(key){
-			return List.main[key].quest[quest].complete;		
+			return List.main[key].quest[quest]._complete;		
 		},		
 		name:'Quest "' + Db.quest[quest].name + '"',
 		description:'Having completed the quest ' + Db.quest[quest].name + '.',

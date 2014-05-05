@@ -64,9 +64,11 @@ Quest.creation = function(q){
 	
 	//Variable
 	q.variable = Tk.useTemplate(Quest.template.variable(),q.variable);
-	for(var j in q.challenge){ q.variable.challenge[j] = 0; }	//0:non-active, 1:active
-	for(var j in q.requirement){ q.variable.requirement += '0'; }	//0:non-met, 1:met
+	for(var j in q.challenge){ q.variable._challenge[j] = 0; }	//0:non-active, 1:active
+	for(var j in q.requirement){ q.variable._requirement += '0'; }	//0:non-met, 1:met
 	
+	//Event
+	q.event = Tk.useTemplate(Quest.template.event(),q.event);
 	
 	
 	
@@ -128,21 +130,21 @@ Quest.creation.tester = function(q){
 	
 	item.option.push({name:'Call Event','func':function(key){
 		Chat.question(key,{text:'event',func:function(key,param){
-			if(q.event[param]) q.event[param](key);
-			else if(q.event.test && q.event.test.list && q.event.test.list[param]) q.event.test.list[param](key);
-			else Chat.add(key,"no found");
+			if(q.event[param]) return q.event[param](key);
+			else for(var i in q.event.test)	if(q.event.test[param]) return q.event.test[param](key);
+			Chat.add(key,"no found");
 		}});
 	}});
 	
 	item.option.push({name:'Change Var','func':function(key){
-		Chat.question(key,{text:'variable,value',func:function(key,param,param1){
+		Chat.question(key,{text:'variable,value',func:function(key,param,value){
 			var mq = List.main[key].quest[q.id];
-			if(param1 === undefined)	return Chat.add(key,param + ' : ' + mq[param]);
+			if(value === undefined)	return Chat.add(key,param + ' : ' + mq[param]);
 			if(mq[param] !== undefined){
-				if(param1 === 'true') mq[param] = true;
-				else if(param1 === 'false') mq[param] = false;
-				else if(!isNaN(param1)) mq[param] = +param1;
-				else mq[param] = param1;
+				if(value === 'true') mq[param] = true;
+				else if(value === 'false') mq[param] = false;
+				else if(!isNaN(value)) mq[param] = +value;
+				else mq[param] = value;
 			}
 			else Chat.add(key,"bad name");
 		}});
@@ -187,20 +189,39 @@ Quest.template = function(id,version){
 
 Quest.template.variable = function(){
 	return {
-		hint:'None.',
-		rewardScore:0,
-		rewardPt:0,
-		complete:0,
-		active:0,
-		deathCount:0,
-		bonus:{
+		_hint:'None.',
+		_rewardScore:0,
+		_rewardPt:0,
+		_complete:0,
+		_active:0,
+		_deathCount:0,
+		_bonus:{
 			challenge:{passive:1,exp:1,item:1},
 			orb:{passive:1,exp:1,item:1},
 			cycle:{passive:1,exp:1,item:1},
 		},
-		challenge:{},
-		requirement:'',
-		skillPlot:[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+		_challenge:{},
+		_challengeDone:{},		//TODO
+		_requirement:'',
+		_skillPlot:[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+		_orbAmount:0,
 	};
 }
+
+
+Quest.template.event = function(){
+	return {
+		_complete:null,
+		_start:null,
+		_abandon:null,
+		_signIn:null,
+		_hint:null,
+		_highscore:null,
+		_test:{
+			signIn:null,
+			firstSignIn:null,
+		},
+	}
+}
+
 

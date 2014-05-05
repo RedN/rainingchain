@@ -43,7 +43,9 @@ exports.init = function(version,questname){	//}
 	s.abandonQuest = function(key){
 		Quest.abandon(key,Q);
 	}
-	
+	s.completeQuest = function(key){
+		Quest.complete(key,Q);
+	}
 	s.get = function(key,attr){
 		if(!List.main[key]) return;	//case enemy
 		var mq = List.main[key].quest[Q];		
@@ -54,19 +56,12 @@ exports.init = function(version,questname){	//}
 	s.set = function(key,attr,value){
 		var mq = List.main[key].quest[Q];	
 		
-		if(attr === 'active'){
-			mq[attr] = true;
-			Chat.add(key,"You started the quest '" + s.quest.name + "'.");
-			return;
-		}	
-		if(!mq.active){
+		if(!mq._active){
 			Chat.add(key,"You need to start this quest via the Quest Tab before making progress in it."); 
 			return;
 		}
 		if(typeof value === 'string' && typeof mq[attr] === 'number' && !isNaN(value) && (value[0] === '+' || value[0] === '-'))	mq[attr] += (+value);
-		else mq[attr] = value;
-		
-		if(attr === 'complete' && value === true)	Quest.complete(key,Q);
+		else mq[attr] = value;		
 	}
 
 	s.getAct = function(key){

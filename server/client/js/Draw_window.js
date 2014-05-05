@@ -880,7 +880,7 @@ Draw.window.quest.info = function(s,q,mq,hq){
 	var str = '';
 	str += 'Quest Created by: ' + Tk.stringify(q.author) + ' | Difficulty: ' + q.difficulty + ' (Lvl ' + q.lvl + ')';
 	str += '<br>';
-	str += 'Hint: ' + mq.hint;
+	str += 'Hint: ' + mq._hint;
 	hq.info.innerHTML = str;
 	
 
@@ -895,7 +895,7 @@ Draw.window.quest.start = function(s,q,mq,hq){
 	hq.start.style.width = s.dw - 100 - 5 + 'px';
 	hq.start.style.height = s.charY*1.5*1.2 + 'px';
 	
-	if(!mq.active){
+	if(!mq._active){
 		var second = $('<p class="u">Start Quest</p>')[0];
 		second.onclick = function(){ Command.send('win,quest,start,' + q.id); };
 		second.title = "Start this quest.";
@@ -922,7 +922,7 @@ Draw.window.quest.left = function(s,q,mq,hq){
 		str += '<h2 class="u">Requirements:</h2>';
 		for(var i in q.requirement){
 			var text = '<span title="' + q.requirement[i].description + '"> - ' + q.requirement[i].name + '</span>';
-			if(+mq.requirement[i]) str += '<del>' + text + '</del>';	//if requirement is met
+			if(+mq._requirement[i]) str += '<del>' + text + '</del>';	//if requirement is met
 			else str += text;
 			
 			str += '<br>';
@@ -932,7 +932,7 @@ Draw.window.quest.left = function(s,q,mq,hq){
 	
 	//reward
 	str +=  '<h2 class="u">Rewards:</h2>';
-	str += ' - Passive: ' + Tk.round(mq.rewardPt,4) + '/' + q.reward.passive.max + ' (Score: ' + Tk.round(mq.rewardScore) + ')<br>';
+	str += ' - Passive: ' + Tk.round(mq._rewardPt,4) + '/' + q.reward.passive.max + ' (Score: ' + Tk.round(mq._rewardScore) + ')<br>';
 	str += ' - Exp: ' + Tk.stringify(q.reward.exp) + '<br>';
 	str += ' - Item: ' + Tk.stringify(q.reward.item) + '<br>';
 	
@@ -954,7 +954,7 @@ Draw.window.quest.right = function(s,q,mq,hq){
 		for(var i in q.challenge){
 			var c = q.challenge[i];
 			
-			var color = mq.challenge[i] ? '#00AA00' : '#FF0000';
+			var color = mq._challenge[i] ? '#00AA00' : '#FF0000';
 			
 			document.createElement('span');
 			str += 
@@ -971,7 +971,7 @@ Draw.window.quest.right = function(s,q,mq,hq){
 	
 	//bonus
 	str += '<h2 class="u">Bonus:</h2>';
-	var b = mq.bonus;
+	var b = mq._bonus;
 	var p = Tk.round(b.challenge.passive * b.orb.passive * b.cycle.passive,3);
 	var e = Tk.round(b.challenge.exp * b.orb.exp * b.cycle.exp,3);
 	var i = Tk.round(b.challenge.item * b.orb.item * b.cycle.item,3);

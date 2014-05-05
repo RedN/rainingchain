@@ -57,11 +57,11 @@ q.variable = {
 };
 
 q.event = {
-	hint:function(key){
-		if(!s.get(key,'active')) return 'You can start this quest by talking to the guy south west of Goblin Land';
+	_hint:function(key){
+		if(!s.get(key,'_active')) return 'You can start this quest by talking to the guy south west of Goblin Land';
 		return "Good luck!";
 	},
-	test:{
+	_test:{
 		signIn:function(key){
 			
 		},
@@ -70,26 +70,26 @@ q.event = {
 			s.setRespawn(key,'goblinLand','n1');
 		}
 	},	
-	signIn:function(key){
+	_signIn:function(key){
 		/*
 		if(s.haveItem(key,'jewel',1,true))
 			s.teleport(key,'goblinLand','t3');
 		*/
 	},
-	start:function(key){
+	_start:function(key){
 		
 		
 	},
-	abandon:function(key){
+	_abandon:function(key){
 		s.teleport(key,'goblinLand','n1');
 		s.setRespawn(key,'goblinLand','n1');
 	},
-	complete:function(key){
-		s.set(key,'complete',true);
+	_complete:function(key){
+		s.set(key,'_complete',true);
 		s.setRespawn(key,'goblinLand','n1');
 	},
 	talkRingo:function(key){
-		if(!s.get(key,'active')){ s.startQuest(key); return; }
+		if(!s.get(key,'_active')){ s.startQuest(key); return; }
 		if(!s.get(key,'talkRingo')){ s.dialogue(key,'ringo','intro','first'); return; }
 		
 		if(s.haveItem(key,'jewel')){ 
@@ -198,6 +198,9 @@ q.event = {
 		if(s.getAct(key).type !== 'player') return true;
 		return s.get(key,'csInBoss');		
 	},
+	questDone:function(key){
+		s.questComplete(key);
+	}	
 };	
 
 q.item['potion_unf'] = {'name':'Unfinished Potion','icon':'magic.staff','drop':0,'bank':0,'option':[		
@@ -352,9 +355,9 @@ q.dialogue['ringo'] = {'face':{'image':'villager-male.0','name':'Ringo'},
 			],
 		},
 		'complete3':{
-			'text':"Okay... Fine... I will increase your maximum HP.",
+			'text':"Okay... Fine... Take those Passive Points.",
 			'option':[
-				{'text':"Thanks.",event:q.event.complete},
+				{'text':"Thanks.",event:q.event.questDone},
 			],
 		},
 	},

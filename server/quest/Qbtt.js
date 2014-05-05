@@ -25,11 +25,11 @@ q.highscore = {
 var TARGETAMOUNT = 10;
 
 q.event = {
-	hint:function(key){
-		if(!s.get(key,'active')) return 'You can start this quest by talking to the girl south west of Goblin Land';
+	_hint:function(key){
+		if(!s.get(key,'_active')) return 'You can start this quest by talking to the girl south west of Goblin Land';
 		return "Good luck!";
 	},
-	test:{
+	_test:{
 		signIn:function(key){
 			
 		},
@@ -38,29 +38,29 @@ q.event = {
 			s.setRespawn(key,'goblinLand','n1');
 		}
 	},	
-	signIn:function(key){
+	_signIn:function(key){
 		s.abandonQuest(key);
 	},
-	start:function(key){
+	_start:function(key){
 		
 		
 	},
-	abandon:function(key){
+	_abandon:function(key){
 		s.teleport(key,'goblinLand','n1');
 		s.setRespawn(key,'goblinLand','n1');
 		s.chrono(key,'timer','remove');
 	},
-	complete:function(key){
+	_complete:function(key){
 		
 		
 	},
-	highscore:function(key){
+	_highscore:function(key){
 		return {
 			time:s.get(key,'time'),		
 		};	
 	},
 	talkJenny:function(key){
-		if(!s.get(key,'active')){ s.startQuest(key); return; }
+		if(!s.get(key,'_active')){ s.startQuest(key); return; }
 		s.dialogue(key,'jenny','intro','first');
 	},
 	teleportCourse:function(key){
@@ -80,7 +80,7 @@ q.event = {
 	endCourse:function(key){
 		var time = s.chrono(key,'timer','stop');
 		s.chat(key,'Your time is : ' + time + ' milliseconds.');
-		s.set(key,'complete',true);
+		s.completeQuest(key);
 		s.teleport(key,'goblinLand','n1');
 	},
 };	

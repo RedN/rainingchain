@@ -117,7 +117,7 @@ SkillPlot.creation = function(data){	//spot, type, num, quest
 			viewedIf:function(key,eid){
 				if(List.all[key].type !== 'player') return true;
 				var plot = List.all[eid].skillPlot;
-				return List.main[key].quest[plot.quest].skillPlot[plot.num] == 0;			
+				return List.main[key].quest[plot.quest]._skillPlot[plot.num] == 0;			
 			}		
 		}
 	});
@@ -133,7 +133,7 @@ SkillPlot.creation = function(data){	//spot, type, num, quest
 			viewedIf:function(key,eid){
 				if(List.all[key].type !== 'player') return true;
 				var plot = List.all[eid].skillPlot;
-				return List.main[key].quest[plot.quest].skillPlot[plot.num] == 1;			
+				return List.main[key].quest[plot.quest]._skillPlot[plot.num] == 1;			
 			},
 			
 		}

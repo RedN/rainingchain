@@ -22,8 +22,10 @@ Actor.death.player = function(act,killers){
 	Main.screenEffect(main,{'name':'fadeout','time':50,'maxTimer':50,'color':'black'});
 	
 	//Quest
-	if(main.questActive) main.quest[main.questActive].deathCount++;	
-	
+	if(main.questActive){
+		main.quest[main.questActive]._deathCount++;	
+		if(Db.quest[main.questActive].event.death) Db.quest[main.questActive].event.death(key);
+	}
 	//Message
 	var string = 'You are dead... ';
 	var array = [
@@ -65,7 +67,8 @@ Actor.death.npc = function(act,killers){
 	act.dead = 1;
 	
 	if(act.deathEvent) for(var i in killers) act.deathEvent(killers[i],act,act.map); 
-		
+	if(act.deathEventArray) act.deathEventArray(killers,act,act.map); 
+	
 	Actor.death.performAbility(act);				//custom death ability function
 	Activelist.clear(act);
 }
