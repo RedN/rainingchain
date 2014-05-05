@@ -673,6 +673,8 @@ Command.list['pvp'].doc = {
 
 
 
+
+
 //{CLIENT SIDE: Pref. many different preference values can be changed. check Command.pref.verify for more detail.
 Command.client = ['pref','music,next','music,info','help','mod','doc'];
 

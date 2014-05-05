@@ -19,7 +19,7 @@ q.variable = {
 	time:0,
 };
 q.highscore = {
-	time:{name:'Fastest Time','sort':'ascending'},
+	time:{name:'Fastest Time',order:'ascending'},
 }
 
 var TARGETAMOUNT = 10;

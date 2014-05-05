@@ -2,7 +2,9 @@
 //used when the client wants to draw something but doesnt have info about it
 if(SERVER){ //}
 	
-Db.query = function(d){
+Db.query = function(d,cb){
+	if(d.db === 'highscore'){ Db.query.highscore(d,cb); return; }	//async
+	
 	var list = {
 		equip:{source:Db.equip,},
 		ability:{source:Db.ability,filter:Db.query.ability},	//note: in Db, ability attack are in object
@@ -17,8 +19,11 @@ Db.query = function(d){
 
 	if(list[d.db].filter) info = list[d.db].filter(Tk.deepClone(info));
 	
-	d.info = info;
-	return d;
+	cb({
+		info:info,
+		id:d.id,
+		db:d.db	
+	});
 }
 
 Db.query.plan = function(info){
@@ -90,6 +95,26 @@ Db.query.quest.challenge = function(info){	//dunno if good
 	return tmp;
 }	
 
+Db.query.highscore = function(d,cb){	//TOFIX temp
+	if(!Quest.highscore.list[d.id]) return;
+	
+	Quest.highscore.fetch(d.id,function(res){
+		Quest.highscore.fetchRank(d.key,d.id,function(res2){
+			res.push(res2);
+			cb({
+				info:res,
+				db:'highscore',
+				id:d.id,
+			});	
+		});
+	});
+	
+	
+}
+
+
+
+
 } // END SERVER
 
 //##############################################
@@ -109,6 +134,7 @@ Db.query = function(db,id){
 	}
 	
 }
+
 
 socket.on('queryDb', function (d) {
 	if(!d.failure)	Db[d.db][d.id] = d.info;

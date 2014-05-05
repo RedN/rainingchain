@@ -22,7 +22,7 @@ List = {
 	sfx:{}, 	//all sfx
 };
 //local compilation of information so server doesnt send many times the same info
-Db = {equip:{},ability:{},item:{},plan:{},quest:{},customMod:{},customImg:{}};
+Db = {equip:{},ability:{},item:{},plan:{},quest:{},customMod:{},customImg:{},highscore:{}};
 
 
 

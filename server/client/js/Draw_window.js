@@ -1356,3 +1356,79 @@ Draw.window.passive.hover = function(over){ ctxrestore();
 
 
 
+/*
+Draw.window.binding = function (){ ctxrestore();
+	var s = Draw.window.main('Key Bindings');	
+	ctx = List.ctx.win;
+	
+	var hq = html.bindingWin;
+	hq.div.style.visibility = 'visible';
+	hq.div.style.left = s.mx + 'px'; 
+	hq.div.style.top = s.my + 'px'; 
+	
+	//Table
+	hq.table.style.left = 50 + 'px'; 
+	hq.table.style.top = 0 + 'px'; 
+	
+	var str = '<table>';
+	
+	str += '<tr>';
+	str += '<td>Action</td>'
+	str += '<td>Key Id</td>'
+	str += '<td>Key Name</td>'
+	str += '</tr>';
+	
+	var list = [
+		{'id':'move','name':'Move','list':['Right','Down','Left','Up']},
+		{'id':'ability','name':'Ability','list':[0,1,2,3,4,5]}
+	];
+	
+	for(var j in list){
+		var info = list[j];
+		for(var i = 0; i < Input.key[info.id].length; i++){
+			var id = Input.key[info.id][i][0];
+			var name = Input.key[info.id][i][0].toString().keyCodeToName();
+			if(name.keyFullName()) name += ' - (' + name.keyFullName() + ')';
+			
+			if(Input.binding[info.id] === i){
+				id = '***';
+				name = '***';
+			}
+			
+			var str2 = 'Change Key Binding for ' + info.name + ' ' + info.list[i];
+			
+			str += '<tr ' +
+					'onclick="Input.binding.' + info.id + ' = ' + i + ';" ' + 
+					'title="' + str2 + '"' +
+					'>'
+			str += '<td>' + info.name + ' ' + info.list[i] + '</td>'
+			str += '<td>' + id + '</td>'
+			str += '<td>' + name + '</td>'
+			str += '</tr>';
+		}
+	}
+	str += '</table>';
+	
+	Draw.setInnerHTML(hq.table,str);
+	
+	//Template
+	var array = ['QWERTY','AZERTY','NUMBER'];
+	var str = '<font size="6">Default Bindings</font>';
+	for(var i = 0; i < array.length; i++){
+		str  += '<div ' +
+				'onclick="Input.init(' + i + ');" ' +
+				'style="width=auto"' + 
+				'title="Change for ' + array[i] + '"' + 
+				'>' +
+				'<font size="4"> -' + array[i] + '</font>' +
+				'</div>';	
+	}
+	Draw.setInnerHTML(hq.template,str);
+	
+	hq.template.style.left = 600 + 'px'; 
+	hq.template.style.top = 25 + 'px'; 
+	
+}
+
+*/
+

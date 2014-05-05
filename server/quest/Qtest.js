@@ -8,7 +8,7 @@ q.variable = {
 };
 
 q.event = {
-	start:function(key){
+	_start:function(key){
 		var act = s.getAct(key);
 		s.addItem(key,'generator');
 		s.addItem(key,'equipGenerator');

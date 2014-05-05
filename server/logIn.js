@@ -167,6 +167,15 @@ Save.player = function(key,updateDb){
 Save.main = function(key,updateDb){
 	var main = typeof key === 'string' ? List.main[key] : key;
     main = Save.main.compress(main);
+	
+	//highscore
+	var highscore = {username:main.username};
+	for(var i in main.quest)
+		for(var j in main.quest[i]._highscore)
+			highscore[i + '-' + j] = main.quest[i]._highscore[j];
+	if(updateDb !== false)	db.upsert('highscore',{username:main.username},highscore,db.err);
+	
+	//main
     var save = {};
     var toSave = ['invList','bankList','quest','questActive','username','name','social','passive','chrono'];
     for(var i in toSave){ save[toSave[i]] = main[toSave[i]]; }
@@ -243,6 +252,7 @@ Save.main.compress = function(main){
 				_skillPlot:mq._skillPlot,
 				_challengeDone:mq._challengeDone,
 				_bonus:mq._bonus,
+				_highscore:mq._highscore,
 			}
 	}
 	

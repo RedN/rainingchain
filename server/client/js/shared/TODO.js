@@ -5,31 +5,31 @@ SKIPPED: trade, craft,db.filter, passive
 teleport everyone in map to this spot
 
 
-deathEventArray
 
-talk about naing convention
+talk about naming convention
 
 
 
 highscore
-
-goblinjewel, complete should be another evvent...
-
-
-
-
-
-
-==REVAMP==
+s.teamForEach
 boss summon
 
+puush support
 
+
+no more context from server, no need for clientContext
+trading is brokens
+
+
+list of tips
+
+==REVAMP==
+
+make Db_public and put real Db in gitignore
 tooltip not disappearing
 
 main.temp = bad... only used for item on another item
 
-only save the active quest
-puush support
 email if server is down	//http://nodejs.org/api/domain.html
 
 add ability with globalMod
@@ -40,10 +40,8 @@ throw error instead of just bypassing !List.all[key]
 
 server ban
 
-no more context from server, no need for clientContext
 BISON doesnt send dialogue if too close from npc? it returns undefined
 
-trading is broken
 
 add more Skill.unlockableContent
 

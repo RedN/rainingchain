@@ -1,3 +1,5 @@
+var db = require('./Db');
+
 Quest.reward = function(key,id){	//roll the perm stat bonus and check if last one was better	
 	var mq = List.main[key].quest[id];
 	var q = Db.quest[id];
@@ -291,3 +293,68 @@ Quest.requirement.template.quest = function(quest){
 	}
 }
 
+
+
+
+
+
+
+
+
+Quest.highscore = {};
+Quest.highscore.template = function(){
+	return {
+		name:"Fastest Completion",
+		order:"ascending",	//descending
+	}
+}
+
+Quest.highscore.fetch = function(category,cb){
+	var req = {}; req[category] = {$ne:null};
+	var proj = {username:1,_id:0};	proj[category] = 1;
+	var sort = {}; sort[category] = 1;
+	
+	db.find('highscore',req,proj,function(err,res){	if(err) throw err;
+		for(var i = 0; i < res.length; i++){
+			res[i].rank = i+1;
+			res[i].score = res[i][category];
+			delete res[i][category];
+		}
+		cb(res);
+	}).sort(sort).limit(25);
+	
+	//ts("Quest.highscore.fetch(key,'Qbtt-time')")
+}
+
+Quest.highscore.fetchRank = function(key,category,cb){
+	var score = List.main[key].quest[Quest.highscore.getQuest(category)]._highscore[Quest.highscore.getCategory(category)];
+	
+	var tmp = {};
+	if(Quest.highscore.list[category].order === 'ascending') tmp[category] = {$lt: score || Cst.bigInt,$ne:null};
+	else tmp[category] = {$gt: score || 0,$ne:null};
+	
+	db.count('highscore',tmp,function(err,result){	
+		cb({
+			rank:result.n+1,		//+1 cuz gt instead of gte
+			username:List.main[key].username,
+			score:score,
+		});
+	});
+}
+
+Quest.highscore.list = {};
+
+Quest.highscore.getQuest = function(str){
+	return str.split('-')[0];
+}
+Quest.highscore.getCategory = function(str){
+	return str.split('-')[1];
+}
+
+
+
+
+/*
+test = function(key){
+	Quest.highscore.fetchRank(key,'Qbtt-time',INFO);
+}*/

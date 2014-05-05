@@ -13,8 +13,6 @@ for real: need to emit info
 
 */
 
-var DB;
-
 Init = {};
 
 Init.db = function(data){
@@ -37,46 +35,57 @@ Init.db = function(data){
 	
 	
 
-	var collections = ["report","customMod","player","main","ability","equip","account","clan",'plan','passiveCount'];
+	var collections = ["report","customMod","player","main","ability","equip","account","clan",'plan','passiveCount','highscore'];
 	
 	//real direct db
-	DB = require("mongojs").connect(databaseURI, collections, MONGO.options);
-	setInterval(function(){	DB = require("mongojs").connect(databaseURI, collections, MONGO.options);},Server.frequence.db);	//refresh connection
+	var DB = require("mongojs").connect(databaseURI, collections, MONGO.options);
+	exports.real = DB;	//TOFIX
+	setInterval(function(){	
+		DB = require("mongojs").connect(databaseURI, collections, MONGO.options);
+		exports.real = DB;	
+	},Server.frequence.db);	//refresh connection
 	
 	
 	//intermediare db
 	exports.find = function(name,searchInfo,wantedData,cb){
 		if(!dbVerify()) return;
-		if(arguments.length === 3) DB[name].find(searchInfo,wantedData);
-		else DB[name].find(searchInfo,wantedData,cb);
+		if(arguments.length === 3) return DB[name].find(searchInfo,wantedData);
+		else return DB[name].find(searchInfo,wantedData,cb);
 	}
 	exports.findOne = function(name,searchInfo,wantedData,cb){
 		if(!dbVerify()) return;
-		if(arguments.length === 3) DB[name].findOne(searchInfo,{_id:0},wantedData);
-		else {	wantedData._id = 0; DB[name].findOne(searchInfo,wantedData,cb); }
+		if(arguments.length === 3) return DB[name].findOne(searchInfo,{_id:0},wantedData);
+		else {	wantedData._id = 0; return DB[name].findOne(searchInfo,wantedData,cb); }
 	}
 	exports.save = function(name,info,cb){
 		if(!dbVerify()) return;
-		DB[name].save(info,cb);
+		return DB[name].save(info,cb);
 	}
 	exports.update = function(name,searchInfo,updateInfo,cb){
 		if(!dbVerify()) return;
-		if(arguments.length === 3) DB[name].update(searchInfo,updateInfo);
-		else DB[name].update(searchInfo,updateInfo,cb);
+		if(arguments.length === 3) return DB[name].update(searchInfo,updateInfo);
+		else return DB[name].update(searchInfo,updateInfo,cb);
 	}
 	exports.upsert = function(name,searchInfo,updateInfo,cb){	
 		if(!dbVerify()) return;
-		if(arguments.length === 3) DB[name].update(searchInfo,updateInfo,{upsert:true});
-		else DB[name].update(searchInfo,updateInfo,{upsert:true},cb);
+		if(arguments.length === 3) return DB[name].update(searchInfo,updateInfo,{upsert:true});
+		else return DB[name].update(searchInfo,updateInfo,{upsert:true},cb);
 	}
 	exports.insert = function(name,updateInfo,cb){
 		if(!dbVerify()) return;
-		DB[name].insert(updateInfo,cb);
+		return DB[name].insert(updateInfo,cb);
 	}
 	exports.remove = function(name,searchInfo,cb){
 		if(!dbVerify()) return;
-		DB[name].remove(searchInfo,cb);
+		return DB[name].remove(searchInfo,cb);
 	}
+	
+	exports.count = function(name,query,cb){
+		return DB.runCommand({count:name,query: query},cb);
+	}
+	
+
+	
 	
 	//delete everything in db
 	exports.deleteAll = function(){

@@ -64,12 +64,15 @@ Quest.creation = function(q){
 	
 	//Variable
 	q.variable = Tk.useTemplate(Quest.template.variable(),q.variable);
-	for(var j in q.challenge){ q.variable._challenge[j] = 0; }	//0:non-active, 1:active
-	for(var j in q.requirement){ q.variable._requirement += '0'; }	//0:non-met, 1:met
+	for(var j in q.challenge) q.variable._challenge[j] = 0; 	//0:non-active, 1:active
+	for(var j in q.requirement) q.variable._requirement += '0'; 	//0:non-met, 1:met
+	for(var j in q.highscore) q.variable._highscore[j] = null;
 	
 	//Event
 	q.event = Tk.useTemplate(Quest.template.event(),q.event);
 	
+	//Highscore
+	for(var j in q.highscore) Quest.highscore.list[q.id + '-' + j] = q.highscore[j];
 	
 	
 	
@@ -205,6 +208,7 @@ Quest.template.variable = function(){
 		_requirement:'',
 		_skillPlot:[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
 		_orbAmount:0,
+		_highscore:{},
 	};
 }
 
@@ -216,6 +220,7 @@ Quest.template.event = function(){
 		_abandon:null,
 		_signIn:null,
 		_hint:null,
+		_death:null,
 		_highscore:null,
 		_test:{
 			signIn:null,

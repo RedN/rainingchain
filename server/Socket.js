@@ -121,9 +121,11 @@ Db.socket = {
 		minInterval:0,
 		online:1,
 		func:function(socket,d){
-			var toreturn = Db.query(d);
-			if(toreturn) socket.emit('queryDb',toreturn); 
-			else socket.emit('queryDb',{'failure':1});
+			d.key = socket.key;
+			Db.query(d,function(toreturn){
+				if(toreturn) socket.emit('queryDb',toreturn); 
+				else socket.emit('queryDb',{'failure':1});
+			});
 		},
 	},
 	'testing':{
