@@ -11,10 +11,7 @@ Actor.creation = function(d){	//d: x  y  map category variant lvl modAmount extr
 	List.actor[e.id] = e;
 	List.all[e.id] = e;
 	Map.enter(e);
-	
-	if(e.loot) e.loot = {func:e.loot,list:[]};
-	
-	
+		
 	if(e.nevermove){ Actor.creation.nevermove(e); }
 	if(e.nevercombat){ Actor.creation.nevercombat(e); }	
 	else {

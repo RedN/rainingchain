@@ -67,7 +67,7 @@ Init.actor = function(){
 		act.combatContext = 'regular';		//or pvp
 		act.friction = 0.9;
 		act.bounce = 1;			//mod
-		act.timeOut = {};
+		act.timeout = {};
 		act.move = 1;
 		act.summon = {};       //if actor is master
 		act.summoned = '';      //if actor is child. .summoned = master id
@@ -91,6 +91,7 @@ Init.actor = function(){
 		act.name = "Goblin";     //visible name
 		act.username = "player000";     //id name
 		act.minimapIcon = 'color.red';     //icon used for minimap
+		act.quest = '';
 		act.sprite = Actor.template.sprite();		
 		act.equip = Actor.template.equip();
 		act.weapon = Actor.template.weapon();

@@ -790,6 +790,15 @@ Init.db.npc = function(){
 		"block":{condition:'true',size:[-1,1,-1,1]},
 	}; //}
 	a["loot"]["chestOn"] = template(a["loot"]["chestOff"],'loot-chestOn');	
+	a["loot"]["flowerOff"] = {  //{
+		"name":"Flower",
+		'minimapIcon':'minimapIcon.chest',
+		"sprite":{'name':"loot-flowerOff",'sizeMod':1},
+		'nevercombat':1,
+		'nevermove':1,
+		"block":{condition:'true',size:[-1,1,-1,1]},
+	}; //}
+	a["loot"]["flowerOn"] = template(a["loot"]["chestOff"],'loot-flowerOn');	
 	//}
 	
 	a["toggle"] = {}; //{
@@ -946,6 +955,14 @@ Init.db.npc = function(){
 		"sprite":{'name':"teleport-underground",'sizeMod':1},
 		'nevercombat':1,
 		'nevermove':1,
+	}; //}
+	a["teleport"]["well"] = {  //{
+		"name":"Well",
+		'minimapIcon':'minimapIcon.door',
+		"sprite":{'name':"teleport-well",'sizeMod':1},
+		'nevercombat':1,
+		'nevermove':1,
+		"block":{condition:'true',size:[-1,1,-1,1]},
 	}; //}
 	//}
 	

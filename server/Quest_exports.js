@@ -27,6 +27,7 @@ exports.init = function(version,questname){	//}
 	var parseExtra = function(extra){
 		if(!extra) return {};
 		if(extra.viewedIf) extra.viewedIf = parseViewedIf(extra.viewedIf);
+		extra.quest = Q;
 		return extra;
 	}
 	
@@ -128,6 +129,8 @@ exports.init = function(version,questname){	//}
 	}
 	
 	s.addItem = function(key,item,amount){
+		if(s.get(key,'_active') === false) return false;
+		
 		Itemlist.add(key,s.itemFormat(item,amount));
 	}
 
@@ -142,12 +145,16 @@ exports.init = function(version,questname){	//}
 		return success;
 	}
 
-	s.testItem = function (key,item,amount,addifgood){
+	s.testItem = function (key,item,amount,addifgood,variable){
+		if(s.get(key,'_active') === false) return false;
+		
 		var list = s.itemFormat(item,amount);
 		var success = Itemlist.test(key,list);
-		if(success && (addifgood || amount === true)) Itemlist.add(key,list);
+		if(success && ((addifgood || amount) === true)) Itemlist.add(key,list);
 		
-		if(typeof (addifgood || amount) === 'string') s.set(key,addifgood || amount,true);
+		if(success && (variable || typeof addifgood === 'string')){
+			s.set(key,variable || addifgood,true);
+		}
 		return success;
 	}
 	

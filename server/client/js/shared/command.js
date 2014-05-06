@@ -220,7 +220,7 @@ Command.list['win,open'] = function(key,win,param0){
 Command.list['win,open'].doc = {
 	'description':"Open a window.",
 	'help':0,'param':[
-		{type:'Letters',name:'Window Name',optional:0,whiteList:['passive','quest','offensive','defensive','ability','binding']},
+		{type:'Letters',name:'Window Name',optional:0,whiteList:['highscore','passive','quest','offensive','defensive','ability','binding']},
 	],
 }
 

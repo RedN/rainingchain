@@ -10,7 +10,7 @@ Actor.loop = function(act){
 		if(act.deleteOnceDead) Actor.remove(act);
 		return;
 	}
-	Actor.loop.timeOut(act);
+	Actor.loop.timeout(act);
 	
 	if(++act.frame % 25 === 0) Activelist.update(act); 
 	if(!act.active) return;
@@ -121,12 +121,12 @@ Actor.performAbility.resource = function(act,cost){
 
 //}
 
-Actor.loop.timeOut = function(act){
-	for(var i in act.timeOut){
-		if(--act.timeOut[i].timer < 0){
-			try {act.timeOut[i].func(act.id);
+Actor.loop.timeout = function(act){
+	for(var i in act.timeout){
+		if(--act.timeout[i].timer < 0){
+			try {act.timeout[i].func(act.id);
 			}catch(err){ ERROR.err(err); }
-			finally{	delete act.timeOut[i];	}			
+			finally{	delete act.timeout[i];	}			
 		}	
 	}
 }
@@ -275,7 +275,7 @@ Actor.loop.fall = function(act){
 		var list = Actor.loop.fall.array;	
 		for(var i in list){
 			if(Collision.getSquareValue({x:xy.x+list[i][0],y:xy.y+list[i][1]},act.map,'player') === '4'){
-				Actor.push(act,list[i][2],5,5);
+				Actor.movePush(act,list[i][2],5,5);
 				break;
 			}
 		}
@@ -387,7 +387,7 @@ Actor.loop.attackReceived = function(act){
 
 Actor.setTimeout = function(act,name,time,cb){
 	name = name || Math.randomId();
-	act.timeOut[name] = {timer:time,func:cb};
+	act.timeout[name] = {timer:time,func:cb};
 }
 
 Actor.freeze = function(act,time,cb){
@@ -400,8 +400,8 @@ Actor.freeze = function(act,time,cb){
 }
 
 Actor.freeze.remove = function(act){
-	if(act.timeOut.freeze)
-		act.timeOut.freeze.timer = -1;
+	if(act.timeout.freeze)
+		act.timeout.freeze.timer = -1;
 	act.move = 1;
 }
 

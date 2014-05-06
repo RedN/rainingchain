@@ -130,6 +130,13 @@ Init.game.other = function(data){
 	
 	Db.questNameConvert = data.other.quest;	//TOFIX
 	
+	//highcore
+	Db.highscoreList = data.other.highscore; //TOFIX
+	
+	var str = '';
+	for(var i in Db.highscoreList) str += '<option value="' + i + '">' + Db.highscoreList[i] + '</option>';
+	$("#highscoreWinSelect")[0].innerHTML = str;
+	
 }
 Init.game.addCanvas = function(name,id,z){
 	//To add a canvas to the game

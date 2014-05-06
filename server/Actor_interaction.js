@@ -96,7 +96,7 @@ Actor.click.pushable = function(pusher,beingPushed){
 	if(Collision.distancePtPt(posB,posP) > 64) return;	//toofar
 	//
 	
-	Actor.push(act,angle,act.pushable.magn,act.pushable.time);
+	Actor.movePush(act,angle,act.pushable.magn,act.pushable.time);
 
 }
 
@@ -143,8 +143,9 @@ Actor.click.loot = function(act,eid){	//need work
 	var e = List.all[eid];
 	
 	if(Collision.distancePtPt(act,e) > DIST) return TOOFAR(act.id);
+	if(e.quest && e.quest !== List.main[act.id].questActive) return Chat.add(act.id,"You need to start this quest via the Quest Tab before making progression in it.");
 	
-	if(e.loot.func(act.id) !== false){
+	if(e.loot(act.id) !== false){
 		Chat.add(act.id,"Nice loot!");
 	}
 	Server.log(3,act.id,'openChest',eid);
@@ -154,6 +155,7 @@ Actor.click.toggle = function(act,eid){
 	var e = List.all[eid];
 	
 	if(Collision.distancePtPt(act,e) > DIST) return TOOFAR(act.id);
+	if(e.quest && e.quest !== List.main[act.id].questActive) return Chat.add(act.id,"You need to start this quest via the Quest Tab before making progression in it.");
 	
 	var sw = e.toggle;
 	if(!sw) return ERROR(3,'not a toggle',e);
@@ -212,7 +214,9 @@ Actor.setRespawn = function(act,spot,safe){
 		act.respawnLoc.safe = Tk.deepClone(spot);
 }
 
-Actor.push = function(act,angle,magn,time){
+Actor.movePush = function(act,angle,magn,time){	//TOFIX find better name
+	if(act.timeout.push) return;	//only 1 push at a time
+	
 	act.friction = 1;
 	act.spdX = magn*Tk.cos(angle);
 	act.spdY = magn*Tk.sin(angle);

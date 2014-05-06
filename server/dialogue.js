@@ -10,7 +10,7 @@ Dialogue.start = function(key,d){
 	main.dialogue.x = List.all[key].x;
 	main.dialogue.y = List.all[key].y;
 	
-	if(dia.func) applyFunc.key(key,dia.func);	
+	if(dia.event) applyFunc.key(key,dia.event);	
 	
 	}catch(err){ ERROR.err(err);}
 }

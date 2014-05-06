@@ -198,7 +198,11 @@
 					<div id="bindingWinTemplate" class="posAbs gradientBoxesWithOuterShadows" style="white-space: nowrap;"></div>
 				</div>
 				
-				
+				<div id="highscoreWinDiv"	class="posAbs"> 
+					<select id="highscoreWinSelect"></select>
+					<div id="highscoreWinTable" class="CSSTableGenerator posAbs" style="width:500px"></div>
+					
+				</div>
 				
 				
 			</div>
@@ -309,6 +313,11 @@
 						'table':$("#bindingWin" + "Table")[0],
 						'template':$("#bindingWin" + "Template")[0],
 						},	
+			'highscoreWin':{'div':$("#highscoreWin" + "Div")[0],
+						'table':$("#highscoreWin" + "Table")[0],
+						'template':$("#highscoreWin" + "Select")[0],
+						},	
+						
 			'win':{'div':$("#win" + "Div")[0],'title':$("#win" + "Title")[0]},	
 			'abilityWin':{'div':$("#abilityWin" + "Div")[0],
 						'subtitle':$("#abilityWin" + "SubTitle")[0],
