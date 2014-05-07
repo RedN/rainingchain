@@ -167,18 +167,6 @@ PassiveGrid.template.count.setInfo = function(count){
 	return count;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
 Passive = {};
 Passive.randomStat = function(good){
 	var good = ["maxSpd","acc","hp-regen","mana-regen","hp-max","mana-max","leech-magn","leech-chance","pickRadius","item-quantity","item-quality","item-rarity","atkSpd-main","crit-chance","crit-magn","bullet-amount","bullet-spd","strike-range","strike-size","strike-maxHit","burn-time","burn-magn","burn-chance","chill-time","chill-magn","chill-chance","stun-time","stun-magn","stun-chance","bleed-time","bleed-magn","bleed-chance","drain-time","drain-magn","drain-chance","knock-time","knock-magn","knock-chance","def-melee-+","def-melee-*","def-melee-^","def-melee-x","def-range-+","def-range-*","def-range-^","def-range-x","def-magic-+","def-magic-*","def-magic-^","def-magic-x","def-fire-+","def-fire-*","def-fire-^","def-fire-x","def-cold-+","def-cold-*","def-cold-^","def-cold-x","def-lightning-+","def-lightning-*","def-lightning-^","def-lightning-x","dmg-melee-+","dmg-melee-*","dmg-melee-^","dmg-melee-x","dmg-range-+","dmg-range-*","dmg-range-^","dmg-range-x","dmg-magic-+","dmg-magic-*","dmg-magic-^","dmg-magic-x","dmg-fire-+","dmg-fire-*","dmg-fire-^","dmg-fire-x","dmg-cold-+","dmg-cold-*","dmg-cold-^","dmg-cold-x","dmg-lightning-+","dmg-lightning-*","dmg-lightning-^","dmg-lightning-x","weapon-mace","weapon-spear","weapon-sword","weapon-bow","weapon-boomerang","weapon-crossbow","weapon-wand","weapon-staff","weapon-orb","summon-amount","summon-time","summon-atk","summon-def"];
@@ -212,6 +200,7 @@ Passive.getUsablePt = function(key){
 	var mq = List.main[key].quest;
 	for(var i in mq) sum += mq[i]._rewardPt;
 	
+	sum += 5;		//TOFIX
 	return Math.floor(sum);
 }
 
@@ -240,10 +229,6 @@ Passive.getBoost = function(p){	//convert the list of passive owned by player in
 	}
 	return Actor.permBoost.stack(temp);
 }
-
-
-
-
 
 
 
@@ -355,46 +340,6 @@ Passive.test.remove = function(passive,yy,xx){
 	
 	
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

@@ -1,14 +1,11 @@
 ==PRESDK==
 SKIPPED: trade, craft,db.filter, passive
 
-teleport everyone in map to this spot
-
 
 
 tip of the day below gameDiv
 group
 
-take passive from quest
 
 dodge where click
 
@@ -53,6 +50,7 @@ add more Skill.unlockableContent
 
 only preload maps used
 
+passive formula be diminshing returns
 
 
 ===POST SDK===

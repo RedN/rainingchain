@@ -265,7 +265,7 @@ Init.db.ability = function(cb){
 	
 	a['pvp-invincibility'] = {'type':'dodge','name':'Invincibility','icon':'blessing.spike',
 		'spd':{'main':1,'support':0},'period':{'own':25,'global':25,'bypassGlobalCooldown':true},'cost':{"mana":50},
-		'action':{'animOnSprite':'boostWhite','func':'Actor.dodge','param':[4]}
+		'action':{'animOnSprite':'boostWhite','func':'Actor.dodge','param':[4,200]}
 	};
 	//}
 	

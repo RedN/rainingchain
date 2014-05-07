@@ -662,7 +662,6 @@ Command.list['pvp'] = function(key){
 		Actor.teleport(act,act.respawnLoc.safe);
 		Chat.add(key,"You can no longer attack or be attacked by other players.");
 	}
-	//TOFIX
 }
 Command.list['pvp'].doc = {
 	'description':"Teleport/Quit to PvP Zone.",

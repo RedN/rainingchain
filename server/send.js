@@ -156,7 +156,7 @@ Change.send.init.bullet = function(bullet){	//For Init
 	return draw;
 }
 
-Change.send.init.strike = function(s){	//TOFIX send all to test
+Change.send.init.strike = function(s){
 	var p = s.point;
 	var r = Math.round;
 	

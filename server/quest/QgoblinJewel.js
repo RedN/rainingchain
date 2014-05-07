@@ -569,14 +569,7 @@ q.map.goblinUnderground = function(){
 		m.waypoint(spot.g1,true);
 		
 		m.loot(spot.q1,q.event.dontHaveJewel,q.event.getJewel)
-		/*
-		m.actor(spot.q1,"loot","chest",{
-			loot:q.event.getJewel
-		});
-		*/
-		/*	//TOFIX
 		
-		*/
 		
 		m.toggle(spot.q2,q.event.seeBlockChest,q.event.swChestOn);
 		

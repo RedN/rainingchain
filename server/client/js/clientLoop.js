@@ -11,10 +11,11 @@ Loop = function(){
 	if(Loop.frame % 5 === 0) Input.offset = $('#gameDiv').offset();
 	
 	if(Input.event.typeNormal()) Input.reset();
-	main.hideHUD.passive = 0	//TOFIX TEST
+	main.hideHUD.passive = 0;
 	
 	Loop.performance();
 	
+	if(Loop.frame % 500 === 0) $(".ui-tooltip-content").parents('div').remove();	//tooltip not disappearing
 }
 
 	

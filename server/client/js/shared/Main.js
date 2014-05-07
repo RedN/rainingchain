@@ -65,7 +65,7 @@ Main.template = function(key){
 Main.passiveAdd = function(main,num,i,j){
 	var key = main.id;
 	//when player wants to add a passive
-	if(Passive.getUnusedPt(key,num) <= -10){ Chat.add(key,"You don't have any Passive Points to use."); return;}	//TOFIXTEST
+	if(Passive.getUnusedPt(key,num) <= 0){ Chat.add(key,"You don't have any Passive Points to use."); return;}
 	if(main.passive.grid[num][i][j] !== '0'){ Chat.add(key,"You already have this passive.");	return;}
 	if(!Passive.test.add(main.passive.grid[num],i,j)){Chat.add(key,"You can't choose this passive yet.");	return;}
 	

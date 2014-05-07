@@ -35,12 +35,17 @@ Actor.getDef = function(act){
 	return def;
 }
 
-Actor.dodge = function(act,time){
+Actor.dodge = function(act,time,dist){
+	//invincibility
 	var oldtouch = act.damagedIf;
 	act.damagedIf = 'false';
 	Actor.setTimeout(act,'dodge',time,function(key){
 		List.all[key].damagedIf = oldtouch;	
 	});
+	
+	//movement
+	Actor.movePush(act,act.angle,dist/time,time)
+	
 }
 
 
