@@ -766,10 +766,11 @@ Command.list['music,info'].doc = {
 Command.pref = {};
 Command.pref.list = {
 	'displayAoE':{name:'Display AoE',initValue:0,min:0,max:1,description:'Display Damage Zone For Strikes. 0=false, 1=true' },
+	'displayFPS':{name:'Display FPS',initValue:0,min:0,max:1,description:'Display FPS Performance. 0=false, 1=true' },
 	'volumeSong':{name:'Volume Song',initValue:20,min:0,max:100,description:'Volume Song.','func':function(value){ Song.beingPlayed.song.volume = value/100 * main.pref.volumeMaster/100; }},
 	'volumeSfx':{name:'Volume Effects',initValue:100,min:0,max:100,description:'Volume Sound Effects.'},
 	'volumeMaster':{name:'Volume Master',initValue:100,min:0,max:100,description:'Volume Master. 0:Mute','func':function(value){ Song.beingPlayed.song.volume = value/100 * main.pref.volumeSong/100; }},
-	'mapRatio':{name:'Map Ratio',initValue:6,min:2,max:10,description:'Minimap Size'},
+	'mapRatio':{name:'Map Ratio',initValue:5,min:2,max:10,description:'Minimap Size'},
 	'bankTransferAmount':{name:'X- Bank',initValue:1000,min:1,max:9999999999,description:'Amount of items transfered with Shift + Left Click'},
 	'orbAmount':{name:'X- Orb',initValue:1000,min:1,max:9999999999,description:'Amount of orbs used with X- option'},
 	'passiveView':{name:'Passive View',initValue:0,min:0,max:1,description:'Impact Passive Colors. 0:Access. 1:Popularity'},

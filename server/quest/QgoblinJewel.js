@@ -59,8 +59,13 @@ q.variable = {
 
 q.event = {
 	_hint:function(key){
-		if(!s.get(key,'_active')) return 'You can start this quest by talking to the guy south west of Goblin Land';
-		return "Good luck!";
+		if(s.haveItem(key,'jewel')) return 'Give Jewel to Ringo.';
+		if(!s.get(key,'talkRingo')) return 'Talk to Ringo in Goblin Land.';
+		if(!s.get(key,'haveFlower')) return 'Get Flower in Goblin Land.';
+		if(!s.haveItem(key,'orc_sock') && !s.haveItem(key,'potion')) return 'Get Orc Sock in Goblin Land.';
+		if(s.haveItem(key,'orc_sock') && !s.haveItem(key,'potion')) return 'Finish the potion.';
+		if(s.haveItem(key,'potion') && !s.haveItem(key,'jewel')) return 'Enter Camp and steal Jewel.';
+		return "BUG... :(";
 	},
 	_test:{
 		signIn:function(key){

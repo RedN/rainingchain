@@ -129,6 +129,7 @@ Init.changeUpdate = function(){
 				{'array':['social','list']},	
 				
 				{'array':['quest']},
+				{'array':['questActive']},
 				
 				{'array':['passive']},	
 				{'array':['hideHUD']},

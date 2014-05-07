@@ -179,16 +179,31 @@ Draw.minimap.map.updateSize = function(){
 		width:Cst.WIDTH/main.pref.mapRatio,
 		height:Cst.HEIGHT/main.pref.mapRatio,
 	});
-	//$("#minimapCanvas")[0].width = Cst.WIDTH/main.pref.mapRatio;
-	//$("#minimapCanvas")[0].height = Cst.HEIGHT/main.pref.mapRatio;
+	$("#minimapCanvas")[0].width = Cst.WIDTH/main.pref.mapRatio;	//not same than style.width
+	$("#minimapCanvas")[0].height = Cst.HEIGHT/main.pref.mapRatio;
 	
 	//hint
-	/*
-	var hint = $("#hintDiv")[0];
+	$("#hintDiv").css({
+		left:Cst.WIDTH-Cst.WIDTH/main.pref.mapRatio,
+		width:Cst.WIDTH/main.pref.mapRatio,
+		height:100,
+		top:Cst.HEIGHT/main.pref.mapRatio,	//height of map
+		fontFamily:'Kelly Slab',
+		fontSize:'20px',
+		whiteSpace:'normal',
+		color:'white',
+	});
 	
-	hint.font = '20px Kelly Slab';
-	hint.style.top = '
-	*/
+	//Perf
+	$("#performanceDiv").css({
+		left:Cst.WIDTH-Cst.WIDTH/main.pref.mapRatio-50,
+		width:50,
+		height:30,
+		fontFamily:'Kelly Slab',
+		fontSize:'20px',
+		whiteSpace:'normal',
+		color:'white',
+	});
 }
 
 Draw.minimap.icon = function(){
@@ -216,15 +231,16 @@ Draw.minimap.icon = function(){
 //}
 
 
-Draw.hint  = function(){
+Draw.hint = function(){
+	var text = '<span title="Active a quest via the Quest Tab">No Active Quest</span>';
+	if(main.questActive) text = '<span title="Active Quest: ' + Db.questNameConvert[main.questActive] + '">' +main.quest[main.questActive]._hint + '</span>';
 	
-	if(main.questActive)
-		Draw.setInnerHTML(hint,main.quest[main.questActive]._hint,'hint');
 	
-
-
-
-
+	Draw.setInnerHTML($("#hintDiv")[0],text,'hintDiv');
 }
 
 
+Draw.performance = function(){
+	var text = '<span title="Performance">' + Loop.performance.result + '</span>';
+	Draw.setInnerHTML($("#performanceDiv")[0],Loop.performance.result,'performanceDiv');
+}

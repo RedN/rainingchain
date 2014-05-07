@@ -45,6 +45,7 @@ Draw.loop = function (){
 
 	Button.context();	//update for client buttons only
 	Draw.context();     //top left
+	Draw.hint();
 	Draw.command();
 	//clientContext = '';		
 	
@@ -521,25 +522,26 @@ Draw.gradientRG = function(n){
 
 Draw.context = function (){ ctxrestore();
 	var text = main.context.text || main.clientContext.text || main.permContext.text;
+	if(!text) return;
+	
 	var top = main.context.textTop || main.clientContext.textTop;
 	var hc = html.context.div;
 	
-	if(!hc.innerHTML || hc.innerHTML !== text){
-		if(!top){
-			hc.innerHTML = text;
-			hc.style.left = (Input.mouse.x + 25).mm(0,Cst.WIDTH-hc.offsetWidth) + 'px';
-			hc.style.top = (Input.mouse.y + 25).mm(0,Cst.HEIGHT-hc.offsetHeight) + 'px';
-		} else {
-			hc.style.left = Cst.WIDTH/2-150 + 'px'
-			hc.style.top = "25px";
-			text = '<font size="5">' + text + '</font>'
-			hc.innerHTML = text;
-		}
+	hc.style.visibility = 'visible';
+	if(hc.innerHTML === text) return;	//same texts
+	
+	if(!top){
+		hc.innerHTML = text;
+		hc.style.left = (Input.mouse.x + 25).mm(0,Cst.WIDTH-hc.offsetWidth) + 'px';
+		hc.style.top = (Input.mouse.y + 25).mm(0,Cst.HEIGHT-hc.offsetHeight) + 'px';
+	} else {
+		hc.style.left = Cst.WIDTH/2-150 + 'px'
+		hc.style.top = "25px";
+		text = '<font size="5">' + text + '</font>'
+		hc.innerHTML = text;
 	}
 	
-	if(hc.innerHTML){
-		hc.style.visibility = 'visible';
-	}
+	
 }
 
 Draw.command = function(){

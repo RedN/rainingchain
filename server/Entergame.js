@@ -60,6 +60,7 @@ Load.enterGame.initData = function(key,player,main){
             'passive':0,
             'social':0,
             'quest':0,
+			'questActive':0,
 			'invList':Change.send.convert.itemlist,
 			'bankList':Change.send.convert.itemlist,
 			'tradeList':Change.send.convert.itemlist,

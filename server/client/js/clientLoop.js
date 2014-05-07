@@ -12,6 +12,9 @@ Loop = function(){
 	
 	if(Input.event.typeNormal()) Input.reset();
 	main.hideHUD.passive = 0	//TOFIX TEST
+	
+	Loop.performance();
+	
 }
 
 	
@@ -50,6 +53,20 @@ Loop.bullet = function(){
 		Sprite.update(List.bullet[i]);
 	}
 }
+
+
+Loop.performance = function(){
+    if(Loop.frame % Loop.performance.frequence === 0){
+        var d = Date.now();	
+		Loop.performance.result = Math.round(40*Loop.performance.frequence/(d - Loop.performance.oldtime)*100) + '%';
+        if(main.pref.displayFPS) Draw.performance();
+		Loop.performance.oldtime = d;
+    }
+};
+
+Loop.performance.frequence = 5*1000/40;
+Loop.performance.oldtime = Date.now();
+Loop.performance.result = '100%';
 
 
 Loop.main = function(){

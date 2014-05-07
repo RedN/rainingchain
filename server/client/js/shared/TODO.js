@@ -5,13 +5,12 @@ teleport everyone in map to this spot
 
 
 
-hint
 tip of the day below gameDiv
 group
 
 take passive from quest
 
-
+dodge where click
 
 talk about naming convention
 
