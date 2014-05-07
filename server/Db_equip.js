@@ -12,6 +12,7 @@ Init.db.equip = function (cb){
 		'dmg':{'main':1,'ratio':{'melee':1,'range':1,'magic':1,'fire':1,'cold':1,'lightning':1}},
 	};					//DONT TOUCH
 	
+	
 	a['start-body'] = {'name':"Body",'piece':'body','type':'metal','icon':'body.metal',
 		'def':{'main':2.451,'ratio':{'melee':1,'range':1,'magic':1,'fire':1,'cold':1,'lightning':1}},'boost':[]
 	}
@@ -50,12 +51,16 @@ Init.db.equip = function (cb){
 	
 	
 	a['start-mace'] = {
-		'piece': 'melee','type': 'mace','icon':'melee.mace',
-		'name':"Mace",'sprite':{'name':"mace",'sizeMod':1},
+		'piece': 'melee','type': 'mace','icon':'melee.mace','name':"Mace",
 		'dmg':{'main':10,'ratio':{'melee':0,'range':10,'magic':80,'fire':10,'cold':0,'lightning':0}},
 		'boost': [],
 	}
-
+	a['start-weapon'] = {
+		'piece': 'melee','type': 'mace','icon':'melee.mace','name':"n00b Weapon",'sprite':{'name':"mace",'sizeMod':1},
+		'dmg':{'main':10,'ratio':{'melee':1,'range':1,'magic':1,'fire':1,'cold':1,'lightning':1}},
+		'boost': [],
+	}
+	
 	a['spear'] = {
 		'piece': 'melee','type': 'spear','icon': 'melee.spear',
 		'name':"Spear",'sprite':{'name':"spear",'sizeMod':1},

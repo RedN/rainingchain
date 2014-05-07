@@ -112,7 +112,7 @@ Load.enterGame.first = function(key){
 	
 	for(var i in Cst.equip.armor.piece)
 		Actor.equip(act,'start-' + Cst.equip.armor.piece[i]);
-	Actor.equip(act,'start-mace');
+	Actor.equip(act,'start-weapon');
 	
 	
 }

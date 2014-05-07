@@ -303,11 +303,9 @@ Actor.loop.move = function(act){
 	
 	
 	//Friction + Min Spd
-	act.spdX *= act.friction;	
-	act.spdY *= act.friction;
 	if (Math.abs(act.spdX) < 0.1){act.spdX = 0;}	
 	if (Math.abs(act.spdY) < 0.1){act.spdY = 0;}
-	if(act.spdX || act.spdY){ act.moveAngle = Tk.atan2(act.spdY,act.spdX); } 
+	act.moveAngle = Tk.atan2(act.spdY,act.spdX);
 	
 	
 	
@@ -324,7 +322,8 @@ Actor.loop.move = function(act){
 			Sprite.updateBumper(act);
 		} 
 	} 
-	
+	act.spdX *= act.friction;	
+	act.spdY *= act.friction;
 }
 
 Actor.loop.move.aim = function (act){	

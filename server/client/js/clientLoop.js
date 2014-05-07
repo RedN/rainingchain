@@ -97,7 +97,8 @@ Loop.sfx = function(){
 	}
 }
 
-removeAny = function(i){
+Activelist = {};	//to be same than server
+Activelist.removeAny = function(i){
 	var id = i.id || i;
 	delete List.bullet[id]; 
 	delete List.actor[id];

@@ -32,7 +32,7 @@ try {
 		var id = data.r[i];
 		if(List.all[id] && List.all[id].sprite){ 
 			List.all[id].sprite.dead = List.all[id].type === 'npc' ? 1/12 : 1/3;	//ratio will impact alpha or fade out
-		} else{removeAny(id);}			
+		} else{Activelist.removeAny(id);}			
 	}
     
 	//Update Main List
@@ -42,7 +42,7 @@ try {
 	for(var i in List.all){
 		var act = List.all[i];
 		if(!act){continue; }
-		if(++act.toRemove > 40){ removeAny(i);}	//aka no update for 1 sec
+		if(++act.toRemove > 40){ Activelist.removeAny(i);}	//aka no update for 1 sec
 	}
 	
 	//Update Bullet

@@ -221,7 +221,7 @@ Init.db.ability = function(cb){
 		'action':{'func':'Combat.attack','param':{
 			'type':"bullet",'angle':0,'amount':1,
 			'objImg':{'name':"arrow",'sizeMod':1},'hitImg':{'name':"strikeHit",'sizeMod':0.5},
-			'dmg':{'main':80,'ratio':{'melee':1,'range':1,'magic':1,'fire':1,'cold':1,'lightning':1}},
+			'dmg':{'main':400,'ratio':{'melee':1,'range':1,'magic':1,'fire':1,'cold':1,'lightning':1}},
 		}
 	}};
 	
@@ -230,7 +230,7 @@ Init.db.ability = function(cb){
 		'action':{'func':'Combat.attack','param':{
 			'type':"strike",'angle':0,'amount':1,
 			'preDelayAnim':{'name':"fireBomb2",'sizeMod':1},
-			'dmg':{'main':200,'ratio':{'melee':1,'range':1,'magic':1,'fire':1,'cold':1,'lightning':1}},
+			'dmg':{'main':600,'ratio':{'melee':1,'range':1,'magic':1,'fire':1,'cold':1,'lightning':1}},
 			'width':50,
 			'height':50,
 			'delay':8,
@@ -242,17 +242,17 @@ Init.db.ability = function(cb){
 	a['pvp-freeze'] = {'type':'attack','name':'Freeze Bullet','icon':'attackMagic.crystal',
 		'spd':{'main':1,'support':0},'period':{'own':100,'global':25},
 		'action':{'func':'Combat.attack','param':{
-			'type':"bullet",'angle':0,'amount':1,
+			'type':"bullet",'angle':25,'amount':5,
 			'objImg':{'name':"iceshard",'sizeMod':1},'hitImg':{'name':"coldHit",'sizeMod':0.5},
-			'dmg':{'main':100,'ratio':{'melee':1,'range':1,'magic':1,'fire':1,'cold':1,'lightning':1}},
-			'chill':{time:25,magn:100,chance:1000},
+			'dmg':{'main':50,'ratio':{'melee':1,'range':1,'magic':1,'fire':1,'cold':1,'lightning':1}},
+			'chill':{time:1/2,magn:4,baseChance:1},
 		}
 	}};
 	
 	a['pvp-fireball'] = {'type':'attack','name':'Fireball Boom','icon':'attackMagic.meteor',
 		'spd':{'main':1,'support':0},'period':{'own':100,'global':25},
 		'action':{'func':'Combat.attack','param':{
-			'type':"bullet",'angle':360,'amount':9,
+			'type':"bullet",'angle':45,'amount':9,
 			'objImg':{'name':"fireball",'sizeMod':1.2},'hitImg':{'name':"fireHit",'sizeMod':0.5},
 			'dmg':{'main':100,'ratio':{'melee':1,'range':1,'magic':1,'fire':1,'cold':1,'lightning':1}},
 		}

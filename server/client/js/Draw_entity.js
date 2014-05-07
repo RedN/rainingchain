@@ -185,7 +185,7 @@ Draw.strike = function(){
 		ctx.closePath();
 		ctx.fill();
 		
-		if(--s.delay < -4) removeAny(s);
+		if(--s.delay < -4) Activelist.removeAny(s);
 	}
 	ctx.fillStyle = 'black';
 	ctx.globalAlpha = 1;

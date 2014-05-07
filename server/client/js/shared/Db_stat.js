@@ -20,7 +20,7 @@ Init.db.stat = function(){
 	'friction':{
 		'icon':'defensive.speed',
 		'name':'Friction',
-		'boost':{'base':0.9,'stat':['friction'],'min':0,'max':1},
+		'boost':{'base':Cst.FRICTION,'stat':['friction'],'min':0,'max':1},
 		'playerOnly':1,
 		'description':"Movement Friction",
 		},

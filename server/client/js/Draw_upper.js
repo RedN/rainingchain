@@ -242,5 +242,5 @@ Draw.hint = function(){
 
 Draw.performance = function(){
 	var text = '<span title="Performance">' + Loop.performance.result + '</span>';
-	Draw.setInnerHTML($("#performanceDiv")[0],Loop.performance.result,'performanceDiv');
+	Draw.setInnerHTML($("#performanceDiv")[0],text,'performanceDiv');
 }

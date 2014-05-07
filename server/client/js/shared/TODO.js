@@ -2,12 +2,12 @@
 SKIPPED: trade, craft,db.filter, passive
 
 
+change tooltip for the one bookmarked
 
 tip of the day below gameDiv
 group
 
-
-dodge where click
+item quest simplify, and STACK always
 
 talk about naming convention
 

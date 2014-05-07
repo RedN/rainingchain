@@ -265,7 +265,6 @@ Actor.creation.nevercombat = function(act){
 	delete act.damageIf;
 	delete act.targetIf;
 	delete act.boss;
-	delete act.deleteOnceDead;
 	delete act.bonus;	
 	delete act.mastery;
 	delete act.ability;

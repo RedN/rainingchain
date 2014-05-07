@@ -447,7 +447,7 @@ Sprite.update = function (act){	//client side only
 	}
 	if(act.sprite.dead){
 		act.sprite.alpha -= act.sprite.dead;
-		if(act.sprite.alpha < 0)	removeAny(act.id);
+		if(act.sprite.alpha < 0)	Activelist.removeAny(act.id);
 	}
 	
 }

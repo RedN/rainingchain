@@ -106,7 +106,6 @@ Loop.logOut = function(){
 	}
 }
 
-
 Loop.team = function(){
 	if(!Loop.interval(50)) return;
 	List.team = {};
@@ -121,6 +120,7 @@ Loop.team = function(){
 Activelist = {};	//Actor.loop.activeList is where the update happens
 Activelist.test = function(act,obj){	
 	//Test used to know if obj should be in activeList of act.
+	//optimization: test only once for each pair. ex: act.activeListAlreadyTest
 	if(!obj){ return false; }
 	if(act.id === obj.id){ return false; }
 	if(!obj.viewedIf || !act.viewedIf){ return false; }
@@ -135,23 +135,6 @@ Activelist.test = function(act,obj){
 	var rect = [act.x-800,act.x+800,act.y-600,act.y+600];
 	
 	return Collision.PtRect(obj,rect);
-	
-	
-	/*
-	//Test used to know if obj should be in activeList of act.
-	if(!obj){ return false; }
-	if(act.id === obj.id){ return false; }
-	if(!obj.viewedIf){ return false; }
-	if(obj.viewedIf === 'false'){ return false; }
-	if(act.map !== obj.map){ return false; }
-	if(obj.dead){ return false; }
-	if(typeof obj.viewedIf === 'function' && !obj.viewedIf(act.id,obj.id)){ return false; }
-	if(typeof obj.viewedIf === 'object' && obj.viewedIf.indexOf(act.id) === -1){ return false; }
-	
-	var rect = [act.x-800,act.x+800,act.y-600,act.y+600];
-	
-	return Collision.PtRect(obj,rect);
-	*/
 }
 
 Activelist.update = function(act){	//called by attack on creation only, called by npc in loop
@@ -180,9 +163,6 @@ Activelist.update = function(act){	//called by attack on creation only, called b
 
 }
 
-
-
-
 Activelist.clear = function(b){	//called when living forever
 	if(!b){ ERROR(2,'actor dont exist'); return; }
 	
@@ -195,7 +175,7 @@ Activelist.clear = function(b){	//called when living forever
 	b.activeList = {};	
 }
 
-removeAny = function(act){
+Activelist.removeAny = function(act){
 	if(typeof act === 'string') act = List.all[act];
 	if(!act) { ERROR(2,'actor dont exist'); return; }
 	if(act.type === 'bullet') Bullet.remove(act);

@@ -224,7 +224,7 @@ Actor.movePush = function(act,angle,magn,time){	//TOFIX find better name
 	Actor.setTimeout(act,'push',time,function(eid){
 		List.all[eid].spdX = 0;
 		List.all[eid].spdY = 0;
-		List.all[eid].friction = 0.9;
+		List.all[eid].friction = Cst.FRICTION;
 	});
 }
 
