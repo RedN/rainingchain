@@ -5,11 +5,11 @@ var questList = [
 	'Qtest',
 	'QgoblinJewel',
 	'Mtest',
-	'Qbtt',
+	//'Qbtt',
 ];
 Quest = {};
 Quest.test = 'QgoblinJewel';	//give player vaTester for this quest
-
+//QgoblinJewel
 
 Init.db.quest = function(){
 	var questVar = {};

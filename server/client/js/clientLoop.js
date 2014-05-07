@@ -8,6 +8,7 @@ Loop = function(){
 	Loop.input();
 	Draw.loop();
 	Loop.frame++;
+	if(Loop.frame % 5 === 0) Input.offset = $('#gameDiv').offset();
 	
 	if(Input.event.typeNormal()) Input.reset();
 	main.hideHUD.passive = 0	//TOFIX TEST

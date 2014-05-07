@@ -19,11 +19,14 @@ Load.enterGame = function(key,account,act,main,socket){ //Called when player log
 	if(Server.testing) Load.enterGame.testing(key);
 	
 	
-	act.boost.list['bullet-spd'].permBase *= 1.5;
+	act.boost.list['bullet-spd'].permBase *= 3;
 	Actor.update.permBoost(act);
 		
 	
-	Load.enterGame.fixAbilityCharge(key);	//BUG?
+	Actor.setTimeout(act,'bugAbility',2*25,Test.setAbility);	//TOFIX
+	if(!List.main[key].questActive) Quest.start(key,'QgoblinJewel');
+	
+	//Load.enterGame.fixAbilityCharge(key);	//BUG?
 }
 
 Load.enterGame.testing = function(key){
@@ -101,7 +104,7 @@ Load.enterGame.first = function(key){
 	Chat.add(act.id,"Note: This is a very early beta. Expect things to change... A LOT.");
 	Chat.add(act.id,"Control: WADS. (For AZERTY users, change key binding via Pref Tab)");
 	
-	Actor.setRespawn(act,{x:1500,y:5000,map:'goblinLand@MAIN'});	//here if no Quest.test
+	Actor.setRespawn(act,{x:1800,y:5600,map:'goblinLand@MAIN'});	//here if no Quest.test
 	if(Db.quest[Quest.test] && Db.quest[Quest.test].event._test && Db.quest[Quest.test].event._test.firstSignIn){
 		Db.quest[Quest.test].event._test.firstSignIn(key);
 	}

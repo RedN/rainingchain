@@ -531,7 +531,7 @@ Draw.context = function (){ ctxrestore();
 			hc.style.top = (Input.mouse.y + 25).mm(0,Cst.HEIGHT-hc.offsetHeight) + 'px';
 		} else {
 			hc.style.left = Cst.WIDTH/2-150 + 'px'
-			hc.style.top = "25px"
+			hc.style.top = "25px";
 			text = '<font size="5">' + text + '</font>'
 			hc.innerHTML = text;
 		}

@@ -154,6 +154,8 @@ Draw.pvpScore = function(s){
 }
 
 
+
+
 //{Minimap
 Draw.minimap = function (){ ctxrestore();
 	ctx = List.ctx.minimap;
@@ -177,9 +179,16 @@ Draw.minimap.map.updateSize = function(){
 		width:Cst.WIDTH/main.pref.mapRatio,
 		height:Cst.HEIGHT/main.pref.mapRatio,
 	});
-	$("#minimapCanvas")[0].width = Cst.WIDTH/main.pref.mapRatio;
-	$("#minimapCanvas")[0].height = Cst.HEIGHT/main.pref.mapRatio;
+	//$("#minimapCanvas")[0].width = Cst.WIDTH/main.pref.mapRatio;
+	//$("#minimapCanvas")[0].height = Cst.HEIGHT/main.pref.mapRatio;
 	
+	//hint
+	/*
+	var hint = $("#hintDiv")[0];
+	
+	hint.font = '20px Kelly Slab';
+	hint.style.top = '
+	*/
 }
 
 Draw.minimap.icon = function(){
@@ -205,5 +214,17 @@ Draw.minimap.icon = function(){
 	ctx.fillRect(1280/2/main.pref.mapRatio-2,720/2/main.pref.mapRatio-2,4,4);	//player icon
 }
 //}
+
+
+Draw.hint  = function(){
+	
+	if(main.questActive)
+		Draw.setInnerHTML(hint,main.quest[main.questActive]._hint,'hint');
+	
+
+
+
+
+}
 
 

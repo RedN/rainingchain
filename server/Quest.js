@@ -59,7 +59,7 @@ Quest.getReward = function(q,bonus){	//TODO item
 
 
 
-Quest.hint = function(key,id){
+Quest.updateHint = function(key,id){
 	if(Db.quest[id].event._hint) List.main[key].quest[id]._hint = Db.quest[id].event._hint(key);
 }
 

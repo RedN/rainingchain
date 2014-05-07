@@ -78,4 +78,5 @@ exports.appPostGetExp = function(req,res){
 		}
 	});	
 }
-
+//obj_big => 96x96 instead of 32x32
+//http://services.runescape.com/m=itemdb_rs/4451_obj_big.gif?id=31291

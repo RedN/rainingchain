@@ -1,8 +1,15 @@
 ==PRESDK==
-
 SKIPPED: trade, craft,db.filter, passive
 
 teleport everyone in map to this spot
+
+
+
+hint
+tip of the day below gameDiv
+group
+
+take passive from quest
 
 
 
@@ -20,8 +27,7 @@ puush support
 no more context from server, no need for clientContext
 trading is brokens
 
-
-list of tips
+save rs items price
 
 ==REVAMP==
 

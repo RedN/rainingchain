@@ -18,7 +18,9 @@ Boss.creation = function(name,e){
 
 
 Boss.creation.model = function(boss){
-
+	for(var i in boss.attack){
+		if(boss.attack.dmg)	boss.attack.dmg.ratio = Tk.convertRatio(boss.attack.dmg.ratio);
+	}
 }
 
 

@@ -13,8 +13,8 @@ Actor.ability.remove = function(act,name){
 
 Actor.ability.swap = function(act,name,position){
 	var ab = Actor.getAbility(act);
-	if(position === undefined) position = ab.length;
-	
+	if(position === undefined)	for(position = 0; position < 100; position++) if(!ab[position]) break;
+
 	var ability = Ability.uncompress(name);
 	if(act.type === 'player'){
 		if(position === 4 && ability.type !== 'heal'){Chat.add(act.id,'This ability slot can only support Healing abilities.'); return;}	

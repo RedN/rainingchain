@@ -1,7 +1,7 @@
 NODEJITSU = typeof process.env.NODEJITSU !== 'undefined';
 SERVER = true;
 
-if(NODEJITSU) require('nodetime').profile({accountKey: '7a06997db310e13bef9840cd1d8cfc1ea45fcc57',appName: 'Raining Chain'});
+if(NODEJITSU) require('nodetime').profile({accountKey: '2c80ddb75be46eb8d768574123a2a98cf63d1d97',appName: 'RC ' + Date.now()});
 
 //Create Server
 var http = require('http');

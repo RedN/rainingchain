@@ -95,7 +95,6 @@ Map.remove = function(map){
 	for(var i in map.list.bullet) Bullet.remove(List.all[i]);
 	for(var i in map.list.strike) Strike.remove(List.all[i]);
 	
-	delete List.map[map.id];
 }
 
 

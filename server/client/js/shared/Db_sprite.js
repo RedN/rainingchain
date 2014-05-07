@@ -258,8 +258,8 @@ Init.db.sprite = function(){
 	
 	a["teleport-door"] ={"src":"picture/teleport-door.png","size":1,"preBumperBox":[ -16,16,-8,40 ]};
 	a["teleport-zone"] ={"src":"picture/teleport-zone.png","size":1.5,"side":[0,1,2,3],"preBumperBox":[ -16,16,-16,16 ]};
-	a["teleport-underground"] ={"src":"picture/teleport-underground.png","size":3,"preBumperBox":[ -16,16,-16,16 ]};
-	a["teleport-well"] ={"src":"picture/teleport-well.png","size":3,"preBumperBox":[ -24,24,-24,24 ]};
+	a["teleport-underground"] ={"src":"picture/teleport-underground.png","size":2.5,"preBumperBox":[ -16,16,-16,16 ]};
+	a["teleport-well"] ={"src":"picture/teleport-well.png","size":2,"preBumperBox":[ -24,24,-24,24 ]};
 	
 	a["block-rock1x1"] ={"src":"picture/block-rock2x2.png","size":0.5,"preBumperBox":[ -32,32,-32,32 ]};
 	a["block-barrier"] ={"src":"picture/block-barrier.png","size":1,"preBumperBox":[ -64,64,-32,32 ]};

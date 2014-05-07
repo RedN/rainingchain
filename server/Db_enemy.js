@@ -127,6 +127,7 @@ boss = skull
 
 
 */
+
 Db.npc = {};
 Init.db.npc = function(){ 
 	var a = Db.npc;
@@ -191,7 +192,7 @@ Init.db.npc = function(){
 				'knock,baseChance':0.25,
 			}},
 			{'template':'lightningBullet','aiChance':[1,0.2,0.4],'extra':{
-				'amount':5,'angle':30,'knock,baseChance':0.25,'sin':{"amp":2,"freq":2},
+				'amount':3,'angle':30,'knock,baseChance':0.25,'sin':{"amp":2,"freq":2},
 			}},
 			[0.4,0.2,0.2]
 		],
@@ -769,7 +770,7 @@ Init.db.npc = function(){
 	a['waypoint'] = {}; //{
 	a["waypoint"]["grave"] = {  //{
 		"name":"Grave",
-		'minimapIcon':'minimapIcon.grave',
+		'minimapIcon':'minimapIcon.waypoint',
 		"sprite":{'name':"waypoint-grave",'sizeMod':1},
 		"waypoint":1,
 		'nevercombat':1,
@@ -783,7 +784,7 @@ Init.db.npc = function(){
 	a["loot"] = {}; //{
 	a["loot"]["chestOff"] = {  //{
 		"name":"Chest",
-		'minimapIcon':'minimapIcon.chest',
+		'minimapIcon':'minimapIcon.loot',
 		"sprite":{'name':"loot-chestOff",'sizeMod':1},
 		'nevercombat':1,
 		'nevermove':1,
@@ -792,7 +793,7 @@ Init.db.npc = function(){
 	a["loot"]["chestOn"] = template(a["loot"]["chestOff"],'loot-chestOn');	
 	a["loot"]["flowerOff"] = {  //{
 		"name":"Flower",
-		'minimapIcon':'minimapIcon.chest',
+		'minimapIcon':'minimapIcon.loot',
 		"sprite":{'name':"loot-flowerOff",'sizeMod':1},
 		'nevercombat':1,
 		'nevermove':1,
@@ -964,8 +965,6 @@ Init.db.npc = function(){
 		'nevermove':1,
 		"block":{condition:'true',size:[-1,1,-1,1]},
 	}; //}
-	//}
-	
 	//}
 	
 	

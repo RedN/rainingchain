@@ -62,7 +62,8 @@ exports.init = function(version,questname){	//}
 			return;
 		}
 		if(typeof value === 'string' && typeof mq[attr] === 'number' && !isNaN(value) && (value[0] === '+' || value[0] === '-'))	mq[attr] += (+value);
-		else mq[attr] = value;		
+		else mq[attr] = value;	
+		Quest.updateHint(key,Q);		
 	}
 
 	s.getAct = function(key){

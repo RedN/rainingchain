@@ -34,6 +34,7 @@ leech chance: unrelated to dmg. abilityMod [1] * playerMod [0]
 
 */
 
+
 Combat = {};
 
 Combat.attack = function(key,action,extra){   	
@@ -64,6 +65,26 @@ Combat.attack.perform = function(player,atk,extra){   //extra used for stuff lik
 		atkList[i].angle = initAngle + atkAngle * (atk.amount-2*(i+0.5)) / (atk.amount*2);
 		atkList[i].num = i;	//num used for parabole/sin
 		Attack.creation(player,atkList[i]);	
+	}
+	
+	if(player.type === 'player'){
+		player.spdX /= 2;
+		player.spdY /= 2;
+		Actor.boost(player,{
+			'stat':'acc',
+			value:1/5,
+			time:3,
+			type:'*',
+			name:'performAbility',		
+		});
+	}
+	if(player.type === 'npc'){
+		player.spdX /= 8;
+		player.spdY /= 8;
+		Actor.boost(player,[
+			{'stat':'acc',value:1/3,time:6,	type:'*',name:'performAbility'},
+			{'stat':'maxSpd',value:1/2,time:10,	type:'*',name:'performAbility'}
+		]);
 	}
 }	
 	
@@ -279,6 +300,8 @@ Combat.collision.damage = function(atk,player){
 	var def = Actor.getDef(player);
 	var dmgInfo = Combat.collision.damage.calculate(atk.dmg,def);
 	if(!dmgInfo.sum) return;
+	
+	dmgInfo.sum *= Test.dmgMod[player.type];	//TOFIX
 	
 	Actor.changeHp(player,-dmgInfo.sum);
 	

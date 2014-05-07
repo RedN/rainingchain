@@ -63,7 +63,7 @@ Attack.template = function(type){
 	
 	b.maxTimer = 40;
 	b.timer = 0;
-	b.spd = 15;
+	b.spd = 10;
 	
 	b.normal = 0;	//for movement, get set inside creation
 	b.nova = 0;

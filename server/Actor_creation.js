@@ -326,7 +326,10 @@ Actor.remove = function(act){
 	Map.leave(act);
 	delete List.actor[act.id];
 	delete List.all[act.id]
-	if(act.group) delete List.group[act.group].list[act.id];
+	if(act.group) {
+		if(!List.group[act.group]) return ERROR(3,'no group','name',act.name);
+		delete List.group[act.group].list[act.id];		//BUG
+	}
 }
 
 

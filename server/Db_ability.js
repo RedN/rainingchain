@@ -217,11 +217,11 @@ Init.db.ability = function(cb){
 	//Alt-03
 	//{ Pvp
 	a['pvp-bullet'] = {'type':'attack','name':'Basic Bullet','icon':'attackRange.steady',
-		'spd':{'main':1,'support':0},'period':{'own':30,'global':20},
+		'spd':{'main':1,'support':0},'period':{'own':15,'global':15},
 		'action':{'func':'Combat.attack','param':{
 			'type':"bullet",'angle':0,'amount':1,
 			'objImg':{'name':"arrow",'sizeMod':1},'hitImg':{'name':"strikeHit",'sizeMod':0.5},
-			'dmg':{'main':100,'ratio':{'melee':1,'range':1,'magic':1,'fire':1,'cold':1,'lightning':1}},
+			'dmg':{'main':80,'ratio':{'melee':1,'range':1,'magic':1,'fire':1,'cold':1,'lightning':1}},
 		}
 	}};
 	

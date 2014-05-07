@@ -119,7 +119,7 @@ Test.b = function(){}
 Test.c = function(){}
 Test.d = function(){}
 
-Test.dmgMod = {player:1,npc:5,pvp:-0.8};
+Test.dmgMod = {player:1.5,npc:2,pvp:-0.8};
 Test.offPvp = function(){
 	for(var i in List.main){
 		Command.list.pvp(i);	

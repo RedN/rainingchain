@@ -1,5 +1,6 @@
 Input = {};
 Input.mouse = {x:0,y:0,drag:{active:0,sx:0,sy:0,vx:0,vy:0},left:0,right:0};
+Input.offset = {left:0,top:0};	//updated in loop
 
 Input.init = function(setup,save){
 	Input.key = {};
@@ -216,9 +217,8 @@ Input.event.mouse.wheel = function(side){
 }
 
 Input.event.mouse.move = function (evt){
-	var pos = $('#gameDiv').offset();
-	Input.mouse.x = evt.x - pos.left;
-	Input.mouse.y = evt.y - pos.top;
+	Input.mouse.x = evt.x - Input.offset.left;
+	Input.mouse.y = evt.y - Input.offset.top;
 }
 
 Input.event.mouse.drag = function(){

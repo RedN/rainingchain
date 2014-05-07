@@ -892,7 +892,7 @@ Draw.window.quest.start = function(s,q,mq,hq){
 	hq.start.style.top = -40 + 'px'; 
 	
 	hq.start.style.font = s.charY*1.5 + 'px Kelly Slab';
-	hq.start.style.width = s.dw - 100 - 5 + 'px';
+	hq.start.style.width = 220 + 'px';
 	hq.start.style.height = s.charY*1.5*1.2 + 'px';
 	
 	if(!mq._active){
