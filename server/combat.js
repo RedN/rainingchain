@@ -92,7 +92,9 @@ Combat.attack.simple = function(player,attack,extra){
 	Combat.attack(player,Tk.useTemplate(Attack.template(),attack),Tk.deepClone(extra));	
 }
 	
-Combat.summon = function(key,action,enemy){		//action:{name,maxChild,time,distance}
+Combat.summon = function(key,action,enemy){		//action:{name,maxChild,time,distance} || {"category":"slime","variant":"Big","lvl":0,'amount':1,"modAmount":0}
+	return; //TOFIX
+	
 	var name = action.name || Math.randomId();
 	action.maxChild = action.maxChild || 1;
 	action.time = action.time || Cst.bigInt;
@@ -119,7 +121,6 @@ Combat.summon = function(key,action,enemy){		//action:{name,maxChild,time,distan
 	enemy = Tk.deepClone(Tk.arrayfy(enemy));
 	for(var i in enemy){
 		enemy[i].extra = {
-			'deleteOnceDead':1,
 			'summoned':{'father':master.id,'time':action.time*timeMod,'distance':action.distance},
 			'targetIf':'summoned',
 			'damageIf':'summoned',

@@ -7,7 +7,7 @@ Actor.loop = function(act){
 	if(act.dead){
 		if(act.type === 'player' && --act.respawn < 0)
 			Actor.death.respawn(act);
-		if(act.deleteOnceDead) Actor.remove(act);
+		if(act.type !== 'player' && !act.group) Actor.remove(act);
 		return;
 	}
 	Actor.loop.timeout(act);

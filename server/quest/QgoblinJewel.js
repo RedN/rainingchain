@@ -37,7 +37,7 @@ q.reward = {
 };
 
 q.challenge = {
-	speedrunner:s.challenge('speedrun','1:05:10.10'),
+	//speedrunner:s.challenge('speedrun','1:05:10.10'),
 };
 
 /*
@@ -232,7 +232,7 @@ q.item['jewel'] = {'name':'Jewel','icon':'minimapIcon.loot','drop':0,'bank':0,'o
 q.npc["boss"] = {  //{
 	"name":"Goblin",
 	"sprite":{'name':"goblin",'sizeMod':1.2},
-	"mastery":{'def':{'melee':1,'range':1,'magic':1,'fire':3,'cold':3,'lightning':3},
+	"mastery":{'def':{'melee':1,'range':1,'magic':1,'fire':1,'cold':1,'lightning':1},
 				'dmg':{'melee':1/6,'range':1/6,'magic':1/6,'fire':1/6,'cold':1/6,'lightning':1/6}},		//QUICKFIX
 	"acc":0.5,
 	"maxSpd":10,
@@ -241,7 +241,7 @@ q.npc["boss"] = {  //{
 	"boss":q.id+'-test',
 	'target,maxAngleChance':10,
 	'resource,hp,regen':0,
-	'resource,hp,max':2000,
+	'resource,hp,max':5000,
 	'modAmount':false,
 }; //}
 
@@ -569,6 +569,7 @@ q.map.goblinUnderground = function(){
 		m.waypoint(spot.g1,true);
 		
 		m.loot(spot.q1,q.event.dontHaveJewel,q.event.getJewel)
+		
 		
 		
 		m.toggle(spot.q2,q.event.seeBlockChest,q.event.swChestOn);

@@ -21,7 +21,6 @@ Actor.creation = function(d){	//d: x  y  map category variant lvl modAmount extr
 	
 	for(var i in e.immune) e.mastery.def[i].sum = Cst.bigInt;
 	
-	if(!e.group) e.deleteOnceDead = 1;
 	return e.id;
 }
 
@@ -42,19 +41,20 @@ Actor.creation.group = function(gr,el){
 	
 	Map.convertSpot(gr);
 	gr = Tk.useTemplate(Actor.creation.group.template(),gr);	
+	gr.group = Math.randomId();	//cant used the one in gr cuz when reviving would be same id again
 	el = Tk.arrayfy(el);
 	
 	var id = gr.group;
 	List.group[id] = {
 		'id':id,
-		'param':[gr,el],        //used to revive group
+		'param':[gr,el],        //used to revive node appgroup
 		'list':{},              //hold enemies
 		'respawn':gr.respawn,   //time before respawn when all monster dead
 	};
 	
 	for(var i in el){
 		var amount = el[i].amount || 1;
-		el[i] = Tk.useTemplate(el[i],gr);  //info about x,y,map
+		el[i] = Tk.useTemplate(el[i],gr);  //info about x,y,map,group
 		for(var j = 0 ; j < amount; j++){
 			var eid = Actor.creation(el[i]);
 			List.group[id].list[eid] = 1;
@@ -67,7 +67,7 @@ Actor.creation.group = function(gr,el){
 }
 
 Actor.creation.group.template = function(){
-	return {'x':0,'y':0,'v':25,'map':'test@MAIN','respawn':100,group:Math.randomId()}
+	return {'x':0,'y':0,'v':25,'map':'test@MAIN','respawn':100,group:'bob'}
 }
 
 Actor.creation.boost = function(e){

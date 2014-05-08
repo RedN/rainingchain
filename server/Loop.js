@@ -60,30 +60,7 @@ Loop.map = function(){
 
 Loop.group = function(){
 	for(var i in List.group){
-		var g = List.group[i];
-		var list = g.list;
-		var alldead = true;
-		
-		for(var j in list){
-			var e = List.actor[j];
-			if(!e){ delete list[j]; ERROR(2,'no actor');  continue; }
-			if(!e.dead){ alldead = false; }
-			if(e.dead && e.deleteOnceDead){
-				Actor.remove(e);
-				delete list[j];
-				continue;
-			}
-		}
-		if(Object.keys(g.list).length === 0){ delete List.group[i]; continue; } //get removed if no longer in List or deleteOnceDead
-		
-		if(alldead){ //aka all dead
-			if(--g.respawn <= 0){
-				for(var j in list) Actor.remove(List.actor[j]);		
-				Actor.creation.group.apply(this,g.param); 		
-				delete List.group[i];
-				continue;
-			}
-		}	
+		Group.loop(List.group[i]);
 	}
 }
 
@@ -184,6 +161,35 @@ Activelist.removeAny = function(act){
 	else if(act.type === 'drop') Drop.remove(act);
 	else if(act.type === 'strike') Strike.remove(act);
 }
+
+
+Group = {};
+
+Group.loop = function(g){
+	var alldead = true;
+	
+	for(var i in g.list){
+		var e = List.actor[i];	//bug when removing map
+		if(!e){ delete g.list[i]; ERROR(2,'no actor');  continue; }
+		if(!e.dead){ alldead = false; }
+	}
+	
+	if(alldead && --g.respawn <= 0){ //aka all dead
+		Actor.creation.group(g.param[0],g.param[1]); 		
+		Group.remove(g);
+	}	
+
+}
+
+Group.remove = function(g){
+	for(var i in g.list){
+		var e = List.actor[i];
+		if(!e){ ERROR(2,'no actor');  continue; }
+		Actor.remove(e);
+	}
+	delete List.group[g.id];
+}
+
 
 
 

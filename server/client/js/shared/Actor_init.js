@@ -131,7 +131,6 @@ Init.actor = function(){
 		act.deathEvent = null;	//function param = id of each killer
 		act.deathEventArray = null;	//function param = array id of killers
 		act.combat = 1;
-		act.deleteOnceDead = 0;
 		act.damageIf = 'player';
 		act.damagedIf = 'true';
 		act.targetIf = 'player';  //condition used by monsters to find their target. check targetIfList

@@ -53,7 +53,7 @@ Map.creation = function(namemodel,version,lvl){	//create instance of map. versio
 		lvl:lvl || model.lvl,
 		addon:newaddon,
 		timer:version === 'MAIN' ? 1/0 : 5*60*1000/25,
-		list:{all:{},player:{},bullet:{},npc:{},anim:{},actor:{},drop:{}},		//acts like List.all (for faster activeList and collisionRect)
+		list:{all:{},player:{},bullet:{},npc:{},anim:{},actor:{},drop:{},group:{}},		//acts like List.all (for faster activeList and collisionRect)
 		
 	};
 	
@@ -90,11 +90,13 @@ Map.creation.model = function(map){	//create the model that will be in Db.map | 
 
 Map.remove = function(map){
 	if(Map.getVersion(map.id) === "MAIN") return; //cant delete main maps
+	for(var i in map.list.group) Group.remove(List.group[i]);
 	for(var i in map.list.actor) Actor.remove(List.all[i]);
 	for(var i in map.list.drop) Drop.remove(List.all[i]);
 	for(var i in map.list.bullet) Bullet.remove(List.all[i]);
 	for(var i in map.list.strike) Strike.remove(List.all[i]);
-	
+	delete List.map[map.id];
 }
+
 
 
