@@ -97,23 +97,6 @@ Bullet.loop.collision = function(b){
 	Collision.BulletMap(b);
 }
 
-Bullet.mapMod = {};	//all bullets share the same mapMod
-Bullet.loop.mapMod = function(){
-	Bullet.mapMod = {};
-	for(var i in List.actor){
-		var act = List.actor[i];
-		if(!act || !act.block || !act.block.condition || act.block.condition !== 'true') continue;
-		
-		var size = act.block.size;
-		var pos = Collision.getPos(act);
-			
-		for(var j = size[0]; j <= size[1]; j++){
-			for(var k = size[2]; k <= size[3]; k++){
-				Bullet.mapMod[act.map + '-' + (pos.x+j) + '-' + (pos.y+k)] = 1;
-			}
-		}
-	}
-}
 
 
 //Update Strike

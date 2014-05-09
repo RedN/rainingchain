@@ -38,11 +38,11 @@ Actor.loop = function(act){
 	if(act.combat && act.move && interval(3)) Actor.loop.move.aim(act); //impact max spd depending on aim
 	
 	if(act.move){
-		if(interval(10)) Actor.loop.mapMod(act); 
 		Actor.loop.bumper(act);   //test if collision with map    
 		Actor.loop.move(act);  	//move the actor
 	}
 	if(act.type === 'player'){
+		if(interval(10)) Actor.loop.mapMod(act); 
 		if(interval(3)) Actor.loop.fall(act);						//test if fall
 		if(interval(25)) Actor.loop.friendList(act);   				//check if any change in friend list
 		if(interval(5)) Actor.loop.trade(act); ;    
@@ -134,7 +134,8 @@ Actor.loop.timeout = function(act){
 
 Actor.loop.mapMod = function(act){
 	act.mapMod = {};
-
+	
+	
 	for(var i in act.activeList){
 		var b = List.all[i];
 		if(!b || !b.block || !b.block.condition) continue;

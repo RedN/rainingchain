@@ -62,8 +62,11 @@ Collision.anglePtPt = function(pt1,pt2){	//pt1 looking towards pt2
 
 Collision.PosMap = function(pos,map,type){	//Test Collision between pos and map	
 	var grid = List.map[map].grid[type];
-	return !grid[pos.y] || !+grid[pos.y][pos.x];		//return 1 if collision
+	return !grid[pos.y] || !+grid[pos.y][pos.x] 
+	|| (type !== 'player' && +Collision.mapMod[map + '-' + pos.x + '-' + pos.y]);	//if type === player, this line wont affect return
+	//return 1 if collision	
 }
+
 
 Collision.getPos = function(pt){
 	return {x:Math.floor(pt.x/32),y:Math.floor(pt.y/32)}
@@ -133,8 +136,7 @@ Collision.BulletMap = function(bullet){
 	if(bullet.ghost) return 0;
 
 	var pos = Collision.getPos(bullet);
-	var str = bullet.map + '-' + pos.x + '-' + pos.y;
-	if(Bullet.mapMod[str] || Collision.PosMap(pos,bullet.map,'bullet'))
+	if(Collision.PosMap(pos,bullet.map,'bullet'))
 		bullet.toRemove = 1;
 	
 }
@@ -179,14 +181,37 @@ Collision.StrikeMap = function(strike,target){	//gets farthest position with no 
 
 Collision.ActorMap = function(pos,map,player){
 	if(player.ghost) return 0;
-
-	if(player.mapMod && player.mapMod[pos.x + '-' + pos.y]){
+	
+	if(player.mapMod && player.mapMod[pos.x + '-' + pos.y]){	//for player only
 		return player.mapMod[pos.x + '-' + pos.y];
 	}
 	
-	var bool = Collision.PosMap(pos,map,player.type || 'npc');
 	return Collision.PosMap(pos,map,player.type || 'npc');
 };
 
+
+
+Collision.loop = function(){
+	if(Loop.interval(25)) Collision.loop.mapMod();
+}
+
+Collision.loop.mapMod = function(){
+	Collision.mapMod = {};
+	for(var i in List.actor){
+		var act = List.actor[i];
+		if(!act || !act.block || !act.block.condition || act.block.condition !== 'true') continue;
+		
+		var size = act.block.size;
+		var pos = Collision.getPos(act);
+			
+		for(var j = size[0]; j <= size[1]; j++){
+			for(var k = size[2]; k <= size[3]; k++){
+				Collision.mapMod[act.map + '-' + (pos.x+j) + '-' + (pos.y+k)] = 1;
+			}
+		}
+	}
+}
+
+Collision.mapMod = {};	//all bullets share the same mapMod
 
 

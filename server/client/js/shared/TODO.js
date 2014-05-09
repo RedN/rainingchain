@@ -12,6 +12,9 @@ Update
 	convert itemlist
 
 
+	
+	
+mapMod for enemy, same system than bullet	
 
 
 ==PRESDK==

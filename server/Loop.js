@@ -1,10 +1,12 @@
 Loop = function(){
 	try {
-	Loop.frame++;	
-    Test.loop();
-    Performance.loop();
-	
-	Loop.bullet();
+	Loop.frame++;
+	Performance.loop();
+	Test.loop();
+   
+	Activelist.loop(); 
+	Collision.loop();
+    Loop.bullet();
 	Loop.strike();
 	Loop.group();
 	Loop.actor();
@@ -16,7 +18,7 @@ Loop = function(){
 	Change.send();
 	
 	Loop.logOut();
-	} catch(err){ ERROR.err(err); }
+	} catch(err){ ERROR.err(err);  } //REAL PROBLEM... should change that so each loop has own try...
 }
 Loop.frame = 0; 
 
@@ -33,9 +35,6 @@ Loop.actor = function(){
 Loop.bullet = function (){
 	for(var i in List.bullet){
 		Bullet.loop(List.bullet[i]);
-	}
-	if(Loop.interval(25)){
-		Bullet.loop.mapMod();	
 	}
 }
 
@@ -189,6 +188,33 @@ Group.remove = function(g){
 	}
 	delete List.group[g.id];
 }
+
+
+
+
+
+
+Activelist.loop = function(){
+	if(!Loop.interval(25)) return;
+	for(var i in List.all){}
+	
+	
+	
+	
+	
+
+
+
+
+
+
+}
+//activelist used: boss, target, mapMod, chat, button, send
+//bullet: Collision.BulletActor, 
+
+
+
+
 
 
 
