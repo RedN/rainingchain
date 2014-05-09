@@ -96,7 +96,7 @@ Map.enter = function(act,map){
 	if(newmap.list[act.type]) newmap.list[act.type][act.id] = 1;
 	if(act.type === 'player' || act.type === 'npc') newmap.list.actor[act.id] = 1;
 	
-	Activelist.update(act);
+	Activelist.init(act);
 	
 	if(act.type === 'player'){
 		for(var i in newmap.addon)

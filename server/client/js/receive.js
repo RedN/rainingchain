@@ -52,6 +52,7 @@ try {
 		b.x += Tk.cos(b.angle)*b.spd;
 		b.y += Tk.sin(b.angle)*b.spd;	
 	}
+	Loop();
 
 } catch (err){ ERROR.err(err) }
 }

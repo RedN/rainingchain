@@ -1,4 +1,6 @@
 
+
+
 =========
 Perf
 
@@ -13,9 +15,9 @@ Update
 
 
 	
-	
-mapMod for enemy, same system than bullet	
+problem with activelist loop, need to update activelist for enemy vs bullet
 
+removelist: {id:disappearSpeed}
 
 ==PRESDK==
 SKIPPED: trade, craft,db.filter, passive

@@ -1,3 +1,4 @@
+var db = require('./Db');
 /*
 1- connect db
 2- ts("Server.maxPlayerAmount = 16")
@@ -124,7 +125,20 @@ Server.ban = function(name){
 
 
 
+Server.reset = function(save){
+	if(save){
+		try	{
+			for(var i in List.main) Save(key);
+		} catch(err){}
+	}
 
+	try	{
+		for(var i in List.socket)	List.socket[i].disconnect();
+	} catch(err){}
+	
+	for(var i in List)	List[i] = {};
+	db.update('account',{},{'$set':{online:0}});
+}
 
 
 

@@ -6,7 +6,7 @@ Change.update = function(){
 	//Entity
 	for(var i in List.all){
 		var act = List.all[i];
-		if(act.dead || act.active === false) continue;
+		if(act.dead || act.active === false) continue;		//need false cuz bullet.active is undefined
 		for(var m in Change.update.list[act.type]){         //m = watch or exist
 			for (var k in Change.update.list[act.type][m]){     //k = priority , reg , slow
 				if(Loop.frame % TIMER[k] !== 0) continue;

@@ -4,7 +4,6 @@ Loop = function(){
 	Performance.loop();
 	Test.loop();
    
-	Activelist.loop(); 
 	Collision.loop();
     Loop.bullet();
 	Loop.strike();
@@ -113,9 +112,11 @@ Activelist.test = function(act,obj){
 	return Collision.PtRect(obj,rect);
 }
 
-Activelist.update = function(act){	//called by attack on creation only, called by npc in loop
+Activelist.update = function(act){	//called by npc in loop
+	var tested = {};
 	//Test Already in List if they deserve to stay
 	for(var j in act.activeList){
+		tested[j] = 1;
 		if(!Activelist.test(act,List.all[j])){
 			delete List.all[j].activeList[act.id];
 			delete act.activeList[j];
@@ -124,20 +125,31 @@ Activelist.update = function(act){	//called by attack on creation only, called b
 	}
 	
 	//Add New Boys
-	var range = 'all';
-	if(act.type === 'bullet' || act.type === 'strike') range = 'actor';	//attack only need to check actor
-	
-	for(var j in List.map[act.map].list[range]){
-		if(act.activeList[j]) continue;	//no need to test again
+	for(var j in List.map[act.map].list.all){
+		if(tested[j]) continue;	//no need to test again
 
 		if(Activelist.test(act,List.all[j])){
 			act.activeList[j] = 1;			//for player, if 1:need init, if 2:just update
 			List.all[j].activeList[act.id] = 1;	
 		}
 	}
-	act.active = act.activeList.$length() || act.type === 'player';
-
 }
+
+
+
+Activelist.init = function(act){	//when Map.enter
+	var range = 'all';
+	if(act.type === 'bullet' || act.type === 'strike') range = 'actor';	//attack only need to check actor
+	
+	for(var j in List.map[act.map].list[range]){
+		if(Activelist.test(act,List.all[j])){
+			act.activeList[j] = 1;			//for player, if 1:need init, if 2:just update
+			List.all[j].activeList[act.id] = 1;	
+		}
+	}
+}
+
+
 
 Activelist.clear = function(b){	//called when living forever
 	if(!b){ ERROR(2,'actor dont exist'); return; }
@@ -194,14 +206,20 @@ Group.remove = function(g){
 
 
 
-Activelist.loop = function(){
+Activelist.loop = function(){	//unsued
+	return;
 	if(!Loop.interval(25)) return;
-	for(var i in List.all){}
+
+	for(var i in List.actor) List.actor[i].activeList = {};
+	
+	for(var i in List.main){
+		var p = List.actor[i];
+		
+		
+		
 	
 	
-	
-	
-	
+	}
 
 
 

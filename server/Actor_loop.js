@@ -5,21 +5,21 @@ var SUMMONINTERVAL = 5;
 
 Actor.loop = function(act){
 	if(act.dead){
-		if(act.type === 'player' && --act.respawn < 0)
-			Actor.death.respawn(act);
+		if(act.type === 'player' && --act.respawn < 0)	Actor.death.respawn(act);
 		if(act.type !== 'player' && !act.group) Actor.remove(act);
 		return;
 	}
 	Actor.loop.timeout(act);
+	Actor.loop.updateActive(act);
 	
-	if(++act.frame % 25 === 0) Activelist.update(act); 
+	act.frame++;
 	if(!act.active) return;
 	
 	var interval = function(num){	return act.frame % num === 0; };
 	
 	
 	if(act.combat){
-		if(act.hp <= 0) Actor.death(act);
+		if(act.hp <= 0){ Actor.death(act); return; }
 		if(act.boss){ Boss.loop(act.boss);}
 		if(interval(ABILITYINTERVAL)){
 			Actor.loop.ability.charge(act);
@@ -42,6 +42,7 @@ Actor.loop = function(act){
 		Actor.loop.move(act);  	//move the actor
 	}
 	if(act.type === 'player'){
+		if(interval(25)) Activelist.update(act);
 		if(interval(10)) Actor.loop.mapMod(act); 
 		if(interval(3)) Actor.loop.fall(act);						//test if fall
 		if(interval(25)) Actor.loop.friendList(act);   				//check if any change in friend list
@@ -52,6 +53,9 @@ Actor.loop = function(act){
 
 }
 
+Actor.loop.updateActive = function(act){
+	act.active = act.activeList.$length() || act.type === 'player' || false;	//need to be false for Change.send
+}
 //{Ability
 Actor.loop.ability = {};
 Actor.loop.ability.charge = function(m){	//HOTSPOT

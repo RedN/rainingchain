@@ -109,7 +109,7 @@ Init.game = function (data) {
 		gameStarted = true;
 		Song.play(Object.keys(Db.song).random());
 		
-		setInterval(Loop,40);
+		//setInterval(Loop,40);	//in Receive now
 		socket.emit('clientReady',1); 
 		
 	});

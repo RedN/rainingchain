@@ -10,7 +10,7 @@ Performance.loop = function(){
 Performance.cpu = function(){
     if(Performance.cpu.display && Loop.frame % Performance.cpu.frequence === 0){
         var d = Date.now();	
-        INFO('Performance: ' + Math.round(40*Performance.cpu.frequence/(d - Performance.cpu.oldtime)*100+15) + '%');	//+15 cuz weird glitch making 85% them max
+        INFO('Performance (Include Server + Client Lag): ' + Math.round(40*Performance.cpu.frequence/(d - Performance.cpu.oldtime)*100+15) + '%');	//+15 cuz weird glitch making 85% them max
         Performance.cpu.oldtime = d;
     }
 };
