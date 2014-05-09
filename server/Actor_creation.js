@@ -67,7 +67,7 @@ Actor.creation.group = function(gr,el){
 }
 
 Actor.creation.group.template = function(){
-	return {'x':0,'y':0,'v':25,'map':'test@MAIN','respawn':100,group:'bob'}
+	return {'x':0,'y':0,'v':25,'map':'test@MAIN','respawn':100,group:'bob','lvl':0}
 }
 
 Actor.creation.boost = function(e){

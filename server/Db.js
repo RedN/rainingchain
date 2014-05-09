@@ -35,7 +35,7 @@ Init.db = function(data){
 	
 	
 
-	var collections = ["report","customMod","player","main","ability","equip","account","clan",'plan','passiveCount','highscore'];
+	var collections = ["report","customMod","player","main","ability","equip","account","clan",'plan','passiveCount','highscore','rscalc'];
 	
 	//real direct db
 	var DB = require("mongojs").connect(databaseURI, collections, MONGO.options);
@@ -134,7 +134,7 @@ Init.db = function(data){
 	//db.deleteAll();
 	//db.filterDb();
 	
-	
+	Init.db.rscalc(); //rscalc
 }
 
 

@@ -1,7 +1,7 @@
 NODEJITSU = typeof process.env.NODEJITSU !== 'undefined';
 SERVER = true;
 
-if(NODEJITSU) require('nodetime').profile({accountKey: '2c80ddb75be46eb8d768574123a2a98cf63d1d97',appName: 'RC ' + Date.now()});
+if(NODEJITSU) require('nodetime').profile({accountKey: '2c80ddb75be46eb8d768574123a2a98cf63d1d97',appName: 'RC'});
 
 //Create Server
 var http = require('http');
@@ -23,12 +23,11 @@ app.use(express.bodyParser());
 app.use(express.static(path.resolve(__dirname, 'server/client')));	//need to be entered manually
 
 
-//Runescape Calculators:
+//Runescape Calculators:	//rscalc
 RSCALC = require('./server/RS_calculators');
 app.get('/rs', function (req, res) { res.sendfile(__dirname  + '/server/client/rscalc/index.html');});
 app.post('/getPrice', function(req, res){	res.send({itemDb:RSCALC.itemDb,lastUpdate:RSCALC.lastUpdate});});
 app.post('/getExp', function(req, res){	RSCALC.appPostGetExp(req,res); });
-
 
 //Require
 require(clientPath + 'essentialsShare');
