@@ -181,7 +181,7 @@ Collision.StrikeMap = function(strike,target){	//gets farthest position with no 
 Collision.ActorMap = function(pos,map,act){
 	if(act.ghost) return 0;
 	
-	if(act.type === 'player'){
+	if(act.awareNpc){
 		if(act.mapMod[pos.x + '-' + pos.y]) return 1;
 	} else if(+Collision.mapMod[map + '-' + pos.x + '-' + pos.y]){
 		return 1;

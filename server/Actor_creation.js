@@ -243,6 +243,7 @@ Actor.creation.optionList = function(e){
 		var info = {'name':'Push',"func":'Actor.click.pushable',"param":[e.id]};
 		ol.option.push(info);
 		e.onclick.shiftLeft = info;
+		e.awareNpc = 1;	//so blocked by other blocks but not himself
 	} 
 	
 	e.optionList = ol.option.length ? ol : null;

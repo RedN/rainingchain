@@ -17,7 +17,10 @@ Actor.loop = function(act){
 	
 	var interval = function(num){	return act.frame % num === 0; };
 	
-	
+	if(interval(25) && act.awareNpc) Activelist.update(act);
+	if(interval(10) && act.awareNpc) Actor.loop.mapMod(act); 
+		
+		
 	if(act.combat){
 		if(act.hp <= 0){ Actor.death(act); return; }
 		if(act.boss){ Boss.loop(act.boss);}
@@ -42,8 +45,6 @@ Actor.loop = function(act){
 		Actor.loop.move(act);  	//move the actor
 	}
 	if(act.type === 'player'){
-		if(interval(25)) Activelist.update(act);
-		if(interval(10)) Actor.loop.mapMod(act); 
 		if(interval(3)) Actor.loop.fall(act);						//test if fall
 		if(interval(25)) Actor.loop.friendList(act);   				//check if any change in friend list
 		if(interval(5)) Actor.loop.trade(act); ;    

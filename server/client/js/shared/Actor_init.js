@@ -28,6 +28,7 @@ Init.actor = function(){
 			reachedGoal:0,isStuck:0,maxAngleChange:180,
 		}
 		act.mapMod = {};
+		act.awareNpc = 0;
 		act.customBoost = Actor.template.customBoost();
 		act.bonus = Actor.template.bonus();	//Bonus applies on top of ability attack. If effect not on ability, do nothing.
 		act.mastery = Actor.template.mastery(type);
@@ -153,7 +154,7 @@ Init.actor = function(){
 			act.privateOld = {};
 			act.context = 'player0000';
 			act.name = 'player0000';
-			
+			act.awareNpc = 1;
 			act.team = act.name;
 			act.item = {"quantity":0,"quality":0,"rarity":0};  //aka magic find
 			act.pickRadius = 100;  //distance to pick items on ground
