@@ -107,7 +107,7 @@ Chat.receive.offlinepm = function(pack){
 }
 Chat.receive.public = function(pack){
 	var text = '<span oncontextmenu="Chat.click.name(\'' + pack.from + '\')">' + Chat.receive.symbol(pack.symbol) + pack.from + "</span>" + ': ' + '<span style="color:blue">' + pack.text + "</span>";
-	html.chat.text.innerHTML += '<br>' + text; 
+	html.chat.text.innerHTML += '<br>' + Chat.receive.public.parse(text,pack.from); 
 }		
 Chat.receive.question = function(pack){	
 	if(pack.option === true) pack.option === ['yes','no'];
@@ -139,6 +139,17 @@ Chat.receive.question = function(pack){
 	}
 }		
 		
+Chat.receive.public.parse = function(text,from){
+	var friend = false;
+	for(var i in main.social.list.friend) if(i === from) friend = true;
+	if(from === player.name) friend = true;
+	
+	if(main.pref.puush === 0 || (main.pref.puush === 1 && friend === false)){
+		return text.replaceAll('a href','span href').replaceAll('</a>','</span>');
+	}
+	return text;
+}
+
 		
 Chat.click = {};
 Chat.click.name = function(name){	//in public chat
@@ -222,5 +233,7 @@ Chat.report = function(){
 }
 		
 		
-		
+Chat.puush = function(link){
+	
+}		
 		

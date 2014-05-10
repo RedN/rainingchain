@@ -13,7 +13,6 @@ tip of the day below gameDiv
 group
 
 
-talk about naming convention
 
 tofix: summon
 
@@ -27,14 +26,12 @@ boss summon
 puush support
 
 
-no more context from server, no need for clientContext
 trading is brokens
 
 save rs items price
 
 ==REVAMP==
 
-make Db_public and put real Db in gitignore
 tooltip not disappearing
 
 main.temp = bad... only used for item on another item

@@ -572,6 +572,19 @@ String.prototype.replacePattern = function(func){	//only works like [[sdadsa]]
 	return data;
 }
 
+String.prototype.replaceCustomPattern = function(begin,ending,func){	//only works like [[sdadsa]]
+	var data = this;
+	
+	var start = data.indexOf(begin); if(start === -1) return data;
+	var end = data.indexOf(ending); if(end === -1 || end < start) return data;
+	
+	var center = data.slice(start,end+ending.length);
+	center = func(center);
+	
+	data = data.slice(0,start) + center + data.slice(end+ending.length);
+	
+	return data;
+}
 
 
 String.prototype.chronoToTime = function(func){	//1:04:10.10

@@ -1,4 +1,4 @@
-if(SERVER) var db = require('./../../../Db');
+if(SERVER) var db = requireDb();
 
 //List of functions that the client can use.
 Command = {};
@@ -773,6 +773,7 @@ Command.pref.list = {
 	'volumeSong':{name:'Volume Song',initValue:20,min:0,max:100,description:'Volume Song.','func':function(value){ Song.beingPlayed.song.volume = value/100 * main.pref.volumeMaster/100; }},
 	'volumeSfx':{name:'Volume Effects',initValue:100,min:0,max:100,description:'Volume Sound Effects.'},
 	'volumeMaster':{name:'Volume Master',initValue:100,min:0,max:100,description:'Volume Master. 0:Mute','func':function(value){ Song.beingPlayed.song.volume = value/100 * main.pref.volumeSong/100; }},
+	'puush':{name:'Allow Puush Link',initValue:0,min:0,max:2,description:'Allow Puush Link in chat. 0=never, 1=friend only, 2=always' },
 	'mapRatio':{name:'Map Ratio',initValue:5,min:2,max:10,description:'Minimap Size'},
 	'bankTransferAmount':{name:'X- Bank',initValue:1000,min:1,max:9999999999,description:'Amount of items transfered with Shift + Left Click'},
 	'orbAmount':{name:'X- Orb',initValue:1000,min:1,max:9999999999,description:'Amount of orbs used with X- option'},

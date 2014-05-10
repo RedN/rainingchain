@@ -1,10 +1,13 @@
-var db = require('./Db');
+var db = requireDb();
 
 //chat
 Chat = {};
 Chat.parse = function(data){
+	data = data.replaceCustomPattern('http://puu.sh/','.png',Chat.parse.puush);
 	return data.replacePattern(Chat.parse.item);
 }
+
+//'http://puu.sh/8H2H1.png'.slice(-9,-4)
 
 Chat.parse.item = function(id){
 	var item = Db.item[id];
@@ -36,6 +39,9 @@ Chat.question = function(key,q){	//q:{text, func, param, repeat, [option]}
 	Chat.add(key,{type:'question',option:q.option,text:q.text});
 }
 
+Chat.parse.puush = function(link){
+	return	'<a href="' + link + '" target="_blank">[' + link.slice(-9,-4) + ']</a>';
+}
 
 
 Chat.receive = function(d){	//data:{to,key,type,text,	[title,category for report]

@@ -82,12 +82,12 @@ Button.context = function (key){ 	//client only
 		
 	for(var i = list.length-1 ; i >= 0  ; i--){
 		if(Collision.PtRect({"x":x,'y':y},list[i].rect)){
-			var tmp = {'server':SERVER,'text':list[i].text,'textTop':list[i].textTop};
-			main.clientContext = tmp; 
+			var tmp = {'text':list[i].text,'textTop':list[i].textTop};
+			main.context = tmp; 
 			return;
 		}	
 	}
-	main.clientContext = {'server':SERVER,'text':''};
+	main.context = {'text':''};
 }
 
 Button.reset = function(key){	//called when player clicks. used to remove popup

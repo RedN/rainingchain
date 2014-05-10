@@ -47,8 +47,7 @@ Draw.loop = function (){
 	Button.context();	//update for client buttons only
 	Draw.context();     //top left
 	Draw.hint();
-	Draw.command();
-	//clientContext = '';		
+	Draw.command();		
 	
 }
 
@@ -522,10 +521,10 @@ Draw.gradientRG = function(n){
 }
 
 Draw.context = function (){ ctxrestore();
-	var text = main.context.text || main.clientContext.text || main.permContext.text;
+	var text = main.context.text;
 	if(!text) return;
 	
-	var top = main.context.textTop || main.clientContext.textTop;
+	var top = main.context.textTop;
 	var hc = html.context.div;
 	
 	hc.style.visibility = 'visible';

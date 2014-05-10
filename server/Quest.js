@@ -1,4 +1,4 @@
-var db = require('./Db');
+var db = requireDb();
 
 Quest.reward = function(key,id){	//roll the perm stat bonus and check if last one was better	
 	var mq = List.main[key].quest[id];

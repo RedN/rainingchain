@@ -1,4 +1,4 @@
-var db = require('./Db');
+var db = requireDb();
 
 Db.equip = {};	//for quest
 Init.db.equip = function (cb){

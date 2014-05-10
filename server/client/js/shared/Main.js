@@ -5,7 +5,6 @@ Main.template = function(key){
 	var main = {
 		'temp':{'reset':{}},
 		"optionList":null,
-		'context':'',
 		'chatInput':'',
 		'pref':Main.template.pref(),
 		
@@ -37,6 +36,7 @@ Main.template = function(key){
 				'mute':{},
 				'clan':[],
 			},
+			'puush':0,
 			'symbol':'',
 			'status':'on',
 			'muted':0,
@@ -56,8 +56,6 @@ Main.template = function(key){
 		main['id'] = key;
 	} else {
 		main['context'] = {'text':''};
-		main['clientContext'] = {'text':''};
-		main['permContext'] = {'text':''};
 	}
 	return main;
 }

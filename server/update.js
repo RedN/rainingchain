@@ -1,40 +1,6 @@
 var TIMER = {'fast':1,'reg':5,'slow':25};
 
 
-//not compress in old. use a custom isequal
-Change.update = function(){
-	//Entity
-	for(var i in List.all){
-		var act = List.all[i];
-		if(act.dead || act.active === false) continue;		//need false cuz bullet.active is undefined
-		for(var m in Change.update.list[act.type]){         //m = watch or exist
-			for (var k in Change.update.list[act.type][m]){     //k = priority , reg , slow
-				if(Loop.frame % TIMER[k] !== 0) continue;
-				for(var j in Change.update.list[act.type][m][k])
-					Change.update[m](act,Change.update.list[act.type][m][k][j]);	
-    }}}
-	//MainList
-	for(var i in List.main){
-		var act = List.main[i];
-		for(var m in Change.update.list.main){
-    		for (var k in Change.update.list.main[m]){
-    	        if(Loop.frame % TIMER[k] !== 0) continue;
-				for(var j in Change.update.list.main[m][k])
-					Change.update[m](act,Change.update.list.main[m][k][j]);	
-    }}}
-	//Private
-	for(var i in List.main){
-		var act = List.all[i];
-    	for(var m in Change.update.list.priv){		
-    	    for (var k in Change.update.list.priv[m]){
-    	        if(Loop.frame % TIMER[k] !== 0) continue;
-				for(var j in Change.update.list.priv[m][k])
-					Change.update[m](act,Change.update.list.priv[m][k][j],true);	
-    }}}
-	
-	
-}
-
 Init.changeUpdate = function(){
 	//NOTE: for .e being in 2 category, must put r:noreset. otherwise, second wont get
 	//MEANS PRIVATE MUST BE LAST
@@ -111,7 +77,6 @@ Init.changeUpdate = function(){
 			'fast':[],
 			'reg':[
 				{'array':['currentTab']},
-				{'array':['context']},
 				{'array':['dialogue']},	
 				
 				{'array':['popupList']},
@@ -224,6 +189,40 @@ Init.changeUpdate = function(){
 			}
 		}
 	}
+	
+}
+
+//not compress in old. use a custom isequal
+Change.update = function(){
+	//Entity
+	for(var i in List.all){
+		var act = List.all[i];
+		if(act.dead || act.active === false) continue;		//need false cuz bullet.active is undefined
+		for(var m in Change.update.list[act.type]){         //m = watch or exist
+			for (var k in Change.update.list[act.type][m]){     //k = priority , reg , slow
+				if(Loop.frame % TIMER[k] !== 0) continue;
+				for(var j in Change.update.list[act.type][m][k])
+					Change.update[m](act,Change.update.list[act.type][m][k][j]);	
+    }}}
+	//MainList
+	for(var i in List.main){
+		var act = List.main[i];
+		for(var m in Change.update.list.main){
+    		for (var k in Change.update.list.main[m]){
+    	        if(Loop.frame % TIMER[k] !== 0) continue;
+				for(var j in Change.update.list.main[m][k])
+					Change.update[m](act,Change.update.list.main[m][k][j]);	
+    }}}
+	//Private
+	for(var i in List.main){
+		var act = List.all[i];
+    	for(var m in Change.update.list.priv){		
+    	    for (var k in Change.update.list.priv[m]){
+    	        if(Loop.frame % TIMER[k] !== 0) continue;
+				for(var j in Change.update.list.priv[m][k])
+					Change.update[m](act,Change.update.list.priv[m][k][j],true);	
+    }}}
+	
 	
 }
 

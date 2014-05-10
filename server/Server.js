@@ -1,4 +1,4 @@
-var db = require('./Db');
+var db = requireDb();
 /*
 1- connect db
 2- ts("Server.maxPlayerAmount = 16")

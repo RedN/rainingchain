@@ -1,5 +1,5 @@
 var request = require('request');
-var db = require('./Db');
+var db = requireDb();
 
 require('./client/js/shared/essentialsShare');
 

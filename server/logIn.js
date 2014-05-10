@@ -1,4 +1,4 @@
-var db = require('./Db');
+var db = requireDb();
 var crypto = require('crypto');
 
 Sign = {};
@@ -236,6 +236,8 @@ Save.main.compress = function(main){
 	main.social = {
 		friend:main.social.list.friend,
 		mute:main.social.list.mute,
+		muted:main.social.muted,
+		puush:main.social.puush,
 		message:main.social.message,
 		symbol:main.social.symbol,
 	}
@@ -280,7 +282,9 @@ Load.main.uncompress = function(main,key){
 		  clan: []
 		},
 		status: "on",
-		symbol:main.social.symbol
+		symbol:main.social.symbol,
+		muted:main.social.muted,
+		puush:main.social.puush,
 	};
 	
 	//If changes with quest

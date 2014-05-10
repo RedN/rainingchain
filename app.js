@@ -20,18 +20,10 @@ app.use(express.compress());
 app.use(express.bodyParser());
 app.use(express.static(path.resolve(__dirname, 'server/client')));	//need to be entered manually
 
-
-//Runescape Calculators:	//rscalc
-RSCALC = require('./server/RS_calculators');
-app.get('/rs', function (req, res) { res.sendfile(__dirname  + '/server/client/rscalc/index.html');});
-app.post('/getPrice', function(req, res){	res.send({itemDb:RSCALC.itemDb,lastUpdate:RSCALC.lastUpdate});});
-app.post('/getExp', function(req, res){	RSCALC.appPostGetExp(req,res); });
-
 //Require
 require(clientPath + 'essentialsShare');
+require(serverPath + (NODEJITSU ? 'Db_private' : 'Db'));
 require(serverPath + 'Server');
-if(NODEJITSU) require(serverPath + 'Db_private');
-else require(serverPath + 'Db');
 
 require(serverPath + 'main');
 require(serverPath + 'cycle');
@@ -98,6 +90,11 @@ require(clientPath + 'queryShare');
 require(clientPath + 'ts');
 require(clientPath + 'Db_customboost');
 
+//Runescape Calculators:	//rscalc
+RSCALC = require('./server/RS_calculators');
+app.get('/rs', function (req, res) { res.sendfile(__dirname  + '/server/client/rscalc/index.html');});
+app.post('/getPrice', function(req, res){	res.send({itemDb:RSCALC.itemDb,lastUpdate:RSCALC.lastUpdate});});
+app.post('/getExp', function(req, res){	RSCALC.appPostGetExp(req,res); });
 
 
 

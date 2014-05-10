@@ -1,5 +1,5 @@
 if(SERVER){
-	var db = require('./../../../Db');
+	var db = requireDb();
 	var request = require('request');
 }
 if(!SERVER){

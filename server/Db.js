@@ -1,5 +1,7 @@
-Init = {};
+requireDb = function(){ return exports;}
 
+
+Init = {};
 Init.db = function(data){
 	data = data || {};
 	var MONGO = {
@@ -95,6 +97,7 @@ Init.db = function(data){
 				});
 			});
 		});
+
 
 	}
 
