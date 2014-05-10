@@ -45,6 +45,7 @@ Actor.loop = function(act){
 		Actor.loop.move(act);  	//move the actor
 	}
 	if(act.type === 'player'){
+		if(interval(6)) Actor.loop.ability.chargeClient(act);
 		if(interval(3)) Actor.loop.fall(act);						//test if fall
 		if(interval(25)) Actor.loop.friendList(act);   				//check if any change in friend list
 		if(interval(5)) Actor.loop.trade(act); ;    
@@ -59,27 +60,36 @@ Actor.loop.updateActive = function(act){
 }
 //{Ability
 Actor.loop.ability = {};
-Actor.loop.ability.charge = function(m){	//HOTSPOT
+Actor.loop.ability.charge = function(act){	//HOTSPOT
 	var alreadyBoosted = {};
-	var ma = m.abilityChange;
+	var ma = act.abilityChange;
 	ma.globalCooldown -= ABILITYINTERVAL;
 	ma.globalCooldown = ma.globalCooldown.mm(-100,250); 	//cuz if atkSpd is low, fuck everything with stun
-	var ab = Actor.getAbility(m);
+	var ab = Actor.getAbility(act);
 	for(var i in ab){
 		var s = ab[i]; if(!s) continue;	//cuz can have hole if player
 		
 		//Charge
 		if(!alreadyBoosted[s.id]){  //this is because a player can set the same ability to multiple input
-			ma.charge[s.id] += m.atkSpd.main * s.spd.main * ABILITYINTERVAL;
+			ma.charge[s.id] += act.atkSpd.main * s.spd.main * ABILITYINTERVAL;
 			alreadyBoosted[s.id] = 1;
 		}
-		
+	}
+}
+
+Actor.loop.ability.chargeClient = function(act){
+	var ab = Actor.getAbility(act);
+	var ma = act.abilityChange;
+	
+	for(var i in ab){
+		var s = ab[i]; if(!s) continue;	//cuz can have hole if player
 		//Client
 		var rate = ma.charge[s.id] / s.period.own;
 		ma.chargeClient[i] = Math.min(rate,1);
 	}
-
 }
+
+
 
 Actor.loop.ability.test = function(m){
 	var ab = Actor.getAbility(m);

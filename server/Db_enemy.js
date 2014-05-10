@@ -1061,6 +1061,10 @@ Init.db.npc.creation.ability = function(e){	//use abilityList to create custom a
 		
 		Actor.ability.swap(e,a);
 	}
+	for(var i = e.ability.regular.length-1; i >= 0; i--){
+		if(!e.ability.regular[i]) e.ability.regular.splice(i,1);
+	}
+	
 	
 	e.abilityList = Actor.template.ability(e.abilityList);
 	

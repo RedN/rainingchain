@@ -7,7 +7,8 @@ Perf
 Actor
 	Activelist.test
 	ability charge
-	bumper boost
+	bumper
+	boost
 
 Update
 	Change.update.watch

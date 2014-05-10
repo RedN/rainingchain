@@ -29,7 +29,6 @@ try {
 	}
     	
 		
-	console.log(data.r);
 	for(var i in data.r){	//remove
 		if(List.all[i] && List.all[i].sprite){ 
 			List.all[i].sprite.dead = data.r[i] || 1;	//ratio will impact alpha or fade out
