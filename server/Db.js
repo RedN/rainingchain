@@ -88,9 +88,10 @@ Init.db = function(data){
 	
 	
 	//delete everything in db
-	exports.deleteAll = function(){
+	exports.deleteAll = function(rscalc){
 		if(!dbVerify()) return;
 		for(var i in collections){
+			if(i === 'rscalc' && rscalc !== false) continue;
 			DB[collections[i]].remove();
 		}
 		INFO('DELETED EVERYTHING IN DATABASE!');

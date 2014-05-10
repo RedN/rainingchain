@@ -143,16 +143,13 @@ Actor.loop.mapMod = function(act){
 	
 	for(var i in act.activeList){
 		var b = List.all[i];
-		if(!b || !b.block || !b.block.condition) continue;
-		if(b.block.condition === 'true'
-			|| (typeof b.block.condition === 'function' && b.block.condition(act.id,act,b))){
-			var size = b.block.size;
-			var pos = Collision.getPos(b);
-			
-			for(var j = size[0]; j <= size[1]; j++){
-				for(var k = size[2]; k <= size[3]; k++){
-					act.mapMod[(pos.x+j) + '-' + (pos.y+k)] = 1;
-				}
+		if(!b || !b.block) continue;
+		var size = b.block.size;
+		var pos = Collision.getPos(b);
+		
+		for(var j = size[0]; j <= size[1]; j++){
+			for(var k = size[2]; k <= size[3]; k++){
+				act.mapMod[(pos.x+j) + '-' + (pos.y+k)] = 1;
 			}
 		}
 	}

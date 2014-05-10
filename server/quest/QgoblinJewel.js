@@ -213,19 +213,20 @@ q.event = {
 	}	
 };	
 
-q.item['potion_unf'] = {'name':'Unfinished Potion','icon':'heal.pot','drop':0,'bank':0,'option':[		
-	{'name':'Finish potion','description':'Requires 1 mystical flower and 1 orc socks.','param':[],'func':q.event.itemPotionUnf},
-]};	
-
-q.item['potion'] = {'name':'Potion','icon':'heal.pot','drop':0,'bank':0,'option':[		
-	{'name':'Drink','description':'Transform into an orc.','param':[],'func':q.event.itemPotion},
-]};	
 
 
-q.item['orc_sock'] = {'name':'Orc Sock','icon':'defensive.speed','drop':0,'bank':0,'option':[]};
-q.item['flower'] = {'name':'Mystical Flower','icon':'leaf.leaf','drop':0,'bank':0,'option':[]};
-q.item['jewel'] = {'name':'Jewel','icon':'minimapIcon.loot','drop':0,'bank':0,'option':[]};	
 
+
+q.item['potion'] = s.item('Potion','heal.pot',[
+	['Drink',q.event.itemPotion,'Transform into an orc.'],
+]);
+q.item['potion_unf'] = s.item('Unfinished Potion','heal.pot',[
+	['Finish Potion',q.event.itemPotionUnf,'Requires 1 mystical flower and 1 orc socks.'],
+]);
+
+q.item['orc_sock'] = s.item('Orc Sock','defensive.speed');
+q.item['flower'] = s.item('Mystical Flower','leaf.leaf');
+q.item['jewel'] = s.item('Jewel','minimapIcon.loot');
 
 
 
@@ -432,7 +433,7 @@ q.map.goblinLand = function(){
 			["orc","magic",3,{deathEvent:q.event.killOrc}],
 		]);	
 				
-		m.block(spot.b1,null,'invisible');
+		m.block(spot.b1);
 		
 		m.teleport(spot.t3,q.event.teleInCamp,"zone",{angle:270});
 		
@@ -512,9 +513,9 @@ q.map.goblinCamp = function(){
 	
 	a.load = function(spot){
 					
-		m.block(spot.b2,q.event.seeBlockBoss);
-		m.block(spot.b3,q.event.seeBlockBoss);
-		m.block(spot.b4,null,'invisible');
+		m.block(spot.b2,q.event.seeBlockBoss,true);
+		m.block(spot.b3,q.event.seeBlockBoss,true);
+		m.block(spot.b4);
 		
 		m.teleport(spot.t3,q.event.teleOutCamp,"zone",{angle:90});
 		m.teleport(spot.t4,q.event.teleInBossZone,"zone",{angle:90,viewedIf:q.event.seeBlockBoss});
@@ -582,7 +583,7 @@ q.map.goblinUnderground = function(){
 		m.actor(spot.b6,"pushable","rock2x2",{});
 		
 		
-		m.block(spot.b7,q.event.seeBlockChest);
+		m.block(spot.b7,q.event.seeBlockChest,true);
 	
 	} 
 	a.loop = function(spot){

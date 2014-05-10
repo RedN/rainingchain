@@ -14,13 +14,13 @@ var updateItemDb = function (){
 	var count = 0;
 	var interval = setInterval(function(){ 
 		if(count < itemIdList.length){ 
-			updatePrice(itemIdList[count]);
 			count++;
+			updatePrice(itemIdList[count]);
 		} else {
 			count = 0;
+			exports.lastUpdate = Date.now();
 			clearInterval( interval );
 			if(exports.displayUpdate >= 1) INFO('Item Database Updated');
-			exports.lastUpdate = Date.now();
 			db.update('rscalc',{},{'$set':{item:itemDb,lastUpdate:Date.now()}},db.err);
 		}	
 	}, 5000);
@@ -42,7 +42,7 @@ var updatePrice = function (id){
 			
 			if(exports.displayUpdate >= 2) INFO('Item: ' + idToName[id] + ' - New Price: ' + idToObj[id].price);
 			
-		} catch (err) { ERROR.err(err);}
+		} catch (err) { ERROR(3,str);}
 	});
 }
 
@@ -60,13 +60,18 @@ var parseExp = function (str){
 	return JSON.stringify(obj);	
 }
 Init.db.rscalc = function(){
+	
 	db.findOne('rscalc',{},{},function(err,res){
 		if(err) return ERROR.err(err);
 		
-		try {
-			itemDb = res.item;
-			exports.lastUpdate = res.lastUpdate;
-		} catch(err){ ERROR.err(err); }	
+		if(res === null){
+			db.insert('rscalc',{item:itemDb,lastUpdate:Date.now()},db.err);
+		} else {
+			try {
+				itemDb = res.item;
+				exports.lastUpdate = res.lastUpdate;
+			} catch(err){ ERROR.err(err); }	
+		}
 	});
 }
 

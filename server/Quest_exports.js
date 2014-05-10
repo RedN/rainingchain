@@ -241,20 +241,51 @@ exports.init = function(version,questname){	//}
 			Map.collisionRect(spot.map,spot,'player',cb);
 	}
 
-	m.block = function(zone,viewedIf,sprite,extra){
+	m.block = function(zone,viewedIf,sprite,extra){	//only support spikes
 		extra = extra || {};
 		if(viewedIf) extra.viewedIf = viewedIf;
-		if(sprite) extra['sprite,name'] = sprite;
+		if(!sprite){
+			extra['sprite,name'] = 'invisible';
+		}
+		extra = parseExtra(extra);
+		
+		var totalinit = Math.abs(zone[1] - zone[0])/32 + Math.abs(zone[3] - zone[2])/32 + 1; //one should have value, other be 0
+		var total = totalinit;	
+		
+		var a9 = Math.floor(total/9);	total -= a9*9;
+		var a5 = Math.floor(total/5);	total -= a5*5;
+		var a3 = Math.floor(total/3);	total -= a3*3;
+		var a1 = total;
+		var list = {'1':a1,'3':a3,'5':a5,'9':a9};	
+		var block = true;		
 		
 		if(zone[2] === zone[3]){	//horizontal
-			for(var i = zone[0]; i <= zone[1]; i += 32){
-				m.actor({x:i+16,y:zone[2],map:zone.map,addon:zone.addon},'block','spike',parseExtra(extra));
+			var x = zone[0] + 16;
+			for(var i in list){
+				var ext = Tk.deepClone(extra);
+				if(sprite) ext['sprite,name'] = 'block-spike1x' + i;
+				
+				for(var j = 0 ; j < list[i]; j++){
+					if(block) ext.block = {size:[0,totalinit-1,0,0]};
+					m.actor({x:x,y:zone[2]+16,map:zone.map,addon:zone.addon},'block','template',ext);
+					if(block){ ext = Tk.deepClone(ext); delete ext.block; block = false;}
+					x += 32*(+i);
+				}
 			}
 		}
-		if(zone[0] === zone[1]){
-			for(var i = zone[2]; i <= zone[3]; i += 32){
-				m.actor({x:zone[0],y:i+16,map:zone.map,addon:zone.addon},'block','spike',parseExtra(extra));
-			}	
+		if(zone[0] === zone[1]){	//horizontal
+			var y = zone[2] + 16;
+			for(var i in list){
+				var ext = Tk.deepClone(extra);
+				if(sprite) ext['sprite,name'] = 'block-spike' + i + 'x1';
+					
+				for(var j = 0 ; j < list[i]; j++){
+					if(block) ext.block = {size:[0,0,0,totalinit-1]};
+					m.actor({x:zone[0]+16,y:y,map:zone.map,addon:zone.addon},'block','template',ext);
+					if(block){ ext = Tk.deepClone(ext); delete ext.block; block = false;}
+					y += 32*(+i);
+				}
+			}
 		}
 	}
 
@@ -346,7 +377,13 @@ exports.init = function(version,questname){	//}
 			return Quest.challenge.template[arguments[0]](arguments[1],arguments[2],arguments[3],arguments[4]);	
 	}
 	
-	
+	s.item = function(name,icon,option,description){
+		var tmp = {name:name,icon:icon,description:description||name,option:[],trade:0,stack:1,bank:0,drop:0,quest:Q};
+		for(var i in option){
+			tmp.option.push({'name':option[i][0],'func':option[i][1],'description':option[i][2] || option[i][0],'param':[]});
+		}
+		return tmp;
+	}
 	
 	
 	s.ERROR = function(txt){

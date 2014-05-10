@@ -164,7 +164,7 @@ Activelist.clear = function(b){	//called when living forever
 	for(var i in b.activeList){
 		var viewer = List.all[i];
 		if(!viewer){ ERROR(2,'actor dont exist'); continue; }
-		if(viewer.type === 'player') viewer.removeList[b.publicId || b.id] = 1/3;
+		if(viewer.type === 'player') viewer.removeList[b.publicId || b.id] = b.type === 'bullet' ? 1/3 : 1/12;
         delete viewer.activeList[b.id];
 	}
 	b.activeList = {};	

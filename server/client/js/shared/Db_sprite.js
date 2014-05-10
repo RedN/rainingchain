@@ -263,7 +263,30 @@ Init.db.sprite = function(){
 	
 	a["block-rock1x1"] ={"src":"picture/block-rock2x2.png","size":0.5,"preBumperBox":[ -32,32,-32,32 ]};
 	a["block-barrier"] ={"src":"picture/block-barrier.png","size":1,"preBumperBox":[ -64,64,-32,32 ]};
-	a["block-spike"] ={"src":"picture/block-spike.png","size":1,"preBumperBox":[ -16,16,-32,32 ]};
+	a["block-spike"] ={"src":"picture/block-spike1x1.png","size":2,"preBumperBox":[ -8,8,-16,16 ]};
+	a["block-spike1x1"] ={"src":"picture/block-spike1x1.png","size":2,"preBumperBox":[ -8,8,-16,16 ]};
+	
+	a["block-spike1x3"] ={"src":"picture/block-spike1x3.png","size":2,"preBumperBox":[ -8,40,-16,16 ],anim:{
+		"walk":{"startY":0,"frame":1,"sizeX":80,"sizeY":32,"dir":1,"spd":0,"walk":0,"next":"walk"},
+	}};
+	a["block-spike1x5"] ={"src":"picture/block-spike1x5.png","size":2,"preBumperBox":[ -8,72,-16,16 ],anim:{
+		"walk":{"startY":0,"frame":1,"sizeX":112,"sizeY":32,"dir":1,"spd":0,"walk":0,"next":"walk"},
+	}};
+	a["block-spike1x9"] ={"src":"picture/block-spike1x9.png","size":2,"preBumperBox":[ -8,104,-16,16 ],anim:{
+		"walk":{"startY":0,"frame":1,"sizeX":272,"sizeY":32,"dir":1,"spd":0,"walk":0,"next":"walk"},
+	}};
+	
+	a["block-spike3x1"] ={"src":"picture/block-spike3x1.png","size":2,"preBumperBox":[ -8,8,-16,48 ],anim:{
+		"walk":{"startY":0,"frame":1,"sizeX":16,"sizeY":96,"dir":1,"spd":0,"walk":0,"next":"walk"},
+	}};
+	a["block-spike5x1"] ={"src":"picture/block-spike5x1.png","size":2,"preBumperBox":[ -8,8,-16,80 ],anim:{
+		"walk":{"startY":0,"frame":1,"sizeX":16,"sizeY":160,"dir":1,"spd":0,"walk":0,"next":"walk"},
+	}};
+	a["block-spike9x1"] ={"src":"picture/block-spike9x1.png","size":2,"preBumperBox":[ -8,8,-16,112 ],anim:{
+		"walk":{"startY":0,"frame":1,"sizeX":16,"sizeY":256,"dir":1,"spd":0,"walk":0,"next":"walk"},
+	}};
+	
+	
 	
 	a["invisible"] ={"src":"picture/invisible.png","size":1,"preBumperBox":[ -16,16,-16,16 ]};
 	

@@ -775,7 +775,7 @@ Init.db.npc = function(){
 		"waypoint":1,
 		'nevercombat':1,
 		'nevermove':1,
-		"block":{condition:'true',pushable:0,size:[-1,1,-1,1]},
+		"block":{size:[-1,1,-1,1]},
 	}; //}
 	
 	
@@ -788,7 +788,7 @@ Init.db.npc = function(){
 		"sprite":{'name':"loot-chestOff",'sizeMod':1},
 		'nevercombat':1,
 		'nevermove':1,
-		"block":{condition:'true',size:[-1,1,-1,1]},
+		"block":{size:[-1,1,-1,1]},
 	}; //}
 	a["loot"]["chestOn"] = template(a["loot"]["chestOff"],'loot-chestOn');	
 	a["loot"]["flowerOff"] = {  //{
@@ -797,7 +797,7 @@ Init.db.npc = function(){
 		"sprite":{'name':"loot-flowerOff",'sizeMod':1},
 		'nevercombat':1,
 		'nevermove':1,
-		"block":{condition:'true',size:[-1,1,-1,1]},
+		"block":{size:[-1,1,-1,1]},
 	}; //}
 	a["loot"]["flowerOn"] = template(a["loot"]["chestOff"],'loot-flowerOn');	
 	//}
@@ -809,7 +809,7 @@ Init.db.npc = function(){
 		"sprite":{'name':"toggle-boxOff",'sizeMod':1},
 		'nevercombat':1,
 		'nevermove':1,
-		"block":{condition:'true',size:[-0,0,-0,0]},
+		"block":{size:[-0,0,-0,0]},
 	}; //}
 	a["toggle"]["boxOn"] = template(a["toggle"]["boxOff"],'toggle-boxOn');	
 	//}
@@ -846,7 +846,7 @@ Init.db.npc = function(){
 		"sprite":{'name':"pushable-rock1x1",'sizeMod':1},
 		'nevercombat':1,
 		'moveSelf':0,
-		"block":{condition:'true',size:[-1,1,-1,1]},
+		"block":{size:[-1,1,-1,1]},
 		"pushable":{magn:4,time:16},
 		"bounce":0,
 	}; //}
@@ -856,7 +856,7 @@ Init.db.npc = function(){
 		"sprite":{'name':"pushable-rock1x1",'sizeMod':2},
 		'nevercombat':1,
 		'moveSelf':0,
-		"block":{condition:'true',size:[-1,0,-1,0]},
+		"block":{size:[-1,0,-1,0]},
 		"pushable":{magn:4,time:16},
 		"bounce":0,
 	}; //}
@@ -866,7 +866,7 @@ Init.db.npc = function(){
 		"sprite":{'name':"pushable-rock1x1",'sizeMod':3},
 		'nevercombat':1,
 		'moveSelf':0,
-		"block":{condition:'true',size:[-1,1,-1,1]},
+		"block":{size:[-1,1,-1,1]},
 		"pushable":{magn:4,time:16},
 		"bounce":0,
 	}; //}
@@ -877,7 +877,7 @@ Init.db.npc = function(){
 		"sprite":{'name':"pushable-rock1x1",'sizeMod':4},
 		'nevercombat':1,
 		'moveSelf':0,
-		"block":{condition:'true',size:[-1,1,-1,1]},
+		"block":{size:[-1,1,-1,1]},
 		"pushable":{magn:4,time:16},
 		"bounce":0,
 	}; //}
@@ -886,13 +886,21 @@ Init.db.npc = function(){
 	
 	
 	a["block"] = {}; //{	
+	a["block"]["template"] = {  //{
+		"name":"",
+		'minimapIcon':'',
+		"sprite":{'name':"invisible",'sizeMod':1},
+		'nevercombat':1,
+		'nevermove':1,
+	}; //}
+	
 	a["block"]["rock2x2"] = {  //{
 		"name":"Block",
 		'minimapIcon':'',
 		"sprite":{'name':"block-rock1x1",'sizeMod':2},
 		'nevercombat':1,
 		'nevermove':1,
-		"block":{condition:'true',size:[-1,0,-1,0]},
+		"block":{size:[-1,0,-1,0]},
 	}; //}
 	
 	a["block"]["barrier"] = {  //{
@@ -901,7 +909,7 @@ Init.db.npc = function(){
 		"sprite":{'name':"block-barrier",'sizeMod':1.5},
 		'nevercombat':1,
 		'nevermove':1,
-		"block":{condition:'true',size:[-2,2,-1,1]},
+		"block":{size:[-2,2,-1,1]},
 	}; //}
 	
 	a["block"]["spike"] = {  //{
@@ -910,7 +918,7 @@ Init.db.npc = function(){
 		"sprite":{'name':"block-spike",'sizeMod':1},
 		'nevercombat':1,
 		'nevermove':1,
-		"block":{condition:'true',size:[0,0,0,0]},
+		"block":{size:[0,0,0,0]},
 	}; //}
 	
 	a["block"]["invisible"] = {  //{
@@ -919,7 +927,7 @@ Init.db.npc = function(){
 		"sprite":{'name':"invisible",'sizeMod':1},
 		'nevercombat':1,
 		'nevermove':1,
-		"block":{condition:'true',size:[0,0,0,0]},
+		"block":{size:[0,0,0,0]},
 	}; //}
 	//}
 	
@@ -930,7 +938,7 @@ Init.db.npc = function(){
 		"sprite":{'name':"tree-red",'sizeMod':1},
 		'nevercombat':1,
 		'nevermove':1,
-		"block":{condition:'true',size:[-1,1,-2,0]},
+		"block":{size:[-1,1,-2,0]},
 	}; //}
 	a["tree"]["down"] = template(a["tree"]["red"],'tree-down');	
 	//}
@@ -963,7 +971,7 @@ Init.db.npc = function(){
 		"sprite":{'name':"teleport-well",'sizeMod':1},
 		'nevercombat':1,
 		'nevermove':1,
-		"block":{condition:'true',size:[-1,1,-1,1]},
+		"block":{size:[-1,1,-1,1]},
 	}; //}
 	//}
 	

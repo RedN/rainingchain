@@ -135,7 +135,7 @@ Collision.BulletMap = function(bullet){
 	if(bullet.ghost) return 0;
 
 	var pos = Collision.getPos(bullet);
-	if(Collision.PosMap(pos,bullet.map,'bullet'))
+	if(Collision.PosMap(pos,bullet.map,'bullet') || +Collision.mapMod[bullet.map + '-' + pos.x + '-' + pos.y] )
 		bullet.toRemove = 1;
 	
 }
@@ -200,7 +200,7 @@ Collision.loop.mapMod = function(){
 	Collision.mapMod = {};
 	for(var i in List.actor){
 		var act = List.actor[i];
-		if(!act || !act.block || !act.block.condition || act.block.condition !== 'true') continue;
+		if(!act || !act.block) continue;
 		
 		var size = act.block.size;
 		var pos = Collision.getPos(act);

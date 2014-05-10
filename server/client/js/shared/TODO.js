@@ -15,9 +15,6 @@ Update
 
 
 	
-problem with activelist loop, need to update activelist for enemy vs bullet
-
-removelist: {id:disappearSpeed}
 
 ==PRESDK==
 SKIPPED: trade, craft,db.filter, passive
@@ -36,6 +33,9 @@ item quest simplify, and STACK always
 talk about naming convention
 
 tofix: summon
+
+exp+drop system like skillplot
+
 
 highscore
 s.teamForEach
