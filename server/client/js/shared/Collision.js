@@ -70,6 +70,9 @@ Collision.PosMap = function(pos,map,type){	//Test Collision between pos and map
 Collision.getPos = function(pt){
 	return {x:Math.floor(pt.x/32),y:Math.floor(pt.y/32)}
 }
+Collision.getPos.xy = function(pt){
+	return {x:Math.floor(pt.x/32),y:Math.floor(pt.y/32)}
+}
 
 Collision.getSquareValue = function(pos,map,type){
 	var grid = Db.map[Map.getModel(map)].grid[type];

@@ -213,12 +213,12 @@ Actor.loop.regen = function(act){
 }
 
 Actor.loop.boost = function(act){
-	var array = {'fast':1,'reg':5,'slow':25};
-	for(var j in array){
-		if(!Loop.interval(array[j])) continue;
+	var list = Actor.loop.boost.list;
+	for(var j in list){
+		if(!Loop.interval(list[j])) continue;
 		
 		for(var i in act.boost[j]){
-			act.boost[j][i].time -= array[j];
+			act.boost[j][i].time -= list[j];
 			if(act.boost[j][i].time < 0)
 				Actor.boost.remove(act,act.boost[j][i]);
 		}
@@ -229,6 +229,8 @@ Actor.loop.boost = function(act){
 		delete act.boost.toUpdate[i];
 	}
 }
+Actor.loop.boost.list = {'fast':2,'reg':5,'slow':25}; //fast = 2, no idea if good
+
 
 Actor.loop.summon = function(act){
     //(assume player is the master)
@@ -267,9 +269,10 @@ Actor.loop.bumper = function(act){	//HOTSPOT
 		act.y = act.y.mm(50,act.y,Db.map[Map.getModel(act.map)].grid.bullet.length*32-50);
 	}
 	//test bumpers
-	for(var i = 0 ; i < 4 ; i ++){
-		var pos = Collision.getPos({x:act.x + act.bumperBox[i].x,y:act.y + act.bumperBox[i].y});
-		act.bumper[i] = Collision.ActorMap(pos,act.map,act);
+	for(var i = 0 ; i < 4 ; i++){
+		act.bumper[i] = Collision.ActorMap(
+			{x:Math.floor((act.x + act.bumperBox[i].x)/32),y:Math.floor((act.y + act.bumperBox[i].y)/32)}	//bit faster than PosMap
+		,act.map,act);
 	}
 }
 
@@ -298,6 +301,8 @@ Actor.fall = function(act){	//default fall
 	else act.hp = -1;
 }
 
+
+
 Actor.loop.move = function(act){
 	if(act.bumper[0]){act.spdX = -Math.abs(act.spdX*0.5)*act.bounce - act.bounce;} 
 	if(act.bumper[1]){act.spdY = -Math.abs(act.spdY*0.5)*act.bounce - act.bounce;}
@@ -316,7 +321,6 @@ Actor.loop.move = function(act){
 	act.moveAngle = Tk.atan2(act.spdY,act.spdX);
 	
 	
-	
 	//Calculating New Position
 	var dist = Math.pyt(act.spdY,act.spdX);
 	var amount = Math.ceil(dist/30);
@@ -327,24 +331,27 @@ Actor.loop.move = function(act){
 		for(var i = 0 ; i < amount && !act.bumper[0] && !act.bumper[1] && !act.bumper[2] && !act.bumper[3]  ; i++){
 			act.x += act.spdX/amount;
 			act.y += act.spdY/amount;
-			Sprite.updateBumper(act);
+			Actor.loop.bumper(act);
 		} 
 	} 
 	act.spdX *= act.friction;	
 	act.spdY *= act.friction;
 }
+
 
 /*
 Actor.loop.move = function(act){
-	if(act.bumper[0]){act.spdX = -Math.abs(act.spdX*0.5)*act.bounce - act.bounce;} 
-	if(act.bumper[1]){act.spdY = -Math.abs(act.spdY*0.5)*act.bounce - act.bounce;}
-	if(act.bumper[2]){act.spdX = Math.abs(act.spdX*0.5)*act.bounce + act.bounce;} 
-	if(act.bumper[3]){act.spdY = Math.abs(act.spdY*0.5)*act.bounce + act.bounce;} 
+	var oldx = act.x;
+	var oldy = act.y;
+	
+	if(act.moveInput[0] && act.spdX < act.maxSpd){act.spdX += act.acc;}
+	if(act.moveInput[1] && act.spdY < act.maxSpd){act.spdY += act.acc;}
+	if(act.moveInput[2] && act.spdX > -act.maxSpd){act.spdX -= act.acc;}
+	if(act.moveInput[3] && act.spdY > -act.maxSpd){act.spdY -= act.acc;}	
+	
+	var goalx = oldx + spdX;
+	var goaly = oldy + spdY;
 
-	if(act.moveInput[0] && !act.bumper[0] && act.spdX < act.maxSpd){act.spdX += act.acc;}
-	if(act.moveInput[1] && !act.bumper[1] && act.spdY < act.maxSpd){act.spdY += act.acc;}
-	if(act.moveInput[2] && !act.bumper[2] && act.spdX > -act.maxSpd){act.spdX -= act.acc;}
-	if(act.moveInput[3] && !act.bumper[3] && act.spdY > -act.maxSpd){act.spdY -= act.acc;}	
 	
 	
 	//Friction + Min Spd
@@ -364,16 +371,13 @@ Actor.loop.move = function(act){
 		for(var i = 0 ; i < amount && !act.bumper[0] && !act.bumper[1] && !act.bumper[2] && !act.bumper[3]  ; i++){
 			act.x += act.spdX/amount;
 			act.y += act.spdY/amount;
-			Sprite.updateBumper(act);
+			Actor.loop.bumper(act);
 		} 
 	} 
 	act.spdX *= act.friction;	
 	act.spdY *= act.friction;
 }
-
 */
-
-
 
 Actor.loop.move.aim = function (act){	
 	//penalty if looking and moving in opposite direction

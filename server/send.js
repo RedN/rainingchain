@@ -242,7 +242,6 @@ Change.send.convert.itemlist = function(inv){
 		}
 	}
 	inv.toUpdate = 0;
-	console.log(1);
 	return draw;
 }
 
