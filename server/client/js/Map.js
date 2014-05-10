@@ -41,7 +41,7 @@ Map.creation = function(name){
 	Db.map[name] = m;
 }
 
-
+//var image = newImage("img/map/goblinLand/goblinLandB.png");
 
 
 

@@ -84,7 +84,7 @@ Change.send.template = function(){
 		u:{},  //update (already init-ed)
 		p:{},	//player
 		m:{},	//main
-		r:[],	//removeList
+		r:{},	//removeList
 		a:[],  //animation
 	}
 }
@@ -130,7 +130,7 @@ Change.send.reset = function(){
 	for(var i in List.main){ 
 		List.main[i].change = {}; 
 		List.all[i].privateChange = {}; 	
-		List.all[i].removeList = [];
+		List.all[i].removeList = {};
 	}
 }
 

@@ -8,7 +8,7 @@ Loop = function(){
 	Loop.input();
 	Draw.loop();
 	Loop.frame++;
-	if(Loop.frame % 5 === 0) Input.offset = $('#gameDiv').offset();
+	if(Loop.frame % 25 === 0) Loop.offset();
 	
 	if(Input.event.typeNormal()) Input.reset();
 	main.hideHUD.passive = 0;
@@ -16,10 +16,16 @@ Loop = function(){
 	Loop.performance();
 	
 	if(Loop.frame % 500 === 0) $(".ui-tooltip-content").parents('div').remove();	//tooltip not disappearing
+	
 }
 
 	
 Loop.frame = 0;
+
+Loop.offset = function(){
+	var off = $('#gameDiv').offset();
+	Input.offset = {left:off.left - window.pageXOffset,top:off.top - window.pageYOffset};
+}
 
 Loop.interval = function(num){
 	return Loop.frame % num === 0;
@@ -50,8 +56,12 @@ Loop.player.old = {};
 
 Loop.bullet = function(){
 	for(var i in List.bullet){
-		//cant put position update here cuz desync
-		Sprite.update(List.bullet[i]);
+		var b = List.bullet[i];
+		Sprite.update(b);
+		if(b.spd === null || b.sprite.dead) continue;	//spd null if boomerang etc...
+		b.x += Tk.cos(b.angle)*b.spd;
+		b.y += Tk.sin(b.angle)*b.spd;	
+		
 	}
 }
 
@@ -68,6 +78,7 @@ Loop.performance = function(){
 Loop.performance.frequence = 5*1000/40;
 Loop.performance.oldtime = Date.now();
 Loop.performance.result = '100%';
+
 
 
 Loop.main = function(){

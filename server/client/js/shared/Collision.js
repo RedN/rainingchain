@@ -62,8 +62,7 @@ Collision.anglePtPt = function(pt1,pt2){	//pt1 looking towards pt2
 
 Collision.PosMap = function(pos,map,type){	//Test Collision between pos and map	
 	var grid = List.map[map].grid[type];
-	return !grid[pos.y] || !+grid[pos.y][pos.x] 
-	|| (type !== 'player' && +Collision.mapMod[map + '-' + pos.x + '-' + pos.y]);	//if type === player, this line wont affect return
+	return !grid[pos.y] || !+grid[pos.y][pos.x];	//if type === player, this line wont affect return
 	//return 1 if collision	
 }
 
@@ -179,14 +178,16 @@ Collision.StrikeMap = function(strike,target){	//gets farthest position with no 
 	return end;
 }
 
-Collision.ActorMap = function(pos,map,player){
-	if(player.ghost) return 0;
+Collision.ActorMap = function(pos,map,act){
+	if(act.ghost) return 0;
 	
-	if(player.mapMod && player.mapMod[pos.x + '-' + pos.y]){	//for player only
-		return player.mapMod[pos.x + '-' + pos.y];
+	if(act.type === 'player'){
+		if(act.mapMod[pos.x + '-' + pos.y]) return 1;
+	} else if(+Collision.mapMod[map + '-' + pos.x + '-' + pos.y]){
+		return 1;
 	}
-	
-	return Collision.PosMap(pos,map,player.type || 'npc');
+		
+	return Collision.PosMap(pos,map,act.type || 'npc');
 };
 
 

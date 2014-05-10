@@ -27,7 +27,7 @@ Init.actor = function(){
 			stuck:[],
 			reachedGoal:0,isStuck:0,maxAngleChange:180,
 		}
-		
+		act.mapMod = {};
 		act.customBoost = Actor.template.customBoost();
 		act.bonus = Actor.template.bonus();	//Bonus applies on top of ability attack. If effect not on ability, do nothing.
 		act.mastery = Actor.template.mastery(type);
@@ -146,7 +146,7 @@ Init.actor = function(){
 		//{Player Only
 		if(type === 'player'){
 			act.skill = Actor.template.skill();
-			act.removeList = [];	//for things that got removed from activeList
+			act.removeList = {};	//for things that got removed from activeList
 			act.type = 'player';
 			act.damageIf = 'npc';
 			act.privateChange = {};

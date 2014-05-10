@@ -10,6 +10,7 @@ Draw.loop = function (){
 	}
 	for(var i in html){ 
 		if(i === 'warning') continue;
+		if(i === 'map') continue;
 		//if(i === 'command') continue;
 		//if(i === 'context') continue;
 		if(i === 'chat') continue;
@@ -604,4 +605,39 @@ Draw.face = function(info,x,y,size){
 	ctx.textAlign = 'left';
 	
 }
+
+
+
+
+Draw.mapOtherSystemUnused = function(){
+	//'map':{'a':{'canvas':$("#mapAbove" + "Canvas")[0],'ctx':$("#mapAbove" + "Canvas")[0].getContext('2d')},'b':{'canvas':$("#mapBelow" + "Canvas")[0],'ctx':$("#mapBelow" + "Canvas")[0].getContext('2d')}},
+	//<canvas id="mapAboveCanvas" class='posAbs' width='12800' height='7200' style="z-index:-9; width:12800px; height:7200px; background-color:red;"></canvas>
+	//<canvas id="mapBelowCanvas" class='posAbs' width='12800' height='7200' style="z-index:-11; width:12800px; height:7200px; background-color:yellow;"></canvas>
+					
+	Draw.mapLoop = function(layer){
+		html.map.a.canvas.style.left = (-player.x + Cst.WIDTH/2) + 'px';
+		html.map.a.canvas.style.top = (-player.y + Cst.HEIGHT/2) + 'px';
+		html.map.b.canvas.style.left = (-player.x + Cst.WIDTH/2) + 'px';
+		html.map.b.canvas.style.top = (-player.y + Cst.HEIGHT/2) + 'px';
+	}
+
+	Draw.mapInit = function(layer){
+		var map = Db.map[player.map];
+		var mapAmount = 10;
+		var width = 640;
+		var height = 360;
+		
+		for(var i = 0; i < mapAmount; i++){
+			for(var j = 0; j < mapAmount; j++){
+				if(!map.img['b'][i] || !map.img['b'][i][j]) continue;
+				//problem is map not whole
+				//html.map.b.ctx.drawImage(map.img['b'][i][j],0,0,width,height, i*width*2,j*height*2,width*2,height*2);
+				html.map.a.ctx.drawImage(map.img['a'][i][j],0,0,width,height, i*width*2,j*height*2,width*2,height*2);
+			}
+		}
+	}
+}
+
+
+
 

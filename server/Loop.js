@@ -120,7 +120,14 @@ Activelist.update = function(act){	//called by npc in loop
 		if(!Activelist.test(act,List.all[j])){
 			delete List.all[j].activeList[act.id];
 			delete act.activeList[j];
-			if(act.type === 'player') act.removeList.push(List.all[j].publicId || j);
+			
+			
+			if(act.type === 'player'){
+				var fadeout = List.all[j].type === 'bullet' ? 1/3 : 1/12;
+				var id = List.all[j].publicId || j;
+				if(act.removeList[id] === undefined) act.removeList[id] = fadeout;	//case manually doing it for chest, switch
+			
+			}
 		}
 	}
 	
@@ -157,7 +164,7 @@ Activelist.clear = function(b){	//called when living forever
 	for(var i in b.activeList){
 		var viewer = List.all[i];
 		if(!viewer){ ERROR(2,'actor dont exist'); continue; }
-		if(viewer.type === 'player') viewer.removeList.push(b.publicId || b.id);
+		if(viewer.type === 'player') viewer.removeList[b.publicId || b.id] = 1/3;
         delete viewer.activeList[b.id];
 	}
 	b.activeList = {};	

@@ -24,7 +24,6 @@ SKIPPED: trade, craft,db.filter, passive
 
 
 BUG: spawn monster in map that was deleted
-warning if scrollbar 
 no clip bug
 
 change tooltip for the one bookmarked

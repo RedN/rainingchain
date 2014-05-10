@@ -7,7 +7,7 @@ try {
 	if(Receive.showData) INFO(JSON.stringify(data));  //for testing
 	if(!data) return;
 	data = Receive.parse(data);
- 
+	
     //Init Anim
 	for(var i in data.a) Anim.creation(data.a[i]);	
 	
@@ -28,11 +28,11 @@ try {
 		}
 	}
     	
+		
 	for(var i in data.r){	//remove
-		var id = data.r[i];
-		if(List.all[id] && List.all[id].sprite){ 
-			List.all[id].sprite.dead = List.all[id].type === 'npc' ? 1/12 : 1/3;	//ratio will impact alpha or fade out
-		} else{Activelist.removeAny(id);}			
+		if(List.all[i] && List.all[i].sprite){ 
+			List.all[i].sprite.dead = data.r[i] || 1;	//ratio will impact alpha or fade out
+		} else{Activelist.removeAny(i);}			
 	}
     
 	//Update Main List
@@ -45,13 +45,7 @@ try {
 		if(++act.toRemove > 40){ Activelist.removeAny(i);}	//aka no update for 1 sec
 	}
 	
-	//Update Bullet
-	for(var i in List.bullet){	//need to be here so same tempo than server
-		var b = List.bullet[i];
-		if(b.spd === null || b.sprite.dead) continue;	//spd null if boomerang etc...
-		b.x += Tk.cos(b.angle)*b.spd;
-		b.y += Tk.sin(b.angle)*b.spd;	
-	}
+	
 	Loop();
 
 } catch (err){ ERROR.err(err) }

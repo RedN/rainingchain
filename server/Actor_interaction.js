@@ -67,7 +67,7 @@ Actor.click.dialogue = function(act,eid){
 
 Actor.click.pushable = function(pusher,beingPushed){
 	var act = List.all[beingPushed];
-	if(!act.pushable) return
+	if(!act.pushable) return ERROR(3,'no pushable');
 	
 	var pusherAngle = Tk.atan2(act.y - pusher.y,act.x - pusher.x);			//only work with square block
 	var fact = 360/4;
@@ -93,9 +93,8 @@ Actor.click.pushable = function(pusher,beingPushed){
 	var posB = {'x':act.x + blockVarX,'y':act.y+blockVarY};
 	var posP = {'x':pusher.x + pusherVarX,'y':pusher.y+pusherVarY};
 	
-	if(Collision.distancePtPt(posB,posP) > 64) return;	//toofar
+	if(Collision.distancePtPt(posB,posP) > 64) return TOOFAR(pusher.id);	//toofar
 	//
-	
 	Actor.movePush(act,angle,act.pushable.magn,act.pushable.time);
 
 }
@@ -147,6 +146,7 @@ Actor.click.loot = function(act,eid){	//need work
 	
 	if(e.loot(act.id) !== false){
 		Chat.add(act.id,"Nice loot!");
+		act.removeList[eid] = 1;
 	}
 	Server.log(3,act.id,'openChest',eid);
 }
@@ -162,6 +162,7 @@ Actor.click.toggle = function(act,eid){
 	
 	e.toggle(act.id,e,List.map[e.map]);
 	Chat.add(act.id,"You pulled the toggle.");
+	act.removeList[eid] = 1;
 }
 
 Actor.click.drop = function (act,id){
@@ -215,13 +216,12 @@ Actor.setRespawn = function(act,spot,safe){
 }
 
 Actor.movePush = function(act,angle,magn,time){	//TOFIX find better name
-	if(act.timeout.push) return;	//only 1 push at a time
-	
+	if(act.timeout.movePush) return;	//only 1 push at a time
 	act.friction = 1;
 	act.spdX = magn*Tk.cos(angle);
 	act.spdY = magn*Tk.sin(angle);
 	
-	Actor.setTimeout(act,'push',time,function(eid){
+	Actor.setTimeout(act,'movePush',time,function(eid){
 		List.all[eid].spdX = 0;
 		List.all[eid].spdY = 0;
 		List.all[eid].friction = Cst.FRICTION;
