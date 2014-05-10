@@ -6,14 +6,12 @@ SKIPPED: trade, craft,db.filter, passive
 
 
 BUG: spawn monster in map that was deleted
-no clip bug
 
 change tooltip for the one bookmarked
 
 tip of the day below gameDiv
 group
 
-item quest simplify, and STACK always
 
 talk about naming convention
 

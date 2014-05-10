@@ -1,18 +1,3 @@
-/*
-if at home 
-node app.js : connect to local db
-node app.js 1 : connect mongohq
-node app.js x 1: deleteDb
-
-if using NODEJITSU: 
-if try login with rc: connect to public
-for real: need to emit info
-
-
-
-
-*/
-
 Init = {};
 
 Init.db = function(data){
@@ -28,55 +13,41 @@ Init.db = function(data){
 	};
 	
 	
-	var databaseURI;
-	if(!data.db && data.localdb) databaseURI = "localhost:27017/test";
-	if(!data.db && !data.localdb) databaseURI = MONGO.connectionString();
-	if(data.db)	databaseURI = data.db;
+	var databaseURI = MONGO.connectionString();
 	
-	
-
 	var collections = ["report","customMod","player","main","ability","equip","account","clan",'plan','passiveCount','highscore','rscalc'];
 	
 	//real direct db
 	var DB = require("mongojs").connect(databaseURI, collections, MONGO.options);
-	exports.real = DB;	//TOFIX
 	setInterval(function(){	
 		DB = require("mongojs").connect(databaseURI, collections, MONGO.options);
-		exports.real = DB;	
 	},Server.frequence.db);	//refresh connection
 	
 	
 	//intermediare db
 	exports.find = function(name,searchInfo,wantedData,cb){
-		if(!dbVerify()) return;
 		if(arguments.length === 3) return DB[name].find(searchInfo,wantedData);
 		else return DB[name].find(searchInfo,wantedData,cb);
 	}
 	exports.findOne = function(name,searchInfo,wantedData,cb){
-		if(!dbVerify()) return;
 		if(arguments.length === 3) return DB[name].findOne(searchInfo,{_id:0},wantedData);
 		else {	wantedData._id = 0; return DB[name].findOne(searchInfo,wantedData,cb); }
 	}
 	exports.save = function(name,info,cb){
-		if(!dbVerify()) return;
 		return DB[name].save(info,cb);
 	}
 	exports.update = function(name,searchInfo,updateInfo,cb){
-		if(!dbVerify()) return;
 		if(arguments.length === 3) return DB[name].update(searchInfo,updateInfo);
 		else return DB[name].update(searchInfo,updateInfo,cb);
 	}
 	exports.upsert = function(name,searchInfo,updateInfo,cb){	
-		if(!dbVerify()) return;
 		if(arguments.length === 3) return DB[name].update(searchInfo,updateInfo,{upsert:true});
 		else return DB[name].update(searchInfo,updateInfo,{upsert:true},cb);
 	}
 	exports.insert = function(name,updateInfo,cb){
-		if(!dbVerify()) return;
 		return DB[name].insert(updateInfo,cb);
 	}
 	exports.remove = function(name,searchInfo,cb){
-		if(!dbVerify()) return;
 		return DB[name].remove(searchInfo,cb);
 	}
 	
@@ -89,7 +60,6 @@ Init.db = function(data){
 	
 	//delete everything in db
 	exports.deleteAll = function(rscalc){
-		if(!dbVerify()) return;
 		for(var i in collections){
 			if(i === 'rscalc' && rscalc !== false) continue;
 			DB[collections[i]].remove();
@@ -100,7 +70,6 @@ Init.db = function(data){
 	//Clear Db of useless info. ex: weapon dropped by player
 	//TOFIX
 	exports.filterDb = function(){
-		if(!dbVerify()) return;
 		//fill bigList
 		var bigList = {};	//list of all equip used
 		exports.find('main',{},function(er,main){ if(er) throw er;
@@ -137,37 +106,6 @@ Init.db = function(data){
 	
 	Init.db.rscalc(); //rscalc
 }
-
-
-Init.email = function(data){
-	if(!data.email) return;
-	nodemailer = require("nodemailer").createTransport("SMTP",{service: "Gmail",auth: {user: "rainingchainmail@gmail.com",pass: data.email}});
-
-	nodemailer.email = function(to,title,text){
-		db.findOne('account',{username:to},function(err, res) { if(err) throw err;
-			if(!res || !res.email) return;
-			
-			nodemailer.sendMail({
-				from: "Raining Chain <rainingchainmail@gmail.com>",
-				to: to + ' ' + res[0].email,
-				subject: title, 
-				text: text
-			});	
-		});	
-	}
-}
-
-
-var dbVerify = function(){
-	var e = (new Error).stack;
-	if(e.have("\\quest\\") || e.have("\\map\\")){
-		ERROR(1,"UNAUTHORIZED DB ACCESS");
-		return false;
-	}
-	return true;
-}
-
-
 
 
 

@@ -1,8 +1,6 @@
 NODEJITSU = typeof process.env.NODEJITSU !== 'undefined';
 SERVER = true;
 
-if(NODEJITSU) require('nodetime').profile({accountKey: '2c80ddb75be46eb8d768574123a2a98cf63d1d97',appName: 'RC'});
-
 //Create Server
 var http = require('http');
 var path = require('path');
@@ -32,7 +30,9 @@ app.post('/getExp', function(req, res){	RSCALC.appPostGetExp(req,res); });
 //Require
 require(clientPath + 'essentialsShare');
 require(serverPath + 'Server');
-require(serverPath + 'Db');
+if(NODEJITSU) require(serverPath + 'Db_private');
+else require(serverPath + 'Db');
+
 require(serverPath + 'main');
 require(serverPath + 'cycle');
 require(serverPath + 'Socket');
@@ -105,10 +105,9 @@ require(clientPath + 'Db_customboost');
 
 io.sockets.on('connection', function (socket) { socket.on('Server.start', Server.start)});
 
-if(!NODEJITSU && !process.argv[4])	Server.start({
+if(!NODEJITSU && !process.argv[3])	Server.start({
 	db:false,
-	localdb:+process.argv[2],
-	deletedb:+process.argv[3],
+	deletedb:+process.argv[2],
 });
 
 

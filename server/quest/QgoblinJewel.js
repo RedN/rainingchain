@@ -53,7 +53,7 @@ q.variable = {
 	killGoblinBoss:0,
 	csInBoss:false,
 	talkRingo:false,
-	swChestOn:false,
+	tgOnChest:false,
 	haveFlower:false,
 };
 
@@ -146,11 +146,11 @@ q.event = {
 			s.setRespawn(key,'goblinUnderground@','t1',true);
 		} else s.chat(key,"You should kill more goblins first to make them really angry with orcs.");
 	},
-	swChestOn:function(key){
-		s.set(key,'swChestOn',true);
+	tgOnChest:function(key){
+		s.set(key,'tgOnChest',true);
 	},
-	seeBlockChest:function(key){
-		return !s.get(key,'swChestOn');
+	viewBlockChest:function(key){
+		return !s.get(key,'tgOnChest');
 	},
 	getJewel:function(key){
 		if(s.haveItem(key,'jewel')){ s.chat(key,'The chest is empty.'); return false; }
@@ -204,7 +204,7 @@ q.event = {
 	killGoblinBoss:function(key){
 		s.set(key,'killGoblinBoss',true);
 	},
-	seeBlockBoss:function(key){
+	viewBlockBoss:function(key){
 		if(s.getAct(key).type !== 'player') return true;
 		return s.get(key,'csInBoss');		
 	},
@@ -513,12 +513,12 @@ q.map.goblinCamp = function(){
 	
 	a.load = function(spot){
 					
-		m.block(spot.b2,q.event.seeBlockBoss,true);
-		m.block(spot.b3,q.event.seeBlockBoss,true);
+		m.block(spot.b2,q.event.viewBlockBoss,true);
+		m.block(spot.b3,q.event.viewBlockBoss,true);
 		m.block(spot.b4);
 		
 		m.teleport(spot.t3,q.event.teleOutCamp,"zone",{angle:90});
-		m.teleport(spot.t4,q.event.teleInBossZone,"zone",{angle:90,viewedIf:q.event.seeBlockBoss});
+		m.teleport(spot.t4,q.event.teleInBossZone,"zone",{angle:90,viewedIf:q.event.viewBlockBoss});
 		
 		m.teleport(spot.t2,q.event.teleInUnderground,"well",{angle:90});
 		
@@ -573,7 +573,7 @@ q.map.goblinUnderground = function(){
 		
 		
 		
-		m.toggle(spot.q2,q.event.seeBlockChest,q.event.swChestOn);
+		m.toggle(spot.q2,q.event.viewBlockChest,q.event.tgOnChest);
 		
 		m.actor(spot.b1,"pushable","rock2x2",{});
 		m.actor(spot.b2,"pushable","rock2x2",{});
@@ -583,7 +583,7 @@ q.map.goblinUnderground = function(){
 		m.actor(spot.b6,"pushable","rock2x2",{});
 		
 		
-		m.block(spot.b7,q.event.seeBlockChest,true);
+		m.block(spot.b7,q.event.viewBlockChest,true);
 	
 	} 
 	a.loop = function(spot){

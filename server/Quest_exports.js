@@ -82,6 +82,7 @@ exports.init = function(version,questname){	//}
 	}
 
 	s.teleport = function(key,map,letter,popup){	//type: 0=immediate, 1=popup
+		if(List.main[key].questActive !== Q) return Chat.add(key,"Can't teleport because quest not active.");
 		var spot = s.getSpot(map,Q,letter);
 		
 		if(!popup) Actor.teleport(s.getAct(key),spot);
@@ -225,7 +226,6 @@ exports.init = function(version,questname){	//}
 		Actor.creation({spot:spot,category:cat,variant:variant,lvl:lvl || 0,extra:parseExtra(extra)});
 	}
 	
-	
 	m.actorGroup = function(spot,respawn,list,extra){
 		var tmp = [];
 		for(var i in list){
@@ -234,7 +234,6 @@ exports.init = function(version,questname){	//}
 		}
 		Actor.creation.group({'spot':spot,'respawn':respawn},tmp);
 	}
-
 
 	m.collision = function(spot,cb){
 		if(!Loop.interval(5)) return;
