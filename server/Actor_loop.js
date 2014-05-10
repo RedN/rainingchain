@@ -61,7 +61,6 @@ Actor.loop.updateActive = function(act){
 //{Ability
 Actor.loop.ability = {};
 Actor.loop.ability.charge = function(act){	//HOTSPOT
-	var alreadyBoosted = {};
 	var ma = act.abilityChange;
 	ma.globalCooldown -= ABILITYINTERVAL;
 	ma.globalCooldown = ma.globalCooldown.mm(-100,250); 	//cuz if atkSpd is low, fuck everything with stun
@@ -69,11 +68,7 @@ Actor.loop.ability.charge = function(act){	//HOTSPOT
 	for(var i in ab){
 		var s = ab[i]; if(!s) continue;	//cuz can have hole if player
 		
-		//Charge
-		if(!alreadyBoosted[s.id]){  //this is because a player can set the same ability to multiple input
-			ma.charge[s.id] += act.atkSpd.main * s.spd.main * ABILITYINTERVAL;
-			alreadyBoosted[s.id] = 1;
-		}
+		ma.charge[s.id] += act.atkSpd.main * s.spd.main * ABILITYINTERVAL;
 	}
 }
 
@@ -338,6 +333,47 @@ Actor.loop.move = function(act){
 	act.spdX *= act.friction;	
 	act.spdY *= act.friction;
 }
+
+/*
+Actor.loop.move = function(act){
+	if(act.bumper[0]){act.spdX = -Math.abs(act.spdX*0.5)*act.bounce - act.bounce;} 
+	if(act.bumper[1]){act.spdY = -Math.abs(act.spdY*0.5)*act.bounce - act.bounce;}
+	if(act.bumper[2]){act.spdX = Math.abs(act.spdX*0.5)*act.bounce + act.bounce;} 
+	if(act.bumper[3]){act.spdY = Math.abs(act.spdY*0.5)*act.bounce + act.bounce;} 
+
+	if(act.moveInput[0] && !act.bumper[0] && act.spdX < act.maxSpd){act.spdX += act.acc;}
+	if(act.moveInput[1] && !act.bumper[1] && act.spdY < act.maxSpd){act.spdY += act.acc;}
+	if(act.moveInput[2] && !act.bumper[2] && act.spdX > -act.maxSpd){act.spdX -= act.acc;}
+	if(act.moveInput[3] && !act.bumper[3] && act.spdY > -act.maxSpd){act.spdY -= act.acc;}	
+	
+	
+	//Friction + Min Spd
+	if (Math.abs(act.spdX) < 0.1){act.spdX = 0;}	
+	if (Math.abs(act.spdY) < 0.1){act.spdY = 0;}
+	act.moveAngle = Tk.atan2(act.spdY,act.spdX);
+	
+	
+	
+	//Calculating New Position
+	var dist = Math.pyt(act.spdY,act.spdX);
+	var amount = Math.ceil(dist/30);
+	if(amount < 2){
+		act.x += act.spdX;
+		act.y += act.spdY;
+	} else {    //aka could pass thru walls => move step by step and test bumper every time
+		for(var i = 0 ; i < amount && !act.bumper[0] && !act.bumper[1] && !act.bumper[2] && !act.bumper[3]  ; i++){
+			act.x += act.spdX/amount;
+			act.y += act.spdY/amount;
+			Sprite.updateBumper(act);
+		} 
+	} 
+	act.spdX *= act.friction;	
+	act.spdY *= act.friction;
+}
+
+*/
+
+
 
 Actor.loop.move.aim = function (act){	
 	//penalty if looking and moving in opposite direction

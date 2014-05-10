@@ -5,14 +5,9 @@
 Perf
 
 Actor
-	Activelist.test
-	ability charge
 	bumper
 	boost
 
-Update
-	Change.update.watch
-	convert itemlist
 
 
 	

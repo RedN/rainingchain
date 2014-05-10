@@ -118,9 +118,9 @@ Init.changeUpdate = function(){
 				
 				{'array':['windowList'],'filter':Change.send.convert.windowList},
 				
-				{'array':['invList'],'filter':Change.send.convert.itemlist},
-				{'array':['bankList'],'filter':Change.send.convert.itemlist},
-				{'array':['tradeList'],'filter':Change.send.convert.itemlist},
+				{'array':['invList'],'filter':Change.send.convert.itemlist,'condition':(function(m){ return m.invList.toUpdate; })},
+				{'array':['bankList'],'filter':Change.send.convert.itemlist,'condition':(function(m){ return m.bankList.toUpdate; })},
+				{'array':['tradeList'],'filter':Change.send.convert.itemlist,'condition':(function(m){ return m.tradeList.toUpdate; })},
 				{'array':['optionList'],'filter':Change.send.convert.optionList},
 				
 				{'array':['temp']},
@@ -235,23 +235,27 @@ Change.update.watch = function(act,info,priv){
 	var valRaw = Tk.viaArray.get({'origin':act,'array':info.array});
 	if(valRaw && info.filter) valRaw = info.filter(valRaw,act);
 	        
-	var val0 = Tk.stringify(valRaw);                              		//Get new
-	var val1 = priv ? act.privateOld[info.id] : act.old[info.id]; 		//Get old
+	var valNew = Tk.stringify(valRaw);                              		//Get new
+	var valOld = priv ? act.privateOld[info.id] : act.old[info.id]; 		//Get old
 	
 	//Test !=
-	if(Tk.isEqual(val0, val1)) return;
+	//if(Tk.isEqual(valNew, valOld)) return;
+	if(valNew == valOld) return;	//no idea if better/needed
 	
-	if(!priv){ act.old[info.id] = val0; }                  //Set Old
-	else { act.privateOld[info.id] = val0; }
+	if(!priv){ 			  //Set Old
+		act.old[info.id] = valNew; 
+		act.change[info.id] = valRaw;
+	} else { 
+		act.privateOld[info.id] = valNew; 
+		act.privateChange[info.id] = valRaw;		
+	}
 
-	if(info.sendArray){                                                 //Modify array of what to send
+	/*if(info.sendArray){                                                //Modify array of what to send //none use it atm
 		var valRaw = Tk.viaArray.get({'origin':act,'array':info.sendArray});
 		if(info.sendFilter) valRaw = info.sendFilter(valRaw);
-		var val0 = Tk.stringify(valRaw);
-	}
+		var valNew = Tk.stringify(valRaw);
+	}*/
 	
-	if(!priv){ act.change[info.id] = valRaw; }          //Add to change list for send.js know
-	else {	act.privateChange[info.id] = valRaw; }
 
 }	
 

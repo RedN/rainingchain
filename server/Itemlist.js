@@ -3,6 +3,27 @@
 
 Itemlist = {};
 
+Itemlist.template = function(type,data){
+	var tmp = {};
+	tmp.type = type;
+	tmp.key = 'not_set';
+	tmp.toUpdate = 1;
+	if(type === 'inventory'){
+		tmp.alwaysStack = false;
+		var size = 20;	
+	}
+	if(type === 'bank'){
+		tmp.alwaysStack = true;
+		var size = 256;	
+	}
+	tmp.data = Array(size);	
+    for(var i = 0 ; i < tmp.data.length ; i++) tmp.data[i] = [];
+	
+	if(data) for(var i in data) tmp.data[i] = data[i];
+	
+    return tmp;
+}
+
 Itemlist.format = function(id,amount,verify){	//verify is for quest, verification be done later
 	var tmp = {};
 	if(Array.isArray(id)){
@@ -28,6 +49,7 @@ Itemlist.add = function (inv,id,amount){	//only preparing
 }
 
 Itemlist.add.action = function(inv,id,amount){
+	inv.toUpdate = 1;
 	if(Db.item[id].stack || inv.alwaysStack){
 		var pos = Itemlist.getPosition(inv,id);
 		if(pos !== null){ inv.data[pos][1] += amount; return; }
@@ -50,6 +72,7 @@ Itemlist.remove = function (inv,id,amount){
 }
 
 Itemlist.remove.action = function (inv,id,amount){
+	inv.toUpdate = 1;
 	if(Db.item[id].stack || inv.alwaysStack){
 		for(var i = 0 ; i < inv.data.length ; i ++){
 			if(inv.data[i][0] === id){
@@ -145,26 +168,6 @@ Itemlist.transfer = function(inv,other,id,amount,allornothing){
 
 Itemlist.transfer.bank = function(key,inv,id,amount){
 	Itemlist.transfer(List.main[key].bankList,inv,id,amount);
-}
-
-Itemlist.template = function(type,data){
-	var tmp = {};
-	tmp.type = type;
-	tmp.key = 'not_set';
-	if(type === 'inventory'){
-		tmp.alwaysStack = false;
-		var size = 20;	
-	}
-	if(type === 'bank'){
-		tmp.alwaysStack = true;
-		var size = 256;	
-	}
-	tmp.data = Array(size);	
-    for(var i = 0 ; i < tmp.data.length ; i++) tmp.data[i] = [];
-	
-	if(data) for(var i in data) tmp.data[i] = data[i];
-	
-    return tmp;
 }
 
 Itemlist.click = {};

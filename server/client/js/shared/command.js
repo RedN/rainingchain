@@ -406,10 +406,14 @@ Command.list['win,passive,unfreeze'].doc = {
 
 
 Command.list['win,ability,swap'] = function(key,name,position){
-//(key,input,ab){
-	position = +position;
-	if(typeof position !== 'number' || typeof name !== 'string'){ return; }
-	if(position < 0 || !Actor.getAbilityList(List.all[key])[name]){ return; } 
+	var abl = Actor.getAbilityList(List.all[key]);
+	var ab = Actor.getAbility(List.all[key]);
+	
+	if(!abl[name]) return;
+	for(var i in ab){ 
+		if(ab[i] && ab[i].id === name) ab[i] = null; 
+	}	//prevent multiple
+	
 	Actor.ability.swap(List.all[key],name,position);
 }
 Command.list['win,ability,swap'].doc = {

@@ -241,8 +241,12 @@ Change.send.convert.itemlist = function(inv){
 			draw[i][2] = Db.item[inv.data[i][0]].name;
 		}
 	}
+	inv.toUpdate = 0;
+	console.log(1);
 	return draw;
 }
+
+
 
 Change.send.convert.windowList = function(data){
 	if(data.trade)	data.trade = Change.send.convert.windowList.trade(Tk.deepClone(data.trade));
