@@ -4,6 +4,9 @@
 
 Game Engine: 
 	Samuel Magnan (Idk Whats Rc)
+
+Editing Tileset Images:
+	Jerome T.
 	
 Icons:	
 	http://game-icons.net/ (Lorc, Delapouite & contributors) http://creativecommons.org/licenses/by/3.0/
@@ -26,14 +29,16 @@ Software:
 	Pngquant: http://pngquant.org/
 	
 Songs:
-	Check song.js file.
-
+	Evil-Dog, Darknessbreaker, DJM4C,K-Pone, 3kliksphilip, MiguelVolkov, Getcheffy
+	Check /server/client/js/song.js file for more details.
+	
 Sfx: 
 	http://www.soundjay.com/
 
+Tileset:
+	http://www.pixeljoint.com/pixelart/45616.htm	Pandora'sSecret 
 
-
-Last Update: 2014-12-03
+Last Update: 2014-05-27
 
 
 

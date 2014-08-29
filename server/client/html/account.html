@@ -1,0 +1,91 @@
+<h2>Account Management</h2>
+Log: <div id="accountLog"></div>
+
+<h3>Confirm Email</h3>
+Requires to be logged into the game. The Activation Key was sent to your email. Check in the Spam Folder too.<br>
+Activation Key: <input id="accountActivationKey"></input><br>
+<button onclick="Account.requestActivationKey()">Go!</button><br>
+<button onclick="Account.sendActivationKey()">Send Key Again</button><br>
+
+<h3>Change Email</h3>
+Requires to be logged into the game. You will be able to change it 7 days after the request. <br>
+Current Password: <input type="password" id="accountCurrentPasswordEmail"></input><br>
+New Email: <input id="accountNewEmail"></input><br>
+<button onclick="Account.changeEmail()">Go!</button><br>
+<button onclick="Account.abortChangeEmail()">Abort Request</button><br>
+
+<h3>Change Password</h3>
+Requires to be logged into the game. <br>
+Current Password: <input type="password" id="accountCurrentPassword"></input><br>
+New Password: <input type="password" id="accountNewPassword"></input><br>
+Confirm Password: <input type="password" id="accountNewPasswordConfirm"></input><br>
+<button onclick="Account.changePassword()">Go!</button><br>
+
+<h3>Request Reset Password</h3>
+This will send a Reset Key to the email address linked with the account.<br>
+Username: <input id="accountRequestName"></input><br>
+Email: <input id="accountRequestEmail"></input><br>
+<button onclick="Account.requestResetPassword()">Go!</button><br>
+
+<h3>Reset Password</h3>
+Enter the Reset Key you received via email from "Request Reset Password" to reset your password.<br>
+Username: <input id="accountResetName"></input><br>
+Reset Key: <input id="accountResetKey"></input><br>
+<button onclick="Account.resetPassword()">Go!</button><br>
+
+
+
+<script>
+socket.on('account',function(d){
+	Account.log(d);
+});
+	
+var Account = {};
+Account.log = function(text){
+	$("#accountLog")[0].innerHTML = text;
+}
+
+Account.changePassword = function(){
+	var old = $("#accountCurrentPassword")[0].value;
+	
+	var pass = $("#accountNewPassword")[0].value;
+	if(pass != $("#accountNewPasswordConfirm")[0].value) return Account.log("Passwords do not match.");
+	
+	socket.emit('account',{command:'changePassword',oldPassword:old,newPassword:pass});
+	
+	$("#accountNewPassword")[0].value = '';
+	$("#accountNewPasswordConfirm")[0].value = '';
+	$("#accountCurrentPassword")[0].value = '';
+}
+
+Account.requestResetPassword = function(){
+	socket.emit('account',{command:'requestResetPassword',user:$("#accountRequestName")[0].value,email:$("#accountRequestEmail")[0].value});
+}
+Account.resetPassword = function(){
+	socket.emit('account',{command:'resetPassword',user:$("#accountResetName")[0].value,resetPasswordKey:$("#accountResetKey")[0].value});
+}
+	
+
+Account.changeEmail = function(){
+	socket.emit('account',{command:'changeEmail',password:$("#accountCurrentPasswordEmail")[0].value,email:$("#accountNewEmail")[0].value});
+	$("#accountCurrentPasswordEmail")[0].value = '';
+}	
+Account.abortChangeEmail = function(){
+	socket.emit('account',{command:'abortChangeEmail'});
+}
+Account.requestActivationKey = function(){
+	socket.emit('account',{command:'requestActivationKey'});
+}
+
+Account.sendActivationKey = function(){
+	socket.emit('account',{command:'sendActivationKey',key:$("#accountActivationKey")[0].value});
+}
+</script>
+
+
+
+
+
+
+
+

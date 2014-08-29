@@ -1,4 +1,6 @@
-Test = {};
+//LICENSED CODE BY SAMUEL MAGNAN FOR RAININGCHAIN.COM, LICENSE INFORMATION AT GITHUB.COM/RAININGCHAIN/RAININGCHAIN
+eval(loadDependency(['Db','List','Actor','Itemlist','Plan','Chat'],['Test']));
+var Test = exports.Test = {};
 
 Test.loop = function(){
 
@@ -15,39 +17,14 @@ Test.no = {
 };
 
 
-
-Test.setAbility = function(key){
-	var act = List.all[key];
-	//PVP
-	act.abilityList = Actor.template.abilityList({
-		'pvp-bullet':1,
-		'pvp-fireball':1,
-		'pvp-freeze':1,
-		'pvp-explosion':1,
-		'pvp-invincibility':1,
-		'pvp-heal':1,
-	});
-
-	Actor.ability.swap(act,'pvp-bullet',0);
-	Actor.ability.swap(act,'pvp-explosion',1);
-	Actor.ability.swap(act,'pvp-freeze',2);
-	Actor.ability.swap(act,'pvp-fireball',3);
-	Actor.ability.swap(act,'pvp-heal',4);
-	Actor.ability.swap(act,'pvp-invincibility',5);
-	
-}
-
-
-Test.spawnEnemy = function(key,cat,variant){
-	cat = cat || 'bat';
-	variant = variant || 'normal';
+Test.spawnEnemy = function(key,model){
+	model = model || 'Qsystem-bat';
 	
 	var player = List.all[key];
-	if(!Db.npc[cat][variant]){ ERROR(4,"no npc",cat,variant); return;}
+	if(!Db.npc[model]){ ERROR(4,"no npc",model); return;}
 	Actor.creation({
 		'spot':{x:player.x,y:player.y,map:player.map},
-		"category":cat,		
-		"variant":variant,		
+		"model":model,	
 		"extra":{},
 	});
 }
@@ -58,49 +35,29 @@ Test.invincible = function(key){
 			{stat:'globalDef',value:1000,type:'+'},
 			{stat:'globalDmg',value:1000,type:'+'},
 		]);	
+		Chat.add(key,'Invincible');
 	} else {
 		Actor.permBoost(List.all[key],'Test.invincible');
+		Chat.add(key,'Not Invincible');
+	}
+}
+Test.ghost = function(key){
+	if(List.all[key].ghost){
+		Actor.permBoost(List.all[key],'Test.ghost');
+		Chat.add(key,'Not ghost');
+		List.all[key].ghost = 0;
+	} else {
+		List.all[key].ghost = 1;
+		List.all[key].bumper = [0,0,0,0];
+		Actor.permBoost(List.all[key],'Test.ghost',[
+			{stat:'maxSpd',value:40,type:'+'},
+			{stat:'acc',value:40,type:'+'},
+		]);	
 	}
 }
 
-
 Test.generateEquip = function(key,lvl,maxAmount){
 	var act = List.all[key];
-	
-	/*
-	if(!NODEJITSU){
-		lvl = lvl || 0;
-		maxAmount = maxAmount || 5;
-		
-		
-		for(var i in act.equip.piece){
-			var id = Plan.use(key,{
-				piece: i,
-				type: Cst.equip[i].type.random(),
-				lvl: lvl,
-				
-				category: "equip",
-				color: "white",
-				icon: "plan.equip",
-				id: Math.randomId(),
-				maxAmount: maxAmount,
-				minAmount: 0,
-				name: "Equip Plan",
-				quality: 0,
-				rarity: 0,
-				req: {item: [],skill:{}},
-			});
-			Actor.equip(act,id);
-		}
-	}
-	
-	if(NODEJITSU){
-		act.equip.melee = "QtestEnemy-weapon";
-		//act.equip = {"piece":{"melee":"QtestEnemy-weapon","range":"24fvltcng","magic":"ipw6bxde4","amulet":"kc3fy1ltl","helm":"w74kcmoxj","ring":"xnpno7719","gloves":"5lzcbznld","body":"ub12yl35d","shield":"csb34pzva","bracelet":"ri7qsje6y","pants":"yk4w35h1k","boots":"qjo3fpkpf"},"dmg":{"melee":1,"range":1,"magic":1,"fire":1,"cold":1,"lightning":1},"def":{"melee":1.85622969311756,"range":1.2542729220383129,"magic":3.8250781267619787,"fire":1.1564167262496907,"cold":1.1299560920228722,"lightning":1.1757721163703236}};
-		Actor.update.equip(act);
-	}
-	*/
-	act.equip.melee = "QtestEnemy-weapon";
 	Actor.update.equip(act);
 }
 
@@ -108,7 +65,7 @@ Test.generateEquip = function(key,lvl,maxAmount){
 Test.removeEquipInventory = function(key){
 	for(var i in List.main[key].invList.data){
 		var a = List.main[key].invList.data[i];
-		if(Db.equip[a[0]]) Itemlist.remove(key,a[0]);
+		if(Db.equip[a[0]]) Itemlist.remove(List.main[key].invList,a[0]);
 	}
 }
 
@@ -119,17 +76,55 @@ Test.b = function(){}
 Test.c = function(){}
 Test.d = function(){}
 
-Test.dmgMod = {player:1,npc:1,pvp:-0.8};
+Test.dmgMod = {player:1,npc:1,pvp:1};
 Test.offPvp = function(){
-	for(var i in List.main){
-		Command.list.pvp(i);	
-	}
+
+}
+
+Test.aa = function(){
+	setInterval(function(){
+		var	start = Date.now();
+		db.find('main',{username:'rc'},{invList:1},function(err,res){
+			INFO(Date.now()-start);
+		});
+	},25);
 }
 
 
+Test.createPlan = function(key){
+	var id = Plan.creation({	//plan
+		'rarity':Math.random(),
+		'quality':Math.random(),
+		'lvl':Actor.getCombatLevel(List.all[key]),
+		'category':'equip',
+		'minAmount':0,
+		'maxAmount':6,
+	});
+	Itemlist.add(List.main[key].invList,id);
+}
 
 
+var b = {name:'asdasd',age:100,x:123,hp:12,'sprite,name':'sdgsgsdg'}
+var c = 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa';
+var d = '{"name":"asdasd","age":100,"x":123,"hp":12,"sprite,name":"sdgsgsdg"}';
 
-
-
+Test.bb = function(){
+	var start = Date.now();
+	for(var i in List.socket){
+		for(var j = 0 ;j < 10000; j++){
+			List.socket[i].emit('asd',JSON.stringify(b).replace(/\"/g,''));
+		}
+	}
+	INFO(Date.now()-start);
+	
+	var start = Date.now();
+	for(var i in List.socket){
+		for(var j = 0 ;j < 10000; j++){
+			List.socket[i].emit('asd',b);
+		}
+	}
+	INFO(Date.now()-start);
+	
+	
+}
 

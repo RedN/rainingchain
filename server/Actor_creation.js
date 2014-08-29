@@ -1,8 +1,12 @@
-Actor.creation = function(d){	//d: x  y  map category variant lvl modAmount extra
+//LICENSED CODE BY SAMUEL MAGNAN FOR RAININGCHAIN.COM, LICENSE INFORMATION AT GITHUB.COM/RAININGCHAIN/RAININGCHAIN
+eval(loadDependency(['Db','List','Actor','Tk','Party','Boss','Map','Test','Quest','Chat','Sprite','Change']));
+Actor.creation = function(d){	//d: x  y  map model lvl modAmount extra
 	if(Test.no.npc) return;
+	if(List.map[d.map] && List.map[d.map].list.actor.$length() > 1000) return ERROR(3,'too many monster',d.map);
 	
 	Map.convertSpot(d);	
-	var data = Tk.useTemplate(Actor.creation.template(),d);
+	if(!d.model) ERROR(1,'asd',d);
+	var data = Tk.useTemplate(Actor.creation.template(),d,true);
 	var e = Actor.creation.db(data);
 	e = Actor.creation.data(e,data);
 	e = Actor.creation.extra(e);
@@ -12,49 +16,58 @@ Actor.creation = function(d){	//d: x  y  map category variant lvl modAmount extr
 	List.all[e.id] = e;
 	Map.enter(e);
 		
-	if(e.nevermove){ Actor.creation.nevermove(e); }
-	if(e.nevercombat){ Actor.creation.nevercombat(e); }	
+	if(e.nevermove) Actor.creation.nevermove(e); 
+	if(e.nevercombat) Actor.creation.nevercombat(e); 
 	else {
 		e = Actor.creation.mod(e); 
 		e = Actor.creation.boost(e);
+		e = Actor.creation.weakness(e);
+		e.resource.hp.max = e.hp; e.resource.mana.max = e.mana;
+		for(var i in e.immune) if(e.immune) e.mastery.def[i].sum = CST.bigInt;
 	}
 	
-	for(var i in e.immune) e.mastery.def[i].sum = Cst.bigInt;
+	Change.update.npc.creation(e); e.change = {}; //otherwise, data would be sent twice, in sa.i and sa.u
+	
+	
+	if(e.pushable || e.block) Actor.stickToGrid(e);
 	
 	return e.id;
 }
 
 Actor.creation.template = function(){
-	return {x:0,y:0,v:0,map:"test@MAIN",category:'system',variant:"default",lvl:0,extra:{},modAmount:1}
-
+	return {x:0,y:0,v:0,map:"Qbug",model:'Qbug',lvl:0,extra:{},modAmount:1}
 }
 
 Actor.creation.group = function(gr,el){
    	if(Test.no.npc) return;
-	
 	/*
 	gr: x y map respawn
-    el: [  {'amount':1,"category":"slime","variant":"Big","lvl":0,'modAmount':1},
-		{'amount':10,"category":"bat","variant":"normal","lvl":0,'modAmount':1},	];
+    el: [  {'amount':1,"model":"slime","lvl":0,'modAmount':1},
+		{'amount':10,"model":"bat","lvl":0,'modAmount':1},	];
 	*/
 	var enemyIdList = [];
 	
 	Map.convertSpot(gr);
-	gr = Tk.useTemplate(Actor.creation.group.template(),gr);	
+	gr = Tk.useTemplate(Actor.creation.group.template(),gr,true);	
 	gr.group = Math.randomId();	//cant used the one in gr cuz when reviving would be same id again
 	el = Tk.arrayfy(el);
 	
 	var id = gr.group;
 	List.group[id] = {
 		'id':id,
+		'map':gr.map,
 		'param':[gr,el],        //used to revive node appgroup
 		'list':{},              //hold enemies
 		'respawn':gr.respawn,   //time before respawn when all monster dead
 	};
+	if(!List.map[gr.map]){ return ERROR(3,'spawn group but map not exist',gr.map);}
+	List.map[gr.map].list.group[id] = id;
+	
+	
 	
 	for(var i in el){
 		var amount = el[i].amount || 1;
-		el[i] = Tk.useTemplate(el[i],gr);  //info about x,y,map,group
+		el[i] = Tk.useTemplate(el[i],gr,true);  //info about x,y,map,group
 		for(var j = 0 ; j < amount; j++){
 			var eid = Actor.creation(el[i]);
 			List.group[id].list[eid] = 1;
@@ -67,7 +80,7 @@ Actor.creation.group = function(gr,el){
 }
 
 Actor.creation.group.template = function(){
-	return {'x':0,'y':0,'v':25,'map':'test@MAIN','respawn':100,group:'bob','lvl':0}
+	return {x:0,y:0,v:25,map:'QfirstTown-main@MAIN',respawn:100,group:'bob',lvl:0}
 }
 
 Actor.creation.boost = function(e){
@@ -79,17 +92,16 @@ Actor.creation.boost = function(e){
 }
 
 Actor.creation.db = function(cr){
-	var e = Tk.deepClone(Db.npc[cr.category][cr.variant]);
-	e.lvl = Actor.creation.lvl(List.map[cr.map].lvl,cr.lvl); 
+	if(!Db.npc[cr.model]) return ERROR(2,'npc model dont exist',cr.model);
+	var e = Tk.deepClone(Db.npc[cr.model]);
+	if(!List.map[cr.map]){ ERROR(3,'map dont exist?',cr.map); }
+	else e.lvl = Actor.creation.lvl(List.map[cr.map].lvl,cr.lvl); 
 	
 	e.id = Math.randomId();
 	e.publicId = Math.randomId(6);
 	e.frame = Math.floor(Math.random()*100);
 	
-	e.globalDef =  Actor.creation.db.globalLvlMod(e.lvl).globalDef;
-	e.globalDmg = Actor.creation.db.globalLvlMod(e.lvl).globalDef;
 	if(e.globalMod) e = e.globalMod(e,e.lvl);
-	
 	if(e.boss)	e.boss = Boss.creation(e.boss,e);
 	
 	Sprite.creation(e,e.sprite);		//To set hitbox and bumper
@@ -117,19 +129,21 @@ Actor.creation.db.globalLvlMod = function(lvl){
 }
 
 Actor.creation.data = function(e,cr){
-	e.map = cr.map || 'test@MAIN';
+	e.map = cr.map || 'QfirstTown-main@MAIN';
 	
 	var pos = Actor.creation.data.position(cr);
 	e.x = e.crX = pos.x; 
 	e.y = e.crY = pos.y; 	
 	
-	e.category = cr.category; 
-	e.variant = cr.variant; 
-	e.modAmount = e.modAmount === false ? 0 : Actor.creation.data.modAmount(cr.modAmount);
+	
+	
+	e.model = cr.model;
+	e.modAmount = (e.modAmount === false || e.modAmount === 0) ? 0 : Actor.creation.data.modAmount(cr.modAmount);
 	e.extra = cr.extra;
 	e.group = cr.group || '';
 	
 	e.target.main = {x:e.x,y:e.y};
+	e.target.sub = {x:e.x,y:e.y};
 	e.data = cr;
 	
 	return e;
@@ -140,10 +154,9 @@ Actor.creation.data.modAmount = function(num){
 	
 	if(num === true){
 		var a = Math.random();
-		if(a > 1/4) return 0;
-		if(a > 1/8) return 1;
-		if(a > 1/32) return 2;
-		return 3;
+		if(a > 1/8) return 0;
+		if(a > 1/32) return 1;
+		return 2;
 	}
 	return 0;
 }
@@ -167,12 +180,9 @@ Actor.creation.mod = function(e){
 		var choosen = Actor.creation.mod.list.random('chance');
 		if(e.modList.have(choosen)){ i -= 0.99; continue; }
 		
-		e.modList.push(choosen);
+		e.modList.push(Actor.creation.mod.list[choosen].name);	//atm modList only used for context on client
 		choosen = Actor.creation.mod.list[choosen];
 		e = choosen.func(e);
-		e.name += ': ' + choosen.name;
-		e.context += ': ' + choosen.name;
-		
 	}
 	return e;
 }
@@ -196,16 +206,16 @@ Actor.creation.mod.list = {
 
 	'BAx2':{'name':'More Bullets','chance':1,
 		'func': (function(e){ e.bonus.bullet.amount *= 2; return e; })},
-	'BAx4':{'name':'Even More Bullets','chance':1,
-		'func': (function(e){ e.bonus.bullet.amount *= 4; e.globalDmg /= 2; return e; })},
+	//'BAx4':{'name':'Even More Bullets','chance':1,
+	//	'func': (function(e){ e.bonus.bullet.amount *= 3; e.globalDmg /= 2; return e; })},
 	'regen':{'name':'Fast Regen','chance':1,
-		'func': (function(e){ e.resource.hp.regen = 2*e.resource.hp.regen || e.resource.hp.max/250; return e; })},
+		'func': (function(e){ e.resource.hp.regen = 3*e.resource.hp.regen || e.resource.hp.max/250; return e; })},
 	'extraLife':{'name':'More Life','chance':1,
 		'func': (function(e){ e.resource.hp.max *= 2; e.hp *= 2; return e; })},
 	'leech':{'name':'Leech Hp','chance':1,
 		'func': (function(e){ e.bonus.leech.chance = 0.5; e.bonus.leech.magn = 0.5; return e; })},
 	'atkSpd':{'name':'Faster Attack','chance':1,
-		'func': (function(e){ e.atkSpd.main *= 2; return e; })},
+		'func': (function(e){ e.atkSpd *= 2; return e; })},
 	/*'reflectPhysical':{'name':'Reflect Physical','chance':1,
 		'func': (function(e){ e.reflect = {"melee":0.5,"range":0.5,"magic":0.5,"fire":0,"cold":0,"lightning":0}; return e; })},
 	'reflectElemental':{'name':'Reflect Elemental','chance':1,	//TOFIX
@@ -214,40 +224,78 @@ Actor.creation.mod.list = {
 		'func': (function(e){ e.bonus.strike.size *= 2; e.bonus.strike.maxHit *= 2; return e; })},
 }
 
+Actor.creation.weakness = function(e){
+	var average = 0;
+	for(var i in e.mastery.def) average += e.mastery.def[i].sum;
+	average /= 6;
+	
+	for(var i in e.mastery.def){
+		if(e.mastery.def[i].sum > average*1.4) e.weakness.resist += i + ',';
+		if(e.mastery.def[i].sum < average/1.4) e.weakness.weak += i + ',';
+	}
+	e.weakness.resist.slice(0,-1);	//remove extra ,
+	e.weakness.weak.slice(0,-1);	//remove extra ,
+	return e;
+}
+
 Actor.creation.extra = function(act){
 	if(typeof act.extra === 'function')	act.extra(act);
-	else act = Tk.useTemplate(act,act.extra,1,1);	
-	
+	else {
+		act = Tk.useTemplate(act,act.extra,true,true);
+		act.globalDef *= Actor.creation.db.globalLvlMod(act.lvl).globalDef;
+		act.globalDmg *= Actor.creation.db.globalLvlMod(act.lvl).globalDmg;
+	}	
 	delete act.extra;
+	
+	act.context = act.name;
+	act.acc = act.maxSpd/3;
 	return act;
 }
 
 Actor.creation.optionList = function(e){
 	var ol = {'name':e.name,'option':[]};
 	
-	if(e.onclick.shiftLeft)	ol.option.push(e.onclick.shiftLeft);
-	if(e.type === 'player') ol.option.push({'name':'Trade',"func":'Actor.click.player',"param":[e.id]});
-	if(e.dialogue)	ol.option.push({'name':'Talk',"func":'Actor.click.dialogue',"param":[e.id]});
-	if(e.waypoint)	ol.option.push({'name':'Set Respawn',"func":'Actor.click.waypoint',"param":[e.id]});
-	if(e.loot)	ol.option.push({'name':'Loot',"func":'Actor.click.loot',"param":[e.id]});	
-	if(e.skillPlot)	ol.option.push({'name':'Harvest',"func":'Actor.click.skillPlot',"param":[e.id]});
-	if(e.teleport){
-		var info = {'name':'Teleport',"func":'Actor.click.teleport',"param":[e.id]};
-		ol.option.push(info);
-		//ol.option.push({'name':'Select Instance',"func":'Actor.teleport.selectInstance',"param":[e.id]});
-		e.onclick.shiftLeft = info;
+	if(e.onclick.shiftLeft){
+		e.onclick.shiftLeft.param.unshift(e.id);
+		ol.option.push(e.onclick.shiftLeft);
 	}
-	if(e.toggle)	ol.option.push({'name':'Pull Switch',"func":'Actor.click.toggle',"param":[e.id]});
+	if(e.onclick.shiftRight){
+		e.onclick.shiftRight.param.unshift(e.id);
+		ol.option.push(e.onclick.shiftRight);
+	}
+	if(e.onclick.left){
+		e.onclick.left.param.unshift(e.id);
+		ol.option.push(e.onclick.left);
+	}
+	if(e.type === 'player') ol.option.push({'name':'Trade',"func":Actor.click.trade,"param":['$actor',e.id]});
+	if(e.dialogue) Actor.creation.optionList.addLeft(ol,e,{'name':'Talk',"func":Actor.click.dialogue,"param":['$actor',e.id]});
+	if(e.waypoint)	Actor.creation.optionList.addLeft(ol,e,{'name':'Set Respawn',"func":Actor.click.waypoint,"param":['$actor',e.id]});
+	if(e.loot)	Actor.creation.optionList.addLeft(ol,e,{'name':'Loot',"func":Actor.click.loot,"param":['$actor',e.id]});
+	if(e.skillPlot)	Actor.creation.optionList.addLeft(ol,e,{'name':'Harvest',"func":Actor.click.skillPlot,"param":['$actor',e.id]});
+	if(e.toggle) Actor.creation.optionList.addLeft(ol,e,{'name':'Interact With',"func":Actor.click.toggle,"param":['$actor',e.id]});
+	if(e.teleport)	Actor.creation.optionList.addLeft(ol,e,{'name':'Teleport',"func":Actor.click.teleport,"param":['$actor',e.id]});
 	
-	if(e.pushable){
-		var info = {'name':'Push',"func":'Actor.click.pushable',"param":[e.id]};
-		ol.option.push(info);
-		e.onclick.shiftLeft = info;
-		e.awareNpc = 1;	//so blocked by other blocks but not himself
-	} 
+	if(e.bank)	Actor.creation.optionList.addLeft(ol,e,{'name':'Bank',"func":Actor.click.bank,"param":['$actor',e.id]});
+	if(e.signpost)	Actor.creation.optionList.addLeft(ol,e,{'name':'Read',"func":Actor.click.signpost,"param":['$actor',e.id]});
 	
-	e.optionList = ol.option.length ? ol : null;
+	if(e.pushable)	Actor.creation.optionList.addLeft(ol,e,{'name':'Push',"func":Actor.click.pushable,"param":['$actor',e.id]});
+	
+	if(e.deathEvent && Quest.test.simple){
+		ol.option.push({'name':'Kill',"func":function(key,eid){ Chat.add(key,'You killed "' + List.all[eid].name + '".'); e.deathEvent(key,eid);  },"param":[e.id]});
+	}
+	
+	if(e.onclick.right){	//special case only
+		e.onclick.right.param.unshift(e.id);
+		ol.option.push(e.onclick.right);
+	}
+	
+	e.optionList = (ol.option.length && !e.hideOptionList) ? ol : null;
 	return e;
+}
+
+Actor.creation.optionList.addLeft = function(ol,e,info){
+	ol.option.push(info);
+	e.onclick.left = info;
 }
 
 Actor.creation.nevercombat = function(act){
@@ -275,9 +323,6 @@ Actor.creation.nevercombat = function(act){
 	//Def = DefMain * defArmor * act.mastery.def
 	delete act.hp;	
 	delete act.mana;
-	delete act.dodge;
-	delete act.fury;
-	delete act.resource;
 	
 	delete act.globalDef;	
 	delete act.reflect;
@@ -327,12 +372,11 @@ Actor.remove = function(act){
 	delete List.actor[act.id];
 	delete List.all[act.id]
 	if(act.group) {
-		if(!List.group[act.group]) return ERROR(3,'no group','name',act.name);
+		if(!List.group[act.group]) return ERROR(3,'Actor.remove no group','name',act.name);
 		delete List.group[act.group].list[act.id];		//BUG
 	}
+	Party.leave(act);
 }
-
-
 
 
 

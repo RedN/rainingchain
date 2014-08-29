@@ -18,7 +18,9 @@ a {
 	text-decoration: none;
 	cursor: default;
 }
-
+span {
+	cursor: default;
+}
 body { 
 	cursor: default;
 	draggable:false;
@@ -34,8 +36,10 @@ textarea{
 }
 
 canvas{
-	z-index:-1;
+	/*z-index:-1;*/
 }
+
+
 
 div{
 	white-space:nowrap;
@@ -43,6 +47,8 @@ div{
 	draggable:false;
 	readonly:readonly;
 	disabled:disabled;
+	
+	cursor: default;
 	
 	/*height:auto;
 	width:auto;*/
@@ -119,13 +125,14 @@ details details summary {
 	border: none;
 	outline: none;
 	overflow:hidden;
-	
+	/*
 	-webkit-touch-callout: none;
 	-webkit-user-select: none;
 	-khtml-user-select: none;
 	-moz-user-select: none;
 	-ms-user-select: none;
 	user-select: none;	
+	*/
 }
 .onlyTextScroll{
 	background-color:transparent;
@@ -133,7 +140,7 @@ details details summary {
 	outline: none;
 	overflow-y: scroll;
 	overflow-x: hidden;
-	
+	/*
 	-webkit-touch-callout: none;
 	-webkit-user-select: none;
 	-khtml-user-select: none;
@@ -142,6 +149,7 @@ details details summary {
 	user-select: none;			
 	
 	-moz-appearance: textfield-multiline;
+	*/
 }
 
 .container { 
@@ -153,7 +161,10 @@ details details summary {
 }
 
 .shadow{
-	text-shadow: 1.5px  1.5px 0 #000;		
+	text-shadow: 1px  1px 0 #000;		
+}
+.shadowBig{
+	text-shadow: 3px  3px 0 #000;
 }
 
 .posAbs {
@@ -161,14 +172,64 @@ details details summary {
 }
 
 
-	
-/*Dialogue*/
-#dialogueBoxText{
-	/*font-family:Fixedsys;*/
-	font-size:20px;
+
+
+/* rating http://jsfiddle.net/leaverou/CGP87/light/ */
+.rating {
+    float:left;
+}
+
+.rating:not(:checked) > input {
+    position:absolute;
+    top:-9999px;
+    clip:rect(0,0,0,0);
+}
+
+.rating:not(:checked) > label {
+    float:right;
+    width:1em;
+    padding:0 .1em;
+    overflow:hidden;
+    white-space:nowrap;
+    cursor:pointer;
+    font-size:200%;
+    line-height:1.2;
+    color:#ddd;
+    text-shadow:1px 1px #bbb, 2px 2px #666, .1em .1em .2em rgba(0,0,0,.5);
+}
+
+.rating:not(:checked) > label:before {
+    content: '★ ';
+}
+
+.rating:not(:checked) > label:hover,
+
+.rating:not(:checked) > label:hover ~ label {
+    color: gold;
+    text-shadow:1px 1px goldenrod, 2px 2px #B57340, .1em .1em .2em rgba(0,0,0,.5);
 }
 
 
+
+/*div*/
+
+div.niceDiv{
+	border: 4px #000000 solid;
+	background-color: #e5edfa;
+	padding: 18px;
+	color: #002157;
+	font-size: inherit;
+	font-weight: inherit;
+	font-family: inherit;
+	font-style: inherit;
+	text-decoration: inherit;
+	-webkit-border-radius: 8px;
+	-moz-border-radius: 8px;
+	border-radius: 8px;
+	-moz-box-shadow: 0px 0px 10px 0px #333333;
+	-webkit-box-shadow: 0px 0px 10px 0px #333333;
+	box-shadow: 0px 0px 10px 0px #333333;
+}
 
 
 /*Scroll Bar*/
@@ -178,21 +239,21 @@ details details summary {
 ::-webkit-scrollbar {
 	width: 12px;
 }
- 
+
 ::-webkit-scrollbar-track {
 	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3); 
 	-webkit-border-radius: 10px;
 	border-radius: 10px;
 }
- 
+
 ::-webkit-scrollbar-thumb {
 	-webkit-border-radius: 10px;
 	border-radius: 10px;
-	background: rgba(150,75,0,0.8); 
-	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5); 
+	background: rgba(0,0,0,0.6); 
+	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3); 
 }
 ::-webkit-scrollbar-thumb:window-inactive {
-	background: rgba(150,75,0,0.4); 
+	background: rgba(0,0,0,0.4); 
 }
 		
 .gradientBoxesWithOuterShadows { 
@@ -213,6 +274,12 @@ details details summary {
 	color-stop(0%, white), color-stop(15%, white), color-stop(100%, #D7E9F5)); 
 	background: -moz-linear-gradient(top, white 0%, white 55%, #D5E4F3 130%); 
 }
+
+
+.selectNice {
+   font-size: 20px;
+   font-family: 'Averia Libre', cursive;
+}​
 
 
 /* Upload Mods */

@@ -1,4 +1,7 @@
-Attack = {};
+//LICENSED CODE BY SAMUEL MAGNAN FOR RAININGCHAIN.COM, LICENSE INFORMATION AT GITHUB.COM/RAININGCHAIN/RAININGCHAIN
+eval(loadDependency(['List','Actor','Tk','Activelist','Map','Test','Collision','Sprite','Anim'],['Attack','Bullet','Strike']));
+
+var Attack = exports.Attack = {};
 
 Attack.template = function(type){
 	var b = {};
@@ -14,7 +17,7 @@ Attack.template = function(type){
 	b.moveAngle = 0;	//where bullet moves (used for knock)
 	b.crX = 0;  //creation X
 	b.crY = 0;  //creation Y
-	b.map = 'test@MAIN';
+	b.map = 'QfirstTown-main@MAIN';
 	b.toRemove = 0;
 	b.id = Math.randomId();
 	b.publicId = Math.randomId(6);
@@ -25,11 +28,11 @@ Attack.template = function(type){
 	
 	
 	//All
-	b.dmg = {main:1,ratio:Cst.element.template(1)};
+	b.dmg = {main:1,ratio:CST.element.template(1)};
 	b.globalDmg = 1;	//for nova
 	
-	b.objImg = 0;	//for bullet: sprite when travelling {name,anim,sizeMod} || for strike: anim when performing {name,sizeMod}
-	b.hitImg = 0;	//when enemy get hits, use anim on him {name,sizeMod}
+	b.objSprite = 0;	//for bullet: sprite when travelling {name,anim,sizeMod} || for strike: anim when performing {name,sizeMod}
+	b.hitAnim = 0;	//when enemy get hits, use anim on him {name,sizeMod}
 	
 	
 	b.damageIfMod = 0; //if 1, hit allies
@@ -37,15 +40,15 @@ Attack.template = function(type){
 	b.amount = 1;	//# bullets shot (useless here tho)
 	b.aim = 0;
 	
-	b.bleed = {'baseChance':0,'chance':1,'magn':1,'time':1};	//act as modifier
-	b.knock = {'baseChance':0,'chance':1,'magn':1,'time':1};
-	b.drain = {'baseChance':0,'chance':1,'magn':1,'time':1};	
-	b.burn = {'baseChance':0,'chance':1,'magn':1,'time':1};
-	b.chill = {'baseChance':0,'chance':1,'magn':1,'time':1};
-	b.stun = {'baseChance':0,'chance':1,'magn':1,'time':1};
-	b.crit = {'baseChance':0,'chance':1,'magn':1};
-	b.leech = {'baseChance':0,'chance':1,'magn':1,'time':1};	
-	b.pierce = {'baseChance':0,'chance':0,'dmgReduc':0.5};		//will be overwrite completly
+	b.bleed = {'chance':0,'magn':1,'time':1};	//magn and time act as modifier
+	b.knock = {'chance':0,'magn':1,'time':1};
+	b.drain = {'chance':0,'magn':1,'time':1};
+	b.burn = {'chance':0,'magn':1,'time':1};
+	b.chill = {'chance':0,'magn':1,'time':1};
+	b.stun = {'chance':0,'magn':1,'time':1};
+	b.crit = {'chance':1,'magn':1,'time':1};	//100% will be multiplied by the 0.05 of player
+	b.leech = {'chance':0,'magn':1,'time':1};	
+	b.pierce = {'chance':0,'dmgReduc':0.5};		//will be overwrite completly
 	b.curse = null;
 	b.onHit = null;
 	
@@ -80,25 +83,28 @@ Attack.template = function(type){
 
 Attack.template.parabole = function(){
 	return {
-		'height':10,	//height of parabole (distance from middle)
-		'min':100,		//min distance where bullets will collide
-		'max':500,		//max distance where bullets will collide
-		'timer':50,		//time before bullets collide
+		height:10,	//height of parabole (distance from middle)
+		min:100,		//min distance where bullets will collide
+		max:500,		//max distance where bullets will collide
+		timer:50,		//time before bullets collide
 	}
 }
 Attack.template.boomerang = function(){
 	return {
-		'comeBackTime':50,	//time before bullet turns 180 degre
-		'spd':2,			//spd mod
-		'spdBack':1.5,		//spd mod when bullet comes back
-		'newId':1			//after turn back, renew id so it can hit enemy again
+		comeBackTime:15,	//time before bullet turns 180 degre
+		spd:2,				//spd mod
+		spdBack:1.5,		//spd mod when bullet comes back
+		newId:1				//after turn back, renew id so it can hit enemy again
 	}
 }
 
-Attack.creation = function(player,s,extra){
+Attack.creation = function(act,s,extra){
 	if(Test.no.attack) return;
-	s = Attack.creation.info(player,s);
-	s = Tk.useTemplate(s,extra || {});
+	if(!List.map[act.map]) return ERROR(3,'map no exist',act.map);
+	if(List.map[act.map].list.bullet.$length() > 10000) return ERROR(3,'too many bullet',act.map);
+	
+	s = Attack.creation.info(act,s);
+	s = Tk.useTemplate(s,extra || {},false);
 	
 	s.id = Math.randomId();
 	s.publicId = Math.randomId(6);
@@ -120,7 +126,7 @@ Attack.creation.info = function(act,b){
 	b.mouseX = act.mouseX || 0;
 	b.mouseY = act.mouseY || 0;
 	
-	b.map = act.map || 'test@MAIN';	
+	b.map = act.map || 'QfirstTown-main@MAIN';	
 	b.viewedIf = act.viewedIf || 'true';
 	b.damageIf = act.damageIf || 'player';
 		
@@ -139,17 +145,27 @@ Attack.creation.info = function(act,b){
 Attack.creation.bullet = function(b){
 	
 	if(b.parabole){
-		b.parabole = Tk.useTemplate(Attack.template.parabole(),b.parabole);
-		var diff = Math.pyt(b.mouseX - Cst.WIDTH2,b.mouseY - Cst.HEIGHT2);
+		var tmp = Attack.template.parabole();
+		for(var i in b.parabole) tmp[i] *= b.parabole[i];
+		b.parabole = tmp;
+		var diff = Math.pyt(b.mouseX - CST.WIDTH2,b.mouseY - CST.HEIGHT2);
 		b.parabole.dist = diff.mm(b.parabole.min,b.parabole.max);
 		b.parabole.timer *= b.parabole.dist/b.parabole.max;
 	}
 	if(b.nova){ b.angle = Math.random()*360;}	//otherwise, circle always the same. moveAngle is same tho
-	if(b.boomerang) b.boomerang = Tk.useTemplate(Attack.template.boomerang(),b.boomerang);
+	if(b.boomerang){
+		var tmp = Attack.template.boomerang();
+		for(var i in b.boomerang) tmp[i] *= b.boomerang[i];
+		b.boomerang = tmp;
+	}
 	
 	b.normal = !b.sin && !b.parabole && !b.boomerang;
 	
-	Sprite.creation(b,{'name':b.objImg.name,'anim':"travel",'sizeMod':b.objImg.sizeMod});
+	var spriteName = b.objSprite.name;
+	if(List.main[b.parent] && List.main[b.parent].contribution.reward.bullet[spriteName] && List.main[b.parent].contribution.reward.bullet[spriteName].status === 2)
+		spriteName = List.main[b.parent].contribution.reward.bullet[spriteName].name;
+	
+	Sprite.creation(b,{'name':spriteName,'anim':"travel",'sizeMod':b.objSprite.sizeMod});
 	
 	List.bullet[b.id] = b;
 	Map.enter(b);
@@ -163,13 +179,14 @@ Attack.creation.bullet = function(b){
 //need to remove player.bonus to pre-atk
 Attack.creation.strike = function(s){
 	//Position
-	var dist = Math.pyt( s.mouseX-Cst.WIDTH2, s.mouseY-Cst.HEIGHT2);
+	var dist = Math.pyt( s.mouseX-CST.WIDTH2, s.mouseY-CST.HEIGHT2);
 	dist = dist.mm(s.minRange,s.maxRange);
 	
+	s.angle = Tk.atan2(s.mouseY-CST.HEIGHT2,s.mouseX-CST.WIDTH2);
 	if(s.middleX === undefined){ s.middleX = dist * Tk.cos(s.angle); }	//could be set in extra
 	if(s.middleY === undefined){ s.middleY = dist * Tk.sin(s.angle); }
 	
-	var pos = Collision.StrikeMap(s,{x:s.x + s.middleX,y:s.y + s.middleY});	//get farthest possible without touching wall
+	var pos = Collision.strikeMap(s,{x:s.x + s.middleX,y:s.y + s.middleY});	//get farthest possible without touching wall
 	s.middleX = pos.x*32-s.x;
 	s.middleY = pos.y*32-s.y;
 	
@@ -177,7 +194,6 @@ Attack.creation.strike = function(s){
 	//s.middleX : when the strike is depending on mouseX. 
 	//then we check how far we can go in that direction until we face wall. (already done)
 	//after that, we place 9 points around this middleX. exact position depends on width and height of strike
-	
 	
 	var w = s.width; var h = s.height;
 	var startX = -w; var startY = -h;
@@ -190,7 +206,7 @@ Attack.creation.strike = function(s){
 				
 		s.point[k] = {'x':numX + s.crX + s.middleX,'y':numY + s.crY + s.middleY};
 	}
-	
+		
 	if(s.preDelayAnim){ 
 		Anim.creation({
 			name:s.preDelayAnim.name,
@@ -202,7 +218,7 @@ Attack.creation.strike = function(s){
 	s.x = s.crX + s.middleX;
 	s.y = s.crY + s.middleY;
 	List.strike[s.id] = s;
-	Activelist.update(s);	//could use Map.enter instead
+	Activelist.init(s);	//could use Map.enter instead
 	
 	Attack.creation.neverbullet(s);
 	return s;
@@ -235,8 +251,15 @@ Attack.creation.neverstrike = function(b){
 }
 
 
+var Strike = exports.Strike = {};
+Strike.remove = function(strike){
+	Activelist.clear(strike);
+	
+	delete List.strike[strike.id];
+	delete List.all[strike.id]
+}
 
-Bullet = {};
+var Bullet = exports.Bullet = {};
 Bullet.remove = function(b){
 	Map.leave(b);
 	delete List.bullet[b.id];

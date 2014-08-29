@@ -1,26 +1,36 @@
 {
-	"name": "rainingchain",
-	"subdomain": "rainingchain",
-	"scripts": {
-		"start": "app.js"
-	},
-	"version": "0.10.11-47",
-	"engines": {
-		"node": "0.10.x"
-	},
-	"domains": [
-		"rainingchain.com",
-		"www.rainingchain.com"
-	],
-	"dependencies": {
-		"astar": "0.0.x",
-		"async": "0.2.x",
-		"crypto": "0.0.x",
-		"express": "3.2.x",
-		"mongojs": "0.9.x",
-		"nodemailer": "0.6.x",
-		"socket.io": "0.9.x",
-		"request": "2.21.x",
-		"nodetime": "0.8.x"
-	}
+    "name": "rainingchain",
+    "version": "1.0.0-61",
+    "description": "Raining Chain",
+    "main": "app.js",
+    "subdomain": "rainingchain",
+    "scripts": {
+        "start": "node app.js"
+    },
+    "dependencies": {
+        "astar": "0.0.x",
+        "async": "0.2.x",
+        "busy": "0.1.x",
+        "crypto": "0.0.x",
+        "express": "3.2.x",
+        "mongojs": "0.9.x",
+        "nodemailer": "0.6.x",
+        "socket.io": "1.0.x",
+        "request": "2.21.x",
+        "nodetime": "0.8.x",
+        "twit": "1.1.x"
+    },
+    "engines": {
+        "node": "0.10.x"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/rainingchain/rainingchain"
+    },
+    "keywords": [
+        "node",
+        "heroku",
+        "express"
+    ],
+    "author": "Samuel Magnan"
 }

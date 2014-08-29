@@ -1,13 +1,30 @@
-Actor = {};
+//LICENSED CODE BY SAMUEL MAGNAN FOR RAININGCHAIN.COM, LICENSE INFORMATION AT GITHUB.COM/RAININGCHAIN/RAININGCHAIN
+eval(loadDependency(['List','Tk','Actor']));
 
 Actor.getCombatLevel = function(act){
 	return Math.max(act.skill.lvl.melee,act.skill.lvl.range,act.skill.lvl.magic);
 }
 
-Actor.setCombatContext = function(act,type){
-	act.combatContext = type;
-	Actor.update.equip(act);
+Actor.getCombatLevelDmgMod = function(act){
+	var combatlvl = Actor.getCombatLevel(act);
+	return (10+combatlvl)/(10+combatlvl/2);
+}
 
+Actor.setCombatContext = function(act,what,type,reset){
+	act.combatContext[what] = type;
+	if(what === 'ability'){
+		if(reset){
+			act.abilityList[type] = {};
+			act.ability[type] = [];
+		}
+		act.abilityChange = Actor.template.abilityChange(act.abilityList[type]);
+		act.flag.ability = 1;
+		act.flag.abilityList = 1;
+	}
+	if(what === 'equip'){
+		if(reset) act.equip[type] = [];
+		Actor.update.equip(act);	//act.flag.equip set there
+	}
 }
 
 Actor.changeHp = function(act,amount){
@@ -36,16 +53,33 @@ Actor.getDef = function(act){
 }
 
 Actor.dodge = function(act,time,dist){
-	//invincibility
-	var oldtouch = act.damagedIf;
-	act.damagedIf = 'false';
-	Actor.setTimeout(act,'dodge',time,function(key){
-		List.all[key].damagedIf = oldtouch;	
-	});
+	
+	Actor.invincible(act,time);
 	
 	//movement
 	Actor.movePush(act,act.angle,dist/time,time)
 	
 }
+
+Actor.invincible = function(act,time){
+	//invincibility
+	var oldtouch = act.damagedIf;
+	act.damagedIf = 'false';
+	Actor.setTimeout(act,'actor.invincible',time,function(key){
+		List.all[key].damagedIf = oldtouch;	
+	});
+
+}
+
+Actor.rechargeAbility = function(act){
+	var ab = Actor.getAbility(act);
+	act.abilityChange.globalCooldown = 0;
+	for(var i in ab){
+		var ss = ab[i]; if(!ss) continue;	//cuz can have hole if player
+		act.abilityChange.charge[ss.id] = 1000;
+	}
+}
+
+
 
 

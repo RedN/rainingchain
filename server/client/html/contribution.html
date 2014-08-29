@@ -1,0 +1,151 @@
+<h2><button style="text-decoration:underline" id="contributionBtnEarning" onclick="Contribution.click('earning');">Earning</button> | <button id="contributionBtnSpending" onclick="Contribution.click('spending');">Spending</button> Contribution Points</h2>
+
+<span class="u" style="font:25px Kelly Slab">Usable CP: <span id="contributionPtUsable">0</span>, All-Time CP: <span id="contributionPtSum">0</span></span><br>
+<div id="contributionLog"></div>
+
+<div id="contributionEarning">
+	
+	<h3>Quest Creation: <span id="contributionQuestPt">0</span> CP Earned</h3>
+	Create a quest for Raining Chain. Grant 1 CP for every player who completes the quest.<br>
+	<!-- -->Check this <a style="text-decoration:underline;color:blue;font-size:20px;" href="https://www.youtube.com/watch?v=3j4d2xkhJP4" target="_blank">Youtube video</a> for a fully detailed guide about creating quests for beginner coders.<br>
+	History:<div style="padding:5px" id="contributionQuestHistory"></div><br>
+	
+	<!--
+	<h3>Map Creation: </h3>
+	Create a map for Raining Chain.<br>
+	CP Earned: <span id="contributionMapPt">0</span> CP<br>
+	History:<br>
+	<div style="padding:5px" id="contributionMapHistory"></div><br>
+	-->
+	
+	<h3>Youtube: <span id="contributionYoutubePt">0</span> CP Earned <button onclick="Contribution.updateSocialMedia('youtube');">Update</button></h3>
+	Post a video on Youtube with Raining Chain in the title. Grant 1 CP/10 views.<br>
+	Account: <input onchange="this.style.color = 'orange';" id="contributionYoutubeUsername" placeholder="None"></input> <button onclick="Contribution.change('youtube',$('#contributionYoutubeUsername')[0].value);">Change Name</button><br>
+	History:<div style="padding:5px" id="contributionYoutubeHistory"></div><br>
+	
+	<h3>Reddit: <span id="contributionRedditPt">0</span> CP Earned <button onclick="Contribution.updateSocialMedia('reddit');">Update</button></h3>
+	Post on <a href="http://www.reddit.com/r/rainingchain" target="_blank">www.reddit.com/r/rainingchain</a>. Grant 1 CP per Up Vote.<br>
+	Account: <input onchange="this.style.color = 'orange';" id="contributionRedditUsername" placeholder="None"></input> <button onclick="Contribution.change('reddit',$('#contributionRedditUsername')[0].value);">Change Name</button><br>
+	History:<div style="padding:5px" id="contributionRedditHistory"></div><br>
+	
+	<h3>Twitter: <span id="contributionTwitterPt">0</span> CP Earned <button onclick="Contribution.updateSocialMedia('twitter');">Update</button></h3>
+	Tweet about Raining Chain with the hashtag #rainingchain. Grant 1 CP per tweet.<br>
+	Account: <input onchange="this.style.color = 'orange';" id="contributionTwitterUsername" placeholder="None"></input> <button onclick="Contribution.change('twitter',$('#contributionTwitterUsername')[0].value);">Change Name</button><br>
+	History:<div style="padding:5px" id="contributionTwitterHistory"></div><br>
+	
+	<h3>Twitch: <span id="contributionTwitchPt">0</span> CP Earned <button title="Click this button while streaming." onclick="Contribution.updateSocialMedia('twitch');">Update</button></h3>
+	<!-- -->Stream under the game <a href="http://www.twitch.tv/directory/game/Raining%20Chain" target="_blank" title="Your stream should appear in this list.">"Raining Chain"</a> on Twitch.<br>
+	While streaming, click the Update button to get 1 CP/3 viewers rounded up. (Limit of 1 Update/Hour).<br>
+	Account: <input  onchange="this.style.color = 'orange';" id="contributionTwitchUsername" placeholder="None"></input> <button onclick="Contribution.change('twitch',$('#contributionTwitchUsername')[0].value);">Change Name</button><br>
+	History:<div style="padding:5px" id="contributionTwitchHistory"></div><br>
+	
+</div>
+
+<div id="contributionSpending" style="display:none">
+	<!--
+	<h3>Character Design:</h3>
+	<h4>Pre-existing Sprite:</h4>
+
+	Submit your very own sprite or use one already in the game engine.<br>
+
+	<br>
+	-->
+	<h3>Name Symbol</h3>
+	Permanently add a symbol in front of your name in the chat box. <br>
+	The symbol is unlocked automatically upon reaching the required CP.<br>
+	<button onclick="Contribution.reset('symbol');">Turn Off</button><br>
+	<br>
+	<table style="background-color:rgba(0,0,0,0.2);">
+		<tr><td>Bronze Contributor</td><td><span class="shadow"><span style="color:#CD7F32;">★</span>YourName: </span></td><td> <button id="contributionSymbol-bronze" onclick="Contribution.select('symbol','bronze');">Unlocked at 10 CP</button></td></tr>
+		<tr><td>Silver Contributor</td><td><span class="shadow"><span style="color:#C0C0C0;">★</span>YourName: </span></td><td> <button id="contributionSymbol-silver" onclick="Contribution.select('symbol','silver');">Unlocked at 100 CP</button></td></tr>
+		<tr><td>Gold Contributor</td><td><span class="shadow"><span style="color:#FFD700;">★</span>YourName: </span></td><td> <button id="contributionSymbol-gold" onclick="Contribution.select('symbol','gold');">Unlocked at 1000 CP</button></td></tr>
+		<tr><td>Diamond Contributor</td><td><span class="shadow"><span style="color:white;">★</span>YourName: </span></td><td> <button id="contributionSymbol-diamond" onclick="Contribution.select('symbol','diamond');">Unlocked at 10000 CP</button></td></tr>
+	</table>
+
+	<h3>Bullet Sprite</h3>
+	Change bullet image. <button onclick="Contribution.reset('bullet');">Turn Off</button><br>
+	<br>
+	<table style="background-color:rgba(0,0,0,0.2);">
+		<tr><td>Happy Face</td><td><img src="/img/ui/contribution/bullet-happyface.png"></td><td><button id="contributionBullet-lightningball" onclick="Contribution.purchase('bullet','lightningball');">Get for 100 CP</button></td></tr>
+		<tr><td>Penguin</td><td><img src="/img/ui/contribution/bullet-penguin.png"></td><td><button id="contributionBullet-iceshard" onclick="Contribution.purchase('bullet','iceshard');">Get for 150 CP</button></td></tr>
+		<tr><td>"Cannon"</td><td><img src="/img/ui/contribution/bullet-cannon.png"></td><td><button id="contributionBullet-arrow" onclick="Contribution.purchase('bullet','arrow');">Get for 200 CP</button></td></tr>
+		<tr><td>Pony!</td><td><img src="/img/ui/contribution/bullet-pony.png"></td><td><button id="contributionBullet-fireball" onclick="Contribution.purchase('bullet','fireball');">Get for 250 CP</button></td></tr>
+	</table>
+
+
+
+	<h3>Player Sprite</h3>
+	Change player appearance. <button onclick="Contribution.reset('player');">Turn Off</button><br>
+	<br>
+	<table style="background-color:rgba(0,0,0,0.2);">
+		<tr>
+		<td>
+			Skin: <select class="selectNice" id="contributionPlayerSel0" onchange="Contribution.player.update()"></select><br>
+			Body: <select class="selectNice" id="contributionPlayerSel1" onchange="Contribution.player.update()"></select><br>
+			Helm: <select class="selectNice" id="contributionPlayerSel2" onchange="Contribution.player.update()"></select><br>
+			<!--Hair: <select class="selectNice" id="contributionPlayerSel3" onchange="Contribution.player.update()"></select><br>
+			Helm: <select class="selectNice" id="contributionPlayerSel4" onchange="Contribution.player.update()"></select><br>
+			 Hat: <select class="selectNice" id="contributionPlayerSel5" onchange="Contribution.player.update()"></select><br>
+			Any: <select class="selectNice" id="contributionPlayerSel6" onchange="Contribution.player.update()"></select><br> -->
+		</td>
+		<td>
+			<canvas width="60" height="80" id="contributionPlayerCanvasFront"></canvas>
+		</td>
+		<td>
+			<canvas width="60" height="80" id="contributionPlayerCanvasRight"></canvas>
+		</td>
+		<td>
+			<canvas width="60" height="80" id="contributionPlayerCanvasBack"></canvas>
+		</td>		
+		</tr>
+	</table>
+	<input id="contributionPlayerInput" onchange="Contribution.player.input()" value="115;410;247" size="60"><br>
+	<button id="contributionPlayerBtn" onclick="Contribution.purchase('player',$('#contributionPlayerInput')[0].value);">Get for 50 CP</button>
+
+
+
+
+	<h3>Chat Text</h3>
+	Modify the color of your text in the chat box.<br>
+	Last for: 1 Month.<br>
+	<br>
+	<table style="background-color:rgba(0,0,0,0.2);">
+		<tr><td><span class="shadow" style="color:yellow;">Hello, I'm Yellow.</span></td><td><button id="contributionChatText-yellow" onclick="Contribution.purchase('chatText','yellow');">Get for Free</button></td></tr>
+		<tr><td><span class="shadow" style="color:orange;">Hello, I'm Orange.</span></td><td><button id="contributionChatText-orange" onclick="Contribution.purchase('chatText','orange');">Get for 10 CP</button></td></tr>
+		<tr><td><span class="shadow" style="color:#55FF55;">Hello, I'm Green.</span></td><td><button id="contributionChatText-green" onclick="Contribution.purchase('chatText','green');">Get for 20 CP</button></td></tr>
+		<tr><td><span class="shadow" style="color:pink;">Hello, I'm Pink.</span></td><td><button id="contributionChatText-pink" onclick="Contribution.purchase('chatText','pink');">Get for 50 CP</button></td></tr>
+		<tr><td><span class="shadow" style="color:cyan;">Hello, I'm Cyan.</span></td><td><button id="contributionChatText-cyan" onclick="Contribution.purchase('chatText','cyan');">Get for 80 CP</button></td></tr>
+		<tr><td><span class="shadow" style="color:#FF5555;">Hello, I'm Crimson.</span></td><td><button id="contributionChatText-crimson" onclick="Contribution.purchase('chatText','crimson');">Get for 100 CP</button></td></tr>
+		<tr><td><span class="shadow"><span style="color:cyan;">Hello, </span><span style="color:orange;">I'm </span><span style="color:yellow;">Rainbow!</span></span></td><td><button id="contributionChatText-rainbow" onclick="Contribution.purchase('chatText','rainbow');">Get for 500 CP</button></td></tr>
+	</table>
+
+
+
+	<!--
+	<h3>Display Global Message:</h3>
+	Message will appear in the chat box of every player when they log in.<br>
+	Your message will appear for 24 hours after being approved by an admin.<br>
+	Max Characters: 69. No HTML/Offensive/IRL ads allowed.<br>
+	Status: <span id="contributionGlobalStatus">Inactive</span><br>
+	<input id="contributionGlobalInput" type="text" maxlength="69" size="69" placeholder="Type your message here."></input><br>
+	<button id="contributionGlobalBtn" onclick=" Contribution.purchase('globalMessage',$('#contributionGlobalInput')[0].value); $('#contributionGlobalInput')[0].value = 'Sent for approval.';">Submit Text for 1000 CP</button>
+	-->
+
+	<h3>Broadcast Achievement:</h3>
+	Display a message to every player upon levelling up or completing a quest.<br>
+	Current Stock: <span id="contributionBroadcastSpan">0</span> Message(s).<br>
+	<button onclick="Contribution.purchase('broadcastAchievement',1);">Get 1 Messages for 2 CP</button><br>
+	<button onclick="Contribution.purchase('broadcastAchievement',10);">Get 10 Messages for 10 CP</button><br>
+	<button onclick="Contribution.purchase('broadcastAchievement',100);">Get 100 Messages for 50 CP</button><br>
+	<br>
+
+
+
+
+	<!--
+	<h3>Change Display Name:</h3>
+	Change the name showed in-game. <br>
+	The username used to sign in will remain the same.<br>
+	<br>
+	-->
+</div>

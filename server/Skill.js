@@ -1,32 +1,44 @@
-//Skill
-Skill = {};
+//LICENSED CODE BY SAMUEL MAGNAN FOR RAININGCHAIN.COM, LICENSE INFORMATION AT GITHUB.COM/RAININGCHAIN/RAININGCHAIN
+eval(loadDependency(['Db','List','Actor','Tk','Server','Chat'],['Skill']));
 
-Skill.addExp = function(key,skill,amount,bonus){
-	var player = List.all[key];
-	var mod = bonus === false ? 1 : player.bonus.exp[skill];
-	amount = typeof amount !== 'function' ? amount : amount(player.skill.lvl[skill],key);
-	player.skill.exp[skill] += amount * mod;		
-	Skill.updateLvl(key,skill);
-	Server.log(2,key,'addExp',skill,amount);
+var Skill = exports.Skill = {};
+
+//TODO: same than itemlist, format function
+Skill.addExp = function(key,skill,amount,globalmod){
+	if(typeof skill === 'object') Skill.addExp.action(key,skill,amount || 1);
+	else {
+		var tmp = {}; tmp[skill] = amount || 0;
+		Skill.addExp.action(key,tmp,globalmod || 1);
+	} 
+	List.all[key].flag['skill,exp'] = 1;
 }
 
 
-Skill.addExp.bulk = function(key,obj,bonus){
+
+Skill.addExp.action = function(key,obj,globalmod){
+	var player = List.all[key];
 	for(var i in obj){
-		Skill.addExp(key,i,obj[i],bonus);
+		var amount = typeof obj[i] !== 'function' ? obj[i] : obj[i](player.skill.lvl[i],key);
+		amount *= globalmod;
+		amount = Math.round(amount);
+		if(isNaN(amount)) return ERROR(4,'exp given is nan');
+		player.skill.exp[i] += amount;		
+		Skill.updateLvl(key,i);
+		Server.log(2,key,'addExp',i,amount);
 	}
 }
+
 
 Skill.updateLvl = function(key,sk){
 	var ps = List.all[key].skill;
 	var main = List.main[key];
 	
-	if(!sk) sk = Cst.skill.list;	//if no sk, update all skills
+	if(!sk) sk = CST.skill;	//if no sk, update all skills
 	sk = Tk.arrayfy(sk);
 	
 	for(var i in sk){
 		var s = sk[i];
-		if(ps.exp[s] >= Cst.exp.list[ps.lvl[s]+1]){
+		if(ps.exp[s] >= CST.exp[ps.lvl[s]+1]){
 			var newLvl = Skill.getLvlViaExp(ps.exp[s]);			
 			var lvlDiff = newLvl-ps.lvl[s];
 			
@@ -37,15 +49,28 @@ Skill.updateLvl = function(key,sk){
 }
 
 Skill.getLvlViaExp = function(exp){
-	return Tk.binarySearch(Cst.exp.list,exp)
+	if(isNaN(exp)) return ERROR(4,'exp is NaN');
+	return Tk.binarySearch(CST.exp,exp)
 }
 
 
 Skill.lvlUp = function(key,skill){
 	var sk = List.all[key].skill;
-	Chat.add(key,'You are level ' + sk.lvl[skill] + ' in ' + skill.capitalize() + '!');
+	Chat.add(key,'You are now level ' + sk.lvl[skill] + ' in ' + skill.capitalize() + '!');
+	
+	if(['melee','range','magic'].have(skill)) Chat.add(key,'You now deal more damage in ' + skill.capitalize() + '.');
+	
 	Server.log(1,key,'Skill.lvlUp',skill,sk.lvl[skill]);
+	Skill.applyLvlDmgBoost(key);
+	List.all[key].flag['skill,lvl'] = 1;
+	
+	if(List.main[key].contribution.reward.broadcastAchievement > 0){
+		List.main[key].contribution.reward.broadcastAchievement--;
+		Chat.broadcast(List.all[key].name.q() + ' is now level ' + sk.lvl[skill] + ' in ' + skill.capitalize() + '!'); 
+	}
 }
+
+
 
 Skill.unlockableContent = function(key){
 	var total = Skill.getTotalLvl(key);
@@ -83,63 +108,80 @@ Skill.getTotalLvl = function(key){
 	return sum;
 }
 
+Skill.applyLvlDmgBoost = function(key){
+	var act = List.all[key];	
+	var boost = Actor.getCombatLevelDmgMod(act);
+	Actor.permBoost(act,'applyLvlDmgBoost',[{stat:'globalDmg',value:boost,type:'***'}]);
+}
+
+
 
 Db.skillPlot = {
-	'treeRed':{
-		category:'tree',
-		variant:'red',
+	'tree-red':{
+		model:'tree-red',
+		downModel:'tree-down',
 		lvl:0,
 		skill:'woodcutting',
 		exp:100,
-		chance:function(lvl){
-			return 1;			
+		getSuccess:function(lvl){
+			return true;	
 		},
 		item:{
-			'wood-0':0.5,
-			'leaf-0':0.5,			
+			'wood-0':0.9,
+			'ruby-0':0.05,
+			'sapphire-0':0.025,
+			'topaz-0':0.025,
+		},
+	},
+	'rock-bronze':{
+		model:'rock-bronze',
+		downModel:'rock-down',
+		lvl:0,
+		skill:'mining',
+		exp:100,
+		getSuccess:function(lvl){
+			return true;	
+		},
+		item:{
+			'metal-0':0.9,
+			'ruby-0':0.025,
+			'sapphire-0':0.05,
+			'topaz-0':0.025,		
+		},
+	},
+	'hunt-squirrel':{
+		model:'hunt-squirrel',
+		downModel:'hunt-down',
+		lvl:0,
+		skill:'trapping',
+		exp:100,
+		getSuccess:function(lvl){
+			return true;	
+		},
+		item:{
+			'bone-0':0.9,
+			'ruby-0':0.025,
+			'sapphire-0':0.025,
+			'topaz-0':0.05,				
+		},
+	},
+	'Qtutorial-tree-red':{	//sketchy
+		model:'tree-red',
+		downModel:'tree-down',
+		lvl:0,
+		skill:'woodcutting',
+		exp:100,
+		getSuccess:function(lvl){
+			return true;	
+		},
+		item:{
+			'Qtutorial-resource':1,
 		},
 	},
 }
 
 
-SkillPlot = {};
-SkillPlot.creation = function(data){	//spot, type, num, quest
-	var plot = Db.skillPlot[data.type];
-	
-	//create 2 copy. if not harvest, view up tree. else view down
-	var id = Actor.creation({'spot':data.spot,
-		"category":plot.category,"variant":plot.variant,"extra":{
-			skillPlot:{
-				quest:data.quest,
-				num:data.num,
-				type:data.type,
-			},
-			viewedIf:function(key,eid){
-				if(List.all[key].type !== 'player') return true;
-				var plot = List.all[eid].skillPlot;
-				return List.main[key].quest[plot.quest]._skillPlot[plot.num] == 0;			
-			}		
-		}
-	});
-	Db.quest[data.quest].skillPlot.push(id);
-	
-	Actor.creation({'spot':data.spot,
-		"category":plot.category,"variant":"down","extra":{
-			skillPlot:{
-				quest:data.quest,
-				num:data.num,
-				type:'down',
-			},
-			viewedIf:function(key,eid){
-				if(List.all[key].type !== 'player') return true;
-				var plot = List.all[eid].skillPlot;
-				return List.main[key].quest[plot.quest]._skillPlot[plot.num] == 1;			
-			},
-			
-		}
-	});
 
-}
 
 
 

@@ -1,8 +1,11 @@
+//LICENSED CODE BY SAMUEL MAGNAN FOR RAININGCHAIN.COM, LICENSE INFORMATION AT GITHUB.COM/RAININGCHAIN/RAININGCHAIN
+eval(loadDependency(['Db','Tk','Init']));
+
 Db.boost = {};
 var a = Db.boost.list = {};
 
 a.all = [
-
+	
 ];
 
 
@@ -19,12 +22,12 @@ a.amulet = {
 		
 	],
 	sapphire:[
-		{'stat':['chill-all'],'valueMod':1,'chance':1},
+		{'stat':['chill-all'],'valueMod':1.5,'chance':1},
 		{'stat':'chill-chance','valueMod':2,'chance':1},
 	
 	],
 	topaz:[
-		{'stat':['stun-all'],'valueMod':1,'chance':1},
+		{'stat':['stun-all'],'valueMod':1.5,'chance':1},
 		{'stat':'stun-chance','valueMod':2,'chance':1},
 	
 	],
@@ -32,69 +35,57 @@ a.amulet = {
 
 a.ring = {
 	all:[
-		{'stat':['dmg-+'],'valueMod':2,'chance':1},
-		{'stat':['def-+'],'valueMod':2,'chance':1},
+		{'stat':['dmg-*'],'valueMod':2,'chance':1},
+		{'stat':['def-*'],'valueMod':2,'chance':1},
 		{'stat':['status-all'],'valueMod':1,'chance':1},
 		{'stat':'item-quality','valueMod':1,'chance':0.5},
-	],				
-	ruby:[
-		{'stat':['burn-all'],'valueMod':1.5,'chance':1},
-		{'stat':'burn-magn','valueMod':2,'chance':1},
-		
-	],
-	sapphire:[
-		{'stat':['chill-all'],'valueMod':1,'chance':1},
-		{'stat':'chill-magn','valueMod':2,'chance':1},
-	
-	],
-	topaz:[
-		{'stat':['stun-all'],'valueMod':1,'chance':1},
-		{'stat':'stun-magn','valueMod':2,'chance':1},
-	
-	],
-};
-
-a.bracelet = {
-	all:[
-		{'stat':['dmg-^'],'valueMod':2,'chance':1},
-		{'stat':['def-^'],'valueMod':2,'chance':1},
-		{'stat':['status-all'],'valueMod':1,'chance':1},
 		{'stat':'item-quantity','valueMod':1,'chance':0.5},
 	],				
 	ruby:[
 		{'stat':['burn-all'],'valueMod':1.5,'chance':1},
+		{'stat':'burn-magn','valueMod':2,'chance':1},
 		{'stat':'burn-time','valueMod':2,'chance':1},
-		
 	],
 	sapphire:[
-		{'stat':['chill-all'],'valueMod':1,'chance':1},
+		{'stat':['chill-all'],'valueMod':1.5,'chance':1},
+		{'stat':'chill-magn','valueMod':2,'chance':1},
 		{'stat':'chill-time','valueMod':2,'chance':1},
-	
 	],
 	topaz:[
-		{'stat':['stun-all'],'valueMod':1,'chance':1},
+		{'stat':['stun-all'],'valueMod':1.5,'chance':1},
+		{'stat':'stun-magn','valueMod':2,'chance':1},
 		{'stat':'stun-time','valueMod':2,'chance':1},
-	
 	],
 };
 
+
 a.helm = {
 	all:[
-		{'stat':['dmg-+'],'valueMod':2,'chance':1},
-		{'stat':['def-+'],'valueMod':2,'chance':1},
+		{'stat':['dmg-^'],'valueMod':2,'chance':1},
+		{'stat':['def-^'],'valueMod':2,'chance':1},
 		{'stat':['resource-max'],'valueMod':1,'chance':1},
 		{'stat':['resource-regen'],'valueMod':1,'chance':1},
+		{'stat':['summon-all'],'valueMod':1,'chance':1},
+		{'stat':'atkSpd','valueMod':1,'chance':1},
+		{'stat':'pickRadius','valueMod':1,'chance':1},
 	],				
 	metal:[
 		{'stat':'hp-max','valueMod':1,'chance':1},
+		{'stat':'leech-magn','valueMod':1,'chance':1},
+		{'stat':'leech-chance','valueMod':1,'chance':1},
+		{'stat':'summon-amount','valueMod':1.5,'chance':1},
 	],
 	wood:[
 		{'stat':'hp-regen','valueMod':1,'chance':1},
-		
+		{'stat':'crit-magn','valueMod':1,'chance':1},
+		{'stat':'crit-chance','valueMod':1,'chance':1},
+		{'stat':'summon-atk','valueMod':1.5,'chance':1},
 	],
 	bone:[
 		{'stat':'mana-max','valueMod':1,'chance':1},
 		{'stat':'mana-regen','valueMod':1,'chance':1},
+		{'stat':'maxSpd','valueMod':1,'chance':1},
+		{'stat':'summon-def','valueMod':1.5,'chance':1},
 	],
 };
 
@@ -102,179 +93,79 @@ a.body = {
 	all:[
 		{'stat':['dmg-x'],'valueMod':2,'chance':1},
 		{'stat':['def-x'],'valueMod':2,'chance':1},
-		{'stat':['def'],'valueMod':4,'chance':1},
-	
+		{'stat':['def'],'valueMod':1.5,'chance':1},
+		{'stat':['weapon'],'valueMod':1,'chance':1},
 	],				
 	metal:[
 		{'stat':['def-melee'],'valueMod':8,'chance':1},
-		
+		{'stat':['weapon-melee'],'valueMod':2,'chance':1},
+		{'stat':'strike-range','valueMod':1,'chance':1},
 	],
 	wood:[
 		{'stat':['def-range'],'valueMod':8,'chance':1},
-	
+		{'stat':['weapon-range'],'valueMod':2,'chance':1},
+		{'stat':'strike-size','valueMod':1,'chance':1},
 	],
 	bone:[
 		{'stat':['def-magic'],'valueMod':8,'chance':1},
-	
-	],
-};
-
-a.shield = {
-	all:[
-		{'stat':['dmg-*'],'valueMod':2,'chance':1},
-		{'stat':['def-*'],'valueMod':2,'chance':1},
-		{'stat':['weapon'],'valueMod':1,'chance':1},
-	
-	],				
-	metal:[
-		{'stat':['weapon-melee'],'valueMod':1,'chance':1},
-		
-	],
-	wood:[
-		{'stat':['weapon-range'],'valueMod':1,'chance':1},
-	
-	],
-	bone:[
-		{'stat':['weapon-magic'],'valueMod':1,'chance':1},
-	
-	],
-};
-
-a.gloves = {
-	all:[
-		{'stat':['dmg-+'],'valueMod':2,'chance':1},
-		{'stat':['def-+'],'valueMod':2,'chance':1},
-		
-		{'stat':'atkSpd-main','valueMod':1,'chance':1},
-		{'stat':'pickRadius','valueMod':1,'chance':1},
-	],				
-	chain:[
-		{'stat':'leech-magn','valueMod':1,'chance':1},
-		{'stat':'leech-chance','valueMod':1,'chance':1},
-		
-	],
-	leaf:[
-		{'stat':'crit-magn','valueMod':1,'chance':1},
-		{'stat':'crit-chance','valueMod':1,'chance':1},
-	],
-	hide:[
-		{'stat':['summon-all'],'valueMod':1,'chance':1},
-	],
-};
-
-a.pants = {
-	all:[
-		{'stat':['dmg-x'],'valueMod':2,'chance':1},
-		{'stat':['def-x'],'valueMod':2,'chance':1},
-		{'stat':['summon-all'],'valueMod':1,'chance':1},
-		
-	],				
-	chain:[
-		{'stat':'item-quality','valueMod':1,'chance':0.5},
-		{'stat':'summon-amount','valueMod':1,'chance':1},
-	],
-	leaf:[
-		{'stat':'item-quantity','valueMod':1,'chance':0.5},
-		{'stat':'summon-atk','valueMod':1,'chance':1},
-	
-	],
-	hide:[
-		{'stat':'item-rarity','valueMod':1,'chance':0.5},
-		{'stat':'summon-def','valueMod':1,'chance':1},
-	
-	],
-};
-
-a.boots = {
-	all:[
-		{'stat':['dmg-*'],'valueMod':2,'chance':1},
-		{'stat':['def-*'],'valueMod':2,'chance':1},
-		{'stat':'maxSpd','valueMod':1,'chance':1},
-		{'stat':'acc','valueMod':1,'chance':1},
-	],				
-	chain:[
-		{'stat':'strike-range','valueMod':1,'chance':1},
-		
-	],
-	leaf:[
-		{'stat':'strike-size','valueMod':1,'chance':1},
-	
-	],
-	hide:[
+		{'stat':['weapon-magic'],'valueMod':2,'chance':1},
 		{'stat':'strike-maxHit','valueMod':1,'chance':1},
-	
 	],
 };
 
-a.melee = {
+
+a.weapon = {
 	all:[
 		{'stat':['dmg'],'valueMod':1,'chance':1},
-		{'stat':['dmg-melee'],'valueMod':1,'chance':1},
-	],				
+	],
 	mace:[	//brute force / tank
 		{'stat':['dmg-melee'],'valueMod':10,'chance':1},
 		{'stat':['def'],'valueMod':10,'chance':1},
 	],
 	spear:[	//aoe
-		{'stat':'strike-size','valueMod':1,'chance':1},
-		{'stat':'strike-maxHit','valueMod':1,'chance':1},
-		{'stat':'strike-range','valueMod':1,'chance':1},
+		{'stat':'strike-size','valueMod':5,'chance':1},
+		{'stat':'strike-maxHit','valueMod':5,'chance':1},
+		{'stat':'strike-range','valueMod':5,'chance':1},
+		{'stat':['dmg-melee'],'valueMod':2,'chance':1},
 	],
 	sword:[	//status
-		{'stat':['status-time'],'valueMod':1,'chance':1},
-		{'stat':['status-magn'],'valueMod':1,'chance':1},
-		{'stat':['status-chance'],'valueMod':1,'chance':1},
+		{'stat':['status-time'],'valueMod':5,'chance':1},
+		{'stat':['status-magn'],'valueMod':5,'chance':1},
+		{'stat':['status-chance'],'valueMod':5,'chance':1},
+		{'stat':['dmg-melee'],'valueMod':2,'chance':1},
 	],
-};
-
-a.range = {
-	all:[
-		{'stat':['dmg'],'valueMod':1,'chance':1},
-		{'stat':['dmg-range'],'valueMod':1,'chance':1},
-	
-	],				
 	bow:[	//amount
-		{'stat':'bullet-amount','valueMod':1,'chance':1},
+		{'stat':'bullet-amount','valueMod':5,'chance':1},
+		{'stat':['dmg-range'],'valueMod':2,'chance':1},
 	],
 	boomerang:[	//crit
-		{'stat':'crit-chance','valueMod':1,'chance':1},
-		{'stat':'crit-magn','valueMod':1,'chance':1},
+		{'stat':'crit-chance','valueMod':5,'chance':1},
+		{'stat':'crit-magn','valueMod':5,'chance':1},
+		{'stat':['dmg-range'],'valueMod':2,'chance':1},
 	
 	],
 	crossbow:[	//speed
-		{'stat':'atkSpd-main','valueMod':5,'chance':10},
-		// {'stat':'atkSpd-support','valueMod':5,'chance':10},
-	],
-};
-
-a.magic = {
-	all:[
-		{'stat':['dmg'],'valueMod':1,'chance':1},
-		{'stat':['dmg-magic'],'valueMod':1,'chance':1},
-	
-	],				
+		{'stat':'atkSpd','valueMod':5,'chance':10},
+		{'stat':['dmg-range'],'valueMod':2,'chance':1},
+	],	
 	wand:[	//leech
-		{'stat':'leech-chance','valueMod':1,'chance':1},
-		{'stat':'leech-magn','valueMod':1,'chance':1},
-		
+		{'stat':'leech-chance','valueMod':5,'chance':1},
+		{'stat':'leech-magn','valueMod':5,'chance':1},
+		{'stat':['dmg-magic'],'valueMod':2,'chance':1},
 	],
 	staff:[	//aoe onHit
 		{'stat':'strike-maxHit','valueMod':10,'chance':1},
 		{'stat':'strike-range','valueMod':10,'chance':1},
 		{'stat':'strike-size','valueMod':10,'chance':1},
-	
+		{'stat':['dmg-magic'],'valueMod':2,'chance':1},
 	],
 	orb:[	//status
-		{'stat':['status-chance'],'valueMod':1,'chance':1},
-		{'stat':['status-magn'],'valueMod':1,'chance':1},
-		{'stat':['status-time'],'valueMod':1,'chance':1},
-	
+		{'stat':['status-chance'],'valueMod':5,'chance':1},
+		{'stat':['status-magn'],'valueMod':5,'chance':1},
+		{'stat':['status-time'],'valueMod':5,'chance':1},
+		{'stat':['dmg-magic'],'valueMod':2,'chance':1},
 	],
 };
-
-
-
-
 
 
 Init.db.boost = function(){
@@ -390,8 +281,6 @@ Db.boost.group = {
 	
 	'resource-max':['mana-max'],
 	'resource-regen':['mana-regen'],
-	//'resource-max':['mana-max','fury-max','heal-max','dodge-max'],
-	//'resource-regen':['mana-regen','fury-regen','heal-regen','dodge-regen'],
 	
 	
 }
@@ -417,8 +306,7 @@ Db.boost.base = {	//info about value (number) for each boost
 	},
 	normal:{
 		//normal
-		'atkSpd-main':0.01,
-		'atkSpd-support':0.01,
+		'atkSpd':0.01,
 		'crit-chance':0.01,
 		'crit-magn':0.01,
 		'leech-magn':0.01,
@@ -426,8 +314,8 @@ Db.boost.base = {	//info about value (number) for each boost
 		'bullet-amount':0.01,
 		'strike-range':0.01,
 		'strike-size':0.01,
-		'strike-maxHit':0.01,
-		'pickRadius':100,
+		'strike-maxHit':0.2,
+		'pickRadius':200,
 		'hp-max':1,
 		'hp-regen':0.01,
 		'maxSpd':0.1,

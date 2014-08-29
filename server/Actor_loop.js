@@ -1,74 +1,83 @@
+//LICENSED CODE BY SAMUEL MAGNAN FOR RAININGCHAIN.COM, LICENSE INFORMATION AT GITHUB.COM/RAININGCHAIN/RAININGCHAIN
+eval(loadDependency(['Db','List','Actor','Tk','Main','Boss','Loop','Activelist','Map','Collision','Sprite','Anim']));
 //####Update Actor####
 
-var ABILITYINTERVAL = 3;
-var SUMMONINTERVAL = 5;
+var INTERVAL_ABILITY = 3;
+var INTERVAL_SUMMON = 5;
+var INTERVAL_STATUS = 3;
+var INTERVAL_TIMEOUT = 1;	//need to be fast for block... -.-
+
+var interval = function(num){ return Loop.interval(num); }
 
 Actor.loop = function(act){
+	
 	if(act.dead){
 		if(act.type === 'player' && --act.respawn < 0)	Actor.death.respawn(act);
-		if(act.type !== 'player' && !act.group) Actor.remove(act);
+		if(act.type === 'npc' && !act.group) Actor.remove(act);
 		return;
 	}
-	Actor.loop.timeout(act);
-	Actor.loop.updateActive(act);
+	if(Loop.interval(5)) Actor.loop.updateActive(act);
 	
-	act.frame++;
 	if(!act.active) return;
+	act.frame++;
 	
-	var interval = function(num){	return act.frame % num === 0; };
+	if(interval(INTERVAL_TIMEOUT)) Actor.loop.timeout(act);
 	
-	if(interval(25) && act.awareNpc) Activelist.update(act);
-	if(interval(10) && act.awareNpc) Actor.loop.mapMod(act); 
+	if(act.awareNpc){
+		if(interval(25)) Activelist.update(act);
+		if(interval(10)) Actor.loop.mapMod(act);
+	}
+	 
 		
 		
 	if(act.combat){
-		if(act.hp <= 0){ Actor.death(act); return; }
-		if(act.boss){ Boss.loop(act.boss);}
-		if(interval(ABILITYINTERVAL)){
+		if(act.hp <= 0) return Actor.death(act);
+		if(act.boss) Boss.loop(act.boss);
+		if(interval(INTERVAL_ABILITY)){
 			Actor.loop.ability.charge(act);
 			Actor.loop.ability.test(act);
 		}
-		Actor.loop.regen(act);    
-		Actor.loop.status(act);	
+		if(interval(INTERVAL_STATUS)){
+			Actor.loop.regen(act);    
+			Actor.loop.status(act);	
+		}
+		if(interval(INTERVAL_SUMMON)) Actor.loop.summon(act);
 		Actor.loop.boost(act);
-		if(interval(SUMMONINTERVAL)) Actor.loop.summon(act);
 		if(interval(25)) Actor.loop.attackReceived(act); 	//used to remove attackReceived if too long
 	}
 	if(act.combat || act.move){
 		Actor.loop.setTarget(act);  //update Enemy Target
 		Actor.loop.input(act); 		//simulate enemy key press depending on target 
 	}
-	if(act.combat && act.move && interval(3)) Actor.loop.move.aim(act); //impact max spd depending on aim
-	
+	if(act.pushable) Actor.loop.pushable(act);
 	if(act.move){
 		Actor.loop.bumper(act);   //test if collision with map    
 		Actor.loop.move(act);  	//move the actor
 	}
 	if(act.type === 'player'){
-		if(interval(6)) Actor.loop.ability.chargeClient(act);
+		if(!act.combat) Actor.loop.boost(act); // duplicate, already under if(act.combat), but if not here too, in town, window open = move still
+		if(interval(3)) Actor.loop.move.aim(act);
+		if(interval(5)) Actor.loop.bumper.death(act);
+		if(interval(INTERVAL_ABILITY)) Actor.loop.ability.chargeClient(act);
 		if(interval(3)) Actor.loop.fall(act);						//test if fall
-		if(interval(25)) Actor.loop.friendList(act);   				//check if any change in friend list
-		if(interval(5)) Actor.loop.trade(act); ;    
-		if(interval(5))	Actor.loop.dialogue(act); 
-		if(interval(Server.frequence.save)) Save(act.id);    		//save progression
+		if(interval(25*10)) act.damagedIf = 'true';	//QUICKFIX
 	}
 
 }
 
 Actor.loop.updateActive = function(act){
-	act.active = act.activeList.$length() || act.type === 'player' || false;	//need to be false for Change.send
+	act.active = act.alwaysActive || !act.activeList.$empty();	//need to be false for Change.send ?
 }
 //{Ability
 Actor.loop.ability = {};
 Actor.loop.ability.charge = function(act){	//HOTSPOT
 	var ma = act.abilityChange;
-	ma.globalCooldown -= ABILITYINTERVAL;
+	ma.globalCooldown -= INTERVAL_ABILITY;
 	ma.globalCooldown = ma.globalCooldown.mm(-100,250); 	//cuz if atkSpd is low, fuck everything with stun
 	var ab = Actor.getAbility(act);
 	for(var i in ab){
 		var s = ab[i]; if(!s) continue;	//cuz can have hole if player
-		
-		ma.charge[s.id] += act.atkSpd.main * s.spd.main * ABILITYINTERVAL;
+		ma.charge[s.id] = (ma.charge[s.id] + act.atkSpd * INTERVAL_ABILITY) || 0;
 	}
 }
 
@@ -76,23 +85,23 @@ Actor.loop.ability.chargeClient = function(act){
 	var ab = Actor.getAbility(act);
 	var ma = act.abilityChange;
 	
+	ma.chargeClient = '';
 	for(var i in ab){
-		var s = ab[i]; if(!s) continue;	//cuz can have hole if player
+		var s = ab[i]; if(!s){ ma.chargeClient += '0'; continue; }	//cuz can have hole if player
 		//Client
-		var rate = ma.charge[s.id] / s.period.own;
-		ma.chargeClient[i] = Math.min(rate,1);
+		var rate = ma.charge[s.id] / s.periodOwn;
+		ma.chargeClient += rate >= 1 ? 'R' : Math.round(rate*35).toString(36).slice(0,1);
 	}
 }
 
-
-
 Actor.loop.ability.test = function(m){
+	if(m.noAbility) return;
 	var ab = Actor.getAbility(m);
 	var ma = m.abilityChange;
 	for(var i in ab){
 		var s = ab[i]; if(!s) continue;	//cuz can have hole if player
 		
-		if(ma.press[i] === '1' && ma.charge[s.id] > s.period.own && (s.period.bypassGlobalCooldown || (ma.globalCooldown <= 0))){
+		if(ma.press[i] === '1' && ma.charge[s.id] > s.periodOwn && (s.bypassGlobalCooldown || (ma.globalCooldown <= 0))){
 			Actor.performAbility(m,s);
 			break;
 		}
@@ -101,31 +110,29 @@ Actor.loop.ability.test = function(m){
 
 Actor.performAbility = function(act,ab,mana,reset){
 	//Mana
-	if(mana !== false && !Actor.performAbility.resource(act,ab.cost)) return;
+	if(mana !== false && !Actor.performAbility.resource(act,ab)) return;
 	if(reset !== false)	Actor.performAbility.resetCharge(act,ab);
-	
 	
 	//Anim
 	if(ab.action.anim) Sprite.change(act,{'anim':ab.action.anim});
 	if(ab.action.animOnSprite)	Anim.creation({name:ab.action.animOnSprite,target:act.id});
 	
 	//Do Ability Action (ex: Combat.attack)
-	applyFunc.key(act.id,ab.action.func,ab.action.param);
+	Tk.applyFunc.key(act.id,ab.action.func,ab.action.param,List);
 }
 
 Actor.performAbility.resetCharge = function(act,ab){
 	var charge = act.abilityChange.charge;
 	charge[ab.id] = 0;
 	act.abilityChange.globalCooldown = Math.max(act.abilityChange.globalCooldown,0);	//incase bypassing Global
-	act.abilityChange.globalCooldown +=  ab.period.global * (ab.spd.main / act.atkSpd.main.mm(0.05));
+	act.abilityChange.globalCooldown +=  ab.periodGlobal / act.atkSpd.mm(0.05);
 
 }
 
-Actor.performAbility.resource = function(act,cost){
-	for(var j in cost){
-		if(cost[j] > act[j]){ return false;}
-	}
-	for(var j in cost){act[j] -= cost[j];}
+Actor.performAbility.resource = function(act,ab){
+	if(act.mana < ab.costMana || act.hp < ab.costHp) return false;
+	act.mana -= ab.costMana;
+	act.hp -= ab.costHp;
 	return true;		
 }
 
@@ -133,9 +140,10 @@ Actor.performAbility.resource = function(act,cost){
 
 Actor.loop.timeout = function(act){
 	for(var i in act.timeout){
-		if(--act.timeout[i].timer < 0){
+		act.timeout[i].timer -= INTERVAL_TIMEOUT;
+		if(act.timeout[i].timer < 0){
 			try {act.timeout[i].func(act.id);
-			}catch(err){ ERROR.err(err); }
+			}catch(err){ ERROR.err(3,err); }
 			finally{	delete act.timeout[i];	}			
 		}	
 	}
@@ -145,16 +153,15 @@ Actor.loop.timeout = function(act){
 Actor.loop.mapMod = function(act){
 	act.mapMod = {};
 	
-	
 	for(var i in act.activeList){
-		var b = List.all[i];
-		if(!b || !b.block) continue;
-		var size = b.block.size;
-		var pos = Collision.getPos(b);
+		var b = List.all[i].block;
+		if(!b) continue;
+		if(b.condition === 'npc' && act.type === 'player') continue;
+		var pos = Collision.getPos(List.all[i]);
 		
-		for(var j = size[0]; j <= size[1]; j++){
-			for(var k = size[2]; k <= size[3]; k++){
-				act.mapMod[(pos.x+j) + '-' + (pos.y+k)] = 1;
+		for(var j = b.size[0]; j <= b.size[1]; j++){
+			for(var k = b.size[2]; k <= b.size[3]; k++){
+				act.mapMod[(pos.x+j) + '-' + (pos.y+k)] = typeof b.value === 'undefined' ? 1 : b.value;
 			}
 		}
 	}
@@ -169,21 +176,24 @@ Actor.loop.status = function(act){
 	Actor.loop.status.knock(act);
 	Actor.loop.status.burn(act);
 	Actor.loop.status.bleed(act);
-	Actor.loop.status.stun(act);
-	Actor.loop.status.chill(act);
-	Actor.loop.status.drain(act);
+	if(act.status.stun.time > 0) Actor.loop.status.stun(act);
+	if(act.status.chill.time > 0) Actor.loop.status.chill(act);
+	if(act.status.drain.time > 0) Actor.loop.status.drain(act);
 	
-	act.statusClient = '';
-	for(var i in Cst.status.list)	act.statusClient += act.status[Cst.status.list[i]].time > 0 ? '1' : '0';
+	if(Loop.interval(2*INTERVAL_ABILITY)){
+		act.statusClient = '';
+		for(var i in CST.status.list)	act.statusClient += act.status[CST.status.list[i]].time > 0 ? '1' : '0';
+	}
 }
 
-Actor.loop.status.chill = function(act){act.status.chill.time--;}
 Actor.loop.status.stun = function(act){act.status.stun.time--;}
+Actor.loop.status.chill = function(act){act.status.chill.time--;}
 Actor.loop.status.drain = function(act){act.status.drain.time--;}
 
 Actor.loop.status.knock = function(act){
 	var status = act.status.knock;
-	if(status.time-- > 0){ 
+	if(status.time > 0){
+		status.time -= INTERVAL_ABILITY;
 		act.spdX = Tk.cos(status.angle)*status.magn;
 		act.spdY = Tk.sin(status.angle)*status.magn;
 	}
@@ -191,16 +201,18 @@ Actor.loop.status.knock = function(act){
 
 Actor.loop.status.burn = function(act){
 	var status = act.status.burn;
-	if(status.time-- > 0){
-		Actor.changeHp(act, -status.magn*act.hp);
+	if(status.time > 0){
+		status.time -= INTERVAL_ABILITY;
+		Actor.changeHp(act, -status.magn*act.hp*INTERVAL_ABILITY);
 	}
 }
 
 Actor.loop.status.bleed = function(act){
 	var status = act.status.bleed;
 	
-	if(status.time-- > 0){
-		Actor.changeHp(act, -status.magn);
+	if(status.time > 0){
+		status.time -= INTERVAL_ABILITY;
+		Actor.changeHp(act, -status.magn*INTERVAL_ABILITY);
 	}
 }
 
@@ -208,7 +220,7 @@ Actor.loop.status.bleed = function(act){
 
 Actor.loop.regen = function(act){
 	for(var i in act.resource){
-		act[i] = Math.min(act[i] + act.resource[i].regen,act.resource[i].max);
+		act[i] = Math.min(act[i] + act.resource[i].regen * INTERVAL_ABILITY,act.resource[i].max);
 	}
 }
 
@@ -220,7 +232,7 @@ Actor.loop.boost = function(act){
 		for(var i in act.boost[j]){
 			act.boost[j][i].time -= list[j];
 			if(act.boost[j][i].time < 0)
-				Actor.boost.remove(act,act.boost[j][i]);
+				Actor.boost.remove(act,act.boost[j][i],j,i);
 		}
 	}
 	
@@ -252,7 +264,7 @@ Actor.loop.summon = function(act){
 			act.map = fat.map;
 		}	
 		
-		act.summoned.time -= SUMMONINTERVAL;
+		act.summoned.time -= INTERVAL_SUMMON;
 		if(act.summoned.time < 0){
 			Actor.remove(act);
 		}
@@ -263,17 +275,31 @@ Actor.loop.summon = function(act){
 
 //{Move
 Actor.loop.bumper = function(act){	//HOTSPOT
-	//test collision with map
-	if(Loop.interval(100)){	//test global limit
-		act.x = act.x.mm(50,act.x,Db.map[Map.getModel(act.map)].grid.bullet[0].length*32-50);
-		act.y = act.y.mm(50,act.y,Db.map[Map.getModel(act.map)].grid.bullet.length*32-50);
+	if(act.ghost) return;
+	
+	/*
+	if(!interval(3) && act.type !== 'player'){	//only update if spd is high, but still update every 3 frames no matter what
+		if(!(act.spdX > 7 || act.spdX < -7 || act.spdY > 7 || act.spdY < -7)) return;	//bit faster than Math.abs
 	}
-	//test bumpers
-	for(var i = 0 ; i < 4 ; i++){
-		act.bumper[i] = Collision.ActorMap(
-			{x:Math.floor((act.x + act.bumperBox[i].x)/32),y:Math.floor((act.y + act.bumperBox[i].y)/32)}	//bit faster than PosMap
-		,act.map,act);
+	*/
+	if(interval(3) || act.type === 'player'){
+		for(var i = 0 ; i < 4 ; i++)
+			act.bumper[i] = Collision.actorMap.fast(Math.floor((act.x + act.bumperBox[i].x)/32),Math.floor((act.y + act.bumperBox[i].y)/32),act.map,act);
+		return;
 	}
+	
+	//for npc, update every 3 frames or if spd more than 7
+	if(act.spdX > 7) act.bumper[0] = Collision.actorMap.fast(Math.floor((act.x + act.bumperBox[0].x)/32),Math.floor((act.y + act.bumperBox[0].y)/32),act.map,act);
+	else if(act.spdX < -7) act.bumper[2] = Collision.actorMap.fast(Math.floor((act.x + act.bumperBox[2].x)/32),Math.floor((act.y + act.bumperBox[2].y)/32),act.map,act);
+	if(act.spdY > 7) act.bumper[1] = Collision.actorMap.fast(Math.floor((act.x + act.bumperBox[1].x)/32),Math.floor((act.y + act.bumperBox[1].y)/32),act.map,act);
+	else if(act.spdY < -7) act.bumper[3] = Collision.actorMap.fast(Math.floor((act.x + act.bumperBox[3].x)/32),Math.floor((act.y + act.bumperBox[3].y)/32),act.map,act);
+
+	
+}
+
+Actor.loop.bumper.death = function(act){	//quick fix if manage to past thru wall
+	for(var i in act.bumper) if(!act.bumper[i]) return;
+	act.hp = -1;	
 }
 
 Actor.loop.fall = function(act){
@@ -294,14 +320,10 @@ Actor.loop.fall = function(act){
 }
 Actor.loop.fall.array = [[1,0,0],[0,1,90],[-1,0,180],[0,-1,270],[1,1,45],[-1,1,135],[-1,1,225],[1,-1,315],];
 
-
-
 Actor.fall = function(act){	//default fall
 	if(List.map[act.map].fall) List.map[act.map].fall(act.id,act);
 	else act.hp = -1;
 }
-
-
 
 Actor.loop.move = function(act){
 	if(act.bumper[0]){act.spdX = -Math.abs(act.spdX*0.5)*act.bounce - act.bounce;} 
@@ -322,8 +344,9 @@ Actor.loop.move = function(act){
 	
 	
 	//Calculating New Position
-	var dist = Math.pyt(act.spdY,act.spdX);
-	var amount = Math.ceil(dist/30);
+	//var dist = Math.pyt(act.spdY,act.spdX);	//slow
+	var dist = Math.abs(act.spdY) + Math.abs(act.spdX);
+	var amount = Math.ceil(dist/31);
 	if(amount < 2){
 		act.x += act.spdX;
 		act.y += act.spdY;
@@ -338,46 +361,6 @@ Actor.loop.move = function(act){
 	act.spdY *= act.friction;
 }
 
-
-/*
-Actor.loop.move = function(act){
-	var oldx = act.x;
-	var oldy = act.y;
-	
-	if(act.moveInput[0] && act.spdX < act.maxSpd){act.spdX += act.acc;}
-	if(act.moveInput[1] && act.spdY < act.maxSpd){act.spdY += act.acc;}
-	if(act.moveInput[2] && act.spdX > -act.maxSpd){act.spdX -= act.acc;}
-	if(act.moveInput[3] && act.spdY > -act.maxSpd){act.spdY -= act.acc;}	
-	
-	var goalx = oldx + spdX;
-	var goaly = oldy + spdY;
-
-	
-	
-	//Friction + Min Spd
-	if (Math.abs(act.spdX) < 0.1){act.spdX = 0;}	
-	if (Math.abs(act.spdY) < 0.1){act.spdY = 0;}
-	act.moveAngle = Tk.atan2(act.spdY,act.spdX);
-	
-	
-	
-	//Calculating New Position
-	var dist = Math.pyt(act.spdY,act.spdX);
-	var amount = Math.ceil(dist/30);
-	if(amount < 2){
-		act.x += act.spdX;
-		act.y += act.spdY;
-	} else {    //aka could pass thru walls => move step by step and test bumper every time
-		for(var i = 0 ; i < amount && !act.bumper[0] && !act.bumper[1] && !act.bumper[2] && !act.bumper[3]  ; i++){
-			act.x += act.spdX/amount;
-			act.y += act.spdY/amount;
-			Actor.loop.bumper(act);
-		} 
-	} 
-	act.spdX *= act.friction;	
-	act.spdY *= act.friction;
-}
-*/
 
 Actor.loop.move.aim = function (act){	
 	//penalty if looking and moving in opposite direction
@@ -386,47 +369,6 @@ Actor.loop.move.aim = function (act){
 	Actor.boost(act,{'stat':'maxSpd','type':"*",'value':Math.pow(1-diffAim/360,1.5),'time':4,'name':'Aim'});
 }
 //}
-
-
-
-
-
-
-Actor.loop.trade = function(act){	//BAD
-	var key = act.id;
-	if(!List.main[key].windowList.trade) return;
-	
-	if(List.main[List.main[key].windowList.trade.trader]){
-		List.main[key].windowList.trade.tradeList = List.main[List.main[key].windowList.trade.trader].tradeList;	
-		List.main[key].windowList.trade.confirm.other = List.main[List.main[key].windowList.trade.trader].windowList.trade.confirm.self;
-	
-		if(List.main[key].windowList.trade.confirm.other && List.main[key].windowList.trade.confirm.self){
-			//tradeItem(key,List.main[key].windowList.trade.trader);	//TOFIXBUG
-		}
-	} else {
-		List.main[key].windowList.trade = 0;
-	}
-}
-
-Actor.loop.dialogue = function(act){
-	//test if player has move away to end dialogue	
-	var key = act.id;
-	if(!List.main[key].dialogue) return;
-	if(Collision.distancePtPt(act,List.main[key].dialogue) > 100){
-		Dialogue.end(key);
-	}
-
-
-}
-
-Actor.loop.friendList = function(act){
-	var key = act.id;
-	var fl = List.main[key].social.list.friend;
-    
-	for(var i in fl){
-		fl[i].online = Chat.receive.pm.test(act.name,i);
-	}
-}
 
 Actor.loop.attackReceived = function(act){
 	for(var i in act.attackReceived){
@@ -444,9 +386,13 @@ Actor.setTimeout = function(act,name,time,cb){
 
 Actor.freeze = function(act,time,cb){
 	act.move = 0;
-	time = time || Cst.MIN*10;	
+	var oldcombat = act.combat;
+	if(oldcombat) act.combat = 0;
+	
+	time = time || CST.MIN*10;	
 	Actor.setTimeout(act,'freeze',time,function(key){
 		List.all[key].move = 1;
+		if(oldcombat) List.all[key].combat = 1;
 		if(cb) cb(key);
 	});
 }
@@ -457,7 +403,9 @@ Actor.freeze.remove = function(act){
 	act.move = 1;
 }
 
-
-
-
+Actor.loop.pushable = function(act){
+	if(!(act.pushable.timer-- > 0)) return;
+	act.x += Tk.cos(act.pushable.angle) * act.pushable.magn;
+	act.y += Tk.sin(act.pushable.angle) * act.pushable.magn;
+}
 

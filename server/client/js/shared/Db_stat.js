@@ -1,3 +1,5 @@
+//LICENSED CODE BY SAMUEL MAGNAN FOR RAININGCHAIN.COM, LICENSE INFORMATION AT GITHUB.COM/RAININGCHAIN/RAININGCHAIN
+eval(loadDependency(['Db','Actor','Tk','Init']));
 
 Init.db.stat = function(){
 	//if not playerOnly : cant be boosted with equip/curse for non player
@@ -14,13 +16,13 @@ Init.db.stat = function(){
 	'acc':{
 		'icon':'defensive.speed',
 		'name':'Acceleration',
-		'boost':{'base':3,'stat':['acc'],'min':0,},
+		'boost':{'base':8,'stat':['acc'],'min':0,},
 		'description':"Movement Acceleration.",
 		},
 	'friction':{
 		'icon':'defensive.speed',
 		'name':'Friction',
-		'boost':{'base':Cst.FRICTION,'stat':['friction'],'min':0,'max':1},
+		'boost':{'base':CST.FRICTION,'stat':['friction'],'min':0,'max':1},
 		'playerOnly':1,
 		'description':"Movement Friction",
 		},
@@ -36,13 +38,6 @@ Init.db.stat = function(){
 	//}
 
 	//{Resource
-	'dodge-regen':{
-		'icon':'resource.dodge',
-		'name':'Regen Dodge',
-		'boost':{'base':1,'stat':['resource','dodge','regen'],},
-		'playerOnly':1,
-		'description':"Dodge Regeneration per frame.",
-		},
 	'hp-regen':{
 		'icon':'resource.hp',
 		'name':'Regen Life',
@@ -52,32 +47,12 @@ Init.db.stat = function(){
 	'mana-regen':{
 		'icon':'resource.mana',
 		'name':'Regen Mana',
-		'boost':{'base':1,'stat':['resource','mana','regen'],},
+		'boost':{'base':10/25,'stat':['resource','mana','regen'],},
 		'description':"Mana Regeneration per frame.",
 		},	
-	'fury-regen':{
-		'icon':'resource.fury',
-		'name':'Regen Fury',
-		'boost':{'base':1,'stat':['resource','fury','regen'],},
-		'playerOnly':1,
-		'description':"Fury Regeneration per frame.",
-		},
-	'heal-regen':{
-		'icon':'resource.heal',
-		'name':'Regen Heal',
-		'boost':{'base':1,'stat':['resource','heal','regen'],},
-		'playerOnly':1,
-		'description':"Heal Regeneration per frame.",
-		},
+	
 
-		
-	'dodge-max':{
-		'icon':'resource.dodge',
-		'name':'Max Dodge',
-		'boost':{'base':100,'stat':['resource','dodge','max'],},
-		'playerOnly':1,
-		'description':"Maximum Dodge Points.",
-		},
+	
 	'hp-max':{
 		'icon':'resource.hp',
 		'name':'Max Life',
@@ -90,20 +65,6 @@ Init.db.stat = function(){
 		'boost':{'base':100,'stat':['resource','mana','max'],},
 		'description':"Maximum Mana Points.",
 		},	
-	'fury-max':{
-		'icon':'resource.fury',
-		'name':'Max Fury',
-		'boost':{'base':100,'stat':['resource','fury','max'],},
-		'playerOnly':1,
-		'description':"Maximum Fury Points.",
-		},
-	'heal-max':{
-		'icon':'resource.heal',
-		'name':'Max Heal',
-		'boost':{'base':100,'stat':['resource','heal','max'],},
-		'playerOnly':1,
-		'description':"Maximum Heal Points.",
-		},
 	
 	
 	
@@ -128,7 +89,7 @@ Init.db.stat = function(){
 	'pickRadius':{
 		'icon':'defensive.pickup',
 		'name':'Pick Radius',
-		'boost':{'base':100,'stat':['pickRadius'],'min':5},
+		'boost':{'base':250,'stat':['pickRadius'],'min':5},
 		'playerOnly':1,
 		'description':"Maximum distance that you can still pick items on the ground.",
 		},	
@@ -156,16 +117,10 @@ Init.db.stat = function(){
 	//}	
 		
 	//{Attack
-	'atkSpd-main':{
+	'atkSpd':{
 		'icon':'offensive.atkSpd',
-		'name':'Atk Spd Main',
-		'boost':{'base':1,'stat':['atkSpd','main'],},
-		'description':"Affect how fast your character can use abilities.",
-		},
-	'atkSpd-support':{
-		'icon':'offensive.atkSpd',
-		'name':'Atk Spd Support',
-		'boost':{'base':1,'stat':['atkSpd','support'],},
+		'name':'Atk Speed',
+		'boost':{'base':1,'stat':['atkSpd'],},
 		'description':"Affect how fast your character can use abilities.",
 		},
 	'crit-chance':{
@@ -225,7 +180,7 @@ Init.db.stat = function(){
 	'burn-magn':{
 		'icon':'status.burn',
 		'name':'Burn Magn',
-		'boost':{'base':0.005,'stat':['bonus','burn','magn'],},
+		'boost':{'base':0.005,'stat':['bonus','burn','magn'],},	//0.995 ^ 100: if 100% life at start, end = 60% life ||| if start = 50%, end = 30%
 		'description':"Affect damage dealt to a burnt enemy.",
 		},	
 	'burn-chance':{
@@ -254,32 +209,32 @@ Init.db.stat = function(){
 		},	
 	'stun-time':{
 		'icon':'status.stun',
-		'name':'Confuse Time',
+		'name':'Stun Time',
 		'boost':{'base':10,'stat':['bonus','stun','time'],},
-		'description':"Affect Confuse Duration.",
+		'description':"Affect Stun Duration.",
 		},
 	'stun-magn':{
 		'icon':'status.stun',
-		'name':'Confuse Magn',
+		'name':'Stun Magn',
 		'boost':{'base':2,'stat':['bonus','stun','magn'],},
 		'description':"Affect how reduced the sight of view of stund enemy is.",
 		},	
 	'stun-chance':{
 		'icon':'status.stun',
-		'name':'Confuse Chance',
+		'name':'Stun Chance',
 		'boost':{'base':1,'stat':['bonus','stun','chance'],},
 		'description':"Affect chance to stun enemy.",
 		},		
 	'bleed-time':{
 		'icon':'status.bleed',
 		'name':'Bleed Time',
-		'boost':{'base':1,'stat':['bonus','bleed','time'],},
+		'boost':{'base':25,'stat':['bonus','bleed','time'],},
 		'description':"Affect Bleed Duration.",
 		},
 	'bleed-magn':{
 		'icon':'status.bleed',
 		'name':'Bleed Magn',
-		'boost':{'base':100,'stat':['bonus','bleed','magn'],},
+		'boost':{'base':4,'stat':['bonus','bleed','magn'],},	//4 * 25 = 100 dmg over 1 second
 		'description':"Affect damage dealt by bleeding enemy.",
 		},	
 	'bleed-chance':{
@@ -345,7 +300,7 @@ Init.db.stat = function(){
 		},	
 	'resist-stun':{
 		'icon':'status.stun',
-		'name':'Confuse Resist',
+		'name':'Stun Resist',
 		'boost':{'stat':['status','stun','resist'],},
 		'description':"",
 		},	
@@ -432,7 +387,7 @@ Init.db.stat = function(){
 
 	//{Def
 	'globalDef':{
-		'icon':'element.melee',
+		'icon':'blessing.multi',
 		'name':'Main Defense',
 		'boost':{'base':1,'stat':['globalDef'],},
 		'description':"Reduce Damage Taken from all elements.",
@@ -645,7 +600,7 @@ Init.db.stat = function(){
 	
 	//{Dmg
 	'globalDmg':{
-		'icon':'element.melee',
+		'icon':'element.melee2',
 		'name':'Main Damage',
 		'boost':{'base':1,'stat':['globalDmg'],},
 		'description':"Increase Damage Dealt for all elements.",
@@ -858,63 +813,63 @@ Init.db.stat = function(){
 	
 	//{Weapon
 	'weapon-mace':{
-		'icon':'melee.mace',
+		'icon':'weapon.mace',
 		'name':'Dmg Mace',
 		'boost':{'stat':['bonus','weapon','mace'],},
 		'playerOnly':1,	
 		'description':"Increase Damage Dealt with Mace",
 		},			
 	'weapon-spear':{
-		'icon':'melee.spear',
+		'icon':'weapon.spear',
 		'name':'Dmg Spear',
 		'boost':{'stat':['bonus','weapon','spear'],},
 		'playerOnly':1,	
 		'description':"Increase Damage Dealt with Spear",
 		},	
 	'weapon-sword':{
-		'icon':'melee.sword',
+		'icon':'weapon.sword',
 		'name':'Dmg Sword',
 		'boost':{'stat':['bonus','weapon','sword'],},
 		'playerOnly':1,	
 		'description':"Increase Damage Dealt with Sword",
 		},	
 	'weapon-bow':{
-		'icon':'range.bow',
+		'icon':'weapon.bow',
 		'name':'Dmg Bow',
 		'boost':{'stat':['bonus','weapon','bow'],},
 		'playerOnly':1,	
 		'description':"Increase Damage Dealt with Bow",
 		},			
 	'weapon-boomerang':{
-		'icon':'range.boomerang',
+		'icon':'weapon.boomerang',
 		'name':'Dmg Boomerang',
 		'boost':{'stat':['bonus','weapon','boomerang'],},
 		'playerOnly':1,	
 		'description':"Increase Damage Dealt with Boomerang",
 		},	
 	'weapon-crossbow':{
-		'icon':'range.crossbow',
+		'icon':'weapon.crossbow',
 		'name':'Dmg Crossbow',
 		'boost':{'stat':['bonus','weapon','crossbow'],},
 		'playerOnly':1,
 		'description':"Increase Damage Dealt with Crossbow",
 		},		
 	'weapon-wand':{	
-		'icon':'magic.wand',
+		'icon':'weapon.wand',
 		'name':'Dmg Wand',
 		'boost':{'stat':['bonus','weapon','wand'],},
 		'playerOnly':1,	
 		'description':"Increase Damage Dealt with Wand",
 		},			
 	'weapon-staff':{
-		'icon':'magic.staff',
+		'icon':'weapon.staff',
 		'name':'Dmg Staff',
 		'boost':{'stat':['bonus','weapon','staff'],},
 		'playerOnly':1,	
 		'description':"Increase Damage Dealt with Staff",
 		},	
 	'weapon-orb':{
-		'icon':'magic.orb',
+		'icon':'weapon.orb',
 		'name':'Dmg Orb',
 		'boost':{'stat':['bonus','weapon','orb'],},
 		'playerOnly':1,	
@@ -956,24 +911,23 @@ Init.db.stat = function(){
 
 }
 	//add custom boost
-	for(var i in Db.customBoost){
-		var b = Db.customBoost[i];
+	for(var i in Db.statCustom){
+		var b = Db.statCustom[i];
 		Db.stat['custom-' + i] = {
-			'custom':1,
 			'icon':b.icon,
+			custom:1,
 			'name':b.name,
-			'boost':{'base':0,'stat':['customBoost',i],},
+			'boost':{'base':0,'stat':['statCustom',i],},
 			'playerOnly':1,	
 			'description':b.description,
 		};
 	}
 	
-	
 	for(var i in Db.stat){
 		var s = Db.stat[i];
 		s.description = s.description || s.name;
-		s = Tk.useTemplate(Init.db.stat.template(),s);
-		s.boost = Tk.useTemplate(Init.db.stat.template.boost(),s.boost);
+		s = Tk.useTemplate(Init.db.stat.template(),s,true);
+		s.boost = Tk.useTemplate(Init.db.stat.template.boost(),s.boost,true);
 		s.boost.permMax = s.boost.max;
 		s.boost.permMin = s.boost.min;
 		s.boost.permBase = s.boost.base;
@@ -983,7 +937,7 @@ Init.db.stat = function(){
 	
 	Init.db.stat.bonus();
 	Init.db.stat.boost();
-	Init.db.stat.customBoost();
+	Init.db.stat.statCustom();
 }
 Init.db.stat.template = function(){
 	return {
@@ -992,6 +946,7 @@ Init.db.stat.template = function(){
 		boost:Init.db.stat.template.boost(),
 		playerOnly:0,	
 		description:"Affect the overall defence of your summons.",
+		custom:0,
 	}
 }
 Init.db.stat.template.boost = function(){
@@ -1004,7 +959,6 @@ Init.db.stat.template.boost = function(){
 		permMax:100000,
 		min:-100000,
 		permMin:-100000,
-		custom:0,
 	}
 }
 
@@ -1034,16 +988,16 @@ Init.db.stat.bonus = function(){
 	Actor.template.bonus = new Function('return ' + Tk.stringify(info));
 }
 
-Init.db.stat.customBoost = function(){
+Init.db.stat.statCustom = function(){
 	//generate bonus attribute for Actor
 	var info = {};
 	
 	for(var i in Db.stat){
-		if(Db.stat[i].custom){
+		if(Db.stat[i].boost.stat[0] === 'statCustom'){
 			info[Db.stat[i].boost.stat[1]] = 0;
 		}
 	}
-	Actor.template.customBoost = new Function('return ' + Tk.stringify(info));
+	Actor.template.statCustom = new Function('return ' + Tk.stringify(info));
 }
 
 Init.db.stat.boost = function(){
@@ -1052,12 +1006,25 @@ Init.db.stat.boost = function(){
 	var e = {};
 	
 	for(var i in Db.stat){
-		p[i] = Db.stat[i].boost;
+		var b = Tk.deepClone(Db.stat[i].boost);
+		delete b.permMax;	//not needed to be in every actor.boost
+		delete b.permMin;
+		delete b.min;
+		delete b.max;
+		p[i] = b;
 		if(!Db.stat[i].playerOnly){
-			e[i] = Db.stat[i].boost;
+			e[i] = b;
 		}
 	}
 
 	Actor.template.boost = new Function('type', 'return type === "player" ? ' + Tk.stringify(p) + ' : ' + Tk.stringify(e));
 }
+
+
+
+
+
+
+
+
 

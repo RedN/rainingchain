@@ -1,3 +1,6 @@
+//LICENSED CODE BY SAMUEL MAGNAN FOR RAININGCHAIN.COM, LICENSE INFORMATION AT GITHUB.COM/RAININGCHAIN/RAININGCHAIN
+eval(loadDependency(['Db','Tk','Init','Activelist'],['Sprite']));
+
 /*
 "mace":{                               //id of the sprite
     "src":"img/Sprite/human.png"        //image src
@@ -27,12 +30,47 @@ Init.db.sprite = function(){
 	var a = Db.sprite =	{};
     //ts('Sprite.change(p,{name:"taurus"});')
     //{ PLAYER
-    a["mace"] = {"src":"actor/main.png","size":2.5,"side":[1,2,3,0],"hpBar":-50/3,"legs":20,
-    	"preHitBox":[ -36/3,36/3,-16/3,56/3],"preBumperBox":[ -36/3,36/3,-16/3,56/3 ],"anim": {
-    		"walk":{"startY":0,"frame":4,"sizeX":24,"sizeY":32,"dir":4,"spd":0.4,"walk":1,"next":"walk"},
-    		"attack":{"startY":0,"frame":4,"sizeX":24,"sizeY":32,"dir":4,"spd":0.4,"next":"walk"}
+    
+	a["mace"] = {"src":"actor/main.png","size":2.7,"side":[1,2,3,0],"hpBar":-17,"legs":20,
+    	"preHitBox":[ -12,12,-12,12],"preBumperBox":[ -12,12,-5,20 ],"anim": {
+    		"walk":{"startY":0,"frame":4,"sizeX":24,"sizeY":32,"dir":4,"spd":0.5,"walk":1,"next":"walk"},
+    		"attack":{"startY":0,"frame":4,"sizeX":24,"sizeY":32,"dir":4,"spd":0.5,"next":"walk"}
     	}};
-		
+	
+	/*
+	a["mace"] = {"src":"actor/main.png","size":1.5,"side":[3,2,1,0],"hpBar":-40,"legs":32,
+    	"preHitBox":[ -24,24,-20,24],"preBumperBox":[ -36/3*2.5/1.5,36/3*2.5/1.5,-16/3*2.5/1.5,56/3*2.5/1.5 ],"anim": {
+		//"preHitBox":[ -24,24,-20,24],"preBumperBox":[ -24,24,0,48 ],"anim": {
+    		"walk":{"startY":0,"frame":4,"sizeX":64,"sizeY":64,"dir":4,"spd":2,"walk":1,"next":"walk"},
+    		"attack":{"startY":0,"frame":4,"sizeX":64,"sizeY":64,"dir":4,"spd":2,"next":"walk"},
+    		"travel":{"startY":0,"frame":4,"sizeX":64,"sizeY":64,"dir":4,"spd":2,"next":"walk"},
+    	}};
+	*/
+	
+	var tmp = Init.db.sprite.player = {
+		body:[
+			205,206,207,208,209,210,211,221,222,223,224,225,325,326,327,328,410,411,412,413,680,
+		],
+		helm:[
+			//120,
+			132,133,134,135,136,137,138,139,140,141,15085,15088,15191,15192,15193,15194,15195,15196,15197,15198,15199,15200,15201,15202,15203,15204,15205,168,169,170,171,172,173,174,175,176,177,178,179,
+			1389,1507,230,253,254,255,256,257,361,641
+		],
+		skin:[
+			115,291,432,434
+		],
+	};
+	for(var i in tmp)
+		for(var j in tmp[i]) 
+			a[tmp[i][j]] = {"src":"player/" + i + '/' + tmp[i][j] + ".png",player:1,"size":2.7,"side":[1,2,3,0],"hpBar":-17,"legs":20,
+			"preHitBox":[ -12,12,-12,12],"preBumperBox":[ -12,12,-5,20 ],"anim": {
+				"walk":{"startY":0,"frame":4,"sizeX":24,"sizeY":32,"dir":4,"spd":0.5,"walk":1,"next":"walk"},
+				"attack":{"startY":0,"frame":4,"sizeX":24,"sizeY":32,"dir":4,"spd":0.5,"next":"walk"}
+			}};
+	
+	
+	
+	
 	a["sword"] = {"src":"actor/mace.png","size":1.5,"side":[3,2,1,0],"hpBar":-40,"legs":20,
     	"preHitBox":[ -20,20,-20,32 ],"preBumperBox":[ -12,12,4,30 ],"anim": {
     		"walk":{"startY":0,"frame":9,"sizeX":64,"sizeY":64,"dir":4,"spd":1,"walk":1,"next":"walk"},
@@ -203,22 +241,45 @@ Init.db.sprite = function(){
     	}};		
 	//}	
     //{ BULLET
-    a["fireball"] ={"src":"bullet/fireball.png","size":1,"side":[0,1,2,3],"anim": {
-    		"travel":{"startY":0,"frame":1,"sizeX":32,"sizeY":32,"dir":4,"spd":0.2,"next":"travel"},
+    a["fireball"] ={"src":"bullet/fireball.png","size":1,"side":[0],canvasRotate:1,"anim": {
+    		"travel":{"startY":0,"frame":1,"sizeX":32,"sizeY":32,"dir":1,"spd":0.2,"next":"travel"},
     	}};
     			
-    a["iceshard"] ={"src":"bullet/iceshard.png","size":1,"side":[0,1,2,3,4,5,6,7],"anim": {
-    		"travel":{"startY":0,"frame":1,"sizeX":32,"sizeY":32,"dir":8,"spd":0,"next":"travel"},
+    a["iceshard"] ={"src":"bullet/iceshard.png","size":1,"side":[0],canvasRotate:1,"anim": {
+    		"travel":{"startY":0,"frame":1,"sizeX":32,"sizeY":32,"dir":1,"spd":0,"next":"travel"},
     	}};
-    a["lightningball"] ={"src":"bullet/lightningball.png","size":1,"side":[0],"anim": {
+    a["lightningball"] ={"src":"bullet/lightningball.png","size":1,"side":[0],canvasRotate:1,"anim": {
     		"travel":{"startY":0,"frame":1,"sizeX":32,"sizeY":32,"dir":1,"spd":0,"next":"travel"},
     	}};
     	
-    a["arrow"] ={"src":"bullet/arrow.png","size":1,"side":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15],"anim": {
-    		"travel":{"startY":0,"frame":1,"sizeX":42,"sizeY":42,"dir":16,"spd":0,"next":"travel"},
+		/*
+    a["arrow"] ={"src":"picture/pony.png","size":1,"side":[0],"anim": {
+    		"travel":{"startY":0,"frame":1,"sizeX":50,"sizeY":40,"dir":1,"spd":0,"next":"travel"},
     	}};
-     a["dart"] ={"src":"bullet/dart.png","size":2,"side":[0,1,2,3,4],"anim": {
-    		"travel":{"startY":0,"frame":1,"sizeX":16,"sizeY":16,"dir":4,"spd":0,"next":"travel"},
+		*/
+		
+	a["bullet-pony"] ={"src":"bullet/bullet-pony.png","size":1,"side":[0,1],"anim": {
+    		"travel":{"startY":0,"frame":1,"sizeX":32,"sizeY":32,"dir":2,"spd":0,"next":"travel"},
+    	}};
+	a["bullet-happyface"] ={"src":"bullet/bullet-happyface.png","size":1,"side":[0],"anim": {
+    		"travel":{"startY":0,"frame":1,"sizeX":32,"sizeY":32,"dir":1,"spd":0,"next":"travel"},
+    	}};	
+	a["bullet-penguin"] ={"src":"bullet/bullet-penguin.png","size":1,"side":[0],"anim": {
+    		"travel":{"startY":0,"frame":1,"sizeX":32,"sizeY":32,"dir":1,"spd":0,"next":"travel"},
+    	}};	
+		
+	a["arrow"] ={"src":"bullet/arrow.png","size":1,"side":[0],canvasRotate:1,"anim": {
+    		"travel":{"startY":0,"frame":1,"sizeX":42,"sizeY":11,"dir":1,"spd":0,"next":"travel"},
+    }};
+	
+	a["bullet-cannon"] ={"src":"bullet/bullet-cannon.png","size":1,"side":[0],canvasRotate:1,"anim": {
+    		"travel":{"startY":0,"frame":1,"sizeX":42,"sizeY":11,"dir":1,"spd":0,"next":"travel"},
+    }};	
+	//a["pony"] = {"src":"picture/pony.png","size":2,"preBumperBox":[ -25,25,-20,20 ]};
+		
+	
+	a["dart"] ={"src":"bullet/dart.png","size":2,"side":[0],canvasRotate:1,"anim": {
+    		"travel":{"startY":0,"frame":1,"sizeX":16,"sizeY":16,"dir":1,"spd":0,"next":"travel"},
     	}};	
     a["boomerang"] ={"src":"bullet/boomerang.png","size":1,"side":[0],"anim": {
     		"travel":{"startY":0,"frame":8,"sizeX":52,"sizeY":52,"dir":1,"spd":1,"next":"travel"},
@@ -240,9 +301,27 @@ Init.db.sprite = function(){
     	}};	
 
     //}	
-    //{ System
 	
-	a["pushable-rock1x1"] ={"src":"picture/pushable-rock2x2.png","size":0.5,"preBumperBox":[ -32,32,-32,32 ]};
+	
+	
+	
+	
+	
+	
+	
+    //{ System
+	for(var i = 0 ; i<= 15; i++)
+		a["number-" + i] ={"src":"picture/number" + i + ".png","size":2,legs:-100,"preBumperBox":[ -16,16,-16,16 ]};
+	
+	a["number-empty"] ={"src":"picture/numberEmpty.png",legs:-100,"size":2,"preBumperBox":[ -16,16,-16,16 ]};
+	a["number-flag"] ={"src":"picture/numberFlag.png",legs:-100,"size":2,"preBumperBox":[ -16,16,-16,16 ]};
+	
+	
+	a["system-sign"] ={"src":"picture/sign.png","size":2,"preBumperBox":[ -16,16,-16,16 ]};
+	
+	a["system-target"] ={"src":"picture/target.png","size":0.5,"preBumperBox":[ -48,48,-48,48 ]};
+	
+	a["pushable-rock1x1"] ={"src":"picture/pushable-rock2x2.png","size":0.5,"preBumperBox":[ -31,31,-31,31 ]};
 	a["waypoint-grave"] ={"src":"picture/waypoint-grave.png","size":2,"preBumperBox":[ -16,16,-16,16 ]};
 	
 	a["loot-chestOn"] ={"src":"picture/loot-chestOn.png","size":2,"preBumperBox":[ -16,16,-16,16 ]};
@@ -253,16 +332,38 @@ Init.db.sprite = function(){
 	a["toggle-wallOff"] ={"src":"picture/toggle-wallOff.png","size":2,"preBumperBox":[ -16,16,-16,16 ]};
 	a["toggle-wallOn"] ={"src":"picture/toggle-wallOn.png","size":2,"preBumperBox":[ -16,16,-16,16 ]};
 	
-	a["tree-red"] ={"src":"picture/tree-red.png","size":2,"preBumperBox":[ -32,32,-40,40 ]};
+	a["tree-red"] ={"src":"picture/tree-red.png","size":2,'legs':40,"preBumperBox":[ -32,32,-40,40 ]};
 	a["tree-down"] ={"src":"picture/tree-down.png","size":2,"preBumperBox":[ -32,32,-40,40 ]};
 	
-	a["teleport-door"] ={"src":"picture/teleport-door.png","size":1,"preBumperBox":[ -16,16,-8,40 ]};
-	a["teleport-zone"] ={"src":"picture/teleport-zone.png","size":1.5,"side":[0,1,2,3],"preBumperBox":[ -16,16,-16,16 ]};
+	a["rock-bronze"] ={"src":"picture/rock-bronze.png",'legs':30,"size":1.5,"preBumperBox":[ -32,32,-32,32 ]};
+	a["rock-down"] ={"src":"picture/rock-down.png",'legs':30,"size":1.5,"preBumperBox":[ -32,32,-32,32 ]};
+	
+	a["hunt-down"] ={"src":"picture/hunt-down.png",'legs':35,"size":1.5,"preBumperBox":[ -16,16,-32,32 ]};
+	
+	a["hunt-squirrel"] = {
+		"src":"actor/squirrel.png",	
+		"size":2,
+		"link":"http://charas-project.net/resources_download.php?id=15580&file=resources%2FCharasets%2F1%2F10052_1098590341.png",
+		"side":[1,2,3,0],
+		"preHitBox":[ -12,12,-12,12],
+		"anim": {
+			"walk":{"startY":0,"frame":3,"sizeX":24,"sizeY":24,"dir":4,"spd":0.4,"walk":true,"next":"walk"},
+		}
+	}
+	
+	
+	a["teleport-door"] ={"src":"picture/teleport-door.png","size":2,"side":[0],"preBumperBox":[ -16,16,-40,8 ],"anim": {
+		"walk":{"startY":0,"frame":1,"sizeX":32,"sizeY":80,"dir":1,"spd":1,"next":"walk"},
+	}};	
+	a["teleport-cave"] ={"src":"picture/teleport-cave.png","size":1,"side":[0],"centerY":-32,"preBumperBox":[ -64,64,-50,52 ],"anim": {
+		"walk":{"startY":0,"frame":1,"sizeX":128,"sizeY":102,"dir":1,"spd":1,"next":"walk"},
+	}};
+	a["teleport-zone"] ={"src":"picture/teleport-zone.png","size":1.5,legs:-1000,"side":[0,1,2,3],"preBumperBox":[ -16,16,-16,16 ]};
 	a["teleport-underground"] ={"src":"picture/teleport-underground.png","size":2.5,"preBumperBox":[ -16,16,-16,16 ]};
 	a["teleport-well"] ={"src":"picture/teleport-well.png","size":2,"preBumperBox":[ -24,24,-24,24 ]};
 	
-	a["block-rock1x1"] ={"src":"picture/block-rock2x2.png","size":0.5,"preBumperBox":[ -32,32,-32,32 ]};
-	a["block-barrier"] ={"src":"picture/block-barrier.png","size":1,"preBumperBox":[ -64,64,-32,32 ]};
+	a["block-rock1x1"] ={"src":"picture/block-rock2x2.png","size":0.5,"preBumperBox":[ -31,31,-31,31]};
+	a["block-barrier"] ={"src":"picture/block-barrier.png","size":1,hpBar:-40,"preBumperBox":[ -64,64,-32,32 ]};
 	a["block-spike"] ={"src":"picture/block-spike1x1.png","size":2,"preBumperBox":[ -8,8,-16,16 ]};
 	a["block-spike1x1"] ={"src":"picture/block-spike1x1.png","size":2,"preBumperBox":[ -8,8,-16,16 ]};
 	
@@ -270,7 +371,7 @@ Init.db.sprite = function(){
 		"walk":{"startY":0,"frame":1,"sizeX":80,"sizeY":32,"dir":1,"spd":0,"walk":0,"next":"walk"},
 	}};
 	a["block-spike1x5"] ={"src":"picture/block-spike1x5.png","size":2,"preBumperBox":[ -8,72,-16,16 ],anim:{
-		"walk":{"startY":0,"frame":1,"sizeX":112,"sizeY":32,"dir":1,"spd":0,"walk":0,"next":"walk"},
+		"walk":{"startY":0,"frame":1,"sizeX":144,"sizeY":32,"dir":1,"spd":0,"walk":0,"next":"walk"},
 	}};
 	a["block-spike1x9"] ={"src":"picture/block-spike1x9.png","size":2,"preBumperBox":[ -8,104,-16,16 ],anim:{
 		"walk":{"startY":0,"frame":1,"sizeX":272,"sizeY":32,"dir":1,"spd":0,"walk":0,"next":"walk"},
@@ -285,14 +386,44 @@ Init.db.sprite = function(){
 	a["block-spike9x1"] ={"src":"picture/block-spike9x1.png","size":2,"preBumperBox":[ -8,8,-16,112 ],anim:{
 		"walk":{"startY":0,"frame":1,"sizeX":16,"sizeY":256,"dir":1,"spd":0,"walk":0,"next":"walk"},
 	}};
+		
+	a["block-bridgeH"] ={"src":"picture/block-bridgeH.png","size":2,"preBumperBox":[ -15,15,-15,15 ],legs:-50,anim:{
+		"walk":{"startY":0,"frame":1,"sizeX":32,"sizeY":32,"dir":1,"spd":0,"walk":0,"next":"walk"},
+	}};
 	
-	
+	a["block-bridgeV"] ={"src":"picture/block-bridgeV.png","size":2,"preBumperBox":[ -15,15,-15,15 ],legs:-50,anim:{
+		"walk":{"startY":0,"frame":1,"sizeX":32,"sizeY":32,"dir":1,"spd":0,"walk":0,"next":"walk"},
+	}};
 	
 	a["invisible"] ={"src":"picture/invisible.png","size":1,"preBumperBox":[ -16,16,-16,16 ]};
 	
 	a["loot-flowerOn"] = {"src":"picture/loot-flowerOn.png","size":4,"preBumperBox":[ -16,16,-16,16 ]};
 	a["loot-flowerOff"] = {"src":"picture/loot-flowerOff.png","size":4,"preBumperBox":[ -16,16,-16,16 ]};
 	
+	
+	
+	
+	//TOWER
+	a["tower-green"] ={"src":"picture/tower-green.png","size":1,"preBumperBox":[ -32,32,-32,32 ],"anim": {
+		"walk":{"startY":0,"frame":1,"sizeX":64,"sizeY":64,"dir":1,"spd":0,"next":"walk"},
+		"attack":{"startY":0,"frame":1,"sizeX":64,"sizeY":64,"dir":1,"spd":0,"next":"walk"},
+	}};
+	a["tower-yellow"] ={"src":"picture/tower-yellow.png","size":1,"preBumperBox":[ -32,32,-32,32 ],"anim": {
+		"walk":{"startY":0,"frame":1,"sizeX":64,"sizeY":64,"dir":1,"spd":0,"next":"walk"},
+		"attack":{"startY":0,"frame":1,"sizeX":64,"sizeY":64,"dir":1,"spd":0,"next":"walk"},
+	}};
+	a["tower-red"] ={"src":"picture/tower-red.png","size":1,"preBumperBox":[ -32,32,-32,32 ],"anim": {
+		"walk":{"startY":0,"frame":1,"sizeX":64,"sizeY":64,"dir":1,"spd":0,"next":"walk"},
+		"attack":{"startY":0,"frame":1,"sizeX":64,"sizeY":64,"dir":1,"spd":0,"next":"walk"},
+	}};
+	a["tower-blue"] ={"src":"picture/tower-blue.png","size":1,"preBumperBox":[ -32,32,-32,32 ],"anim": {
+		"walk":{"startY":0,"frame":1,"sizeX":64,"sizeY":64,"dir":1,"spd":0,"next":"walk"},
+		"attack":{"startY":0,"frame":1,"sizeX":64,"sizeY":64,"dir":1,"spd":0,"next":"walk"},
+	}};
+	a["tower-enemy"] ={"src":"picture/tower-enemy.png","size":2,"preBumperBox":[ -16,16,-16,16 ],"anim": {
+		"walk":{"startY":0,"frame":1,"sizeX":32,"sizeY":32,"dir":1,"spd":0,"next":"walk"},
+		"attack":{"startY":0,"frame":1,"sizeX":32,"sizeY":32,"dir":1,"spd":0,"next":"walk"},
+	}};
 	//}
     
     
@@ -302,7 +433,6 @@ Init.db.sprite = function(){
     }
         
 }
-
 
 Init.db.sprite.template = function(){
 	return {
@@ -319,13 +449,14 @@ Init.db.sprite.template = function(){
 		anim:{walk:Init.db.sprite.template.anim()},
 		defaultAnim:"walk",
 		alpha:1,
-
+		canvasRotate:0,
 	}
 }
 
 Init.db.sprite.template.anim = function(){
 	return {"startY":0,"frame":4,"sizeX":24,"sizeY":32,"dir":4,"spd":0.4,"walk":0,"next":"walk"};
 }
+
 Init.db.sprite.template.rpgvx = function(){
 	return {"size":2,"side":[2,0,1,3],"hpBar":-22,"legs":16,
 		"preHitBox":[ -16,16,-16,16 ],"preBumperBox":[ -16,16,-16,16 ],
@@ -335,28 +466,25 @@ Init.db.sprite.template.rpgvx = function(){
 		}};
 }
 
-
-Sprite = {};
+var Sprite = exports.Sprite = {};
 
 Sprite.creation = function(act,info){	
 	if(!info.anim) info.anim = Db.sprite[info.name || 'mace'].defaultAnim;
-	info.oldAnim = info.anim;
-	info.initAnim = info.anim;
-	
-	act.sprite = Tk.useTemplate(Sprite.template(),info);
+	info.oldAnim = info.anim;	
+	act.sprite = Tk.useTemplate(Sprite.template(),info,true);
 	Sprite.updateBumper(act);
 }
 
 Sprite.creation.model = function(sp){
-	if(sp.rgpvx)	sp = Tk.useTemplate(Init.db.sprite.template.rpgvx(),sp);	//cuz im lazy...'
+	if(sp.rgpvx)	sp = Tk.useTemplate(Init.db.sprite.template.rpgvx(),sp,true);	//cuz im lazy...'
 	
 	if(!sp.side) sp.side = [0];
 	if(!sp.preHitBox && sp.preBumperBox) sp.preHitBox = Tk.deepClone(sp.preBumperBox);
 	if(!sp.anim) sp.anim = {"walk":{"startY":0,"frame":1,"sizeX":sp.preHitBox[1]*2,"sizeY":sp.preHitBox[3]*2,"dir":sp.side.length,"spd":0,"walk":0,"next":"walk"}};
 	
-	sp = Tk.useTemplate(Init.db.sprite.template(),sp);
+	sp = Tk.useTemplate(Init.db.sprite.template(),sp,true);
 	
-	for(var j in sp.anim)	sp.anim[j] = Tk.useTemplate(Init.db.sprite.template.anim(),sp.anim[j]);
+	for(var j in sp.anim)	sp.anim[j] = Tk.useTemplate(Init.db.sprite.template.anim(),sp.anim[j],true);
 
 	//Prepare the bumperbox and hitbox of sprites       //hitbox: used for dmg collisions       //bumperbox: used for map collisions
 	sp.bumperBox = [];
@@ -373,7 +501,7 @@ Sprite.creation.model = function(sp){
     
     if(!SERVER){
 		sp.src = 'img/sprite/' + sp.src
-		sp.img = newImage(sp.src);
+		sp.img = Tk.newImage(sp.src);
 		Img.preloader.push(sp.src);
     }
 	Db.sprite[sp.id] = sp;
@@ -383,46 +511,36 @@ Sprite.creation.model = function(sp){
 Sprite.template = function(){
 	return {
     	name:'mace',
-		initAnim:"walk",	//info about anim sent to client when init. use when anim is constant (ex: switch off)
-    	anim:"walk",		//normally null. change for 1 frame when attack etc... changing initAnim will also change anim
+		anim:"walk",		//on SERVER: normally null. change for 1 frame when attack
     	oldAnim:"walk",		//client stuff
 		sizeMod : 1,
     	startX : 0,
     	timer : 0,
 		alpha: 1,
 		dead: 0,			//used to change alpha
-		regular:1,			//appearance depends on equip
+		normal:'mace',		//default appearance, contribution reward
+		mirror:0,			//if 90 < angle < 270, symetry
+		rotateCanvas:0,		
 	}
 }
-
 
 Sprite.change = function(act,info){
     if(!act || !act.sprite) return ERROR(5,'no sprite');
 
-	if(info.initAnim || info.anim){ 
-		act.sprite.initAnim = info.initAnim || act.sprite.initAnim;
-		act.sprite.anim = info.initAnim || info.anim;
+	if(info.anim){ 
+		act.sprite.anim = info.anim;
 		act.sprite.startX = 0;
 		act.sprite.timer = 0;
 	}
 	
 	if(info.name){
-		if(info.name === 'regular')  act.sprite.regular = 1;
-		else {
-			act.sprite.name = info.name;
-			act.sprite.regular = 0;
-		}
+		if(info.name === 'normal')  act.sprite.name = act.sprite.normal;
+		else act.sprite.name = info.name;
 	}
 	act.sprite.sizeMod = info.sizeMod || act.sprite.sizeMod;
-	
-	if(act.type === 'player' && act.sprite.regular && SERVER){
-		act.sprite.name = Sprite.getRegular(act);
-	}
-	
+		
 	if(info.sizeMod || info.name) Sprite.updateBumper(act);
-	
 }
-
 
 Sprite.getRegular = function(act){	//check equip
 	return 'mace';
@@ -430,7 +548,9 @@ Sprite.getRegular = function(act){	//check equip
 
 Sprite.updateBumper = function(act){		//server only
 	//Set the Sprite Bumper Box to fit the sizeMod
-	var dsp = Db.sprite[act.sprite.name];
+	if(!act.sprite.name) return ERROR(3,'no sprite name',act.name);
+	var dsp = Db.sprite[act.sprite.name.split(',')[0]];
+	if(!dsp) return ERROR(4,'no sprite',act.sprite.name);
 	if(!dsp.hitBox) return;	//Attack Dont
 	
 	act.hitBox = Tk.deepClone(dsp.hitBox);
@@ -448,23 +568,30 @@ Sprite.updateBumper = function(act){		//server only
 
 Sprite.update = function (act){	//client side only
 	if(!act.sprite) return;
-	var dsp = Db.sprite[act.sprite.name];
-	if(!dsp){ ERROR(2,"sprite dont exist",act.sprite.name); dsp = Db.sprite['mace'];}
+	var dsp = Db.sprite[Draw.actor.getSpriteName(act)];
+	if(!dsp){ ERROR(4,"sprite dont exist",act.sprite.name); dsp = Db.sprite['mace'];}
 	if(act.sprite.animOld !== act.sprite.anim){	//otherwise, animation can be cut if timer for walk is high 
 		act.sprite.animOld = act.sprite.anim;
 		Sprite.change(act,{'anim':act.sprite.anim});
 	}
 	var animFromDb = dsp.anim[act.sprite.anim];	
-	
+	if(!animFromDb) return ERROR(4,"sprite anim dont exist",act.sprite.name,act.sprite.anim);
 	var mod = 1;
 	if(animFromDb.walk){    //if walking, the speed of animation depends on movement speed
-		var spd =  Math.max(Math.abs(act.spdX),Math.abs(act.spdY));
+		var spd =  Math.max(Math.abs(act.spdX),Math.abs(act.spdY))/2;	//divide by 2, idk why but it works, probably because xy update only send 1/2 times
 		mod = Math.abs(spd/act.maxSpd) || 0;
+		
+		var angle = Math.round(act.angle/(360/4));
+		if(angle === 0 && act.angle >= 180-45 && act.angle <= 180+45) mod *= -1;
+		if(angle === 90 && act.angle >= 270-45 && act.angle <= 270+45) mod *= -1;
+		if(angle === 180 && (act.angle >= 360-45 || act.angle <= 0+45)) mod *= -1;
+		if(angle === 270 && act.angle >= 90-45 && act.angle <= 90+45) mod *= -1;
 	}
-	
 	act.sprite.timer += animFromDb.spd * mod;	
 	act.sprite.startX = Math.floor(act.sprite.timer);
-	
+	if(act.sprite.startX < 0){	//weird... cuz backwalk
+		act.sprite.startX = animFromDb.frame
+	}
 	if(act.sprite.startX > animFromDb.frame-1){
 		Sprite.change(act,{'anim':animFromDb.next});
 	}

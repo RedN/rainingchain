@@ -1,23 +1,28 @@
-Loop = function(){
-	try {
+//LICENSED CODE BY SAMUEL MAGNAN FOR RAININGCHAIN.COM, LICENSE INFORMATION AT GITHUB.COM/RAININGCHAIN/RAININGCHAIN
+eval(loadDependency(['List','Actor','Main','Bullet','Strike','Change','Sign','Map','Drop','Test','Server','Performance','Collision'],['Loop','Activelist','Group']));
+
+var LOOPLOGOUT = 10;
+var Loop = exports.Loop = function(){
+	try { if(Loop.error()) return;	} catch(err){ ERROR.err(3,err);  } //aka reset
+	
 	Loop.frame++;
-	Performance.loop();
-	Test.loop();
-   
-	Collision.loop();
-    Loop.bullet();
-	Loop.strike();
-	Loop.group();
-	Loop.actor();
-	Loop.drop();
-	Loop.map();
-	Loop.team();
+	try { Performance.loop(); } catch(err){ ERROR.err(3,err);  }
+	try { Test.loop(); } catch(err){ ERROR.err(3,err);  }
 	
-	Change.update();
-	Change.send();
+	try { Collision.loop(); } catch(err){ ERROR.err(3,err);  }
+    try { Loop.bullet(); } catch(err){ ERROR.err(3,err);  }
+	try { Loop.strike(); } catch(err){ ERROR.err(3,err);  } 
+	try { Loop.group(); } catch(err){ ERROR.err(3,err);  }
+	try { Loop.actor(); } catch(err){ ERROR.err(3,err);  }
+	try { Loop.main(); } catch(err){ ERROR.err(3,err);  }
+	try { Loop.drop(); } catch(err){ ERROR.err(3,err);  }
+	try { Loop.map(); } catch(err){ ERROR.err(3,err);  }
+	try { if(!Loop.interval(500)) Loop.party(); } catch(err){ ERROR.err(3,err);  }
 	
-	Loop.logOut();
-	} catch(err){ ERROR.err(err);  } //REAL PROBLEM... should change that so each loop has own try...
+	try { Change.update(); } catch(err){ ERROR.err(3,err);  }
+	try { Change.send(); } catch(err){ ERROR.err(3,err);  } //REAL PROBLEM...
+	try { if(Loop.interval(LOOPLOGOUT)) Loop.logOut(); } catch(err){ ERROR.err(3,err);  }
+	//REAL PROBLEM...
 }
 Loop.frame = 0; 
 
@@ -30,7 +35,11 @@ Loop.actor = function(){
 	    Actor.loop(List.actor[i]); 
 	}
 }
-
+Loop.main = function(){
+	for (var i in List.main){     
+		Main.loop(List.main[i]);
+	}
+}
 Loop.bullet = function (){
 	for(var i in List.bullet){
 		Bullet.loop(List.bullet[i]);
@@ -66,9 +75,9 @@ Loop.logOut = function(){
 	//Check inactivity of players 
 	for(var i in List.socket){
 		var socket = List.socket[i];
-		socket.timer += 40;		//gets reset when input
-		socket.globalTimer += 40;		
-		if((socket.timer >= Server.frequence.inactivity || socket.globalTimer >= Server.frequence.disconnect || socket.toRemove) && !socket.beingRemoved){
+		socket.timer += 40*LOOPLOGOUT;		//gets reset when input
+		socket.globalTimer += 40*LOOPLOGOUT;		
+		if(((!Server.isAdmin(i) && socket.timer >= Server.frequence.inactivity) || socket.globalTimer >= Server.frequence.disconnect || socket.toRemove) && !socket.beingRemoved){
 			Sign.off(i,'Disconnected due to inactivity.');
 		}
 		if(socket.removed)	Sign.off.remove(i);
@@ -81,18 +90,23 @@ Loop.logOut = function(){
 	}
 }
 
-Loop.team = function(){
-	if(!Loop.interval(50)) return;
-	List.team = {};
-	for(var i in List.main){
-		var team = List.actor[i].team;
-		List.team[team] = List.team[team] || {};
-		List.team[team][i] = i;
+Loop.party = function(){	
+	for(var i in List.party){
+		if(List.party[i].list.$empty()) delete List.party[i]
 	}
 
 }
 
-Activelist = {};	//Actor.loop.activeList is where the update happens
+Loop.error = function(){
+	ERROR.count = Math.max(ERROR.count - 0.1,0);
+	if(ERROR.count > 100){
+		Server.reset(ERROR.last);
+		ERROR.count = 0;
+		return true;
+	}
+}
+
+var Activelist = exports.Activelist = {};	//Actor.loop.activeList is where the update happens
 Activelist.test = function(act,obj){	
 	//Test used to know if obj should be in activeList of act.
 	//optimization: test only once for each pair. ex: act.activeListAlreadyTest
@@ -109,7 +123,7 @@ Activelist.test = function(act,obj){
 	
 	var rect = [act.x-800,act.x+800,act.y-600,act.y+600];
 	
-	return Collision.PtRect(obj,rect);
+	return Collision.ptRect(obj,rect);
 }
 
 Activelist.update = function(act){	//called by npc in loop
@@ -123,10 +137,9 @@ Activelist.update = function(act){	//called by npc in loop
 			
 			
 			if(act.type === 'player'){
-				var fadeout = List.all[j].type === 'bullet' ? 1/3 : 1/12;
+				var fadeout = List.all[j].type === 'bullet' ? 3 : 12;
 				var id = List.all[j].publicId || j;
 				if(act.removeList[id] === undefined) act.removeList[id] = fadeout;	//case manually doing it for chest, switch
-			
 			}
 		}
 	}
@@ -142,32 +155,55 @@ Activelist.update = function(act){	//called by npc in loop
 	}
 }
 
-
-
 Activelist.init = function(act){	//when Map.enter
-	var range = 'all';
-	if(act.type === 'bullet' || act.type === 'strike') range = 'actor';	//attack only need to check actor
-	
-	for(var j in List.map[act.map].list[range]){
-		if(Activelist.test(act,List.all[j])){
-			act.activeList[j] = 1;			//for player, if 1:need init, if 2:just update
-			List.all[j].activeList[act.id] = 1;	
+	if(act.type === 'bullet' || act.type === 'strike'){
+		for(var j in List.map[act.map].list.actor){	//attack only need to check actor
+			if(Activelist.test(act,List.all[j])){
+				act.activeList[j] = 1;				//needs to be there for collision detect
+				if(List.all[j].type === 'player') List.all[j].activeList[act.id] = 1;	//only players should be aware of bullets. otherwise, enemy becomes active
+				//for player, if 1:need init, if 2:just update
+			}
 		}
+		return;
 	}
+	if(act.type === 'player' || act.awareNpc){
+		for(var j in List.map[act.map].list.all){
+			if(Activelist.test(act,List.all[j])){
+				act.activeList[j] = 1;
+				List.all[j].activeList[act.id] = 1;	
+			}
+		}
+		return;
+		//bug: if both player tele same time, player is in both add and remove list. fixed in Receive.js	
+	}	
+	if(act.type === 'npc'){	
+		for(var j in List.map[act.map].list.actor){	//only check for player nearby
+			if(List.all[j].type === 'player' && Activelist.test(act,List.all[j])){
+				act.activeList[j] = 1;
+				List.all[j].activeList[act.id] = 1;	
+			}
+		}
+		return;
+	}	
 }
 
-
-
-Activelist.clear = function(b){	//called when living forever
-	if(!b){ ERROR(2,'actor dont exist'); return; }
+Activelist.clear = function(act){	//called when living forever
+	if(!act){ ERROR(2,'actor dont exist'); return; }
 	
-	for(var i in b.activeList){
+	for(var i in act.activeList){
 		var viewer = List.all[i];
-		if(!viewer){ ERROR(2,'actor dont exist'); continue; }
-		if(viewer.type === 'player') viewer.removeList[b.publicId || b.id] = b.type === 'bullet' ? 1/3 : 1/12;
-        delete viewer.activeList[b.id];
+		if(!viewer){ continue; }	//normal for npc because when npc dies, he cant tell the bullet cuz not in activeList
+		//add yourself in removeList of others
+		if(viewer.type === 'player') viewer.removeList[act.publicId || act.id] = act.type === 'bullet' ? 3 : 24;
+        
+		//add them to your list
+		if(act.type === 'player') act.removeList[viewer.publicId || act.id] = viewer.type === 'bullet' ? 3 : 24;
+		
+		delete viewer.activeList[act.id];
 	}
-	b.activeList = {};	
+
+	
+	act.activeList = {};	
 }
 
 Activelist.removeAny = function(act){
@@ -181,7 +217,11 @@ Activelist.removeAny = function(act){
 }
 
 
-Group = {};
+//activelist used: boss, target, mapMod, chat, button, send
+//bullet: Collision.bulletActor, 
+
+
+var Group = exports.Group = {};
 
 Group.loop = function(g){
 	var alldead = true;
@@ -192,50 +232,31 @@ Group.loop = function(g){
 		if(!e.dead){ alldead = false; }
 	}
 	
-	if(alldead && --g.respawn <= 0){ //aka all dead
-		Actor.creation.group(g.param[0],g.param[1]); 		
-		Group.remove(g);
+	if(alldead){	
+		if(g.respawn === false){ return Group.remove(g); } 
+	
+		if(--g.respawn <= 0){	//= false if no respawn like summon
+			Actor.creation.group(g.param[0],g.param[1]); 	
+			Group.remove(g);
+		}
+		
 	}	
 
 }
 
 Group.remove = function(g){
+	if(!g) return ERROR(3,'no group');
 	for(var i in g.list){
 		var e = List.actor[i];
 		if(!e){ ERROR(2,'no actor');  continue; }
 		Actor.remove(e);
 	}
 	delete List.group[g.id];
+	delete List.map[g.map].list.group[g.id];
 }
 
 
 
-
-
-
-Activelist.loop = function(){	//unsued
-	return;
-	if(!Loop.interval(25)) return;
-
-	for(var i in List.actor) List.actor[i].activeList = {};
-	
-	for(var i in List.main){
-		var p = List.actor[i];
-		
-		
-		
-	
-	
-	}
-
-
-
-
-
-
-}
-//activelist used: boss, target, mapMod, chat, button, send
-//bullet: Collision.BulletActor, 
 
 
 

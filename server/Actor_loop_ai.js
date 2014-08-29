@@ -1,3 +1,5 @@
+//LICENSED CODE BY SAMUEL MAGNAN FOR RAININGCHAIN.COM, LICENSE INFORMATION AT GITHUB.COM/RAININGCHAIN/RAININGCHAIN
+eval(loadDependency(['Db','List','Actor','Combat','Map','Collision','Tk']));
 var astar = require('astar');
 
 Actor.loop.input = function(act){
@@ -38,8 +40,8 @@ Actor.loop.input.move.sub = function(act){
 		var target = List.all[act.target.main];
 		if(!target) return;
 		act.angle = Tk.atan2(target.y-act.y,target.x-act.x);
-		act.mouseX = target.x-act.x+Cst.WIDTH2;
-		act.mouseY = target.y-act.y+Cst.HEIGHT2;
+		act.mouseX = target.x-act.x+CST.WIDTH2;
+		act.mouseY = target.y-act.y+CST.HEIGHT2;
 	} else if(diff  > 15){
 		act.angle = Tk.atan2(y,x);
 		for(var i in act.moveInput){	if(Math.random()< 0.05){ act.moveInput[i] = 1;} }	//little shake when stuck
@@ -159,8 +161,13 @@ Actor.loop.setTarget.sub = function(act){
 	if(!cible) return;
 	
 	var rayon = (Math.randomML()*act.moveRange.confort*2)+act.moveRange.ideal;
-	var angle = (act.angle+180) + Math.randomML()*act.target.maxAngleChange;
-	act.target.sub = {x:Tk.cos(angle)*rayon+cible.x,y:Tk.sin(angle)*rayon+cible.y};
+	
+	var count = 0;
+	do {
+		var angle = (act.angle+180) + Math.randomML()*act.target.maxAngleChange;
+		var tmp = {x:Tk.cos(angle)*rayon+cible.x,y:Tk.sin(angle)*rayon+cible.y};
+	} while(Collision.ptPtWallCollision(act.map,act,tmp) && ++count < 100)
+	act.target.sub = tmp;
 } 
 
 Actor.loop.setTarget.stuck = function(act){
@@ -182,33 +189,41 @@ Actor.getPath = function(act,target){	//using a*
 	start = map[start.y][start.x];
 	end = map[end.y][end.x];
 	
-	return astar.search.parse(astar.search(map,start,end));
+	return Actor.getPath.parseAStar(astar.search(map,start,end));
 }
+
+Actor.getPath.parseAStar = function(array){	//RAININGCHAIN
+	for(var i in array)	array[i] = {y:array[i].x*32,x:array[i].y*32};	//inverting x and y cuz xy represent position of the nodes in the grid
+	return array;
+}
+
 
 Actor.isStuck = function(act,maintar){
 	if(!maintar) return 0;
 	var path = Collision.getPath(Collision.getPos(act),Collision.getPos(maintar));
 	for(var i in path){
-		if(Collision.ActorMap(path[i],act.map,act)) return 1;	
+		if(Collision.actorMap(path[i],act.map,act)) return 1;	
 	}
 	return 0;
 }
 
-Actor.setCutscene = function(act, path, cb, boost){
+Actor.setCutscene = function(act, path, cb, boost,combat){
+	/*
+	this caused mastery sum to be NaN???
 	boost = boost || 8;
 	if(!Array.isArray(boost))
 		boost = [{'stat':'maxSpd','value':boost,'type':'min'},{'stat':'maxSpd','value':boost,'type':'max'}];
 	
 	Actor.permBoost(act,'cutscene',boost);
-	
+	*/
 	act.target.cutscene = {
 		active:1,
 		time:0,
 		path:Tk.deepClone(path),
 		oldCombat:act.combat || 0,
-		func:cb,		
+		func:cb,
 	}
-	act.combat = 0;
+	act.combat = combat || 0;
 }
 
 Actor.endCutscene = function(act){

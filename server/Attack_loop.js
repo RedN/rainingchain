@@ -1,3 +1,6 @@
+//LICENSED CODE BY SAMUEL MAGNAN FOR RAININGCHAIN.COM, LICENSE INFORMATION AT GITHUB.COM/RAININGCHAIN/RAININGCHAIN
+eval(loadDependency(['List','Attack','Tk','Bullet','Strike','Collision','Anim','Combat']));
+
 //Update Bullet
 Bullet.loop = function(b){
 	Bullet.loop.collision(b);
@@ -5,7 +8,7 @@ Bullet.loop = function(b){
 	
 	if(b.nova){Bullet.loop.nova(b);}
 	
-	if(++b.timer >= b.maxTimer || b.toRemove){
+	if(++b.timer >= b.maxTimer || b.toRemove || !List.all[b.parent]){
 		Bullet.remove(b);
 	}
 }
@@ -14,7 +17,7 @@ Bullet.loop = function(b){
 Bullet.loop.nova = function(b){
 	b.angle += b.nova.rotation;
 	if(b.timer % b.nova.period === 0){
-		Combat.attack(b,Tk.useTemplate(Attack.template(),b.nova.attack));
+		Combat.attack(b,Tk.useTemplate(Attack.template(),b.nova.attack,true));
 	}
 
 }
@@ -58,22 +61,29 @@ Bullet.loop.move.parabole = function(b){
 	if(b.timer >= b.parabole.timer){ b.toRemove = 1; };
 }
 		
-Bullet.loop.move.boomerang = function(b){	
-	var spdBoost = b.boomerang.spd*( Math.abs(b.timer - b.boomerang.comeBackTime/2)/b.boomerang.comeBackTime*2 )
-
-	if(b.timer < b.boomerang.comeBackTime/2){
-		b.x += b.spd * Tk.cos(b.moveAngle)*spdBoost;
-		b.y += b.spd * Tk.sin(b.moveAngle)*spdBoost;
+Bullet.loop.move.boomerang = function(b){
+	var timeSpdMod = Math.min(2,Math.abs(b.timer - b.boomerang.comeBackTime)/b.boomerang.comeBackTime);
+	var spd = b.spd * b.boomerang.spd * timeSpdMod;
+	
+	if(b.timer < b.boomerang.comeBackTime){
+		b.x += Tk.cos(b.moveAngle)*spd;
+		b.y += Tk.sin(b.moveAngle)*spd;
 	}
-
-	if(b.timer >= b.boomerang.comeBackTime/2){		//AKA come back
+	
+	if(b.timer >= b.boomerang.comeBackTime){		//AKA come back
 		if(!List.actor[b.parent]) return;
-		spdBoost *= b.boomerang.spdBack;
+	
+		spd *= b.boomerang.spdBack;
 		
-		if(b.boomerang.newId){
-			b.hitId = Math.random();
+		if(!b.boomerang.comingBack){
+			b.boomerang.comingBack = 1;
+			b.ghost = 1;
 			b.angle += 180;
-			b.boomerang.newId = 0;
+			
+			if(b.boomerang.newId){
+				b.boomerang.newId = 0;
+				b.hitId = Math.random();
+			}
 		}
 		
 		var diffX = b.x - List.actor[b.parent].x;
@@ -84,24 +94,19 @@ Bullet.loop.move.boomerang = function(b){
 		b.moveAngle = (Tk.atan2(diffY,diffX) + 360) % 360;
 		b.angle = b.moveAngle;
 		
-		b.x -= Tk.cos(b.moveAngle)*b.spd*spdBoost;
-		b.y -= Tk.sin(b.moveAngle)*b.spd*spdBoost;
+		b.x -= Tk.cos(b.moveAngle)*spd;
+		b.y -= Tk.sin(b.moveAngle)*spd;
 		
-		if(diff <= 10*spdBoost*b.boomerang.spdBack){ b.toRemove = 1;}
-		
+		if(diff <= spd*2) b.toRemove = 1;
 	}	
 }		
 		
 Bullet.loop.collision = function(b){
-	Collision.BulletActor(b); 
-	Collision.BulletMap(b);
+	Collision.bulletActor(b); 
+	Collision.bulletMap(b);
 }
 
-
-
 //Update Strike
-
-Strike = {};
 Strike.loop = function(s){
 	if(s.delay-- <= 0){
 		if(s.onStrike && s.onStrike.chance >= Math.random()){	Combat.attack.simple(s,s.onStrike.attack);}
@@ -123,14 +128,7 @@ Strike.loop = function(s){
 
 //Collision Strike / Life 
 Strike.loop.collision = function(atk){
-	Collision.StrikeActor(atk);
+	Collision.strikeActor(atk);
 }
 
-
-Strike.remove = function(strike){
-	Activelist.clear(strike);
-	
-	delete List.strike[strike.id];
-	delete List.all[strike.id]
-}
 

@@ -1,4 +1,8 @@
+//LICENSED CODE BY SAMUEL MAGNAN FOR RAININGCHAIN.COM, LICENSE INFORMATION AT GITHUB.COM/RAININGCHAIN/RAININGCHAIN
+eval(loadDependency(['Db','List','Tk','Combat','Input','Chat','Collision','Button','Command','Passive']));
+
 Draw.window = function(){ ctxrestore();
+	html.$abilityWinAttackDmg[0].style.visibility = 'hidden';	//set in Draw.window.ability.action.attack	//BAD
 	for(var i in main.windowList){
 		if(main.windowList[i]){
 			Draw.window[i]();
@@ -10,6 +14,7 @@ Draw.window = function(){ ctxrestore();
 Draw.window.main = function(title){ ctxrestore();	
 	var s = Draw.window.main.constant(); 	
 	ctx = List.ctx.win;
+	ctx.fillStyle = 'black';
 	
 	var hw = html.win;
 	var t = hw.title;
@@ -55,7 +60,7 @@ Draw.window.main = function(title){ ctxrestore();
 	//Help
 	titlename = titlename.toLowerCase()
 	if(titlename === 'offensive' || titlename === 'defensive') titlename = 'stat';
-	Help.icon('window_' + titlename,s.x + s.w -45,s.y);
+	if(!titlename.have('Quest')) Help.icon('window_' + titlename,s.x + s.w -45,s.y);	//TOFIX BAD quest break
 		
 	//Close
 	Draw.icon('system.close',s.x + s.w -20,s.y,20);	
@@ -111,8 +116,9 @@ Draw.window.bank = function (){ ctxrestore();
 		});	
 	
 	//Draw Items
-	for (var i = 0 ; i < main.bankList.length ; i++){
-		if(!main.bankList[i].length) continue;
+	for (var i = 0 ; i < main.bankList.data.length ; i++){
+		var d = main.bankList.data[i];
+		if(!d.length) continue;
 		var amountX = Math.floor(s.w/40)-1;
 		var numX = s.x + 40 + 40*(i%amountX);
 		var numY = s.y + 70 + 40*Math.floor(i/amountX);
@@ -123,15 +129,194 @@ Draw.window.bank = function (){ ctxrestore();
 			"shiftLeft":{"func":Command.send,"param":['win,bank,click,shiftLeft,' + i+ ',' + main.pref.bankTransferAmount]},
 			"shiftRight":{"func":Command.send,"param":['win,bank,click,shiftLeft,' + i + ',' + 999999999]},
 			"right":{"func":Command.send,"param":['win,bank,click,right,' + i]},
-			'text':'Withdraw ' + main.bankList[i][2]
+			'text':'Withdraw ' + d[2]
 		});	
-		Draw.item(main.bankList[i],numX,numY);
+		Draw.item(d,numX,numY);
 	}
 	
 	
 }
 
-//{Stat
+Draw.window.trade = function (){ ctxrestore();
+	html.tradeWin.div.style.visibility = 'visible';
+	var s = Draw.window.main('Trade');	
+	ctx = List.ctx.win;
+
+	/*
+	//change amount:
+		
+	var numX = s.mx+200;
+	var numY = s.y+15;
+	
+	var prefAmount = main.pref.bankTransferAmount;
+	var string = 'X-Amount: ' + prefAmount;
+	
+	ctx.setFont(25);
+	ctx.fillText(string,numX,numY);
+	*/
+	
+	//##################################
+	
+	var myList = main.tradeList;
+	var hisList = main.tradeInfo;
+	
+	if(!myList.data) return ERROR(3,'no myList');
+	if(!hisList.data) return ERROR(3,'no hisList');
+	
+	var s = Draw.window.main('Trading ' + main.windowList.trade);	//bad	
+	ctx = List.ctx.win;
+		
+	//Draw Own Items
+	for (var i = 0 ; i < myList.data.length ; i++){
+		if(!myList.data[i].length) continue;
+		var numX = s.x + 160 + 65*(i%4);
+		var numY = s.y + 70 + 65*Math.floor(i/4);
+		
+		Button.creation(0,{
+			"rect":[numX,numX+56,numY,numY+56],
+			"left":{"func":Command.send,"param":['win,trade,click,left,' + i]},
+			"right":{"func":Command.send,"param":['win,trade,click,right,' + i]},
+			'text':'Withdraw ' + myList.data[i][2]
+		});	
+		
+		
+		Draw.item(myList.data[i],numX,numY,56);
+		
+	}	
+	
+	//Draw Other Items
+	for (var i = 0 ; i < hisList.data.length ; i++){
+		if(!hisList.data[i].length) continue;
+		var numX = s.x + 570 + 65*(i%4);
+		var numY = s.y +  70 + 65*Math.floor(i/4);
+			
+		Button.creation(0,{
+			"rect":[numX,numX+56,numY,numY+56],
+			'text':hisList.data[i][2]
+		});	
+		
+		Draw.item(hisList.data[i],numX,numY,56);
+	}	
+	
+	//Accept
+	html.tradeWin.btnSelf.style.top = (500 + -25) + 'px';
+	html.tradeWin.btnSelf.style.left = (100 + 100) + 'px';
+	Draw.setInnerHTML(html.tradeWin.btnSelf,myList.acceptTrade ? 'Refuse Trade' : 'Accept Trade');
+	
+	html.tradeWin.btnOther.style.top = (500 + -25) + 'px';
+	html.tradeWin.btnOther.style.left = (100 + 500) + 'px';
+	Draw.setInnerHTML(html.tradeWin.btnOther,hisList.acceptTrade ? 'Other player is accepting trade' : 'Waiting for other player...');
+	
+	
+	
+	/*
+	var numX = s.x+160; 
+	var numY = s.h-50; 
+	var wi = 250; 
+	var he = 35;
+	
+	//My button
+	Button.creation(0,{
+		"rect":[numX,numX+wi,numY,numY+he],
+		'text':myList.acceptTrade ? 'Click to Refuse Trade' : 'Click to Accept Trade',
+		"left":{"func":Command.send,"param":['win,trade,toggle']},
+	});
+	
+	
+	ctx.textAlign = "center";
+	ctx.setFont(25);
+	ctx.fillStyle = "yellow";
+	ctx.strokeStyle = 'yellow';
+	
+	ctx.fillText('Trade State ',numX+wi/2,numY+3);
+	ctx.strokeRect(numX,numY,wi,he);
+		
+	Draw.icon(hisList.acceptTrade ? 'system.heart' : 'system.close',numX+7,numY+7,20);
+
+	var numX = s.x+570; var numY = s.h-50; var wi = 250; var he = 35;
+	ctx.fillText('Trade State ',numX+wi/2,numY+3);
+	ctx.strokeRect(numX,numY,wi,he);
+	
+	
+	Draw.icon(hisList.acceptTrade ? 'system.heart' : 'system.close',numX+7,numY+7,20);
+	*/
+	
+}
+
+Draw.window.binding = function (){ ctxrestore();
+	var s = Draw.window.main('Key Bindings');	
+	ctx = List.ctx.win;
+	
+	var hq = html.bindingWin;
+	hq.div.style.visibility = 'visible';
+	hq.div.style.left = s.mx + 'px'; 
+	hq.div.style.top = s.my + 'px'; 
+	
+	//Table
+	hq.table.style.left = 50 + 'px'; 
+	hq.table.style.top = 0 + 'px'; 
+	
+	var str = '<table>';
+	
+	str += '<tr>';
+	str += '<td>Action</td>'
+	str += '<td>Key Id</td>'
+	str += '<td>Key Name</td>'
+	str += '</tr>';
+	
+	var list = [
+		{'id':'move','name':'Move','list':['Right','Down','Left','Up']},
+		{'id':'ability','name':'Ability','list':[0,1,2,3,4,5]}
+	];
+	
+	for(var j in list){
+		var info = list[j];
+		for(var i = 0; i < Input.key[info.id].length; i++){
+			var keycode = Input.key[info.id][i][0].toString();
+			var name = keycode.keyCodeToName();	//
+			if(name != keycode.keyCodeToName(true)) name += ' - (' + keycode.keyCodeToName(true) + ')';	// != important 
+			
+			if(Input.binding[info.id] === i){
+				keycode = '***';
+				name = '***';
+			}
+			
+			var str2 = 'Change Key Binding for ' + info.name + ' ' + info.list[i];
+			
+			str += '<tr ' +
+					'onclick="Input.binding.' + info.id + ' = ' + i + ';" ' + 
+					'title="' + str2 + '"' +
+					'>'
+			str += '<td>' + info.name + ' ' + info.list[i] + '</td>'
+			str += '<td>' + keycode + '</td>'
+			str += '<td>' + name + '</td>'
+			str += '</tr>';
+		}
+	}
+	str += '</table>';
+	
+	Draw.setInnerHTML(hq.table,str);
+	
+	//Template
+	var array = ['QWERTY','AZERTY','NUMBER'];
+	var str = '<font size="6">Default Bindings</font>';
+	for(var i = 0; i < array.length; i++){
+		str  += '<div ' +
+				'onclick="Input.init(' + i + ');" ' +
+				'style="width=auto"' + 
+				'title="Change for ' + array[i] + '"' + 
+				'>' +
+				'<font size="4"> -' + array[i] + '</font>' +
+				'</div>';	
+	}
+	Draw.setInnerHTML(hq.template,str);
+	
+	hq.template.style.left = 600 + 'px'; 
+	hq.template.style.top = 25 + 'px'; 
+	
+}
+
+//{ Stat
 Draw.window.offensive = function (){ ctxrestore();
 	var hover = Draw.window.stat('offensive');	
 	if(hover !== undefined){ Draw.window.stat.hover(hover,'offensive'); }
@@ -153,7 +338,7 @@ Draw.window.defensive = function (){ ctxrestore();
 	for(var i in def.ratio){
 		var numX = s.zx + (count%3)*125-100;
 		var numY = s.zy + Math.floor(count/3)*fontSize*1.1;
-		ctx.fillStyle = Cst.element.toColor[i];
+		ctx.fillStyle = CST.element.toColor[i];
 		ctx.roundRect(numX-5,numY,125,fontSize*1.1);
 		ctx.fillStyle = 'black';
 		ctx.fillText(i.capitalize() + ': ' + Tk.round(def.ratio[i]*def.main),numX,numY);		
@@ -168,43 +353,42 @@ Draw.window.defensive = function (){ ctxrestore();
 Draw.window.stat = function(type){ ctxrestore();
 	var obj = {'offensive':0,'defensive':0,'ability':0,'passive':0}; obj[type] = 1;
 	var s = Draw.window.main(obj);	
-	ctx = List.ctx.win;
-	if(SERVER){ return; }
-	
-	ctx.setFont(22);
 	
 	//Content
+	var array = [];
 	for(var i = 0 ; i < Draw.window.stat.list[type].length ; i++){
-		
 		var info = Draw.window.stat.list[type][i];  
-		
-		var numX = s.x + 50 + Math.floor(i/15) * 500;
-		var numY = s.y + 60 + 30* (i%15);
-		
-		var string = info.string()
-		
-		ctx.fillText(info.name + ':',numX,numY);
-		ctx.fillText(string,numX+125,numY);
-		Draw.icon(info.icon,numX-30,numY,20)
-		
-		if(Collision.PtRect(Collision.getMouse(),[numX,numX+500,numY,numY+30])){
+		array.push([
+			'<span id="Drawwindowstatlist' + type + i + '"></span>',	//then add icon to that...
+			info.name + ':',
+			info.string(),
+		]);
+	}
+	var hqc = html.statWin.left;
+	hqc.style.visibility = 'visible';
+	var str = '<table class="CSSTableGenerator">' + Tk.arrayToTable(array,0,0) + '</table>';
+	Draw.setInnerHTML(hqc,str);
+	//Draw.icon(info.icon,numX-30,numY,20)
+	/*
+	if(Collision.ptRect(Collision.getMouse(),[numX,numX+500,numY,numY+30])){
 			var hover = i;
 		}
-	}
-	
+	*/
+	/*
 	//Bottom, custom effects	//TOFIX add title
 	var numX = s.x + 10;
 	var numY = s.y + 60 + 30* 15;
 	var str = 'Custom Effects: ';
-	for(var i in player.customBoost){
-		if(player.customBoost[i])
-			str += Db.customBoost[i].name + ', ';
+	for(var i in player.statCustom){
+		if(player.statCustom[i] && Db.statCustom[i].displayInWindow)
+			str += Db.statCustom[i].name + ', ';
 	}
 	str = str.slice(0,-2);
 	ctx.font = '30px Kelly Slab';
 	ctx.fillText(str,numX,numY);
 	
 	return hover;
+	*/
 }
 
 Draw.window.stat.list = {
@@ -216,13 +400,13 @@ Draw.window.stat.list = {
 	{'name':'Cold','icon':'element.cold','stat':[{'name':'x','stat':'dmg-cold-x'},{'name':'*','stat':'dmg-cold-*'},{'name':'^','stat':'dmg-cold-^'},{'name':'+','stat':'dmg-cold-+'}],'string':(function(){ return Draw.window.stat.list.element('dmg','cold')})},
 	{'name':'Lightning','icon':'element.lightning','stat':[{'name':'x','stat':'dmg-lightning-x'},{'name':'*','stat':'dmg-lightning-*'},{'name':'^','stat':'dmg-lightning-^'},{'name':'+','stat':'dmg-lightning-+'}],'string':(function(){ return Draw.window.stat.list.element('dmg','lightning')})},
 	
-	{'name':'Weapon','icon':'element.melee','stat':[{'name':'Mace','stat':'weapon-mace'},{'name':'Spear','stat':'weapon-spear'},{'name':'Sword','stat':'weapon-sword'}],'string':(function(){ return 'Mace: ' + Tk.round(player.boost.list['weapon-mace'].base,2,1) + ', Spear: ' + Tk.round(player.boost.list['weapon-spear'].base,2,1) + ', Sword: ' + Tk.round(player.boost.list['weapon-sword'].base,2,1)						})},
-	{'name':'Weapon','icon':'element.range','stat':[{'name':'Bow','stat':'weapon-bow'},{'name':'Boomerang','stat':'weapon-boomerang'},{'name':'Crossbow','stat':'weapon-crossbow'}],'string':(function(){ return 'Bow: ' + Tk.round(player.boost.list['weapon-bow'].base,2,1) + ', Boom.: ' + Tk.round(player.boost.list['weapon-boomerang'].base,2,1) + ', CBow: ' + Tk.round(player.boost.list['weapon-crossbow'].base,2,1)						})},
-	{'name':'Weapon','icon':'element.magic','stat':[{'name':'Wand','stat':'weapon-wand'},{'name':'Staff','stat':'weapon-staff'},{'name':'Orb','stat':'weapon-orb'}],'string':(function(){ return 'Wand: ' + Tk.round(player.boost.list['weapon-wand'].base,2,1) + ', Staff: ' + Tk.round(player.boost.list['weapon-staff'].base,2,1) + ', Orb: ' + Tk.round(player.boost.list['weapon-orb'].base,2,1)						})},
+	{'name':'Weapon','icon':'element.melee2','stat':[{'name':'Mace','stat':'weapon-mace'},{'name':'Spear','stat':'weapon-spear'},{'name':'Sword','stat':'weapon-sword'}],'string':(function(){ return 'Mace: ' + Tk.round(player.boost.list['weapon-mace'].base,2,1) + ', Spear: ' + Tk.round(player.boost.list['weapon-spear'].base,2,1) + ', Sword: ' + Tk.round(player.boost.list['weapon-sword'].base,2,1)						})},
+	{'name':'Weapon','icon':'element.range2','stat':[{'name':'Bow','stat':'weapon-bow'},{'name':'Boomerang','stat':'weapon-boomerang'},{'name':'Crossbow','stat':'weapon-crossbow'}],'string':(function(){ return 'Bow: ' + Tk.round(player.boost.list['weapon-bow'].base,2,1) + ', Boom.: ' + Tk.round(player.boost.list['weapon-boomerang'].base,2,1) + ', CBow: ' + Tk.round(player.boost.list['weapon-crossbow'].base,2,1)						})},
+	{'name':'Weapon','icon':'element.magic2','stat':[{'name':'Wand','stat':'weapon-wand'},{'name':'Staff','stat':'weapon-staff'},{'name':'Orb','stat':'weapon-orb'}],'string':(function(){ return 'Wand: ' + Tk.round(player.boost.list['weapon-wand'].base,2,1) + ', Staff: ' + Tk.round(player.boost.list['weapon-staff'].base,2,1) + ', Orb: ' + Tk.round(player.boost.list['weapon-orb'].base,2,1)						})},
 	
 	{'name':'Burn','icon':'status.burn','stat':[{'name':'Chance','stat':'burn-chance'},{'name':'Magn','stat':'burn-magn'},{'name':'Time','stat':'burn-time'}],'string':(function(){ return Draw.window.stat.list.status('off','burn')})},
 	{'name':'Chill','icon':'status.chill','stat':[{'name':'Chance','stat':'chill-chance'},{'name':'Magn','stat':'chill-magn'},{'name':'Time','stat':'chill-time'}],'string':(function(){ return Draw.window.stat.list.status('off','chill')})},
-	{'name':'Confuse','icon':'status.stun','stat':[{'name':'Chance','stat':'stun-chance'},{'name':'Magn','stat':'stun-magn'},{'name':'Time','stat':'stun-time'}],'string':(function(){ return Draw.window.stat.list.status('off','stun')})},
+	{'name':'Stun','icon':'status.stun','stat':[{'name':'Chance','stat':'stun-chance'},{'name':'Magn','stat':'stun-magn'},{'name':'Time','stat':'stun-time'}],'string':(function(){ return Draw.window.stat.list.status('off','stun')})},
 	{'name':'Knockback','icon':'status.knock','stat':[{'name':'Chance','stat':'knock-chance'},{'name':'Magn','stat':'knock-magn'},{'name':'Time','stat':'knock-time'}],'string':(function(){ return Draw.window.stat.list.status('off','knock')})},
 	{'name':'Bleed','icon':'status.bleed','stat':[{'name':'Chance','stat':'bleed-chance'},{'name':'Magn','stat':'bleed-magn'},{'name':'Time','stat':'bleed-time'}],'string':(function(){ return Draw.window.stat.list.status('off','bleed')})},
 	{'name':'Drain','icon':'status.drain','stat':[{'name':'Chance','stat':'drain-chance'},{'name':'Magn','stat':'drain-magn'},{'name':'Time','stat':'drain-time'}],'string':(function(){ return Draw.window.stat.list.status('off','drain')})},
@@ -235,7 +419,7 @@ Draw.window.stat.list = {
 	{'name':'Strike','icon':'offensive.bullet','stat':[{'name':'AoE','stat':'bullet-amount'},{'name':'Range','stat':'aim'},{'name':'Max','stat':'aim'}],'string':(function(){ return 'AoE: ' + Tk.round(player.boost.list['strike-size'].base,2,1) + ', Range: ' + Tk.round(player.boost.list['strike-range'].base,2,1) + ', Max: ' + Tk.round(player.boost.list['strike-maxHit'].base,2,1); })},
 	{'name':'Summon','icon':'summon.wolf','stat':[{'name':'Amount','stat':'summon-amount'},{'name':'Time','stat':'summon-time'},{'name':'Attack','stat':'summon-atk'},{'name':'Defence','stat':'summon-def'}],'string':(function(){ return '#:' + Tk.round(player.boost.list['summon-amount'].base,2,1) + ', Time:' + Tk.round(player.boost.list['summon-time'].base,2,1) + ', A:' + Tk.round(player.boost.list['summon-atk'].base,2,1)+ ', D:' + Tk.round(player.boost.list['summon-def'].base,2,1); })},
 
-	{'name':'Atk Spd','icon':'offensive.atkSpd','stat':[{'name':'Atk Spd','stat':'atkSpd-main'}],'string':(function(){ return Tk.round(player.boost.list['atkSpd-main'].base,2,1); })},
+	{'name':'Atk Spd','icon':'offensive.atkSpd','stat':[{'name':'Atk Spd','stat':'atkSpd'}],'string':(function(){ return Tk.round(player.boost.list['atkSpd'].base,2,1); })},
 	
 ],
 
@@ -257,13 +441,6 @@ Draw.window.stat.list = {
 	
 	
 ],
-/*
-{'name':'Speed','icon':'defensive.speed','stat':[{'name':'Max','stat':'maxSpd'},{'name':'Acc.','stat':'acc'},{'name':'Fric.','stat':'friction'}],'string':(function(){ return 'Max: ' + Tk.round(player.boost.list['maxSpd'].base,2,1) + ', Acc.: ' + Tk.round(player.boost.list['acc'].base,2,1)+ ', Fric.: ' + Tk.round(player.boost.list['friction'].base,2,1)})},
-{'name':'Atk Spd','icon':'offensive.atkSpd','stat':[{'name':'Main','stat':'atkSpd-main'},{'name':'Support','stat':'atkSpd-support'}],'string':(function(){ return 'Main:' + Tk.round(player.boost.list['atkSpd-main'].base,2,1) + ', Support:' + Tk.round(player.boost.list['atkSpd-support'].base,2,1); })},
-{'name':'Fury','icon':'resource.fury','stat':[{'name':'Max','stat':'fury-max'},{'name':'Regen','stat':'fury-regen'}],'string':(function(){ return 'Max: ' + Tk.round(player.boost.list['fury-max'].base,0,1) + ', Regen: ' + Tk.round(player.boost.list['fury-regen'].base,2,1)})},
-{'name':'Dodge','icon':'resource.dodge','stat':[{'name':'Max','stat':'dodge-max'},{'name':'Regen','stat':'dodge-regen'}],'string':(function(){ return 'Max: ' + Tk.round(player.boost.list['dodge-max'].base,0,1) + ', Regen: ' + Tk.round(player.boost.list['dodge-regen'].base,2,1)})},
-{'name':'Heal','icon':'resource.heal','stat':[{'name':'Max','stat':'heal-max'},{'name':'Regen','stat':'heal-regen'}],'string':(function(){ return 'Max: ' + Tk.round(player.boost.list['heal-max'].base,0,1) + ', Regen: ' + Tk.round(player.boost.list['heal-regen'].base,2,1)})},
-*/
 
 };
 
@@ -339,7 +516,6 @@ Draw.window.stat.hover = function(hover,type){ ctxrestore();
 Draw.window.ability = function (){ ctxrestore();
 	var s = Draw.window.main({'offensive':0,'defensive':0,'ability':1,'passive':0});
 	ctx = List.ctx.win;
-	
 	var ha = html.abilityWin;
 	ha.div.style.visibility = 'visible';
 	ha.div.style.left = s.mx + 'px'; 
@@ -358,7 +534,6 @@ Draw.window.ability = function (){ ctxrestore();
 	Draw.window.ability.leftSide();
 	Draw.window.ability.abilityList(diffX);
 	Draw.window.ability.generalInfo(diffX,diffY);
-	Draw.window.ability.upgrade(diffX+500,diffY+35);
 	
 
 	if(Draw.old.abilityShowed.action){
@@ -396,7 +571,7 @@ Draw.window.ability.leftSide = function(){ ctxrestore();
 		
 		
 		var button = ('' + Input.key.ability[i][0]).keyCodeToName();
-		button = button.keyFullName() || button;
+		button = button.keyCodeToName(true) || button;
 		
 		if(button === 'l') button = 'Left Click'; 
 		if(button === 'r') button = 'Right Click';
@@ -416,10 +591,11 @@ Draw.window.ability.leftSide = function(){ ctxrestore();
 	
 	Button.creation(0,{
 		"rect":[s.x + 12, s.x + 12+90, s.y + 100-65+250, s.y + 100-65+250+60 ],
-		"left":{"func":Command.send,"param":['$win,open,binding']},
+		"left":{"func":function(){ Command.send('win,open,binding');},"param":[]},
 		'text':"Open Key Bindings Window"
 		});	
 }
+
 Draw.window.ability.abilityList = function(diffX){ ctxrestore();
 	var s = Draw.window.main.constant();
 	s.mx += diffX; 
@@ -435,10 +611,13 @@ Draw.window.ability.abilityList = function(diffX){ ctxrestore();
 	ha.subtitle.style.width = 400 + 'px';
 	ha.subtitle.style.height = charY*1.2 + 'px';
 	
-	var obj = {'attack':[],'blessing':[],'curse':[],'dodge':[],'heal':[],'summon':[]};
+	var obj = {'all':[],'attack':[],'boost':[],'dodge':[],'heal':[],'summon':[]};
 	for(var i in player.abilityList){
 		var ability = Db.query('ability',i);
-		if(ability) obj[ability.type].push(ability);
+		if(ability){
+			obj[ability.type].push(ability);
+			obj.all.push(ability);
+		}
 	}	
 	
 	var str = 'List of Abilities: ';
@@ -451,7 +630,7 @@ Draw.window.ability.abilityList = function(diffX){ ctxrestore();
 		'style="text-decoration:' + (j === ats ? 'underline' : 'none') + '" ' +
 		'onclick="Draw.old.abilityTypeShowed = \'' + j +  '\';' + '" ' + 
 		'title="' + title + '"' +
-		'>' + j.capitalize().slice(0,1) + 
+		'>' + j.capitalize() + 
 		'</span>';
 		str += ' - '
 	}	
@@ -462,14 +641,14 @@ Draw.window.ability.abilityList = function(diffX){ ctxrestore();
 		
 	//Drawing
 	for(var j in obj[ats]){
-		var numX = s.zx + diffX + +j%15 * 25;
-		var numY = s.zy + charY*1.2 + Math.floor(+j/15) * 25;
+		var numX = s.zx + diffX + +j%20 * 35;
+		var numY = s.zy + charY*1.2 + Math.floor(+j/20) * 35;
 				
 		var ability = obj[ats][j];	
-		Draw.icon(ability.icon,numX,numY,20);
+		Draw.icon(ability.icon,numX,numY,30);
 		
 		Button.creation(0,{
-			"rect":[numX, numX + 20, numY, numY + 20 ],
+			"rect":[numX, numX + 30, numY, numY + 30 ],
 			"left":{
 				"func":(function(id){ Draw.old.abilityShowed = Db.query('ability',id); }),
 				"param":[ability.id]
@@ -480,7 +659,6 @@ Draw.window.ability.abilityList = function(diffX){ ctxrestore();
 	}
 }
 	
-
 Draw.window.ability.generalInfo = function(diffX,diffY){ ctxrestore();
 	var s = Draw.window.main.constant(); 
 	s.x += diffX;
@@ -507,132 +685,28 @@ Draw.window.ability.generalInfo = function(diffX,diffY){ ctxrestore();
 	
 	var	str = 
 	'<span style="font:30px Kelly Slab">' + ab.name + '</span>' + '<br>' +
-	' - Cast/S: ' + Tk.round(25/ab.period.own,2) + '<br>' +
+	' - Time/Cast: ' + Tk.round(ab.periodOwn/25,2) + ' Sec<br>' +
 	' - Cost: ' ;
-	if(ab.cost.mana){ str += Tk.round(ab.cost.mana,1) + ' Mana'; }
-	if(ab.cost.hp){ str += ' + ' + Tk.round(ab.cost.hp,1) + ' Life'; }
-	if(!ab.cost.mana && !ab.cost.hp) str += 'None';
+	if(ab.costMana && !ab.costHp) str += Tk.round(ab.costMana,1) + ' Mana'; 
+	if(ab.costMana && ab.costHp) str += Tk.round(ab.costMana,1) + ' Mana, ' + Tk.round(ab.costHp,1) + ' Life';
+	if(!ab.costMana && ab.costHp) str += Tk.round(ab.costHp,1) + ' Life';
+	if(!ab.costMana && !ab.costHp) str += 'None';
 	
 	//Orb
-	var orb = Db.abilityOrb[ab.orb.upgrade.bonus];
-	var str2 = '<br>' +
-	' - Orbs: ' + ab.orb.upgrade.amount + ' | ' + 'Effect: ';
-	
-	str2 += '<span ' + 
-	'title="' + orb.info + '"' + 
-	'>' + orb.name + 
-	'</span>';
-	
-	str2 += ' | ' + '<span ' + 
-	'onclick="Draw.window.ability.generalInfo.upgrade();' + '" ' + 
-	'oncontextmenu="Draw.window.ability.generalInfo.upgrade();' + '" ' + 
-	'title="Click to upgrade this ability (requires Orbs of Upgrade)"' + 
-	'>' + '[UPGRADE]' + 
-	'</span>';
-	
 	if(!main.hideHUD.advancedAbility) str += str2;
 	
-	/*	no longer used
-	str += '<br><table>';
-	var array = Object.keys(ab.modList);
-	for(var i = 0 ; i < 6 ;i++){ array[i] = array[i] || null; }
-	for(var i in array){
-		var j = i % 2;
-		
-		if(j == 0){str += '<tr>';}
-		str += '<td>';
-		
-		if(array[i]){
-			var plus = '<span ' + 
-			'onclick="Draw.window.ability.generalInfo.upMod(\'' + array[i] + '\');' + '" ' + 
-			'title="Upgrade this Ability Modifier"' + 
-			'>' + '+ ' + 
-			'</span>';
-			
-			str += '<span ' +
-			'title="' + Db.abilityMod[array[i]].info + '">' + plus + Db.abilityMod[array[i]].name + '</span>';
-		} else { str += '+ ________________'}
-		
-		str += '</td>';
-		if(j == 1){str += '</tr>';}
-	}
-	str += '</table>';
-	*/
 	
 	Draw.setInnerHTML(gi,str);
 }
 
-Draw.window.ability.upgrade = function(diffX,diffY){ //not longer used
-	return;
-	var s = Draw.window.main.constant(); 
-	s.x += diffX;
-	s.y += diffY;
-	s.zx += diffX;
-	s.zy += diffY;
-	
-	var hu = html.abilityWin.upgrade;
-	hu.style.left = diffX + 'px'; 
-	hu.style.top = diffY + 'px'; 
-	hu.style.width = '400px';
-	hu.style.height = '400px';
-	hu.style.font = 30 + 'px Kelly Slab';
-	
-	var str = 
-	'<span ' + 
-	'onclick="Draw.window.ability.generalInfo.mod();' + '" ' + 
-	'title="Add Ability Modifier"' + 
-	'>' + 'Add Mod' + 
-	'</span>';
-	str +=  '<br>';
-	str +=
-	'<span ' + 
-	'onclick="Draw.window.ability.generalInfo.upgrade();' + '" ' + 
-	'title="Upgrade using Ability Upgrades"' + 
-	'>' + 'Upgrade' + 
-	'</span>';
-	
-	Draw.setInnerHTML(hu,str);
-}
-
-Draw.window.ability.generalInfo.mod = function(){
-	if(html.chat.input.value.have('win,ability,addMod,')){
-		Command.send(html.chat.input.value + Draw.old.abilityShowed.id);
-		html.chat.input.value = '';
-	} else {
-		Chat.add('Select an ability mod in your inventory first.');
-	}
-}
-
-Draw.window.ability.generalInfo.upgrade = function(){
-	var name = Draw.old.abilityShowed.id;
-	var option = {'name':'Upgrade','count':1,'option':[
-		{'name':'Use 1 Orb','func':Command.send,'param':['win,ability,upgrade,' + name + ',1']},
-		{'name':'Use 10 Orbs','func':Command.send,'param':['win,ability,upgrade,' + name + ',10']},
-		{'name':'Use 100 Orbs','func':Command.send,'param':['win,ability,upgrade,' + name + ',100']},
-		{'name':'Use X Orbs','func':Input.add,'param':['win,ability,upgrade,' + name + ',']},
-	]};
-	Button.creation.optionList(option);
-}
-
-Draw.window.ability.generalInfo.upMod = function(mod){	//unused
-	return;
-	var name = Draw.old.abilityShowed.id;
-	var option = {'name':'Upgrade Mod','count':1,'option':[
-		{'name':'Use 1 Orb','func':Command.send,'param':['win,ability,upMod,' + name + ',' + mod + ',1']},
-		{'name':'Use 10 Orbs','func':Command.send,'param':['win,ability,upMod,' + name + ',' + mod + ',10']},
-		{'name':'Use 100 Orbs','func':Command.send,'param':['win,ability,upMod,' + name + ',' + mod + ',100']},
-		{'name':'Use X Orbs','func':Input.add,'param':['win,ability,upMod,' + name + ',' + mod + ',']},
-	]};
-	
-	Button.creation.optionList(option);
-}
 
 Draw.window.ability.action = function(diffX,diffY){ ctxrestore();
 	var ab = Draw.old.abilityShowed;
-	if(ab.action.func === 'Combat.attack'){ Draw.window.ability.action.attack(diffX,diffY);}
-	if(ab.action.func === 'Actor.boost'){ Draw.window.ability.action.boost(diffX,diffY);}
-	if(ab.action.func === 'Combat.summon'){ Draw.window.ability.action.summon(diffX,diffY);}
-
+	if(ab.action.funcStr === 'Combat.attack'){ Draw.window.ability.action.attack(diffX,diffY);}
+	if(ab.action.funcStr === 'Combat.boost'){ Draw.window.ability.action.boost(diffX,diffY);}
+	if(ab.action.funcStr === 'Combat.summon'){ Draw.window.ability.action.summon(diffX,diffY);}
+	if(ab.action.funcStr === 'Combat.heal'){ Draw.window.ability.action.heal(diffX,diffY);}
+	if(ab.action.funcStr === 'Combat.dodge'){ Draw.window.ability.action.dodge(diffX,diffY);}
 }
 
 Draw.window.ability.action.attack = function(diffX,diffY){  ctxrestore();
@@ -651,51 +725,59 @@ Draw.window.ability.action.attack = function(diffX,diffY){  ctxrestore();
 	var preatk = Tk.deepClone(ab.action.param);
 	var atk = Combat.attack.mod(player,Tk.deepClone(preatk));
 	
-	var fontSize = 20;	
-	ctx.font = fontSize + 'px Kelly Slab';
+	var fontSize = 30;	
+	ctx.setFont(30);
 	
-	//Weapon, Ability Combined
-	var helper = function(atk,name,length){
-		var str = name + ':';
-		ctx.fillText(str,s.zx,s.zy);
-		var dist = 125;	
-		Draw.element(s.zx+dist,s.zy,length,fontSize,atk.dmg.ratio);
-		ctx.fillText('x' + Tk.round(atk.dmg.main,1),s.zx+150+dist+15,s.zy);
+	var el = html.$abilityWinAttackDmg;
+	el[0].style.visibility = 'visible';
+	el[0].style.left = s.x + 500 - 175 + 'px';
+	el[0].style.top = s.y - 140 + 'px';
+	el[0].style.font = '30px Kelly Slab';
+	el[0].innerHTML = '';
+	
+	el.append('Ability: &nbsp;');
+	for(var i in preatk.dmg.ratio) if(preatk.dmg.ratio[i]){ var element = i; break; }
+	if(!element) return ERROR(4,'ability with no element');
+	el.append(Draw.icon.html('element.' + element,30,''));
+	el.append(' <span title="Ability Base Damage">' + preatk.dmg.main.r(0) + '</span><br>');
+	
+	el.append('Weapon: ');
+	var elementW = [];	for(var i in weapon.dmg.ratio) if(weapon.dmg.ratio[i] === 1.5) elementW.push(i);
+	if(weapon.dmg.ratio[element] === 1.5){
+		el.append(Draw.icon.html('element.' + element,30,''));
+		el.append(' <span title="Weapon Base Damage">x' + weapon.dmg.main.r(1) + '</span>');
+		el.append(' <span title="x1.5 Dmg Bonus because Weapon Type matches Ability Type (both ' + element.capitalize() + ')"> &nbsp;x1.5</span>');
+	} else {
+		var canvas = Draw.icon.html('element.' + element,30,'',null,null,0.3);
+		canvas.getContext('2d').fillText('X',0,0);
+		canvas.getContext('2d').fillText('X',12,12);
+		canvas.getContext('2d').fillText('X',24,24);
+		el.append(canvas);
+		el.append(' <span title="Weapon Base Damage">x' + weapon.dmg.main.r(1) + '</span>');
+		el.append(' <span title="No Bonus because Weapon Type (' + elementW[0].capitalize() + ', ' + elementW[1].capitalize() + ')' +
+			' Doesn\'t Match Ability Type (' + element.capitalize() + ')"> &nbsp;x1</span>');
 	}
 	
-	helper(preatk,'Ability',150);
-	s.zy += fontSize;
-	helper(weapon,'Weapon',150);
-	s.zy += fontSize;
-	helper(atk,'Combined',150*atk.weaponCompability);
+	//add final
+	var boost = Actor.getCombatLevelDmgMod(player);
 	
-	//Final
-	s.zy -= 2*fontSize;
-	s.zx += 500;
-	ctx.fillTextU("Final Damage",s.zx+20,s.zy-10);
-	s.zy += fontSize;
+	Actor.update.mastery(player);
 	
-	var count = 0;
-	for(var i in atk.dmg.ratio){
-		var numX = s.zx + (count%3)*125-100;
-		var numY = s.zy + Math.floor(count/3)*fontSize*1.1;
-		ctx.fillStyle = Cst.element.toColor[i];
-		ctx.roundRect(numX-5,numY,125,fontSize*1.1);
-		ctx.fillStyle = 'black';
-		ctx.fillText(i.capitalize() + ': ' + Tk.round(atk.dmg.ratio[i]*atk.dmg.main),numX,numY);		
-		count++;
-	}
-	ctx.fillStyle = 'black';
+	el.append(' &nbsp; &nbsp;} Final: ');
+	el.append(Draw.icon.html('element.' + element,30,''));
+	el.append(' ' + (preatk.dmg.main*weapon.dmg.main*weapon.dmg.ratio[element]*player.mastery.dmg[element].sum * boost).r(0));
+
+	el.append('<br>Mastery: ');
+	el.append(Draw.icon.html('element.' + element,30,''));
+	el.append('<span title="From Passive Tree + Equipment"> x' + player.mastery.dmg[element].sum.r(3) + '</span>');
 	
-	s.zx -= 500;
-	s.zy += fontSize*2.5;
-	
-	
+	//HERE player.skill.lvl[skill]
+	el.append('&nbsp; <span title="Bonus From Your Combat Skill Levels"> x' + boost.r(3) + '</span>');
+		
 
 	//General Info
 	var dmg = 0;	for(var i in atk.dmg.ratio){ dmg += atk.dmg.ratio[i]; } dmg *= atk.dmg.main;
 	str = 'x' + atk.amount + ' Bullet' + (atk.amount > 1 ? 's' : '') + ' @ ' + atk.angle + '°';
-	str += '  =>  DPS: ' + Tk.round(dmg / ab.period.own * 25,1);
 	ctx.fillText(str,s.zx,s.zy);
 	s.zy += fontSize;
 	
@@ -708,78 +790,49 @@ Draw.window.ability.action.attack = function(diffX,diffY){  ctxrestore();
 	for(var i in atk){
 		if(atk[i] && Draw.window.ability.action.attack.modTo[i]){
 			var tmp = atk[i];
-
-			
-			//Status
-			if(Cst.status.list.have(i)){ 
-				var mod = tmp.chance * player.bonus[i].chance;
-				var base = Math.pow(main.pref.abilityDmgStatusTrigger/100*atk.dmg.ratio[Cst.status.toElement[i]],1.5);
-				tmp.chance = Math.probability(base,mod);
-			}	
-			if(tmp.chance !== undefined && tmp.chance <= 0.01){ continue;}
-			Draw.icon(Draw.window.ability.action.attack.modTo[i].icon,s.zx,s.zy+30,20);
-			ctx.fillText('=> ' + Draw.window.ability.action.attack.modTo[i].text(tmp),s.zx+30,s.zy+30);
+			//player bonus have already been applied
+			if(tmp.chance === 0) continue;
+			Draw.icon(Draw.window.ability.action.attack.modTo[i].icon,s.zx,s.zy+30,30);
+			ctx.fillText(' => ' + Draw.window.ability.action.attack.modTo[i].text(tmp),s.zx+35,s.zy+30);
 			s.zy += fontSize;
-			
 		}
 	}
 	
-	//%Dmg
-		
-	var hd = html.abilityWin.dmgTrigger;
-	hd.style.left = s.zx + 'px'; 
-	hd.style.top = s.zy + 'px'; 
-	hd.style.font = fontSize + 'px Kelly Slab';
-	//hd.style.width = 500 + 'px';
-	//hd.style.height = 100 + 'px';
-	
-	var str = 'Assuming Enemy Loses <span ' + 
-		'style="color:' + 'blue' + '" ' +
-		'onclick="Input.add(\'' + '$pref,abilityDmgStatusTrigger,' + '\')' + '" ' + 
-		'title="Change Default %Dmg Dealt"' +
-		'>' +
-		main.pref.abilityDmgStatusTrigger + '%' +
-		'</span>'
-		+ ' Hp';
-	
-	Draw.setInnerHTML(hd,str);
 		
 }
-
 Draw.window.ability.action.attack.modTo = {
-	'burn':{icon:'status.burn',
-			text:(function(a){ return Tk.round(a.chance*100,2) + '% Chance to Burn for ' + Tk.round(a.magn*100*a.time,2) + '% Hp of Monster\'s Remaining Hp over ' + Tk.round(a.time/25,2) + 's.'; }),},
-	'chill':{icon:'status.chill',
-			text:(function(a){ return Tk.round(a.chance*100,2) + '% Chance to Chill, reducing Speed by -' + Tk.round(a.magn*100,2) + '% for ' + Tk.round(a.time/25,2) + 's.'; })},
-	'stun':{icon:'status.stun',
-			text:(function(a){ return Tk.round(a.chance*100,2) + '% Chance to Confuse for ' + Tk.round(a.time/25,2) + 's.'; })},
-	'bleed':{icon:'status.bleed',
-			text:(function(a){ return Tk.round(a.chance*100,2) + '% Chance to Bleed for ' + Tk.round(a.magn*100*a.time,2) + '% Initial Dmg over ' + Tk.round(a.time/25,2) + 's.'; })},
-	'knock':{icon:'status.knock',
-			text:(function(a){ return Tk.round(a.chance*100,2) + '% Chance to Knockback by ' + Tk.round(a.magn*a.time,2) + ' pixel over ' + Tk.round(a.time/25,2) + 's.'; })},	
-	'drain':{icon:'status.drain',
-			text:(function(a){ return Tk.round(a.chance*100,2) + '% Chance to Drain ' + Tk.round(a.magn*100,2) + '% Mana.'; })},
-	'leech':{icon:'offensive.leech',
-			text:(function(a){ return Tk.round(a.chance*100,2) + '% Chance to Life Leech ' + Tk.round(a.magn*100,2) + '% Hp'; })},
-	'pierce':{icon:'offensive.pierce',
-			text:(function(a){ return Tk.round(a.chance*100,2) + '% Chance to Pierce, reducing this attack damage by ' + Tk.round(100-a.dmgReduc*100,2) + '% Dmg.'; })},	
-			
-	'curse':{icon:'curse.skull',
-			text:(function(a){ return Tk.round(a.chance*100,2) + '% Chance to Lower ' + Db.stat[a.boost[0].stat].name + ' by ' + Tk.round(100-a.boost[0].value*100,2) + '% for ' + Tk.round(a.boost[0].time/25,2) + 's.'; })},
-	'sin':{icon:'offensive.bullet',
-			text:(function(a){ return 'Sin Bullet'; })},
-	'parabole':{icon:'offensive.bullet',
-			text:(function(a){ return 'Parabole Bullet'; })},
-	'nova':{icon:'offensive.bullet',
-			text:(function(a){ return 'Nova'; })},
-	'boomerang':{icon:'offensive.bullet',
-			text:(function(a){ return 'Boomerang'; })},
-	'onHit':{icon:'offensive.bullet',
-			text:(function(a){ return 'Explosive'; })},
-	'damageIfMod':{icon:'system.heart',
-			text:(function(a){ return 'Affect Allies'; })},
-	'heal':{icon:'system.heart',
-			text:(function(a){ return 'HEAL NEED TO BE DONE'; })},
+	'burn':{icon:'status.burn',	text:(function(a){ 
+		return Tk.round(a.chance*100,2) + '% chance to Burn for ' + (100-Math.pow(1-a.magn,a.time)*100).r(0) + '% Hp over ' + Tk.round(a.time/25,2) + 's.'; }),},
+	'chill':{icon:'status.chill',text:(function(a){ 
+		return Tk.round(a.chance*100,2) + '% chance to Chill, reducing Speed by ' + ((1-(1/a.magn))*100).r(0) + '% for ' + Tk.round(a.time/25,2) + 's.'; })},
+	'stun':{icon:'status.stun',text:(function(a){ 
+		return Tk.round(a.chance*100,2) + '% chance to Stun for ' + Tk.round(a.time/25,2) + 's.'; })},
+	'bleed':{icon:'status.bleed',text:(function(a){ 
+		return Tk.round(a.chance*100,2) + '% chance to Bleed for ' + Tk.round(a.magn*a.time,2) + ' Dmg over ' + Tk.round(a.time/25,2) + 's.'; })},
+	'knock':{icon:'status.knock',text:(function(a){ 
+		return Tk.round(a.chance*100,2) + '% chance to Knockback by ' + Tk.round(a.magn*a.time,2) + ' pixel over ' + Tk.round(a.time/25,2) + 's.'; })},	
+	'drain':{icon:'status.drain',text:(function(a){ 
+		return Tk.round(a.chance*100,2) + '% chance to Drain ' + Tk.round(a.magn*100,2) + '% Mana.'; })},
+	'leech':{icon:'offensive.leech',text:(function(a){ 
+		return Tk.round(a.chance*100,2) + '% chance to Life Leech ' + Tk.round(a.magn*100,2) + '% Hp'; })},
+	'pierce':{icon:'offensive.pierce',text:(function(a){ 
+		return Tk.round(a.chance*100,2) + '% chance to Pierce, with ' + Tk.round(100-(100-a.dmgReduc*100),0) + '% Dmg Reduction for each pierce.'; })},	
+	'curse':{icon:'curse.skull',text:(function(a){ 
+		return Tk.round(a.chance*100,2) + '% chance to Lower ' + Db.stat[a.boost[0].stat].name + ' by ' + Tk.round(100-a.boost[0].value*100,2) + '% for ' + Tk.round(a.boost[0].time/25,2) + 's.'; })},
+	'sin':{icon:'offensive.bullet',text:(function(a){ 
+		return 'Sin Bullet'; })},
+	'parabole':{icon:'offensive.bullet',text:(function(a){ 
+		return 'Parabole Bullet'; })},
+	'nova':{icon:'offensive.bullet',text:(function(a){ 
+		return 'Nova'; })},
+	'boomerang':{icon:'offensive.bullet',text:(function(a){ 
+		return 'Boomerang'; })},
+	'onHit':{icon:'offensive.bullet',text:(function(a){ 
+		return 'Explosive'; })},
+	'damageIfMod':{icon:'system.heart',text:(function(a){ 
+		return 'Affect Allies'; })},
+	'heal':{icon:'system.heart',text:(function(a){ 
+		return 'Heal for ' + Tk.stringify(a) ; })},
 }
 
 Draw.window.ability.action.boost = function(diffX,diffY){  ctxrestore();
@@ -789,7 +842,7 @@ Draw.window.ability.action.boost = function(diffX,diffY){  ctxrestore();
 	s.zx += diffX;
 	s.zy += diffY;
 	var ab = Draw.old.abilityShowed;
-	var boost = ab.action.param;
+	var boost = ab.action.param.boost;
 	if(!boost) return
 	
 	var fontSize = 40;
@@ -799,7 +852,7 @@ Draw.window.ability.action.boost = function(diffX,diffY){  ctxrestore();
 	for(var i in boost[0]){
 		Draw.icon(Db.stat[boost[0][i].stat].icon,s.zx,s.zy,fontSize);
 		var value = Tk.round(boost[0][i].value,2);
-		if(+value >= + Cst.bigInt) value = 'Infinity';
+		if(+value >= + CST.bigInt) value = 'Infinity';
 		var str = boost[0][i].type + value + ' ' + Db.stat[boost[0][i].stat].name + ' for ' + Tk.round(boost[0][i].time/25,2) + 's.';
 		ctx.fillText(str,s.zx+fontSize*1.2,s.zy);
 		s.zy += fontSize*1.5;
@@ -821,10 +874,39 @@ Draw.window.ability.action.summon = function(diffX,diffY){  ctxrestore();
 	ctx.fillText(str,s.zx,s.zy);
 }
 
+Draw.window.ability.action.heal = function(diffX,diffY){  ctxrestore();
+	var s = Draw.window.main.constant(); 
+	s.x += diffX;
+	s.y += diffY;
+	s.zx += diffX;
+	s.zy += diffY;
+	var ab = Draw.old.abilityShowed;
+	var info = ab.action.param;
+	ctx.setFont(30);
+	
+	var str = '';
+	for(var i in info)
+		str += 'Regenerate ' + info[i] + ' ' + i.capitalize();
+	ctx.fillText(str,s.zx,s.zy);
+}
+
+Draw.window.ability.action.dodge = function(diffX,diffY){  ctxrestore();
+	var s = Draw.window.main.constant(); 
+	s.x += diffX;
+	s.y += diffY;
+	s.zx += diffX;
+	s.zy += diffY;
+	var ab = Draw.old.abilityShowed;
+	var info = ab.action.param;
+	ctx.setFont(30);
+	
+	str = 'Invincibility for ' + info.time + ' frames and move ' + info.distance + ' pixels.';
+	ctx.fillText(str,s.zx,s.zy);
+}
+
 //}
 
-
-//{quest
+//{ Quest
 Draw.window.quest = function (){ ctxrestore();
 	var q = Db.query('quest',main.windowList.quest);
 	var s = Draw.window.main('Quest: ' + (q ? q.name : ''));	
@@ -834,9 +916,8 @@ Draw.window.quest = function (){ ctxrestore();
 	var hq = html.questWin;	
 	hq.div.style.visibility = 'visible';
 	
-	Draw.icon(q.icon,s.zx,s.zy,22*4);	//TOFIX rushed cuz this needs to be drawn every frame
-	
-	if(Draw.window.quest.refreshIf(q,main.quest[main.windowList.quest])) Draw.window.quest.refresh(s,q)
+	if(Draw.window.quest.refreshIf(q,main.quest[main.windowList.quest])) 
+		Draw.window.quest.refresh(s,q)
 }
 
 Draw.window.quest.refresh = function(s,q){
@@ -848,313 +929,202 @@ Draw.window.quest.refresh = function(s,q){
 	
 	s.charY = 22;
 	Draw.window.quest.start(s,q,mq,hq);
-	Draw.window.quest.info(s,q,mq,hq);
-	Draw.window.quest.right(s,q,mq,hq);
+	Draw.window.quest.challenge(s,q,mq,hq);
 	Draw.window.quest.left(s,q,mq,hq);
+	Draw.window.quest.right(s,q,mq,hq);
 
 }
 
 Draw.window.quest.refreshIf = function(q,mq){
-	var str = Tk.stringify(q) + Tk.stringify(mq);
+	var str = Tk.stringify(q) + Tk.stringify(mq) + main.questActive;
 	var bool = Draw.refresh.winQuest !== str;
 	Draw.refresh.winQuest = str;
 	return bool;
+}
+
+Draw.window.quest.left = function(s,q,mq,hq){
+	var hqc = hq.left;
+	//Info
+	hqc.style.left = 5 + 'px'; 
+	hqc.style.top = 175 + 'px'; 
+	
+	hqc.style.font = s.charY + 'px Kelly Slab';
+	hqc.style.width = s.dw - 5 + 'px';
+	
+	
+	var str = '<h2 class="u">General Quest Info</h2>';
+	str += 'Quest created by: ' + q.author.q() + '.<br>';
+	str += 'Rating: ' + q.statistic.ratingGlobal.r(2) + '/5.<br>';
+	str += 'Completed by ' + q.statistic.amountComplete + ' players.<br>'; 
+	str += ((q.statistic.amountComplete/q.statistic.amountStarted*100) || 0).r(1) + '% players who started the quest finished it.<br>';
+	str += 'In average, players repeat this quest ' + q.statistic.averageRepeat.r(2) + ' times.<br>';
+	str += '<br>';
+	str += 'Last Quest Comment: ';
+	if(q.playerComment[0]){
+		str += '<br> &emsp; &emsp;<b>' + q.playerComment[0].name + '</b>: <i>' + q.playerComment[0].text.slice(0,75) + '...</i> | ';
+		str += '<br><a onclick="Draw.window.quest.left.openQuestComment(\'' + q.id + '\')"> - All comments</a>'
+	} else {
+		str += ' None...<br>'
+		str += ' - <a onclick="onclick="Chat.report.open(\'quest\',\'' + q.id + '\');">Be the first!</a>';
+	}	
+	
+	Draw.setInnerHTML(hqc,str);
+	
 
 }
 
-Draw.window.quest.info = function(s,q,mq,hq){
-	var icon = s.charY*4;
+Draw.window.quest.left.openQuestComment = function(id){
+	var q = Db.quest[id];
+	var str = '<h2>Comments for the Quest "' + q.name + '"</h2>';
+	str += '<p class="u" onclick="Chat.report.open(\'quest\',\'' + id + '\');">Click here to post your own comment.</p>'
 	
-	//Icon
-	//Draw.icon(q.icon,s.zx,s.zy,icon);
+	for(var i in q.playerComment){
+		str += q.playerComment[i].name + ': ' + q.playerComment[i].text + '<br>';
+	}
 	
-	//Info
-	hq.info.style.left = icon + 5 + 'px'; 
-	hq.info.style.top = 0 + 'px'; 
-	
-	hq.info.style.font = s.charY + 'px Kelly Slab';
-	hq.info.style.width = s.dw - icon - 5 + 'px';
-	hq.info.style.height = s.charY*3*1.2 + 'px';
-	
-	
-	var str = '';
-	str += 'Quest Created by: ' + Tk.stringify(q.author) + ' | Difficulty: ' + q.difficulty + ' (Lvl ' + q.lvl + ')';
-	str += '<br>';
-	str += 'Hint: ' + mq._hint;
-	hq.info.innerHTML = str;
-	
+	Tk.openDialog('questComment',str);
 
 }
 
 Draw.window.quest.start = function(s,q,mq,hq){
+	var hqc = hq.start;
+	hqc.style.left = 200 + 25 + s.dw/2 + 'px'; 
+	hqc.style.top = 50 + 'px'; 
 	
-	hq.start.style.left = 200 + 50 + s.dw/2 + 'px'; 
-	hq.start.style.top = -40 + 'px'; 
+	hqc.style.font = s.charY*1.5 + 'px Kelly Slab';
 	
-	hq.start.style.font = s.charY*1.5 + 'px Kelly Slab';
-	hq.start.style.width = 220 + 'px';
-	hq.start.style.height = s.charY*1.5*1.2 + 'px';
-	
-	if(!mq._active){
-		var second = $('<p class="u">Start Quest</p>')[0];
-		second.onclick = function(){ Command.send('win,quest,start,' + q.id); };
-		second.title = "Start this quest.";
-	} else {
-		var second = $('<p class="u">Abandon Quest</p>')[0];
-		second.onclick = function(){Command.send('win,quest,abandon,' + q.id);}
-		second.title = "Abandon this quest. You will lose your progression and be teleported to the starting location.";
+	var str = '';
+	var chal = ''; for(var i in mq._challenge) if(mq._challenge[i]) chal = i;
+	if(!main.questActive){
+		str += '<button style="font:25px Kelly Slab" class="myButtonGreen" title="Start this quest" onclick="Command.send(\'win,quest,start,' + q.id + '\');">' +
+			(chal ? 'Start Quest<br>with Challenge<br>' + q.challenge[chal].name.q() : 'Start Quest<br>without challenge')
+			+ '</button><br>';
 	}
-	hq.start.innerHTML = '';
-	hq.start.appendChild(second);
+	if(main.questActive === q.id){
+		str += '<button style="font:25px Kelly Slab" class="myButtonRed" title="Abandon Quest" onclick="Command.send(\'win,quest,abandon,' + q.id + '\');">Abandon Quest</button><br>';
+	}
+	
+	if(main.questActive && main.questActive !== q.id){
+		str += '<button style="font:25px Kelly Slab" class="myButtonRed" title="Abandon Active Quest (' +Db.questNameConvert[main.questActive] + ')" ' +
+			'onclick="Command.send(\'win,quest,abandon,' + main.questActive + '\');">Abandon Active Quest</button><br>';
+	}
+	Draw.setInnerHTML(hqc,str);
 }	
 
-Draw.window.quest.left = function(s,q,mq,hq){
-	hq.left.style.left = 0 + 'px'; 
-	hq.left.style.top = 90 + 'px'; 
-	
-	hq.left.style.font = s.charY + 'px Kelly Slab';
-	hq.left.style.width = s.dw/2 - 5 + 'px';
-	hq.left.style.height = 500 + 'px';
+Draw.window.quest.right = function(s,q,mq,hq){	//BAD
+	var hqc = hq.right;
+	hqc.style.left = s.dw/2 + 'px'; 
+	hqc.style.top = 175 + 'px'; 
+	hqc.style.width = s.dw/2 - 5 + 'px';
+	hqc.style.font = s.charY + 'px Kelly Slab';
 	
 	var str = '';
-	//requirements
-	if(q.requirement && q.requirement.length){ 
-		str += '<h2 class="u">Requirements:</h2>';
-		for(var i in q.requirement){
-			var text = '<span title="' + q.requirement[i].description + '"> - ' + q.requirement[i].name + '</span>';
-			if(+mq._requirement[i]) str += '<del>' + text + '</del>';	//if requirement is met
-			else str += text;
-			
-			str += '<br>';
-		}
-		str += '<br><br>';
-	}
-	
+
 	//reward
-	str +=  '<h2 class="u">Rewards:</h2>';
-	str += ' - Passive: ' + Tk.round(mq._rewardPt,4) + '/' + q.reward.passive.max + ' (Score: ' + Tk.round(mq._rewardScore) + ')<br>';
-	str += ' - Exp: ' + Tk.stringify(q.reward.exp) + '<br>';
-	str += ' - Item: ' + Tk.stringify(q.reward.item) + '<br>';
+	str +=  '<h2 class="u">Personal Score:</h2>';
+	str += 'Quest completed: ' + mq._complete + ' times<br>';
+	str += '<span title="Everytime you beat a quest, you get a Quest Score that depends on performance and Passive Bonus.">' +
+		'Cumulative Quest Score: ' + mq._rewardScore.r(0) + ' / 10000 </span><br>';
+	str += '<span title="Depends on your Cumulative Quest Score. Use Passive Points to boost stats via Passive Grid.">' +
+		'Passive Points: ' + mq._rewardPt.r(4) + ' / ' + q.reward.passive.max.r(1) + '</span>';
 	
-	hq.left.innerHTML = str;
+	str += '<br><h2 class="u">Highscores</h2>';
+	for(var i in Db.highscoreList)
+		if(i.have(q.id,0)) str += '<a title="' + Db.highscoreList[i].description 
+			+ '" onclick="Draw.window.highscore.open(\'' + i + '\');"> - ' + Db.highscoreList[i].name + '</a><br>'
+	
+	Draw.setInnerHTML(hqc,str);
 }
 
-Draw.window.quest.right = function(s,q,mq,hq){
-	hq.right.style.left = s.dw/2 + 'px'; 
-	hq.right.style.top = 90 + 'px'; 
+Draw.window.quest.challenge = function(s,q,mq,hq){
+	var hqc = hq.challenge;
+	hqc.style.left = 0 + 'px'; 
+	hqc.style.top = -30 + 'px'; 
 	
-	hq.right.style.font = s.charY + 'px Kelly Slab';
-	hq.right.style.width = s.dw/2 - 5 + 'px';
-	hq.right.style.height = 500 + 'px';
+	hqc.style.font = s.charY + 'px Kelly Slab';
 	
-	var str = '';
+	var str = '<table><tr><td>';
 	//challenge
 	if(q.challenge && q.challenge.$length()){ 
 		str += '<h2 class="u">Challenges:</h2>';
+		
+		str += mq._completed ? 
+				'<span style="color:yellow;" title="Completed this quest at least once">★</span>'
+				: '<span style="color:gray;" title="Never completed this quest">★</span>';
+		var chal = ''; for(var i in mq._challenge) if(mq._challenge[i]) chal = i;
+		str += ' - <span class="shadow" style="cursor:pointer;color:' + 
+				(chal ? ('red" onclick="Command.send(\'win,quest,toggleChallenge,' + q.id + ',' + chal + '\');") ')
+					: 'yellow" ') + 
+				'title="Click if you want to do the quest normally."> No Challenge</span><br>';
+		
+		
 		for(var i in q.challenge){
 			var c = q.challenge[i];
-			
 			var color = mq._challenge[i] ? '#00AA00' : '#FF0000';
-			
-			document.createElement('span');
-			str += 
-				'<span ' + 
-				'class="shadow" ' + 
-				'style="color:' + color + '" ' +
-				'onclick="Command.send(\'' + 'win,quest,toggleChallenge,' + q.id + ',' + i + '\')' + '" ' + 
-				'title="' + c.description + '"' +
-				'>' + c.name + ' - (x' + c.bonus.success.passive + ')' +	//TOFIX only showing passive
+			var star = mq._challengeDone[i] ? 
+					'<span style="color:yellow;" title="Completed this challenge at least once">★</span>'
+					: '<span style="color:gray;" title="Never completed this challenge">★</span>';
+					
+			str += star +
+				' - <span class="shadow" style="cursor:pointer;color:' + color + '" ' +
+				'onclick="Command.send(\'win,quest,toggleChallenge,' + q.id + ',' + i + '\');" ' + 
+				'title="Click to toggle challenge: ' + c.description + '"' +
+				'>' + c.name + ' - (x' + c.bonus.success.passive + ')' +
 				'</span><br>';
 		}
-		str += '<br><br>';
+		//str += '<br><br>';
 	}
+	
+	str += '</td><td>  <td><td style="padding:20px;width=1000px;">'
 	
 	//bonus
-	str += '<h2 class="u">Bonus:</h2>';
+	str += '<h2 class="u">Reward Bonus:</h2>';
 	var b = mq._bonus;
-	var p = Tk.round(b.challenge.passive * b.orb.passive * b.cycle.passive,3);
-	var e = Tk.round(b.challenge.exp * b.orb.exp * b.cycle.exp,3);
-	var i = Tk.round(b.challenge.item * b.orb.item * b.cycle.item,3);
+	var count = 0;	for(var i in mq._challengeDone) if(mq._challengeDone[i]) count++;
+	var active = 0;	for(var i in mq._challenge) if(mq._challenge[i]) active++;
 	
-	str += ' - Passive: <span title="' + Tk.round(b.challenge.passive,4) + '*' + Tk.round(b.orb.passive,4) + Tk.round(b.cycle.passive,4) + '"> x' + p + '</span><br>';
-	str += ' - Exp: <span title="' + Tk.round(b.challenge.exp,4) + '*' + Tk.round(b.orb.exp,4) + Tk.round(b.cycle.exp,4) + '"> x' + e + '</span><br>';
-	str += ' - Item: <span title="' + Tk.round(b.challenge.Item,4) + '*' + Tk.round(b.orb.Item,4) + Tk.round(b.cycle.Item,4) + '"> x' + i + '</span><br>';
-	
-	hq.right.innerHTML = str;
+	var array = Draw.window.quest.challenge.array(b,active,count);
+	str += '<div class="CSSTableGenerator CSSTableGeneratorHead"><table class="arrayToTable">' + Tk.arrayToTable(array,1,1) + '</table></div>';
+	str += '</td></tr></table>';
+	Draw.setInnerHTML(hqc,str);
 }
 
-
-
+Draw.window.quest.challenge.array = function(b,active,count){
+	return [
+		[
+			'',
+			active ? '<span title="Bonus awarded if you beat the currently active challenge.">Active Chal.</span>'
+				: '<span title="You have no active challenge. Activate a challenge to receive an Active Challenge Bonus.">Active Chal.</span>',
+			count ? '<span title="Bonus awarded because you have completed ' + count + ' Challenges in the past.">Past Chal.</span>'
+				: '<span title="Completing challenges grant a permanent bonus that applies even if the challenge is no longer active.">Past Chal.</span>',
+			'<span title="Everytime you complete this quest, its Cycle Bonus decreases. Every midnight, it increases to at least x1.">Cycle</span>',
+			'<u>Final</u>',
+		],
+		[
+			'<span title="Impact Quest Score which impacts amount of Passive Points (PP) gained. Use PP to boost stats via the Passive Grid.">Passive:</span>',
+			'x' + b.challenge.passive.r(3),
+			'x' + b.challengeDone.passive.r(3),
+			'x' + b.cycle.passive.r(3),
+			'<u>x' + (b.challenge.passive*b.challengeDone.passive*b.cycle.passive).r(3)+'</u>',
+		],
+		[
+			'<span title="Impact exp rewarded for completing the quest, killing monsters and harvesting Skill Plots.">Exp:</span>',
+			'x' + b.challenge.exp.r(3),
+			'x' + b.challengeDone.exp.r(3),
+			'x' + b.cycle.exp.r(3),
+			'<u>x' + (b.challenge.exp*b.challengeDone.exp*b.cycle.exp).r(3)+'</u>',
+		],
+		[
+			'<span title="Impact amount of item received from completing the quest, killing monsters and harvesting Skill Plots.">Item:</span>',
+			'x' + b.challenge.item.r(3),
+			'x' + b.challengeDone.item.r(3),
+			'x' + b.cycle.item.r(3),
+			'<u>x' + (b.challenge.item*b.challengeDone.item*b.cycle.item).r(3)+'</u>',
+		],
+	];
+}
 //}
 
-Draw.window.trade = function (){ ctxrestore();
-	var s = Draw.window.main('Trade');	
-	ctx = List.ctx.win;
-
-	//change amount:
-		
-	var numX = s.mx+200;
-	var numY = s.y+15;
-	
-	var prefAmount = main.pref.bankTransferAmount;
-	var string = 'X-Amount: ' + prefAmount;
-	
-	ctx.setFont(25);
-	ctx.fillText(string,numX,numY);
-	
-	//##################################
-	
-	var trade = main.windowList.trade;
-	var myList = main.tradeList;
-	var hisList = trade.tradeList;
-	
-	var s = Draw.window.main('Trading ' + trade.trader);	
-	ctx = List.ctx.win;
-	
-	
-	//Draw Own Items
-	for (var i = 0 ; i < myList.length ; i++){
-		if(!myList[i].length) continue;
-		var numX = s.x + 160 + 65*(i%4);
-		var numY = s.y + 70 + 65*Math.floor(i/4);
-		
-		Button.creation(0,{
-			"rect":[numX,numX+56,numY,numY+56],
-			"left":{"func":Command.send,"param":['win,trade,click,left,' + i]},
-			"right":{"func":Command.send,"param":['win,trade,click,right,' + i]},
-			'text':'Withdraw ' + main.bankList[i][2]
-		});	
-		
-		
-		Draw.item(myList[i],numX,numY,56);
-		
-	}	
-	
-	//Draw Other Items
-	for (var i = 0 ; i < hisList.length ; i++){
-		if(!hisList[i].length) continue;
-		var numX = s.x + 570 + 65*(i%4);
-		var numY = s.y +  70 + 65*Math.floor(i/4);
-			
-		Button.creation(0,{
-			"rect":[numX,numX+56,numY,numY+56],
-			'text':hisList[i][2]
-		});	
-		
-		Draw.item(hisList[i],numX,numY,56);
-	}	
-	
-	//Accept
-	var numX = s.x+160; 
-	var numY = s.h-50; 
-	var wi = 250; 
-	var he = 35;
-	
-	//My button
-	Button.creation(0,{
-		"rect":[numX,numX+wi,numY,numY+he],
-		'text':trade.confirm.self ? 'Click to Refuse Trade' : 'Click to Accept Trade',
-		"left":{"func":Command.send,"param":['win,trade,toggle,']},
-	});
-	
-	
-	ctx.textAlign = "center";
-	ctx.setFont(25);
-	ctx.fillStyle = "yellow";
-	ctx.strokeStyle = 'yellow';
-	
-	ctx.fillText('Trade State ',numX+wi/2,numY+3);
-	ctx.strokeRect(numX,numY,wi,he);
-		
-	Draw.icon(trade.confirm.self ? 'system.heart' : 'system.close',numX+7,numY+7,20);
-
-	var numX = s.x+570; var numY = s.h-50; var wi = 250; var he = 35;
-	ctx.fillText('Trade State ',numX+wi/2,numY+3);
-	ctx.strokeRect(numX,numY,wi,he);
-	
-	
-	Draw.icon(trade.confirm.other ? 'system.heart' : 'system.close',numX+7,numY+7,20);
-	
-	
-}
-
-
-Draw.window.binding = function (){ ctxrestore();
-	var s = Draw.window.main('Key Bindings');	
-	ctx = List.ctx.win;
-	
-	var hq = html.bindingWin;
-	hq.div.style.visibility = 'visible';
-	hq.div.style.left = s.mx + 'px'; 
-	hq.div.style.top = s.my + 'px'; 
-	
-	//Table
-	hq.table.style.left = 50 + 'px'; 
-	hq.table.style.top = 0 + 'px'; 
-	
-	var str = '<table>';
-	
-	str += '<tr>';
-	str += '<td>Action</td>'
-	str += '<td>Key Id</td>'
-	str += '<td>Key Name</td>'
-	str += '</tr>';
-	
-	var list = [
-		{'id':'move','name':'Move','list':['Right','Down','Left','Up']},
-		{'id':'ability','name':'Ability','list':[0,1,2,3,4,5]}
-	];
-	
-	for(var j in list){
-		var info = list[j];
-		for(var i = 0; i < Input.key[info.id].length; i++){
-			var id = Input.key[info.id][i][0];
-			var name = Input.key[info.id][i][0].toString().keyCodeToName();
-			if(name.keyFullName()) name += ' - (' + name.keyFullName() + ')';
-			
-			if(Input.binding[info.id] === i){
-				id = '***';
-				name = '***';
-			}
-			
-			var str2 = 'Change Key Binding for ' + info.name + ' ' + info.list[i];
-			
-			str += '<tr ' +
-					'onclick="Input.binding.' + info.id + ' = ' + i + ';" ' + 
-					'title="' + str2 + '"' +
-					'>'
-			str += '<td>' + info.name + ' ' + info.list[i] + '</td>'
-			str += '<td>' + id + '</td>'
-			str += '<td>' + name + '</td>'
-			str += '</tr>';
-		}
-	}
-	str += '</table>';
-	
-	Draw.setInnerHTML(hq.table,str);
-	
-	//Template
-	var array = ['QWERTY','AZERTY','NUMBER'];
-	var str = '<font size="6">Default Bindings</font>';
-	for(var i = 0; i < array.length; i++){
-		str  += '<div ' +
-				'onclick="Input.init(' + i + ');" ' +
-				'style="width=auto"' + 
-				'title="Change for ' + array[i] + '"' + 
-				'>' +
-				'<font size="4"> -' + array[i] + '</font>' +
-				'</div>';	
-	}
-	Draw.setInnerHTML(hq.template,str);
-	
-	hq.template.style.left = 600 + 'px'; 
-	hq.template.style.top = 25 + 'px'; 
-	
-}
-
-
-
-	
 //{ Passive
 Draw.window.passive = function (){ ctxrestore();
 	var s = Draw.window.main({'offensive':0,'defensive':0,'ability':0,'passive':1});	
@@ -1178,7 +1148,29 @@ Draw.window.passive = function (){ ctxrestore();
 	hp.text.style.whiteSpace = 'nowrap';
 	hp.text.style.backgroundColor = 'white';
 	
-	var str = 'Page: ';
+	var str = 'Quests grant passive points<br>';
+	str += 'which give bonus to a stat.<br>';
+	str += '<br>'
+	str += '<span style="font-size:30px" title="' + (main.passive.usablePt-main.passive.usedPt[main.passive.active]).r(0) + ' Available Point(s). Complete/Repeat quests to get more points.">'
+		+ 'Points: ' + main.passive.usedPt[main.passive.active] + '/' + Tk.round(main.passive.usablePt,2) + '</span><br>';
+	str += '<span title="Use Orb of Removal obtained from completing quests to get more Remove Points.">Remove Pts: ' + main.passive.removePt.r(1) + '</span><br>';
+	str += '<br>';
+	/*
+	str += '<span ' + 
+	'onclick="Draw.window.passive.grid.info.toggleFullscreen();' + '" ' + 
+	'title="Toggle Fullscreen"' + 
+	'>' + 'Fullscreen' + 
+	'</span><br>';
+	str += 	'<span ' + 
+	'onclick="Draw.window.passive.grid.info.reset();' + '" ' + 
+	'title="Reset Position and Zoom"' +
+	'>' + 'Reset View' + 
+	'</span>';
+	str += '<br>';
+	str += '<br>';
+	*/
+	/*
+	str += 'Page: ';
 	for(var i in main.passive.grid){
 		str += '<span ' + 
 		'onclick="Command.send(\'win,passive,page,' + i + '\');'+ '" ' +
@@ -1204,116 +1196,136 @@ Draw.window.passive = function (){ ctxrestore();
 		'>' + 'Freeze' + 
 		'</span>';
 	}	
+	*/
 	
-	str += '<br>';
-	str += '<br>';
-	str += 'Pts: ' + main.passive.usedPt[main.passive.active] + '/' + main.passive.usablePt + '<br>';
-	str += 'Remove Pts: ' + main.passive.removePt + '<br>';
-	str += '<br>';
-	str += '<span ' + 
-	'onclick="Draw.window.passive.grid.info.toggleFullscreen();' + '" ' + 
-	'title="Toggle Fullscreen"' + 
-	'>' + 'Fullscreen' + 
-	'</span><br>';
-	str += 	'<span ' + 
-	'onclick="Draw.window.passive.grid.info.reset();' + '" ' + 
-	'title="Reset Position and Zoom"' +
-	'>' + 'Reset View' + 
-	'</span><br>';
 	
 	Draw.setInnerHTML(hp.text,str);
 	Draw.window.passive.grid();
+}
+
+Draw.window.passive.refreshIf = function(){
+	var str = Tk.stringify(main.passive);// + Tk.stringify(Draw.window.passive.grid.info);
+	if(Draw.old.passiveWin !== str){
+		Draw.old.passiveWin = str;
+		return true;
+	}
+	return false;
 }
 
 Draw.window.passive.grid = function(){ ctxrestore();
 	var s = Draw.window.main.constant();	
 	ctx = List.ctx.passiveGrid;
 	
+	if(!Draw.window.passive.refreshIf()) return;
+	
 	var info = Draw.window.passive.grid.info;
 	
 	//Hide Background
 	if(info.fullscreen){
 		ctx.fillStyle = 'white';
-		ctx.fillRect(0,0,Cst.WIDTH,Cst.HEIGHT);
+		ctx.fillRect(0,0,CST.WIDTH,CST.HEIGHT);
 		html.win.div.style.visibility = 'hidden';
 		ctx.fillStyle = 'black';	
 	}
 	
 	//Update Drag
+	/*
 	info.x += Input.mouse.drag.vx; var dx = info.x;
 	info.y += Input.mouse.drag.vy; var dy = info.y;
 	
 	info.size = Math.max(0.1,info.size);
 	info.size = Math.min(200,info.size);
+	*/
+	info.size = 24;
+	
 	var iconSize = info.size ;
-	var border = info.size/20;
+	var border = info.size/3;
 	var border2 = border/2;
 	var ic = iconSize + border;
 	
 	var pass = main.passive.grid[main.passive.active];
 	
+	var el = html.passiveWin.grid;
+	el.innerHTML = '';
+	el.style.lineHeight = iconSize/2 + 'px';
+	
+	el.style.left = Draw.window.passive.grid.info.x + 'px';
+	el.style.top = Draw.window.passive.grid.info.y + 'px';
+	
+	
 	//Draw Stat	
 	var grid = Db.passiveGrid[main.passive.active].grid;
 	for(var i = 0 ; i < grid.length ; i++){
 		for(var j = 0 ; j < grid[i].length ; j++){
-			var numX = s.x + 300 + ic * j + dx;	
-			var numY = s.y + 60 + ic * i + dy;
-			
 			var boost = grid[i][j];
-			
-			ctx.globalAlpha = 1;
+			var canvas = document.createElement('canvas');
+			canvas.height = ic;
+			canvas.width = ic;
+			var ctx = canvas.getContext('2d');
 			
 			//Freebies
 			if(pass[i][j] === '2' || !Db.stat[boost.stat]){	//TOFIX should only be ===2
-				ctx.globalAlpha = 0.5;
+				ctx.globalAlpha = 1;
 				ctx.fillStyle = 'green';
-				ctx.fillRect(numX,numY,ic,ic);
+				ctx.fillRect(0,0,ic,ic);
+				el.appendChild(canvas);
 				continue;
 			}
 			
 			//Border
-			ctx.globalAlpha = 0.5;
-			if(main.pref.passiveView === 0){ ctx.fillStyle = +pass[i][j] ? 'green' : (Passive.test.add(pass,i,j) ? '#FFFF00': 'red');}
-			if(main.pref.passiveView === 1){ var n = (boost.count-grid.min) / (grid.max-grid.min);	ctx.fillStyle =	Draw.gradientRG(n);}
-			ctx.fillRect(numX,numY,ic,ic);
-		
-			//Icon
-			ctx.globalAlpha = +pass[i][j] ? 1 : 0.5;
-			var name = Db.stat[boost.stat].icon;
-			Draw.icon(name,numX+border2,numY+border2,iconSize,{
-				"right":{"func":Command.send,"param":['win,passive,add,' + main.passive.active + ',' + i + ',' + j]},
-				"shiftRight":{"func":Command.send,"param":['win,passive,remove,' + main.passive.active + ',' + i + ',' + j]},
-				'text':'Right: Choose ' + name + ' | Shift-Right: Remove',
-			});
+			ctx.globalAlpha = 1;
+			if(true || main.pref.passiveView === 0){ ctx.fillStyle = +pass[i][j] ? 'green' : (Passive.test.add(pass,i,j) ? '#FFFF00': 'red');}
+			//else if(main.pref.passiveView === 1){ var n = (boost.count-grid.min) / (grid.max-grid.min);	ctx.fillStyle =	Draw.gradientRG(n);}
+			ctx.fillRect(0,0,ic,ic);
 			
+			//Boost
+			canvas.onclick = (function(ii,jj){
+				return function(){
+					Command.send('win,passive,add,' + main.passive.active + ',' + ii + ',' + jj);
+				};
+			})(i,j);
+			canvas.oncontextmenu = (function(ii,jj){
+				return function(){
+					Command.send('win,passive,remove,' + main.passive.active + ',' + ii + ',' + jj);
+				};
+			})(i,j);
 			
-			//Hover
-			if(!Input.mouse.drag.active && Collision.PtRect(Collision.getMouse(key),[numX,numX+ic,numY,numY+ic])){
-				var hover = boost;
+			if(+pass[i][j]) canvas.title = 'Right Click: Remove "' + Db.stat[boost.stat].name + '"';
+			else {
+				if(Db.stat[boost.stat].custom) canvas.title = 'Left Click: ' + Db.stat[boost.stat].description;
+				else canvas.title = 'Left Click: Boost "' + Db.stat[boost.stat].name + '" by x0.02';
 			}
+				
 			
+			var name = Db.stat[boost.stat].icon;
+			
+			if(Db.stat[boost.stat].custom){
+				ctx.globalAlpha = 1;
+				Draw.icon(name,border2,border2,iconSize,'',ctx);
+				ctx.strokeStyle = +pass[i][j] ? 'white' : 'blue';
+				ctx.lineWidth = 2;
+				ctx.strokeRect(border2-2,border2-2,iconSize+4,iconSize+4);
+			} else {
+				ctx.globalAlpha = +pass[i][j] ? 1 : 0.5;
+				Draw.icon(name,border2,border2,iconSize,'',ctx);
+			}	
+			
+			el.appendChild(canvas);			
 		}
+		var br = document.createElement("br");
+		el.appendChild(br);
 	}
-	
-	if(hover){ Draw.window.passive.hover(hover); }
-	
-	//Dragging
-	Button.creation(0,{
-		"rect":[s.x,s.x+s.w,s.y+50,s.y+50+s.h],	//+50 or close doesnt work
-		"left":{"func":Input.event.mouse.drag,"param":[]},
-	});	
-	
 }
 
 Draw.window.passive.grid.info = {
-	size:20,
-	x:0,
-	y:0,
+	size:22,
+	x:380,
+	y:60,
 	fullscreen:false,
 	reset:(function(){
 		Draw.window.passive.grid.info.x = 0;
 		Draw.window.passive.grid.info.y = 0;
-		Draw.window.passive.grid.info.size = 20;
+		Draw.window.passive.grid.info.size = 22;
 	}),
 	toggleFullscreen:(function(){
 		Draw.window.passive.grid.info.fullscreen = !Draw.window.passive.grid.info.fullscreen;
@@ -1351,11 +1363,12 @@ Draw.window.passive.hover = function(over){ ctxrestore();
 	var value = 'Value: +' + Tk.round(over.value,5);
 	ctx.fillText(value,ssx + 5,ssy+1+25*2);
 	//TOFIX add description
+	
+	ctx.fillStyle = 'black';
 }
 //}
 
-
-
+//{ Highscore
 Draw.window.highscore = function (){ ctxrestore();
 	var s = Draw.window.main('Highscore');	
 	ctx = List.ctx.win;
@@ -1365,22 +1378,82 @@ Draw.window.highscore = function (){ ctxrestore();
 	hq.div.style.left = s.mx + 'px'; 
 	hq.div.style.top = s.my + 'px'; 
 	
-	//Table
-	hq.table.style.left = 50 + 'px'; 
-	hq.table.style.top = 0 + 'px'; 
+	//Select Quest
+	var rank = Db.query('highscore',html.highscoreWin.selectCategory.value);
+	if(!rank){  return Draw.setInnerHTML(hq.table,''); }
 	
-	var str = '<table>';
+	/*if(!main.windowList.highscore.have($("#highscoreWinSelectQuest")[0].value)){
+		$("#highscoreWinSelectQuest")[0].value = main.windowList.highscore.split('-')[0];
+		Draw.window.highscore.changeQuest();
+	}*/
+	
+	//Table
+	hq.table.style.left = 250 + 'px'; 
+	hq.table.style.top = 100 + 'px'; 
+	
+	var str = '<table class="maxSize">';
 	str += '<tr>';
-	str += '<td>Action</td>'
-	str += '<td>Key Id</td>'
-	str += '<td>Key Name</td>'
+	str += '<td>Rank</td>'
+	str += '<td>Name</td>'
+	str += '<td>Score</td>'
 	str += '</tr>';
+	
+	for(var i in rank){
+		str += '<tr>';
+		str += '<td>'+ rank[i].rank + '</td>'
+		str += '<td>'+ rank[i].username + '</td>'
+		str += '<td>'+ (rank[i].score || 0) +'</td>'
+		str += '</tr>';
+	}
 	str += '</table>';
 	
 	
 	Draw.setInnerHTML(hq.table,str);
-	
-	
 }
+Draw.window.highscore.open = function(category){
+	$("#highscoreWinSelectQuest")[0].value = category.split('-')[0];
+	Draw.window.highscore.changeQuest();
+	$("#highscoreWinSelectCategory")[0].value = category;
+	Draw.window.highscore.changeCategory();
+	Command.send('win,open,highscore,' + category);
+}
+
+Draw.window.highscore.changeQuest = function(open){	//called when selecting
+	var quest = $("#highscoreWinSelectQuest")[0].value;
+	
+	var str = '';
+	var goodvalue;
+	for(var i in Db.highscoreList){
+		if(!i.have(quest)) continue;
+		goodvalue = goodvalue || i;
+		str += '<option value="' + i + '">' + Db.highscoreList[i].name + '</option>';
+	}	
+	$("#highscoreWinSelectCategory")[0].innerHTML = str;
+	
+	$("#highscoreWinSelectCategory")[0].value = goodvalue;	//first one
+	Draw.window.highscore.changeCategory(open);
+}
+Draw.window.highscore.changeCategory = function(open){ //called when selecting
+	var category = $("#highscoreWinSelectCategory")[0].value;
+	
+	$("#highscoreWinDescription")[0].innerHTML = Db.highscoreList[category].description;
+	
+	if(open !== false) Command.send('win,open,highscore,' + category);
+}
+
+Draw.window.highscore.update = function(){
+	if(Date.now() - Draw.window.highscore.update.lastClick > 2000){
+		Draw.window.highscore.update.lastClick = Date.now();
+		Db.query('highscore',html.highscoreWin.selectCategory.value,true);
+		Chat.add(0,"Highscores take about 15 seconds to update. =/");
+	}	
+}
+Draw.window.highscore.update.lastClick = Date.now();
+
+//}
+
+
+
+
 
 

@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 	<head>
+		<meta name="google" value="notranslate" />
 		<link href='http://fonts.googleapis.com/css?family=Oleo+Script' rel='stylesheet' type='text/css'>
 		<link href='http://fonts.googleapis.com/css?family=VT323' rel='stylesheet' type='text/css'>
 		<link href='http://fonts.googleapis.com/css?family=Geo' rel='stylesheet' type='text/css'>
@@ -13,163 +14,215 @@
 		<link rel="stylesheet" href="/css/css.css" type="text/css" />
 		<link rel="stylesheet" href="/css/login.css" type="text/css"/>
 		<link rel="stylesheet" href="/css/progress.css" type="text/css" />
+		<link rel="stylesheet" href="/css/button.css" type="text/css" />
 		
-		 
+		<script src="/js/shared/BISON.js"></script>
+		
+		<script src="/library/jquery.min.js"></script>
+		<script src="/library/jqueryui/js/jquery-ui-1.10.4.custom.min.js"></script>
+		
 		<title>Raining Chain</title>
 	</head>
 	
 	
 	<body>
 		<script src="/socket.io/socket.io.js"></script>
+		<!--<script src="https://cdn.socket.io/socket.io-1.0.3.js"></script>-->
 		
-		<script>
+		<script>	
 		var SERVER = false;
-		var socket = io.connect();
-		//var socket = io.connect('http://localhost:3000');	//if via ip
+		var exports = {};
+		var loadDependency = function(){return '';}
+		var socket = io();
+				
 		Init = {};
 		Init.db = {};
 		</script>
 		
-		
-		<script src="/js/shared/BISON.js"></script>
-		
-		<script src="/library/jquery.min.js"></script>
-		<script src="/library/jqueryui/js/jquery-ui-1.10.4.custom.min.js"></script>
-
-		<script src="/js/shared/constant.js"></script>
-		<script src="/js/shared/customMod.js"></script>
+		<script src="/js/shared/CST.js"></script>
+		<script src="/js/shared/Db_customMod.js"></script>
 		<script src="/js/shared/Db_stat.js"></script>
-		<script src="/js/essentials.js"></script>
-		<script src="/js/shared/essentialsShare.js"></script>
-		<script src="/js/shared/Combat_sub.js"></script>
+		<script src="/js/Toolkit_client.js"></script>
+		<script src="/js/shared/Toolkit.js"></script>
+		<script src="/js/shared/Combat_shared.js"></script>
 
-		<script src="/js/img.js"></script>
-		<script src="/js/sfx.js"></script>
-		<script src="/js/song.js"></script>
-		<script src="/js/inputbase.js"></script>
-		<script src="/js/receive.js"></script>
-		<script src="/js/chat.js"></script>
+		<script src="/js/Img.js"></script>
+		<script src="/js/Sfx.js"></script>
+		<script src="/js/Song.js"></script>
+		<script src="/js/Input_client.js"></script>
+		<script src="/js/Change_receive.js"></script>
+		<script src="/js/Chat_client.js"></script>
 			
+		<script src="/js/shared/Actor.js"></script>
 		<script src="/js/shared/Actor_combat.js"></script>
 		<script src="/js/shared/Actor_boost.js"></script>
-		<script src="/js/clientLoop.js"></script>
-		<script src="/js/help.js"></script>
+		<script src="/js/Loop_client.js"></script>
+		<script src="/js/Input_controller.js"></script>
+		<script src="/js/Help.js"></script>
 		<script src="/js/shared/Main.js"></script>
-		<script src="/js/shared/anim.js"></script>
+		<script src="/js/shared/Anim.js"></script>
 		<script src="/js/shared/Collision.js"></script>
 		<script src="/js/shared/Db_sprite.js"></script>
-		<script src="/js/shared/Actor_init.js"></script>
 		<script src="/js/Draw.js"></script>
 		<script src="/js/Draw_tab.js"></script>
 		<script src="/js/Draw_window.js"></script>
 		<script src="/js/Draw_popup.js"></script>
 		<script src="/js/Draw_entity.js"></script>
 		<script src="/js/Draw_upper.js"></script>
-		<script src="/js/shared/command.js"></script>
+		<script src="/js/shared/Command.js"></script>
 		<script src="/js/shared/Button.js"></script>
-		<script src="/js/shared/passiveGrid.js"></script>
-		<script src="/js/shared/Db_customboost.js"></script>
-		<script src="/js/shared/Db_ability_sub.js"></script>
+		<script src="/js/shared/Passive.js"></script>
+		<script src="/js/shared/Db_statCustom.js"></script>
+		<script src="/js/shared/Contribution.js"></script>
 		
 		<script src="/js/main.js"></script>
-		<script src="/js/Map.js"></script>
-		<script src="/js/shared/queryShare.js"></script>
-		<script src="/js/shared/ts.js"></script>
-	
+		<script src="/js/Map_client.js"></script>
+		<script src="/js/shared/Db_query.js"></script>
+		<script src="/js/shared/Db_query_admin.js"></script>
+		
 		<div id="startDiv">
-			<a href="http://rainingchain.com/rs"><font size="5">Runescape Calculators</font></a>
+			<a href="/rs"><font size="5">Runescape Calculators</font></a><br>
+			<a href="/zelda"><font size="5">Zelda Glitch Database</font></a>
+			
 			<!-- Login -->
 			<div class="lg-container">
-				<h1 id="lg-title">Raining Chain<br>(BETA)</h1>
-				<div id="lg-form" name="lg-form">
-					
-					<div>
-						<label for="username">Username:</label>
-						<input type="text" id="lg-username" placeholder="username"/>
+				<h1 id="lg-title">Raining Chain <span style="font-size:25px"> Beta</span></h1>
+				
+				<br>
+				<button id="lg-signUpBtn" title="Create A New Account" style="text-decoration:underline;" onclick="Sign.display('up');return false;">Sign Up</button>
+				<button id="lg-signInBtn" title="Log In An Existing Account"  onclick="Sign.display('in');return false;">Sign In</button>
+				<br>
+				<form id="lg-signUpDiv" class="lg-form">
+					<h3 class="u">Account Data</h3>
+					<table>
+						<tr><td>Username:</td><td><input type="text" id="lg-signUpUsername" placeholder="username"/></td></tr>
+						<tr><td>Password:</td><td><input type="password" id="lg-signUpPassword" placeholder="password"/></td></tr>
+						<tr><td>Confirm:</td><td><input type="password" id="lg-signUpPasswordConfirm" placeholder="confirm password"/></td></tr>
+						<tr><td>Email:</td><td><input type="text" id="lg-signUpEmail" placeholder="recovery email"/></td></tr>
+						<tr><td><span title="If you have been referred by a friend, enter his username here.">
+							Referral:</span></td><td><input type="text" id="lg-signUpReferral" placeholder="friend username *optional*"/></td></tr>
+					</table>
+					<br>
+					<h3 class="u">Social Media: Optional</h3>
+					<div style=" width:400px; white-space:normal;">
+					Posting something about Raining Chain on these accounts will
+					automatically grant you Contribution Points used for cosmetic rewards.
+					More info here.
 					</div>
+					<br>
+					<table>
+						<tr><td>Youtube:</td><td><input type="text" id="lg-signUpYoutube" placeholder="ex: IdkWhatsRc *optional*"/></td></tr>
+						<tr><td>Twitch:</td><td><input type="text" id="lg-signUpTwitch" placeholder="*optional*"/></td></tr>
+						<tr><td>Reddit:</td><td><input type="text" id="lg-signUpReddit" placeholder="*optional*"/></td></tr>
+						<tr><td>Twitter:</td><td><input type="text" id="lg-signUpTwitter" placeholder="*optional*"/></td></tr>
+					</table>
 					
-					<div>
-						<label for="password">Password:</label>
-						<input type="password" id="lg-password" placeholder="password" />
-					</div>
+					<br>
+					<button onclick="Sign.up();">Create Account And Play</button>
+				</form>
+				
+				<form id="lg-signInDiv" class="lg-form" style="display:none;">
+					<br>
+					<table>
+						<tr><td>Username:</td><td><input type="text" id="lg-signInUsername" placeholder="username"/></td></tr>
+						<tr><td>Password:</td><td><input type="password" id="lg-signInPassword" placeholder="password"/></td></tr>
+					</table>
+					<br>
+					<button onclick="Sign.in()">Enter The Game</button>
+					<button style="font-size:15px" onclick="$('#accountManagement').dialog('open');">Lost Password</button>
+				</form>
 					
-					<div>				
-						<button onclick="Sign.in()">Sign In</button> <br>
-						<button onclick="Sign.up()">Sign Up</button>
-						<br>
-						<br>
-						<button onclick="readFiles.open()">Mods</button>
-						<br>
-						<br>
-						The servers are currently down. Open-Beta coming soon.<br>
-						You need Google Chrome to play this game.<br>
-					</div>
-				</div>
+					<!--<div>
+						
+						<button onclick="readFiles.open()">Mods</button> 
+						<script>if(window.location.hostname.have('ngrok')) $("#bottomStart")[0].innerHTML = 'You are on Raining Chain <span class="u">Test</span> Server.<br>';</script>
+						
+					</div>-->
 				
 				<br>
 				
 				<div id="lg-message"></div>	
 			</div>
 			
-			<div class="lg-container">	
-				<h2>Info</h2>
-				Raining Chain is a F2P open-source MMORPG currently under development.<br>
-				For gameplay footage: <a href="https://www.youtube.com/watch?v=feZAAgKC--A">Youtube Videos</a><br>
-				Source Code: <a href="https://github.com/RainingChain/rainingchain">Github</a><br>
-				Players will be able to contribute directly to the project with the Software Development Kit: 
-				<a href="https://github.com/RainingChain/rc_sdk">SDK (Work in progress)</a><br>
-			</div>
-				
 			<!-- Preloader -->
-			<div class="demo-wrapper html5-progress-bar">
+			<div class="demo-wrapper html5-progress-bar" title="Image Loading Process">
 				<div class="progress-bar-wrapper">
 					<progress id="preloader" value="0" max="100"></progress>
 					<span class="progress-value">0%</span>
 				</div>
 			</div>
 			
-			
-			
+			<div class="lg-container" style="font-family:Kelly Slab; font-size:20px;" align="center">	
+				<h2 class="u">Info</h2>
+				Raining Chain is a F2P open-source MMORPG.<br>
+				<br>
+				For gameplay footage: <a href="https://www.youtube.com/watch?v=feZAAgKC--A">Youtube Videos</a><br>
+				Source Code: <a href="https://github.com/RainingChain/rainingchain">Github</a><br>
+				<br>
+				Players are able to contribute directly to the project with the <a href="https://github.com/RainingChain/rc_sdk">Software Development Kit.</a><br>
+				<a href="https://www.youtube.com/watch?v=3j4d2xkhJP4&list=PLh-MBXZEiyMh5RfWWgGq65ZKGlTAoQT7j">Video tutorials about creating Quest. (Very Easy)</a><br>
+				<br>
+				<a href="http://www.twitch.tv/rainingchain" target="_blank" style="cursor:pointer" title="http://www.twitch.tv/rainingchain">Follow me on Twitch!</a><br>
+				<br>
+				Game designed for Google Chrome.<br>
+				Compatible with IE, Opera & Firefox.<br>
+			</div>
+					
 		</div>	
-		
-		
-		
 			
-		<div id="mainDiv" style="width: 1280px;  height:720px; margin: 0px auto;">
-		<div  id="gameDiv" class='posAbs' style="display:none; width:1280px; height:720px; overflow:hidden;">	<!--  -->
+		<div id="mainDiv" style="display:none; width: 1280px;  height:720px; margin: 0px auto;">
+		<div  id="gameDiv" class='posAbs' style="width:1280px; height:720px; overflow:hidden;">	<!--  -->
 			<div id="canvasDiv" class='posAbs'></div>
-			<div id="hintDiv" class='posAbs'></div>
+			
+			
+			<div id="minimapBelow" class='shadow posAbs'>	<!-- Draw.minimap.map.updateSize for position -->
+				<span style="white-space:nowrap;overflow:hidden;">
+					<span onclick="Draw.minimap.below.change(-1)" title="Enlarge"> + </span>
+					<span onclick="Draw.minimap.below.change(1)" title="Minimize"> - </span>
+					
+					<span id="minimapMap"></span>
+				</span><br>
+				<div style="white-space:normal;" id="hintDiv" class='posAbs'></div>
+			</div> 
+			
+			
 			<div id="performanceDiv" class='posAbs'></div>
-			<div id="contextDiv" style="white-space: nowrap; width:auto; padding:3px; z-index:100;" class='posAbs gradientBoxesWithOuterShadows'></div>
+			<div id="contextDiv" style="text-align:center; white-space: nowrap; width:auto; padding:3px; z-index:100;" class='posAbs gradientBoxesWithOuterShadows'></div>
+			<div id="optionListDiv" style=" white-space: nowrap; width:auto; padding:3px; z-index:100;" class='posAbs gradientBoxesWithOuterShadows'></div>
 			<div id="commandDiv" style="white-space: nowrap; width:auto; padding:3px; z-index:100;" class='posAbs gradientBoxesWithOuterShadows'></div>
+			
+			
+			<div id="aboveChat" style="font-size:15px; color:white;z-index:5" class="posAbs shadow"></div>
 			<!-- Chat -->
 			<div id="chatBoxDiv" class="posAbs"> 
-				<div id="chatBoxText" class='taJust onlyTextScroll' style="white-space:normal;"></div>
-				<form id='chatForm'>
-					<span id="chatUserName" class='onlyText'></span>
-					<input id="chatBoxInput" class='onlyText' type="text">
+				<div id="chatBoxText" class="taJust onlyTextScroll shadow" style="white-space:normal;color:white;"></div>
+				<form id="chatForm">
+					<span id="chatUserName" style="color:white;"  class="onlyText"></span>
+					<input id="chatBoxInput" style="color:white;" type="text" class="onlyText">
 				</form>
 			</div>		
 			
 			<div id="pmBoxDiv" class="posAbs"> 
-				<div id="pmBoxText" class='onlyText container'></div>
+				<div id="pmBoxText" class='onlyText container shadow'></div>
 			</div>
 			
-			<div id="dialogueBoxDiv" class="posAbs"> 
-				<div id="dialogueBoxText" class='posAbs taJust onlyText container'></div>
+			<div id="dialogueBoxDiv" style="color:white;" class="posAbs"> 
+				<div id="dialogueBoxText" style="color:white; font-size:20px;" class='posAbs taJust onlyText container'></div>
 			</div>	
 			
 			<!-- Tab -->
-			<div id="friendListDiv"	class="posAbs"> 
-				<div id="friendListText" class='posAbs onlyTextScroll'></div>
-			</div>
-			
-			<div id="questListDiv" class="posAbs"> 
-				<div id="questListText" class='posAbs onlyTextScroll'></div>
-			</div>
-			
-			<div id="prefListDiv" class="posAbs"> 
-				<div id="prefListText" class='posAbs onlyTextScroll'></div>
+			<div id="tabDiv">
+				<div id="friendListDiv"	class="posAbs"> 
+					<div id="friendListText" class='posAbs'></div>
+				</div>
+				
+				<div id="questListDiv" class="posAbs"> 
+					<div id="questListText" class='posAbs'></div>
+				</div>
+				
+				<div id="prefListDiv" class="posAbs"> 
+					<div id="prefListText" class='posAbs'></div>
+				</div>
 			</div>
 			
 			<!-- Window -->
@@ -179,111 +232,203 @@
 				<div id="abilityWinDiv"	class="posAbs"> 
 					<div id="abilityWinSubTitle" class='posAbs'></div>
 					<div id="abilityWinGeneralInfo" class='posAbs'></div>
+					<div id="abilityWinAttackDmg" class='posAbs'></div>
 					<div id="abilityWinUpgrade" class='posAbs'></div>
 					<div id="abilityWinDmgTrigger" class='posAbs'></div>
 				</div>
 				
+				<div id="statWinDiv"	class="posAbs"> 
+					<div id="statWinLeft" class='posAbs'></div>
+					<div id="statWinRight" class='posAbs'></div>
+				</div>
+				
 				<div id="passiveWinDiv"	class="posAbs"> 
-					<div id="passiveWinText" class='posAbs gradientBoxesWithOuterShadows'></div>
+					<div id="passiveWinText" class="posAbs gradientBoxesWithOuterShadows"></div>
+					<div id="passiveWinGrid" class="posAbs" style="display=none"></div>
 				</div>
 				
 				<div id="questWinDiv"	class="posAbs"> 
-					<div id="questWinInfo" class='posAbs onlyText'></div>
+					<div id="questWinComment" class='posAbs onlyText'></div>
+					<div id="questWinChallenge" class='posAbs onlyText'></div>
 					<div id="questWinStart" class='posAbs onlyText'></div>
 					<div id="questWinLeft" class='posAbs onlyText'></div>
 					<div id="questWinRight" class='posAbs onlyText'></div>
 				</div>
 					
 				<div id="bindingWinDiv"	class="posAbs"> 	
-					<div id="bindingWinTable" class="CSSTableGenerator posAbs" style="width:500px"></div>
+					<div id="bindingWinTable" class="CSSTableGenerator CSSTableGeneratorHead maxSize posAbs" style="width:500px"></div>
 					<div id="bindingWinTemplate" class="posAbs gradientBoxesWithOuterShadows" style="white-space: nowrap;"></div>
 				</div>
 				
-				<div id="highscoreWinDiv"	class="posAbs"> 
-					<select id="highscoreWinSelect"></select>
-					<div id="highscoreWinTable" class="CSSTableGenerator posAbs" style="width:500px"></div>
-					
+				<div id="tradeWinDiv"	class="posAbs"> 	
+					<button id="tradeWinBtnSelf" class="myButton posAbs" onclick="Command.send('win,trade,toggle');" style=""></button>
+					<button id="tradeWinBtnOther" class="myButton posAbs" disabled="disabled" style=""></button>
 				</div>
 				
 				
+				<div id="highscoreWinDiv"	class="posAbs" style="font-size: 30px;"> 
+					Quest: <select class="selectNice" id="highscoreWinSelectQuest"></select> - 
+					Category: <select class="selectNice" id="highscoreWinSelectCategory"></select> - 
+					<button class="myButton" onclick="Draw.window.highscore.update()">Update</button>
+					<br>
+					<span style="font-size: 20px;" id="highscoreWinDescription"></span><br>
+					<div id="highscoreWinTable" class="CSSTableGenerator CSSTableGeneratorHead maxSize posAbs" style="overflow-y: scroll; height:350px; width:500px"></div>
+					
+				</div>
+				<div id="questRating" class="niceDiv" style="visibility:hidden; font-size:20px; text-align:center; position:absolute; top:25px; left:600px; width:250px; height:120px;">
+					Rate the quest.<br>
+					<fieldset class="rating">
+						<input type="radio" onclick="Draw.questRating.click(5);" id="star5" /><label for="star5" title="Rocks!">5 stars</label>
+						<input type="radio" onclick="Draw.questRating.click(4);" id="star4" /><label for="star4" title="Pretty good">4 stars</label>
+						<input type="radio" onclick="Draw.questRating.click(3);" id="star3" /><label for="star3" title="Meh">3 stars</label>
+						<input type="radio" onclick="Draw.questRating.click(2);" id="star2" /><label for="star2" title="Kinda bad">2 stars</label>
+						<input type="radio" onclick="Draw.questRating.click(1);" id="star1" /><label for="star1" title="Sucks big time">1 star</label>
+					</fieldset>
+				</div>
+				<div id="questPopup" class="niceDiv" style="white-space:normal; visibility:hidden; font-size:20px; text-align:center; position:absolute; top:25px; left:600px; width:300px; height:auto;"></div>
+				<!-- Warning -->
+				<div id="warningDiv" class="niceDiv shadow" style="white-space:normal; font:20px Kelly Slab; position:absolute; top:200px; left:200px; width:500px; height:auto; background-color:red; color:white; visibility:hidden">
+					<span id="warningText"></span>
+				</div>
 			</div>
 			
 			<!-- Pop -->
 			<div id="popDiv" class="posAbs" style="z-index:40"></div>
 			
+			
+				
+			
 		</div>
 		</div>
+		<div id="largeLog" style="white-space:normal; width:1280px; font-family:Kelly Slab; font-size:20px; color:white;"></div>
 		
-		<!-- Warning -->
-		<div class="ui-widget" id="warningDiv" style="visibility:hidden">
-			<div class="ui-state-error ui-corner-all" style="padding: 0 .7em;">
-				<p><span class="ui-icon ui-icon-alert" style="float: left; margin-right: .3em;"></span>
-				<span id="warningText"></span></p>
+		<div id="TestQuest" style="font-size:20px; display:none"> 
+			<span style="color:white; font-size:30px;">Click links below to quickly test quests:</span><br>
+			
+			<div style="margin-left:50px">
+				<a onclick="TestQuest('QlureKill');">Quest "Lure & Kill"</a><br>
+				<a onclick="TestQuest('QpuzzleBridge');">Quest "Puzzle Bridge"</a><br>
+				<a onclick="TestQuest('Qdarkness');">Quest "Darkness".</a><br>
+				<a onclick="TestQuest('QtowerDefence');">Quest "Tower Defence"</a><br>
+				<a onclick="TestQuest('QprotectFirstTown');">Quest "Protect Town"</a><br>
+				<a onclick="TestQuest('QcollectFight');">Quest "Collect & Fight" (Solo & Party)</a><br>
+				<a onclick="TestQuest('Qbtt000');">Quest "Break The Targets"</a><br>
+				<a onclick="TestQuest('QbulletHeaven');">Quest "Bullet Heaven"</a><br>
+				<a onclick="TestQuest('QbaseDefence');">Quest "Defend Base".</a><br>
+				<a onclick="TestQuest('Qminesweeper');">Quest "Minesweeper".</a><br>
+				<a onclick="TestQuest('Qfifteen');">Quest "Fifteen".</a><br>
+				<a onclick="TestQuest('Qtutorial');">Quest "Tutorial". Might be broken if not doing it at beginning...</a><br>
 			</div>
 		</div>
+		<br>
+		<div id="infoDay" style="white-space:normal; width:1280px; font-family:Kelly Slab; font-size:30px; color:white;"></div>		
+		<div id="tsDiv" style="visibility:hidden"><form id='tsForm'><input id="tsInput" type="text" size="100" style="font-size: 30px;"></form></div>
 		
-		<!-- ts -->
-		<div id="tsDiv" style="visibility:hidden">
-			<form id='tsForm'><input id="tsInput" type="text" size="100" style="font-size: 30px;"></form>		
-		</div>
+		
 		
 		<!-- Dialogue Box from Jquery -->
 		<div id="help" title="Raining Chain Documentation"></div>
 		<div id="questionDiv" title="Server Question">
 			<div id="questionText" class='onlyText'></div>
 			<div id="questionOption" class='onlyText'></div>
+			
 			<form id='questionForm'>
-				<input id="questionInput" class='onlyText' placeholder="answer" type="text">
-			</form>		
+				<input id="questionInput"  placeholder="answer" class="onlyText" type="text">
+			</form>
 		</div>
 		
 		<div id="customMod" title="Use Custom Mods"></div>
-	
 		<div id="hax" title="Hax List"></div>
+		<div id="popupDialog" title="Important Message to Developers"></div>
+		<div id="firstSignIn" style="font-size:25px" title="Welcome to Raining Chain"></div>
+		<div id="questComment" title="Quest Comments"></div>
+		<div id="questComplete" title="Quest Comments"></div>
+		<div id="contribution" title="Contribution"></div>
+		
+		
+		<div id="accountManagement" title="Account Management"></div>
+		
 		
 		<div id="contactMe" title="Contact Me"> 
-			<select id="contactMeSelect">
-			  <option value="bug">Bug</option>
-			  <option value="hax">Hax</option>
-			  <option value="player">Player</option>
-			  <option value="other">Other</option>
+			<select id="contactMeCategory" onchange="Chat.report.select()">
+			  <option value="misc">Feedback</option>
+			  <option value="quest">Quest</option>
+			  <!--<option value="abuse">Abuse</option>
+			  <option value="bug">Bug</option>-->
+			</select>
+			<select id="contactMeSubcategory">
+				<option value="misc">Misc</option>
 			</select>
 			<br>
 			Title: <input id="contactMeTitle"></input><br>			
-			Text (Up to 1k Characters): <br>
+			Text (Limit <span id="contactMeLimit">1000</span> characters. Quest comments will be tweeted on Twitter.)<br>
 			<textarea id="contactMeText" rows="10" cols="50"></textarea>
 			<br>
 			<input type="submit" value="Submit" onclick="Chat.report()">
 		</div>
 		
-		<script>
+		<script>$(document).ready(function() {
 		/*Jquery 101:
 		$( "#myId" );	$( ".myClass" );	$( "input[name='first_name']" );
 		$( "div:visible" );
 		$( "div.foo" ).has( "p" );         // div.foo elements that contain <p> tags*/
 		
 		$( document ).tooltip();
-		$( document ).tooltip('option','show',100);
+		$( document ).tooltip('option','show',false);
+		$( document ).tooltip('option','hide',false);
 		
+		$( "#popupDialog" ).dialog({autoOpen: false,width: 1200, maxHeight:700});
+		$( "#questComment" ).dialog({autoOpen: false,width: 1200, maxHeight:700});
+		$( "#questComplete" ).dialog({autoOpen: false,width: 1000, maxHeight:700});
+		
+		
+		$( "#firstSignIn" ).dialog({autoOpen: false,width: 1200});
+		$.get('/html/firstSignIn.html').success(function(data){ $('#firstSignIn').html(data);});
+		$( "#firstSignIn" ).dialog({
+		   beforeClose: function() {
+				var bool = Date.now() - Game.startTime > 10*1000;
+				if(!bool && $( "#firstSignIn" )[0].innerHTML[0] !== 'I') 
+					$( "#firstSignIn" )[0].innerHTML = 'I know you really want to play now but please take the time to read the text below. :D<br>' + $( "#firstSignIn" )[0].innerHTML;
+				return bool;
+		   }
+		});
+
 		$( "#help" ).dialog({autoOpen: false,width: 1200});
-		$.get('/js/help.html').success(function(data){ $('#help').html(Init.help(data));});
+		$.get('/html/help.html').success(function(data){ $('#help').html(Init.help(data));});
 		
-		$( "#questionDiv" ).dialog({autoOpen: false,width: 400});
+		$( "#questionDiv" ).dialog({autoOpen: false,width: 400,maxHeight:700});
 		$('#questionForm').submit(function(e) {
 			e.preventDefault();
 			Chat.question.answer($("#questionInput")[0].value);
 		});
-		$('#questionForm')[0].mode = 'server';
+		
+		$('#lg-signInDiv').submit(function(e) {	//BAD
+			Sign.in();	
+			Sign.display('in');
+			e.preventDefault();
+			return false;
+		});
+		$('#lg-signUpDiv').submit(function(e) {	//BAD
+			e.preventDefault();
+			return false;
+		});
 		
 		//ts('Chat.question(key,{text:"asdkjasdas asd ahjd asd asjhd",func:function(){return false},repeat:1})')
 		
-		$( "#customMod" ).dialog({autoOpen: false,width: 1000});
-		$.get('/js/customMod.html').success(function(data){	$('#customMod').html(data);	});
+		$( "#customMod" ).dialog({autoOpen: false,width: 1000, maxHeight:700});
+		$.get('/html/Db_customMod.html').success(function(data){	$('#customMod').html(data);	});
 		
-		$( "#hax" ).dialog({autoOpen: false,width: 1000});
-		$.get('/js/hax.html').success(function(data){ $('#hax').html(data);});
+		$( "#hax" ).dialog({autoOpen: false,width: 1000, maxHeight:700});
+		$.get('/html/hax.html').success(function(data){ $('#hax').html(data);});
 		
-		$( "#contactMe" ).dialog({autoOpen: false,width: 1000});
+		$( "#contactMe" ).dialog({autoOpen: false,width: 800, maxHeight:700});
+		
+		$( "#contribution" ).dialog({autoOpen: false,width: 900, maxHeight:700});
+		$.get('/html/contribution.html').success(function(data){	$('#contribution').html(data);	});
+		
+		
+		$( "#accountManagement" ).dialog({autoOpen: false,width: 1000});
+		$.get('/html/account.html').success(function(data){	$('#accountManagement').html(data);	});
 		
 		$('#chatForm').submit(function(e) {
 			Chat.send();
@@ -294,41 +439,57 @@
 			$('#tsInput')[0].value = '';
 			e.preventDefault();
 		});
-		$("#lg-username")[0].value = localStorage.getItem('username') || $("#lg-username")[0].value;
+		if(localStorage.getItem('username')){
+			$("#lg-signInUsername")[0].value = localStorage.getItem('username');
+			Sign.display('in');
+		}
 		
-		var html = {
-			'chat':{'div': $("#chatBoxDiv")[0],'text': $("#chatBoxText")[0],'input': $("#chatBoxInput")[0]},
-			'pm':{'div':$("#pmBoxDiv")[0],'text':$("#pmBoxText")[0]},
-			'dialogue':{'div':$("#dialogueBoxDiv")[0],'text':$("#dialogueBoxText")[0]},
-			'friendTab':{'div':$("#friendListDiv")[0],'text':$("#friendListText")[0]},
-			'questTab':{'div':$("#questListDiv")[0],'text':$("#questListText")[0]},
-			'prefTab':{'div':$("#prefListDiv")[0],'text':$("#prefListText")[0]},
-			'context':{'div':$("#context" + "Div")[0]},	
-			'command':{'div':$("#command" + "Div")[0]},
-			'questWin':{'div':$("#questWin" + "Div")[0],
-						'info':$("#questWin" + "Info")[0],
-						'start':$("#questWin" + "Start")[0],
-						'right':$("#questWin" + "Right")[0],
-						'left':$("#questWin" + "Left")[0],
+		html = {
+			chat:{div: $("#chatBoxDiv")[0],text: $("#chatBoxText")[0],input: $("#chatBoxInput")[0]},
+			pm:{div:$("#pmBoxDiv")[0],text:$("#pmBoxText")[0]},
+			dialogue:{div:$("#dialogueBoxDiv")[0],text:$("#dialogueBoxText")[0]},
+			friendTab:{div:$("#friendListDiv")[0],text:$("#friendListText")[0]},
+			questTab:{div:$("#questListDiv")[0],text:$("#questListText")[0]},
+			prefTab:{div:$("#prefListDiv")[0],text:$("#prefListText")[0]},
+			context:{div:$("#context" + "Div")[0]},	
+			command:{div:$("#command" + "Div")[0]},
+			questWin:{div:$("#questWin" + "Div")[0],
+						challenge:$("#questWin" + "Challenge")[0],
+						start:$("#questWin" + "Start")[0],
+						right:$("#questWin" + "Right")[0],
+						left:$("#questWin" + "Left")[0],
+						comment:$("#questWin" + "Comment")[0],
 						},	
-			'bindingWin':{'div':$("#bindingWin" + "Div")[0],
-						'table':$("#bindingWin" + "Table")[0],
-						'template':$("#bindingWin" + "Template")[0],
+			bindingWin:{div:$("#bindingWin" + "Div")[0],
+						table:$("#bindingWin" + "Table")[0],
+						template:$("#bindingWin" + "Template")[0],
 						},	
-			'highscoreWin':{'div':$("#highscoreWin" + "Div")[0],
-						'table':$("#highscoreWin" + "Table")[0],
-						'template':$("#highscoreWin" + "Select")[0],
+			highscoreWin:{div:$("#highscoreWin" + "Div")[0],
+						table:$("#highscoreWin" + "Table")[0],
+						selectQuest:$("#highscoreWin" + "SelectQuest")[0],
+						selectCategory:$("#highscoreWin" + "SelectCategory")[0],
 						},	
 						
-			'win':{'div':$("#win" + "Div")[0],'title':$("#win" + "Title")[0]},	
-			'abilityWin':{'div':$("#abilityWin" + "Div")[0],
-						'subtitle':$("#abilityWin" + "SubTitle")[0],
-						'generalinfo':$("#abilityWin" + "GeneralInfo")[0],
-						'upgrade':$("#abilityWin" + "Upgrade")[0],
-						'dmgTrigger':$("#abilityWin" + "DmgTrigger")[0],
+			win:{div:$("#win" + "Div")[0],title:$("#win" + "Title")[0]},	
+			abilityWin:{div:$("#abilityWin" + "Div")[0],
+						subtitle:$("#abilityWin" + "SubTitle")[0],
+						generalinfo:$("#abilityWin" + "GeneralInfo")[0],
+						upgrade:$("#abilityWin" + "Upgrade")[0],
+						dmgTrigger:$("#abilityWin" + "DmgTrigger")[0],
+						attackDmg:$("#abilityWin" + "AttackDmg")[0],
 						},
-			'passiveWin':{'div':$("#passiveWin" + "Div")[0],'text':$("#passiveWin" + "Text")[0]},
-			
+			tradeWin:{div:$("#tradeWin" + "Div")[0],
+						btnSelf:$("#tradeWin" + "BtnSelf")[0],
+						btnOther:$("#tradeWin" + "BtnOther")[0],
+						},
+			statWin:{div:$("#statWin" + "Div")[0],
+				left:$("#statWin" + "Left")[0],
+				right:$("#statWin" + "Right")[0],
+			},
+			passiveWin:{div:$("#passiveWin" + "Div")[0],grid:$("#passiveWin" + "Grid")[0],text:$("#passiveWin" + "Text")[0]},
+			$abilityWinAttackDmg:$("#abilityWinAttackDmg"),
+			$chatUserName:$("#chatUserName"),
+			$optionListDiv:$("#optionListDiv"),
 		};
 		
 		// $$$ is \r\n      var html = {$$$			win:{$$$				main:$$$				bank:$$$				stat:$$$				ability:$$$				trade:$$$				quest:$$$				passive:$$$			},$$$			tab:{$$$				main:$$$				inventory:$$$				equip:$$$				skill:$$$				friend:$$$				quest:$$$				setting:$$$			},$$$			minimap:$$$			context:$$$			resource:$$$			chat:$$$			$$$			$$$			$$$			$$$			'div': $("#chatBoxDiv")[0],'text': $("#chatBoxText")[0],'input': $("#chatBoxInput")[0]},$$$			'pm':{'div':$("#pmBoxDiv")[0],'text':$("#pmBoxText")[0]},$$$			'dialogue':{'div':$("#dialogueBoxDiv")[0],'text':$("#dialogueBoxText")[0]},$$$			'friendTab':{'div':$("#friendListDiv")[0],'text':$("#friendListText")[0]},$$$			'questTab':{'div':$("#questListDiv")[0],'text':$("#questListText")[0]},$$$			'questWin':{'div':$("#questWin" + "Div")[0],$$$						'info':$("#questWin" + "Info")[0],$$$						'hint':$("#questWin" + "Hint")[0],$$$						'description':$("#questWin" + "Description")[0],$$$						'requirement':$("#questWin" + "Requirement")[0],$$$						'bonus':$("#questWin" + "Bonus")[0],$$$						},	$$$			'win':{'div':$("#win" + "Div")[0],'title':$("#win" + "Title")[0]},	$$$			'abilityWin':{'div':$("#abilityWin" + "Div")[0],$$$						'subtitle':$("#abilityWin" + "SubTitle")[0],$$$						'generalinfo':$("#abilityWin" + "GeneralInfo")[0],$$$						'upgrade':$("#abilityWin" + "Upgrade")[0],$$$						},	$$$			$$$			'passiveWin':{'div':$("#passiveWin" + "Div")[0],'text':$("#passiveWin" + "Text")[0]}$$$		};
@@ -345,8 +506,16 @@
 		
 		
 		
-		</script>
+		
+		
+		});</script>
 		
 	</body>
-	<script type="text/javascript">var sc_project=9738829; var sc_invisible=0; var sc_security="f32083c8"; var scJsHost = (("https:" == document.location.protocol) ?"https://secure." : "http://www.");document.write("<sc"+"ript type='text/javascript' src='" +scJsHost+"statcounter.com/counter/counter.js'></"+"script>");</script><noscript><div class="statcounter"><a title="web analytics"href="http://statcounter.com/" target="_blank"><imgclass="statcounter"src="http://c.statcounter.com/9738829/0/f32083c8/0/"alt="web analytics"></a></div></noscript>
+	
+	
+<script type="text/javascript">
+	var sc_project=9738829; var sc_invisible=1; var sc_security="f32083c8"; 
+	var scJsHost = (("https:" == document.location.protocol) ?"https://secure." : "http://www.");
+	document.write("<sc"+"ript type='text/javascript' src='" +scJsHost+"statcounter.com/counter/counter.js'></"+"script>");
+</script>
 </html>

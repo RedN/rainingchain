@@ -1,0 +1,13 @@
+For shortcuts to work, you will need to place:
+Game engine in: 	C:rc\rainingchain
+SDK:				C:rc\rc_sdk
+
+###################################
+
+If you are on Linux or Mac, .bat files will not work.
+Here's another way to run the server (works also in Windows):
+- Open command prompt. (Search for command with window start search bar. Command prompt is also known as terminal or console.)
+- Move to the rainingchain directory using the command "cd.." (to exit folder) and "cd [folder_name]" (to enter folder)
+- Once inside the rainingchain folder, type "node app.js" in the command line.
+
+If you need more help: https://www.youtube.com/watch?v=1LkHv_-RCt8

@@ -1,69 +1,89 @@
+//LICENSED CODE BY SAMUEL MAGNAN FOR RAININGCHAIN.COM, LICENSE INFORMATION AT GITHUB.COM/RAININGCHAIN/RAININGCHAIN
+eval(loadDependency(['Db','List','Actor','Tk','Init','Bullet','Strike','Group','Map','Drop']));
 var astar = require('astar');
 
 Db.map = {};
 //var mapList = [];
 
 Init.db.map = function (){	
-	var a = Db.map;
-	
-	//for(var i in mapList)	Db.map[mapList[i]] = require('./map/'+mapList[i]).map;		//not longer using. each map must be a quest
-	
-	for(var m in a){
-		a[m] = a[m]();
-		a[m].id = m;
-		Map.creation.model(a[m]);
+	for(var i in Db.map){
+		Db.map[i].id = i;
+		Db.map[i] = Map.creation.model(Db.map[i]);
 	}
-	
 }
 
-Init.db.map.template = function(){
+Map.template = function(){
+	return Tk.useTemplate(Map.template.model(),{
+		model:'',
+		version:'',
+		alwaysExist:false,
+		timer:5*60*1000/25,
+		list:{all:{},player:{},bullet:{},npc:{},anim:{},actor:{},drop:{},group:{}},		//acts like List.all (for faster activeList and collisionRect)
+	});
+}
+
+Map.template.model = function(){
 	return {
+		id:'',
 		addon:{},
 		name : "No Name Map",
 		tileset : 'v1.1',
-		grid :[[]],
+		grid :{player:[[]],npc:[[]],bullet:[[]]},
 		lvl:0,
 		fall:null,
-		graphic:null,	//if use same graphic than other map
+		graphic:'',	//if use same graphic than other map
 	}
 }
-
-Map.creation = function(namemodel,version,lvl){	//create instance of map. version is usually the player name
+Map.template.addon = function(){
+	return {
+		load:null,
+		loop:null,
+		playerEnter:null,
+		playerLeave:null,
+		spot:{},
+		path:{},
+		variable:{},
+	}
+}
+Map.creation = function(namemodel,version,creatorkey){	//create instance of map. version is usually the player name
 	version = version || 'MAIN';
 	var newid = namemodel + '@' + version;
 	var model = Db.map[namemodel];
+
+	var newaddon = {};
+	for(var i in model.addon) newaddon[i] = Tk.useTemplate(Map.template.addon(),Tk.deepClone(model.addon[i]));
 	
-	var newaddon = Tk.deepClone(model.addon);
 	for(var i in newaddon){
 		for(var j in newaddon[i].spot){
 			newaddon[i].spot[j].map = newid;
 			newaddon[i].spot[j].addon = i;
+			newaddon[i].spot.map = newid;
 		}
 	}
-	//TOFIX problem with grid if using graphic
 	
-	var map = {
+	var map = Tk.useTemplate(Map.template(),{
 		id:newid,
 		name:model.name,
 		model:model.id,
 		version:version,
+		alwaysExist:version === 'MAIN' && model.alwaysExist,
 		graphic:model.graphic,
 		grid:Db.map[model.graphic].grid,
 		fall:model.fall,
-		lvl:lvl || model.lvl,
+		lvl:model.lvl,
 		addon:newaddon,
 		timer:version === 'MAIN' ? 1/0 : 5*60*1000/25,
-		list:{all:{},player:{},bullet:{},npc:{},anim:{},actor:{},drop:{},group:{}},		//acts like List.all (for faster activeList and collisionRect)
-		
-	};
+	});
 	
 	List.map[newid] = map;
 	
-	Map.load(List.map[newid]);
+	Map.load(List.map[newid],creatorkey);
 	return newid;
 }
 
 Map.creation.model = function(map){	//create the model that will be in Db.map | Model will then be modded by quest
+	map = Tk.useTemplate(Map.template.model(),map);
+	
 	var grid = [];	//for astar
 	for(var i = 0 ; i < map.grid.length; i++){	
 		grid[i] = [];
@@ -88,12 +108,17 @@ Map.creation.model = function(map){	//create the model that will be in Db.map | 
 	return map;
 }
 
+//ts("Map.remove(List.map[p.map])");
 Map.remove = function(map){
-	if(Map.getVersion(map.id) === "MAIN") return; //cant delete main maps
+	if(map.alwaysExist) return; //cant delete main maps
+	for(var i in map.list.bullet) Bullet.remove(List.all[i]);	//need to be first because activeList has npc
 	for(var i in map.list.group) Group.remove(List.group[i]);
+	for(var i in map.list.player){
+		ERROR(4,'deleting map and player inside',map.id);   //should not happen
+		Actor.teleport.town(List.all[i],true);
+	}	
 	for(var i in map.list.actor) Actor.remove(List.all[i]);
 	for(var i in map.list.drop) Drop.remove(List.all[i]);
-	for(var i in map.list.bullet) Bullet.remove(List.all[i]);
 	for(var i in map.list.strike) Strike.remove(List.all[i]);
 	delete List.map[map.id];
 }

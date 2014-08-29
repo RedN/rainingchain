@@ -1,3 +1,5 @@
+//LICENSED CODE BY SAMUEL MAGNAN FOR RAININGCHAIN.COM, LICENSE INFORMATION AT GITHUB.COM/RAININGCHAIN/RAININGCHAIN
+eval(loadDependency(['List','Main','Actor','Db','Init','Tk','Server','Chat','Itemlist','Craft','Item','Skill','requireDb'],['Plan']));
 var db = requireDb();
 Init.db.plan = function(cb){
 	Db.plan = {};
@@ -8,21 +10,31 @@ Init.db.plan = function(cb){
 	
 	
 		a['randomArmor'] = {
-			category:'armor',
+			category:'equip',
 			req:{item:[],skill:{}},
 		};
-		
+		a['Qtutorial-bow'] = {
+			category:'equip',
+			piece:'weapon',	
+			type:'bow',		
+			req:{item:[['Qtutorial-resource',2]],skill:{}},
+			definitive:1,
+			quest:'Qtutorial',
+			drop:0,
+			salvage:0,
+			upgrade:0,
+		};
 		
 		a['randomWeapon'] = {
 			category:'equip',
-			piece:'melee',	
+			piece:'weapon',	
 			type:'sword',		
 			req:{item:[],skill:{}},
 		};
 		
 		a['randomWeapon2'] = {
 			category:'equip',
-			piece:'magic',	
+			piece:'weapon',	
 			type:'wand',		
 			req:{item:[],skill:{}},
 		};
@@ -36,33 +48,35 @@ Init.db.plan = function(cb){
 	})
 }
 	
-Plan = {};
+var Plan = exports.Plan = {};
 
 Plan.creation = function(preplan){
 	//seed: lvl, category,[ piece, type, rarity, quality,]
 	//extra: definitive, minBoost, maxBoost
 	
-	var plan = Tk.useTemplate(Plan.template(),preplan);
+	var plan = Tk.useTemplate(Plan.template(),preplan,true);
 	if(plan.category === 'equip' || plan.category === 'weapon' || plan.category === 'armor') 
 		plan = Plan.template.equip(plan);
-	if(plan.category === 'ability') 
-		plan = Plan.template.ability(plan);	
 	
 	Db.plan[plan.id] = plan;
-	
 	Item.creation({
-		'id':plan.id,
-		'name':plan.name,
-		'icon':plan.icon,
-		'option':[	
-			{'name':'Examine','func':'Main.examine','param':['plan',plan.id]},
-			{'name':'Use','func':'Plan.use','param':[plan.id]},
+		id:plan.id,
+		name:plan.name,
+		icon:plan.icon,
+		quest:plan.quest,
+		drop:0,
+		trade:0,
+		option:[	
+			{'name':'Examine','func':Main.examine,'param':['$main','plan',plan.id]},
+			{'name':'Craft Equip','func':Plan.use,'param':[plan.id]},
+			{'name':'Upgrade Tier',description:'Improve plan but increase items required.','func':Plan.upgrade.click,'param':[plan.id]},
+			{'name':'Salvage',description:'Convert into crafting materials.','func':Plan.salvage,'param':[plan.id]},
 		]
 	});
 		
 	db.upsert('plan',{'id':plan.id}, plan, db.err);
 	
-	if(plan.definitive) return plan.id;
+	if(plan.definitive){ db.upsert('plan',{'id':plan.id}, plan, db.err); return plan.id; }
 	
 	//Lvl Rarity quality
 	plan.lvl = Math.floor(plan.lvl * (1 + 0.1*Math.randomML()));	//aka lvl += 10
@@ -75,70 +89,77 @@ Plan.creation = function(preplan){
 	
 	
 	var num = Math.random();
-	if(num < 0.1){plan.color = 'blue';plan.minAmount = 1;}
-	if(num < 0.01){plan.color = 'yellow';plan.minAmount = 3;}
+	if(num < 0.2){ plan.minAmount = 1; plan.minAmountOriginal = 1; }
+	if(num < 0.05){ plan.minAmount = 2; plan.minAmountOriginal = 2; }
+	if(num < 0.01){ plan.minAmount = 3; plan.minAmountOriginal = 3; }
 	
+	Plan.setColor(plan);
 	
 	//Requirements
-	plan = Plan.creation.req(plan);
+	plan = Plan.creation.req(plan);	
 	
+	plan.definitive = 1;
 	
-	
-	
-	
+	db.upsert('plan',{'id':plan.id}, plan, db.err);
 	return plan.id;
+}
+
+Plan.creation.simple = function(key){
+	var lvl = typeof key === 'number' ? key : (typeof key === 'string' ?  Actor.getCombatLevel(List.all[key]) : 0);
+
+	return Plan.creation({
+		'rarity':Math.random(),
+		'quality':Math.random(),
+		'lvl':lvl,
+		'category':'equip',
+		'minAmount':0,
+		'maxAmount':6,
+	});
+}
+
+Plan.setColor = function(plan){
+	if(plan.minAmount === 0){ plan.color = 'white'; return; }
+	if(plan.minAmount <= 2){ plan.color = 'blue'; return ; }
+	plan.color = 'yellow';
 }
 
 Plan.creation.req = function(plan){
 	var lvl = plan.lvl;
+	var rlvl = Math.floor(lvl/20);
 	
-	var array = {
-		'melee':['chain','metal'],
-		'range':['leaf','wood'],
-		'magic':['hide','bone'],
-	};
+	//armor
+	if(plan.type === 'metal'){
+		plan.req.item = [['metal-'+rlvl,10]];
+		if(lvl) plan.req.skill = {metalwork:lvl};
+	} else if(plan.type === 'wood'){
+		plan.req.item = [['wood-'+rlvl,10]];
+		if(lvl) plan.req.skill = {woodwork:lvl};
+	} else if(plan.type === 'bone'){
+		plan.req.item = [['bone-'+rlvl,10]];
+		if(lvl) plan.req.skill = {leatherwork:lvl};
+	} else if(plan.type === 'ruby' || plan.type === 'sapphire' || plan.type === 'topaz'){
+		var random = ['metal-','wood-','bone-'].random();
+		plan.req.item = [
+			[plan.type + '-'+ rlvl,2],
+			[random+rlvl,1]
+		];
+		var lvl08 = (lvl*0.8).r(0);
+		if(lvl) plan.req.skill = {metalwork:lvl08,woodwork:lvl08,leatherwork:lvl08};
+	} 
 	
-	var skill = {
-		'chain':'metalwork',
-		'metal':'metalwork',
-		'leaf':'woodwork',
-		'wood':'woodwork',
-		'hide':'leatherwork',
-		'bone':'leatherwork',
-		'ruby':'metalwork',
-		'sapphire':'woodwork',
-		'topaz':'leatherwork',
-	};
-	
-	//Item
-	var lvlcap = Math.floor(plan.lvl/20);
-	
-	var main = array[plan.piece] ? array[plan.piece].random() : plan.type;
-	for(var i = 0 ; i <= lvlcap; i++){	
-		var amount = lvl < 20 ? lvl*5 : 100
-		plan.req.item.push([main + '-' + i*20,100]);
+	if(plan.type === 'mace' || plan.type === 'sword' || plan.type === 'spear'){
+		plan.req.item = [['metal-'+rlvl,15]];
+		if(lvl) plan.req.skill = {metalwork:lvl};
+	} else if(plan.type === 'bow' || plan.type === 'crossbow' || plan.type === 'boomerang'){
+		plan.req.item = [['wood-'+rlvl,15]];
+		if(lvl) plan.req.skill = {woodwork:lvl};
+	} else if(plan.type === 'wand' || plan.type === 'orb' || plan.type === 'staff'){
+		plan.req.item = [['bone-'+rlvl,15]];
+		if(lvl) plan.req.skill = {leatherwork:lvl};
 	}
-	
-	if(lvl > 20){
-		var rare = Math.floor(Math.random()*10)
-		rare = 'rare-' + rare;
-		plan.req.item.push([rare,1]);
-	}
-	
-	if(lvl > 10){
-		plan.req.item.push(['shard-' + plan.color,5]);	
-	}	
-		
-	//Skill
-	var sk = skill[main];
-	plan.req.skill[sk] = plan.lvl;
 	
 	return plan;
 }
-
-
-
-
 
 Plan.template = function(){
 	var id = 'plan-' + Math.randomId();
@@ -152,21 +173,25 @@ Plan.template = function(){
 		rarity:0, 
 		req:{'skill':{},'item':[[id,1]]},
 		name:'Bugged Plan',
+		minAmountOriginal:0,
 		minAmount:0,
-		maxAmount:10,
+		maxAmount:6,
 		color:'white',
+		quest:'',
+		salvage:true,
+		upgrade:true,
 	}
 }
 
 Plan.template.equip = function(plan){
 	if(plan.category === 'weapon' || plan.category === 'armor'){
-		plan.piece = plan.piece || Cst.equip[plan.category].piece.random();
+		plan.piece = plan.piece || CST.equip.piece.random();
 		plan.category = 'equip';
-	} else plan.piece = plan.piece || Cst.equip.piece.random();	//aka category already equip
+	} else plan.piece = plan.piece || CST.equip.piece.random();	//aka category already equip
 	
 	plan.name = 'Equip Plan';
 	plan.icon = 'plan.equip';
-	plan.type = plan.type || Cst.equip[plan.piece].type.random(); 
+	plan.type = plan.type || CST.equip[plan.piece].random(); 
 	
 	return plan;
 }
@@ -187,16 +212,20 @@ Plan.use = function(key,id){	//when player tries to use plan
 	Itemlist.remove(inv,plan.req.item);
 	
 	plan.creator = List.all[key].username;
-	var itemid;
-	if(plan.unique){ itemid = plan.unique }	//always give same items		
-	if(plan.category === 'equip') itemid = Craft.equip(plan); 
-	if(plan.category === 'ability') itemid = Craft.ability(plan); 
+	var itemid = Craft.equip(plan); 
 	
+	//add exp
+	var base = Craft.equip.salvage.getBase(plan).exp;	//{item:2}
+	var mod = Craft.equip.salvage.getModExp(plan);	//{metalwork:1}
+	for(var i in mod) mod[i] *= base * 2;	//x2 because craft instead of salvaging
+	Skill.addExp(key,mod);
+	
+	Itemlist.remove(inv, id);
 	Itemlist.add(inv, itemid);
+	db.remove('plan',{'id':plan.id});
 	Server.log(3,key,'Plan.use',id,itemid);
 	return itemid;
 }
-
 
 Plan.use.ability = function(key,seed){		//quickfix...
 	var id = Craft.ability(seed);
@@ -215,13 +244,34 @@ Plan.test = function(key,req){	//test requirement
 	return true
 }
 
-Plan.upgrade = function(){
-	//need to add stuff
-	//x2 more req but +0.5 rarity
+Plan.upgrade = function(plan){
+	db.remove('plan',{'id':plan.id});
+	plan = Tk.deepClone(plan);
+	for(var i in plan.req.item){
+		if(i === plan.id) continue;
+		plan.req.item[i][1] = Math.round(plan.req.item[i][1] * (0.5*plan.minAmount+2));
+	}
+	plan.minAmount++;
+	Plan.setColor(plan);
+	plan.id = Math.randomId();
+	plan.definitive = 1;
+	Plan.creation(plan);
+	return plan.id;
 }
 
+Plan.upgrade.click = function(key,pid){
+	var plan = Db.plan[pid];
+	if(plan.minAmount >= 3 || !plan.upgrade) return Chat.add(key,'You can not longer upgrade this plan.');
+	
+	var newid = Plan.upgrade(plan);
+	Itemlist.remove(List.main[key].invList,pid);
+	Itemlist.add(List.main[key].invList,newid);
+}
 
-
+Plan.salvage = function(key,id){
+	if(!Db.plan[id].salvage) return Chat.add(key,'You can\'t salvage this plan.');
+	Craft.equip.salvage(key,id);
+}
 
 
 

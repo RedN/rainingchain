@@ -477,7 +477,7 @@
     }
 
     // Exports
-	var active = false;	//RAININGCHAIN
+	var active = false;	//RAININGCHAIN //TOFIX dont work if function i think
     if (typeof exports !== 'undefined') {
         exports.encode = encode;
         exports.decode = decode;

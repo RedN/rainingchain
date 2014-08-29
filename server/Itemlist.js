@@ -1,22 +1,19 @@
-//First param is invlist
-//ts('Main.openWindow(m,"bank")')
+//LICENSED CODE BY SAMUEL MAGNAN FOR RAININGCHAIN.COM, LICENSE INFORMATION AT GITHUB.COM/RAININGCHAIN/RAININGCHAIN
+eval(loadDependency(['Db','List','Tk','Chat','Button'],['Itemlist']));
 
-Itemlist = {};
+var Itemlist = exports.Itemlist = {};
 
 Itemlist.template = function(type,data){
-	var tmp = {};
-	tmp.type = type;
-	tmp.key = 'not_set';
-	tmp.toUpdate = 1;
-	if(type === 'inventory'){
-		tmp.alwaysStack = false;
-		var size = 20;	
-	}
-	if(type === 'bank'){
-		tmp.alwaysStack = true;
-		var size = 256;	
-	}
-	tmp.data = Array(size);	
+	var tmp = {
+		type:type,
+		key:'not_set',
+		toUpdate:1,
+		toUpdateOther:1,
+		alwaysStack:type === 'bank',
+		size:type === 'bank' ? 128 : 20,
+		acceptTrade:false,
+	};
+	tmp.data = Array(tmp.size);	
     for(var i = 0 ; i < tmp.data.length ; i++) tmp.data[i] = [];
 	
 	if(data) for(var i in data) tmp.data[i] = data[i];
@@ -28,6 +25,7 @@ Itemlist.format = function(id,amount,verify){	//verify is for quest, verificatio
 	var tmp = {};
 	if(Array.isArray(id)){
 		for(var i in id){
+			if(!id[i][0]) continue;
 			tmp[id[i][0]] = tmp[id[i][0]] || 0;
 			tmp[id[i][0]] += id[i][1] || 1;
 		}
@@ -38,6 +36,7 @@ Itemlist.format = function(id,amount,verify){	//verify is for quest, verificatio
 	for(var i in tmp){
 		if(verify !== false && !Db.item[i]){ ERROR(3,'item dont exist',i,tmp); delete tmp[i]; }
 		if(Math.floor(tmp[i]) !== tmp[i]){ ERROR(3,'item amount isnt whole',i,tmp[i]); delete tmp[i]; }
+		if(tmp[i] === 0) delete tmp[i];
 	}
 	return tmp;
 }
@@ -50,6 +49,7 @@ Itemlist.add = function (inv,id,amount){	//only preparing
 
 Itemlist.add.action = function(inv,id,amount){
 	inv.toUpdate = 1;
+	inv.toUpdateOther = 1;
 	if(Db.item[id].stack || inv.alwaysStack){
 		var pos = Itemlist.getPosition(inv,id);
 		if(pos !== null){ inv.data[pos][1] += amount; return; }
@@ -73,6 +73,7 @@ Itemlist.remove = function (inv,id,amount){
 
 Itemlist.remove.action = function (inv,id,amount){
 	inv.toUpdate = 1;
+	inv.toUpdateOther = 1;
 	if(Db.item[id].stack || inv.alwaysStack){
 		for(var i = 0 ; i < inv.data.length ; i ++){
 			if(inv.data[i][0] === id){
@@ -94,7 +95,6 @@ Itemlist.remove.action = function (inv,id,amount){
 }
 
 Itemlist.test = function (inv,id,amount){ //test if enouhg space
-	if(typeof inv === 'string') inv = List.main[inv].invList;
 	var list = Itemlist.format(id,amount);	
 	
 	var spaceNeeded = 0;
@@ -120,8 +120,6 @@ Itemlist.empty = function (inv,amount){ //Return amount of empty slots. (If amou
 }
 
 Itemlist.getAmount = function(inv,id){
-	if(typeof inv === 'string') inv = List.main[inv].invList;
-	
 	if(!Db.item[id]){ ERROR(3,'item dont exist',id); return 0;}
 	if(Db.item[id].stack || inv.alwaysStack){
 		for(var i in inv.data)	if(inv.data[i][0] === id) return inv.data[i][1];
@@ -134,12 +132,9 @@ Itemlist.getAmount = function(inv,id){
 }
 
 Itemlist.getPosition = function(inv,id){
-	if(typeof inv === 'string') inv = List.main[inv].invList;
 	for(var i in inv.data)	if(inv.data[i][0] === id) return +i;
 	return null;
 }
-
-
 
 Itemlist.have = function (inv,id,amount){
 	if(typeof inv === 'string') inv = List.main[inv].invList;
@@ -181,11 +176,18 @@ Itemlist.click.inventory = function(inv,side,slot,amount){
 			
 	//If Bank Window
 	if(mw.bank || mw.trade){
-		if(mw.bank) var list = m.bankList;
-		if(mw.trade){ var list = m.tradeList; Itemlist.trade.reset(inv); }
+		if(mw.bank){ 
+			if(!Db.item[id].bank) return 'cant bank'; 
+			var list = m.bankList;
+		}
+		if(mw.trade){ 
+			if(!Db.item[id].trade) return 'cant trade';
+			var list = m.tradeList; 
+			Itemlist.trade.resetAccept(inv); 
+		}
 		
-		
-		if(side === 'left'){ Itemlist.transfer(inv,list,id,1); }
+		if(side === 'left') return Itemlist.transfer(inv,list,id,1);
+		if(side === 'shiftLeft') return Itemlist.transfer(inv,list,id,amount);		
 		
 		if(side === 'right'){ 
 			Button.creation.optionList(key,{
@@ -199,24 +201,22 @@ Itemlist.click.inventory = function(inv,side,slot,amount){
 			});
 		}
 		
-		if(side === 'shiftLeft'){ Itemlist.transfer(inv,list,id,amount);}				
+			
 		return;		
 	}
 	
 	//No Window
 	var item = Db.item[inv.data[slot][0]];
 	if(side === 'left'){	
-		if(m.temp.selectInv){	//select inv
-			var array = [inv.data[slot][0]];
-			for(var i = List.main[key].temp.selectInv.param.length-1 ; i >= 0 ; i--){
-				array.unshift(List.main[key].temp.selectInv.param[i]); }
-				
-			applyFunc.key(key,List.main[key].temp.selectInv.func,array);
+		if(m.selectInv){	//select inv
+			var param = Tk.deepClone(m.selectInv.data.param);
+			param.push(inv.data[slot][0]);				
+			Tk.applyFunc.key(key,m.selectInv.data.func,param,List);
 			return;
 		}
 		var opt = item.option[0];
 		if(opt && opt.name !== 'Drop' && opt.name !== 'Destroy' && opt.func && !opt.client){
-			applyFunc.key(key,opt.func,opt.param); 
+			Tk.applyFunc.key(key,opt.func,opt.param,List); 
 			if(item.remove){ Itemlist.remove(inv,item.id); }
 		}	
 	}
@@ -248,25 +248,65 @@ Itemlist.click.bank = function(bank,side,slot,amount){	//amount is from pref
 
 Itemlist.click.trade = function(trade,side,slot){
 	Itemlist.click.bank(trade,side,slot);
-	Itemlist.trade.reset(trade);
+	Itemlist.trade.resetAccept(trade);
 }
 
 //Actual trade function is Command.list['win,trade,toggle']
 Itemlist.trade = function(trade,other){
-	var temp = Tk.deepClone(trade.data);
-	var temp2 = Tk.deepClone(other.data);
-	other.data = temp;
-	trade.data = temp2;
+	if(!Itemlist.trade.test(trade,other)) return false;
+	
+	Itemlist.add(List.main[trade.key].invList,other.data);
+	Itemlist.add(List.main[other.key].invList,trade.data);
+	
 	Chat.add(trade.key,'Trade Accepted.');
 	Chat.add(other.key,'Trade Accepted.');
+	
+	Itemlist.trade.resetData(trade);
+	Itemlist.trade.resetData(other);
+	
 	Itemlist.trade.reset(trade);
+	Itemlist.trade.reset(other);
+	return true;
 }
 
-Itemlist.trade.reset = function(trade){
-	var other = List.main[trade.key].windowList.trade.trader;
-	List.main[trade.key].windowList.trade.confirm = {'self':0,'other':0};
-	List.main[other].windowList.trade.confirm = {'self':0,'other':0};
+Itemlist.trade.reset = function(trade){	//BAD	TODO
+	trade.acceptTrade = false;
+	Itemlist.add(List.main[trade.key].invList,trade.data);
+	Itemlist.trade.resetData(trade);
+	
 }
+
+Itemlist.trade.resetData = function(list){
+	for(var i in list.data) list.data[i] = [];
+	list.toUpdate = 1;
+	list.toUpdateOther = 1;
+}
+
+Itemlist.trade.resetAccept = function(trade){
+	trade.acceptTrade = false;
+	List.main[trade.key].tradeInfo.acceptTrade = false;
+	trade.toUpdate = 1;
+	trade.toUpdateOther = 1;
+	List.main[trade.key].tradeInfo.toUpdate = 1;
+	List.main[trade.key].tradeInfo.toUpdateOther = 1;
+}
+
+Itemlist.trade.test = function(trade,other){
+	if(!Itemlist.test(List.main[trade.key].invList,other.data)) return false;
+	if(!Itemlist.test(List.main[other.key].invList,trade.data)) return false;
+	return true;
+}
+
+
+
+
+
+
+
+
+
+
+
 
 
 

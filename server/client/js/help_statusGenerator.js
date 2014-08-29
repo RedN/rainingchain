@@ -1,3 +1,5 @@
+//LICENSED CODE BY SAMUEL MAGNAN FOR RAININGCHAIN.COM, LICENSE INFORMATION AT GITHUB.COM/RAININGCHAIN/RAININGCHAIN
+eval(loadDependency(['Tk']));
 Math.probability = function(base,mod){
 	return 1 - Math.pow(1-base,mod);
 }

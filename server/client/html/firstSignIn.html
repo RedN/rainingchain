@@ -1,0 +1,24 @@
+You are playing an <u>Beta version</u> of Raining Chain.<br>
+If you find any bug, please leave feedback by clicking the Flag icon at the bottom.<br>
+<!-- <u>Click links below game box to try finished quests.</u><br> -->
+<br>
+-ASDW to move. <span class="u" style="color:blue" onclick="Input.init.azerty(this);" >If AZERTY, click here.</span><br>
+-Small Screen? Press Ctrl -.<br>
+-Change Volume via Pref Tab. (Bottom Right) <span class="u" style="color:blue" onclick="Command.send('pref,volumeMaster,0');" >To Mute, click here.</span><br>
+<br>
+This version of the game has the following features disabled:<br>
+ -Trading<br>
+ -Passive Auto-Balancement<br>
+
+
+<script>
+var TestQuest = function(name){
+	//if(main.questActive && main.questActive !== name)
+	Command.send('win,quest,abandon,' + main.questActive);
+	ts("add('_questtester-" + name + "')");
+	Command.send('win,quest,start,' + name);
+	ts("Db.quest['" + name + "'].event._testSignIn(key); Db.quest.Qtutorial.event.skipTutorial(key);");	
+}
+//-Quests grant Passive Points that strengthen your character.<br>
+
+</script>

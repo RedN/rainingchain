@@ -1,20 +1,22 @@
-requireDb = function(){ return exports;}
+//LICENSED CODE BY SAMUEL MAGNAN FOR RAININGCHAIN.COM, LICENSE INFORMATION AT GITHUB.COM/RAININGCHAIN/RAININGCHAIN
+eval(loadDependency(['Server'],['Init','requireDb']));
+
+var requireDb = exports.requireDb = function(){ return exports; }
 
 
-Init = {};
+var Init = exports.Init = {};
 Init.db = function(data){
 	data = data || {};
+	
 	var MONGO = {
 		username: "public",
 		password: "public",
-		server: 'widmore.mongohq.com',
-		port: '10000',
+		server: 'oceanic.mongohq.com',
+		port: '10064',
 		db: 'public',
 		connectionString: function(){return 'mongodb://'+this.username+':'+this.password+'@'+this.server+':'+this.port+'/'+this.db;},
-		options: {server:{auto_reconnect: true,socketOptions:{connectTimeoutMS:Cst.HOUR,keepAlive:Cst.HOUR,socketTimeoutMS:Cst.HOUR}}}
+		options: {server:{auto_reconnect: true,socketOptions:{connectTimeoutMS:CST.HOUR,keepAlive:CST.HOUR,socketTimeoutMS:CST.HOUR}}}
 	};
-	
-	
 	var databaseURI = MONGO.connectionString();
 	
 	var collections = ["report","customMod","player","main","ability","equip","account","clan",'plan','passiveCount','highscore','rscalc'];
@@ -24,7 +26,6 @@ Init.db = function(data){
 	setInterval(function(){	
 		DB = require("mongojs").connect(databaseURI, collections, MONGO.options);
 	},Server.frequence.db);	//refresh connection
-	
 	
 	//intermediare db
 	exports.find = function(name,searchInfo,wantedData,cb){
@@ -107,7 +108,7 @@ Init.db = function(data){
 	//db.deleteAll();
 	//db.filterDb();
 	
-	Init.db.rscalc(); //rscalc
+	//Init.db.rscalc(); //rs
 }
 
 

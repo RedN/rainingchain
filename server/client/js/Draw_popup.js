@@ -1,3 +1,6 @@
+//LICENSED CODE BY SAMUEL MAGNAN FOR RAININGCHAIN.COM, LICENSE INFORMATION AT GITHUB.COM/RAININGCHAIN/RAININGCHAIN
+eval(loadDependency(['Db','List','Tk','Input']));
+
 Draw.popup = function(){
 	if(main.popupList.equip) Draw.popup.equip();
 	if(main.popupList.plan) Draw.popup.plan();
@@ -46,8 +49,8 @@ Draw.popup.equip.main = function(){
 	var w = 250;
 	var h = 250+25*Math.max(0,equip.boost.length-7);
 	
-	var sx = Math.max(0,Math.min(posx-w,Cst.WIDTH-w));
-	var sy = Math.max(0,Math.min(posy-h,Cst.HEIGHT - h));	
+	var sx = Math.max(0,Math.min(posx-w,CST.WIDTH-w));
+	var sy = Math.max(0,Math.min(posy-h,CST.HEIGHT - h));	
 	
 	return {
 		'w':w,
@@ -79,20 +82,19 @@ Draw.popup.equip.top = function(s){
 	ctx.textAlign = 'left';
 	ctx.fillStyle = 'white';
 	
-	ctx.setFont(15);
+	//Lvl, bottom left below icon
+	ctx.setFont(20);
 	var string = 'Lv:' + s.equip.lvl;
-	if(!main.hideHUD.equipOrb) string += '  Orb: +' + Tk.round(s.equip.orb.upgrade.bonus*100-100,2) + '% | ' + s.equip.orb.upgrade.amount;
-	ctx.fillText(string,s.x+50+5,s.y+28);
+	ctx.fillText(string,s.x+5,s.y+50);
+	//if(!main.hideHUD.equipOrb) string += '  Orb: +' + Tk.round(s.equip.orb.upgrade.bonus*100-100,2) + '% | ' + s.equip.orb.upgrade.amount;
+	//ctx.fillText(string,s.x+50+5,s.y+28);
 	
-	//Draw Def/Dmg
-	ctx.setFont(25);
+	//Draw Def/Dmg right
+	ctx.setFont(22);
 	ctx.textAlign = 'center';
-	var bar = s.equip.category === 'armor' ? s.equip.def.ratio  : s.equip.dmg.ratio;
-	var num = s.equip.category === 'armor' ? s.equip.def.main :  s.equip.dmg.main;
-	num *= s.equip.orb.upgrade.bonus;
-	num = num < 1 ? (num < 0.1 ? Tk.round(num,2) : Tk.round(num,1) ) : Tk.round(num,0);
-	ctx.fillText(Tk.round(num,0),s.x+25,s.y+50);
-	Draw.element(s.x+52,s.y+50,190,25,bar);
+	
+	if(s.equip.category === 'weapon') Draw.popup.equip.top.weapon(s);
+	else Draw.popup.equip.top.armor(s);
 	
 	
 	//Separation
@@ -100,6 +102,37 @@ Draw.popup.equip.top = function(s){
 	ctx.moveTo(s.x,s.y+80);
 	ctx.lineTo(s.x+s.w,s.y+80);
 	ctx.stroke();
+}
+
+Draw.popup.equip.top.weapon = function(s){
+	ctx.fillText('Damage: ' + (s.equip.dmg.main * s.equip.orb.upgrade.bonus).r(1),s.x+150,s.y+25);
+	
+	ctx.fillText('x1.5 Dmg for       ',s.x+150,s.y+25+25);
+	var count = 0;
+	for(var i in s.equip.dmg.ratio){
+		if(s.equip.dmg.ratio[i] === 1) continue;
+		Draw.icon('element.'+i,s.x+150+45 + count*25,s.y+25+25,24);
+		count++
+	}
+}
+
+Draw.popup.equip.top.armor = function(s){
+	var def = s.equip.def.main * s.equip.orb.upgrade.bonus;
+	
+	ctx.textAlign = 'left';
+	for(var i in s.equip.def.ratio){
+		if(s.equip.def.ratio[i] > 1){
+			Draw.icon('element.'+i,s.x+85+37,s.y+25+3,24);
+			ctx.fillText((def*s.equip.def.ratio[i]).r(1),s.x+85+37+27,s.y+25+3,24);
+		}
+	}
+	var count = 0;
+	for(var i in s.equip.def.ratio)
+		if(s.equip.def.ratio[i] === 1){
+			Draw.icon('element.'+i,s.x+85+count*75,s.y+25+3+25,24);
+			ctx.fillText((def*s.equip.def.ratio[i]).r(1),s.x+85+count*75+27,s.y+25+3+25,24);
+			count++
+		}
 }
 
 Draw.popup.equip.boost = function(s){
@@ -149,8 +182,8 @@ Draw.popup.plan.main = function(){
 	var w = 250;
 	var h = 250;
 	
-	var sx = Math.max(0,Math.min(posx-w,Cst.WIDTH-w));
-	var sy = Math.max(0,Math.min(posy-h,Cst.HEIGHT - h));	
+	var sx = Math.max(0,Math.min(posx-w,CST.WIDTH-w));
+	var sy = Math.max(0,Math.min(posy-h,CST.HEIGHT - h));	
 	
 	return {
 		'w':w,
@@ -175,7 +208,7 @@ Draw.popup.plan.top = function(s){
 	ctx.fillStyle = 'white';
 	
 	ctx.setFont(15);
-	var str = 'Lv:' + s.equip.lvl + ', Rar.: ' + Tk.round(s.equip.rarity*100,0) + '%, Qual.:' + Tk.round(s.equip.quality*100,0) + '%';
+	var str = 'Lv:' + s.equip.lvl + ', Boost: ' + s.equip.minAmount + ' - ' + s.equip.maxAmount;
 	ctx.fillText(str,s.x+50+5,s.y+28);
 	
 	//Piece Type

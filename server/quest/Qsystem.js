@@ -1,0 +1,1347 @@
+/*jslint node: true, undef:true, sub:true, asi:true, funcscope:true*/
+/*Go to http://jshint.com/ and copy paste your code to spot syntax errors.*/
+"use strict";
+var s = require('./../Quest_exports').init('v1.0','Qsystem',{
+	dailyTask:false,
+	showInTab:false,
+	showWindowComplete:false,
+	inMain:false,
+	alwaysActive:true,
+});
+var q = s.quest; var m = s.map; var b = s.boss;
+
+
+s.newEquip('unarmed','weapon','mace','Mace',1);
+s.newEquip('start-body','body','metal','Body',6);
+s.newEquip('start-helm','helm','wood','Helm',4);
+s.newEquip('start-amulet','amulet','ruby','Amulet',6);
+s.newEquip('start-ring','ring','sapphire','Ring',4);
+s.newEquip('start-weapon','weapon','mace','Mace',10);
+
+s.newAbility('start-melee','attack',{
+	name:'Strike',
+	icon:'attackMelee.cube',
+	description:'Regular Melee Strike',
+	periodOwn:25,
+	periodGlobal:20,
+},{
+	type:"strike",width:40,height:40,delay:0,minRange:0,maxRange:50,
+	preDelayAnim:s.newAbility.anim("slashMelee",1),
+	hitAnim:s.newAbility.anim("strikeHit",0.2),
+	dmg:s.newAbility.dmg(500,'melee'),
+	knock:{chance:1,magn:3,time:0.1},
+});
+s.newAbility('player-meleeBig','attack',{
+	name:'Bleeding Blow',icon:'attackMelee.cube',
+	description:'Powerful Melee Strike with increased bleed chance. Cost life.',
+	periodOwn:25,periodGlobal:20,costHp:100,
+},{
+	type:"strike",width:40,height:40,delay:0,minRange:0,maxRange:50,
+	preDelayAnim:s.newAbility.anim("splashMelee",1),
+	hitAnim:s.newAbility.anim("strikeHit",0.2),
+	dmg:s.newAbility.dmg(700,'melee'),
+	knock:{chance:1,magn:3,time:0.1},
+	bleed:{chance:0.25,magn:1,time:1},
+});
+s.newAbility('start-bullet','attack',{
+	name:'Basic Bullet',icon:'attackRange.steady',
+	description:'Very fast arrow shooting.',
+	periodOwn:15,periodGlobal:15,
+},{
+	type:"bullet",
+	objSprite:s.newAbility.sprite("arrow",1),
+	hitAnim:s.newAbility.anim("strikeHit",0.5),
+	dmg:s.newAbility.dmg(400,'range'),
+});
+s.newAbility('player-windKnock','attack',{
+	name:'Wind',icon:'attackRange.steady',
+	description:'Defensive wind that pushes enemies away.',
+	periodOwn:25,periodGlobal:25,costMana:50,
+},{
+	type:"bullet",angle:100,amount:3,
+	objSprite:s.newAbility.sprite("tornado",1),
+	hitAnim:s.newAbility.anim("strikeHit",0.5),
+	dmg:s.newAbility.dmg(100,'range'),
+	knock:{chance:1,magn:1.5,time:1.5},
+});
+s.newAbility('player-magicBullet','attack',{
+	name:'Magic Bullet',icon:'attackMagic.ball',
+	description:'Powerful magic spell with increased chance to drain mana.',
+	periodOwn:25,periodGlobal:25,
+},{
+	type:"bullet",
+	objSprite:s.newAbility.sprite("shadowball",1),
+	hitAnim:s.newAbility.anim("lightningHit",0.5),
+	dmg:s.newAbility.dmg(600,'magic'),
+	drain:{chance:0.25,magn:1,time:1},
+});
+s.newAbility('player-magicBomb','attack',{
+	name:'Magic Explosion',icon:'attackMagic.ball',
+	description:'Explosive spell that can leech life.',
+	periodOwn:30,periodGlobal:20,costMana:75,
+},{
+	type:"strike",width:100,height:100,delay:4,minRange:0,maxRange:200,
+	preDelayAnim:s.newAbility.anim("magicBomb",1),
+	hitAnim:s.newAbility.anim("lightningHit",0.5),
+	dmg:s.newAbility.dmg(1000,'magic'),
+	leech:{chance:0.25,magn:1,time:1},
+});
+s.newAbility('start-fireball','attack',{
+	name:'Fireball Boom',icon:'attackMagic.meteor',
+	description:'Shoot multiple fireballs.',
+	periodOwn:25,periodGlobal:25,costMana:50,
+},{
+	type:"bullet",angle:45,amount:9,
+	objSprite:s.newAbility.sprite("fireball",1.2),
+	hitAnim:s.newAbility.anim("fireHit",0.5),
+	dmg:s.newAbility.dmg(125,'fire'),
+});
+s.newAbility('player-fireBullet','attack',{
+	name:'Fire Ball',icon:'attackMagic.meteor',
+	description:'Shoot a single fireball that explodes upon hit.',
+	periodOwn:20,periodGlobal:20,
+},{
+	type:"bullet",
+	objSprite:s.newAbility.sprite("fireball",1),
+	hitAnim:s.newAbility.anim("fireHit",0.5),
+	dmg:s.newAbility.dmg(400,'fire'),
+	onHit:s.newAbility.onHit(1,{
+		type:"strike",width:100,height:100,delay:0,
+		preDelayAnim:s.newAbility.anim("fireBomb",1),
+		dmg:s.newAbility.dmg(50,'fire'),
+	}),
+});
+s.newAbility('start-freeze','attack',{
+	name:'Freeze Bullet',icon:'attackMagic.crystal',
+	description:'Defensive spell that feezes enemies.',
+	periodOwn:25,periodGlobal:25,costMana:40,
+},{
+	type:"bullet",angle:25,amount:5,
+	objSprite:s.newAbility.sprite("iceshard",1),
+	hitAnim:s.newAbility.anim("coldHit",0.5),
+	dmg:s.newAbility.dmg(50,'cold'),
+	chill:s.newAbility.status(0.5,4,1),
+});
+s.newAbility('player-coldBullet','attack',{
+	name:'Ice Shards',icon:'attackMagic.crystal',
+	description:'Shoot multiple ice shards.',
+	periodOwn:20,periodGlobal:20,
+},{
+	type:"bullet",angle:5,amount:2,
+	objSprite:s.newAbility.sprite("iceshard",1),
+	hitAnim:s.newAbility.anim("coldHit",0.5),
+	dmg:s.newAbility.dmg(300,'cold'),
+});
+s.newAbility('player-lightningBullet','attack',{
+	name:'Lightning Bullet',icon:'attackMagic.static',
+	description:'Shoot piercing lightning balls at the speed of light.',
+	periodOwn:5,periodGlobal:5,
+},{
+	type:"bullet",
+	objSprite:s.newAbility.sprite("lightningball",0.7),
+	hitAnim:s.newAbility.anim("lightningHit",0.5),
+	dmg:s.newAbility.dmg(100,'lightning'),
+	pierce:s.newAbility.pierce(0.5,0.5,5),
+});
+s.newAbility('player-lightningBomb','attack',{
+	name:'Lightning Explosion',icon:'attackMagic.static',
+	description:'Explodes in all directions, piercing through enemies.',
+	periodOwn:25,periodGlobal:25,costMana:75,
+},{
+	type:"strike",width:50,height:50,delay:5,minRange:100,maxRange:150,
+	preDelayAnim:s.newAbility.sprite("lightningBomb",1),
+	dmg:s.newAbility.dmg(400,'lightning'),
+	onStrike:s.newAbility.onStrike(1,{
+		type:"bullet",angle:360,amount:5,
+		objSprite:s.newAbility.sprite("lightningball",0.8),
+		hitAnim:s.newAbility.anim("lightningHit",0.5),
+		dmg:s.newAbility.dmg(200,'lightning'),
+		pierce:s.newAbility.pierce(1,0.5,5),
+	}),
+});
+
+s.newAbility('start-heal','heal',{
+	name:'Regen',
+	description:'Standard healing.',
+	periodOwn:250,periodGlobal:50,costMana:30,
+},{
+	hp:800,
+});
+s.newAbility('player-healFast','heal',{
+	name:'Fast Regen',
+	description:'Faster but less powerful healing.',
+	periodOwn:100,periodGlobal:50,costMana:30,
+},{
+	hp:400,
+});
+s.newAbility('player-healCost','heal',{
+	name:'Expensive Regen',
+	description:'Mana-expensive but great healing.',
+	periodOwn:150,periodGlobal:50,costMana:100,
+},{
+	hp:1000,
+});
+s.newAbility('player-healSlowCast','heal',{
+	name:'Slow Cast Regen',
+	description:'Slow to cast but free healing.',
+	periodOwn:150,periodGlobal:50,costMana:0,
+},{
+	hp:800,
+});
+s.newAbility('healZone','attack',{
+	name:'Heal Zone',icon:'heal.plus',
+	periodOwn:50,periodGlobal:50,
+},{
+	type:"strike",width:200,height:200,delay:0,minRange:0,maxRange:0,
+	postDelayAnim:s.newAbility.anim("aura",2),
+	dmg:s.newAbility.dmg(0,'lightning'),
+	damageIfMod:1,
+	heal:{hp:200},
+});
+
+s.newAbility('start-dodge','dodge',{
+	name:'Invincibility',
+	description:'Dodge all damage.',
+	bypassGlobalCooldown:true,periodOwn:25,periodGlobal:25,costMana:30,
+},{
+	time:4,
+	distance:200,
+});
+s.newAbility('player-dodgeFast','dodge',{
+	name:'Fast Dodge',
+	description:'Faster dodge but more mana-expensive.',
+	bypassGlobalCooldown:true,periodOwn:25,periodGlobal:25,costMana:75,
+},{
+	time:6,
+	distance:300,
+});
+s.newAbility('player-dodgeLife','dodge',{
+	name:'Life Dodge',
+	description:'Cost Life instead of mana. Invincibility lasts longer.',
+	bypassGlobalCooldown:true,periodOwn:25,periodGlobal:25,costHp:100,
+},{
+	time:6,
+	distance:300,
+});
+	
+s.newAbility('meleeBullet','attack',{
+	name:'Bone Throw',icon:'weapon.boomerang',
+	periodOwn:25,periodGlobal:25,
+},{
+	type:"bullet",
+	objSprite:s.newAbility.sprite("bone",1),
+	hitAnim:s.newAbility.anim("strikeHit",0.5),
+	dmg:s.newAbility.dmg(100,'melee'),
+});
+s.newAbility('rangeBullet','attack',{
+	name:'Rock Throw',icon:'offensive.bullet',
+	periodOwn:25,periodGlobal:25,
+},{
+	type:"bullet",
+	objSprite:s.newAbility.sprite("rock",1),
+	hitAnim:s.newAbility.anim("earthBomb",0.4),
+	dmg:s.newAbility.dmg(100,'range'),
+});
+s.newAbility('magicBullet','attack',{
+	name:'Magic Bullet',icon:'resource.dodge',
+	periodOwn:25,periodGlobal:25,
+},{
+	type:"bullet",
+	objSprite:s.newAbility.sprite("shadowball",1),
+	hitAnim:s.newAbility.anim("lightningHit",0.5),
+	dmg:s.newAbility.dmg(100,'magic'),
+});
+s.newAbility('fireBullet','attack',{
+	name:'Fire Bullet',icon:'attackMagic.fireball',
+	periodOwn:25,periodGlobal:25,
+},{
+	type:"bullet",
+	objSprite:s.newAbility.sprite("fireball",1.2),
+	hitAnim:s.newAbility.anim("fireHit",0.5),
+	dmg:s.newAbility.dmg(100,'fire'),
+});
+s.newAbility('coldBullet','attack',{
+	name:'Cold Bullet',icon:'attackMagic.crystal',
+	periodOwn:25,periodGlobal:25,
+},{
+	type:"bullet",
+	objSprite:s.newAbility.sprite("iceshard",1),
+	hitAnim:s.newAbility.anim("coldHit",0.5),
+	dmg:s.newAbility.dmg(100,'cold'),
+});
+s.newAbility('lightningBullet','attack',{
+	name:'Lightning Bullet',icon:'attackMagic.static',
+	periodOwn:25,periodGlobal:25,
+},{
+	type:"bullet",
+	objSprite:s.newAbility.sprite("lightningball",1),
+	hitAnim:s.newAbility.anim("lightningHit",0.5),
+	dmg:s.newAbility.dmg(100,'lightning'),
+});
+		
+s.newAbility('meleeBomb','attack',{
+	name:'Ground Break',icon:'system1.less',
+	periodOwn:50,periodGlobal:50,
+},{
+	type:"strike",width:50,height:50,delay:10,minRange:0,maxRange:200,
+	preDelayAnim:s.newAbility.anim("boostWhite",1),
+	dmg:s.newAbility.dmg(400,'melee'),
+});
+s.newAbility('rangeBomb','attack',{
+	name:'Tornado',icon:'misc.disync',
+	periodOwn:50,periodGlobal:50,
+},{
+	type:"strike",width:50,height:50,delay:10,minRange:0,maxRange:200,
+	preDelayAnim:s.newAbility.anim("rangeBomb",1),
+	dmg:s.newAbility.dmg(400,'range'),
+});
+s.newAbility('magicBomb','attack',{
+	name:'Magic Explosion',icon:'attackMagic.fireball',
+	periodOwn:50,periodGlobal:50,
+},{
+	type:"strike",width:50,height:50,delay:10,minRange:0,maxRange:200,
+	preDelayAnim:s.newAbility.anim("magicBomb",1),
+	dmg:s.newAbility.dmg(400,'magic'),
+});
+s.newAbility('fireBomb','attack',{
+	name:'Fire Explosion',icon:'attackMagic.fireball',
+	periodOwn:50,periodGlobal:50,
+},{
+	type:"strike",width:50,height:50,delay:10,minRange:0,maxRange:200,
+	preDelayAnim:s.newAbility.anim("fireBomb",1),
+	dmg:s.newAbility.dmg(400,'fire'),
+});
+s.newAbility('coldBomb','attack',{
+	name:'Cold Explosion',icon:'attackMagic.crystal',
+	periodOwn:50,periodGlobal:50,
+},{
+	type:"strike",width:50,height:50,delay:10,minRange:0,maxRange:200,
+	preDelayAnim:s.newAbility.anim("coldBomb",1),
+	dmg:s.newAbility.dmg(400,'cold'),
+});	
+s.newAbility('lightningBomb','attack',{
+	name:'Lightning Explosion',icon:'attackMagic.static',
+	periodOwn:50,periodGlobal:50,
+},{
+	type:"strike",width:50,height:50,delay:10,minRange:0,maxRange:200,
+	preDelayAnim:s.newAbility.anim("lightningBomb",1),
+	dmg:s.newAbility.dmg(400,'lightning'),
+});	
+	
+s.newAbility('fireNova','attack',{
+	name:'Fire Nova',icon:'attackMagic.fireball',
+	periodOwn:50,periodGlobal:50,
+},{
+	type:"bullet",
+	objSprite:s.newAbility.sprite("fireball",1),
+	hitAnim:s.newAbility.anim("fireHit",0.5),
+	dmg:s.newAbility.dmg(100,'fire'),
+	spd:4,
+	nova:s.newAbility.nova(1,3,{
+		type:"bullet",
+		objSprite:s.newAbility.sprite("fireball",0.5),
+		hitAnim:s.newAbility.anim("fireHit",0.3),
+		dmg:s.newAbility.dmg(25,'fire'),
+	}),
+});
+s.newAbility('coldNova','attack',{
+	name:'Cold Nova',icon:'attackMagic.crystal',
+	periodOwn:50,periodGlobal:50,
+},{
+	type:"bullet",
+	objSprite:s.newAbility.sprite("iceshard",1),
+	hitAnim:s.newAbility.anim("coldHit",0.5),
+	dmg:s.newAbility.dmg(100,'cold'),
+	spd:4,
+	maxTimer:80,
+	nova:s.newAbility.nova(4,3,{
+		type:"bullet",angle:360,amount:4,
+		objSprite:s.newAbility.sprite("iceshard",0.5),
+		hitAnim:s.newAbility.anim("coldHit",0.3),
+		dmg:s.newAbility.dmg(25,'cold'),
+		maxTimer:10,
+	}),
+});
+s.newAbility('lightningNova','attack',{
+	name:'Lightning Nova',icon:'attackMagic.fireball',
+	periodOwn:50,periodGlobal:50,
+},{
+	type:"bullet",
+	objSprite:s.newAbility.sprite("lightningball",1),
+	hitAnim:s.newAbility.anim("lightningHit",0.5),
+	dmg:s.newAbility.dmg(100,'lightning'),
+	maxTimer:80,
+	nova:s.newAbility.nova(6,0,{
+		type:"strike",width:75,height:75,delay:0,minRange:0,maxRange:0,
+		postDelayAnim:s.newAbility.anim("lightningHit",0.5),
+		hitAnim:s.newAbility.anim("lightningHit",0.25),
+		dmg:s.newAbility.dmg(200,'lightning'),
+	}),
+});
+
+s.newAbility('scratch','attack',{
+	name:'Scratch',icon:'attackMelee.scar',
+	periodOwn:25,periodGlobal:25,
+},{
+	type:"strike",width:50,height:50,delay:0,minRange:0,maxRange:50,
+	postDelayAnim:s.newAbility.anim("scratch",0.5),
+	dmg:s.newAbility.dmg(100,'melee'),
+});
+s.newAbility('scratchBig','attack',{
+	name:'Multi Scratch',icon:'attackMelee.scar',
+	periodOwn:50,periodGlobal:50,
+},{
+	type:"strike",width:50,height:50,delay:0,minRange:0,maxRange:50,
+	postDelayAnim:s.newAbility.anim("scratch2",0.5),
+	hitAnim:s.newAbility.anim("strikeHit",0.25),
+	dmg:s.newAbility.dmg(200,'melee'),
+});	
+s.newAbility('arrowBullet','attack',{
+	name:'Arrow',icon:'skill.range',
+	periodOwn:25,periodGlobal:25,
+},{
+	type:"bullet",
+	objSprite:s.newAbility.sprite("arrow",1),
+	hitAnim:s.newAbility.anim("splashMelee",0.5),
+	dmg:s.newAbility.dmg(100,'range'),
+});
+s.newAbility('dart','attack',{
+	name:'Dart',icon:'attackRange.head',
+	periodOwn:25,periodGlobal:25,
+},{
+	type:"bullet",
+	objSprite:s.newAbility.sprite("dart",1),
+	hitAnim:s.newAbility.anim("strikeHit",0.5),
+	dmg:s.newAbility.dmg(100,'range'),
+});	
+s.newAbility('windBullet','attack',{
+	name:'Wind',icon:'attackRange.head',
+	periodOwn:25,periodGlobal:25,
+},{
+	type:"bullet",
+	objSprite:s.newAbility.sprite("tornado",1),
+	hitAnim:s.newAbility.anim("strikeHit",0.5),
+	dmg:s.newAbility.dmg(100,'range'),
+});
+
+s.newAbility('bind','attack',{
+	name:'Binding',icon:'curse.stumble',
+	periodOwn:50,periodGlobal:50,
+},{
+	type:"strike",width:25,height:25,delay:10,minRange:0,maxRange:100,
+	preDelayAnim:s.newAbility.sprite("bind",1),
+	hitAnim:s.newAbility.anim("bind",0.25),
+	dmg:s.newAbility.dmg(100,'cold'),
+	chill:s.newAbility.status(1,1,1),
+});
+s.newAbility('mine','attack',{
+	name:'Mine',icon:'attackRange.head',
+	periodOwn:25,periodGlobal:25,
+},{
+	type:"bullet",
+	spd:0,
+	maxTimer:250,
+	objSprite:s.newAbility.sprite("dart",1),
+	hitAnim:s.newAbility.anim("curseGreen",0.5),
+	dmg:s.newAbility.dmg(100,'magic'),
+});
+s.newAbility('boomerang','attack',{
+	name:'Boomerang',icon:'weapon.boomerang',
+	periodOwn:25,periodGlobal:25,
+},{
+	type:"bullet",
+	maxTimer:250,
+	objSprite:s.newAbility.sprite("bone",1),
+	hitAnim:s.newAbility.anim("strikeHit",0.5),
+	dmg:s.newAbility.dmg(100,'melee'),
+	boomerang:s.newAbility.boomerang(1,1,1,1),
+	pierce:s.newAbility.pierce(1,0.8,5),
+});
+s.newAbility('boneBoomerang','attack',{
+	name:'Bone Boomerang',icon:'attackMagic.fireball',
+	periodOwn:25,periodGlobal:25,
+},{
+	type:"bullet",
+	spd:0,
+	maxTimer:250,
+	objSprite:s.newAbility.sprite("bone",1),
+	hitAnim:s.newAbility.anim("strikeHit",0.5),
+	dmg:s.newAbility.dmg(100,'melee'),
+	boomerang:s.newAbility.boomerang(1,1,1,1),
+	pierce:s.newAbility.pierce(1,0.8,5),
+});
+
+s.newAbility('healModel','heal',{
+	name:'Regen',
+	description:'Standard healing.',
+	periodOwn:250,periodGlobal:50,
+},{
+	hp:800,
+});
+s.newAbility('eventModel','boost',{	//shouldnt be boost for model
+	name:'Event',icon:'attackMagic.fireball',
+	description:'Custom Event',
+	periodOwn:10,periodGlobal:10,
+	action:{func:CST.func,funcStr:'event',param:{}},
+},{});
+s.newAbility('summonModel','summon',{
+	name:'Summon',icon:'summon.wolf',
+	description:'Standard healing.',
+	periodOwn:50,periodGlobal:50,
+	action:{func:CST.func,funcStr:'event',param:{}},
+},{});
+s.newAbility('boostModel','boost',{
+	name:'Blessing',icon:'blessing.fly',
+	description:'Boost a stat.',
+	periodOwn:25,periodGlobal:25,
+	action:{func:CST.func,funcStr:'event',param:{}},
+},{});
+
+//NPC needs to be after s.newAbility so can use their templates
+s.newNpc("bat",{
+	name:"Bat",
+	sprite:s.newNpc.sprite("bat"),
+	abilityList:[
+		s.newNpc.abilityList(s.newAbility(null,'scratch',{},{
+			leech:s.newAbility.status(0.25,25,1),
+			hitAnim:s.newAbility.anim('cursePink',1),
+		}),[0.2,0,0]),
+		s.newNpc.abilityList('scratch',[0.4,0,0]),
+		s.newNpc.abilityList('lightningBullet',[0.4,0.4,1]),
+		s.newNpc.abilityList(s.newAbility(null,'boostModel',{},{
+			boost:[
+				{'stat':'leech-chance','type':'+','value':1000,'time':50},
+				{'stat':'crit-chance','type':'+','value':1000,'time':50}
+			],
+		}),[0,0.1,0.2]),
+		s.newNpc.abilityList('idle',[0.4,0.4,1]),
+	],
+	mastery_def:s.newNpc.mastery(2,1,1,1,0.5,1),
+	maxSpd:2,
+	moveRange:s.newNpc.moveRange(0.5,1),	
+});
+s.newNpc("bee",{
+	name:"Bee",
+	sprite:s.newNpc.sprite("bee"),
+	abilityList:[
+		s.newNpc.abilityList('scratch',[0.2,0,0]),
+		s.newNpc.abilityList(s.newAbility(null,'scratchBig',{},{
+			dmg:s.newAbility.dmg(400,'melee'),delay:10,
+		}),[0,0,0]),	//onDeath
+		s.newNpc.abilityList(s.newAbility(null,'dart',{},{
+			burn:s.newAbility.status(0.5,1,1),
+		}),[0,0.2,0.4]),
+		s.newNpc.abilityList('idle',[0.4,0.4,1]),
+	],
+	deathAbility:[1],
+	mastery_def:s.newNpc.mastery(1,1,2,0.5,1,1),
+	maxSpd:1,
+	moveRange:s.newNpc.moveRange(0.5,1),
+});
+s.newNpc("mosquito",{
+	name:"Mosquito",
+	sprite:s.newNpc.sprite("mosquito"),
+	abilityList:[
+		s.newNpc.abilityList(s.newAbility(null,'dart',{},{
+			knock:s.newAbility.status(0.25,1,1),
+		}),[1,0.2,0.4]),
+		s.newNpc.abilityList(s.newAbility(null,'lightningBullet',{},{
+			amount:3,angle:30,
+			knock:s.newAbility.status(0.25,1,1),
+			sin:{"amp":2,"freq":2},	//BAD
+		}),[1,0.2,0.4]),
+		s.newNpc.abilityList('idle',[0.4,0.2,0.2]),		
+	],
+	mastery_def:s.newNpc.mastery(1,1,1,1,2,0.5),
+	maxSpd:2,
+	moveRange:s.newNpc.moveRange(2.5,1.5),
+});
+s.newNpc("mushroom",{
+	name:"Mushroom",
+	sprite:s.newNpc.sprite("mushroom"),
+	abilityList:[
+		s.newNpc.abilityList(s.newAbility(null,'magicBullet',{},{
+			spd:0.1,
+			maxTimer:250,
+			stun:s.newAbility.status(1,1,1),
+			dmg:s.newAbility.dmg(200,'magic'),
+			objSprite:s.newAbility.sprite('spore',1),
+		}),[1,1,1]),
+		s.newNpc.abilityList(s.newAbility(null,'magicBullet',{},{
+			stun:s.newAbility.status(0.5,1,1),
+			objSprite:s.newAbility.sprite('spore',1),
+			angle:360,amount:5,
+		}),[0.5,0.3,0.3]),
+		s.newNpc.abilityList('idle',[0.4,0.2,0.2]),	
+	],
+	mastery_def:s.newNpc.mastery(1,1,2,0.5,1,1),
+	maxSpd:2,
+	moveRange:s.newNpc.moveRange(1,1),
+});
+s.newNpc("larva",{
+	name:"Larva",
+	sprite:s.newNpc.sprite("larva"),
+	abilityList:[
+		s.newNpc.abilityList(s.newAbility(null,'fireBomb',{},{
+			maxRange:0,
+			dmg:s.newAbility.dmg(500,'fire'),
+		}),[0,0,0]),	//death
+		s.newNpc.abilityList('idle',[0.4,0.2,0.2]),	
+	],
+	deathAbility:[0],
+	mastery_def:s.newNpc.mastery(1,1,1,1,1,1),
+	maxSpd:0.5,
+	hp:10,
+	moveRange:s.newNpc.moveRange(0.1,1),
+});
+s.newNpc("plant",{
+	name:"Plant",
+	sprite:s.newNpc.sprite("plant"),
+	abilityList:[
+		s.newNpc.abilityList(s.newAbility(null,'scratchBig',{},{
+			dmg:s.newAbility.dmg(300,'melee'),
+			bleed:s.newAbility.status(1,1,1),
+		}),[0.2,1,1]),
+		s.newNpc.abilityList(s.newAbility(null,'dart',{},{
+			dmg:s.newAbility.dmg(50,'range'),
+			bleed:s.newAbility.status(0.2,1,1),
+			chill:s.newAbility.status(0.4,1,1),
+			parabole:s.newAbility.parabole(),
+			amount:5,angle:25,
+			curse:s.newAbility.curse(1,[
+				{'stat':'globalDmg','type':'*','value':0.5,'time':50},
+				{'stat':'maxSpd','type':'+','value':0.1231231414,'time':50}
+			]),
+		}),[0.4,0.2,0.2]),
+		s.newNpc.abilityList('idle',[0.2,0.2,0.2]),	
+	],
+	mastery_def:s.newNpc.mastery(1,1,2,0.5,1,1),
+	maxSpd:0.5,
+	moveRange:s.newNpc.moveRange(0.1,1),
+});
+s.newNpc("slime",{
+	name:"Slime",
+	sprite:s.newNpc.sprite("slime"),
+	abilityList:[
+		s.newNpc.abilityList(s.newAbility(null,'summon',{},{
+			action:{name:'slime-child',maxChild:5,time:20*25,distance:500},
+			npc:{model:"slime-child",lvl:0,amount:1,modAmount:0},
+		}),[0.4,0.4,0.4]),
+		s.newNpc.abilityList(s.newAbility(null,'coldBullet',{},{
+			dmg:s.newAbility.dmg(50,'cold'),
+			chill:s.newAbility.status(0.2,1,1),
+			amount:5,angle:25,
+		}),[0.2,0.4,0.4]),
+		s.newNpc.abilityList(s.newAbility(null,'healZone',{},{
+			hp:200,
+		}),[0.1,0.1,0.2]),
+		s.newNpc.abilityList('idle',[0.4,0.2,0.2]),	
+	],
+	deathAbility:[0],
+	mastery_def:s.newNpc.mastery(1,1,0.5,2,1,1),
+	maxSpd:1,
+	moveRange:s.newNpc.moveRange(1,1),	
+}); 
+s.newNpc("slime-child",{
+	name:"Small Slime",
+	sprite:s.newNpc.sprite("slime",0.5),
+	abilityList:[
+		s.newNpc.abilityList(s.newAbility(null,'coldBullet',{},{
+			dmg:s.newAbility.dmg(25,'cold'),
+			objSprite:s.newAbility.sprite('iceshard',0.5),
+		}),[1,1,1]),
+		s.newNpc.abilityList('idle',[0.2,0.2,0.2]),
+	],
+	mastery_def:s.newNpc.mastery(1,1,0.5,2,1,1),
+	maxSpd:1,
+	hp:100,
+	moveRange:s.newNpc.moveRange(0.1,1),
+});
+s.newNpc("salamander",{
+	name:"Salamander",
+	sprite:s.newNpc.sprite("salamander"),
+	abilityList:[
+		s.newNpc.abilityList(s.newAbility(null,'fireBullet',{},{
+			dmg:s.newAbility.dmg(10,'fire'),
+			burn:s.newAbility.status(1,5,1),
+		}),[1,1,1]),
+		s.newNpc.abilityList(s.newAbility(null,'coldBullet',{},{
+			dmg:s.newAbility.dmg(10,'cold'),
+			chill:s.newAbility.status(1,1,1),
+		}),[1,1,1]),
+		s.newNpc.abilityList(s.newAbility(null,'lightningBullet',{},{
+			dmg:s.newAbility.dmg(10,'lightning'),
+			stun:s.newAbility.status(1,1,1),
+		}),[1,1,1]),
+		s.newNpc.abilityList(s.newAbility(null,'meleeBullet',{},{
+			dmg:s.newAbility.dmg(10,'melee'),
+			bleed:s.newAbility.status(1,5,1),
+		}),[1,1,1]),
+		s.newNpc.abilityList(s.newAbility(null,'magicBullet',{},{
+			dmg:s.newAbility.dmg(10,'magic'),
+			drain:s.newAbility.status(1,5,1),
+		}),[1,1,1]),
+		s.newNpc.abilityList(s.newAbility(null,'rangeBullet',{},{
+			dmg:s.newAbility.dmg(10,'range'),
+			knock:s.newAbility.status(1,1,1),
+		}),[4,1,1]),
+		s.newNpc.abilityList('idle',[4,4,4]),
+	],
+	mastery_def:s.newNpc.mastery(0.5,1,2,1,1,1),
+	maxSpd:1,
+	moveRange:s.newNpc.moveRange(1.5,1),
+});
+s.newNpc("goblin-melee",{
+	name:"Goblin",
+	sprite:s.newNpc.sprite("goblin"),
+	abilityList:[
+		s.newNpc.abilityList(s.newAbility(null,'scratch',{},{
+			postDelayAnim:s.newAbility.anim("slashMelee",0.5),
+		}),[1,0,0]),
+		s.newNpc.abilityList(s.newAbility(null,'scratchBig',{},{
+			bleed:s.newAbility.status(1,2,1),
+		}),[1,0,0]),
+		s.newNpc.abilityList(s.newAbility(null,'rangeBullet',{},{
+			stun:s.newAbility.status(0.25,1,1),
+		}),[0,0,1]),
+		s.newNpc.abilityList('idle',[1,1,1]),
+	],
+	mastery_def:s.newNpc.mastery(1,2,0.5,1,1,1),
+	maxSpd:1,
+	moveRange:s.newNpc.moveRange(0.5,1),
+});
+s.newNpc("goblin-range",{
+	name:"Goblin",
+	sprite:s.newNpc.sprite("goblin"),
+	abilityList:[
+		s.newNpc.abilityList(s.newAbility(null,'arrowBullet',{},{
+			angle:10,amount:3,aim:25,
+		}),[0,0.5,0.5]),
+		s.newNpc.abilityList(s.newAbility(null,'scratchBig',{},{
+			knock:s.newAbility.status(1,2,1),
+		}),[0,0,1]),
+		s.newNpc.abilityList(s.newAbility(null,'rangeBullet',{},{
+			amount:5,angle:45,
+			parabole:s.newAbility.parabole(),
+		}),[0,0,1]),
+		s.newNpc.abilityList('idle',[1,1,1]),
+	],
+	mastery_def:s.newNpc.mastery(0.5,1,2,1,1,1),
+	maxSpd:1,
+	moveRange:s.newNpc.moveRange(1.5,1),
+});
+s.newNpc("goblin-magic",{
+	name:"Goblin",
+	sprite:s.newNpc.sprite("goblin"),
+	abilityList:[
+		s.newNpc.abilityList(s.newAbility(null,'fireBomb',{},{
+			burn:s.newAbility.status(1,1,1),
+		}),[0,0.5,0.5]),
+		s.newNpc.abilityList('healZone',[0.2,0.2,0.2]),
+		s.newNpc.abilityList('coldNova',[0.5,0.5,0.5]),
+		s.newNpc.abilityList(s.newAbility(null,'scratch',{},{
+			burn:s.newAbility.status(1,1,1),
+			dmg:s.newAbility.dmg(100,'lightning'),
+			postDelayAnim:s.newAbility.anim(100,'slashLightning'),
+		}),[1,0,0]),
+		s.newNpc.abilityList('idle',[1,1,1]),
+	],
+	mastery_def:s.newNpc.mastery(2,0.5,1,1,1,1),
+	maxSpd:1,
+	moveRange:s.newNpc.moveRange(2.5,1),
+});
+s.newNpc("orc-melee",{
+	name:"Orc",
+	sprite:s.newNpc.sprite("orc-melee"),
+	abilityList:[
+		s.newNpc.abilityList(s.newAbility(null,'scratch',{},{
+			postDelayAnim:s.newAbility.anim("slashMelee",0.5),
+		}),[1,0.5,0]),
+		s.newNpc.abilityList(s.newAbility(null,'scratchBig',{},{
+			bleed:s.newAbility.status(1,2,1),
+		}),[1,0.5,0]),
+		s.newNpc.abilityList(s.newAbility(null,'boostModel',{},{
+			boost:[
+				{'stat':'bleed-chance','type':'+','value':1000,'time':100},
+				{'stat':'atkSpd','type':'*','value':3,'time':100},
+				{'stat':'globalDef','type':'*','value':10,'time':100},
+			],
+		}),[0.2,0.4,0.4]),
+		s.newNpc.abilityList(s.newAbility(null,'rangeBullet',{},{
+			amount:3,angle:30,
+		}),[0.5,0.5,1]),
+		s.newNpc.abilityList('idle',[0.5,0.5,0.5]),
+	],
+	mastery_def:s.newNpc.mastery(1,2,0.5,1,1,1),
+	maxSpd:1,
+	moveRange:s.newNpc.moveRange(0.5,1),
+});
+s.newNpc("orc-range",{
+	name:"Orc",
+	sprite:s.newNpc.sprite("orc-range"),
+	abilityList:[
+		s.newNpc.abilityList(s.newAbility(null,'arrowBullet',{},{
+			objSprite:s.newAbility.sprite("arrow",1.5),
+			amount:3,angle:30,
+			pierce:s.newAbility.pierce(1,0.8,5),
+			dmg:s.newAbility.dmg(200,'range'),
+		}),[0,0.5,0.5]),
+		s.newNpc.abilityList(s.newAbility(null,'scratch',{},{
+			stun:s.newAbility.status(1,2,1),
+			postDelayAnim:s.newAbility.anim('slashLightning',0.8),
+		}),[1,0,0]),
+		s.newNpc.abilityList(s.newAbility(null,'arrowBullet',{periodOwn:10,periodGlobal:10},{
+			amount:5,angle:45,
+		}),[0,0.5,0.5]),
+		s.newNpc.abilityList('idle',[1,1,1]),
+	],
+	mastery_def:s.newNpc.mastery(0.5,1,2,1,1,1),
+	maxSpd:1,
+	moveRange:s.newNpc.moveRange(1.5,1),
+}); 
+s.newNpc("orc-magic",{
+	name:"Orc",
+	sprite:s.newNpc.sprite("orc-magic"),
+	abilityList:[
+		s.newNpc.abilityList(s.newAbility(null,'coldBomb',{},{
+			chill:s.newAbility.status(1,1,1),
+		}),[0,0.5,0.5]),
+		s.newNpc.abilityList('healZone',[0.2,0.2,0.2]),
+		s.newNpc.abilityList('lightningNova',[0.5,0.5,0.5]),
+		s.newNpc.abilityList(s.newAbility(null,'scratch',{},{
+			burn:s.newAbility.status(0.5,1,1),
+			postDelayAnim:s.newAbility.anim('slashFire',0.8),
+			dmg:s.newAbility.dmg(100,'fire'),
+		}),[1,0,0]),
+		s.newNpc.abilityList('idle',[1,1,1]),
+	],
+	mastery_def:s.newNpc.mastery(2,0.5,1,1,1,1),
+	maxSpd:1,
+	moveRange:s.newNpc.moveRange(2.5,1),
+});
+s.newNpc("gargoyle",{
+	name:"Gargoyle",
+	sprite:s.newNpc.sprite("gargoyle"),
+	abilityList:[
+		s.newNpc.abilityList('lightningBomb',[0.5,0.5,1]),
+		s.newNpc.abilityList(s.newAbility(null,'scratch',{},{
+			stun:s.newAbility.status(1,1,1),
+		}),[0.5,0,0]),
+		s.newNpc.abilityList('lightningBullet',[1,1,1]),
+		s.newNpc.abilityList('lightningNova',[0,0.4,0.4]),
+		s.newNpc.abilityList('idle',[0.5,0.5,0.5]),
+	],
+	mastery_def:s.newNpc.mastery(1,1,1,1,0.5,2),
+	maxSpd:1,
+	moveRange:s.newNpc.moveRange(1.5,1),
+});
+s.newNpc("ghost",{
+	name:"Ghost",
+	sprite:s.newNpc.sprite("ghost"),
+	abilityList:[
+		s.newNpc.abilityList(s.newAbility(null,'magicBullet',{},{
+			curse:s.newAbility.curse(0.25,1,[
+				{'stat':'globalDmg','type':'*','value':0.1,'time':50}
+			]),
+		}),[0.5,0.5,1]),
+		s.newNpc.abilityList(s.newAbility(null,'magicBomb',{},{
+			curse:s.newAbility.curse(0.25,1,[
+				{'stat':'globalDef','type':'*','value':0.5,'time':50}
+			]),
+			drain:s.newAbility.status(1,1,1),
+		}),[0.3,0.5,0.5]),
+		s.newNpc.abilityList('lightningBullet',[1,1,1]),
+		s.newNpc.abilityList('idle',[0.5,0.5,0.5]),
+	],
+	mastery_def:s.newNpc.mastery(2,1,1,1,0.5,1),
+	maxSpd:1,
+	moveRange:s.newNpc.moveRange(1.5,1),
+});
+s.newNpc("death",{
+	name:"Death",
+	sprite:s.newNpc.sprite("death"),
+	abilityList:[
+		s.newNpc.abilityList(s.newAbility(null,'magicBullet',{},{
+			drain:s.newAbility.status(1,1,1),
+			curse:s.newAbility.curse(0.25,[
+				{'stat':'hp-regen','type':'*','value':0.5,'time':250},
+				{'stat':'mana-regen','type':'*','value':0.5,'time':250},
+			]),
+		}),[0.5,0.5,,0.5]),
+		s.newNpc.abilityList(s.newAbility(null,'magicBomb',{},{
+			aim:25,
+			dmg:s.newAbility.dmg(25,'magic'),
+			onStrike:s.newAbility.onStrike(1,{
+				type:"bullet",angle:360,amount:8,
+				objSprite:s.newAbility.sprite('shadowball',0.8),
+				hitAnim:s.newAbility.anim('magicHit',0.5),
+				dmg:s.newAbility.dmg(100,'magic'),
+			}),
+		}),[0.8,0.8,0.8]),
+		s.newNpc.abilityList('coldBullet',[0.1,0.3,0.3]),
+		s.newNpc.abilityList('idle',[0.5,0.5,0.5]),
+	],
+	mastery_def:s.newNpc.mastery(2,1,1,1,1,0.5),
+	maxSpd:1,
+	moveRange:s.newNpc.moveRange(2,1),
+});
+s.newNpc("skeleton",{
+	name:"Skeleton",
+	sprite:s.newNpc.sprite("skeleton"),
+	abilityList:[
+		s.newNpc.abilityList(s.newAbility(null,'boneBoomerang',{},{
+			amount:3,angle:30,
+		}),[0.1,0.5,0.5]),
+		
+		s.newNpc.abilityList(s.newAbility(null,'boneBoomerang',{},{
+			objSprite:s.newAbility.sprite('bone',1.5),
+			knock:s.newAbility.status(1,1,1),
+			dmg:s.newAbility.dmg(200,'melee'),
+		}),[0.1,0.8,0.8]),
+		s.newNpc.abilityList(s.newAbility(null,'scratch',{},{
+			knock:s.newAbility.status(0.25,2,1),
+		}),[1,0,0]),
+		s.newNpc.abilityList('idle',[0.5,0.5,0.5]),
+	],
+	mastery_def:s.newNpc.mastery(1,2,1,0.5,1,1),
+	maxSpd:1,
+	moveRange:s.newNpc.moveRange(2,1),
+});
+s.newNpc("spirit",{
+	name:"Spirit",
+	sprite:s.newNpc.sprite("spirit"),
+	abilityList:[
+		s.newNpc.abilityList(s.newAbility(null,'fireBomb',{},{
+			aim:20,
+			onStrike:s.newAbility.onStrike(1,{
+				type:"bullet",angle:360,amount:4,
+				objSprite:s.newAbility.sprite('fireball',0.8),
+				hitAnim:s.newAbility.anim('fireHit',0.5),
+				dmg:s.newAbility.dmg(100,'fire'),
+			}),
+		}),[0.5,0.5,0.5]),
+		s.newNpc.abilityList(s.newAbility(null,'fireBullet',{},{
+			amount:3,angle:45,
+			burn:s.newAbility.status(1,1,1),
+		}),[0.4,0.8,0.8]),
+		s.newNpc.abilityList(s.newAbility(null,'fireBomb',{},{
+			aim:20,
+			onStrike:s.newAbility.onStrike(1,{
+				preDelayAnim:s.newAbility.anim('cursePink',0.5),
+				dmg:s.newAbility.dmg(25,'fire'),
+				curse:s.newAbility.curse(1,[
+					{'stat':'def-fire-mod','type':'*','value':0.5,'time':150}
+				]),
+			}),
+		}),[0.3,0.3,0.3]),
+		s.newNpc.abilityList('fireNova',[0,0.4,0.4]),
+		s.newNpc.abilityList('idle',[0.5,0.5,0.5]),
+	],
+	//'reflect':{'fire':2},
+	mastery_def:s.newNpc.mastery(1,1,1,2,1,0.5),
+	maxSpd:1,
+	moveRange:s.newNpc.moveRange(2,1),
+});
+s.newNpc("demon",{
+	name:"Demon",
+	sprite:s.newNpc.sprite("demon"),
+	abilityList:[
+		s.newNpc.abilityList('fireNova',[0,0.4,0.4]),
+		s.newNpc.abilityList(s.newAbility(null,'fireBullet',{},{
+			amount:7,angle:360,
+			burn:s.newAbility.status(1,2,1),
+		}),[0.4,0.8,0.8]),
+		s.newNpc.abilityList(s.newAbility(null,'scratch',{},{
+			dmg:s.newAbility.dmg(100,'fire'),
+			postDelayAnim:s.newAbility.anim('slashFire',1),
+		}),[0.4,0,0]),
+		s.newNpc.abilityList('idle',[0.5,0.5,0.5]),
+	],
+	mastery_def:s.newNpc.mastery(1,1,0.5,2,1,1),
+	maxSpd:1,
+	moveRange:s.newNpc.moveRange(2,1),
+});
+s.newNpc("taurus",{
+	name:"Taurus",
+	sprite:s.newNpc.sprite("taurus"),
+	abilityList:[
+		s.newNpc.abilityList(s.newAbility(null,'rangeBullet',{},{
+			amount:7,angle:160,
+			bleed:s.newAbility.status(0.5,1,1),
+		}),[0,0.4,0.4]),		
+		s.newNpc.abilityList(s.newAbility(null,'scratchBig',{},{
+			postDelayAnim:s.newAbility.anim('scratch2',1.5),
+			dmg:s.newAbility.dmg(200,'melee'),
+			onStrike:s.newAbility.onStrike(0.5,{
+				type:"bullet",angle:360,amount:8,
+				objSprite:s.newAbility.sprite('rock',0.8),
+				hitAnim:s.newAbility.anim('earthHit',0.5),
+				dmg:s.newAbility.dmg(25,'melee'),			
+			}),
+		}),[1,0,0]),
+		s.newNpc.abilityList('idle',[0.5,0.5,0.5]),
+	],
+	mastery_def:s.newNpc.mastery(2,1,1,1,1,0.5),
+	maxSpd:1,
+	moveRange:s.newNpc.moveRange(0.5,1),
+});
+s.newNpc("mummy",{
+	name:"Mummy",
+	sprite:s.newNpc.sprite("mummy"),
+	'resource':{'hp':{'max':1000,'regen':3},'mana':{'max':100,'regen':1}},
+	hp:1000,	//needed
+	abilityList:[
+		s.newNpc.abilityList(s.newAbility(null,'scratch',{},{
+			leech:s.newAbility.status(1,1,1),
+			postDelayAnim:s.newAbility.anim('cursePink',1),
+		}),[1,0,0]),
+		s.newNpc.abilityList(s.newAbility(null,'scratch',{},{
+			chill:s.newAbility.status(1,1,1),
+			postDelayAnim:s.newAbility.anim('slashCold',1),
+		}),[0.5,0,0]),
+		s.newNpc.abilityList('coldNova',[0,0.2,0.4]),
+		s.newNpc.abilityList(s.newAbility(null,'magicBomb',{},{
+			dmg:s.newAbility.dmg(100,'magic'),
+			chill:s.newAbility.status(1,1,1),
+			curse:s.newAbility.curse(0.75,[
+				{'stat':'globalDmg','type':'*','value':0.5,'time':50},			
+			]),
+		}),[0,0.5,0.5]),
+		s.newNpc.abilityList('idle',[0.5,0.5,0.5]),
+	],
+	mastery_def:s.newNpc.mastery(1,1,1,0.5,2,1),
+	maxSpd:1,
+	moveRange:s.newNpc.moveRange(0.5,1),
+});
+s.newNpc("bird",{ 
+	name:"Bird",
+	sprite:s.newNpc.sprite("birdRed"),
+	abilityList:[
+		s.newNpc.abilityList('rangeBomb',[0.5,0.5,0.5]),
+		s.newNpc.abilityList(s.newAbility(null,'scratch',{},{
+			knock:s.newAbility.status(1,1,1),
+			postDelayAnim:s.newAbility.anim('earthHit',1),
+		}),[0.5,0,0]),
+		s.newNpc.abilityList(s.newAbility(null,'windBullet',{},{
+			knock:s.newAbility.status(0.5,1,1),
+			amount:5,angle:45,
+			sin:{amp:2,freq:2},	//BAD
+		}),[0,0.5,0.5]),
+		s.newNpc.abilityList('idle',[0.5,0.5,0.5]),
+	],
+	mastery_def:s.newNpc.mastery(2,0.5,1,1,1,1),
+	maxSpd:1,
+	moveRange:s.newNpc.moveRange(2.5,1),
+});
+s.newNpc("dragon",{
+	name:"Dragon",
+	sprite:s.newNpc.sprite("dragonKing"),
+	abilityList:[
+		s.newNpc.abilityList(s.newAbility(null,'windBullet',{},{
+			angle:360,amount:9,
+		}),[1,0.5,0.5]),
+		s.newNpc.abilityList('fireNova',[0.5,0.5,0.5]),
+		s.newNpc.abilityList('coldNova',[0.5,0.5,0.5]),
+		s.newNpc.abilityList('lightningNova',[0.5,0.5,0.5]),
+		s.newNpc.abilityList(s.newAbility(null,'scratchBig',{},{
+			bleed:s.newAbility.status(1,1,1),
+		}),[0.5,0,0]),
+		s.newNpc.abilityList('idle',[0.5,0.5,0.5]),		
+	],
+	mastery_def:s.newNpc.mastery(1,1,1,2,1,0.5),
+	mastery_dmg:s.newNpc.mastery(1.5,1.5,1.5,1.5,1.5,1.5),
+	hp:2000,
+	maxSpd:1,
+	moveRange:s.newNpc.moveRange(2.5,1),
+});
+
+s.newNpc("warrior",{
+	name:"Ringo",
+	sprite:s.newNpc.sprite("warrior-male0"),
+	nevercombat:1,
+	maxSpd:0.5,
+});
+s.newNpc("npc",{
+	name:"Ringo",
+	sprite:s.newNpc.sprite("villager-male0"),
+	nevercombat:1,
+	angle:90,
+	maxSpd:0.5,
+	minimapIcon:'color.green',
+});
+s.newNpc("npc-playerLike",{
+	name:"Ringo",
+	sprite:s.newNpc.sprite("villager-male0"),
+	targetIf:'false',
+	maxSpd:0.5,
+	target_period_sub:150,
+	modAmount:0,
+	combatType:'player',
+	awareNpc:1,
+	angle:90,
+	minimapIcon:'color.green',
+});
+
+
+
+// {System 
+s.newNpc("loot-chestOff",{
+	name:"Chest",
+	minimapIcon:'minimapIcon.loot',
+	sprite:s.newNpc.sprite("loot-chestOff"),
+	nevercombat:1,
+	nevermove:1,
+	block:{size:[-1,1,-1,1],value:1},
+});
+s.newNpc("loot-chestOn",{
+	name:"Chest",
+	minimapIcon:'minimapIcon.loot',
+	sprite:s.newNpc.sprite("loot-chestOn"),
+	nevercombat:1,
+	nevermove:1,
+	block:{size:[-1,1,-1,1],value:1},
+});
+s.newNpc("loot-flowerOff",{
+	name:"Chest",
+	minimapIcon:'minimapIcon.loot',
+	sprite:s.newNpc.sprite("loot-flowerOff"),
+	nevercombat:1,
+	nevermove:1,
+	block:{size:[0,0,0,0],value:1},
+});
+s.newNpc("loot-flowerOn",{
+	name:"Chest",
+	minimapIcon:'minimapIcon.loot',
+	sprite:s.newNpc.sprite("loot-flowerOn"),
+	nevercombat:1,
+	nevermove:1,
+	block:{size:[0,0,0,0],value:1},
+});
+s.newNpc("toggle-boxOff",{
+	name:"Lever",
+	minimapIcon:'minimapIcon.toggle',
+	sprite:s.newNpc.sprite("toggle-boxOff"),
+	nevercombat:1,
+	nevermove:1,
+	block:{size:[0,1,0,1],value:1},
+});
+s.newNpc("toggle-boxOn",{
+	name:"Lever",
+	minimapIcon:'minimapIcon.toggle',
+	sprite:s.newNpc.sprite("toggle-boxOn"),
+	nevercombat:1,
+	nevermove:1,
+	block:{size:[0,1,0,1],value:1},
+});
+
+s.newNpc("waypoint-grave",{
+	name:"Grave",
+	minimapIcon:'minimapIcon.waypoint',
+	sprite:s.newNpc.sprite("waypoint-grave"),
+	waypoint:1,
+	nevercombat:1,
+	nevermove:1,
+	block:{size:[0,1,0,1],value:1},
+}); 
+s.newNpc("target",{
+	name:"Target",
+	sprite:s.newNpc.sprite("system-target"),
+	nevermove:1,
+	hp:1,
+	modAmount:false,
+}); 
+s.newNpc("system-sign",{
+	name:"Sign",
+	sprite:s.newNpc.sprite("system-sign"),
+	minimapIcon:'tab.skill',
+	nevermove:1,
+	nevercombat:1,
+	block:{size:[0,1,0,1],value:1},
+});
+s.newNpc("system-bank",{
+	name:"Bank",
+	minimapIcon:'minimapIcon.loot',
+	sprite:s.newNpc.sprite("loot-chestOff",1.5),
+	nevercombat:1,
+	nevermove:1,
+	block:{size:[-1,1,-1,1],value:1},
+	bank:1,
+});
+
+s.newNpc("pushable-rock2x2",{
+	name:"Block",
+	minimapIcon:'',
+	sprite:s.newNpc.sprite("pushable-rock1x1",2),
+	nevercombat:1,
+	moveSelf:0,
+	move:0,
+	block:{size:[0,1,0,1],value:1},
+	pushable:{magn:4,time:16,event:null,timer:0,angle:0},
+	bounce:0,
+});
+s.newNpc("pushable-bridgeH",{
+	name:"",
+	minimapIcon:'',
+	sprite:s.newNpc.sprite("block-bridgeH"),
+	nevercombat:1,
+	moveSelf:0,
+	move:0,
+	block:{size:[0,1,0,1],value:1},
+	pushable:{magn:4,time:16,event:null,timer:0,angle:0},
+	bounce:0,
+});
+s.newNpc("pushable-bridgeV",{ 
+	name:"",
+	minimapIcon:'',
+	sprite:s.newNpc.sprite("block-bridgeV"),
+	nevercombat:1,
+	moveSelf:0,
+	move:0,
+	block:{size:[0,1,0,1],value:1},
+	pushable:{magn:4,time:16,event:null,timer:0,angle:0},
+	bounce:0,
+});
+s.newNpc("block-template",{
+	name:"",
+	minimapIcon:'',
+	sprite:s.newNpc.sprite("invisible"),
+	nevercombat:1,
+	nevermove:1,
+});
+s.newNpc("block-rock2x2",{ 
+	name:"Block",
+	minimapIcon:'',
+	sprite:s.newNpc.sprite("block-rock1x1",2),
+	nevercombat:1,
+	nevermove:1,
+	block:{size:[0,1,0,1],value:1},
+});
+s.newNpc("block-barrier",{ 
+	name:"Barrier",
+	minimapIcon:'',
+	sprite:s.newNpc.sprite("block-barrier",1.5),
+	nevercombat:1,
+	nevermove:1,
+	block:{size:[-2,2,-1,1],value:1},
+});
+s.newNpc("block-spike",{
+	name:"Spike",
+	minimapIcon:'',
+	sprite:s.newNpc.sprite("block-spike"),
+	nevercombat:1,
+	nevermove:1,
+	block:{size:[0,0,0,0],value:1},
+});
+s.newNpc("block-invisible",{
+	name:"Spike",
+	minimapIcon:'',
+	sprite:s.newNpc.sprite("invisible"),
+	nevercombat:1,
+	nevermove:1,
+	block:{size:[0,0,0,0],value:1},
+});
+s.newNpc("block-bridgeH",{
+	name:"",
+	minimapIcon:'',
+	sprite:s.newNpc.sprite("block-bridgeH"),
+	nevercombat:1,
+	nevermove:1,
+	block:{size:[0,1,0,1],value:0},
+});
+s.newNpc("block-bridgeV",{
+	name:"",
+	minimapIcon:'',
+	sprite:s.newNpc.sprite("block-bridgeV"),
+	nevercombat:1,
+	nevermove:1,
+	block:{size:[0,1,0,1],value:0},
+});
+
+s.newNpc("tree-red",{
+	name:"Red Tree",
+	minimapIcon:'minimapIcon.tree',
+	sprite:s.newNpc.sprite("tree-red"),
+	nevercombat:1,
+	nevermove:1,
+	block:{size:[-1,2,0,2]},
+});
+s.newNpc("tree-down",{
+	name:"Cut Tree",
+	minimapIcon:'minimapIcon.tree',
+	sprite:s.newNpc.sprite("tree-down"),
+	nevercombat:1,
+	nevermove:1,
+	block:{size:[-1,2,1,2]},
+});
+s.newNpc("rock-bronze",{
+	name:"Bronze Rock",
+	minimapIcon:'minimapIcon.rock',
+	sprite:s.newNpc.sprite("rock-bronze"),
+	nevercombat:1,
+	nevermove:1,
+	block:{size:[-1,1,0,1]},
+});
+s.newNpc("rock-down",{
+	name:"Empty Rock",
+	minimapIcon:'minimapIcon.rock',
+	sprite:s.newNpc.sprite("rock-down"),
+	nevercombat:1,
+	nevermove:1,
+	block:{size:[-1,1,0,1]},
+});
+s.newNpc("hunt-squirrel",{
+	name:"Squirrel",
+	minimapIcon:'minimapIcon.trap',
+	sprite:s.newNpc.sprite("hunt-squirrel"),
+	nevercombat:1,
+	maxSpd:0.5,
+});
+s.newNpc("hunt-down",{
+	name:"Creature Grave",
+	minimapIcon:'minimapIcon.trap',
+	sprite:s.newNpc.sprite("hunt-down"),
+	nevercombat:1,
+	nevermove:1,
+	block:{size:[0,1,0,1]},
+});
+
+s.newNpc("teleport-door",{
+	name:"Door",
+	minimapIcon:'minimapIcon.door',
+	sprite:s.newNpc.sprite("teleport-door"),
+	nevercombat:1,
+	nevermove:1,
+});
+s.newNpc("teleport-zone",{  
+	name:"Map Transition",
+	minimapIcon:'minimapIcon.door',
+	sprite:s.newNpc.sprite("teleport-zone",1.5),
+	nevercombat:1,
+	nevermove:1,
+});
+s.newNpc("teleport-underground",{
+	name:"Underground",
+	minimapIcon:'minimapIcon.door',
+	sprite:s.newNpc.sprite("teleport-underground"),
+	nevercombat:1,
+	nevermove:1,
+}); 
+s.newNpc("teleport-well",{
+	name:"Well",
+	minimapIcon:'minimapIcon.door',
+	sprite:s.newNpc.sprite("teleport-well"),
+	nevercombat:1,
+	nevermove:1,
+	block:{size:[-1,1,-1,1],value:1},
+});
+s.newNpc("teleport-cave",{
+	name:"Cave",
+	minimapIcon:'minimapIcon.door',
+	sprite:s.newNpc.sprite("teleport-cave"),
+	nevercombat:1,
+	nevermove:1,
+});
+
+
+s.exports(exports);
+

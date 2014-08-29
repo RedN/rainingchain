@@ -1,0 +1,988 @@
+<!--//LICENSED CODE BY SAMUEL MAGNAN FOR RAININGCHAIN.COM, LICENSE INFORMATION AT GITHUB.COM/RAININGCHAIN/RAININGCHAIN-->
+<head>
+	<link rel="stylesheet" href="css/CSSTableGenerator.css" type="text/css" media="screen, projection" />
+	<link href='http://fonts.googleapis.com/css?family=Kelly Slab' rel='stylesheet' type='text/css'>
+	<script type="text/javascript" src="tablesorter/jquery-latest.js"></script> 
+	<script type="text/javascript" src="tablesorter/jquery.tablesorter.js"></script> 
+	<!--<script src="sorttable.js"></script>-->
+	<!-- /zelda/css/css.css -->
+	<title>Zelda Glitch Database</title>
+	<style>body {background-image: url("../css/img/blackmamba.png");}</style>
+	
+</head>
+<body>
+	<a style="font:18px Kelly Slab; color:yellow;" href="http://www.rainingchain.com">Raining Chain Open-Source MMORPG</a><br>
+	<br>
+	<a style="font:25px Kelly Slab; color:cyan;" href="https://www.mediafire.com/?x08ajci8ek1cc3r" target="_blank">Zelda Software Package</a>
+	<span style="font-size:15px; color:white;">(1.0 JP ROM + Project64 1.6 Emulator + Memory Hack Software & Address + ESS & Controller Viewer + Xbox360 Controller Remap)</span>
+	<br>
+	<br>
+	<span style="font:45px Kelly Slab; color:white;">Zelda Glitch Database [Made by <a title="Check my video tutorials on Youtube" style="color:cyan;" target="_blank" href="https://www.youtube.com/channel/UCcVVNdWnK9gC6duwBn8mthg">RacingChu</a>]</span><br>
+	<span style="font:20px Kelly Slab; color:white;">
+		Download WR Videos (.mp4): 
+		<span style="font:18px Kelly Slab;">
+		<a style="color:cyan;" href="https://www.mediafire.com/folder/c8t8513q8aueo" target="_blank" title="18:10 by Cosmo">Any%</a>
+		, <a style="color:cyan;" href="https://www.mediafire.com/folder/c8t8513q8aueo" target="_blank" title="4:31:16 by ZFG">100%</a>
+		, <a style="color:cyan;" href="https://www.mediafire.com/folder/c8t8513q8aueo" target="_blank" title="1:35:19 by SVA">All Dungeons</a>
+		, <a style="color:cyan;" href="https://www.mediafire.com/folder/c8t8513q8aueo" target="_blank" title="2:08:03 by Pydoyks">MST</a>
+		, <a style="color:cyan;" href="https://www.mediafire.com/folder/c8t8513q8aueo" target="_blank" title="1:22:56 by Moltov">No RBA/WW</a>
+		, <a style="color:cyan;" href="https://www.mediafire.com/folder/c8t8513q8aueo" target="_blank" title="50:36 by Dromasylvia">No WW</a>
+		, <a style="color:cyan;" href="https://www.mediafire.com/folder/c8t8513q8aueo" target="_blank" title="37:32 by ZFG">Ganonless</a>
+		, <a style="color:cyan;" href="https://www.mediafire.com/folder/c8t8513q8aueo" target="_blank" title="3:46:08 by enu">Glitchless</a>
+		</span>
+	</span>
+	<br>
+	<span style="font:20px Kelly Slab; color:white;">Savestate Compilation: 
+	<a style="font:18px Kelly Slab; color:cyan;" href="https://www.mediafire.com/folder/v87y7sz2sq64g" target="_blank" title="Download all savestates">>All<</a>
+	, <a style="font:18px Kelly Slab; color:cyan;" href="https://www.mediafire.com/folder/v87y7sz2sq64g" target="_blank" title="Following sword route">Any%</a>
+	, <a style="font:18px Kelly Slab; color:cyan;" href="https://www.mediafire.com/folder/v87y7sz2sq64g" target="_blank" title="Following same route than WR (4:31:16 by ZFG)">100%</a>
+	, <a style="font:18px Kelly Slab; color:cyan;" href="https://www.mediafire.com/folder/v87y7sz2sq64g" target="_blank" title="Following same route than WR (50:36 by Dromasylvia)">Ganonless</a>
+	, <a style="font:18px Kelly Slab; color:cyan;" title="Coming soon.">All Dungeons</a>
+	, <a style="font:18px Kelly Slab; color:cyan;" title="Coming soon.">MST</a>
+	, <a style="font:18px Kelly Slab; color:cyan;" title="Coming soon.">No WW</a>
+	, <a style="font:18px Kelly Slab; color:cyan;" title="Coming soon.">No RBA/WW</a>
+	, <a style="font:18px Kelly Slab; color:cyan;" title="Coming soon.">Glitchless</a>
+	</span>
+	
+	<br>
+	
+	<span style="font:20px Kelly Slab; color:white;">Jump to:
+		<select id="selectMap" onchange="jumpToMap(this)"></select>
+	</span>
+	<br>
+	
+	
+	<span style="color:white;" id="glitchAmount"></span> <input type="checkbox" onchange="updateTable();" id="noBingo"><span style="color:white;">Hide Bingo-Only Glitches</span></input><br>
+	<div id="divTable" class="maxSize CSSTableGenerator CSSTableGeneratorHead">
+		<table id="table" class="tablesorter"></table>
+	</div>
+	<br>
+	<br>
+	<br>
+	<font style="color:white;" size="5">Comment below to suggest a new trick!</font>
+	<!-- GDeach1985@jourrapide.com Begin Comments JavaScript Code -->
+	<script type="text/javascript" async>function ajaxpath_53f6a9b995381(url){return window.location.href == '' ? url : url.replace('&s=','&s=' + escape(window.location.href));}(function(){document.write('<div id="fcs_div_53f6a9b995381"><a title="free comment script" href="http://www.freecommentscript.com">&nbsp;&nbsp;<b>Free HTML User Comments</b>...</a></div>');fcs_53f6a9b995381=document.createElement('script');fcs_53f6a9b995381.type="text/javascript";fcs_53f6a9b995381.src=ajaxpath_53f6a9b995381("http://www.freecommentscript.com/GetComments2.php?p=53f6a9b995381&s=&Size=10#!53f6a9b995381");setTimeout("document.getElementById('fcs_div_53f6a9b995381').appendChild(fcs_53f6a9b995381)",1);})();</script><noscript><div><a href="http://www.freecommentscript.com" title="free html user comment box">Free Comment Script</a></div></noscript>
+	<!-- End Comments JavaScript Code -->
+	
+	
+	
+	<!-- Start of StatCounter Code for Default Guide -->
+	<script type="text/javascript">var sc_project=9989425;var sc_invisible=0; var sc_security="c483d5a6"; var scJsHost = (("https:" == document.location.protocol) ?"https://secure." : "http://www.");document.write("<sc"+"ript type='text/javascript' src='" +scJsHost+"statcounter.com/counter/counter.js'></"+"script>");</script>
+	<noscript><div class="statcounter"><a title="free web stats" href="http://statcounter.com/free-web-stats/" target="_blank"><img class="statcounter" src="http://c.statcounter.com/9989425/0/c483d5a6/0/" alt="free web stats"></a></div></noscript>
+	<!-- End of StatCounter Code for Default Guide -->
+
+</body>
+<script>
+
+Tk = {}; Tk.arrayToTable = function(array,top,left,thead){
+	var str = '';	
+	for(var i in array){
+		if(+i === 0){
+			if(!top) str += '<tr>';
+			if(top && !thead) str += '<tr class="tableHead">';
+			if(top && thead) str += '<thead><tr class="tableHead">'
+		}
+		for(var j in array[i]){
+			if(+i === 0 && thead){
+				str += '<th>' + array[i][j] + '</th>';
+				continue;
+			}
+			if(+j === 0){
+				if(!left) str += '<td>' + array[i][j] + '</td>';
+				if(left) str += '<td class="tableHead" style="color:white;">' + array[i][j] + '</td>';
+			} else {
+				str += '<td>' + array[i][j] + '</td>'
+			}
+		}
+		str += '</tr>';
+		if(+i === 0 && thead) str += '</thead><tbody>';
+	}
+	if(thead) str += '</tbody><tfoot></tfoot>';
+	return str;
+}
+
+Object.defineProperty(Array.prototype, "have", {
+    enumerable: false,
+    value: function(name,begin){
+		if(begin) return this.indexOf(name) === 0;
+		return this.indexOf(name) !== -1;
+	}
+});
+
+var getRequiredHead = function(){	//trick must be used in category defined by requiredHead to appear in table
+	return [];
+	//'Any%','100%','All Dungeons','MST','No RBA/WW','No WW','Ganonless'
+}
+
+var init = function(){
+	var str = '';
+	for(var i in abr) str += '<option value="'+i+'">' + abr[i] + '</option>';
+	document.getElementById('selectMap').innerHTML = str;
+	updateTable();
+}
+
+
+var updateTable = function(){
+	var array = [
+		[
+			'Location','Name','Video','Savestate','Any%','100%',
+			'<font size="2">All Dungeons</font>',
+			'MST',
+			'<font size="2">No RBA/WW</font>',
+			'No WW',
+			'<font size="2">Ganonless</font>',
+			'<font size="2">Glitchess</font>'
+		]
+	];
+
+	for(var i in list){
+		var t = trickToArray(list[i],document.getElementById('noBingo').checked);
+		if(t) array.push(t);
+	}
+	
+	document.getElementById("table").innerHTML = Tk.arrayToTable(array,1,0,1);
+	$("#table").tablesorter(); 
+	document.getElementById("glitchAmount").innerHTML = 'Displaying ' + (array.length-1) + '/' + Object.keys(list).length + ' glitches.';
+};
+
+
+var newTrick = function(savestate,mine,loc,name,video,category,submitter){
+	category = category || {};
+	list[loc+name] = {
+		location:loc,
+		name:name,
+		video:video,
+		'Any%':category.any || 0,
+		'100%':category.cent || 0,
+		'All Dungeons':category.ad || 0,
+		'MST':category.mst || 0,
+		'No RBA/WW':category.rba || 0,
+		'No WW':category.ww || 0,
+		'Ganonless':category.ganon || 0,
+		'Glitchless':category.less || 0,
+		RacingChu:mine,
+		submitter:submitter || '',
+		savestate:savestate || 0,
+	};
+}
+var trickToArray = function(trick,nobingo){
+	var array = [];
+	array.push('<a name="' + trick.location + '"></a>' + abr[trick.location]);
+	array.push(trick.submitter ? ('<span title="Submitted by ' + trick.submitter + '">' + trick.name + '</span>') : trick.name);	
+	var word = trick.RacingChu ? '<span style="visibility:hidden">a</span>>Video<' : 'Video';
+	var str = '<a target="_blank" href="' + trick.video +'" title="Watch on Youtube in a new window">' + word + '</a>';
+	array.push(str);
+	
+	if(trick.savestate){
+		var str = '<a title="Download this v1.0 savestate for Project64 1.6" target="_blank" href="https://www.mediafire.com/folder/c3dhcmrp5yt1m">Savestate</a>';
+		//	/zelda/' + trick.location + '@' + trick.name + '.zip
+		array.push(str);
+	} else array.push('<font size="2">Coming soon.</font>');
+	
+	var onlyUsedInBingo = !(trick['Any%'] || trick['100%'] || trick['All Dungeons'] || trick['MST'] || trick['No RBA/WW'] || trick['No WW'] || trick['Ganonless'] || trick['Glitchless']);
+	if(nobingo && onlyUsedInBingo) return;
+	
+	var NOTHING = '<span style="visibility:hidden">Z</span>';	//hax for sorting
+	if(!trick['Any%']) array.push(NOTHING);
+	if(trick['Any%'] === 1) array.push('<span title="Alternative glitch for Any%">X</span>');
+	if(trick['Any%'] === 2) array.push('<span title="Used in the current Any% World Record (18:10 by Cosmo)">WR</span>');
+
+	if(!trick['100%']) array.push(NOTHING);
+	if(trick['100%'] === 1) array.push('<span title="Alternative glitch for 100%">X</span>');
+	if(trick['100%'] === 2) array.push('<span title="Used in the current 100% World Record (4:31:16 by ZFG)">WR</span>');
+	
+	if(!trick['All Dungeons']) array.push(NOTHING);	
+	if(trick['All Dungeons'] === 1) array.push('<span title="Alternative glitch for All Dungeons">X</span>');
+	if(trick['All Dungeons'] === 2) array.push('<span title="Used in the current All Dungeons World Record (1:35:19 by SVA)">WR</span>');
+
+	if(!trick['MST']) array.push(NOTHING);
+	if(trick['MST'] === 1) array.push('<span title="Alternative glitch for MST">X</span>');
+	if(trick['MST'] === 2) array.push('<span title="Used in the current MST World Record (2:08:03 by Pydoyks)">WR</span>');
+
+	if(!trick['No RBA/WW']) array.push(NOTHING);
+	if(trick['No RBA/WW'] === 1) array.push('<span title="Alternative glitch for No RBA/WW">X</span>');
+	if(trick['No RBA/WW'] === 2) array.push('<span title="Used in the current No RBA/WW World Record  (1:22:56 by Moltov)">WR</span>');
+
+	if(!trick['No WW']) array.push(NOTHING);
+	if(trick['No WW'] === 1) array.push('<span title="Alternative glitch for No WW">X</span>');
+	if(trick['No WW'] === 2) array.push('<span title="Used in the current No WW World Record (50:36 by Dromasylvia)">WR</span>');
+
+	if(!trick['Ganonless']) array.push(NOTHING);
+	if(trick['Ganonless'] === 1) array.push('<span title="Alternative glitch for Ganonless">X</span>');
+	if(trick['Ganonless'] === 2) array.push('<span title="Used in the current Ganonless World Record (37:32 by ZFG)">WR</span>');
+	
+	if(!trick['Glitchless']) array.push(NOTHING);
+	if(trick['Glitchless'] === 1) array.push('<span title="Alternative glitch for Glitchless">X</span>');
+	if(trick['Glitchless'] === 2) array.push('<span title="Used in the current Glitchless World Record (3:46:08 by enu)">WR</span>');
+	
+	return array;
+}
+
+var jumpToMap = function(){
+	$("#table").tablesorter( {sortList: [[0,0]]} ); 
+	setTimeout(function(){
+		var h = document.getElementById('selectMap').value;
+		var url = location.href;               //Save down the URL without hash.
+		location.href = "#"+h;                 //Go to the target element.
+		history.replaceState(null,null,url);   //Don't like hashes. Changing it back.
+	},100);
+}
+
+
+var list = {};
+var abr = {
+	Deku:"Deku Tree",
+	DC:"Dodongo's Cavern",
+	Jabu:"Jabu-Jabu's Belly",
+	Fire:"Fire Temple",
+	Forest:"Forest Temple",
+	Water:"Water Temple",
+	Shadow:"Shadow Temple",
+	Spirit:"Spirit Temple",
+	BotW:"Bottom of the Well",
+	IC:"Ice Cavern",
+	
+	DMC:"Death Moutain Crater",
+	DMT:"Death Mountain Trail",
+	GC:"Goron City",
+	Kokiri:"Kokiri Forest",
+	LW:"Lost Woods",
+	Field:"Hyrule Field",
+	Kak:"Kakariko Village",
+	Grave:"Graveyard",
+	LLR:"Lon Lon Ranch",
+	GF:"Gerudo Fortress",
+	GV:"Gerudo Valley",
+	GTG:"Gerudo Training Grounds",
+	Colossus:"Desert Colossus",
+	HW:"Haunted Wasteland",
+	Hylia:"Lake Hylia",
+	SFM:"Sacred Forest Meadow",
+	ZD:"Zora's Domain",
+	ZF:"Zora's Fountain",
+	ZR:"Zora's River",
+	GT:"Ganon's Castle",
+	Castle:"Hyrule Castle",
+	Market:"Hyrule Market",
+}
+//https://www.youtube.com/watch?v=
+//https://youtu.be/
+
+newTrick(1,0,"Deku","Deku Tree as Adult from LW","https://youtu.be/D2mhjzUHTU4",{ad:2});
+newTrick(1,0,"Deku","Deku Tree as Adult from Tree","https://youtu.be/dcDwuKfiy88",{ad:1});
+newTrick(1,0,"Deku","B1 Skip with ISG","https://youtu.be/tOgnF1MwjkU",{any:2,mst:1});
+newTrick(1,0,"Deku","B1 Skip from Top","https://youtu.be/CjbjpCPq6Cc",{less:2,any:1,mst:2});
+newTrick(1,0,"Deku","B1 Skip Backup","https://youtu.be/qie9fhptfjk",{less:1,any:1,mst:1});
+newTrick(1,1,"Deku","B1 Skip with Megasidehop","https://www.youtube.com/watch?v=fBIq3S9WQ3o",{cent:2,any:1});
+newTrick(1,0,"Deku","B1 Skip with Groundjump","https://youtu.be/Fmu7GYNz3b4#t=10669",{cent:2});
+newTrick(1,0,"Deku","Go B1 as Adult","https://youtu.be/r_8MNAJhz8s");
+newTrick(1,0,"Deku","Navi Vine Text Skip","https://youtu.be/QT4FySkgr0g",{less:2,cent:2,any:2,mst:2});
+newTrick(1,0,"Deku","Navi Door Text Skip","https://youtu.be/_v0UoU2xmvE",{cent:2,ad:2});
+newTrick(1,0,"Deku","Flame Storage Burn Web","https://youtu.be/MqAuCtS-eQ4",{any:1,mst:2});
+newTrick(1,0,"Deku","Get Flame Backflip","https://youtu.be/420mouc6qSw#t=440",{less:2});
+newTrick(1,1,"Deku","Gohma Double KO","https://www.youtube.com/watch?v=tKCM6XNVp4Y",{any:1,mst:2});
+newTrick(1,0,"Deku","Gohma Clip","https://youtu.be/Mrs0qQYZOvc",{cent:2,any:2,mst:1});
+newTrick(1,0,"Deku","231 Skip","https://youtu.be/eGKF8dPMaSY",{ad:2});
+newTrick(1,0,"Deku","Warp to Boss","https://www.youtube.com/watch?v=7vxb5FgtX-A");
+newTrick(1,1,"Deku","WW to Ganon","https://youtu.be/PTucNxwP5bw",{cent:2,any:1,mst:2});
+newTrick(1,0,"Deku","WW to Ganon Faster","https://youtu.be/aq6pGJbd6Iw#t=773",{any:2,mst:1});	//not guide
+newTrick(0,0,"Deku","WW to Shadow","https://youtu.be/K6PfmneKJfI",{ad:2});
+newTrick(0,0,"Deku","WW to DC","https://youtu.be/eoBAqez1ePc");
+newTrick(1,0,"Deku","GS with Chu","https://www.youtube.com/watch?v=vH2sV2d3F0Q");
+
+newTrick(1,0,"DC","Groundjump to Switch","https://youtu.be/jGSH76uwDd4");
+newTrick(1,0,"DC","Chu to Switch","https://youtu.be/136cGHN2f0I");
+newTrick(1,0,"DC","Boss Door Switch with Navi","https://youtu.be/816RB17is_o",{cent:2,ad:2,mst:1});
+newTrick(1,0,"DC","Boss Door Switch with Bottle","https://youtu.be/IzQYDS_8xv4",{cent:1,ad:1,mst:2});
+newTrick(1,0,"DC","DC Face Hover","https://youtu.be/PU7FfP0zYiM");
+newTrick(1,0,"DC","GS near Stairs","https://youtu.be/WyaTpNdejPw",{cent:2});
+newTrick(1,0,"DC","Chu Megaflip for Bomb","https://youtu.be/4u9-llaEwgU");
+newTrick(1,0,"DC","Flame Circles No Slingshot","https://youtu.be/dcPSgv68INw",{less:2});
+newTrick(1,0,"DC","Hover to GS","https://youtu.be/Fmu7GYNz3b4#t=2653",{cent:2});
+newTrick(1,0,"DC","Quick Red Eyes","https://youtu.be/Fmu7GYNz3b4#t=2629",{less:2,cent:2,mst:2});
+newTrick(1,0,"DC","Red Eyes with Chu","https://youtu.be/y9isrFtbTqc",{ad:1});
+newTrick(1,0,"DC","Red Eyes Skip","https://youtu.be/BbHmmyIhODc",{ad:2});
+newTrick(1,1,"DC","WW to GTG","https://youtu.be/m9uM1TFB0qM",{cent:2,mst:2,ad:2});
+newTrick(0,0,"DC","WW to GTG as Child","https://youtu.be/M2BvcHAm0Io");
+newTrick(0,0,"DC","WW to Gohma","https://youtu.be/7CLy56nLOFQ");
+
+newTrick(1,0,"Jabu","Jabu Without Fish","https://youtu.be/fW0NCydX6h8",{cent:2,mst:2,ad:2});
+newTrick(1,0,"Jabu","Chu Megaflip to Switch","https://youtu.be/UpA_8yn-Z60",{cent:1,mst:2,ad:2});
+newTrick(1,0,"Jabu","Bomb Megaflip to Switch","https://youtu.be/Fmu7GYNz3b4#t=8585",{cent:2});
+newTrick(1,0,"Jabu","Boomerang Switch Top","https://youtu.be/zkmZgQ8CKmQ",{less:2,cent:2,mst:2,ad:2});
+newTrick(1,0,"Jabu","First Switch with Chu","https://youtu.be/FNXtXCOWzqo",{mst:2,ad:2});
+newTrick(1,0,"Jabu","Barinade","https://youtu.be/x2zyc_4PbS4",{less:2,cent:2,mst:2,ad:2});
+newTrick(1,0,"Jabu","Blue Switch Roll","https://youtu.be/Cnn5d8ir5cc",{less:2,cent:2,mst:2,ad:2});
+newTrick(1,0,"Jabu","Blue Switch Bottle","https://youtu.be/cXgRtAWOjkM",{mst:1,ad:1});
+newTrick(0,0,"Jabu","Barinade as Adult","http://www.twitch.tv/zfg1/c/3423285");
+newTrick(1,0,"Jabu","Quick Boomerang Room","https://youtu.be/PyC0nMqcOW8",{less:2,cent:2,mst:2,ad:2});
+newTrick(1,0,"Jabu","Blue Switch no Ruto","https://youtu.be/B3L8ZE_bWCM");
+newTrick(1,0,"Jabu","No Platform Drop","https://youtu.be/420mouc6qSw#t=3537",{less:2});
+
+newTrick(1,0,"Forest","Poe CS Skip","https://youtu.be/x0jM5jU-J-M",{cent:2});
+newTrick(1,0,"Forest","Damage Boost Balcony","https://youtu.be/Fmu7GYNz3b4#t=5574",{cent:2,mst:2,rba:2});
+newTrick(1,0,"Forest","Damage Boost to Green Poe","https://youtu.be/7JfVzlUACdE");
+newTrick(1,0,"Forest","SoT Block Skip via Clip Wall","https://youtu.be/GpHX1M2VhOg",{cent:2,rba:2,mst:2});
+newTrick(1,0,"Forest","SoT Block Skip via Ledge Clip","https://youtu.be/ZD-sVkbwVp8",{cent:1,rba:1,mst:1});
+newTrick(1,0,"Forest","Warp to Boss from Bow Room","https://youtu.be/tiEk0zCvJ3A",{cent:2,mst:2});
+newTrick(1,0,"Forest","Warp to Boss from Main Room","https://youtu.be/iwkYfnNNDQ8",{cent:2,ad:2});
+newTrick(1,0,"Forest","Warp to Boss with Entrance Glitch","https://youtu.be/hzbGgU_AiDw");
+newTrick(1,0,"Forest","Quick Jump Down Stairs","https://youtu.be/Fmu7GYNz3b4#t=5680",{less:2,cent:2,mst:2,rba:2});
+newTrick(1,0,"Forest","Phantom Ganon","https://youtu.be/Fmu7GYNz3b4#t=5780",{cent:2,mst:2,ad:2});
+newTrick(1,0,"Forest","Blue Warp CS Skip","https://youtu.be/f74txDcMiUA",{cent:2,mst:2,ad:2});
+newTrick(1,0,"Forest","Blue Warp CS Skip with Chu","https://youtu.be/f1NnNJVcZW4");
+newTrick(1,0,"Forest","Skip Navi Text Wallmaster","https://youtu.be/Fmu7GYNz3b4#t=5669",{cent:2,mst:2,rba:2});
+newTrick(1,0,"Forest","Skip Tower Block Puzzle","https://youtu.be/6OWR8uIyFqs#t=3818",{cent:2,mst:2,rba:2});
+newTrick(0,0,"Forest","BK No Bow","https://youtu.be/YY4eFFKH9N4");
+newTrick(1,0,"Forest","Well Chest with Iron Boots","https://youtu.be/420mouc6qSw#t=5765",{less:2});
+
+newTrick(1,0,"Fire","Hookshot to Elevator","https://youtu.be/Fmu7GYNz3b4#t=6800",{cent:2});
+newTrick(1,0,"Fire","Clip Block at Crystal","https://youtu.be/OWXX6m4cjgM",{cent:1,mst:2});
+newTrick(1,0,"Fire","Clip Block at Crystal with Bomb","https://www.youtube.com/watch?v=3bt3LtFjEuQ#t=1886",{ganon:2});
+newTrick(1,0,"Fire","Clip Block at Crystal with Chu","https://youtu.be/txxU71YH91s");
+newTrick(1,0,"Fire","Skip Block at Crystal with Jump","https://youtu.be/420mouc6qSw#t=8490");
+newTrick(1,0,"Fire","Clip Block at Crystal with BGS","https://youtu.be/Fmu7GYNz3b4#t=4874",{cent:2});
+newTrick(1,0,"Fire","Jump SoT GS","https://youtu.be/VpPkI6x1ZmA",{cent:2});
+newTrick(1,0,"Fire","Boss Door Without Pillar","https://youtu.be/d_y7QpCK_Io",{less:2,ad:2});
+newTrick(1,0,"Fire","Daruna CS Skip","https://youtu.be/b3dUpZLWnBg",{cent:2,mst:1,ganon:2});
+newTrick(1,0,"Fire","Daruna CS Skip Shorten","https://youtu.be/u1u-xn-Xj2U#t=4532",{ad:2});
+newTrick(1,0,"Fire","Sidehop Flame Wall","https://youtu.be/qL9F_FemT2Y",{less:2,cent:1,mst:1,ganon:1});
+newTrick(1,0,"Fire","SS Flame Wall","https://youtu.be/DQb3yMauoew",{cent:2,mst:2,ganon:2});
+newTrick(1,0,"Fire","Warp to Boss with Hammer","https://youtu.be/bufY7eiMKlA",{cent:2,mst:2,ganon:2});
+newTrick(1,0,"Fire","Warp to Boss with SS","https://www.youtube.com/watch?v=-4vzLNy3kUk",{cent:1,mst:1,ganon:1});
+newTrick(0,0,"Fire","Warp to Boss with Ledge Clip","https://www.youtube.com/watch?v=JmfrBSa9ekc",{cent:1,mst:1,ganon:1});
+newTrick(1,0,"Fire","Weirdshot BK","https://youtu.be/zjcMLK46FT0",{ad:2});
+newTrick(1,0,"Fire","Clip Entrance Totem","https://youtu.be/fh1G_We6t0s",{cent:2});
+newTrick(1,0,"Fire","Sot Clip To Free Goron","https://youtu.be/420mouc6qSw#t=8817",{less:2});
+newTrick(1,0,"Fire","BK Skip via Ledge Clip","https://youtu.be/XU3_sxCKAN0",{ad:1});
+newTrick(1,0,"Fire","Volvagia","https://youtu.be/lJaElLlVgig",{less:2,cent:2,mst:2,ad:2,ganon:2});
+newTrick(1,0,"Fire","WW to Credits","https://youtu.be/zVQcJDnj-Ss",{ganon:2});
+newTrick(1,0,"Fire","WW to Forest","https://youtu.be/A074PAKb_ac",{cent:2,mst:2});
+newTrick(0,0,"Fire","WW to Ganon (1080)","https://youtu.be/rldRoUzuFrQ",{ad:2});
+
+newTrick(1,0,"IC","Clip Ice at End with Recoil","https://youtu.be/bO3RLfgoKHc",{cent:1});
+newTrick(1,0,"IC","Clip Ice at End with ESS","https://youtu.be/Fmu7GYNz3b4#t=4148",{cent:2});
+newTrick(1,0,"IC","Clip West Ice at Blade with Recoil","https://youtu.be/VwQBcaE5llM",{cent:2});
+newTrick(1,0,"IC","Clip East Ice at Blade with SS","https://youtu.be/Fmu7GYNz3b4#t=4036",{cent:2});
+newTrick(0,0,"IC","Clip East Ice at Blade with ESS","https://www.youtube.com/watch?v=L8s_09Vt9eg",{cent:1});
+newTrick(1,0,"IC","Clip East Ice at Blade with Bomb","https://www.youtube.com/watch?v=OUO877PXjgI",{cent:1});
+newTrick(1,0,"IC","Clip via Freezard","https://youtu.be/3HYqXZLCDXU",{cent:2});
+newTrick(1,0,"IC","Fast 2nd Rupee Room","https://youtu.be/Fmu7GYNz3b4#t=4092",{cent:2});
+newTrick(1,0,"IC","Serenade CS Skip","https://youtu.be/Z5SGg34uD14",{cent:2});
+newTrick(1,0,"IC","HP No Blue Fire","https://youtu.be/l7x85j_i2ts",{cent:2});
+newTrick(1,0,"IC","Groundjump Skip Block Push","https://youtu.be/Fmu7GYNz3b4#t=4142",{cent:2});
+newTrick(1,0,"IC","Red Ice Chest Clip","https://youtu.be/mjw3xqgk7O4");
+newTrick(1,0,"IC","Useful Jumps","https://youtu.be/k5MYQ_4mcGQ#t=130",{less:2});
+newTrick(1,0,"IC","IC as Child","https://youtu.be/FrF3rFvDVJI");
+
+newTrick(1,0,"Water","Early Water Temple from House","https://youtu.be/nkz1suNoI1s",{ad:1,mst:1});
+newTrick(1,0,"Water","Early Water Temple with SS","https://youtu.be/nUHjP3e9DEg",{ad:2,mst:2});
+newTrick(1,0,"Water","Early Water Temple from ZD","https://youtu.be/u1u-xn-Xj2U#t=3362",{ad:1,mst:1});
+newTrick(1,0,"Water","Bottle Dive","https://youtu.be/0ICDUvoFvw4");
+newTrick(1,0,"Water","Go Top with Hookshot","https://youtu.be/zddpkhXmklU",{less:2});
+newTrick(1,0,"Water","Jump to High Water Ocarina Spot","https://youtu.be/9D9aMvKY0Lw",{less:2});
+newTrick(1,0,"Water","Go to Boss Side via Hammer","https://youtu.be/K4BUyBosTrk",{cent:1,mst:2});
+newTrick(1,0,"Water","Go to Boss Side via SS","https://youtu.be/Q-DSL3vW2Xk",{cent:2,ad:2,mst:1});
+newTrick(1,0,"Water","BK Skip","https://youtu.be/LkL7wNjdoS0",{cent:2,ad:2,mst:2});
+newTrick(1,0,"Water","Open Door Midair","https://youtu.be/24426V-t7F4",{cent:2});
+newTrick(1,0,"Water","Go Top with Hookshot","https://youtu.be/9D9aMvKY0Lw");
+newTrick(1,0,"Water","SoT Block Skip","https://youtu.be/nWa5SkFOaVw",{cent:2});
+newTrick(1,0,"Water","Morpha","http://www.youtube.com/watch?v=BWIxYFM9MWc",{less:2,mst:2,ad:2});
+newTrick(1,0,"Water","Blue Warp CS Skip","https://youtu.be/tH46ySOoN-8",{ad:2});
+newTrick(1,0,"Water","Blue Warp CS Skip with Sun Song","https://youtu.be/CN1QUXwOqPE",{cent:2});
+newTrick(1,0,"Water","Quick Dark Link with BGS","https://youtu.be/Fmu7GYNz3b4#t=6347",{cent:2});
+newTrick(1,0,"Water","Quick Dark Link with Nuts","https://youtu.be/qcTMf114Ujg",{less:1,cent:1});
+newTrick(1,0,"Water","GS Moving Platform with ISG","https://youtu.be/Fmu7GYNz3b4#t=6289",{cent:2});
+newTrick(1,0,"Water","GS Moving Platform No ISG","https://youtu.be/Fa-m-UacJ20");
+newTrick(1,0,"Water","GS near Vortex no Iron Boots","https://youtu.be/enuD0xbtrz4");
+newTrick(1,0,"Water","Early Cracked Wall Key No Hover","https://youtu.be/F95vtQXoyb4");
+newTrick(1,0,"Water","Early Cracked Wall Key Hover","https://youtu.be/Fmu7GYNz3b4#t=6137",{cent:2});
+newTrick(1,0,"Water","Quick BK","https://youtu.be/B5udV1mmBwY",{less:2});
+newTrick(1,0,"Water","Early Eye Key","https://youtu.be/mA0eliRZKV0");
+
+newTrick(1,0,"BotW","Early BotW with Cuccos","https://youtu.be/3Eno-EZ6EUk",{cent:1,rba:1});
+newTrick(1,0,"BotW","Early BotW with Navi Dive","https://youtu.be/U77sGTDO050",{cent:2,rba:2});
+newTrick(1,0,"BotW","Actor Glitch","https://youtu.be/Y8gunZf4vEk",{rba:2});
+newTrick(1,0,"BotW","Vine Clip to Chu","https://youtu.be/q3tqUxMS760",{rba:2});
+newTrick(1,0,"BotW","Vine Clip to GS","https://youtu.be/WZdR3Ge_CcM#t=172",{cent:2});
+newTrick(1,0,"BotW","Vine Clip to Dead Hand from Chu","https://youtu.be/uwjUADME36c",{cent:2});
+newTrick(1,0,"BotW","Boomerang Coffin Key","https://youtu.be/pb9I2AAMHYg",{cent:1});
+newTrick(1,0,"BotW","Dead Hand","https://youtu.be/Fmu7GYNz3b4#t=8499",{cent:2,rba:2});
+
+newTrick(1,0,"Shadow","Early Shadow as Adult with Chu","https://youtu.be/NVKe8TgRe7w",{cent:2,mst:2,rba:2});
+newTrick(1,0,"Shadow","Early Shadow as Adult with Bomb","https://youtu.be/VL1A9MBx3_c",{ad:2});
+newTrick(1,0,"Shadow","Early Shadow as Adult with Hover","https://youtu.be/KT-PQCHImtM",{ad:1});
+newTrick(0,0,"Shadow","Early Shadow as Child","https://youtu.be/dm-a47j74W0");
+newTrick(1,0,"Shadow","Dead Hand","https://youtu.be/Fmu7GYNz3b4#t=2087",{cent:2,mst:2,ad:2,rba:2});
+newTrick(1,0,"Shadow","Weirdshot Rupee Key","https://youtu.be/QHZIX54-e9A",{cent:2});
+newTrick(1,0,"Shadow","Clip Fence to Boat","https://youtu.be/gHIhhL101YU",{cent:2,mst:2,rba:2});
+newTrick(1,0,"Shadow","Clear Entrance Gap as Child","https://www.youtube.com/watch?v=1iTd4t5d1NI");
+newTrick(1,0,"Shadow","Damage Boost to Tongue","https://youtu.be/420mouc6qSw#t=11120",{less:2});
+newTrick(1,0,"Shadow","Damage Boost to Boss Door","https://youtu.be/420mouc6qSw#t=11611",{less:2});
+newTrick(1,0,"Shadow","BK Without Din Fire","https://youtu.be/9QkP__Qlano",{cent:2,mst:2,rba:2});
+newTrick(1,0,"Shadow","Like Like Clip GS","https://youtu.be/qGWdGr4Vv6c",{cent:2});
+newTrick(1,0,"Shadow","Backflip Spike","https://youtu.be/L5Lui7-I3kk",{less:2});
+newTrick(1,0,"Shadow","Boat No Fight","https://youtu.be/SNnvjTmzUCU#t=140",{less:2,cent:2,mst:2,rba:2});
+newTrick(1,0,"Shadow","Boat GS with Megasidehop","https://youtu.be/hBE9Fe1eips");
+newTrick(1,0,"Shadow","Chu SS over Crater","https://youtu.be/cmX4iBizTUU",{mst:2,rba:2});
+newTrick(1,0,"Shadow","Bongo Bongo","https://youtu.be/VCPUzVrOh9I#t=2106",{less:2,cent:1,mst:2,ad:2,rba:2});
+newTrick(1,0,"Shadow","Unloaded Bongo Bongo","https://youtu.be/tHnDc8oiqA8",{cent:2,mst:1,ad:1,rba:1});
+newTrick(1,0,"Shadow","Blue Warp CS Skip","https://youtu.be/krDUgZbZjkI",{ad:2});
+newTrick(1,0,"Shadow","Fence Clip to Spike Room","https://youtu.be/Fmu7GYNz3b4#t=12506",{ad:2});
+newTrick(1,0,"Shadow","Pillar with Chu","https://youtu.be/8eBjbQ9h_hQ",{mst:1,rba:1,cent:1});
+newTrick(1,0,"Shadow","BK Skip with Chu","https://youtu.be/h5gVuMZWsjE",{mst:1,rba:1});
+newTrick(1,0,"Shadow","BK Skip with Bomb","https://youtu.be/hHRybvPcGDY",{cent:1});
+
+newTrick(1,0,"Spirit","Mirror Hover","https://youtu.be/jjQpINHNPig",{cent:1,mst:2,rba:2,ad:2});
+newTrick(1,0,"Spirit","Mirror from HP","https://youtu.be/Fmu7GYNz3b4#t=13950",{cent:2});
+newTrick(1,0,"Spirit","Silver Block Skip Hover","https://youtu.be/2Ba5K4fIrps",{cent:2,mst:1,rba:1,ad:1});
+newTrick(1,0,"Spirit","Silver Block Skip SS","https://youtu.be/QisEMB_uNRA",{cent:1,mst:1,rba:1,ad:1});
+newTrick(1,0,"Spirit","Kill 3 Anubis","https://youtu.be/PLvj6TJ881Y",{cent:1,mst:1,rba:1,ad:1});
+newTrick(1,0,"Spirit","Kill Solo Anubis","https://youtu.be/420mouc6qSw#t=9830",{less:2});
+newTrick(1,0,"Spirit","Hookshot Hand Key","https://youtu.be/mCFTGDsi0Mo",{mst:1,rba:1,ad:1});
+newTrick(1,0,"Spirit","Mirror Puzzle Skip","https://youtu.be/Tp8SOyT1bjU",{cent:2,mst:2,rba:2,ad:2});
+newTrick(1,0,"Spirit","Fix Camera after Actor Glitch","https://www.youtube.com/watch?v=5z8hZPlf4yk",{cent:1,mst:1,rba:1,ad:1});
+newTrick(1,0,"Spirit","Go Main Room from Mirror Puzzle","https://youtu.be/Fmu7GYNz3b4#t=14119",{cent:2,mst:2,rba:2,ad:2});
+newTrick(1,0,"Spirit","Nabooru CS Skip","https://youtu.be/tbwWi-wynuk",{cent:2,mst:1,rba:2,ad:2});
+newTrick(1,0,"Spirit","Twinrova","https://youtu.be/psCfkgLUdzk",{less:2,cent:2,mst:2,rba:2,ad:2});
+newTrick(1,0,"Spirit","Blue Warp CS Skip","https://youtu.be/wNq-Xg4Mc6U",{mst:2,ad:2});
+newTrick(1,0,"Spirit","BK Skip","https://youtu.be/Fmu7GYNz3b4#t=14202",{cent:2,mst:1,rba:1,ad:2});
+newTrick(1,0,"Spirit","Quick BK","https://youtu.be/4jiUWu7W-6U",{less:2,cent:1,mst:2,rba:2,ad:1});
+newTrick(1,0,"Spirit","Child Section as Adult","https://youtu.be/nIRDNAcoBrE",{cent:2});
+newTrick(1,0,"Spirit","Flame Storage Child Puzzle","https://youtu.be/yQB56oKkHUs");
+newTrick(1,0,"Spirit","Clip Fence in Child Section","https://youtu.be/ALlUKWEFlAA",{cent:2});
+newTrick(1,0,"Spirit","GS SoT Block Clip","https://youtu.be/C08rQfxankk",{cent:1});
+newTrick(1,0,"Spirit","Quick GS SoT Block Clip","https://youtu.be/Fmu7GYNz3b4#t=3615",{cent:2});
+newTrick(1,0,"Spirit","Mirror Puzzle Skip from Main Room","https://youtu.be/F7sYUIiqGhs");
+newTrick(1,0,"Spirit","Void Out Main Room","https://youtu.be/z_dwLL6czlI",{cent:1,mst:1,rba:1,ad:1});
+newTrick(1,0,"Spirit","Adult Section as Child No Explosive","https://www.youtube.com/watch?v=ZJKvgf7e_kw");
+newTrick(1,0,"Spirit","Adult Section as Child","https://www.youtube.com/watch?v=Ch23GDtXWcE");
+newTrick(1,0,"Spirit","Map Without Din Fire","https://www.youtube.com/watch?v=YCI8jeGSI5E");
+
+newTrick(1,0,"GT","Early Ganon Castle with Chu","https://youtu.be/CBrfCW4q4kI");
+newTrick(1,0,"GT","Skip Trials via Hover","https://youtu.be/wJYEisWUzOU",{cent:2,rba:2,ww:2});
+newTrick(1,0,"GT","Skip Trials via Spirit","https://youtu.be/AZGccdS6nkQ",{cent:1,rba:1,ww:1});
+newTrick(1,0,"GT","Quick Forest Trial","https://youtu.be/YrQ9SCtpNSI#t=7583",{less:2,mst:2});
+newTrick(1,0,"GT","Fire Trial SS","https://youtu.be/Me1qV7M-EoM",{mst:2});
+newTrick(1,0,"GT","Water Trial Freezard Clip","https://youtu.be/PrbgmTXuVgE",{mst:2});
+newTrick(1,0,"GT","Water Trial Hammer Clip","https://youtu.be/6g_ggyB-xRw",{mst:2});
+newTrick(1,0,"GT","Spirit Rupee Room Hover","https://youtu.be/v2KBX_4xCrU",{cent:2,mst:2});
+newTrick(1,0,"GT","Spirit Rupee Room No Hover","https://youtu.be/U60ReFtzQtQ",{cent:1,mst:1});
+newTrick(1,0,"GT","Quick Light Trial Rupee","https://youtu.be/YrQ9SCtpNSI#t=8144",{mst:2});
+newTrick(1,1,"GT","Void Warp as Child","https://www.youtube.com/watch?v=HmD9bk0VkUg",{any:1});
+newTrick(1,0,"GT","Quick Void Warp as Child","https://youtu.be/aq6pGJbd6Iw#t=872",{any:2});
+newTrick(1,0,"GT","Void Warp as Adult","https://www.youtube.com/watch?v=Fmu7GYNz3b4#t=15975",{cent:2,mst:2,ad:2});
+newTrick(1,0,"GT","Void Warp as Adult Backup","https://youtu.be/Aq4TDwhGv_g",{cent:1,mst:1,ad:1});
+newTrick(1,0,"GT","Ganondorf","https://youtu.be/vsNF9ywG-yI#t=7843",{less:2,cent:2,mst:2,ww:2,rba:2});
+newTrick(1,0,"GT","Kill Duo Iron Knuckle","https://youtu.be/420mouc6qSw#t=12928",{less:2,cent:2,mst:2,ww:2,rba:2});
+newTrick(1,0,"GT","Ganon","https://youtu.be/aq6pGJbd6Iw#t=1064",{less:2,cent:2,mst:2,ww:2,rba:2,ad:2,any:2});
+newTrick(1,0,"GT","Keep MS for Ganon via SS","https://youtu.be/ywweflYRPLA",{rba:2,ad:2});
+newTrick(0,0,"GT","Keep MS for Ganon via XOR","https://youtu.be/2ogybMyIPmg#t=2880",{ww:2});// i think its cuz of never equiped kokiri sword
+newTrick(1,0,"GT","Early Light Trial","https://youtu.be/V9L-ePeEhH0");
+
+newTrick(1,0,"Kokiri","Bridge Rupee","https://youtu.be/whLhRWIHkK8",{less:2,mst:2,cent:2});
+newTrick(1,0,"Kokiri","WESS Escape No Shield","https://youtu.be/1D06-v7QPDQ",{rba:2});
+newTrick(1,0,"Kokiri","Pokey Escape","https://youtu.be/noZt_MF_ch0",{mst:2,cent:2});
+newTrick(1,0,"Kokiri","Mido Skip","https://youtu.be/xeqUpLfaP7A",{any:2});
+newTrick(1,0,"Kokiri","Jumpslash in Deku CS","https://youtu.be/m-1J_B5gXe8#t=597",{less:2,cent:2,mst:1,any:2});
+
+newTrick(1,0,"LW","Mido Skip","https://youtu.be/ZmgEGIGPbiM",{ad:2,rba:2});
+newTrick(1,0,"LW","Bridge to Lost Woods","https://youtu.be/iQiJEca4juw",{ww:2});
+newTrick(1,0,"LW","Lost Woods to Bridge","https://youtu.be/KO8Oo36xnsQ");
+newTrick(1,0,"LW","Skip Owl with Chu","https://youtu.be/V1muFj7pV8M",{cent:2,ad:2,mst:2});
+newTrick(1,0,"LW","Skip Owl with Stick","https://youtu.be/420mouc6qSw#t=1902",{less:2});
+newTrick(1,0,"LW","Water Escape with Navi","https://youtu.be/r0UgcnbTbQU#t=88",{ww:2,ad:2,any:2,ganon:2});
+newTrick(1,0,"LW","Water Escape with Stick","https://youtu.be/r0UgcnbTbQU#t=88",{ww:2,ad:2,any:2,ganon:2});
+newTrick(1,0,"LW","Water Escape with Sword","https://youtu.be/9V2vTm6xYT8",{ad:1,any:1,mst:1});
+newTrick(1,0,"LW","Quick Water Escape with Sword","https://youtu.be/K7tuZQyTErs",{ad:2,any:1,mst:2});
+newTrick(1,0,"LW","Water Escape as Adult","https://youtu.be/bxpYJrgPTMg",{cent:2,mst:2,ad:2,ganon:2});
+newTrick(1,0,"LW","Duping Deku Stick Upgrade","https://youtu.be/Y-k9qzp47lM");
+newTrick(1,0,"LW","GS Up Without Bean","https://youtu.be/Fmu7GYNz3b4#t=6974",{cent:2});
+newTrick(1,0,"LW","Duping GS","https://youtu.be/bbWdP3hbv8s");	
+newTrick(1,0,"LW","Duping HP","https://www.youtube.com/watch?v=S18uhxVk2cQ");
+
+newTrick(1,0,"SFM","Skip Maze with Bomb","https://youtu.be/kjWNTuun-tM",{rba:2,ad:2});
+newTrick(1,0,"SFM","Skip Maze with Jump","https://youtu.be/kxDQLlzAr64",{less:2});
+newTrick(1,0,"SFM","Minuet CS Skip from SFM","https://youtu.be/Z4p-ZQX2XGA",{rba:2,ad:2});
+newTrick(1,0,"SFM","Minuet CS Skip from Forest","https://youtu.be/Fmu7GYNz3b4#t=5352",{cent:2});
+
+newTrick(1,1,"Field","WESS to Kak from ZR","https://www.youtube.com/watch?v=2kowt08d_I0",{ww:2,ad:2,any:2,ganon:2});
+newTrick(1,0,"Field","WESS to Kak from Kokiri","https://youtu.be/6OWR8uIyFqs#t=441",{cent:2,mst:2,rba:2});
+newTrick(1,0,"Field","Enter Market at Nightfall","https://youtu.be/yz290VUgQkw",{rba:2,ww:2});
+newTrick(1,0,"Field","Bottle On B near Kak","https://youtu.be/Z7CYsWB-RNE&index=11",{ww:2,ad:2,ganon:2});
+newTrick(1,0,"Field","Bottle On B near Market","https://youtu.be/W9Y4XERd-4w",{ad:1,ganon:1,ww:1});
+
+newTrick(1,0,"LLR","000 GS","https://youtu.be/40Z7lJg4690",{cent:2});
+newTrick(1,0,"LLR","Quick HP","https://youtu.be/Fmu7GYNz3b4&list=UUk9RA3G-aVQXvp7-Q4Ac9kQ#t=10066",{cent:2});
+newTrick(1,0,"LLR","Skip Epona Race","https://youtu.be/kqpP8e-TyFM",{cent:2});
+newTrick(1,0,"LLR","House GS No Boomerang","https://youtu.be/tfjMhROmhzo",{},'mrbubbleskp');
+
+newTrick(1,0,"Market","Enter Shop at Night","https://youtu.be/4hFq0ldJnPk#t=70");
+newTrick(1,0,"Market","DoT Skip","https://youtu.be/Ce0DfzDTTO8",{cent:2,rba:2,ad:2,mst:2});
+newTrick(1,0,"Market","DoT Skip Swordless","https://youtu.be/xVJmu_RHlus",{ww:2,ad:2,ganon:2});
+newTrick(1,0,"Market","DoT Skip as Adult","https://youtu.be/aolcugsrlkg",{cent:2,ad:2});
+newTrick(1,0,"Market","Reverse DoT Skip as Adult","https://youtu.be/Fmu7GYNz3b4#t=11896",{cent:2});
+newTrick(1,0,"Market","Quick Bombchu Bowling","https://youtu.be/asTd9OOAGq0",{cent:2});
+newTrick(1,0,"Market","Prelude CS Skip OoB","https://youtu.be/W_1_NUqD-Cc",{ad:2,cent:1});
+newTrick(1,0,"Market","Prelude CS Skip Sun Song","https://youtu.be/21yKXkl8nsw",{cent:2});
+
+newTrick(1,0,"Castle","Grotto GS No Boomerang","https://www.youtube.com/watch?v=fWxcTOq6KV0");
+newTrick(1,0,"Castle","Early Double Defence","https://youtu.be/yBm64QNBlNs",{cent:2});
+newTrick(1,0,"Castle","Skip Guard on Bridge","https://youtu.be/4hFq0ldJnPk#t=70",{less:2,rba:2});
+newTrick(1,0,"Castle","ZL CS Skip","https://youtu.be/9V8Gpg5325M",{cent:2,rba:1,mst:2});
+newTrick(1,0,"Castle","ZL CS Skip No Shield","https://youtu.be/huhAkhKEs2g",{rba:2});
+newTrick(1,0,"Castle","Seam Walk","https://youtu.be/bkHzJX_WkB0",{cent:2});
+newTrick(1,0,"Castle","Milkbox Skip with Chu","https://youtu.be/bkHzJX_WkB0",{rba:2});
+newTrick(1,0,"Castle","Easy Guards","https://www.youtube.com/watch?v=Fmu7GYNz3b4#t=1096",{less:2,cent:2,rba:2,mst:2});
+
+newTrick(1,0,"Kak","Early Roof HP","https://youtu.be/4hFq0ldJnPk#t=49",{cent:2});
+newTrick(1,0,"Kak","Early Windmill HP","https://youtu.be/Fmu7GYNz3b4#t=2383",{cent:2});
+newTrick(1,0,"Kak","Shooting Range at Night","https://youtu.be/Pie4jwzw8PM",{cent:2});
+newTrick(1,0,"Kak","Early Cow HP","https://youtu.be/pfTlwD2ynig");
+newTrick(1,0,"Kak","Quick Potion Shop from DMT","https://youtu.be/2ogybMyIPmg#t=1444",{ww:2});
+newTrick(1,0,"Kak","Impa GS with Hookshot","http://youtu.be/qtAoLRFLoO0");
+
+newTrick(1,0,"Grave","Boomerang HP","https://youtu.be/r-d-bw3sq8s",{cent:2});
+newTrick(1,0,"Grave","Quick Dampe Race","https://youtu.be/Fmu7GYNz3b4#t=1829",{less:2,cent:2,mst:2,ad:2,rba:2});
+newTrick(1,0,"Grave","Leave Dampe Race","https://youtu.be/Fmu7GYNz3b4#t=1994",{less:2,cent:2,mst:2,ad:2,rba:2});
+newTrick(1,0,"Grave","Dampe SoT Clip with Chu","https://www.youtube.com/watch?v=xykL_JbZQo8",{cent:1});
+newTrick(1,0,"Grave","GS without Boomerang","https://www.youtube.com/watch?v=Q5RRGildDWQ");
+
+newTrick(1,0,"DMT","Early Magic","https://youtu.be/monxoBQuQ80");
+newTrick(1,0,"DMT","Early GS near DMC","https://youtu.be/Fmu7GYNz3b4#t=3016",{cent:2});
+newTrick(1,0,"DMT","Early GS near DC","https://youtu.be/Fmu7GYNz3b4#t=3035",{cent:2});
+newTrick(1,0,"DMT","SS DMC to DC","https://youtu.be/ReQK5DBhZ-o",{mst:2,ad:2});
+newTrick(1,0,"DMT","Timer Overwrite for BGS","https://youtu.be/Fmu7GYNz3b4#t=4457",{cent:2});
+
+newTrick(1,0,"DMC","Recoil to HP","https://youtu.be/Fmu7GYNz3b4#t=4607",{cent:2});
+newTrick(1,0,"DMC","SS to HP","https://youtu.be/O0vDRbOIf_k",{cent:1});
+newTrick(1,0,"DMC","HP as Child with 3 hearts","https://youtu.be/yRZnQOK1FaM");
+newTrick(1,0,"DMC","Early x2 Magic as Child from Top","https://youtu.be/oThbq3Zy6mo");
+newTrick(1,0,"DMC","Early x2 Magic as Child from Bottom","https://youtu.be/Fmu7GYNz3b4#t=9209",{cent:2});
+newTrick(1,0,"DMC","Early x2 Magic as Adult","https://youtu.be/EF0JuTY9EwA");
+newTrick(1,0,"DMC","Bolero CS Skip from DMT","https://youtu.be/7v7jzPnvgqU",{mst:2,ad:2});
+newTrick(1,0,"DMC","Bolero CS Skip from GC","https://youtu.be/ALGhUsOtNss",{cent:2,ganon:2});
+newTrick(1,0,"DMC","Damage Boost to go GC from DMT","https://youtu.be/420mouc6qSw#t=4813",{less:2});
+newTrick(1,0,"DMC","Stop Trade Timer","https://youtu.be/3bt3LtFjEuQ&list=UUk9RA3G-aVQXvp7-Q4Ac9kQ#t=1597",{ganon:2});
+
+newTrick(1,0,"GC","ESS Rock Puzzle","https://youtu.be/Fmu7GYNz3b4#t=9434",{cent:2});
+newTrick(0,0,"GC","Quick Statue Push","https://youtu.be/3bt3LtFjEuQ#t=1425",{cent:2});
+newTrick(1,0,"GC","Early Darunia Room","https://youtu.be/eHo3dedG5Sc");
+newTrick(1,0,"GC","GS Dupe","https://youtu.be/rESAa82afZc");
+newTrick(1,0,"GC","Clip Goron Shop","https://youtu.be/FQQIDnHqKrk");
+newTrick(1,0,"GC","Quick Fire Tunic","https://youtu.be/1RJlTGEpr5U#t=1446",{cent:2,ganon:2});
+
+newTrick(1,0,"ZR","Red Rupee via Jumpslash","https://youtu.be/b-aMyK1YzpU",{any:1});
+newTrick(1,0,"ZR","Red Rupee via Sidehop","https://youtu.be/aq6pGJbd6Iw#t=328",{any:2});
+newTrick(1,0,"ZR","Enter LW without Scale as Adult","https://youtu.be/s7mZbyCfFTg",{cent:2});	//i think its cent2
+newTrick(1,0,"ZR","Enter LW without Scale as Child","https://youtu.be/lbPIbqsGrl0");
+newTrick(1,0,"ZR","Enter ZD via Cucco","https://youtu.be/cfmqk0CUcjo",{less:2});
+newTrick(1,0,"ZR","Enter ZD via Hover Boots","https://youtu.be/y4iK6uiw0Xs",{cent:1,mst:2,ad:1});
+newTrick(1,0,"ZR","Enter ZD via Chu","https://youtu.be/9dDQUvB60Jk",{ad:2,mst:2});
+newTrick(1,0,"ZR","Enter ZD via Bomb","https://youtu.be/u1u-xn-Xj2U#t=3318",{cent:2,ad:2,ganon:2});
+newTrick(1,0,"ZR","Owl Skip","https://youtu.be/C9hIY6MRduo");
+newTrick(1,0,"ZR","Owl Skip and get GS","https://www.youtube.com/watch?v=Fmu7GYNz3b4#t=11770",{cent:2});
+newTrick(1,0,"ZR","Bottle on B","https://youtu.be/1USy-75RQfg");
+newTrick(1,0,"ZR","HP near Waterfall as Adult","https://youtu.be/FXxvf0IgmhQ");
+newTrick(1,0,"ZR","Useful Jumps","https://youtu.be/4hFq0ldJnPk#t=12");
+
+newTrick(1,0,"ZD","Warp to Hylia from Entrance","https://youtu.be/4thCXJwMiSc",{mst:2,ad:1});
+newTrick(1,0,"ZD","Warp to Hylia from Entrance Quick","https://youtu.be/EM0P98kOitw",{mst:1,ad:2});
+newTrick(1,0,"ZD","Warp to Hylia via Ladder","https://youtu.be/IWbPTDbgU20",{mst:1,ad:1,cent:2});
+newTrick(1,0,"ZD","Early Eyeball Frog and Tunic","https://www.youtube.com/watch?v=r1mEtmAUGPs",{ganon:2,cent:2});
+newTrick(1,0,"ZD","Clip Frozen King Zora","https://youtu.be/ahXgDMoeIG4",{cent:2});
+newTrick(1,0,"ZD","Skip King Zora as Adult","https://youtu.be/giNUV5hFjZ0",{cent:2});
+newTrick(1,0,"ZD","Skip King Zora as Child","https://youtu.be/QpBMpWHQZe0",{cent:2,mst:2,ad:2});
+newTrick(1,0,"ZD","Unfreeze King Zora via Textbox","https://youtu.be/73O5FHcmdFE",{ganon:2});
+newTrick(1,0,"ZD","Early Shop","https://youtu.be/IORsXcIgeHA");
+
+newTrick(1,0,"ZF","Weirdshot for GS","https://youtu.be/eCj1S4vvZ0A",{cent:2});
+newTrick(1,0,"ZF","Megaflip to HP","https://youtu.be/Fmu7GYNz3b4#t=3952",{cent:2});
+
+newTrick(1,0,"Hylia","Early Golden Scale","https://youtu.be/m19dy6mJpD0",{cent:2});
+newTrick(1,0,"Hylia","Tree GS without Longshot","https://youtu.be/SzTarapaA5s");
+newTrick(1,0,"Hylia","Early Laboratories HP","https://youtu.be/80cWN9o2YTo",{cent:2});
+newTrick(1,0,"Hylia","Navi Dive to ZD","https://youtu.be/Og7QRDonZVY");
+newTrick(1,0,"Hylia","Bottle on B","https://youtu.be/u1u-xn-Xj2U#t=3620");
+newTrick(1,0,"Hylia","Super Swim to Pond","https://www.youtube.com/watch?v=Fmu7GYNz3b4#t=7385",{cent:2});
+
+newTrick(1,0,"GV","Bridge Skip via SS Hover","https://youtu.be/-d-PTbl35Kk",{rba:2});
+newTrick(1,0,"GV","Bridge Skip via Megaflip","https://youtu.be/-45r4tgr_2c",{ww:2});
+newTrick(1,0,"GV","Jumpslash to Patch","https://youtu.be/Fmu7GYNz3b4#t=11017",{cent:2});
+newTrick(1,0,"GV","OoB to come back after HP","https://youtu.be/HIbqBSwTwqY");
+newTrick(1,0,"GV","Bridge Skip as Child","https://youtu.be/axXQVD6kBeQ");
+newTrick(1,0,"GV","Bottle on B as Child","https://youtu.be/SBhJ_V-hRyo");
+newTrick(1,0,"GV","Small Bridge GS with Chu","https://www.youtube.com/watch?v=-u4XnkEAmgw");
+
+newTrick(1,0,"GF","Gate Skip as Adult","https://youtu.be/kIZzkYggvbE",{cent:2,mst:2,rba:2,ad:2});
+newTrick(1,0,"GF","Gate Skip as Child","https://youtu.be/y1w8ngdO3Ys");
+newTrick(1,0,"GF","Gerudo Card as Child","https://youtu.be/izD5_nkmo6k#t=260");
+newTrick(1,0,"GF","Quick Guard Kill","https://youtu.be/420mouc6qSw#t=7745",{less:2,cent:1});
+newTrick(1,0,"GF","37th HP","https://youtu.be/OfgZqAb1C88");
+
+newTrick(1,0,"GTG","Early GTG as Adult","https://youtu.be/7Ooaihbp_Q8");
+newTrick(1,0,"GTG","Early GTG as Child","https://youtu.be/9fgMfzCkX48");
+newTrick(1,0,"GTG","Weirdshot to Ice Arrow or Chu","https://youtu.be/eRKGjGXlp_c",{cent:2,ad:2});
+newTrick(1,0,"GTG","Ice Arrow as Child with Chu","https://youtu.be/kNMCivcY2Nc");
+newTrick(1,0,"GTG","Dupe Keys","https://youtu.be/LUUm3Q8Gbq0");
+
+newTrick(1,0,"HW","Quick Path","https://youtu.be/GVs_HnJ4mJk",{less:2,cent:2,mst:2,rba:2,ad:2});
+newTrick(1,0,"HW","GS with Chu","https://www.youtube.com/watch?v=OLGsYkD5LCs",{},'sniping117');
+
+newTrick(1,0,"Colossus","000 GS","https://youtu.be/Fmu7GYNz3b4#t=13927",{cent:2});
+newTrick(1,0,"Colossus","Early HP","https://youtu.be/QBwaDvVCjH0");
+
+
+
+
+
+
+	
+	
+init();
+
+	
+setTimeout(function(){ document.getElementById('tableForTags').style.display = 'none';},100);	
+	
+	
+</script>
+Compilation of The Legend of Zelda: Ocarina of Time Glitches. Tutorial and guide about OOT tricks.
+
+
+
+
+<div id="tableForTags">
+Bottom of the Well	Early BotW with Cuccos	Video	Savestate		X			X			
+Bottom of the Well	Early BotW with Navi Dive	Video	Savestate		WR			WR			
+Bottom of the Well	Actor Glitch	Video	Savestate					WR			
+Bottom of the Well	Vine Clip to Chu	Video	Savestate					WR			
+Bottom of the Well	Vine Clip to GS	Video	Savestate		WR						
+Bottom of the Well	Vine Clip to Dead Hand from Chu	Video	Savestate		WR						
+Bottom of the Well	Boomerang Coffin Key	Video	Savestate		X						
+Bottom of the Well	Dead Hand	Video	Savestate		WR			WR			
+Death Mountain Trail	Early Magic	Video	Savestate								
+Death Mountain Trail	Early GS near DMC	Video	Savestate		WR						
+Death Mountain Trail	Early GS near DC	Video	Savestate		WR						
+Death Mountain Trail	SS DMC to DC	Video	Savestate			WR	WR				
+Death Mountain Trail	Timer Overwrite for BGS	Video	Savestate		WR						
+Death Moutain Crater	Recoil to HP	Video	Savestate		WR						
+Death Moutain Crater	SS to HP	Video	Savestate		X						
+Death Moutain Crater	HP as Child with 3 hearts	Video	Savestate								
+Death Moutain Crater	Early x2 Magic as Child from Top	Video	Savestate								
+Death Moutain Crater	Early x2 Magic as Child from Bottom	Video	Savestate		WR						
+Death Moutain Crater	Early x2 Magic as Adult	Video	Savestate								
+Death Moutain Crater	Bolero CS Skip from DMT	Video	Savestate			WR	WR				
+Death Moutain Crater	Bolero CS Skip from GC	Video	Savestate		WR					WR	
+Death Moutain Crater	Damage Boost to go GC from DMT	Video	Savestate								WR
+Death Moutain Crater	Stop Trade Timer	Video	Savestate							WR	
+Deku Tree	Deku Tree as Adult from LW	Video	Savestate			WR					
+Deku Tree	Deku Tree as Adult from Tree	Video	Savestate			X					
+Deku Tree	B1 Skip with ISG	Video	Savestate	WR			X				
+Deku Tree	B1 Skip from Top	Video	Savestate	X			WR				WR
+Deku Tree	B1 Skip Backup	Video	Savestate	X			X				X
+Deku Tree	B1 Skip with Megasidehop	>Video<	Savestate	X	WR						
+Deku Tree	B1 Skip with Groundjump	Video	Savestate		WR						
+Deku Tree	Go B1 as Adult	Video	Savestate								
+Deku Tree	Navi Vine Text Skip	Video	Savestate	WR	WR		WR				WR
+Deku Tree	Navi Door Text Skip	Video	Savestate		WR	WR					
+Deku Tree	Flame Storage Burn Web	Video	Savestate	X			WR				
+Deku Tree	Get Flame Backflip	Video	Savestate								WR
+Deku Tree	Gohma Double KO	>Video<	Savestate	X			WR				
+Deku Tree	Gohma Clip	Video	Savestate	WR	WR		X				
+Deku Tree	231 Skip	Video	Savestate			WR					
+Deku Tree	Warp to Boss	Video	Savestate								
+Deku Tree	WW to Ganon	>Video<	Savestate	X	WR		WR				
+Deku Tree	WW to Ganon Faster	Video	Savestate	WR			X				
+Deku Tree	WW to Shadow	Video	Coming soon.			WR					
+Deku Tree	WW to DC	Video	Coming soon.								
+Deku Tree	GS with Chu	Video	Savestate								
+Desert Colossus	000 GS	Video	Savestate		WR						
+Desert Colossus	Early HP	Video	Savestate								
+Dodongo's Cavern	Groundjump to Switch	Video	Savestate								
+Dodongo's Cavern	Chu to Switch	Video	Savestate								
+Dodongo's Cavern	Boss Door Switch with Navi	Video	Savestate		WR	WR	X				
+Dodongo's Cavern	Boss Door Switch with Bottle	Video	Savestate		X	X	WR				
+Dodongo's Cavern	DC Face Hover	Video	Savestate								
+Dodongo's Cavern	GS near Stairs	Video	Savestate		WR						
+Dodongo's Cavern	Chu Megaflip for Bomb	Video	Savestate								
+Dodongo's Cavern	Flame Circles No Slingshot	Video	Savestate								WR
+Dodongo's Cavern	Hover to GS	Video	Savestate		WR						
+Dodongo's Cavern	Quick Red Eyes	Video	Savestate		WR		WR				WR
+Dodongo's Cavern	Red Eyes with Chu	Video	Savestate			X					
+Dodongo's Cavern	Red Eyes Skip	Video	Savestate			WR					
+Dodongo's Cavern	WW to GTG	>Video<	Savestate		WR	WR	WR				
+Dodongo's Cavern	WW to GTG as Child	Video	Coming soon.								
+Dodongo's Cavern	WW to Gohma	Video	Coming soon.								
+Fire Temple	Hookshot to Elevator	Video	Savestate		WR						
+Fire Temple	Clip Block at Crystal	Video	Savestate		X		WR				
+Fire Temple	Clip Block at Crystal with Bomb	Video	Savestate							WR	
+Fire Temple	Clip Block at Crystal with Chu	Video	Savestate								
+Fire Temple	Skip Block at Crystal with Jump	Video	Savestate								
+Fire Temple	Clip Block at Crystal with BGS	Video	Savestate		WR						
+Fire Temple	Jump SoT GS	Video	Savestate		WR						
+Fire Temple	Boss Door Without Pillar	Video	Savestate			WR					WR
+Fire Temple	Daruna CS Skip	Video	Savestate		WR		X			WR	
+Fire Temple	Daruna CS Skip Shorten	Video	Savestate			WR					
+Fire Temple	Sidehop Flame Wall	Video	Savestate		X		X			X	WR
+Fire Temple	SS Flame Wall	Video	Savestate		WR		WR			WR	
+Fire Temple	Warp to Boss with Hammer	Video	Savestate		WR		WR			WR	
+Fire Temple	Warp to Boss with SS	Video	Savestate		X		X			X	
+Fire Temple	Weirdshot BK	Video	Savestate			WR					
+Fire Temple	Clip Entrance Totem	Video	Savestate		WR						
+Fire Temple	Sot Clip To Free Goron	Video	Savestate								WR
+Fire Temple	BK Skip via Ledge Clip	Video	Savestate			X					
+Fire Temple	Volvagia	Video	Savestate		WR	WR	WR			WR	WR
+Fire Temple	WW to Credits	Video	Savestate							WR	
+Fire Temple	WW to Forest	Video	Savestate		WR		WR				
+Fire Temple	WW to Ganon (1080)	Video	Coming soon.			WR					
+Forest Temple	Poe CS Skip	Video	Savestate		WR						
+Forest Temple	Damage Boost Balcony	Video	Savestate		WR		WR	WR			
+Forest Temple	Damage Boost to Green Poe	Video	Savestate								
+Forest Temple	SoT Block Skip via Clip Wall	Video	Savestate		WR		WR	WR			
+Forest Temple	SoT Block Skip via Ledge Clip	Video	Savestate		X		X	X			
+Forest Temple	Warp to Boss from Bow Room	Video	Savestate		WR		WR				
+Forest Temple	Warp to Boss from Main Room	Video	Savestate		WR	WR					
+Forest Temple	Warp to Boss with Entrance Glitch	Video	Savestate								
+Forest Temple	Quick Jump Down Stairs	Video	Savestate		WR		WR	WR			WR
+Forest Temple	Phantom Ganon	Video	Savestate		WR	WR	WR				
+Forest Temple	Blue Warp CS Skip	Video	Savestate		WR	WR	WR				
+Forest Temple	Blue Warp CS Skip with Chu	Video	Savestate								
+Forest Temple	Skip Navi Text Wallmaster	Video	Savestate		WR		WR	WR			
+Forest Temple	Skip Tower Block Puzzle	Video	Savestate		WR		WR	WR			
+Forest Temple	BK No Bow	Video	Coming soon.								
+Forest Temple	Well Chest with Iron Boots	Video	Savestate								WR
+Ganon's Castle	Early Ganon Castle with Chu	Video	Savestate								
+Ganon's Castle	Skip Trials via Hover	Video	Savestate		WR			WR	WR		
+Ganon's Castle	Skip Trials via Spirit	Video	Savestate		X			X	X		
+Ganon's Castle	Quick Forest Trial	Video	Savestate				WR				WR
+Ganon's Castle	Fire Trial SS	Video	Savestate				WR				
+Ganon's Castle	Water Trial Freezard Clip	Video	Savestate				WR				
+Ganon's Castle	Water Trial Hammer Clip	Video	Savestate				WR				
+Ganon's Castle	Spirit Rupee Room Hover	Video	Savestate		WR		WR				
+Ganon's Castle	Spirit Rupee Room No Hover	Video	Savestate		X		X				
+Ganon's Castle	Quick Light Trial Rupee	Video	Savestate				WR				
+Ganon's Castle	Void Warp as Child	>Video<	Savestate	X							
+Ganon's Castle	Quick Void Warp as Child	Video	Savestate	WR							
+Ganon's Castle	Void Warp as Adult	Video	Savestate		WR	WR	WR				
+Ganon's Castle	Void Warp as Adult Backup	Video	Savestate		X	X	X				
+Ganon's Castle	Ganondorf	Video	Savestate		WR		WR	WR	WR		WR
+Ganon's Castle	Kill Duo Iron Knuckle	Video	Savestate		WR		WR	WR	WR		WR
+Ganon's Castle	Ganon	Video	Savestate	WR	WR	WR	WR	WR	WR		WR
+Ganon's Castle	Keep MS for Ganon via SS	Video	Savestate			WR		WR			
+Ganon's Castle	Keep MS for Ganon via XOR	Video	Coming soon.						WR		
+Ganon's Castle	Early Light Trial	Video	Savestate								
+Gerudo Fortress	Gate Skip as Adult	Video	Savestate		WR	WR	WR	WR			
+Gerudo Fortress	Gate Skip as Child	Video	Savestate								
+Gerudo Fortress	Gerudo Card as Child	Video	Savestate								
+Gerudo Fortress	Quick Guard Kill	Video	Savestate		X						WR
+Gerudo Fortress	37th HP	Video	Savestate								
+Gerudo Training Grounds	Early GTG as Adult	Video	Savestate								
+Gerudo Training Grounds	Early GTG as Child	Video	Savestate								
+Gerudo Training Grounds	Weirdshot to Ice Arrow or Chu	Video	Savestate		WR	WR					
+Gerudo Training Grounds	Ice Arrow as Child with Chu	Video	Savestate								
+Gerudo Training Grounds	Dupe Keys	Video	Savestate								
+Gerudo Valley	Bridge Skip via SS Hover	Video	Savestate					WR			
+Gerudo Valley	Bridge Skip via Megaflip	Video	Savestate						WR		
+Gerudo Valley	Jumpslash to Patch	Video	Savestate		WR						
+Gerudo Valley	OoB to come back after HP	Video	Savestate								
+Gerudo Valley	Bridge Skip as Child	Video	Savestate								
+Gerudo Valley	Bottle on B as Child	Video	Savestate								
+Gerudo Valley	Small Bridge GS with Chu	Video	Savestate								
+Goron City	ESS Rock Puzzle	Video	Savestate		WR						
+Goron City	Quick Statue Push	Video	Coming soon.		WR						
+Goron City	Early Darunia Room	Video	Savestate								
+Goron City	GS Dupe	Video	Savestate								
+Goron City	Clip Goron Shop	Video	Savestate								
+Goron City	Quick Fire Tunic	Video	Savestate		WR					WR	
+Graveyard	Boomerang HP	Video	Savestate		WR						
+Graveyard	Quick Dampe Race	Video	Savestate		WR	WR	WR	WR			WR
+Graveyard	Leave Dampe Race	Video	Savestate		WR	WR	WR	WR			WR
+Graveyard	Dampe SoT Clip with Chu	Video	Savestate		X						
+Graveyard	GS without Boomerang	Video	Savestate								
+Haunted Wasteland	Quick Path	Video	Savestate		WR	WR	WR	WR			WR
+Haunted Wasteland	GS with Chu	Video	Savestate								
+Hyrule Castle	Grotto GS No Boomerang	Video	Savestate								
+Hyrule Castle	Early Double Defence	Video	Savestate		WR						
+Hyrule Castle	Skip Guard on Bridge	Video	Savestate					WR			WR
+Hyrule Castle	ZL CS Skip	Video	Savestate		WR		WR	X			
+Hyrule Castle	ZL CS Skip No Shield	Video	Savestate					WR			
+Hyrule Castle	Seam Walk	Video	Savestate		WR						
+Hyrule Castle	Milkbox Skip with Chu	Video	Savestate					WR			
+Hyrule Castle	Easy Guards	Video	Savestate		WR		WR	WR			WR
+Hyrule Field	WESS to Kak from ZR	>Video<	Savestate	WR		WR			WR	WR	
+Hyrule Field	WESS to Kak from Kokiri	Video	Savestate		WR		WR	WR			
+Hyrule Field	Enter Market at Nightfall	Video	Savestate					WR	WR		
+Hyrule Field	Bottle On B near Kak	Video	Savestate			WR			WR	WR	
+Hyrule Field	Bottle On B near Market	Video	Savestate			X			X	X	
+Hyrule Market	Enter Shop at Night	Video	Savestate								
+Hyrule Market	DoT Skip	Video	Savestate		WR	WR	WR	WR			
+Hyrule Market	DoT Skip Swordless	Video	Savestate			WR			WR	WR	
+Hyrule Market	DoT Skip as Adult	Video	Savestate		WR	WR					
+Hyrule Market	Reverse DoT Skip as Adult	Video	Savestate		WR						
+Hyrule Market	Quick Bombchu Bowling	Video	Savestate		WR						
+Hyrule Market	Prelude CS Skip OoB	Video	Savestate		X	WR					
+Hyrule Market	Prelude CS Skip Sun Song	Video	Savestate		WR						
+Ice Cavern	Clip Ice at End with Recoil	Video	Savestate		X						
+Ice Cavern	Clip Ice at End with ESS	Video	Savestate		WR						
+Ice Cavern	Clip West Ice at Blade with Recoil	Video	Savestate		WR						
+Ice Cavern	Clip East Ice at Blade with SS	Video	Savestate		WR						
+Ice Cavern	Clip East Ice at Blade with Bomb	Video	Savestate		X						
+Ice Cavern	Clip via Freezard	Video	Savestate		WR						
+Ice Cavern	Fast 2nd Rupee Room	Video	Savestate		WR						
+Ice Cavern	Serenade CS Skip	Video	Savestate		WR						
+Ice Cavern	HP No Blue Fire	Video	Savestate		WR						
+Ice Cavern	Groundjump Skip Block Push	Video	Savestate		WR						
+Ice Cavern	Red Ice Chest Clip	Video	Savestate								
+Ice Cavern	Useful Jumps	Video	Savestate								WR
+Ice Cavern	IC as Child	Video	Savestate								
+Jabu-Jabu's Belly	Jabu Without Fish	Video	Savestate		WR	WR	WR				
+Jabu-Jabu's Belly	Chu Megaflip to Switch	Video	Savestate		X	WR	WR				
+Jabu-Jabu's Belly	Bomb Megaflip to Switch	Video	Savestate		WR						
+Jabu-Jabu's Belly	Boomerang Switch Top	Video	Savestate		WR	WR	WR				WR
+Jabu-Jabu's Belly	First Switch with Chu	Video	Savestate			WR	WR				
+Jabu-Jabu's Belly	Barinade	Video	Savestate		WR	WR	WR				WR
+Jabu-Jabu's Belly	Blue Switch Roll	Video	Savestate		WR	WR	WR				WR
+Jabu-Jabu's Belly	Blue Switch Bottle	Video	Savestate			X	X				
+Jabu-Jabu's Belly	Barinade as Adult	Video	Coming soon.								
+Jabu-Jabu's Belly	Quick Boomerang Room	Video	Savestate		WR	WR	WR				WR
+Jabu-Jabu's Belly	Blue Switch no Ruto	Video	Savestate								
+Jabu-Jabu's Belly	No Platform Drop	Video	Savestate								WR
+Kakariko Village	Early Roof HP	Video	Savestate		WR						
+Kakariko Village	Early Windmill HP	Video	Savestate		WR						
+Kakariko Village	Shooting Range at Night	Video	Savestate		WR						
+Kakariko Village	Early Cow HP	Video	Savestate								
+Kakariko Village	Quick Potion Shop from DMT	Video	Savestate						WR		
+Kakariko Village	Impa GS with Hookshot	Video	Savestate								
+Kokiri Forest	Bridge Rupee	Video	Savestate		WR		WR				WR
+Kokiri Forest	WESS Escape No Shield	Video	Savestate					WR			
+Kokiri Forest	Pokey Escape	Video	Savestate		WR		WR				
+Kokiri Forest	Mido Skip	Video	Savestate	WR							
+Kokiri Forest	Jumpslash in Deku CS	Video	Savestate	WR	WR		X				WR
+Lake Hylia	Early Golden Scale	Video	Savestate		WR						
+Lake Hylia	Tree GS without Longshot	Video	Savestate								
+Lake Hylia	Early Laboratories HP	Video	Savestate		WR						
+Lake Hylia	Navi Dive to ZD	Video	Savestate								
+Lake Hylia	Bottle on B	Video	Savestate								
+Lake Hylia	Super Swim to Pond	Video	Savestate		WR						
+Lon Lon Ranch	000 GS	Video	Savestate		WR						
+Lon Lon Ranch	Quick HP	Video	Savestate		WR						
+Lon Lon Ranch	Skip Epona Race	Video	Savestate		WR						
+Lon Lon Ranch	House GS No Boomerang	Video	Savestate								
+Lost Woods	Mido Skip	Video	Savestate			WR		WR			
+Lost Woods	Bridge to Lost Woods	Video	Savestate						WR		
+Lost Woods	Lost Woods to Bridge	Video	Savestate								
+Lost Woods	Skip Owl with Chu	Video	Savestate		WR	WR	WR				
+Lost Woods	Skip Owl with Stick	Video	Savestate								WR
+Lost Woods	Water Escape with Navi	Video	Savestate	WR		WR			WR	WR	
+Lost Woods	Water Escape with Stick	Video	Savestate	WR		WR			WR	WR	
+Lost Woods	Water Escape with Sword	Video	Savestate	X		X	X				
+Lost Woods	Quick Water Escape with Sword	Video	Savestate	X		WR	WR				
+Lost Woods	Water Escape as Adult	Video	Savestate		WR	WR	WR			WR	
+Lost Woods	Duping Deku Stick Upgrade	Video	Savestate								
+Lost Woods	GS Up Without Bean	Video	Savestate		WR						
+Lost Woods	Duping GS	Video	Savestate								
+Lost Woods	Duping HP	Video	Savestate								
+Sacred Forest Meadow	Skip Maze with Bomb	Video	Savestate			WR		WR			
+Sacred Forest Meadow	Skip Maze with Jump	Video	Savestate								WR
+Sacred Forest Meadow	Minuet CS Skip from SFM	Video	Savestate			WR		WR			
+Sacred Forest Meadow	Minuet CS Skip from Forest	Video	Savestate		WR						
+Shadow Temple	Early Shadow as Adult with Chu	Video	Savestate		WR		WR	WR			
+Shadow Temple	Early Shadow as Adult with Bomb	Video	Savestate			WR					
+Shadow Temple	Early Shadow as Adult with Hover	Video	Savestate			X					
+Shadow Temple	Early Shadow as Child	Video	Coming soon.								
+Shadow Temple	Dead Hand	Video	Savestate		WR	WR	WR	WR			
+Shadow Temple	Weirdshot Rupee Key	Video	Savestate		WR						
+Shadow Temple	Clip Fence to Boat	Video	Savestate		WR		WR	WR			
+Shadow Temple	Clear Entrance Gap as Child	Video	Savestate								
+Shadow Temple	Damage Boost to Tongue	Video	Savestate								WR
+Shadow Temple	Damage Boost to Boss Door	Video	Savestate								WR
+Shadow Temple	BK Without Din Fire	Video	Savestate		WR		WR	WR			
+Shadow Temple	Like Like Clip GS	Video	Savestate		WR						
+Shadow Temple	Backflip Spike	Video	Savestate								WR
+Shadow Temple	Boat No Fight	Video	Savestate		WR		WR	WR			WR
+Shadow Temple	Boat GS with Megasidehop	Video	Savestate								
+Shadow Temple	Chu SS over Crater	Video	Savestate				WR	WR			
+Shadow Temple	Bongo Bongo	Video	Savestate		X	WR	WR	WR			WR
+Shadow Temple	Unloaded Bongo Bongo	Video	Savestate		WR	X	X	X			
+Shadow Temple	Blue Warp CS Skip	Video	Savestate			WR					
+Shadow Temple	Fence Clip to Spike Room	Video	Savestate			WR					
+Shadow Temple	Pillar with Chu	Video	Savestate		X		X	X			
+Shadow Temple	BK Skip with Chu	Video	Savestate				X	X			
+Shadow Temple	BK Skip with Bomb	Video	Savestate		X						
+Spirit Temple	Mirror Hover	Video	Savestate		X	WR	WR	WR			
+Spirit Temple	Mirror from HP	Video	Savestate		WR						
+Spirit Temple	Silver Block Skip Hover	Video	Savestate		WR	X	X	X			
+Spirit Temple	Silver Block Skip SS	Video	Savestate		X	X	X	X			
+Spirit Temple	Kill 3 Anubis	Video	Savestate		X	X	X	X			
+Spirit Temple	Kill Solo Anubis	Video	Savestate								WR
+Spirit Temple	Hookshot Hand Key	Video	Savestate			X	X	X			
+Spirit Temple	Mirror Puzzle Skip	Video	Savestate		WR	WR	WR	WR			
+Spirit Temple	Fix Camera after Actor Glitch	Video	Savestate		X	X	X	X			
+Spirit Temple	Go Main Room from Mirror Puzzle	Video	Savestate		WR	WR	WR	WR			
+Spirit Temple	Nabooru CS Skip	Video	Savestate		WR	WR	X	WR			
+Spirit Temple	Twinrova	Video	Savestate		WR	WR	WR	WR			WR
+Spirit Temple	Blue Warp CS Skip	Video	Savestate			WR	WR				
+Spirit Temple	BK Skip	Video	Savestate		WR	WR	X	X			
+Spirit Temple	Quick BK	Video	Savestate		X	X	WR	WR			WR
+Spirit Temple	Child Section as Adult	Video	Savestate		WR						
+Spirit Temple	Flame Storage Child Puzzle	Video	Savestate								
+Spirit Temple	Clip Fence in Child Section	Video	Savestate		WR						
+Spirit Temple	GS SoT Block Clip	Video	Savestate		X						
+Spirit Temple	Quick GS SoT Block Clip	Video	Savestate		WR						
+Spirit Temple	Mirror Puzzle Skip from Main Room	Video	Savestate								
+Spirit Temple	Void Out Main Room	Video	Savestate		X	X	X	X			
+Spirit Temple	Adult Section as Child No Explosive	Video	Savestate								
+Spirit Temple	Adult Section as Child	Video	Savestate								
+Spirit Temple	Map Without Din Fire	Video	Savestate								
+Water Temple	Early Water Temple from House	Video	Savestate			X	X				
+Water Temple	Early Water Temple with SS	Video	Savestate			WR	WR				
+Water Temple	Early Water Temple from ZD	Video	Savestate			X	X				
+Water Temple	Bottle Dive	Video	Savestate								
+Water Temple	Go Top with Hookshot	Video	Savestate								
+Water Temple	Jump to High Water Ocarina Spot	Video	Savestate								WR
+Water Temple	Go to Boss Side via Hammer	Video	Savestate		X		WR				
+Water Temple	Go to Boss Side via SS	Video	Savestate		WR	WR	X				
+Water Temple	BK Skip	Video	Savestate		WR	WR	WR				
+Water Temple	Open Door Midair	Video	Savestate		WR						
+Water Temple	SoT Block Skip	Video	Savestate		WR						
+Water Temple	Morpha	Video	Savestate			WR	WR				WR
+Water Temple	Blue Warp CS Skip	Video	Savestate			WR					
+Water Temple	Blue Warp CS Skip with Sun Song	Video	Savestate		WR						
+Water Temple	Quick Dark Link with BGS	Video	Savestate		WR						
+Water Temple	Quick Dark Link with Nuts	Video	Savestate		X						X
+Water Temple	GS Moving Platform with ISG	Video	Savestate		WR						
+Water Temple	GS Moving Platform No ISG	Video	Savestate								
+Water Temple	GS near Vortex no Iron Boots	Video	Savestate								
+Water Temple	Early Cracked Wall Key No Hover	Video	Savestate								
+Water Temple	Early Cracked Wall Key Hover	Video	Savestate		WR						
+Water Temple	Quick BK	Video	Savestate								WR
+Water Temple	Early Eye Key	Video	Savestate								
+Zora's Domain	Warp to Hylia from Entrance	Video	Savestate			X	WR				
+Zora's Domain	Warp to Hylia from Entrance Quick	Video	Savestate			WR	X				
+Zora's Domain	Warp to Hylia via Ladder	Video	Savestate		WR	X	X				
+Zora's Domain	Early Eyeball Frog and Tunic	Video	Savestate		WR					WR	
+Zora's Domain	Clip Frozen King Zora	Video	Savestate		WR						
+Zora's Domain	Skip King Zora as Adult	Video	Savestate		WR						
+Zora's Domain	Skip King Zora as Child	Video	Savestate		WR	WR	WR				
+Zora's Domain	Unfreeze King Zora via Textbox	Video	Savestate							WR	
+Zora's Domain	Early Shop	Video	Savestate								
+Zora's Fountain	Weirdshot for GS	Video	Savestate		WR						
+Zora's Fountain	Megaflip to HP	Video	Savestate		WR						
+Zora's River	Red Rupee via Jumpslash	Video	Savestate	X							
+Zora's River	Red Rupee via Sidehop	Video	Savestate	WR							
+Zora's River	Enter LW without Scale as Adult	Video	Savestate		WR						
+Zora's River	Enter LW without Scale as Child	Video	Savestate								
+Zora's River	Enter ZD via Cucco	Video	Savestate								WR
+Zora's River	Enter ZD via Hover Boots	Video	Savestate		X	X	WR				
+Zora's River	Enter ZD via Chu	Video	Savestate			WR	WR				
+Zora's River	Enter ZD via Bomb	Video	Savestate		WR	WR				WR	
+Zora's River	Owl Skip	Video	Savestate								
+Zora's River	Owl Skip and get GS	Video	Savestate		WR						
+Zora's River	Bottle on B	Video	Savestate								
+Zora's River	HP near Waterfall as Adult	Video	Savestate								
+Zora's River	Useful Jumps	Video	Savestate								
+
+</div>
+
+
+
