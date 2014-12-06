@@ -29,7 +29,7 @@ var Quest = exports.Quest = function(extra){
 		challenge:{},
 		preset:{},
 		highscore:{},
-		event:Quest._event(),
+		event:Quest.Event(),
 		skillPlot:[],
 		rating:0,
 		statistic:Quest.Statistic(),
@@ -63,7 +63,7 @@ Quest.getAPItemplate = function(extra){	//todo touse
 		challenge:{},
 		preset:{},
 		highscore:{},
-		event:Quest._event(),
+		event:Quest.Event(),
 		skillPlot:[],
 		path:{},
 		//
@@ -123,8 +123,10 @@ Quest.init = function(dbLink){	//init Module
 	db = dbLink;
 	for(var i in QUEST_ID_LIST){
 		var qid = QUEST_ID_LIST[i];
-		var q = Quest(require(QUEST_FOLDER+qid + "/" + qid).quest);
-		if(q.id !== qid) return ERROR(2,'quest filename doesnt match quest id',q.id,qid);
+		try {
+			var q = Quest(require(QUEST_FOLDER+qid + "/" + qid).quest);
+			if(q.id !== qid) return ERROR(2,'quest filename doesnt match quest id',q.id,qid);
+		} catch(err){ ERROR(2,'cant find quest file ' + qid + '. NEVER delete a quest folder manually. Use Quest creator.'); }
 	}
 }
 
@@ -204,7 +206,7 @@ Quest.fetchPlayerComment = function(id){
 	});
 }
 
-Quest._event = function(obj){
+Quest.Event = function(obj){
 	var tmp = {
 		_complete:CST.func,
 		_start:CST.func,

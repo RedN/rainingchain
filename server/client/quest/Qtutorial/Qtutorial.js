@@ -1,6 +1,6 @@
 eval(loadDependency(["Actor","Debug"]));
 //11/29/2014 5:04 PM
-/*jslint node: true, undef:true, sub:true, asi:true, funcscope:true, forin:true, unused:false*/
+/*jslint node: true, undef:true, sub:true, asi:true, funcscope:true, forin:true, unused:false*//*global True, False, loadAPI*/
 /*Go to http://jshint.com/ and copy paste your code to spot syntax errors.*/
 
 var s = loadAPI('v1.0','Qtutorial',{

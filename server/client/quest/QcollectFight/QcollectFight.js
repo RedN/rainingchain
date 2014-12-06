@@ -1,4 +1,4 @@
-/*jslint node: true, undef:true, sub:true, asi:true, funcscope:true, forin:true, unused:false*/
+/*jslint node: true, undef:true, sub:true, asi:true, funcscope:true, forin:true, unused:false*//*global True, False, loadAPI*/
 /*Go to http://jshint.com/ and copy paste your code to spot syntax errors.*/
 "use strict";
 var s = loadAPI('v1.0','QcollectFight',{
