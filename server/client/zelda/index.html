@@ -1,4 +1,12 @@
 <!--//LICENSED CODE BY SAMUEL MAGNAN FOR RAININGCHAIN.COM, LICENSE INFORMATION AT GITHUB.COM/RAININGCHAIN/RAININGCHAIN-->
+<!--
+zfg
+	gerudo gate skip with ess
+	darunia door skip
+	zora river to lw with ledge clip
+https://www.youtube.com/watch?v=Q3eIRHcNhoM
+-->
+
 <head>
 	<link rel="stylesheet" href="css/CSSTableGenerator.css" type="text/css" media="screen, projection" />
 	<link href='http://fonts.googleapis.com/css?family=Kelly Slab' rel='stylesheet' type='text/css'>
@@ -131,7 +139,7 @@ var updateTable = function(){
 			'<font size="2">No RBA/WW</font>',
 			'No WW',
 			'<font size="2">Ganonless</font>',
-			'<font size="2">Glitchess</font>'
+			'<font size="2">Glitchless</font>'
 		]
 	];
 
@@ -140,7 +148,7 @@ var updateTable = function(){
 		if(t) array.push(t);
 	}
 	
-	document.getElementById("table").innerHTML = Tk.arrayToTable(array,1,0,1);
+	document.getElementById("table").innerHTML = Tk.arrayToTable(array,true,false,true);
 	$("#table").tablesorter(); 
 	document.getElementById("glitchAmount").innerHTML = 'Displaying ' + (array.length-1) + '/' + Object.keys(list).length + ' glitches.';
 };
@@ -344,7 +352,7 @@ newTrick(1,0,"Fire","Skip Block at Crystal with Jump","https://youtu.be/420mouc6
 newTrick(1,0,"Fire","Clip Block at Crystal with BGS","https://youtu.be/Fmu7GYNz3b4#t=4874",{cent:2});
 newTrick(1,0,"Fire","Jump SoT GS","https://youtu.be/VpPkI6x1ZmA",{cent:2});
 newTrick(1,0,"Fire","Boss Door Without Pillar","https://youtu.be/d_y7QpCK_Io",{less:2,ad:2});
-newTrick(1,0,"Fire","Daruna CS Skip","https://youtu.be/b3dUpZLWnBg",{cent:2,mst:1,ganon:2});
+newTrick(1,0,"Fire","Daruna CS Skip","https://www.youtube.com/watch?v=tlfN5jbFIDc",{cent:2,mst:1,ganon:2});
 newTrick(1,0,"Fire","Daruna CS Skip Shorten","https://youtu.be/u1u-xn-Xj2U#t=4532",{ad:2});
 newTrick(1,0,"Fire","Sidehop Flame Wall","https://youtu.be/qL9F_FemT2Y",{less:2,cent:1,mst:1,ganon:1});
 newTrick(1,0,"Fire","SS Flame Wall","https://youtu.be/DQb3yMauoew",{cent:2,mst:2,ganon:2});
@@ -403,6 +411,7 @@ newTrick(1,0,"Water","Early Eye Key","https://youtu.be/mA0eliRZKV0");
 newTrick(1,0,"BotW","Early BotW with Cuccos","https://youtu.be/3Eno-EZ6EUk",{cent:1,rba:1});
 newTrick(1,0,"BotW","Early BotW with Navi Dive","https://youtu.be/U77sGTDO050",{cent:2,rba:2});
 newTrick(1,0,"BotW","Actor Glitch","https://youtu.be/Y8gunZf4vEk",{rba:2});
+newTrick(1,0,"BotW","Blank A Chu","https://www.youtube.com/watch?v=04WOy_6C2g8",{rba:1,ad:1});
 newTrick(1,0,"BotW","Vine Clip to Chu","https://youtu.be/q3tqUxMS760",{rba:2});
 newTrick(1,0,"BotW","Vine Clip to GS","https://youtu.be/WZdR3Ge_CcM#t=172",{cent:2});
 newTrick(1,0,"BotW","Vine Clip to Dead Hand from Chu","https://youtu.be/uwjUADME36c",{cent:2});

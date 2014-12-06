@@ -1,59 +1,73 @@
 //LICENSED CODE BY SAMUEL MAGNAN FOR RAININGCHAIN.COM, LICENSE INFORMATION AT GITHUB.COM/RAININGCHAIN/RAININGCHAIN
-eval(loadDependency(['List','Init','Db','Chat','Chat','requireDb'],['Clan']));
-var db = requireDb();
+eval(loadDependency(['Message','Main','Actor','Message'],['Clan']));
+var db = null; //Clan.init
 
-Db.clan = {};
 
-Init.db.clan = function(){
-	db.find('clan',{},{'_id':0},function(err,data){
+var Clan = exports.Clan = {};
+
+Clan.init = function(dbLink){	
+	db = dbLink;
+	return;
+	db.clan.find({},{'_id':0},function(err,data){
 		for(var i = 0 ; i < data.length ; i++){
-			Db.clan[data[i].id] = data[i];
+			DB[data[i].id] = data[i];
 		}
 	});
 }
+var DB = Clan.DB = {};
 
-var Clan = exports.Clan = {};
+Clan.get = function(id){
+	return DB[id] || null;
+}
+
 Clan.creation = function(key,name){
-	if(Db.clan[name]){ Chat.add(key,'This name is already taken.');	return;}
+	return Message.add(key,'Clan system is down.');
+	/*
+	if(DB[name]) return Message.add(key,'This name is already taken.');
 	
-	var player = List.all[key];
-	Db.clan[name] = {'name':name,'nick':name,'id':name,'memberList':{}}
-	Db.clan[name].memberList[player.name] = {'admin':1,'rank':10,'kick':1};
+	var player = Actor.get(key);
+	DB[name] = {'name':name,'nick':name,'id':name,'memberList':{}}
+	DB[name].memberList[player.name] = {'admin':1,'rank':10,'kick':1};
 
-	Chat.add(key,'Clan created.');
+	Message.add(key,'Clan created.');
 	Clan.enter(key,name);
 	
-	db.save('clan',Db.clan[name]);
+	db.clan.save(DB[name]);
+	*/
 }
 
 Clan.enter = function(key,name){
-	var main = List.main[key];
-	var pn = List.all[key].name;
+	return Message.add(key,'Clan system is down.');
+	/*
+	var main = Main.get(key);
+	var pn = Actor.get(key).name;
 	
-	if(!Db.clan[name]) return Chat.add(key,'This clan doesn\'t exist.');
-	if(main.social.list.clan.have(name)) return Chat.add(key,'You are already in this clan chat.');	;
-	main.social.list.clan.push(name);
-	main.flag['social,list,clan'] = 1;
+	if(!DB[name]) return Message.add(key,'This clan doesn\'t exist.');
+	if(main.social.clanList.have(name)) return Message.add(key,'You are already in this clan chat.');	;
+	main.social.clanList.push(name);
+	Main.setFlag(main,'social,clanList');
 	
-	if(Db.clan[name].memberList[pn]){
-		Db.clan[name].memberList[pn].active = 1;
+	if(DB[name].memberList[pn]){
+		DB[name].memberList[pn].active = 1;
 	} else {
-		Db.clan[name].memberList[pn] = {'rank':0,'active':1}
+		DB[name].memberList[pn] = {'rank':0,'active':1}
 	}
 	
-	str = ''; for(var i = 0 ; i < main.social.list.clan.length ; i++){ str += '/'; }
+	str = ''; for(var i = 0 ; i < main.social.clanList.length ; i++){ str += '/'; }
 	
-	Chat.add(key,'You are now in clan chat: ' + name + '. Type \"' + str + '\" to talk in it.');	
-
+	Message.add(key,'You are now in clan chat: ' + name + '. Type \"' + str + '\" to talk in it.');	
+*/
 }
 
 Clan.leave = function(key,name){
-	var pn = List.all[key].name;
-	var main = List.main[key];
-	main.flag['social,list,clan'] = 1;
-	for(var i in main.social.list.clan){
+	return Message.add(key,'Clan system is down.');
+	/*
+	var pn = Actor.get(key).name;
+	var main = Main.get(key);
+	Main.setFlag(main,'social,clanList');
+	for(var i in main.social.clanList){
 		if(name === 'ALL' || i === 'name'){
-			var clan = Db.clan[main.social.list.clan[i]];
+			var clan = DB[main.social.clanList[i]];
 			clan.memberList[pn].active = 0;
 			if(!clan.memberList[pn].rank){
 				delete clan.memberList[pn];
@@ -61,9 +75,9 @@ Clan.leave = function(key,name){
 		}
 	}
 	
-	if(name === 'ALL')	main.social.list.clan = [];
-	else main.social.list.clan.splice(main.social.list.clan.indexOf(name),1);
-	
+	if(name === 'ALL')	main.social.clanList = [];
+	else main.social.clanList.splice(main.social.clanList.indexOf(name),1);
+	*/
 	
 }
 

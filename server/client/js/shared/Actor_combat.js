@@ -1,14 +1,5 @@
 //LICENSED CODE BY SAMUEL MAGNAN FOR RAININGCHAIN.COM, LICENSE INFORMATION AT GITHUB.COM/RAININGCHAIN/RAININGCHAIN
-eval(loadDependency(['List','Tk','Actor']));
-
-Actor.getCombatLevel = function(act){
-	return Math.max(act.skill.lvl.melee,act.skill.lvl.range,act.skill.lvl.magic);
-}
-
-Actor.getCombatLevelDmgMod = function(act){
-	var combatlvl = Actor.getCombatLevel(act);
-	return (10+combatlvl)/(10+combatlvl/2);
-}
+eval(loadDependency(['Actor']));
 
 Actor.setCombatContext = function(act,what,type,reset){
 	act.combatContext[what] = type;
@@ -17,30 +8,44 @@ Actor.setCombatContext = function(act,what,type,reset){
 			act.abilityList[type] = {};
 			act.ability[type] = [];
 		}
-		act.abilityChange = Actor.template.abilityChange(act.abilityList[type]);
-		act.flag.ability = 1;
-		act.flag.abilityList = 1;
+		act.abilityChange = Actor.AbilityChange(act.abilityList[type]);
+		Actor.setFlag(act,'ability');
+		Actor.setFlag(act,'abilityList');
 	}
 	if(what === 'equip'){
 		if(reset) act.equip[type] = [];
-		Actor.update.equip(act);	//act.flag.equip set there
+		Actor.equip.update(act);	//act.flag.equip set there
 	}
 }
 
 Actor.changeHp = function(act,amount){
-	Actor.changeResource(act,{hp:amount});
+	Actor.resource.add(act,amount);
 }
 
 Actor.changeResource = function(act,heal){
-	for(var i in heal){
-		if(typeof heal[i] === 'string'){ act[i] += heal[i].numberOnly()/100*act.resource[i].max; }	//ex: 50%		
-		else {	act[i] += heal[i];	}
-		act[i] = Math.min(act[i],act.resource[i].max);
-	}
+	Actor.resource.add(act,heal.hp,heal.mana);
 }
 
+
+Actor.resource = {};
+Actor.resource.loop = function(act){
+	if(!Actor.testInterval(act,5)) return;
+	Actor.resource.add(act,act.hpRegen*5,act.manaRegen*5);	
+}
+
+Actor.resource.add = function(act,hp,mana){
+	if(typeof hp === 'string')	//ex: 50%
+		hp = hp.numberOnly()/100*act.hpMax; 
+	if(typeof mana === 'string')
+		mana = mana.numberOnly()/100*act.manaMax;
+	
+	act.hp = Math.min(act.hpMax,act.hp + (hp || 0));
+	act.mana = Math.min(act.manaMax,act.mana + (mana || 0));
+}
+
+
 Actor.getDef = function(act){
-	var defratio = SERVER ? Actor.getEquip(act).def : player.equip.def;
+	var defratio = Actor.getEquip(act).def;
 	var def = {
 		main:act.globalDef,
 		ratio:Tk.deepClone(defratio)
@@ -54,30 +59,25 @@ Actor.getDef = function(act){
 
 Actor.dodge = function(act,time,dist){
 	
-	Actor.invincible(act,time);
+	Actor.becomeInvincible(act,time);
 	
 	//movement
 	Actor.movePush(act,act.angle,dist/time,time)
 	
 }
 
-Actor.invincible = function(act,time){
+Actor.becomeInvincible = function(act,time){
 	//invincibility
 	var oldtouch = act.damagedIf;
 	act.damagedIf = 'false';
-	Actor.setTimeout(act,'actor.invincible',time,function(key){
-		List.all[key].damagedIf = oldtouch;	
-	});
+	Actor.setTimeout(act,function(key){
+		Actor.get(key).damagedIf = oldtouch;	
+	},time,'actor.invincible');
 
 }
 
 Actor.rechargeAbility = function(act){
-	var ab = Actor.getAbility(act);
-	act.abilityChange.globalCooldown = 0;
-	for(var i in ab){
-		var ss = ab[i]; if(!ss) continue;	//cuz can have hole if player
-		act.abilityChange.charge[ss.id] = 1000;
-	}
+	Actor.ability.fullyRecharge(act);
 }
 
 

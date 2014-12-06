@@ -1,0 +1,109 @@
+//12/02/2014 11:14 PM
+/*jslint node: true, undef:true, sub:true, asi:true, funcscope:true, forin:true, unused:false*/
+/*Go to http://jshint.com/ and copy paste your code to spot syntax errors.*/
+
+'use strict';
+var s = loadAPI().init('v1.0','Qrgb',{
+	name:"Quest Template",
+	author:"rc"
+});
+var m = s.map; var b = s.boss;
+
+/* COMMENT:
+activate switch
+screen goes red
+npc tell u fucked rgb setting
+need to go activate blue and green switch to restore rgb
+mark them on minimap
+switch guarded by monsters
+*/
+
+s.newVariable({
+	toggleRed:False,
+	haveQuestMarker:False
+});
+
+s.newEvent('talkNpc',function(key){ //
+	if(!s.startQuest(key)) return;
+	
+	if(!s.get(key,'toggleRed')){
+		return s.startDialogue(key,'razfibre','normalNpc');
+	}
+	if(!s.get(key,'haveQuestMarker')){
+		return s.startDialogue(key,'razfibre','activateSwitch');
+	}
+	if(s.get(key,'toggleRed')){
+		return s.startDialogue(key,'razfibre','afterRedSwitch');
+	}
+});
+s.newEvent('toggleRed',function(key){ //
+	if(!s.startQuest(key)) return;
+	
+	s.startDialogue(key,'razfibre','warningRightBeforeTouching');
+});
+s.newEvent('toggleRedConfirmed',function(key){ //
+	s.addTorchEffect(key,"red",1000000,"rgba(255,0,0,0.5)");
+	s.startDialogue(key,'razfibre','activateSwitch');
+	s.set(key,'toggleRed',true);
+});
+s.newEvent('addQuestMarker',function(key){ //
+	s.set(key,'haveQuestMarker',true);
+	s.addQuestMarker(key,"green",'QfirstTown-main','n1');
+	s.addQuestMarker(key,"blue",'QfirstTown-main','n1');
+});
+
+s.newDialogue('razfibre','Razfibre','warrior-male.1',[ //{ 
+	s.newDialogue.node('normalNpc',"Hey! Do NOT touch the red switch! It's dangerous.",[ 	],''),
+	s.newDialogue.node('activateSwitch',"Noooo. What have you done!? I told you to not activate this switch.You have messed up the RGB (Red, Green, Blue) settings. ",[ 
+		s.newDialogue.option("How can I fix it?",'activateSwitch2','')
+	],''),
+	s.newDialogue.node('activateSwitch2',"I heard there are 2 other switches around the town.One for Blue and one for Green. Activate them and everything should go back to normal.I will mark them on your minimap.",[ 	],'addQuestMarker'),
+	s.newDialogue.node('afterRedSwitch',"Go activate the other switches I marked on your minimap.",[ 
+		s.newDialogue.option("Okay, I will do that.",'','')
+	],''),
+	s.newDialogue.node('warningRightBeforeTouching',"Don't do that! It's dangerous!",[ 
+		s.newDialogue.option("*Do it anyway.*",'','toggleRedConfirmed'),
+		s.newDialogue.option("*Don't do it.*",'','')
+	],'')
+]); //}
+
+s.newMap('main',{
+	name:"Super Map",
+	lvl:0,
+	grid:["0000000000000000000000000000000000000000","0000000000000000000000000000000000000000","0000000000000000000000000000000000000000","0000000000000000000000000000000000000000","0000000000000000000000000000000000000000","0000000000000000000000000000000000000000","0000000000000000000000000000000000000000","0000000000000000000000000000000000000000","0000000000000000000000000000000000000000","0000000000000000000000000000000000000000","0000000000000000000000000000000000000000","0000000000000000000000000000000000000000","0000000000000000000000000000000000000000","0000000000000000000000000000000000000000","0000000000000000000000000000000000000000","0000000000000000000000000000000000000000","0000000000000000000000000000000000000000","0000000000000000000000000000000000000000","0000000000000000000000000000000000000000","0000000000000000000000000000000000000000","0000000000000000000000000000000000000000","0000000000000000000000000000000000000000","0000000000000000000000000000000000000000","0000000000000000000000000000000000000000","0000000000000000000000000000000000000000","0000000000000000000000000000000000000000","0000000000000000000000000000000000000000","0000000000000000000000000000000000000000","0000000000000000000000000000000000000000","0000000000000000000000000000000000000000","0000000000000000000000000000000000000000","0000000000000000000000000000000000000000","0000000000000000000000000000000000000000","0000000000000000000000000000000000000000","0000000000000000000000000000000000000000","0000000000000000000000000000000000000000","0000000000000000000000000000000000000000","0000000000000000000000000000000000000000","0000000000000000000000000000000000000000","0000000000000000000000000000000000000000","0000000000000000000000000000000000000000","0000000000000000000000000000000000000000","0000000000000000000000000000000000000000","0000000000000000000000000000000000000000","0000000000000000000000000000000000000000"],
+	tileset:'v1.2'
+},{
+	spot:{t3:{x:432,y:432},e1:{x:656,y:432},t2:{x:848,y:432},e4:{x:400,y:688},t1:{x:656,y:688},e2:{x:880,y:688},t4:{x:432,y:880},e3:{x:656,y:880},t5:{x:880,y:880}},
+	load:function(spot){
+		m.spawnActor(spot.e1,'bat');
+	}
+});
+s.newMapAddon('QfirstTown-main',{
+	spot:{n1:{x:2400,y:1344},q1:{x:2464,y:1440}},
+	load:function(spot){
+		m.spawnActor(spot.n1,'npc',{
+			name:'Razfibre',
+			dialogue:'talkNpc',
+			sprite:s.newNpc.sprite('warrior-male1',1),
+			nevermove:true,
+			angle:s.newNpc.angle('down')
+		});
+		
+		m.spawnToggle(spot.q1,function(key){
+			return !s.get(key,'toggleRed');
+		},'toggleRed');
+	}
+});
+s.newMap('blueSwitchCave',{
+	name:"Blue Switch Cave",
+	lvl:0,
+	grid:[],
+	tileset:'v1.2'
+},{
+	spot:{},
+	load:function(spot){
+		
+	}
+});
+
+s.exports(exports);

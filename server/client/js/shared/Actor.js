@@ -1,258 +1,508 @@
 //LICENSED CODE BY SAMUEL MAGNAN FOR RAININGCHAIN.COM, LICENSE INFORMATION AT GITHUB.COM/RAININGCHAIN/RAININGCHAIN
-eval(loadDependency(['Db','Tk','Init','Sprite'],['Actor']));
-//Mort
-Init.actorTemplate = function(){
-	var defaultPreActor = function(type){
-		var act = {};
+eval(loadDependency(['Account','Boss','Map','ActiveList','Debug','ActorGroup','Quest','Message','Send','Stat','Button','OptionList','Sprite','Main','ActorModel'],['Actor']));
+
+var Actor = exports.Actor = function(modelId,extra){
+	var act = {
+		//non-extra
+		change:{},
+		old:{},
+		//flag in model
+		permBoost:{},    //no timer
+		boost:null,
+		frame:Math.floor(Math.random()*100),
+		activeList:{},   //actors near this object
+		active:1,    	//if not active, dont move. no cpu
+		damagedBy:{},   //list of actors that damaged him (used for owner of the drops)
+		dead:0,          //dead:invisible
 		
-		//dont touch
-		act.flag = {};
-		act.change = {};
-		act.old = {};
-		act.permBoost = {};    //no timer
-		act.boost = {          //timer aka needs to be updated every frame
-			'fast':{},'reg':{},'slow':{},'custom':{},
-			'toUpdate':{},
-			'list':Actor.template.boost(type),
-		};
-		act.frame = 0;
-		act.viewedIf = 'true'; //condition to see. check viewedIfList
-		act.activeList = {};   //actors near this object
-		act.active = 1;    	//if not active, dont move. no cpu
-		act.alwaysActive = 0;
-		act.damagedBy = {};   //list of actors that damaged him (used for owner of the drops)
-		act.dead = 0;          //dead = invisible
-		act.type = type;
-		act.combatType = type;
-		act.target = {
-			main:null,sub:{x:0,y:0},	
-			period:{main:90,sub:25,stuck:113},
-			cutscene:{active:0,path:[],time:0,func:null},
-			stuck:[],
-			reachedGoal:0,isStuck:0,maxAngleChange:360,
-		}
-		act.mapMod = {};
-		act.awareNpc = 0;
-		act.statCustom = Actor.template.statCustom();
-		act.bonus = Actor.template.bonus();	//Bonus applies on top of ability attack. If effect not on ability, do nothing.
-		act.mastery = Actor.template.mastery(type);
-		
-		act.status = {
-			'bleed':{"time":0,"list":[],'resist':0,},				//fixed dmg per frame, fast but short
-			'knock':{"time":0,"magn":0,"angle":0,'resist':0},		//push
-			'drain':{"time":0,"magn":0,'resist':0},					//leech mana
-			'burn':{"time":0,"magn":0,'resist':0},					//dmg/frame depending on hp, long but slow
-			'chill':{"time":0,"magn":0,'resist':0},					//slower move
-			'stun':{"time":0,"magn":0,'resist':0},					//stun, remove attack charge
-		};
-		act.statusClient = '000000';
-		act.curseClient = {};
-		act.block = 0; 						//{direction:4,distance:0};
+		moveAngle:1,
+		spdX:0,	
+		spdY:0,	
+		mouseX:0,	
+		mouseY:0,
+		moveInput:Actor.MoveInput(),	
+		bumper:Actor.Bumper(),        //true if touchs map
+
+		attackReceived:{},	//so pierce doesnt hit multiple times
+		targetSetting:Actor.TargetSetting(),
+		targetMain:Actor.TargetMain(),
+		targetSub:Actor.TargetSub(),
+		mapMod:{},
 			
-		act.angle = 1;	
-		act.moveAngle = 1;
-		act.spdX = 0;	
-		act.spdY = 0;	
-		act.mouseX = 0;	
-		act.mouseY = 0;
-		act.moveInput = [0,0,0,0];	    //right,down,left,up
-		act.bumper = [0,0,0,0];        //1 if touchs map
-		act.attackReceived = {};	//so pierce doesnt hit multiple times
+		abilityChange:Actor.AbilityChange(),	
+		statusClient:'000000',
+		curseClient:{},
+		timeout:{},
+		summon:{},       //if actor is master
+		summoned:null,      //if actor is child
 		
-		act.hp = 1000;	
-		act.mana = 100;	
+		serverX:0,
+		serverY:0,
+		id:Math.randomId(),
+		group:'',            //enemy group
 		
-		act.abilityChange = Actor.template.abilityChange();	
-		act.abilityAi = {close:{},middle:{},far:{},range:[60,300]};
-		act.abilityList = Actor.template.abilityList();		
-		act.ability = Actor.template.ability();
-		act.combatContext = {ability:'normal',equip:'normal'};		//or pvp
-		act.friction = CST.FRICTIONNPC;
-		act.bounce = 1;			//mod
-		act.timeout = {};
-		act.move = 1;
-		act.summon = {};       //if actor is master
-		act.summoned = '';      //if actor is child. .summoned = master id
-		//}}
+		noAbility:0,	//for temp time only ex:town
+		isActor:true,
 		
-		//{Setting Affected for Db.enemy
-		act.id = Math.randomId();
-		act.publicId = Math.randomId(6);   //id shared with all players
-		act.optionList = null;   //list of option when right-clicked
-		act.modList = [];  		//list of enemy mods (ex immuneFire)
-		act.group = '';            //enemy group
-		act.x = 1550;	
-		act.y = 550;	
-		act.lastX = 0;
-		act.lastY = 0;
-		act.map = 'QfirstTown-main@MAIN';
-		//}
+		//extra
+		map:Actor.DEFAULT_SPOT.map,
+		x:Actor.DEFAULT_SPOT.x,	
+		y:Actor.DEFAULT_SPOT.y,	
+		spriteFilter:null,
 		
-		//{Setting Used for Db.enemy
-		act.model = "bat";   //for enemy
-		act.lvl = 0;
-		act.name = "Goblin";     //visible name
-		act.username = "player000";     //id name
-		act.minimapIcon = 'color.red';     //icon used for minimap
-		act.quest = '';
-		act.sprite = Actor.template.sprite();		
-		act.equip = Actor.template.equip();
-		act.weapon = Actor.template.weapon();
-		act.moveRange = {
-			'ideal':100,                //distance enemy wants to be from target
-			'confort':25,               
-			'aggressive':400,           //attack player if within this range
-			'farthest':500,             //stop follow player if above this range
-		};
-		act.moveSelf = 1; 		//generate its own input	(ex: block dont but still move)
+		equip:Actor.Equip(),
+
+		status:Actor.Status(),
+		statCustom:Actor.StatCustom(),
+		bonus:Actor.Bonus(),	//Bonus applies on top of ability attack. If effect not on ability, do nothing.
 		
-		act.reflect = CST.element.template(0); //% reflected
-		act.nevercombat = 0;
-		act.boss = '';
-		act.resource = {
-			'hp':{'max':1000,'regen':1},
-			'mana':{'max':100,'regen':10/25},
-		};
-		act.globalDef = 1;
-		act.globalDmg = 1;   //global modifier
-		act.aim = 0;       //difference between mouse and actually bullet direction
-		act.atkSpd = 1;	
-		act.ghost = 0;
-		act.nevermove = 0;
-		act.noAbility = 0;
-		act.maxSpd = 12;	
-		act.acc = 8;
-		act.immune = {};
-		act.weakness = {resist:'',weak:''};
-		//}
-		
+		viewedIf:'true', //condition to see. check viewedIfList
+		angle:1,
+		username:"player000",     //id name
+		context:'',
+		weakness:Actor.Weakness(),	//set when creating
+		optionList:null,	
+			
 		//{Setting for Map.load extra
-		act.dialogue = null;      //function used to trigger dialogue
-		act.chatHead = "";     //is talking?
-		act.deathAbility = [];
-		act.deathEvent = null;	//function param = id of each killer
-		act.deathEventOnce = null;	//function param = array id of killers
-		act.combat = 1;
-		act.damageIf = 'player';
-		act.damagedIf = 'true';
-		act.targetIf = 'player';  //condition used by monsters to find their target. check targetIfList
-		act.onclick = {};
-		act.waypoint = null; 		//right click = setRespawn
-		act.loot = null;		//right click = gives items;
-		act.block = null;			//change map coliision
-		act.teleport = null;
-		act.tag = '';				//to get enemy in q.event
-		act.hideOptionList = false;
-		act.lastInteraction = Date.now();
-		act.lastAbilitySkill = '';
+		dialogue:null,
+		chatHead:null,
+		deathAbility:[],
+		deathEvent:null,	//function param:id of each killer
+		deathEventOnce:null,	//function param:array id of killers
+		onclick:{},
+		loot:null,
+		block:null,
+		teleport:null,
+		tag:{},				//to get enemy in q.event
+		hideOptionList:false,
+		lastInteraction:Date.now(),
+		lastAbilitySkill:'',
+		skillPlot:null,
+		toggle:null,
+		bank:0,
+		signpost:'',		
 		//}	
 		
+		//player only
+		skill:Actor.Skill(),
+		removeList:{},	//for things that got removed from activeList
+		privateChange:{},
+		privateOld:{},
+		magicFind:Actor.MagicFind(),
+		pickRadius:250,
+		respawnLoc:Actor.RespawnLoc(),
+		respawnTimer:25,
+		questMarker:{},
+	}
+	var model = Tk.deepClone(ActorModel.get(modelId));
+	if(!model) return ERROR(2,'no model dont exist',modelId);
+	for(var i in model) act[i] = model[i];
+	for(var i in extra) act[i] = extra[i];
+	
+	Sprite.updateBumper(act);
+	
+	Actor.setBoostListBase(act);
+	
+	if(!SERVER) return act;
+	
+	if(act.type !== 'player')
+		Actor.setAbilityListUsingAbilityAi(act); //based on aiChance
+		
+	act.optionList = Actor.generateOptionList(act);
+	act.onclick = Actor.generateOnclick(act);
+	
+	act.context = act.name;
+	if(act.type === 'npc')
+		act.acc = act.maxSpd/3;
+	
+	if(act.boss) act.boss = Boss.get(act.boss,act);
+	
+	if(act.nevermove) Actor.nevermove(act); 
+	if(act.nevercombat) Actor.nevercombat(act); 
+	else {
+		for(var i in act.immune) 
+			if(act.immune) act.mastery.def[i].sum = CST.bigInt;
+		Actor.setWeakness(act);
+		act.hpMax = act.hp; 
+		act.manaMax = act.mana;
+	}
+	
+	Actor.setChange(act,0,true); //set change and old
+	act.change = {}; //otherwise, data would be sent twice, in sa.i and sa.u
+	Actor.equip.update(act);	//only if player
 
-		//{Player Only
-		if(type === 'player'){
-			act.skill = Actor.template.skill();
-			act.removeList = {};	//for things that got removed from activeList
-			act.type = 'player';
-			act.damageIf = 'npc';
-			act.privateChange = {};
-			act.privateOld = {};
-			act.context = 'player0000';
-			act.name = 'player0000';
-			act.awareNpc = 1;
-			act.alwaysActive = 1;
-			act.minimapIcon = 'color.yellow';
-			act.party = act.name;
-			act.item = {"quantity":0,"quality":0,"rarity":0};  //aka magic find
-			act.pickRadius = 250;  //distance to pick items on ground
-			act.friction = CST.FRICTION;
-			act.respawnLoc = {safe:{x:act.x,y:act.y,map:act.map},recent:{x:act.x,y:act.y,map:act.map}};
-			Sprite.creation(act,act.sprite);
+	return act;
+}
+
+Actor.addToMap = function(act,spot,force){	//act=[Actor]
+	if(!force && !Actor.addToMap.test(act,spot)) return;
+	//else e.lvl = Actor.creation.lvl(Map.get(spot.map).lvl,cr.lvl); 
+	
+	act.map = spot.map;
+	act.x = act.crX = spot.x; 
+	act.y = act.crY = spot.y; 
+	act.targetMain = Actor.TargetMain(null,spot.x,spot.y);	
+	act.targetSub =  Actor.TargetSub(spot.x,spot.y);	
+	
+	Actor.addToList(act);
+	ActiveList.addToList(act);
+	Map.enter(act,force);
+		
+	
+	if(act.pushable || act.block) 
+		Actor.stickToGrid(act);
+	
+	return act;
+}
+Actor.addToMap.test = function(act,spot){
+	if(!Map.get(spot.map)) return ERROR(3,'map dont exist?',spot.map);
+	return true;
+}
+
+Actor.LIST = {};	//supposed to be only accesable by file starting with Actor_
+Actor.USERNAME_TO_ID = {};
+Actor.get = function(id){
+	return Actor.LIST[id] || null;
+}
+
+Actor.isOnline = function(id){
+	return !!Actor.get(id);
+}
+
+Actor.getViaUserName = function(id){
+	return Actor.get(Account.getKeyViaUsername(id)) || null;
+}
+
+Actor.isInMap = function(act,map){
+	return act.map.have(map,true);
+}
+
+Actor.addToList = function(bullet){
+	Actor.LIST[bullet.id] = bullet;
+}
+Actor.removeFromList = function(id){
+	delete Actor.LIST[id]; 
+}
+
+Actor.isPlayer = function(act){
+	if(typeof act === 'string') return Actor.LIST[act].type === 'player';
+	return act.type === 'player';
+}
+
+Actor.DEFAULT_SPRITENAME = 'mace';
+Actor.DEFAULT_SPOT = {x:1550,y:550,map:'QfirstTown-main@MAIN'};
+Actor.IDLE_ABILITY_ID = 'Qsystem-idle';
+
+//###############
+
+Actor.MagicFind = function(quantity,quality,rarity){
+	return {
+		quantity:quantity || 0,
+		quality:quality || 0,
+		rarity:rarity || 0
+	};
+}
+
+//###############
+Actor.StatCustom = function(){
+	return Stat.actorStatCustom();
+}
+
+Actor.Bonus = function(){
+	return Stat.actorBonus();
+}
+
+Actor.sendMessage = function(act,txt){
+	Message.add(act.id,txt);
+}
+
+Actor.ChatHead = function(text,timer){
+	return {
+		text:text || '',
+		timer:timer || 25*10,
+	}
+}
+
+Actor.nevercombat = function(act){
+	act.combat = 0;
+	/*
+	delete act.permBoost;
+	delete act.boost;
+	
+	//General
+	delete act.drop;
+	delete act.item;
+	delete act.pickRadius;
+	
+	//Combat
+	delete act.attackReceived;	
+	delete act.damageIf;
+	delete act.targetIf;
+	delete act.boss;
+	delete act.bonus;	
+	delete act.mastery;
+	delete act.ability;
+	delete act.abilityList;
+	delete act.atkSpd;
+	
+	//Def = DefMain * defArmor * act.mastery.def
+	delete act.hp;	
+	delete act.mana;
+	
+	delete act.globalDef;	
+	delete act.reflect;
+	
+	//Resist
+	delete act.status;
+	
+	//Atk
+	delete act.dmg;
+	delete act.globalDmg;
+	delete act.aim;
+	delete act.weapon;
+	delete act.ability;
+	delete act.equip;
+	
+	
+	delete act.summon
+	delete act.summmoned;
+	*/
+	//For update:
+	act.hpMax = 1;
+	act.hp = 1;
+}
+
+Actor.nevermove = function(act){
+	act.move = 0;
+		/*
+	delete act.friction; 
+	delete act.maxSpd;
+	delete act.acc;
+	delete act.mapMod; 
+	delete act.moveAngle;
+	delete act.spdX;
+	delete act.spdY; 
+	delete act.moveInput; 
+	delete act.bumper; 
+	//delete act.moveRange;
+	*/
+	//For update:
+	act.spdX = 0;
+	act.spdY = 0;
+	act.maxSpd = 1;
+}
+
+Actor.generateOnclick = function(act){
+	act.onclick = act.onclick || {};
+	
+	for(var i in act.onclick)	//if added onclick manually in quest api
+		if(act.onclick[i] && act.onclick[i].param[0] !== act.id)
+			act.onclick[i].param.unshift(act.id);
 			
+	var click = {
+		left:act.onclick.left || (act.optionList && act.optionList.option[0]) || null,
+		right:act.onclick.right || null,
+		shiftLeft:act.onclick.shiftLeft || null,
+		shiftRight:act.onclick.shiftRight || null,
+	}
+	
+	if(!click.shiftLeft	&& !click.shiftRight && !click.left && !click.right) return null;
+	return click;
+}
+
+Actor.generateOptionList = function(act){
+	if(act.hideOptionList) return null;
+	var name = act.name;
+	var option = [];
+	
+	if(act.onclick){
+		if(act.onclick.left) option.push(act.onclick.left);	//note: Button.Click is same than OptionList.Option
+		if(act.onclick.right) option.push(act.onclick.right);
+		if(act.onclick.shiftLeft) option.push(act.onclick.shiftLeft);
+		if(act.onclick.shiftRight) option.push(act.onclick.shiftRight);
+	}
+	
+	//if(act.type === 'player') option.push(OptionList.Option(Actor.click.trade,[OptionList.ACTOR,act.id],'Trade'));
+	if(act.dialogue) option.push(OptionList.Option(Actor.click.dialogue,[OptionList.ACTOR,act.id],'Talk'));
+	if(act.waypoint) option.push(OptionList.Option(Actor.click.waypoint,[OptionList.ACTOR,act.id],'Set Respawn'));
+	if(act.loot)	option.push(OptionList.Option(Actor.click.loot,[OptionList.ACTOR,act.id],'Loot'));
+	if(act.skillPlot)	option.push(OptionList.Option(Actor.click.skillPlot,[OptionList.ACTOR,act.id],'Harvest'));
+	if(act.toggle) option.push(OptionList.Option(Actor.click.toggle,[OptionList.ACTOR,act.id],'Interact With'));
+	if(act.teleport) option.push(OptionList.Option(Actor.click.teleport,[OptionList.ACTOR,act.id],'Teleport'));
+	if(act.bank) option.push(OptionList.Option(Actor.click.bank,[OptionList.ACTOR,act.id],'Bank'));
+	if(act.signpost) option.push(OptionList.Option(Actor.click.signpost,[OptionList.ACTOR,act.id],'Read'));
+	if(act.pushable) option.push(OptionList.Option(Actor.click.pushable,[OptionList.ACTOR,act.id],'Push'));
+	
+	if(act.deathEvent && Quest.TESTING.simple) 
+		option.push(OptionList.Option(function(key,eid){ 	
+			var e = Actor.get(eid);
+			Message.add(key,'You killed "' + e.name + '".'); 
+			e.deathEvent(key,eid);  
+		},[act.id],'Kill'));
+	
+	if(option.length === 0) return null;
+	return Actor.OptionList(act.name,option);	//bad...
+}
+
+
+Actor.creation = {}; 
+
+Actor.creation.lvl = function(lvl,mod){
+	if(!mod) return lvl;
+	if(typeof mod === 'number') return mod;
+	if(typeof mod === 'function') return mod(lvl);
+	
+	if(mod[0] === '+' || mod[0] === '-') return lvl + +mod;
+	if(mod[0] === '*') return lvl * +mod.slice(1);
+	
+	return lvl;	
+}
+
+
+Actor.remove = function(act){
+	if(typeof act === 'string') act = Actor.LIST[act];
+	Map.leave(act,act.map,true);
+	if(Actor.isPlayer(act)) 
+		delete Actor.USERNAME_TO_ID[act.username];
+	Actor.removeFromList(act.id);
+	ActiveList.removeFromList(act.id);
+	if(act.group) ActorGroup.removeActorFromGroup(act);
+	if(act.summoned && Actor.get(act.summoned.parent)) 
+		delete Actor.get(act.summoned.parent).summon[act.summoned.name];
+}
+
+Actor.setWeakness = function(act){
+	var min = CST.bigInt;
+	var max = 0;
+	var resist = '';
+	var weak = '';
+	
+	for(var i in act.mastery.def){
+		if(act.mastery.def[i].sum > max){
+			max = act.mastery.def[i].sum;
+			resist = i;
 		}
-		//}
-		for(var i in act.boost.list){  //init default Db.stat value
-			Tk.viaArray.set({'origin':act,'array':act.boost.list[i].stat,'value':act.boost.list[i].base});
+		if(act.mastery.def[i].sum < min){
+			min = act.mastery.def[i].sum;
+			weak = i;
 		}
-		return act;
 	}
-	
-	var p = defaultPreActor('player');
-	var e = defaultPreActor('npc');
-	
-	var temp = Actor.template;
-	Actor.template = function(type){
-		if(type === 'player') return Tk.deepClone(p);
-		return Tk.deepClone(e);	
-	}
-	for(var i in temp) Actor.template[i] = temp[i];
+	if(weak === resist) weak = resist = '';
+	act.weakness = Actor.Weakness(resist,weak);
 }
 
-var Actor = exports.Actor = {};
-Actor.update = {};
-Actor.template = function(){};
-
-Actor.template.skill = function(){
-	var value = CST.exp[0];
+Actor.Weakness = function(resist,weak){
 	return {
-		'exp':{'melee':value,'range':value,'magic':value,'metalwork':value,'woodwork':value,'leatherwork':value,'mining':value,'woodcutting':value,'trapping':value},
-		'lvl':{'melee':0,'range':0,'magic':0,'metalwork':0,'woodwork':0,'leatherwork':0,'mining':0,'woodcutting':0,'trapping':0},
-	}; 
-};
-
-Actor.template.weapon = function(){
-	return 'Qsystem-unarmed';
-};
-
-Actor.template.equip = function(info){
-	return {
-		normal:info || Actor.template.equip.part(),
-		pvp:Actor.template.equip.part(),
-		quest:Actor.template.equip.part(),
-	}
-};
-Actor.template.equip.part = function(){
-	return {
-		"piece":{helm:'',amulet:'',ring:'',body:'',weapon:''},
-		"def":CST.element.template(1),
-		"dmg":CST.element.template(1),
+		resist:resist || '',
+		weak:weak || '',
 	}
 }
 
-Actor.template.sprite = function(){
-	return {"name":"mace","anim":"walk","sizeMod":1};
+Actor.getMouse = function(act){
+	return SERVER ? {x:act.mouseX,y:act.mouseY} : Input.getMouse();
 }
-
-Actor.template.abilityChange = function(ab){	//ab : abilityList
-	var tmp = {'press':'00000000000000','charge':{},'chargeClient':[0,0,0,0,0,0],'globalCooldown':0};
 	
-	for(var i in ab) tmp.charge[i] = 0;
-	return tmp;
+Actor.getMain = function(act){	//accept string key and object
+	return SERVER ? Main.get(act.id || act) : main;
 }
 
-Actor.template.mastery = function(type){
+Actor.Map = function(map){
+	return map;
+}	
+
+Actor.Map.compressClient = function(name){
+	//used for instanced. client doesnt need to know its instanced
+	return Map.getModel(name);
+}
+
+//####################################
+
+
+Actor.Mastery = function(def,dmg){
 	return {	
-		'def':{'melee':{'+':0,'*':0,'x':0,'^':0,'sum':1,'mod':1},'range':{'+':0,'*':0,'x':0,'^':0,'sum':1,'mod':1},'magic':{'+':0,'*':0,'x':0,'^':0,'sum':1,'mod':1},'fire':{'+':0,'*':0,'x':0,'^':0,'sum':1,'mod':1},'cold':{'+':0,'*':0,'x':0,'^':0,'sum':1,'mod':1},'lightning':{'+':0,'*':0,'x':0,'^':0,'sum':1,'mod':1}},
-		'dmg':{'melee':{'+':0,'*':0,'x':0,'^':0,'sum':1,'mod':1},'range':{'+':0,'*':0,'x':0,'^':0,'sum':1,'mod':1},'magic':{'+':0,'*':0,'x':0,'^':0,'sum':1,'mod':1},'fire':{'+':0,'*':0,'x':0,'^':0,'sum':1,'mod':1},'cold':{'+':0,'*':0,'x':0,'^':0,'sum':1,'mod':1},'lightning':{'+':0,'*':0,'x':0,'^':0,'sum':1,'mod':1}},
+		def:def || Actor.Mastery.part(),
+		dmg:dmg || Actor.Mastery.part(),
 	};
 };
 
-Actor.template.abilityList = function(info){
+Actor.Mastery.part = function(me,ra,ma,fi,co,li){
 	return {
-		normal:info || {},
-		pvp:{},
-		quest:{},
-	};	//check Test for added ability
+		melee:me || Actor.Mastery.element(),
+		range:ra || Actor.Mastery.element(),
+		magic:ma || Actor.Mastery.element(),
+		fire:fi || Actor.Mastery.element(),
+		cold:co || Actor.Mastery.element(),
+		lightning:li || Actor.Mastery.element(),
+	}
+}
+Actor.Mastery.element = function(sum,plus,time,x,exp){
+	return {
+		'+':plus === undefined ? 0: plus,
+		'*': time === undefined ? 1: time,
+		'x':x === undefined ? 1: x,
+		'^':exp === undefined ? 1: exp,
+		'sum':sum === undefined ? 1: sum,
+		'mod':1
+	};
 }
 
-Actor.template.ability = function(info){
-	return {
-		normal:info || [0,0,0,0,0,0],
-		pvp:[0,0,0,0,0,0],
-		quest:[0,0,0,0,0,0],
+Actor.mastery = {};
+Actor.mastery.update = function(act){
+	//Note: mod is applied in Combat.attack.mod.act
+	var mas = act.mastery;
+	for(var i in mas){
+		for(var j in mas[i]){
+			var m = mas[i][j];
+			m.sum = Math.pow(m['x'] * m['*'],m['^']) + m['+'];
+		}
 	}
 }
 
 
+Actor.CombatContext = function(){
+	return {ability:'normal',equip:'normal'};
+}
 
 
+Actor.Pushable = function(magn,time,event){
+	return {
+		magn:magn,
+		time:time,
+		event:event||null,
+		timer:0,
+		angle:0
+	};
+}
+Actor.Block = function(size,value,impactPlayer,impactNpc,impactBullet){
+	return {
+		size:size,
+		value:value === undefined ? 1 : value,
+		impactPlayer:impactPlayer === undefined ? true : value,
+		impactNpc:impactNpc === undefined ? true : value,
+		impactBullet:impactBullet === undefined ? true : value,
+	};
+}
 
+
+Actor.changeSprite = function(act,info){
+	Sprite.change(act,info);
+}
+
+Actor.Summon = function(){
+	return {
+		child:{},
+	}
+}
+Actor.Summoned = function(parent,name,time,distance){
+	return {
+		parent:parent,
+		name:name,
+		time:time,
+		distance:distance,		
+	}
+}
+
+
+Actor.OptionList = function(name,option){
+	return OptionList(name,option);
+}

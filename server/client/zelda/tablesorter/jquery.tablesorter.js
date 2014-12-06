@@ -143,11 +143,7 @@
             this.benchmark = benchmark;
 
             function log(s) {
-                if (typeof console != "undefined" && typeof console.debug != "undefined") {
-                    console.log(s);
-                } else {
-                    alert(s);
-                }
+				alert(s);
             }
 
             /* parsers utils */
@@ -592,7 +588,7 @@
                 var dynamicExp = "sortWrapper = function(a,b) {",
                     l = sortList.length;
 
-                // TODO: inline functions.
+                // : inline functions.
                 for (var i = 0; i < l; i++) {
 
                     var c = sortList[i][0];

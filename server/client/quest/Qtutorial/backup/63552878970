@@ -1,0 +1,467 @@
+eval(loadDependency(["Actor"]));
+//11/29/2014 5:29 PM
+/*jslint node: true, undef:true, sub:true, asi:true, funcscope:true, forin:true, unused:false*/
+/*Go to http://jshint.com/ and copy paste your code to spot syntax errors.*/
+
+var s = loadAPI().init('v1.0','Qtutorial',{
+	name:"Tutorial",
+	author:"",
+	admin:true,
+	dailyTask:false,
+	showWindowComplete:false,
+	skillPlotAllowed:true,
+	reward:{"exp":1,"item":1,"reputation":{"min":1,"max":1,"mod":10}}
+});
+var m = s.map; var b = s.boss;
+
+/* COMMENT:
+BAD:
+-destroy baricade
+-bow crafting
+-assign ability
+-hide buttons
+
+//todo: removed boss attribute
+destroy barricade
+push block
+activate lever
+talk ringo
+break target
+kill all monsters
+loot chest
+assign heal
+pass lava
+get 2 leaves
+make bow
+kill boss
+*/
+
+s.newVariable({
+	killBarricade:0,
+	tgOn:0,
+	talkRingo:0,
+	killTarget:0,
+	killBoss:0,
+	killEnemy:0,
+	killMushroom:0,
+	lootChest:0,
+	learnHeal:0,
+	assignedHeal:0,
+	walkedOverLava:0,
+	lootChest2:0,
+	upgradedEquip:0,
+	bossStarted:0
+});
+
+s.newEvent('_start',function(key){ //
+	s.addEquip.permanently(key,'Qsystem-start-amulet');
+	s.addEquip.permanently(key,'Qsystem-start-ring');
+	s.addEquip.permanently(key,'Qsystem-start-helm');
+	s.addEquip.permanently(key,'Qsystem-start-body');
+	s.addEquip.permanently(key,'Qsystem-start-weapon');
+	
+	s.teleport(key,'main','t2','solo',true);
+	s.setRespawn(key,'main','t2','solo',true);
+	s.addAbility.permanently(key,'Qsystem-start-melee',0);
+		
+	s.setTimeout(key,function(key){
+		s.displayPopup(key,'When stuck in a quest, read the hint below the minimap.');
+	},25*5);
+	
+	s.message(key,'You use your first ability by Left-Clicking.');
+	s.callEvent('updateHUD',key);
+});
+s.newEvent('_debugSignIn',function(key){ //
+	s.callEvent('_signIn',key);
+});
+s.newEvent('_hint',function(key){ //
+	if(!s.get(key,'killMushroom')) return 'ASDW to move.<br>Left-Click to kill the mushroom.';
+	if(!s.get(key,'tgOn')) return 'Activate the switch to free the man.';
+	if(!s.get(key,'talkRingo')) return 'Talk with Ringo.';
+	if(!s.get(key,'killTarget')) return 'Destroy the target with your new ability (Right-Click).';
+	if(s.get(key,'killEnemy') < 6) return 'Kill all monsters and see what happens.';
+	if(!s.get(key,'lootChest')) return 'Loot the chest!';
+	if(!s.get(key,'learnHeal')) return 'Read the scroll you just looted.';
+	if(!s.get(key,'assignedHeal')) return 'Assign the ability Healing to a key binding.';
+	if(!s.get(key,'walkedOverLava')) return 'Use the Healing Ability to heal mid-way traversing the lava north.';
+	if(!s.get(key,'lootChest2')) return 'Search for a chest.';
+	if(!s.get(key,'upgradedEquip')) return 'Harvest Red Trees then unlock a boost for one of your equip.';
+	if(!s.get(key,'killBoss')) return 'Kill the Dragon Boss!';		
+	return "Congratz! Now make your way out of this map.";
+});
+s.newEvent('_death',function(key){ //
+	s.message(key,'You can change your respawn location by interacting with gravestones.');
+});
+s.newEvent('skipTutorial',function(key){ //
+	s.addAbility.permanently(key,'Qsystem-start-melee',0);
+	s.addAbility.permanently(key,'Qsystem-start-bullet',1);
+	s.addAbility.permanently(key,'Qsystem-start-freeze',2);
+	s.addAbility.permanently(key,'Qsystem-start-fireball',3);
+	s.addAbility.permanently(key,'Qsystem-start-heal',4);
+	s.addAbility.permanently(key,'Qsystem-start-dodge',5);
+	s.completeQuest(key);
+});
+s.newEvent('_complete',function(key){ //
+	s.teleportTown(key);
+	s.restoreHUD(key);
+	s.displayPopup(key,"Completing quests grants Reputation. Use Reputation to empower your character via the Reputation Window.");
+		
+	s.setHUD(key,'tab-reputation','flashing');
+	Actor.setTimeout(Actor.get(key),25*10,function(key){
+		s.setHUD(key,'tab-reputation','normal');
+	});
+	
+	Actor.setTimeout(Actor.get(key),'feedback',25*60*2,function(key){
+		s.displayPopup(key,'Don\'t forget to leave feedback!');
+		s.setHUD(key,'tab-feedback','flashing');
+		Actor.setTimeout(Actor.get(key),25*15,function(key){
+			s.setHUD(key,'tab-feedback','normal');
+		})
+	});
+});
+s.newEvent('updateHUD',function(key){ //
+	s.setHUD(key,'tab-equip','invisible');
+	s.setHUD(key,'tab-ability','invisible');
+	s.setHUD(key,'tab-stat','invisible');
+	s.setHUD(key,'tab-quest','invisible');
+	s.setHUD(key,'tab-reputation','invisible');
+	s.setHUD(key,'tab-highscore','invisible');
+	s.setHUD(key,'tab-friend','invisible');
+	s.setHUD(key,'tab-homeTele','invisible');
+	
+	s.setHUD(key,'mana','invisible');
+	s.setHUD(key,'party','invisible');
+	s.setHUD(key,'clan','invisible');
+	s.setHUD(key,'bottomChatIcon','invisible');
+	s.setHUD(key,'curseClient','invisible');
+	s.setHUD(key,'reputationBar','invisible');
+	
+	if(s.get(key,'learnHeal')){
+		if(!s.get(key,'assignedHeal'))
+			s.setHUD(key,'tab-ability','flashing');
+		else s.setHUD(key,'tab-ability','normal');
+	}
+	if(s.get(key,'lootChest2')){
+		if(!s.get(key,'upgradedEquip'))
+			s.setHUD(key,'tab-equip','flashing');
+		else s.setHUD(key,'tab-equip','normal');
+	}
+});
+s.newEvent('_signIn',function(key){ //
+	s.teleport(key,'main','t2','solo',true);
+	
+	if(s.get(key,'lootChest2') && !s.get(key,'upgradedEquip'))
+		s.callEvent('displayPopupEquip',key);
+		
+	if(s.get(key,'learnHeal') && !s.get(key,'assignedHeal'))
+		s.callEvent('displayPopupHeal',key);
+	
+	s.callEvent('updateHUD',key);
+});
+s.newEvent('killBarricade',function(key){ //
+	s.set(key,'killBarricade',1);
+});
+s.newEvent('talkRingo',function(key){ //
+	if(s.get(key,'talkRingo')) return s.startDialogue(key,'ringo','second');
+	
+	s.startDialogue(key,'ringo','first');
+	s.set(key,'talkRingo',1);
+});
+s.newEvent('viewChest',function(key){ //
+	if(s.get(key,'lootChest')) return false;
+	if(s.get(key,'killEnemy') >= 6) return true;
+	return null;
+});
+s.newEvent('killEnemy',function(key){ //
+	s.add(key,'killEnemy',1);
+});
+s.newEvent('lootChest',function(key){ //
+	s.addItem(key,'ability');	
+	s.set(key,'lootChest',1);
+	s.displayPopup(key,'Sweet, a scroll!<br>Left click it in your inventory at bottom right.');
+	s.message(key,'Sweet, a scroll!<br>Left click it.');
+});
+s.newEvent('itemAbility',function(key){ //
+	s.addAbility.permanently(key,'Qsystem-start-heal',null);
+	s.removeItem(key,'ability');	
+	
+	s.message(key,'You have learned the ability Healing.');
+	s.message(key,'To use Healing ability, you will need to assign it to a Key Bind.');
+	s.callEvent('displayPopupHeal',key);
+	s.set(key,'learnHeal',1);
+	s.setHUD(key,'tab-ability','flashing');
+});
+s.newEvent('displayPopupHeal',function(key){ //
+	s.displayPopup(key,'Assign Heal to F Key via Ability Window (bottom-right).<br>Select Heal then click F slot to the left.',25*6);
+	s.setTimeout(key,function(key){
+		if(s.hasAbility(key,'Qsystem-start-heal')){
+			s.set(key,'assignedHeal',true);
+			s.setHUD(key,'tab-ability','normal');
+			return;
+		}
+		s.callEvent('displayPopupHeal',key);
+	},2*25);
+});
+s.newEvent('lootChest2',function(key){ //
+	s.addItem.permanently(key,'Qsystem-start-bow');
+	s.set(key,'lootChest2',1);
+	s.displayPopup(key,'Sweet, a bow!<br>You should upgrade it before fighting the boss.');
+	s.message(key,'Sweet, a bow!<br>You should upgrade it before fighting the boss.');
+	s.callEvent('displayPopupEquip',key);
+	s.setHUD(key,'tab-equip','flashing');
+});
+s.newEvent('displayPopupEquip',function(key){ //
+	s.displayPopup(key,'To upgrade gear, open Equip Window at bottom-right then:<br>-Bind<br>-Spend Mastery Pt<br>-Unlock Boost',25*6);
+	s.setTimeout(key,function(key){
+		var upgraded = false;
+		var equip = Actor.getEquip(Actor.get(key));
+		for(var i in equip.piece){
+			if(equip.piece[i] && !equip.piece[i].have('Qsystem-',true)){
+				upgraded = true;
+				break;
+			}
+		}
+		if(upgraded){
+			s.set(key,'upgradedEquip',true);
+			return;
+		}
+		s.callEvent('displayPopupEquip',key);
+	},2*25);
+});
+s.newEvent('learnArrow',function(key){ //
+	s.addAbility.permanently(key,'Qsystem-start-bullet',1);
+});
+s.newEvent('viewChest2',function(key){ //
+	return !s.get(key,'lootChest2');
+});
+s.newEvent('killBoss',function(key){ //
+	s.set(key,'killBoss',1);
+	
+	s.displayPopup(key,'You just learned 3 new abilities.<br>-Shift-Left Clk: Freeze Foe.<br>-Shift-Right Clk: Fire!<br>-Space Bar: Invincibility dodge');
+	
+	s.addAbility.permanently(key,'Qsystem-start-freeze',2);
+	s.addAbility.permanently(key,'Qsystem-start-fireball',3);
+	s.addAbility.permanently(key,'Qsystem-start-dodge',5);
+});
+s.newEvent('resourceExamine',function(key){ //
+	s.message(key,'Useful material to craft weapons.');
+});
+
+s.newItem('resource',"Red Leaf",'orb.boost',[    //{
+	s.newItem.option('resourceExamine',"Examine","Examine."),
+	s.newItem.option('_complete',"12312","12312")
+],''); //}
+s.newItem('ability',"Ability Scroll",'plan.equip',[    //{
+	s.newItem.option('itemAbility',"Learn","Learn new ability.")
+],''); //}
+
+s.newAbility('fireball','attack',{
+},{
+	type:'bullet',
+	amount:1,
+	angleRange:20,
+	dmg:s.newAbility.dmg(20,'fire'),
+	hitAnim:s.newAbility.anim('fireHit',0.5),
+	spd:40,
+	sprite:s.newAbility.sprite('fireball',1.5)
+});
+s.newAbility('fireball-360','attack',{
+},{
+	type:'bullet',
+	amount:1,
+	angleRange:20,
+	dmg:s.newAbility.dmg(20,'fire'),
+	hitAnim:s.newAbility.anim('fireHit',0.5),
+	spd:40,
+	sprite:s.newAbility.sprite('fireball',1)
+});
+s.newAbility('fireball-fast','attack',{
+},{
+	type:'bullet',
+	amount:2,
+	angleRange:60,
+	dmg:s.newAbility.dmg(5,'fire'),
+	hitAnim:s.newAbility.anim('fireHit',0.5),
+	spd:40,
+	sprite:s.newAbility.sprite('fireball',1)
+});
+s.newAbility('fireball-oob','attack',{
+},{
+	type:'bullet',
+	dmg:s.newAbility.dmg(50,'fire'),
+	hitAnim:s.newAbility.anim('fireHit',0.5),
+	spd:40,
+	sprite:s.newAbility.sprite('fireball',1)
+});
+s.newAbility('fdgfdg','attack',{
+},{
+	type:'bullet',
+	boomerang:s.newAbility.boomerang(1,1,1,True),
+	onMove:{
+		type:'bullet'
+	}
+});
+
+s.newDialogue('ringo','Ringo','villager-male.0',[ //{ 
+	s.newDialogue.node('first',"Thanks for saving me! I'll reward you by teaching you a new ability. Use Right-Click to use it.",[ 
+		s.newDialogue.option("No problem.",'','')
+	],'learnArrow'),
+	s.newDialogue.node('second',"You should try shooting an arrow with Right-Click at the red and white target.",[ 
+		s.newDialogue.option("Okay. I'll go do that.",'','')
+	],'')
+]); //}
+
+s.newNpc('boss',{
+	name:"Dragon Boss",
+	hp:10000,
+	boss:s.newNpc.boss('dragon'),
+	maxSpd:s.newNpc.maxSpd(0.25),
+	sprite:s.newNpc.sprite('dragonKing',1.2),
+	moveRange:s.newNpc.moveRange(3.5,3),
+	targetSetting:s.newNpc.targetSetting(10,50,90)
+});
+
+s.newMap('main',{
+	name:"Tutorial",
+	lvl:0,
+	grid:["000000000000000000000000000000000000000000000001000000000110000000000010000000100000100111100000011000000010001100000000","000000000000000000000000000000000000000000000001000000000110001111111110000000100000100011111100001100000010001100000000","000000000000000000000000000000000000000000000001000000000000001111111110011111100000100001111110000100000010001100000000","000000000000000000000000000000000000001111000001000000000000001111111110011111100000100000111111000100000010001100000000","000000000000000000000000000000000000001111000001000011111110000111111110011111100000100000011111000100000010001100000000","000000000000000000000000000000000000001111000001000111111111000111111110011111100000100110000011000111110010001100000000","000000000000000000000000000000000000000000000001000100000001100111111100000000100000111110000011000111110010001100000000","000000000000000000000000000000000000000000000001000100000001100111100000000000100000011110000011000111110010001100000000","000000000000000000000000000000000000000000000001000100000001111110000000000000100000001111110011000111000110001100000000","000000000000000000000000000000000000001111111111000100000001111110000111100111100000000111111111000011001100001100000000","000000000000000000000000000000000000011000000000000100000001111100000111100111100000000000001111000001111000001100000000","000000000000000000000000000000011110010000000000000100000001110000000111100000100000000000001111001100110000001100000000","000000000000000000000000000000011110010000000000000100000001110000000000000000100000000000001111001100000000001100000000","000000000000000000000000000000011111110000000000001100000001111111111000000000110000000000001111100000000000011100000000","000000000000000000000000000000000111100001100000011110000001111111111100111111111111110000001111110000000000111100000000","000000000000000000000000000000000110000001100000111110000000000000000100100001111111111000001001111111111111111000000222","000000000000000000000000000000000100000000111111111110000000000000000100100000111111111000001000111111111111110000002222","000000000000000000000000000000000100000000111111111110000000000011111100100110000111111000001000011111111111100000022222","000000000000000000000000000000000100000011111111000000000000000011111100100110000111111000001000011111111111000000222222","000000000000000000000000000000000100000111001111000000000000000011111100111110000111111000001111110000000000000022222222","000000000000000000000000001111000100000110000000000000000000000000000100111111111111111000001111110000000000022222222222","000000000000000000000000001111000100000100000000000000000000000000000100011111111111111000001111110000000000222222222222","000000000000000000000000001111000100000100000000000000000000000000000110000000000000111000001111110000000012222222222222","000000000000000000000000000000000100000100000000000000000000000000000011000000000000110000000111110000000011222222222222","000000000000000000000000000000000100000100000000000000000000000000000001111111111111100000000011111111111111122222220000","000000000000000000000000000000000100000100000000000000000000000000000000111111111111000000000001111111111100000000000000","000000000000000000000011110000000100000100000000001000000100000000000000000000000000000000000000000000000100000000000000","000000000111100000000011110000000100000100000000011000000110000000000000000000000000000000000000000000000100000111111111","000000000111100011110011110000000100000100000000111000000111000000000000000000000000000000000000000000000100001100000000","000000000111100011110000010011111100111100000001111000000111100000000000000000000000000000000000000000000100001100000000","000000000000000011110000011111111100111100000001111000000111100000000000000000000000000000000000000000000100001111000000","000000000000000000000000011111111100001100000001111000000111100001110000000000000000000000000000000000000100001111000000","000000000110000000000000000000000110001100000001100000000001100011111110000000000000000000000000000000000100001000000000","000000000110000000000000000000000111111000000001100000000001100111111111100000000000000222222200000000000100001000000000","000000000011111111111111111111111111110000000001100000000001111111100001100000000000000222222200000000000100001000000000","000000000011111111111111111111111111100000000001100000000001111111100000110000000000000220002200000000000100001000000000","000000000111111111111111111111111111000000000001100000000001111100000000110000000000000220002200000000000100001000000000","000000000111111111111111111111111111000000000001100000000001111100000000110000000000000220002200000000000100001100000000","000000000111111111111001111111111111000000000001100000000001111100000000110000000000000222222200000000000100000110000000","000000000111111111111001000000000111000000000001100000000001111100011111110000000000000222222200000000000100000010000000","000000000111111111111001000000000111000000000001100000000001111100011111110000000000000000000000000000000100000010000000","000000000110000000000001000000000111000000000001100000000001111100011111110000000000000000000000000000000100000010000000","001111000110000000000001000000000111000000000001100000000001111100011111110000000000000000000000000000000111111110000000","001111000110000000000000111000111111100000000011100000000001111100000000110000000000000000000000000000000111111110000000","001111000110000000000000111000111111110000000111100000000001111100000000110000000000000000000000000000000111111110000000","000000111110000000000000000000000001111111111111000000000001111100000000111111000000000000000000000000000111111110000000","000000111110000000000000000000000000111111111110000000000001111100000000111111000000000000000000000000000111111100000000","000000000110000000000000000000000000011111111100000000000001111100000000111111000000000000000000000000000111111100000000","000000000110000000000000000000000000001111111000000000000001111100000000011111111111111100000000000001111111111100000000","000000000110000000000000000000000000000000000000000000000001111100000000011111111111111110000000000001111111111100000000","000000000110000000000000000000000000000000000000000000000001111100110011110000000000011111000000000001111111111100000000","000000000110000000000000000000000000000000000000000000000001111100110011110000000000011001111111111111111100111100000000","000110000110000000000000000000000000000000000000000000000001111110000011110000000000011000111111111111111000000000000000","000110000011110000000000000000000000000000000000000000000001111111000011110000000000000000000000000001111000000000000000","000000000001111000000000111111100000000001111100000000000001100111111111111100011000000000000000000001111110000000000000","000000000000001100000001111111110000000011111110000000000001100111111111111110011000000000000000000011111111000000000000","000000000000000110000011111111111000000111111111000000000001111111111111111111000000000000110000000110001111100000000000","000000000000000110000111111111001122221111111111100000000001111100111111111111100000000000110000001110001111110000000000","000000011110000110000111110011001122221111111111100000000001111000000000000011110000000000110000001110000011110000000000","000000011110000110000111110011001122221111000111100000000001111000000000000011111111111111111111001111000011110000000000","000000011110000110000111111111001100001111000111100000000000111111111111111111111111111111111111100111111111100000000000","000000000000000110000111111111001100001111000111100000000000011111111111111111111111111111111111110011111111000000000000","000000000000001110000111100001111100001111000111100000000000001111111111111111111111111111111111110001111110000000000000","011110000000011110000111100001111100001111111111100000000000000111111111111111111111000000000000110000111100000000000000","011110011111111100000011111111000111111100111111100000000000000000000000011111111111000000000000110000000000000000000000","011111111111111000000001111111000111111100011111100000000000000000000000011111111111000000000000111000000000000000000000","000000100000001000000000111111111110001111001111100000000000000000000000011111111111000000000000111100000000000000000000","000000100000001000000000011111111110001111001111100000000000000000000000000001111000000000000000100111111111111111111111","000111100000001000000000011111111111111100011111100000000000000000000000000001111000000000000000100011111111111111111111","000111100111111000000000011111100011111100011111100000000000000000000000000000111100000000000001100001111111111111111111","000000100111111000000000000001100011000110011111100000000000000000000000000000011100000000011111000001111111111111111111","000000100111111000000000000001100110000011111111100000000111111000000000000000001100000000111111000011000000000000000000","000000100000011000000000000001100110000011111000000000001111111100000000000000001100000000111111000110000000000000000000","111100100000011000000000000001100110011111111000000000011120000110000000000000001100000000111111001100000000000000000000","111100111111110000000000000001100110011111111000000000110000000011000000000000011000000000111111111000000000000000000000","111100111111100000000000000001100110000011111000000000110000000011000000000000110000000000100001110000001111000000000000","000000110000000000000000000001100110000011111000000000111000000111000000000001100000000000100001100000001111000000000000","000000110000000000000000000001100110000011111000000000111110011111000000000001100000000001100001000000001111000000000000","000000110000000000000000000001100110011111111000000000111110011110000000000001111111111111100001000000000000000000000000","000000110000000000000000000001100110011111111000000000111110011100000000011111111110000000110001000000000000000000000000","000000110001100000000000000001100110000011111000000000111110011000000000111111111110000000110001000000000000000000000000","000000110001100000000000000001100110000011111111100000111110010000000001100000111110000000000011000000000000000000000000","001100110000000000000000000001100110000011111111100000111110010000000011100000011110000000000110000000000000000000000000","001100110000000000000001111001100110000011111000000000000000000000000011111110001111111111111100000000000000000000000000","000000110000000000000001111001100110000011111000000000000000000000000011111110000111111111111000000000000000000000000000","000000110000000000000001111001100110000011111000000000000000000000000011111110000000000000000000000000000000000000000000","000000110000000000000000000001100110000011111111100000000000000000000011000000000000000000000000000000111100000000000000","000000110000000000000000000001100110000011111111110000000000000000000011000000000000000000000011110000111100000000000000","000000110000000000000000000001100110000011111000011000000000000000000011111000000000000000000011110000111100000000000000","000000110000000000000000000001100110000011000000011100000000000000000011111000000111100000000011110000000000000000000000","000000011111111111111111111111100110000011000111111100000000000000000011000000000111100000000000000000000000000000000000","000000011111111111111111111111111100000011000111111100000000000000000011000000000111100000000000000000000000000000000000","000011110000000000000001111111111000000011000111111100000000000000000011000000000000000000000000000000000000000000000000","000011110000000000000001111111000000000011000000001100000000000000111111000000000000000000000000000000000000000000000000","000011110000111111111111111110000000000001111000001100000000000000111111000000000000000000000000000000000000000000000000","000000000001111111111111111110000000000000111100001100000000000000111111000000000000000011110000000000000000000000000000","000000000011001100000011111100000001111000111110000111111111111111111111110000000000000011110000000000000000000000000000","000000000110001100000001111000000001111000110011000011111111111111111100110000000000000011110000000000000000000000000000","000000000110001100000000000000000001111000110011000000000000000000001100000000000000000000000000000000000000000000000000","000000000110000000000000000000000000000000000011000000000000000000001100000000000000000000000000000000000000000000000000"],
+	tileset:'v1.2'
+},{
+	spot:{t1:{x:2608,y:48},q8:{x:1776,y:304},s3:{x:1920,y:496},g3:{x:1344,y:704},b5:{x:2784,y:704},q3:{x:2176,y:768},b4:{x:2208,y:736},a:{x:2240,y:768},b:{x:1568,y:800},b8:{x:2400,y:832},t3:{x:2160,y:896},t4:{x:2464,y:960},b7:{x:1568,y:1120},e5:{x:2896,y:1168},s1:{x:1248,y:1264},q2:{x:512,y:1248},n1:{x:912,y:1296},b2:{x:512,y:1344},b1:{x:864,y:1408},h:{x:1568,y:1408},c:{x:1472,y:1440},q4:{x:1856,y:1472},g1:{x:1536,y:1504},b3:{x:1344,y:1568},e1:{x:544,y:1952},e2:{x:1152,y:1984},e3:{x:1936,y:2192},el:{x:560,y:2352},g2:{x:832,y:2400},q1:{x:1920,y:2400},t2:{x:656,y:2576},e4:{x:1968,y:2832}},
+	load:function(spot){
+		m.spawnSignpost(spot.q3,function(key){
+			s.displayPopup(key,"Upgrade your equipment before fighting the boss.");
+		});
+		m.spawnSignpost(spot.q4,"Only those who have a healing ability should attempt passing through the lava pit.");
+		
+		m.spawnLoot(spot.q8,'viewChest2','lootChest2','chest');
+		
+		m.spawnBlock(spot.e1,function(key){
+			return !s.get(key,'killMushroom');
+		},'spike');
+		
+		m.spawnActor(spot.el,'mushroom',{
+			deathEvent:function(key){
+				s.set(key,'killMushroom',1);
+			},
+			noAbility:true,
+			maxSpd:s.newNpc.maxSpd(0.2),
+			hp:10,
+		});
+				
+		m.spawnActor(spot.e2,'target',{deathEvent:function(key){ 
+			s.set(key,'killTarget',1);
+			
+			s.forEachActor(key,'main',function(key){;
+				Actor.remove(Actor.get(key));	//Actor
+			},'npc',null,{block:true})
+		}});
+		
+		m.spawnWaypoint(spot.g1,true);
+		m.spawnWaypoint(spot.g2,true);
+		m.spawnWaypoint(spot.g3,true);
+		
+		m.spawnActor(spot.b2,'pushable-rock2x2');
+		m.spawnToggle(spot.q2,function(key){ return !s.get(key,'tgOn');},function(key){ s.set(key,'tgOn',1);},null);
+		
+		m.spawnBlock(spot.b1,function(key){ return !s.get(key,'tgOn');},'spike');
+		m.spawnBlock(spot.b3,function(key){ return !s.get(key,'killTarget');},'spike',{
+			tag:{block:true},
+		});
+		m.spawnBlock(spot.b4,function(key){ return !s.get(key,'upgradedEquip') || s.get(key,'bossStarted');},'spike');
+		m.spawnBlock(spot.b5,function(key){ return !s.get(key,'killBoss');},'spike');
+		
+		m.spawnBlock(spot.a,function(key){ return false;},'invisible');
+		m.spawnBlock(spot.h,function(key){ return false;},'invisible');
+		
+		m.spawnActor(spot.n1,'npc',{
+			sprite:s.newNpc.sprite('villager-male0'),
+			move:0,
+			angle:90,
+			name:'Ringo',
+			dialogue:'talkRingo'
+		});
+		
+		m.spawnLoot(spot.q1,'viewChest','lootChest','chest');
+		
+		m.spawnTeleporter(spot.t3,function(key){
+			s.teleport(key,'Qtutorial-main','t4','solo');
+		},'zone',{angle:0,viewedIf:function(key){
+			return s.get(key,'bossStarted');		
+		}});
+		
+		m.spawnTeleporter(spot.t1,s.completeQuest,'zone','up');
+		
+		m.spawnActorGroup(spot.e3,[
+			m.spawnActorGroup.list("bee",1,{globalDmg:0.1,globalDef:0.5,deathEvent:'killEnemy'}),
+			m.spawnActorGroup.list("bat",2,{globalDmg:0.1,globalDef:0.5,deathEvent:'killEnemy'}),
+		],0);
+		
+		m.spawnActorGroup(spot.e4,[
+			m.spawnActorGroup.list("mushroom",1,{globalDmg:0.1,globalDef:0.5,deathEvent:'killEnemy'}),
+			m.spawnActorGroup.list("plant",2,{globalDmg:0.1,globalDef:0.5,deathEvent:'killEnemy'}),
+		],0);
+		
+		m.spawnActor(spot.e5,'boss',{deathEvent:'killBoss'});
+		
+		m.spawnSkillPlot(spot.s1,'Qtutorial','Qtutorial-tree-red',0);
+		m.spawnSkillPlot(spot.s3,'Qtutorial','Qtutorial-tree-red',2);
+	},
+	loop:function(spot){
+		m.forEachActor(spot,2,function(key){
+			var dmg = s.get(key,'assignedHeal') ? -140 : -300;
+			s.changeHp(key,dmg);
+		},'actor',spot.b7);
+		
+		m.forEachActor(spot,15,function(key){
+			s.set(key,'walkedOverLava',1);
+			s.changeHp(key,500);
+		},'actor',spot.b);
+		
+		m.forEachActor(spot,15,function(key){
+			s.rechargeAbility(key);
+		},'actor',spot.c);
+		
+		m.forEachActor(spot,25,function(key){
+			s.set(key,'bossStarted',1);
+		},'actor',spot.b8);
+		if(!m.testInterval(25)) return;
+	}
+});
+
+s.newBoss('dragon',s.newBoss.variable({"direction":1,"rotationAngle":0,"randomAngle":0}),function(boss){
+	var SPD = 1;
+	s.newBoss.phase(boss,'phase0',{
+		loop:function(boss){
+			var num = b.get(boss,'_framePhase') % 100;
+			if(num === 40) 
+				b.set(boss,'randomAngle',b.get(boss,'_angle') + Math.randomML()*50);
+			if(num === 40 || num === 60 || num === 80)	
+				b.useAbility(boss,'fireball',b.get(boss,'randomAngle'));
+			if(num === 75)
+				for(var i = 0; i < 340; i += 5)	
+					b.useAbility(boss,'fireball-360',b.get(boss,'randomAngle')+i+10);
+		},
+		transitionTest:function(boss){
+			if(b.get(boss,'_framePhase') > 400) return 'phase1'	
+		},
+	});
+	s.newBoss.phase(boss,'phase1',{
+		loop:function(boss){
+			var toadd = b.get(boss,'direction') * SPD;
+			b.add(boss,'rotationAngle',toadd);
+			b.useAbility(boss,'fireball-fast',b.get(boss,'rotationAngle'));
+			if(b.get(boss,'_framePhase') % 50 === 0)
+				for(var i = 0; i < 300; i += 5)	b.useAbility(boss,'fireball-oob',b.get(boss,'rotationAngle')+i+30);
+		},
+		transitionTest:function(boss){
+			if(b.get(boss,'_framePhase') % 250 === 0) return 'phase0';
+		},
+		transitionIn:function(boss){
+			b.set(boss,'rotationAngle',b.get(boss,'_angle'));
+			b.set(boss,'direction',Math.random() > 0.5 ? -1 : 1);
+		}
+	});
+});
+
+s.exports(exports);

@@ -1,364 +1,354 @@
 //LICENSED CODE BY SAMUEL MAGNAN FOR RAININGCHAIN.COM, LICENSE INFORMATION AT GITHUB.COM/RAININGCHAIN/RAININGCHAIN
-eval(loadDependency(['Chat','Button','Command'],['Input']));
+//a 65,b 66,c 67,d 68,e 69,f 70,g 71,h 72,i 73,j 74,k 75,l 76,m 77,n 78,o 79,p 80,q 81,r 82,s 83,t 84,u 85,v 86,w 87,x 88,y 89,z 90,,backspace 8,tab 9,enter 13,shift 16,ctrl 17,alt 18,pause/break 19,caps lock 20,escape 27,page up 33,page down 34,end 35,home 36,left arrow 37,up arrow 38,right arrow 39,down arrow 40,insert 45,delete 46,0 48,1 49,2 50,3 51,4 52,5 53,6 54,7 55,8 56,9 57,left window key 91,right window key 92,select key 93,numpad 0 96,numpad 1 97,numpad 2 98,numpad 3 99,numpad 4 100,numpad 5 101,numpad 6 102,numpad 7 103,numpad 8 104,numpad 9 105,multiply 106,add 107,subtract 109,decimal point 110,divide 111,f1 112,f2 113,f3 114,f4 115,f5 116,f6 117,f7 118,f8 119,f9 120,f10 121,f11 122,f12 123,num lock 144,scroll lock 145,semi-colon 186,equal sign 187,comma 188,dash 189,period 190,forward slash 191,grave accent 192,open bracket 219,back slash 220,close braket 221,single quote 222,
+(function(){ //}
+var SHIFTKEY = 1000;
 
-var Input = exports.Input = {};
-Input.mouse = {x:0,y:0,drag:{active:0,sx:0,sy:0,vx:0,vy:0},left:0,right:0};
-Input.offset = {left:0,top:0};	//updated in loop
+//################
+//Setting
+Input = exports.Input = {
+	setting:null,
+	state:null,
+	binding:{move:null,ability:null},
+};
 
-Input.init = function(setup,save){
-	Input.key = {};
-		
-	if(setup === 0){	//default
-		//first key id works only when not writing message
-		//rest works all the time (dont use letters in rest)
-		
-		Input.key.move = [
-			[68], //d - right
-			[83], //s - down
-			[65], //a - left
-			[87]  //w - up
-		];
-		
-		Input.key.ability = [
-			[1],	//left click + num5
-			[3],		//right click + num+
-			[1001],		//(left click+shift)
-			[1003],		//(right click+shift)
-			[70],		//f			//need to be healing
-			[32],		//space		//need to be dodge
-		];
-		
+Input.Setting = function(move,ability,custom){
+	return {
+		move:move,
+		ability:ability,
+		custom:custom		
 	}
-	
-	if(setup === 1){	//azerty
-		Input.key.move = [
-			[68], //d - right
-			[83], //s - down
-			[81], //q - left
-			[90]  //z - up
-		];
-		
-		Input.key.ability = [
-			[1],	//left click + num5
-			[3],		//right click + num+
-			[1001],		//(left click+shift)
-			[1003],		//(right click+shift)
-			[70],		//f			//need to be healing
-			[32],		//space		//need to be dodge
-		];
-		
+}
+
+Input.Setting.move = function(right,down,left,up){
+	return [right,down,left,up];
+}
+Input.Setting.ability = function(a,b,c,d,e,f){
+	return [a,b,c,d,e,f];
+}
+Input.Setting.custom = function(keyCode,func){
+	return {
+		keyCode:keyCode,
+		func:func	
 	}
-	
-	if(setup === 2){	//number
-		Input.key.move = [
-			[68], //d - right
-			[83], //s - down
-			[65], //a - left
-			[87]  //w - up
-		];
-		
-		Input.key.ability = [
-			[1],	//left click + num5
-			[49],		//1
-			[50],		//2
-			[51],		//3
-			[52],		//4
-			[53],		//5
-		];
-	}
-		
-	Input.key.combo = [
-		{'key':16,'boost':1000,'symbol':'s'},	//shift	//line 105 if change that
-		// {'key':17,'boost':10000,'symbol':'c'}	//ctrl
-	];
-	Input.key.custom = [
-		{'keyCode':[9,9],'func':(function(event){ 	//tab
-			event.preventDefault(); 
-			Chat.send.reply(); 
-			return false; 
-		})},	
-		{'keyCode':[13,13],'func':(function(event){ 	//enter
-			if(Input.event.typeNormal() && document.activeElement !== html.chat.input) return;
-		
-			if(document.activeElement !== html.chat.input){
-				setTimeout(function(){ html.chat.input.focus(); },20);				
-				event.preventDefault();
-			} else if(document.activeElement === html.chat.input && !html.chat.input.value){
-				html.chat.input.blur();
-				document.body.focus();
+}
+
+Input.changeSetting = function(move,ability,custom){
+	custom = custom || [
+		Input.Setting.custom(9,function(event){ 	//tab
+			Message.reply();
+			return false;
+		}),
+		Input.Setting.custom(13,function(event){ 	//enter
+			if(Input.hasFocusOnInput()) return true;
+
+			if(!Dialog.chat.isInputActive()){
+				Dialog.chat.focusInput();
 			}
-		})},	
-		{'keyCode':[27,27],'func':function(event){ //esc
-			if(document.activeElement === html.chat.input && !html.chat.input.value){
-				html.chat.input.blur();
-				document.body.focus();
+			return false;
+		}),
+		Input.Setting.custom(27,function(event){ 	//esc
+			Dialog.closeAll();
+			
+			if(Dialog.chat.isInputActive('')){
+				Dialog.chat.blurInput();
 			}
-			Input.add('',false); 
+			
+			Dialog.chat.setInput('',false); 
 			
 			$(".ui-tooltip-content").parents('div').remove();
-			Command.send('win,close');
-			event.preventDefault();
 			return false;
-		}}, 
-		{'keyCode':[38,38],'func':(function(){ $('#gameDiv')[0].scrollIntoView(true); })}, //up
+		}),
 	];
-	
-	Input.press = {'move':[0,0,0,0],'ability':[],'combo':[]}; 
-	for(var i in Input.key.ability){ Input.press.ability.push(0);}
-	for(var i in Input.key.combo){ Input.press.combo.push(0);}
-	
-	if(save !== false) Input.save();
+	Input.setting = Input.Setting(move,ability,custom);
+	Input.reset();
 }
-Input.init(0,false);
+	
+Input.usePreset = function(preset){
+	preset = preset || 'qwerty';
+	if(preset === 'qwerty')
+		Input.changeSetting(
+			Input.Setting.move(68,83,65,87),	//d s a w
+			Input.Setting.ability(1,3,SHIFTKEY+1,SHIFTKEY+3,70,32) //clk left, clk right, click left sshift, click right shift, f, space
+		);
+	if(preset === 'azerty')
+		Input.changeSetting(
+			Input.Setting.move(68,83,81,90),	//d s q z
+			Input.Setting.ability(1,3,SHIFTKEY+1,SHIFTKEY+3,70,32) //clk left, clk right, click left sshift, click right shift, f, space
+		);
+	if(preset === 'number')
+		Input.changeSetting(
+			Input.Setting.move(68,83,65,87),	//d s a w
+			Input.Setting.ability(1,49,50,51,52,53) //clk left, 1,2,3,4,5
+		);
+}
 
-Input.init.azerty = function(htm){
-	if(htm.innerHTML !== 'Revert.'){
-		Input.init(1);
-		htm.innerHTML = 'Revert.'
-	} else {
-		Input.init(0);
-		htm.innerHTML = 'Change for AZERTY.'
+Input.saveSetting = function(){
+	localStorage.setItem('bindingMove',JSON.stringify(Input.setting.move));
+	localStorage.setItem('bindingAbility',JSON.stringify(Input.setting.ability));
+}
+Input.loadSetting = function(){
+	var move = JSON.parse(localStorage.getItem('bindingMove'));
+	var ability = JSON.parse(localStorage.getItem('bindingAbility'));
+		
+	//integrity test
+	if(!move || !ability) return Input.usePreset();
+	if(typeof move !== 'object' || typeof move[0] !== 'number') return Input.usePreset();
+	if(typeof ability !== 'object' || typeof ability[0] !== 'number') return Input.usePreset();
+	Input.changeSetting(move,ability);
+}
+
+Input.getKeyName = function(what,position,full){
+	if(!Input.setting) return;
+	var keycode = Input.setting[what][position];
+	return keycode.toString().keyCodeToName(full);	
+}
+
+//################
+//State
+Input.State = function(){
+	return {
+		move:[0,0,0,0],	//right,down,left,up
+		ability:[0,0,0,0,0,0],
+		mouseX:0,
+		mouseY:0,
 	}
 }
 
-Input.key.move = JSON.parse(localStorage.getItem('bindingMove')) || Input.key.move;
-Input.key.ability = JSON.parse(localStorage.getItem('bindingAbility')) || Input.key.ability;
-//a	 65$$$b	 66$$$c	 67$$$d	 68$$$e	 69$$$f	 70$$$g	 71$$$h	 72$$$i	 73$$$j	 74$$$k	 75$$$l	 76$$$m	 77$$$n	 78$$$o	 79$$$p	 80$$$q	 81$$$r	 82$$$s	 83$$$t	 84$$$u	 85$$$v	 86$$$w	 87$$$x	 88$$$y	 89$$$z	 90$$$$$$backspace	 8$$$tab	 9$$$enter	 13$$$shift	 16$$$ctrl	 17$$$alt	 18$$$pause/break	 19$$$caps lock	 20$$$escape	 27$$$page up	 33$$$page down	 34$$$end	 35$$$home	 36$$$left arrow	 37$$$up arrow	 38$$$right arrow	 39$$$down arrow	 40$$$insert	 45$$$delete	 46$$$0	 48$$$1	 49$$$2	 50$$$3	 51$$$4	 52$$$5	 53$$$6	 54$$$7	 55$$$8	 56$$$9	 57$$$left window key	 91$$$right window key	 92$$$select key	 93$$$numpad 0	 96$$$numpad 1	 97$$$numpad 2	 98$$$numpad 3	 99$$$numpad 4	 100$$$numpad 5	 101$$$numpad 6	 102$$$numpad 7	 103$$$numpad 8	 104$$$numpad 9	 105$$$multiply	 106$$$add	 107$$$subtract	 109$$$decimal point	 110$$$divide	 111$$$f1	 112$$$f2	 113$$$f3	 114$$$f4	 115$$$f5	 116$$$f6	 117$$$f7	 118$$$f8	 119$$$f9	 120$$$f10	 121$$$f11	 122$$$f12	 123$$$num lock	 144$$$scroll lock	 145$$$semi-colon	 186$$$equal sign	 187$$$comma	 188$$$dash	 189$$$period	 190$$$forward slash	 191$$$grave accent	 192$$$open bracket	 219$$$back slash	 220$$$close braket	 221$$$single quote	 222$$$
-
-Input.reset = function(){ Input.press = {'move':[0,0,0,0],'ability':[0,0,0,0,0,0],'combo':[0,0]}; }
-window.onblur = Input.reset;
-
-Input.binding = {move:null,ability:null};	//used to know if currently binding change
-
-Input.save = function(){
-	localStorage.setItem('bindingMove',JSON.stringify(Input.key.move));
-	localStorage.setItem('bindingAbility',JSON.stringify(Input.key.ability));
+Input.reset = function(){
+	Input.state = Input.State();
 }
 
-Input.add = function(text,focus,add){	//input chat
-	if(add) {html.chat.input.value += text;}
-	else {html.chat.input.value = text;}
-	if(focus !== false){ 
-		html.chat.input.focus();
-		setTimeout(function(){ 
-			html.chat.input.focus();
-			var s = html.chat.input.value;	//so at the end
-			html.chat.input.value = '';
-			html.chat.input.value = s;
-		},50);
+Input.offset = {left:0,top:0};	//updated in loop
+
+Input.isPressed = function(what,position){
+	return !!Input.state[what][position];
+}	
+
+Input.getMouse = function(){
+	return {
+		x:Input.state.mouseX,
+		y:Input.state.mouseY,
 	}
 }
 
-Input.event = {};
-Input.event.typeNormal = function(){
+//################
+//Event
+Input.init = function(){
+	Input.loadSetting();
+	
+	window.onblur = function(){
+		Input.reset();
+	}
+	//EVENT
+	$(document).mousedown(function(event) { 
+		return Input.onclick(event.which,'down',event);  
+	});
+	$(document).mouseup(function(event) { 
+		return Input.onclick(event.which,'up',event); 
+	});
+	$(document).bind('mousewheel',function(event){ 
+		Input.onwheel(event.wheelDeltaY > 0 ? 1 : -1);
+	});
+	$(document).mousemove(function(event){ 
+		Input.onmove(event);
+	});
+	
+	window.onscroll = function(){ 
+		if(Input.getMouse().y < CST.HEIGHT) 
+		window.scrollTo(0, 0); 
+	};
+	$(document).keydown(function(event) {	
+		Input.onkeydown(event.keyCode,'down',event);
+	});
+	$(document).keyup(function(event) { 
+		Input.onkeydown(event.keyCode,'up',event);
+	});
+	$(document).bind('contextmenu', function(e){	//Disable Right Click Context Menu and Lose Focus
+		return false;
+	});	
+	
+	//prevent firefox context box on shift right
+	/*
+	document.onclick = document.dblclick = function(event){	
+		if(!event.shiftKey) return;
+		event.preventDefault(); 
+		event.stopPropagation();
+		return false;
+	}
+	*/
+	/* window.onbeforeunload = function(){	//on close browser
+		return 'Note: Ctrl + W closes the window.';
+	}*/
+}
+
+Input.hasFocusOnInput = function(){
 	var str = document.activeElement.constructor.toString();
 	return str.have('HTMLInputElement') || str.have('HTMLTextAreaElement');
-	
-	
-	
-	/*$("#chatBoxInput").is(":focus") || $("#questionInput").is(":focus")
-			|| $("#contactMeTitle").is(":focus") || $("#contactMeText").is(":focus")
-			|| $("#tsInput").is(":focus");*/
 }
-Input.event.key = function(code,dir,event){
-	var start = +Input.event.typeNormal();
+
+Input.onkeydown = function(code,dir,event){
 	var num = dir === 'down' ? 1 : 0;
-
-	for(var i in Input.key.move){
-		for(var j = start ; j < Input.key.move[i].length; j++){
-			if(code === Input.key.move[i][j]){
-				Input.press.move[i] = num;
-				if(Game.started) event.preventDefault();
-			}
-		}
-	}
-	
-	//for(var i in Input.key.combo){if(code === Input.key.combo[i].key){	Input.press.combo[i] = num;}}
-	Input.press.combo[0] = +event.shiftKey;	//quickfix
-	if(event.shiftKey){Input.press.ability[0] = 0; Input.press.ability[1] = 0; } //quickfix
-	if(!event.shiftKey){Input.press.ability[2] = 0; Input.press.ability[3] = 0; } //quickfix
-	
-	code += Input.event.combo();
-	
 	if(dir === 'down'){
-		for(var i in Input.key.custom){
-			for(var j = start ; j < Input.key.custom[i].keyCode.length; j++){
-				if(code === Input.key.custom[i].keyCode[j]){
-					if(Game.started) Input.key.custom[i].func(event);
-				}
+		for(var i in Input.setting.custom){
+			if(code === Input.setting.custom[i].keyCode){
+				if(!Input.setting.custom[i].func(event))
+					event.preventDefault();
 			}
 		}
 	}
 	
-	for(var i in Input.key.ability){
-		for(var j = start ; j < Input.key.ability[i].length; j++){
-			if(code == Input.key.ability[i][j]){
-				Input.press.ability[i] = num;
-				if(Game.started) event.preventDefault();
-			}
+	if(Input.hasFocusOnInput()) return false;
+	
+	for(var i = 0; i < Input.setting.move.length; i++){
+		if(code === Input.setting.move[i]){
+			Input.state.move[i] = num;
 		}
 	}
 	
-	var blackList = [16,17,1016,1017,10016,11016,17,1017,10017,11017];	//prevent binding plain shift or ctrl to ability
-	if(!blackList.have(code)){
-		if(Input.binding.move !== null){ $(".ui-tooltip-content").parents('div').remove(); Input.key.move[Input.binding.move][0] = code; Input.save(); }
-		if(Input.binding.ability !== null){ $(".ui-tooltip-content").parents('div').remove(); Input.key.ability[Input.binding.ability][0] = code; Input.save(); }
+	if(event.shiftKey) code += SHIFTKEY;
+	
+	for(var i in Input.setting.ability){
+		if(code === Input.setting.ability[i]){
+			Input.state.ability[i] = num;
+			event.preventDefault();
+		}
+		//quick fix for shiftkey
+		if(Input.setting.ability[i] >= SHIFTKEY && code < SHIFTKEY)
+			Input.state.ability[i] = 0;
+		if(Input.setting.ability[i] < SHIFTKEY && code >= SHIFTKEY)
+			Input.state.ability[i] = 0;
+	}
+	// if (e.ctrlKey)
+	if(Input.binding.move !== null){ 
+		Input.setting.move[Input.binding.move] = code; 
 		Input.binding.move = null;
-		Input.binding.ability = null;
-	}	
-	return false;
-}
-
-Input.event.combo = function(){
-	var sum = 0;
-	for(var i in Input.key.combo){
-		if(Input.press.combo[i]){
-			sum += Input.key.combo[i].boost;
-		}
+		Input.saveSetting();		
 	}
-	return sum;
-}
-
-//prevent firefox context box on shift right
-document.onclick = document.dblclick = function(event){	
-	if(!event.shiftKey) return;
-	event.preventDefault(); 
-	event.stopPropagation();
+	if(Input.binding.ability !== null){ 
+		Input.setting.ability[Input.binding.ability] = code; 
+		Input.binding.ability = null;
+		Input.saveSetting(); 
+	}
+	
+	
 	return false;
 }
 
-Input.event.mouse = {};
-Input.event.mouse.click = function(code,dir,event){	
-	if(Date.now() - Input.event.mouse.click.last < 50) return;
-	Input.event.mouse.click.last = Date.now();
+Input.onclick = function(code,dir,event){	
+	if(Date.now() - Input.onclick.LAST < 50) return;
+	Input.onclick.LAST = Date.now();
 	
-	var start = +Input.event.typeNormal();
-	var dirnum = dir === 'down' ? 1 : 0;
-	if(code === 1) Input.mouse.left = dirnum; 
-	if(code === 3) Input.mouse.right = dirnum; 
-	code += Input.event.combo();
+	
+	var num = dir === 'down' ? 1 : 0;
+	if(event.shiftKey) code += SHIFTKEY;
+	
+	//Binding
+	if(Input.binding.ability !== null){
+		Input.setting.ability[Input.binding.ability] = code;
+		Input.binding.ability = null;
+		Input.saveSetting();
+	}
 	
 	//Emit Mouse Click
 	if(dir === 'down'){
-		var side = 'left';
-		switch(code){
-			case 1: side = 'left'; break;
-			case 3: side = 'right'; break;
-			case 1001: side = 'shiftLeft'; break;
-			case 1003: side = 'shiftRight'; break;
-			case 10001: side = 'ctrlLeft'; break;
-			case 10003: side = 'ctrlRight'; break;
-		}
-			
-		if(dirnum && Draw.ptTracker.active) Draw.ptTracker(side);
+		if(code === 1) var side = 'left';
+		if(code === 3) var side = 'right';
+		if(code === SHIFTKEY + 1) var side = 'shiftLeft';
+		if(code === SHIFTKEY + 3) var side = 'shiftRight';
 		
-		
-		if(Game.started){
-			if(!Main.isWindowOpen(main))
-				socket.emit('click', [side,Input.mouse.x.r(0),Input.mouse.y.r(0)]);
-			else socket.emit('click', [side,Input.mouse.x.r(0),Input.mouse.y.r(0),1]);
-		}
-		setTimeout(function(){ Button.reset();},50);	//client side buttons
-		if(Button.test(0,Input.mouse.x,Input.mouse.y,side)) 
-			return false;	//call button function, if returns true prevent use ability when clicking on non-combat actor
-		
+		//call button function, if returns true prevent use ability when clicking on non-combat actor
+		if(Button.onclick(side))	
+			return;		
 	}
 	
 	//Update Input
-	for(var i in Input.key.ability){
-		for(var j = start ; j < Input.key.ability[i].length; j++){
-			if(code === Input.key.ability[i][j]){
-				if(!(dirnum && Input.mouse.x > CST.WIDTH - 200 && Input.mouse.y > CST.HEIGHT-300)){ //Prevent click in inventory
-					Input.press.ability[i] = dirnum;
-				}
-			}
+	for(var i in Input.setting.ability){
+		if(code === Input.setting.ability[i]){
+			Input.state.ability[i] = num;
 		}
+		//quick fix for shiftkey
+		if(Input.setting.ability[i] >= SHIFTKEY && code < SHIFTKEY)
+			Input.state.ability[i] = 0;
+		if(Input.setting.ability[i] < SHIFTKEY && code >= SHIFTKEY)
+			Input.state.ability[i] = 0;
 	}
-	//Binding
-	if(Input.binding.ability !== null){
-		Input.key.ability[Input.binding.ability][0] = code;
-		Input.binding.ability = null;
-	}
-	return;
-}
-Input.event.mouse.click.last = Date.now();
-
-Input.event.mouse.wheel = function(side){
-	if(main.windowList.passive){
-		Draw.window.passive.grid.info.size += 3*side;
-	}
-	//$(document.body)[0].scrollTop = -100;	//BAD
-}
-
-Input.event.mouse.move = function (evt){
-	Input.mouse.x = evt.clientX - Input.offset.left;
-	Input.mouse.y = evt.clientY - Input.offset.top;
-}
-
-Input.event.mouse.drag = function(){
-	Input.mouse.drag.active = 1;
-	Input.mouse.drag.sx = Input.mouse.x;
-	Input.mouse.drag.sy = Input.mouse.y;
-	Input.mouse.drag.vx = 0;
-	Input.mouse.drag.vy = 0;
-}
-
-Input.event.mouse.drag.update  = function(){
-	if(Input.mouse.drag.active && Input.mouse.left){
-		Input.mouse.drag.vx = Input.mouse.x - Input.mouse.drag.sx; 
-		Input.mouse.drag.vy = Input.mouse.y - Input.mouse.drag.sy; 
-		Input.mouse.drag.sx = Input.mouse.x;
-		Input.mouse.drag.sy = Input.mouse.y;
-	} else {
-		Input.mouse.drag.active = 0;
-		Input.mouse.drag.vx = 0;
-		Input.mouse.drag.vy = 0;
-	}
-}	
-
-
-
-//Mouse Down/Up || Key Down/Up
-$(document).ready(function(){
-	$(document).mousedown(function(event) { return Input.event.mouse.click(event.which,'down',event);  });
-	$(document).mouseup(function(event) { return Input.event.mouse.click(event.which,'up',event); });
-	document.onmousewheel = function(event){ Input.event.mouse.wheel(event.wheelDeltaY > 0 ? 1 : -1);}
-	document.addEventListener("mousemove", function(a,b,c,d){ Input.event.mouse.move(a,b,c,d);});
 	
-	document.addEventListener('keydown', function(event) {	Input.event.key(event.keyCode,'down',event);});
-	document.addEventListener('keyup', function(event) { Input.event.key(event.keyCode,'up',event);});
-	$(document).bind('contextmenu', function(e){return false;});	//Disable Right Click Context Menu and Lose Focus
-	//$(window).keydown(function(e) { if(e.ctrlKey) { e.preventDefault();}});	//Disable Ctrl Shortcut
-});
+}
+Input.onclick.LAST = Date.now();
 
+Input.onwheel = function(side){
+
+}
+
+Input.onmove = function (evt){
+	var off = $('#gameDiv').offset();
+	Input.state.mouseX = evt.clientX - (off.left - window.pageXOffset);
+	Input.state.mouseY = evt.clientY - (off.top - window.pageYOffset);
+	Input.onmove.COUNT++;
+}
+Input.onmove.COUNT = 0;
 
 //Send
-Input.send = function(){
-	if(Input.event.typeNormal() && Input.press.move.toString() !== "0,0,0,0"){ 
-		//facing right direction if typing and using secondary move
-		Input.mouse.x = CST.WIDTH2 + 10*Input.press.move[0] - 10*Input.press.move[2];
-		Input.mouse.y = CST.HEIGHT2 + 10*Input.press.move[1] - 10*Input.press.move[3];		
-	}
+Input.loop = function(){
+	if(Input.hasFocusOnInput()) Input.reset();	
+	
+	Input.controller.loop();
 	
 	var d = {};
-	var newKey = Input.press.move.join('') + Input.press.ability.join('');
-	var newMouse = [Math.round(Input.mouse.x),Math.round(Input.mouse.y)];
+	var newKey = Input.state.move.join('') + Input.state.ability.join('');
+	var mouse = Input.getMouse();
+	var newMouse = [Math.round(mouse.x),Math.round(mouse.y)];
 
-	if(Input.send.old.key !== newKey){ d.i = newKey; }
-	if(Input.send.old.mouse.toString() !== newMouse.toString()){ d.m = newMouse; }
+	if(Input.loop.OLD.key !== newKey) 
+		d.i = newKey;
+	if(Input.loop.OLD.mouse.toString() !== newMouse.toString())
+		d.m = newMouse;
 	
-	//$("#largeLog")[0].innerHTML = newKey;	//TOREMOVE
+	if(d.i || d.m)
+		Socket.emit("input", d );
 	
-	if(d.i || d.m){ socket.emit("input", d ); }
-	
-	
-	
-	Input.send.old.key = newKey;
-	Input.send.old.mouse = newMouse;
+	Input.loop.OLD.key = newKey;
+	Input.loop.OLD.mouse = newMouse;
 }
 	
-Input.send.old = {'key':'','mouse':[0,0]};
+Input.loop.OLD = {key:'',mouse:[0,0]};
 
 
 
+//##############
+/*
+0:a,1:b,2:x,3:y,4:lb,5:rb,
+6:lt,7:rt,8:back,9:start,10:lJoy,
+11:rJoy,12:padUp,13:padDown,14:padLeft,15:padRight,
+
+axe:
+0:left horizontal (-1 = left) - 1:left vertical (-1 = up)
+2:right horizontal (-1 = left) - 3:right vertical (-1 = up)
+*/
+
+Input.controller = {};
+Input.controller.loop = function(){	//TOFIX bad name
+	return;
+	/*
+	if(!navigator.getGamepads) return;
+	var list = navigator.getGamepads();
+	var con = list[0] || list[1] || list[2] || list[3];
+	if(!con || !main.pref.controller) return;
+	var but = con.buttons;
+	if(!but[0]) return;	//not loaded properly
+	var axe = con.axes;
 	
+	var p = Input.state;
+	
+	p.ability[4] = +but[4].pressed;	//lb, heal
+	p.ability[5] = +but[10].pressed; //lJoy, dodge
+	p.combo[0] = +but[6].pressed;	//BAD TO FIX
+	
+	p.move[0] = +(axe[0] > 0.4);
+	p.move[2] = +(axe[0] < -0.4);
+	p.move[1] = +(axe[1] > 0.4);
+	p.move[3] = +(axe[1] < -0.4);
+	*/
+}
+
+})();

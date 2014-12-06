@@ -415,7 +415,7 @@ function handleEvent(event) {
 	// grab the event object (IE uses a global event object)
 	event = event || fixEvent(((this.ownerDocument || this.document || this).parentWindow || window).event);
 	// get a reference to the hash table of event handlers
-	var handlers = this.events[event.type];
+	var handlers = this.callEvents[event.type];
 	// execute each event handler
 	for (var i in handlers) {
 		this.$$handleEvent = handlers[i];
