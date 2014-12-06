@@ -1,6 +1,16 @@
-server/Db_private.js
-server/SAM.js
+server/private
 node_modules/nodetime
 node_modules/nodemailer
-node_modules/request
+node_modules/jitsu
+node_modules/twit
 .npmignore
+story plans
+TODO.txt
+TODO_LOW_PRIORITY.txt
+TODO_NEW.txt
+package.json
+
+.*A.png
+.*B.png
+*.tmx
+server/client/quest/tileset

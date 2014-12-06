@@ -1,37 +1,23 @@
-eval(loadDependency(['Db','List','Actor','Loop','Tk','Init','Boss','Combat','Collision']));
+eval(loadDependency(['Actor','Combat','Collision','Ability'],['Boss']));
 //boss
 //LICENSED CODE BY SAMUEL MAGNAN FOR RAININGCHAIN.COM, LICENSE INFORMATION AT GITHUB.COM/RAININGCHAIN/RAININGCHAIN
-Db.boss = {};
-Init.db.boss = function(){	//do nothing...
-	for(var i in Db.boss){
-		Boss.creation.model(Db.boss[i]);
-	}
-}
 
-var Boss = exports.Boss = {};
 
-Boss.creation = function(name,e){
-	var boss = Tk.deepClone(Db.boss[name]);
-	if(!boss) return ERROR(2,'no boss with this name',name);
-	boss.parent = e.id;
-	return boss;
-}
 
-Boss.creation.model = function(boss){	
-	//boss.variable = Tk.useTemplate(Boss.template.variable(),boss.variable,0,0);
-}
-
-Boss.template = function(){
-	return {	
-		id:'',
-		phase:{},
-		currentPhase:'',
+var Boss = exports.Boss = function(id,variable,phase,startingPhase){	//model...
+	var tmp = {	
+		id:id,
+		phase:phase,
+		currentPhase:startingPhase,
 		active:1,
-		variable:Boss.template.variable(),
-	}
-}
-Boss.template.variable = function(){
-	return {
+		variable:variable,
+	};
+	
+	DB[id] = tmp;
+};
+var DB = Boss.DB = {};
+Boss.Variable = function(list){
+	var tmp = {
 		_frame:0,		//always increase
 		_framePhase:0,	//reset to 0 when change phase
 		_hpRatio:1,
@@ -39,21 +25,41 @@ Boss.template.variable = function(){
 		_minion:{},
 		_noattack:0,	//time if above 0 => cant attack
 	}	
+	for(var i in list){
+		if(i.have('_',true)) return ERROR(3,'cant have boss variable starting with _');
+		tmp[i] = list[i];
+	}
+	return tmp;		
 }
 
-Boss.ability = function(boss,name,extra){
+Boss.Phase = function(info){
+	return {
+		loop:info.loop || CST.func,
+		transitionTest:info.transitionTest || function(){ return false; },
+		transitionIn:info.transitionIn || CST.func,
+		transitionOut:info.transitionOut || CST.func,
+	};
+}
+
+Boss.get = function(name,e){
+	var boss = Tk.deepClone(DB[name]);
+	if(!boss) return ERROR(2,'no boss with this name',name);
+	boss.parent = e.id;
+	return boss;
+}
+
+Boss.useAbility = function(boss,ab,extra){
 	var v = boss.variable;
 	if(v._noattack > 0) return;
-	var ab = Db.ability[name];
-	if(ab.type === 'summon')
-		Combat.summon.simple(boss.parent,ab.action.param.npc);	
-	else {
-		Combat.attack.simple(List.actor[boss.parent],ab.action.param,extra);
-	}
+	Actor.useAbility(Boss.getAct(boss),ab,false,false,extra);
+}
+Boss.getAct = function(boss){
+	return Actor.get(boss.parent);
 }
 
+
 Boss.getSummon = function(boss,name){
-	var act = List.actor[boss.parent];
+	var act = Actor.get(boss.parent);
 	if(!act.summon[name]) return [];
 	var tmp = [];
 	for(var i in act.summon[name].child)
@@ -62,20 +68,20 @@ Boss.getSummon = function(boss,name){
 }
 
 Boss.loop = function(boss){
-	var act = List.all[boss.parent];
+	var act = Actor.get(boss.parent);
 	var v = boss.variable;
 	v._frame++;
 	v._framePhase++;
-	if(Loop.interval(25))	Boss.loop.getTarget(boss);
-	if(Loop.interval(3)) 	Boss.loop.angleTarget(boss);
+	if(Actor.testInterval(act,25))	Boss.loop.updateTarget(boss);
+	if(Actor.testInterval(act,3)) 	Boss.loop.updateTargetAngle(boss);
 		
-	boss.active = !v._target.$empty();
+	boss.active = !v._target.$isEmpty();
 	if(!boss.active) return;
 	
 	
 	v._noattack--;
 	v._angle = act.angle;
-	v._hpRatio = act.hp/act.resource.hp.max;
+	v._hpRatio = act.hp/act.hpMax;
 	
 	Boss.loop.transition(boss);
 }
@@ -92,28 +98,28 @@ Boss.loop.transition = function(boss){
 				boss.phase[res].transitionIn(boss.parent);
 			if(boss.phase[curPhase].transitionOut)
 				boss.phase[curPhase].transitionOut(boss.parent);
-			boss.variable._framePhase = 0;
+			boss.variable._framePhase = 1;
 		}
 	}
 	
 	boss.phase[boss.currentPhase].loop(boss.parent);
 }
 
-Boss.loop.angleTarget = function(boss){	//TOFIX can only have player target
-	var act = List.all[boss.parent];
+Boss.loop.updateTargetAngle = function(boss){	//TOFIX can only have player target
+	var act = Actor.get(boss.parent);
 	for(var i in boss.variable._target){ 
-		if(!List.all[i]){ delete boss.variable._target[i]; continue; }
-		boss.variable._target[i] = Collision.anglePtPt(act,List.all[i]);
+		if(!Actor.get(i)){ delete boss.variable._target[i]; continue; }
+		boss.variable._target[i] = Collision.getAnglePtPt(act,Actor.get(i));
 	}
 }
 
-Boss.loop.getTarget = function(boss){	//TOFIX can only have player target
+Boss.loop.updateTarget = function(boss){	//TOFIX can only have player target
 	//Update Boss Target. can have multiple targets unlike regular enemy
-	var act = List.all[boss.parent];
+	var act = Actor.get(boss.parent);
 	boss.variable._target = {};
 	for(var i in act.activeList){ 
-		if(List.all[i].type === 'player'){
-			boss.variable._target[i] = Collision.anglePtPt(act,List.all[i]);
+		if(Actor.isPlayer(i)){
+			boss.variable._target[i] = Collision.getAnglePtPt(act,Actor.get(i));
 		}
 	}
 }
@@ -121,13 +127,13 @@ Boss.loop.getTarget = function(boss){	//TOFIX can only have player target
 
 /*
 //to form the V
-Boss.attack(boss,'midSpear',{angle:boss.angle+boss.opening});
-Boss.attack(boss,'midSpear',{angle:boss.angle-boss.opening});
+Boss.attack(boss,'midSpear',boss.angle+boss.opening);
+Boss.attack(boss,'midSpear',boss.angle-boss.opening);
 
 //random projectiles inside the V
 if(Math.random() < 0.4){
-	Boss.attack(boss,'midSpear',{angle:boss.angle+Math.randomML()*boss.opening});
-	Boss.attack(boss,'midSpear',{angle:boss.angle+Math.randomML()*boss.opening});
+	Boss.attack(boss,'midSpear',boss.angle+Math.randomML()*boss.opening);
+	Boss.attack(boss,'midSpear',boss.angle+Math.randomML()*boss.opening);
 }
 //##################################
 360 with holes:
@@ -135,7 +141,7 @@ if(Math.random() < 0.4){
 boss.center = Math.random()*360;
 for(var j = 0 ; j < boss.hole ; j++){
 	for(var k = 0 ; k < (360/boss.hole-2*boss.opening) ; k+=4){
-		Boss.attack(act,'midSpear',{angle:boss.center+360/boss.hole*j+boss.opening+k});
+		Boss.attack(act,'midSpear',boss.center+360/boss.hole*j+boss.opening+k);
 	}	
 }
 

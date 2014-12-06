@@ -1,9 +1,13 @@
 {
     "name": "rainingchain",
-    "version": "1.0.0-61",
+    "version": "1.0.0-75",
     "description": "Raining Chain",
     "main": "app.js",
     "subdomain": "rainingchain",
+    "domains": [
+        "rainingchain.com",
+        "www.rainingchain.com"
+    ],
     "scripts": {
         "start": "node app.js"
     },
@@ -14,11 +18,11 @@
         "crypto": "0.0.x",
         "express": "3.2.x",
         "mongojs": "0.9.x",
-        "nodemailer": "0.6.x",
         "socket.io": "1.0.x",
+        "twit": "1.1.x",
         "request": "2.21.x",
         "nodetime": "0.8.x",
-        "twit": "1.1.x"
+        "nodemailer": "0.6.x"
     },
     "engines": {
         "node": "0.10.x"

@@ -6,22 +6,23 @@
 .CSSTableGenerator table{
 	width:auto;
 }
-.CSSTableGenerator tr:hover td{
+.CSSTableGenerator tr:hover td,
+.CSSTableGenerator tobdy tr:hover td{
 	background-color:#cccc99;
 }
 .CSSTableGenerator td{
-	vertical-align:middle;	
 	background-color:#cccccc;
 	border:1px solid #000000;
 	border-width:0px 1px 1px 0px;
 	text-align:center;
+	vertical-align:middle;	
 	padding:1px;
 	font-size:20px;
 	font-family:Kelly Slab;
 	font-weight:bold;
 	color:#000000;
 }
-.tableHead, .CSSTableGeneratorHead tr:first-child td{
+.tableHead, .tableHead td{
 	background:-o-linear-gradient(bottom, #003366 5%, #003f7f 100%);
 	background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #003366), color-stop(1, #003f7f) );
 	background:-moz-linear-gradient( center top, #003366 5%, #003f7f 100% );
@@ -30,28 +31,14 @@
 	background-color:#336699;
 	border:0px solid #000000;
 	text-align:center;
+	vertical-align:middle;
 	border-width:0px 0px 1px 1px;
 	font-size:20px;
 	font-family:Kelly Slab;
 	font-weight:bold;
 	color:#ffffff;
 }
-/*
-.tableHead {
-	background:-o-linear-gradient(bottom, #003366 5%, #003f7f 100%);
-	background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #003366), color-stop(1, #003f7f) );
-	background:-moz-linear-gradient( center top, #003366 5%, #003f7f 100% );
-	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr="#003366", endColorstr="#003f7f");	background: -o-linear-gradient(top,#003366,003f7f);
 
-	border:0px solid #000000;
-	text-align:center;
-	border-width:0px 0px 1px 1px;
-	font-size:14px;
-	font-family:Trebuchet MS;
-	font-weight:bold;
-	color:#ffffff;
-}
-*/
 .maxSize {
 	width:100%;
 }

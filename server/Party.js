@@ -1,83 +1,121 @@
 //LICENSED CODE BY SAMUEL MAGNAN FOR RAININGCHAIN.COM, LICENSE INFORMATION AT GITHUB.COM/RAININGCHAIN/RAININGCHAIN
-eval(loadDependency(['List','Chat'],['Party']));
+eval(loadDependency(['Main','Message','Actor'],['Party']));
 
-var Party = exports.Party = {};
-
-Party.template = function(){
-	return {
+var Party = exports.Party = function(id){
+	var tmp = {
+		id:id,
+		quest:null,
+		leader:null,
 		list:{},
-		leader:'',	
-	}
+		maxSize:100,
+		quest:null,
+	};
+	LIST[id] = tmp;
+	return tmp;
 }
+var LIST = Party.LIST = {};
 
-Party.join = function(act,name){
-	Party.leave(act);
-	
-	act.party = name;
-	
-	if(!List.party[name]) Party.creation(act,name);
-	
-	if(Party.testQuest(act,name) === false){
-		Chat.add(act.id,"You can't join this party because one of more players do not share the same active quest than you. Abandon your active quest or make sure they are doing the same than yours. You have been moved in a temporary party instead.");
-		name = '!TEMP-' + act.name;
-		Party.creation(act,name);
-		act.party = name;
-	}
-	
-	for(var i in List.party[name].list){
-		if(i !== act.id) Chat.add(i,act.name + ' joined your party.');
-		List.all[i].flag.party = 1;
-	}
-	
-	List.party[name].list[act.id] = act.id;	
-	
-	
-	Chat.add(act.id, 'You are now in party "' + name + '".');
-}
-
-Party.leave = function(act){
-	var party = List.party[act.party];
-	if(!party || !party.list){ return; }	//normal if player loggin in
-	
-	delete party.list[act.id];
-
-	if(party.list.$length() === 0){ delete List.party[act.party]; return; }
-		
-	if(party.leader === act.id){
-		party.leader = party.list.randomAttribute();
-		for(var i in party.list)	Chat.add(i,"Your new party leader is " + List.all[party.leader].name + '.');
-	}
-
+Party.remove = function(party){
 	for(var i in party.list)
-		act.flag.party = 1;
-	
-	act.flag.party = 1;
+		Main.leaveParty(Main.get(i));	//true to prevent infinite loop
+	delete LIST[party.id];
 }
 
 
+Party.getKeyList = function(party){
+	return Object.keys(party.list);
+}
+Party.setQuest = function(party,quest){
+	party.quest = quest;
+}
 
-Party.testQuest = function(act,name,questid){	//return true if OK
-	name = name || act.party;
-	var quest = questid || List.main[act.id].questActive;
-	if(!quest) return true;
+Party.get = function(id){
+	return LIST[id];
+}
+
+Party.addPlayer = function(party,key,name){
+	party.list[key] = name;
+	if(!party.leader) Party.changeLeader(party,key,false);
+	Party.addMessage(party,name.q() + ' has joined the party.');
+	Party.setFlagForAll(party);
+}
+
+Party.removePlayer = function(party,key){
+	var name = party.list[key];
+	delete party.list[key];
+	Main.setFlag(Main.get(key),'party');
+	if(party.list.$isEmpty())
+		return Party.remove(party);
+	Party.addMessage(party,name.q() + ' left the party.');
+	if(party.leader === key)
+		Party.changeLeader(party,party.list.$keys()[0]);
+	Party.setFlagForAll(party);
+}
+Party.changeLeader = function(party,key,message){
+	if(!party.list[key]) return ERROR(3,'leader not in party');
 	
-	for(var i in List.party[name].list){
-		if(List.main[i].questActive && List.main[i].questActive !== quest) 
-			return false
+	party.leader = key;
+	if(message !== false) Party.addMessage(party,'Your new party leader is ' + Main.get(key).username.q() + '.');
+	Party.setFlagForAll(party);
+	
+}
+Party.addMessage = function(party,str,toexclude){
+	for(var i in party.list){
+		if(toexclude !== i)
+			Main.addMessage(Main.get(i),str);
 	}
+}
+Party.setFlagForAll = function(party){
+	for(var i in party.list){
+		var main = Main.get(i);
+		Main.setFlag(main,'party');
+		main.party = Main.Party(party);
+	}
+}
+
+
+Party.getViaMain = function(main){
+	return Main.getParty(main);
+}
+
+Party.isLeader = function(partyOrKey,key){	//accept
+	if(!key) key = partyOrKey;
+	return Party.getLeader(partyOrKey) === key;
+}	
+Party.getLeader = function(party){
+	var p = typeof party === 'string' ? Party.getViaMain(Main.get(party)) : party;
+	return p.leader;
+}	
+
+Party.getForEach = function(party,func){
+	for(var i in party.list)
+		if(!func(i)) return false;
 	return true;
+
+}
+Party.getSize = function(party){
+	return party.list.$length();
 }
 
-Party.creation = function(act,name){
-	List.party[name] = {
-		'leader':act.id,
-		'id':name,
-		'list':{
-			
-		
-		}	
+
+Party.forEach = function(party,func,type){
+	var bool;
+	if(type === 'or'){
+		for(var i in party.list)
+			bool = bool || func(i);
+	}	
+	if(type === 'and'){
+		bool = true;
+		for(var i in party.list)
+			bool = bool && func(i);
+	}	
+	if(!type){
+		for(var i in party.list)
+			bool = func(i);
 	}
-	List.party[name].list[act.id] = act.id;
+	return bool;
 }
+
+
 
 

@@ -38,7 +38,9 @@
 	position:relative;
 	top:1px;
 }
-
+.myButton.skinny {
+	padding:2px 3px;
+}
 
 
 
