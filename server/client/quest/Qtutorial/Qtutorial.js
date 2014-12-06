@@ -1,5 +1,5 @@
 eval(loadDependency(["Actor","Debug"]));
-//11/29/2014 5:04 PM
+//12/06/2014 1:51 AM
 /*jslint node: true, undef:true, sub:true, asi:true, funcscope:true, forin:true, unused:false*//*global True, False, loadAPI*/
 /*Go to http://jshint.com/ and copy paste your code to spot syntax errors.*/
 
@@ -75,7 +75,6 @@ s.newEvent('_start',function(key){ //
 		s.setTimeout(key,function(){
 			s.callEvent('skipTutorial',key);
 		},25*2);
-	
 });
 s.newEvent('_debugSignIn',function(key){ //
 	s.callEvent('_signIn',key);
@@ -125,8 +124,6 @@ s.newEvent('_complete',function(key){ //
 			s.setHUD(key,'tab-feedback','normal');
 		})
 	},25*60*2);
-	
-	
 });
 s.newEvent('updateHUD',function(key){ //
 	s.setHUD(key,'tab-equip','invisible');
@@ -315,8 +312,8 @@ s.newDialogue('ringo','Ringo','villager-male.0',[ //{
 s.newNpc('boss',{
 	name:"Dragon Boss",
 	hp:10000,
+	nevermove:True,
 	boss:s.newNpc.boss('dragon'),
-	nevermove:true,
 	sprite:s.newNpc.sprite('dragonKing',1.2),
 	moveRange:s.newNpc.moveRange(3.5,3),
 	targetSetting:s.newNpc.targetSetting(10,50,90)

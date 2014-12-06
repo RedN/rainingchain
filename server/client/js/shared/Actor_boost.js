@@ -154,8 +154,8 @@ Actor.permBoost.update = function(act){
 	
 	Actor.boost.update(act);
 	
-	for(var j in act.statCustom){ 
-		Stat.get(j).customFunc(act.boost,act.statCustom[j],act);
+	for(var j in act.bonus.statCustom){ 
+		Stat.get(j).customFunc(act.boost,act.bonus.statCustom[j],act);
 	}	
 	
 	Actor.setFlag(act,'permBoost');

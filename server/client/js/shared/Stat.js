@@ -236,11 +236,10 @@ var initStat = function(){	//global in client...
 		var s = list[i];
 		var id = 'Qsystem-player-' + s[0];	//ability id
 		Stat(id,s[1],'Grant ability ' + s[1],s[2],
-			['statCustom',id],Stat.Value({base:0}),true,funcGenerator(id),false);
+			['bonus','statCustom',id],Stat.Value({base:0}),true,funcGenerator(id),false);
 	}
 		
 	initStat.actorBonus();
-	initStat.actorStatCustom();
 	initStat.actorBoostList();
 };
 
@@ -267,17 +266,6 @@ initStat.actorBoostList = function(){
 	
 }
 	
-initStat.actorStatCustom = function(){
-	//generate bonus attribute for Actor
-	var info = {};
-	
-	for(var i in DB){
-		if(DB[i].path[0] === 'statCustom'){
-			info[DB[i].path[1]] = 0;	//wtf
-		}
-	}
-	Stat.actorStatCustom = new Function('return ' + Tk.stringify(info));
-}
 	
 initStat.actorBonus = function(){
 	//generate bonus attribute for Actor

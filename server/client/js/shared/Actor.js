@@ -53,7 +53,6 @@ var Actor = exports.Actor = function(modelId,extra){
 		equip:Actor.Equip(),
 
 		status:Actor.Status(),
-		statCustom:Actor.StatCustom(),
 		bonus:Actor.Bonus(),	//Bonus applies on top of ability attack. If effect not on ability, do nothing.
 		
 		viewedIf:'true', //condition to see. check viewedIfList
@@ -204,9 +203,6 @@ Actor.MagicFind = function(quantity,quality,rarity){
 }
 
 //###############
-Actor.StatCustom = function(){
-	return Stat.actorStatCustom();
-}
 
 Actor.Bonus = function(){
 	return Stat.actorBonus();
