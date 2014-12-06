@@ -1,120 +1,71 @@
 //LICENSED CODE BY SAMUEL MAGNAN FOR RAININGCHAIN.COM, LICENSE INFORMATION AT GITHUB.COM/RAININGCHAIN/RAININGCHAIN
-eval(loadDependency(['Db','Init'],['Song']));
 
-Init.db.song = function(){
-	Db.song = {	
-		
-		'carol_of_the_balls':{
-			'link':'http://www.newgrounds.com/audio/listen/561212',
-			'permission':true,
-			'author':{
-				'name':'Evil-Dog',
-			}
-		},
-		'crimson_crisis':{
-			'link':'http://www.newgrounds.com/audio/listen/556797',
-			'permission':true,
-			'author':{
-				'name':'Darknessbreaker',
-			}
-		},
-		
-		/*'dark_war':{
-			'link':'http://www.newgrounds.com/audio/listen/564123',
-			'permission':true,
-			'author':{
-				'name':'Steve Syz',
-				'newgroundsName':'DesideratumOfficial',
-			},
-			'tag':['epic'],
-		},*/
-		'digital_insanity':{
-			'link':'http://www.newgrounds.com/audio/listen/517360',
-			'permission':true,
-			'author':{
-				'name':'DJM4C',
-			}
-		},
-		
-		'final_battle':{
-			'link':'http://www.newgrounds.com/audio/listen/546497',
-			'permission':true,
-			'author':{
-				'name':'K-Pone',
-			}
-		},
-		
-		'jur':{
-			'link':'http://www.newgrounds.com/audio/listen/488195',
-			'permission':true,
-			'author':{
-				'name':'3kliksphilip',
-			}
-		},
-		'super_gourmet_race':{
-			'link':'http://www.newgrounds.com/audio/listen/540968',
-			'permission':true,
-			'author':{
-				'name':'MiguelVolkov',
-			}
-		},
-		
-		'game_it_all_day':{
-			'link':'http://www.newgrounds.com/audio/listen/476685',
-			'permission':true,
-			'author':{
-				'name':'Getcheffy',
-			}
-		},
+(function(){ //}
+Song = function(id,src,author,link,name,volume){
+	var tmp = {
+		id:id,
+		src:'music/song/' + src,
+		audio:new Audio(),
+		name:name || id.replaceAll('_',' ').capitalize() ,
+		link:link || '',
+		author:author || '',
 	}
-	//forest http://www.newgrounds.com/audio/listen/483912
-	//http://www.newgrounds.com/audio/listen/568699
-	
-	
-	
-	for(var i in Db.song){
-		var s = Db.song[i];
-		
-		var tmp = {};
-		tmp.song = new Audio();
-		tmp.song.src = s.src ? 'music/song/' + s.src : 'music/song/' + i + '.mp3';
-		tmp.song.volume = s.volume || 1;
-		tmp.song.addEventListener("ended", Song.ended);
-		tmp.name = s.name || i.replaceAll('_',' ').capitalize();
-		tmp.id = i;
-		tmp.link = s.link;
-		tmp.author = s.author;
-		tmp.author.link = s.author.link || s.author.name + '.newgrounds.com';
-		Db.song[i] = tmp;
-	}
-}
+	tmp.audio.src = tmp.src;
+	tmp.audio.volume = volume || 1;
+	tmp.audio.addEventListener("ended", Song.ended);
+	DB[id] = tmp;
+};
+var DB = Song.DB = {};
+Song('carol_of_the_balls','carol_of_the_balls.mp3','Evil-Dog','http://www.newgrounds.com/audio/listen/561212');
+Song('crimson_crisis','crimson_crisis.mp3','Darknessbreaker','http://www.newgrounds.com/audio/listen/556797');
+Song('digital_insanity','digital_insanity.mp3','DJM4C','http://www.newgrounds.com/audio/listen/517360');
+Song('final_battle','final_battle.mp3','K-Pone','http://www.newgrounds.com/audio/listen/546497');
+Song('jur','jur.mp3','3kliksphilip','http://www.newgrounds.com/audio/listen/488195');
+Song('super_gourmet_race','super_gourmet_race.mp3','MiguelVolkov','http://www.newgrounds.com/audio/listen/540968');
+Song('game_it_all_day','game_it_all_day.mp3','Getcheffy','http://www.newgrounds.com/audio/listen/476685');
 
-Song = {};
-Song.play = function(song,volume){
-	var id = song.name || song;
-	var vol = song.volume || volume || 1;
+
+//forest http://www.newgrounds.com/audio/listen/483912
+//http://www.newgrounds.com/audio/listen/568699
+	
+Song.play = function(id,volume){
+	var song = DB[id];
+	var vol = volume || 1;
 	vol *= main.pref.volumeSong/100 * main.pref.volumeMaster/100;
 	
-	var song = Db.song[song];
-	var audio = song.song;
-	//audio.currentTime = audio.duration - 100;	//not sure
+	var audio = song.audio;
 	audio.volume = 0;
-	if(Song.beingPlayed) Song.beingPlayed.song.pause();
-	Song.beingPlayed = song;
+	if(Song.BEING_PLAYED) Song.BEING_PLAYED.audio.pause();
+	Song.BEING_PLAYED = song;
 	
 	$(audio).animate({volume: vol}, 5000);
-	audio.play();
+	audio.play();	
 }
 
 
 Song.ended = function(){
-	do { var next = Object.keys(Db.song).random();
-	} while(next === Song.beingPlayed.id)
+	do { var next = Object.keys(DB).random();
+	} while(next === Song.BEING_PLAYED.id)
 	Song.play(next);	
 }
+Song.getSongBeingPlayed = function(){
+	return Song.BEING_PLAYED;
+}	
+Song.BEING_PLAYED = null;
 
-Song.beingPlayed = null;
+Song.updateVolume = function(){
+	if(Song.BEING_PLAYED)
+		Song.BEING_PLAYED.audio.volume = main.pref.volumeSong/100 * main.pref.volumeMaster/100;
+}
+Song.getCurrentSongInfo = function(){
+	if(!Song.BEING_PLAYED) return 'No song being played...';
+	return '<a style="color:cyan;text-decoration:underline;" target="_blank" href="' + Song.BEING_PLAYED.link + '">\"' + Song.BEING_PLAYED.name + '\"</a> by ' + Song.BEING_PLAYED.author;
+}
 
+Song.playRandom = function(){
+	Song.play(Object.keys(DB).random());
+}
 
+})();
 
 

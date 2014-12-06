@@ -1,907 +1,486 @@
 //LICENSED CODE BY SAMUEL MAGNAN FOR RAININGCHAIN.COM, LICENSE INFORMATION AT GITHUB.COM/RAININGCHAIN/RAININGCHAIN
-eval(loadDependency(['Db','List','Actor','Contribution','Party','Itemlist','Clan','Sign','Chat','Main','Tk','Dialogue','Craft','Quest','requireDb'],['Command']));
-if(SERVER) var db = requireDb();
+eval(loadDependency(['Actor','Equip','OptionList','Server','Contribution','ItemList','Highscore','Clan','Challenge','Sign','Social','Message','Main','Dialogue','Quest'],['Command']));
+if(!SERVER) eval('var Command');
 
-//List of functions that the client can use.
-var Command = exports.Command = {};
-Command.list = {};
+//quests needed to be loaded first via D b.quest.$keys() for Command.Param.quest
 
-Command.receive = function(socket,d){	//server	d:{cmd,param:[]}
-	d = Command.receive.verifyInput(d);
-	if(!d) return;
-	d.param.unshift(socket.key);	
+(function(){ //}
+
+Command = exports.Command = function(id,description,help,param,func,clientSide){
+	if(DB[id]) return ERROR(2,'id already taken',id);
+	var tmp = {
+		id:id || ERROR(3,'id missing'),
+		description:description || '',
+		help:!!help,
+		param:param || [],
+		func:func || ERROR(3,'func missing'),
+		clientSide:!!clientSide
+	}
+	DB[id] = tmp;
+};
+var DB = Command.DB = {};
+
+Command.Param = function(type,name,optional,extra){
+	var tmp = {
+		type:type,
+		visibleType:Command.Param.CONVERT[type],
+		name:name || '',
+		optional:!!optional,	
+		whiteList:null,	//[]
+		default:null,
+		min:0,
+		max:CST.bigInt,
+		noEmptyString:true,
+	};
+	for(var i in extra) tmp[i] = extra[i];
+	return tmp;
+}
+
+Command.Param.CONVERT = {string:'Letters',number:'Number'};
+
+Command.Param.mouse = function(){
+	return Command.Param('string','Mouse Button',false,{whiteList:['left','right','shiftLeft','shiftRight']});
+}
+
+Command.Query = function(func,param){
+	return {
+		func:func,
+		param:param,	
+	}
+}
+
+Command.init = function(){
+	Dialog.UI('command',{	
+		position:'absolute',
+		left:100,
+		top:CST.HEIGHT-300,
+		height:'auto',
+		width:'auto',
+		zIndex:Dialog.ZINDEX.HIGH,
+		font:'1.5em Kelly Slab',
+		border:'2px solid black',
+		lineHeight:'100%',
+		whiteSpace:'nowrap',
+		padding:'3px',
+		backgroundColor:'white',
+	},function(html,variable){
+		var text = Dialog.chat.getInput();
+		if(text[0] !== '$')	return false;	//setTimeout cuz called before keydown
+		
+		var txt = text.slice(1);
+		for(var i in DB){
+			if(!txt.have(i)) continue;
+			var cmd = DB[i];	//a match!
+			var str = cmd.description;
+			for(var j in cmd.param){
+				str += '<br>@param' + j + ' ' + cmd.param[j].name + ' [' + cmd.param[j].type + ']';
+				if(cmd.param[j].optional) str += ' -Optional'
+			}
+			html.html(str);
+			return;	
+		}
+		return false;	//no command matches $command
+	});
+}
+
+//############
+
+Command.receive = function(socket,d){	//server	d=Command.Query
+	var info = Command.receive.verifyInput(d);
+	if(typeof info === 'string') return Message.add(socket.key,info);	//aka error
+	info.param.unshift(socket.key);	
 	
-	Command.list[d.cmd].apply(this,d.param);
+	DB[info.func].func.apply(this,info.param);
 }
 
 Command.receive.verifyInput = function(d){
-	d.cmd = escape.quote(d.cmd);
-	if(Command.client.have(d.cmd) || !Command.list[d.cmd] || !Array.isArray(d.param)) return null;
+	var cmd = DB[d.func];
+	if(!cmd) return 'invalid func';
+	if(cmd.clientSide) return 'clientside func';
 	
 	var p = d.param;
-	var doc = Command.list[d.cmd].doc.param;
-		
-	for(var i = 0 ; i< p.length && i < doc.length; i++){ 
-		p[i] = escape.quote(p[i]); 
-		
-		if(p[i] === undefined && !doc[i].optional) return null;
-		
-		if(p[i] !== undefined && doc[i].type === 'Number'){
-			p[i] = Math.round(+p[i]).mm(doc[i].min || 0,doc[i].max);
-			if(isNaN(p[i])) return null;
+	var doc = cmd.param;
+	
+	for(var i = 0 ; i < p.length && i < doc.length; i++){ 
+		if(p[i] !== undefined && doc[i].type === 'number'){
+			if(typeof p[i] !== 'number') return 'param' + i + ' is not number'; 
+			p[i] = Math.round(p[i]).mm(doc[i].min,doc[i].max);
 		}	
 
-		if(p[i] !== undefined && doc[i].type === 'Letters'){
-			if(doc[i].whiteList && !doc[i].whiteList.have(p[i])) return null;
-			if(doc[i].blackList && doc[i].blackList.have(p[i])) return null;
+		if(p[i] !== undefined && doc[i].type === 'string'){
+			if(typeof p[i] !== 'string') return 'param' + i + ' is not string'; 
+			
+			if(doc[i].whiteList && !doc[i].whiteList.have(p[i])) return 'param' + i + ' not part of whiteList';
 		}
 	}
 	for(++i;i < doc.length; i++){
-		if(!doc[i].optional) return null;
-		if(doc[i].default) p[i] = doc[i].default;
-	} 
+		if(!doc[i].optional) return 'missing non-optional param';
+		if(doc[i].default != null) p[i] = doc[i].default;
+	}
 	
 	return d;
 }
 
-Command.send = function(text){
-	var pack = Command.send.parse(text);
-	if(pack) socket.emit('Command.send',pack); 
-	if(pack === false) Chat.add('Invalid Command Name.');
-}
-
-Command.send.parse = function(txt){
-	for(var i in Command.list){
-		if(txt.indexOf(i) === 0){	//valid cmd
-			var cmd = i;
-			var param = txt.slice(i.length+1).split(',');
-			
-			if(Command.client.have(cmd)){ 
-				Tk.applyFunc(Command.list[cmd],param);				
-				return null;
-			}
-			return {'cmd':cmd,'param':param};
-		}		
+Command.textToCommand = function(txt){
+	for(var i in DB){
+		if(txt.indexOf(i) !== 0) continue	//valid cmd
+		var cmd = i;
+		var param = txt.slice(i.length+1).split(',');
+		for(var j in param)
+			if(DB[i].param[j] && DB[i].param[j].type === 'number') param[i] = +param[i];
+		return Command.Query(cmd,param);
 	}
-	return false;
+	return null;
 }
 
-//{Fl
-Command.list['fl,add'] = function(key,user,nick,comment,color){
-	nick = nick || user;
-	comment = comment || '';
-	color = color || 'cyan';
-	if(user === List.all[key].name) return Chat.add(key,"You are either bored or very lonely for trying this.");
+Command.execute = function(func,param){
+	if(func.func && func.param){ param = func.param; func = func.func; }	//aka if func is Command.Query
+	param = param || [];
+	if(!DB[func]) return ERROR(3,'invalid func',func);
+	if(DB[func].clientSide) return DB[func].func.apply(this,param);
+	Socket.emit('Command.execute',Command.Query(func,param));
+}
+
+
+
+//############
+//############
+
+//Fl
+Command('fl,add','Add a new Friend to your Friend List',true,[ //{
+	Command.Param('string','Username to add',false),
+	Command.Param('string','Nickname',true),
+	Command.Param('string','Comment',true),
+],function(key,user,nick,comment){
+	if(user.length === 0) return;
+	Main.addFriend(Main.get(key),user,nick,comment);
+}); //}
+Command('fl,remove','Remove a Friend',true,[ //{
+	Command.Param('string','Username to remove',false),
+],function(key,user){
+	Main.removeFriend(Main.get(key),user);
+}); //}
+Command('fl,comment','Change Friend Comment',true,[ //{
+	Command.Param('string','Username',false),
+	Command.Param('string','Comment',false),
+],function(key,user,comment){
+	Main.social.changeFriendComment(Main.get(key),user,comment);
 	
-	var list = List.main[key].social.list;
-	if(list.friend[user]) return Chat.add(key,"This player is already in your Friend List."); 
-	if(list.mute[user]) return Chat.add(key,"This player is in your Mute List.");
+}); //}
+Command('fl,nick','Set Nickname for a friend',true,[ //{
+	Command.Param('string','Username',false),
+	Command.Param('string','Nickname',false),
+],function(key,user,nick){
+	Main.social.changeFriendNick(Main.get(key),user,nick);
+}); //}
+Command('fl,pm','Change who can PM you right now.',true,[ //{
+	Command.Param('string','Option (on,off or friend)',false,{whiteList:['on','off','friend']}),
+],function(key,setting){
+	Main.changeStatus(Main.get(key),setting);
+}); //}
+Command('mute',"Mute a player.",true,[ //{
+	Command.Param('string','Username',false),
+],function(key,user){
+	Main.mutePlayer(Main.get(key),user);
+}); //}
+Command('unmute',"Unmute a player.",true,[ //{
+	Command.Param('string','Username',false),
+],function(key,user){
+	Main.unmutePlayer(Main.get(key),user);
+}); //}
+
+//Window
+Command('win,bank,click',"Withdraw Items from Bank.",false,[ //{
+	Command.Param.mouse(),
+	Command.Param('number','Slot',false,{max:255}),
+	Command.Param('number','Amount to withdraw',true,{default:1}),
+],function(key,side,slot,amount){
+	var m = Main.get(key);
+	Main.clickBank(m,side,slot,amount);
+}); //}
+
+
+Command('win,quest,toggleChallenge',"Toggle a Quest Challenge. Only possible before starting the quest.",false,[ //{
+	Command.Param('string','Challenge Id',false),
+],function(key,challenge){
+	Challenge.toggle(Challenge.get(challenge),Main.get(key));
+}); //}
+Command('win,quest,start',"Start a quest.",false,[ //{
+	Command.Param('string','Quest Id',false),
+],function(key,qid){
+	Main.startQuest(Main.get(key),qid);
+}); //}
+Command('win,quest,abandon',"Abandon a quest.",false,[ //{
+	Command.Param('string','Quest Id',false),
+],function(key){
+	Main.abandonQuest(Main.get(key));
+}); //}
+Command('win,reputation,add',"Select a Reputation",false,[ //{
+	Command.Param('number','Page',false,{max:1}),
+	Command.Param('number','Y',false,{max:14}),
+	Command.Param('number','X',false,{max:14}),
+],function(key,num,i,j){	
+	if(Main.getQuestActive(Main.get(key)) !== null) 
+		return Message.add(key,'Finish the quest you\'re doing before modifying your Reputation.');
+	Main.reputation.add(Main.get(key),num,i,j);
+}); //}
+Command('win,reputation,remove',"Remove a Reputation",false,[ //{
+	Command.Param('number','Page',false,{max:1}),
+	Command.Param('number','Y',false,{max:14}),
+	Command.Param('number','X',false,{max:14}),
+],function(key,num,i,j){
+	if(Main.getQuestActive(Main.get(key)) !== null) 
+		return Message.add(key,'Finish the quest you\'re doing before modifying your Reputation.');
+	Main.reputation.remove(Main.get(key),num,i,j);
+}); //}
+Command('win,reputation,page',"Change Active Reputation Page",false,[ //{
+	Command.Param('number','Page',false,{max:1}),
+],function(key,num){
+	if(Main.getQuestActive(Main.get(key)) !== null) 
+		return Message.add(key,'Finish the quest you\'re doing before modifying your Reputation.');
+	Main.reputation.changeActivePage(Main.get(key),num);
+}); //}
+Command('win,ability,swap',"Set an Ability to a Key",false,[ //{
+	Command.Param('string','Ability Id',false),
+	Command.Param('number','Key Position',false,{max:5}),
+],function(key,name,position){
+	Actor.ability.swap(Actor.get(key),name,position,true);
+}); //}
+
+
+//Tab
+Command('useItem',"Select an option from the Right-Click Option List of an item.",false,[ //{
+	Command.Param('string','Id',false),
+	Command.Param('number','Option Position',false),
+],function(key,id,slot){
+	Main.useItem(Main.get(key),id,slot);
+}); //}
+
+Command('transferInvBank',"Transfer items from Inventory to Bank.",false,[ //{
+	Command.Param('string','Item Id',false),
+	Command.Param('number','Amount',true,{default:1,min:1}),
+],function(key,id,amount){
+	Main.transferInvBank(Main.get(key),id,amount);
+}); //}
+
+Command('transferBankInv',"Transfer items from Bank to Inventory.",false,[ //{
+	Command.Param('string','Item Id',false),
+	Command.Param('number','Amount',true,{default:1,min:1}),
+],function(key,id,amount){
+	Main.transferBankInv(Main.get(key),id,amount);
+}); //}
+
+//############
+
+Command('equipBound',"Bound an equip to you.",false,[ //{
+	Command.Param('string','Equip Id',false),
+],function(key,id){
+	Main.question(Main.get(key),function(){
+		Equip.boundToAccount(key,id);
+	},'Are you sure? You won\'t be able to trade the equip afterward.','boolean');
 	
+}); //}
+
+Command('equipUpgrade',"Upgrade an equip.",false,[ //{
+	Command.Param('string','Equip Id',false),
+],function(key,id){
+	Main.question(Main.get(key),function(){
+		Equip.upgrade.click(key,id);
+	},'Are you sure you want to upgrade the equip?','boolean');
 	
-	db.findOne('account',{username:user},function(err, res) {
-		if(res){
-			List.main[key].social.list.friend[user] = {'nick':nick,'comment':comment, 'color':color};
-			Chat.add(key,"Friend added.");
-			List.main[key].flag['social,list,friend'] = 1;
-		}
-		else Chat.add(key,"This player doesn't exist.");
-	});
-}
-Command.list['fl,add'].doc = {
-	'description':'Add a new Friend to your Friend List',
-	'help':1,'param':[
-		{type:'Letters',name:'Username to add',optional:0},
-		{type:'Letters',name:'Set Nickname',optional:1},
-		{type:'Letters',name:'Set Comment',optional:1},
-		{type:'Letters',name:'Set PM Color',optional:1},
-	],
-}
-Command.list['fl,remove'] = function(key,user){
-	if(List.main[key].social.list.friend[user]){
-		delete List.main[key].social.list.friend[user]
-		Chat.add(key, 'Friend deleted.');
-		List.main[key].flag['social,list,friend'] = 1;
-	} else Chat.add(key, 'This player is not in your Friend List.');
-}
-Command.list['fl,remove'].doc = {
-	'description':'Remove a Friend',
-	'help':1,'param':[
-		{type:'Letters',name:'Username to remove',optional:0},
-	],
-}
+}); //}
 
-Command.list['fl,comment'] = function(key,user,comment){
-	if(List.main[key].social.list.friend[user]){
-		List.main[key].social.list.friend[user].comment = comment;
-		Chat.add(key, 'Friend Comment changed.');
-	} else Chat.add(key, 'This player is not in your Friend List.');
-}
-Command.list['fl,comment'].doc = {
-	'description':'Set Comment of a friend',
-	'help':1,'param':[
-		{type:'Letters',name:'Username',optional:0},
-		{type:'Letters',name:'Comment',optional:0},
-	],
-}
-
-Command.list['fl,nick'] = function(key,user,nick){
-	if(List.main[key].social.list.friend[user]){
-		List.main[key].social.list.friend[user].nick = nick;
-		Chat.add(key, 'Friend Nick changed.');
-	} else Chat.add(key, 'This player is not in your Friend List.');
-}
-Command.list['fl,nick'].doc = {
-	'description':'Set Nickname for a friend',
-	'help':1,'param':[
-		{type:'Letters',name:'Username',optional:0},
-		{type:'Letters',name:'Nickname',optional:0},
-	],
-}
-
-
-Command.list['fl,pm'] = function(key,setting){
-	var possible = ['on','off','friend'];
-	if(possible.have(setting)){
-		List.main[key].social.status = setting;
-		Chat.add(key, "Private Setting changed to " + setting + '.');
-	} else {
-		Chat.add(key, "Wrong Private Setting. Use one of the following: " + possible.toString() + '.');
-	}
-}
-Command.list['fl,pm'].doc = {
-	'description':'Change who can PM you right now.',
-	'help':1,'param':[
-		{type:'Letters',name:'Option (on,off or friend)',optional:0},
-	],
-}
-
-Command.list['fl,offlinepm'] = function(key,to,text){
-	Chat.receive({key:key,to:to,from:List.all[key].name,type:'offlinepm',text:text});
-}
-
-Command.list['fl,offlinepm'].doc = {
-	'description':"Send a PM to a player who isn't online right now.",
-	'help':1,'param':[
-		{type:'Letters',name:'Username',optional:0},
-		{type:'Letters',name:'Message',optional:0},
-	],
-}
-
-Command.list['mute'] = function(key,user){
-	if(user === List.all[key].name) return Chat.add(key,"-.- Seriously?");
+Command('equipMastery',"Improve an equip.",false,[ //{
+	Command.Param('string','Equip Id',false),
+],function(key,id){
+	Main.question(Main.get(key),function(key,num){
+		num = +num;
+		if(isNaN(num)) return Message.add(key,'Not a number');
+		Equip.addMasteryExp(key,id,num);
+	},'How many points do you want to invest?','number');
 	
-	if(List.main[key].social.list.friend[user]) return Chat.add(key,"This player is in your Friend List.");
-	if(List.main[key].social.list.mute[user]) return Chat.add(key,"This player is alraedy in your Mute List.");
-		
-	db.findOne('account',{username:user},function(err, res) {
-		if(res){
-			List.main[key].social.list.mute[user] = {};
-			Chat.add(key,"Player muted.");
-			List.main[key].flag['social,list,mute'] = 1;
-		}
-		else Chat.add(key,"This player doesn't exist.");
-	});
-}
-Command.list['mute'].doc = {
-	'description':"Mute a player.",
-	'help':1,'param':[
-		{type:'Letters',name:'Username',optional:0},
-	],
-}
+}); //}
 
-Command.list['unmute'] = function(key,user){
-	if(List.main[key].social.list.mute[user]){
-		delete List.main[key].social.list.mute[user]
-		Chat.add(key, 'Player unmuted.');
-		List.main[key].flag['social,list,mute'] = 1;
-	} else Chat.add(key, 'This player is not in your Mute List.');
-}
-Command.list['unmute'].doc = {
-	'description':"Unmute a player.",
-	'help':1,'param':[
-		{type:'Letters',name:'Username',optional:0},
-	],
-}
+//############
 
-//}
+Command('tab,removeEquip',"Remove a piece of equipment",false,[ //{
+	Command.Param('string','Equipement Piece',false,{whiteList:CST.equip.piece}),
+],function(key,piece){
+	Actor.removeEquip(Actor.get(key),piece,false);
+}); //}
 
-//{Window
-Command.list['win,close'] = function(key){
-	Main.closeAllWindow(List.main[key]); 
-}
-Command.list['win,close'].doc = {
-	'description':"Close the window.",
-	'help':0,'param':[
-		
-	],
-}
-Command.list['win,open'] = function(key,win,param0){
-	if(win === 'quest' && !Db.quest[param0]) return Chat.add(key,'Wrong Input');
-	if(win === 'highscore' && !Db.highscore[param0]) return Chat.add(key,'Wrong Input');
-	
-	Main.openWindow(List.main[key],win,param0);
-}
-Command.list['win,open'].doc = {
-	'description':"Open a window.",
-	'help':0,'param':[
-		{type:'Letters',name:'Window Name',optional:0,whiteList:['highscore','passive','quest','offensive','defensive','ability','binding']},
-		{type:'Letters',name:'Parameter',optional:1},
-	],
-}
+/*
+Command('cc,create',"Create a new Clan",true,[ //{
+	Command.Param('string','Clan Name',false),
+],function(key,name){
+	Clan.creation(key,name);
+}); //}
+Command('cc,enter',"Enter a Clan",true,[ //{
+	Command.Param('string','Clan Name',false),
+],function(key,name){
+	Clan.enter(key,name);
+}); //}
 
-Command.list['win,bank,click'] = function(key,side,slot,amount){
-	var m = List.main[key];
-	if(!m.windowList.bank){ Chat.add(key,'Access denied.'); return;}
-	Itemlist.click.bank(m.bankList,side,+slot,amount);
-}
-Command.list['win,bank,click'].doc = {
-	'description':"Withdraw Items from Bank.",
-	'help':0,'param':[
-		{type:'Letters',name:'Mouse Button',optional:0,whiteList:['left','right','shiftLeft','shiftRight']},
-		{type:'Number',name:'Bank Slot',optional:0,max:255},
-		{type:'Number',name:'Amount to withdraw',optional:1,default:1},
-	],
-}
+Command('cc,leave',"Leave a Clan",true,[ //{
+	Command.Param('string','Clan Name',false),
+],function(key,name){
+	Clan.leave(key,name);
+}); //}
 
-Command.list['win,trade,click'] = function(key,side,slot){
-	var m = List.main[key];
-	if(!m.windowList.trade) return Chat.add(key,'Access denied.');
-	Itemlist.click.trade(m.tradeList,side,+slot);
-}
-Command.list['win,trade,click'].doc = {
-	'description':"Withdraw Items from Trade.",
-	'help':0,'param':[
-		{type:'Letters',name:'Mouse Button',optional:0,whiteList:['left','right','shiftLeft','shiftRight']},
-		{type:'Number',name:'Trade Slot',optional:0,max:19},
-	],
-}
-Command.list['win,trade,toggle'] = function(key){
-	var m = List.main[key];
-	if(!m.windowList.trade || !m.tradeInfo){ Chat.add(key,'Access denied.'); return;}
-	m.tradeList.acceptTrade = !m.tradeList.acceptTrade;
-	m.tradeList.toUpdate = 1;
-	m.tradeList.toUpdateOther = 1;
-	
-	if(m.tradeList.acceptTrade && m.tradeInfo.acceptTrade){
-		if(!List.main[m.tradeInfo.key]) return ERROR(3,'player trading with no online');
-		
-		if(Itemlist.trade(m.tradeList,m.tradeInfo)){
-			Chat.add(key,'Trade was successful.');
-			Main.closeAllWindow(List.main[m.tradeInfo.key]);
-			Main.closeAllWindow(m);
-		} else {
-			Itemlist.trade.resetAccept(m.tradeList);
-			Chat.add(key,'Either you or the other player have not enough inventory space for the trade.');
-		}
-	}
-}
-Command.list['win,trade,toggle'].doc = {
-	'description':"Toggle the Accept/Decline Button",
-	'help':0,'param':[
-	],
-}
+Command('cc,leaveAll',"Leave all Clans",true,[ //{
+],function(key){
+	Clan.leave(key,'ALL');
+}); //}
+*/
 
-Command.list['win,quest,toggleChallenge'] = function(key,id,challenge){
-	var mq = List.main[key].quest[id];
-	if(!mq) return Chat.add(key,'Wrong Input.');
-	if(mq._active) return Chat.add(key,'You have already started this quest. You can\'t change challenges anymore.');
-	
-	var q = Db.quest[id].challenge[challenge];
-	if(!q) return Chat.add(key,'Wrong Input.');
-	
-	Quest.challenge.toggle(key,id,challenge);
-}
-Command.list['win,quest,toggleChallenge'].doc = {
-	'description':"Toggle a Quest Challenge. Only possible before starting the quest.",
-	'help':0,'param':[
-		{type:'Letters',name:'Quest Id',optional:0},
-		{type:'Letters',name:'Bonus Id',optional:0},
-	],
-}
+Command('playerlist',"Get list of player online.",true,[ //{
+],function(key){	//to improve, save the list every 1 sec
+	Message.add(key,Server.getPlayerInfo());
+}); //}
 
-Command.list['win,quest,orb'] = function(key,id,amount){
-	var mq = List.main[key].quest[id];
-	if(!mq){ Chat.add(key,'Wrong Input.'); return; }	
-	var q = Db.quest[id]._bonus[bonus];
-	if(!q){ Chat.add(key,'Wrong Input.'); return; }
-	
-	amount = Math.min(Itemlist.have(List.main[key].invList,'orb-quest',0,'amount'),amount);
-	if(!amount){ Chat.add(key,'You have no orb.'); return; }
-	Quest.orb(key,id,amount);
-}
-Command.list['win,quest,orb'].doc = {
-	'description':"Toggle a Quest Bonus.",
-	'help':0,'param':[
-		{type:'Letters',name:'Quest Id',optional:0},
-		{type:'Letters',name:'Bonus Id',optional:0},
-		{type:'Number',name:'Amount',optional:1,default:1},
-	],
-}
-
-Command.list['win,quest,start'] = function(key,id){
-	var mq = List.main[key].quest[id];
-	if(!mq) return Chat.add(key,'Wrong Input.');
-	
-	if(List.main[key].questActive) return Chat.add(key,'You can only have 1 active quest at once. Finish or abandon the quest "' + Db.quest[List.main[key].questActive].name + '" before starting a new one.');
-	
-	
-	Quest.requirement.update(key,id);
-	for(var i in mq._requirement) if(mq._requirement[i] === '0') return Chat.add(key,'You do not meet the requirements to start this quest.');
-	
-	
-	if(!Party.testQuest(List.all[key],List.all[key].party,id)) return Chat.add(key,"You can't start this quest because someone in your party already started another quest. Leave this party or start the same quest."); 
-	
-	
-	Quest.start(key,id);
-}
-Command.list['win,quest,start'].doc = {
-	'description':"Start a quest.",
-	'help':0,'param':[
-		{type:'Letters',name:'Quest Id',optional:0},
-	],
-}
-Command.list['win,quest,abandon'] = function(key,id){
-	var mq = List.main[key].quest[id];
-	if(!mq){ Chat.add(key,'Wrong Input.'); return; }	
-	if(!mq._active){ Chat.add(key,"You can't abandon a quest you haven't even started yet."); return; }	
-	
-	Quest.abandon(key,id);
-}
-Command.list['win,quest,abandon'].doc = {
-	'description':"Abandon a quest.",
-	'help':0,'param':[
-		{type:'Letters',name:'Quest Id',optional:0},
-	],
-}
-
-
-Command.list['win,passive,add'] = function(key,num,i,j){	
-	if(Quest.getQuestActive(key) !== null) 
-		return Chat.add(key,'Finish the quest you\'re doing before modifying your Passive.');
-	Main.passiveAdd(List.main[key],num,i,j);
-}
-Command.list['win,passive,add'].doc = {
-	'description':"Select a Passive",
-	'help':0,'param':[
-		{type:'Number',name:'Which Page',optional:0,max:1},
-		{type:'Number',name:'Position Y',optional:0,max:19},
-		{type:'Number',name:'Position X',optional:0,max:19},
-	],
-}
-Command.list['win,passive,remove'] = function(key,num,i,j){
-	if(Quest.getQuestActive(key) !== null) 
-		return Chat.add(key,'Finish the quest you\'re doing before modifying your Passive.');
-	Main.passiveRemove(List.main[key],num,i,j);
-}
-Command.list['win,passive,remove'].doc = {
-	'description':"Remove a Passive",
-	'help':0,'param':[
-		{type:'Number',name:'Which Page',optional:0,max:1},
-		{type:'Number',name:'Position Y',optional:0,max:19},
-		{type:'Number',name:'Position X',optional:0,max:19},
-	],
-}
-Command.list['win,passive,page'] = function(key,num){
-	if(Quest.getQuestActive(key) !== null) 
-		return Chat.add(key,'Finish the quest you\'re doing before modifying your Passive.');
-	List.main[key].passive.active = num;
-	Passive.updateBoost(key);
-}
-Command.list['win,passive,page'].doc = {
-	'description':"Change Active Passive Page",
-	'help':0,'param':[
-		{type:'Number',name:'Which Page',optional:0,max:1},
-	],
-}
-
-Command.list['win,passive,freeze'] = function(key,num){
-	if(Quest.getQuestActive(key) !== null) 
-		return Chat.add(key,'Finish the quest you\'re doing before modifying your Passive.');
-	List.main[key].passive.freeze[num] = Date.nowDate();
-}
-Command.list['win,passive,freeze'].doc = {
-	'description':"Freeze a page.",
-	'help':0,'param':[
-		{type:'Number',name:'Which Page',optional:0,max:1},
-	],
-}
-Command.list['win,passive,unfreeze'] = function(key,num){
-	if(Quest.getQuestActive(key) !== null) 
-		return Chat.add(key,'Finish the quest you\'re doing before modifying your Passive.');
-	List.main[key].passive.freeze[num] = null;
-}
-Command.list['win,passive,unfreeze'].doc = {
-	'description':"Unfreeze a page. Effect will go live on new login.",
-	'help':0,'param':[
-		{type:'Number',name:'Which Page',optional:0},
-	],
-}
-
-
-Command.list['win,ability,swap'] = function(key,name,position){
-	if(List.all[key].combatContext.ability !== 'normal') 
-		return Chat.add(key,'You can\'t change your ability at this point of the quest.');
-		
-	var abl = Actor.getAbilityList(List.all[key]);
-	var ab = Actor.getAbility(List.all[key]);
-	
-	if(!abl[name]) return;
-	for(var i in ab){ 
-		if(ab[i] && ab[i].id === name) ab[i] = null; 
-	}	//prevent multiple
-	
-	Actor.ability.swap(List.all[key],name,position,true);
-}
-Command.list['win,ability,swap'].doc = {
-	'description':"Set an Ability to a Key",
-	'help':0,'param':[
-		{type:'Letters',name:'Ability Id',optional:0},
-		{type:'Number',name:'Key Position (0-5)',optional:0,max:5},
-	],
-}
-//}
-
-//{Tab
-Command.list['tab,open'] = function(key,tab){
-	List.main[key].currentTab = tab;
-}
-Command.list['tab,open'].doc = {
-	'description':"Open a Tab",
-	'help':0,'param':[
-		{type:'Letters',name:'Tab Name',optional:0,whiteList:CST.tab},
-	],
-}
-
-
-Command.list['tab,close'] = function(key,tab){
-	List.main[key].currentTab = '';
-}
-Command.list['tab,close'].doc = {
-	'description':"Hide Tab",
-	'help':0,'param':[
-		
-	],
-}
-
-Command.list['tab,inv,click'] = function(key,side,slot,amount){
-	if(List.main[key].currentTab !== 'inventory'){ Chat.add(key,'Access denied.'); return;}
-	var res = Itemlist.click.inventory(List.main[key].invList,side,slot,amount);
-	
-	if(res === 'cant bank') return Chat.add(key,'You can\'t bank this item.');
-	if(res === 'cant trade') return Chat.add(key,'You can\'t trade this item.');	
-	
-	
-}
-Command.list['tab,inv,click'].doc = {
-	'description':"Deposit/Use Items in Inventory.",
-	'help':0,'param':[
-		{type:'Letters',name:'Mouse Button',optional:0,whiteList:['left','right','shiftLeft','shiftRight']},
-		{type:'Number',name:'Inventory Slot',optional:0,max:19},
-		{type:'Number',name:'Amount to withdraw',optional:1,default:1},
-	],
-}
-
-Command.list['tab,removeEquip'] = function(key,piece){
-	if(List.all[key].combatContext.equip !== 'normal') 
-		return Chat.add(key,'You can\'t change your equip at this point of the quest.');
-	
-	if(!Itemlist.empty(List.main[key].invList,1)){ Chat.add(key,'No inventory room.'); return;}
-	Actor.equip.remove(List.all[key],piece);
-}
-Command.list['tab,removeEquip'].doc = {
-	'description':"Remove a piece of equipment",
-	'help':0,'param':[
-		{type:'Letters',name:'Equipement Piece',optional:0,whiteList:CST.equip.piece},
-	],
-}
-
-
-
-
-//}
-
-//{Clan
-Command.list['cc,create'] = function(key,name){
-	Clan.creation(key,name);	
-}
-Command.list['cc,create'].doc = {
-	'description':"Create a new Clan",
-	'help':1,'param':[
-		{type:'Letters',name:'Clan Name',optional:0},
-	],
-}
-Command.list['cc,enter'] = function(key,name){
-	Clan.enter(key,name);	
-}
-Command.list['cc,enter'].doc = {
-	'description':"Enter a Clan",
-	'help':1,'param':[
-		{type:'Letters',name:'Clan Name',optional:0},
-	],
-}
-
-Command.list['cc,leave'] = function(key,name){
-	Clan.leave(key,name);	
-}
-Command.list['cc,leave'].doc = {
-	'description':"Leave a Clan",
-	'help':1,'param':[
-		{type:'Letters',name:'Clan Name (ALL will leave all clans)',optional:0},
-	],
-}
-//}
-
-Command.list['question'] = function(key,param0){
-	var q = List.main[key].question;
-	if(!q) return;
-	
-	if(q.option && (q.option === true || q.option === 'boolean' || q.option.toString() === 'yes,no')){
-		if(param0 === 'yes') Tk.applyFunc.key(key,q.func,q.param,List);	
-		return;
-	}
-	try {		
-		var success = Tk.applyFunc(q.func,arguments);
-		if(!success && q.repeat){
-			Chat.add(key,'Invalid answer to server question.');
-			Chat.question(key,q);
-		} else List.main[key].question = null;
-	} catch(err){ ERROR.err(3,err); }
-	
-	
-}
-Command.list['question'].doc = {
-	'description':"Answer custom questions from server",
-	'help':0,'param':[
-	],
-}
-
-Command.list['playerlist'] = function(key){	//to improve, save the list every 1 sec
-	var str = 'Player Count: ' + Object.keys(List.main).length + ' | ';
-	for(var i in List.main)
-		str += List.all[i].name + ', ';
-	str = str.slice(0,-2);
-	Chat.add(key,str);
-}
-Command.list['playerlist'].doc = {
-	'description':"Get list of player online.",
-	'help':1,'param':[
-	],
-}
-
-Command.list['chrono,remove'] = function(key,name){
-	var main = List.main[key];
+Command('chrono,remove',"Remove a stopped chronometer.",false,[ //{
+	Command.Param('string','Chrono Name',false),
+],function(key,name){
+	var main = Main.get(key);
 	if(main.chrono[name] && !main.chrono[name].active)
-		Main.chrono(main,name,'remove');
-}
-Command.list['chrono,remove'].doc = {
-	'description':"Remove a stopped chronometer.",
-	'help':0,'param':[
-		{type:'Letters',name:'Chrono Name',optional:0},
-	],
-}
+		Main.chrono.remove(main,name);
+}); //}
 
-
-Command.list['logout'] = function(key){
+Command('logout',"Safe way to log out of the game",false,[ //{
+],function(key){
 	Sign.off(key,"You safely quit the game.");
-}
-Command.list['logout'].doc = {
-	'description':"Safe way to log out of the game",
-	'help':0,'param':[
-	],
-}
-Command.list['hometele'] = function(key){
-	if(Actor.teleport.town(List.all[key],true) !== true) return;
-	if(List.main[key].questActive) Quest.abandon(key,List.main[key].questActive);
-	Chat.add(key,'You were teleported to first town.');
-	
-}
-Command.list['hometele'].doc = {
-	'description':"Abandon active quest and teleport to Town. Useful if stuck.",
-	'help':0,'param':[
-	],
-}
+}); //}
 
-Command.list['dialogue,option'] = function(key,slot){
-	var main = List.main[key];
-	if(slot === -1 && main.dialogue && main.dialogue.exit !== 0){ Dialogue.end(key); return; }
-	if(main.dialogue && main.dialogue.option[slot]){
-		Dialogue.option(key,main.dialogue.option[slot]);
-	}	
-}
-Command.list['dialogue,option'].doc = {
-	'description':"Choose a dialogue option.",
-	'help':0,'param':[
-		{type:'Number',name:'Dialogue Option #',optional:0,min:-1},
-	],
-}
-Command.list['option'] = function(key,slot){
-	var main = List.main[key];
-	if(!main.optionList ||  !main.optionList.option[slot]){ return; }
-	var opt = main.optionList.option[slot];
-	Tk.applyFunc.key(key,opt.func,opt.param,List);	
-}
-Command.list['option'].doc = {
-	'description':"Select an option from the Right-Click Option List.",
-	'help':0,'param':[
-		{type:'Number',name:'Option Position',optional:0},
-	],
-}
-Command.list['email,activate'] = function(key,str){
-	var name = List.all[key].name;
-	db.find('account',{username:name},{emailActivationKey:1},function(err,res){	if(err) throw err
-		if(res[0] && res[0].emailActivationKey === str){
-			db.update('account',{username:name},{ $set:{emailActivated:1}},function(err){	if(err) throw err
-				Chat.add(key, 'Your account is now activated.');
-			});
-		} else {Chat.add(key, 'Wrong Activation Key.');}	
-	});
-}
-Command.list['email,activate'].doc = {
-	'description':"Activate your Email.",
-	'help':1,'param':[
-		{type:'Letters',name:'Activation Code',optional:0},
-	],
-}
-Command.list['party,join'] = function(key,name){
-	if(name[0] === '@' || name[0] === '!') return Chat.add(key,"You can't join this party.");	//reserved
-	
-	Party.join(List.all[key],name);
-}
-Command.list['party,join'].doc = {
-	'description':"Join a party.",
-	'help':1,'param':[
-		{type:'Letters',name:'Party Name (Usually Username)',optional:0},
-	],
-}
+Command('hometele',"Abandon active quest and teleport to Town. Useful if stuck.",false,[ //{
+],function(key){
+	Main.question(Main.get(key),function(){
+		if(Actor.teleport.town(Actor.get(key),true,false) !== true) return;
+		Main.abandonQuest(Main.get(key));
+		Message.add(key,'You were teleported to first town.');		
+	},'Are you sure you want to abandon active quest and teleport to town?','boolean');
+}); //}
 
-Command.list['party,tele'] = function(key,name){
-	name = escape.user(name);
-	var act = List.all[key];
-	var mort2 = List.all[List.nameToKey[name]];
-	if(!mort2){ Chat.add(key, 'This player is not online.'); return; }
-	if(mort2.party !== act.party){ Chat.add(key, 'You are not in the same party than this player. Note: $party,join,[TEAMNAME]'); return; }
-	if(!Actor.teleport.join(act,mort2)){
-		Chat.add(key, 'This player is in a solo instance.')
-	}
-}
-Command.list['party,tele'].doc = {
-	'description':"Teleport to a party member.",
-	'help':1,'param':[
-		{type:'Letters',name:'Player Name',optional:0},
-	],
-}
+Command('dialogue,option',"Choose a dialogue option.",false,[ //{
+	Command.Param('number','Dialogue Option #',false,{min:-1}),
+],function(key,slot){
+	var main = Main.get(key);
+	if(!main.dialogue) return;
+	if(slot === -1 && main.dialogue.exit !== 0) return Main.dialogue.end(main);		
+	if(!main.dialogue.node.option[slot]) return;
+	Main.dialogue.selectOption(main,main.dialogue.node.option[slot]);
+}); //}
 
-Command.list['party,leave'] = function(key){
-	Chat.add(key, 'You left your party.');
-	Party.join(List.all[key],'!TEMP-' + List.all[key].name);
-}
-Command.list['party,leave'].doc = {
-	'description':"Leave your party.",
-	'help':1,'param':[
-		
-	],
-}
+Command('actorOptionList',"Select an option from the Right-Click Option List of an actor.",false,[ //{
+	Command.Param('string','Id',false),
+	Command.Param('number','Option Position',false),
+],function(key,id,slot){
+	Actor.click.optionList(Actor.get(key),id,slot);
+}); //}
 
+Command('party,join',"Join a party.",true,[ //{
+	Command.Param('string','Party Name (Usually Username)',false),
+],function(key,name){
+	if(name.have('@') || name.have('!')) return Message.add(key,"You can't join this party.");	//reserved
+	Main.changeParty(Main.get(key),name);
+}); //}
 
-Command.list['pvp'] = function(key){
+Command('party,leave',"Leave your party.",true,[ //{
+],function(key){
+	Message.add(key, 'You left your party.');
+	Main.changeParty(Main.get(key),Math.randomId());
+}); //}
+
+Command('pvp',"Teleport/Quit to PvP Zone.",true,[ //{
+],function(key){
 	return;
-	var act = List.all[key];
+	/*
+	var act = Actor.get(key);
 	if(act.map.have('pvpF4A')){	//TOFIX
 		Actor.teleport(act,act.respawnLoc.safe);
-		Chat.add(key,"You can no longer attack or be attacked by other players.");
+		Message.add(key,"You can no longer attack or be attacked by other players.");
 	}
-}
-Command.list['pvp'].doc = {
-	'description':"Teleport/Quit to PvP Zone.",
-	'help':1,'param':[
-		{type:'Number',name:'0:Free For All. 1:Ranked. 2:Custom',optional:1,max:2},
-	],
-}
+	*/
+}); //}
 
+Command('questRating',"Rate a quest.",false,[ //{
+	Command.Param('string','Quest Id',false),
+	Command.Param('number','Rating',false,{min:1,max:3}),
+	Command.Param('string','Comment',true),
+],function(key,quest,rating,text){
+	Quest.rate(Main.get(key),quest,rating,text);
+}); //}
 
-Command.list['questRating'] = function(key,quest,rating){
-	if(!List.main[key].quest[quest]){
-		return Chat.add(key, 'You can\'t rate this quest.');
-	}
-	Chat.add(key, 'Thanks for your feedback. '+
-		'<span class="u" onclick="Chat.report.open(\'quest\',\'' + quest + '\');">Click here to comment the quest.</span>');
-	List.main[key].quest[quest]._rating = rating;
-}
-Command.list['questRating'].doc = {
-	'description':"Rate a quest.",
-	'help':0,'param':[
-		{type:'Letters',name:'Quest',optional:0},
-		{type:'Number',name:'Rating',optional:0,min:1,max:5},
-	],
-}
-
-
-
-Command.list['reward,purchase'] = function(key,type,param){
+Command('reward,purchase',"Purchase a Contribution Reward",false,[ //{
+	Command.Param('string','Type',false),
+	Command.Param('string','Param',false),
+],function(key,type,param){
 	Contribution.purchase(key,type,param);
-}
-Command.list['reward,purchase'].doc = {
-	'description':"Purchase a Contribution Reward",
-	'help':0,'param':[
-		{type:'Letters',name:'Type',optional:0},
-		{type:'Letters',name:'Param',optional:0},
-	],
-}
+}); //}
 
-Command.list['reward,select'] = function(key,type,param){
+Command('reward,select',"Select a Contribution Reward",false,[ //{
+	Command.Param('string','Type',false),
+	Command.Param('string','Param',false),
+],function(key,type,param){
 	Contribution.select(key,type,param);
-}
-Command.list['reward,select'].doc = {
-	'description':"Select a Contribution Reward",
-	'help':0,'param':[
-		{type:'Letters',name:'Type',optional:0},
-		{type:'Letters',name:'Param',optional:0},
-	],
-}
+}); //}
 
-Command.list['reward,reset'] = function(key,type){
+Command('reward,reset',"Reset a Contribution Reward",false,[ //{
+	Command.Param('string','Type',false),
+],function(key,type){
 	Contribution.reset(key,type);
-}
-Command.list['reward,reset'].doc = {
-	'description':"Reset a Contribution Reward",
-	'help':0,'param':[
-		{type:'Letters',name:'Type',optional:0},
-	],
-}
+}); //}
 
-Command.list['reward,change'] = function(key,account,name){
+Command('reward,change',"Change the social media accounts linked with your Raining Chain account.",false,[ //{
+	Command.Param('string','Website',false,{whiteList:['reddit','youtube','twitch','twitter']}),
+	Command.Param('string','Account Name',false),
+],function(key,account,name){
 	Contribution.change(key,account,name);
-}
-Command.list['reward,change'].doc = {
-	'description':"Change the social media accounts linked with your Raining Chain account.",
-	'help':0,'param':[
-		{type:'Letters',name:'Website',optional:0,whiteList:['reddit','youtube','twitch','twitter']},
-		{type:'Letters',name:'Account Name',optional:0},
-	],
-}
-Command.list['reward,updateSocialMedia'] = function(key,account){
+}); //}
+
+Command('reward,updateSocialMedia',"Update Social Media Contribution Points",false,[ //{
+	Command.Param('string','Website',false,{whiteList:['reddit','youtube','twitch','twitter']}),
+],function(key,account){
 	Contribution.updateSocialMedia(key,account);
-}
-Command.list['reward,updateSocialMedia'].doc = {
-	'description':"Update Social Media Contribution Points",
-	'help':0,'param':[
-		{type:'Letters',name:'Website',optional:0,whiteList:['reddit','youtube','twitch','twitter']},
-	],
-}
+}); //}
 
-
-
-//{CLIENT SIDE: Pref. many different preference values can be changed. check Command.pref.verify for more detail.
-Command.client = ['pref','music,next','music,info','help','mod','doc','reward,open'];
-
-Command.list['help'] = function(lvl){
+Command('help',"Show List of Commands.",true,[ //{
+	Command.Param('number','Show ALL Options (Not Recommended)',true),
+],function(lvl){
 	lvl = typeof lvl === 'undefined' ? lvl : 1;
 	for(var i in Command.list){
-		if(!Command.list[i] || !Command.list[i].doc) continue;
-		if(Command.list[i].doc.help >= lvl){
-			var str = '$' + i + ' :     ' + Command.list[i].doc.description;
-			Chat.add(str);
-		}
+		if(!DB[i]) continue;
+		if(!DB[i].help && !lvl) continue;
+		var str = '$' + i + ' :     ' + DB[i].description;
+		Message.add(str);
 	}
-}
-Command.list['help'].doc = {
-	'description':"Show List of Commands.",
-	'help':1,'param':[
-		{type:'Number',name:'Show ALL Options (Not Recommended)',optional:1},
-	],
-}
-Command.list['reward,open'] = function(key){
-	$( "#contribution" ).dialog('open');
-}
+},true); //}
 
-Command.list['reward,open'].doc = {
-	'description':"Open Contribution Window",
-	'help':0,'param':[
-	],
-}
+Command('reward,open',"Open Contribution Window",false,[ //{
+],function(key){
+	//$( "#contribution" ).d ialog('open');
+},true); //}
 
-Command.list['mod'] = function(lvl){
+Command('mod',"Open the Mod Window.",true,[ //{
+],function(){
 	readFiles.open();
-}
-Command.list['mod'].doc = {
-	'description':"Open the Mod Window.",
-	'help':1,'param':[
-	
-	],
-}
+},true); //}
 
-Command.list['doc'] = function(key){
-	Help.open();
-}
-Command.list['doc'].doc = {
-	'description':"Open the Help Documentation",
-	'help':1,'param':[
-	],
-}
+Command('pref',"Change a Preference.",true,[ //{
+	Command.Param('string','Pref Id',false),
+	Command.Param('number','New Pref Value',false),
+],function(name,value){
+	Pref.change(name,value);
+},true); //}
 
-Command.list['pref'] = function(name,value){
-	if(name === 'reset'){
-		main.pref = Main.template.pref();
-		Chat.add('Preferences Reset to Default.');
-		return;
-	}
-	
-	
-	if(main.pref[name] === undefined){ Chat.add('Invalid name.'); return; }
-	value = Command.pref.verify(name,value);
-	if(value === false){ Chat.add('Invalid value.'); return; }
-	
-	main.pref[name] = value;
-	if(Command.pref.list[name].func) Command.pref.list[name].func(value);
-	Chat.add({text:'Preferences Changed.',timer:100});
-	localStorage.setItem('pref',JSON.stringify(main.pref));
-	
-	if(name === 'mapRatio') Draw.minimap.map.updateSize();
-	$(".ui-tooltip-content").parents('div').remove();
-}
-Command.list['pref'].doc = {
-	'description':"Change a Preference.",
-	'help':1,'param':[
-		{type:'Letters',name:'Pref Id',optional:0},
-		{type:'Number',name:'New Pref Value',optional:0},
-	],
-}
-
-
-Command.list['music,next'] = function(){
+Command('music,next',"Skip this song.",true,[ //{
+],function(){
 	Song.ended();
-}
-Command.list['music,next'].doc = {
-	'description':"Skip this song.",
-	'help':1,'param':[	
-	],
-}
-Command.list['music,info'] = function(){
-	var str = '<a style="color:cyan;text-decoration:underline;" target="_blank" href="' + Song.beingPlayed.link + '">\"' + Song.beingPlayed.name + '\"</a> by ' + Song.beingPlayed.author.name;
-	Chat.add(str);
-}
-Command.list['music,info'].doc = {
-	'description':"Get info about song being played.",
-	'help':1,'param':[	
-	],
-}
+},true); //}
 
-//}
-
-//{Pref
-Command.pref = {};
-Command.pref.list = {
-	'displayFPS':{name:'Display FPS',initValue:1,min:0,max:1,description:'Display FPS Performance. 0=false, 1=true' },
-	'overheadHp':{name:'Overhead Hp',initValue:0,min:0,max:1,description:'Display HP Bar and Status Effect over player head.'},
-	'volumeMaster':{name:'Volume Master',initValue:30,min:0,max:100,description:'Volume Master. 0:Mute','func':function(value){ Song.beingPlayed.song.volume = value/100 * main.pref.volumeSong/100; }},
-	'volumeSong':{name:'Volume Song',initValue:10,min:0,max:100,description:'Volume Song.','func':function(value){ Song.beingPlayed.song.volume = value/100 * main.pref.volumeMaster/100; }},
-	'volumeSfx':{name:'Volume Effects',initValue:20,min:0,max:100,description:'Volume Sound Effects.'},
-	'signInNotification':{name:'Notify Log In',initValue:1,min:0,max:2,description:'Notify you if someone logs in or out of the game. 0=none, 1=text, 2=sound'},
-	'puush':{name:'Allow Puush Link',initValue:2,min:0,max:2,description:'Allow Puush Link in chat. 0=never, 1=friend only, 2=always' },
-	'chatTimePublic':{name:'Chat Time',initValue:120,min:15,max:999,description:'Time in seconds before chat box messages disappear.'},
-	//'displayHelp':{name:'Display Help',initValue:1,min:0,max:1,description:'Display Help Image that explains the interface'},
-	'displayAoE':{name:'Display AoE',initValue:0,min:0,max:1,description:'Display Damage Zone For Strikes. 0=false, 1=true' },
-	'mapRatio':{name:'Map Ratio',initValue:6,min:4,max:7,description:'Minimap Size'},
-	'bankTransferAmount':{name:'X- Bank',initValue:1000,min:1,max:9999999999,description:'Amount of items transfered with Shift + Left Click'},
-	'orbAmount':{name:'X- Orb',initValue:1000,min:1,max:9999999999,description:'Amount of orbs used with X- option'},
-	'controller':{name:'Enable Controller',initValue:0,min:0,max:1,description:'Play the game with a Xbox 360 Controller.'},
-	//'passiveView':{name:'Passive View',initValue:1,min:0,max:1,description:'Impact Passive Colors. 0:Access. 1:Popularity'},
-}
-
-Command.pref.verify = function(name,value){
-	var req = Command.pref.list[name];
-
-	value = +value; 
-	if(isNaN(value)) return false;
-	
-	return value.mm(req.min,req.max);	
-}
-Command.pref.template = function(){
-	var a = {};
-	for(var i in Command.pref.list){a[i] = Command.pref.list[i].initValue;}
-	return a;
-}
-
-//}
+Command('music,info',"Get info about song being played.",true,[ //{
+],function(){
+	Message.add(key,Song.getCurrentSongInfo());
+},true); //}
 
 
+})();
