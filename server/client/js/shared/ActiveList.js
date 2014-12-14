@@ -16,8 +16,14 @@ ActiveList.test = function(act,obj){
 	if(obj.viewedIf === 'false' || act.viewedIf === 'false'){ return false; }
 	if(act.map !== obj.map){ return false; }
 	if(obj.dead || act.dead){ return false; }
-	if(typeof obj.viewedIf === 'function' && (!act.isActor || !obj.viewedIf(act.id,obj.id))){ return false; }
-	if(typeof act.viewedIf === 'function' && (!obj.isActor || !act.viewedIf(obj.id,act.id))){ return false; }
+	if(typeof obj.viewedIf === 'function')
+		try {
+			if(!act.isActor || !obj.viewedIf(act.id,obj.id)){ return false; }
+		} catch(err){ ERROR(3,'invalid viewedIf condition',err.stack); }
+	if(typeof act.viewedIf === 'function')
+		try {
+			if(!obj.isActor || !act.viewedIf(obj.id,act.id)){ return false; }
+		} catch(err){ ERROR(3,'invalid viewedIf condition',err.stack); }
 	if(typeof obj.viewedIf === 'object' && obj.viewedIf.indexOf(act.id) === -1){ return false; }
 	if(typeof act.viewedIf === 'object' && act.viewedIf.indexOf(obj.id) === -1){ return false; }
 	

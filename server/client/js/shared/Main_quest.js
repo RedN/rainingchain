@@ -63,6 +63,13 @@ Main.Quest.uncompressDb.verifyIntegrity = function(quest){	//quest= main.quest
 	//If new or deleted quest
 	//check QuestVar.verifyIntegrity for custom quest variable
 	var allQuest = QuestVar.getInitVar.all();
+	
+	for(var i in quest){
+		if(!allQuest[i]){ 	//delete quest
+			delete quest[i];
+		}
+	}
+	
 	for(var i in allQuest){
 		if(!Quest.get(i).inMain) continue;	//not part of
 	
@@ -70,10 +77,6 @@ Main.Quest.uncompressDb.verifyIntegrity = function(quest){	//quest= main.quest
 			quest[i] = Main.Quest.part(i);
 			continue; 
 		}	
-		if(!allQuest[i]){ 	//delete quest
-			delete quest[i]; 
-			continue; 
-		}
 		
 		//challenge integrity
 		var chal = Quest.getChallengeList(i);

@@ -1,10 +1,10 @@
 //LICENSED CODE BY SAMUEL MAGNAN FOR RAININGCHAIN.COM, LICENSE INFORMATION AT GITHUB.COM/RAININGCHAIN/RAININGCHAIN
 eval(loadDependency(['Actor','Highscore','ItemList','Debug','Boss','Message','Challenge','Ability','Main','ItemModel','Equip'],['Quest']));
 var db;
-var filePath = require('path').resolve(__dirname,'./QuestList.json');
-var jsonList = require('fs').readFileSync(filePath);
-var QUEST_ID_LIST = JSON.parse(jsonList).list;
 var QUEST_FOLDER = './client/quest/';
+var filePath = require('path').resolve(__dirname,QUEST_FOLDER + 'QuestList.txt');
+var questList = require('fs').readFileSync(filePath);
+var QUEST_ID_LIST = questList.toString().trim().replaceAll('\r\n\r\n','\r\n').split('\r\n');
 
 var Quest = exports.Quest = function(extra){
 	var tmp = {

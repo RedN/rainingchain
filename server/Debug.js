@@ -347,10 +347,12 @@ Debug.startQuest = function(key,qid){
 	if(main.questActive && main.questActive !== qid)
 		Main.abandonQuest(main);
 	if(main.questActive !== qid)
-		if(Main.startQuest(main,qid)){
-			Quest.get(qid).event._debugSignIn(key);
-			Debug.giveQuestTool(key,qid);
-		}
+		Main.startQuest(main,qid);
+}
+Debug.onStartQuest = function(key,qid){
+	if(!Debug.ACTIVE) return;
+	Quest.get(qid).event._debugSignIn(key);
+	Debug.giveQuestTool(key,qid);
 }
 
 

@@ -1,5 +1,5 @@
 //LICENSED CODE BY SAMUEL MAGNAN FOR RAININGCHAIN.COM, LICENSE INFORMATION AT GITHUB.COM/RAININGCHAIN/RAININGCHAIN
-eval(loadDependency(['Actor','Challenge','Party','Server','Main','ItemList','Save','Highscore','Message','Dialogue','Boost','Drop','Quest','Collision','Command','Contribution']));
+eval(loadDependency(['Actor','Challenge','Party','Debug','Server','Main','ItemList','Save','Highscore','Message','Dialogue','Boost','Drop','Quest','Collision','Command','Contribution']));
 
 (function(){ //}
 var REMOVAL_ORB_CHANCE = 0.1;
@@ -35,6 +35,7 @@ Main.startQuest.action = function(main,qid){
 	
 	Quest.onStart(q,main);
 	Party.setQuest(Main.getParty(main),qid);
+	Debug.onStartQuest(main.id,qid);
 	
 	Main.closeDialogAll(main);
 	Main.setFlag(main,'questActive');

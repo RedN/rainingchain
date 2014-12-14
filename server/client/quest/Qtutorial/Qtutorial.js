@@ -109,7 +109,7 @@ s.newEvent('skipTutorial',function(key){ //
 s.newEvent('_complete',function(key){ //
 	s.teleportTown(key);
 	s.restoreHUD(key);
-	s.displayPopup(key,"Completing quests grants Reputation. Use Reputation to empower your character via the Reputation Window.");
+	s.displayPopup(key,"Completing quests grants Reputation. Use Reputation to power up your character via the Reputation Window.");
 		
 	s.setHUD(key,'tab-reputation','flashing');
 	Actor.setTimeout(Actor.get(key),function(key){
@@ -120,9 +120,9 @@ s.newEvent('_complete',function(key){ //
 	Actor.setTimeout(Actor.get(key),function(key){
 		s.displayPopup(key,'Don\'t forget to leave feedback!');
 		s.setHUD(key,'tab-feedback','flashing');
-		Actor.setTimeout(Actor.get(key),25*15,function(key){
+		Actor.setTimeout(Actor.get(key),function(key){
 			s.setHUD(key,'tab-feedback','normal');
-		})
+		},25*15)
 	},25*60*2);
 });
 s.newEvent('updateHUD',function(key){ //

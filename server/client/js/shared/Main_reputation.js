@@ -252,7 +252,6 @@ Main.reputation.getBoost = function(grid){	//convert the list of reputation owne
 		for(var j = 0 ; j < grid[i].length ; j++){
 			if(grid[i][j] !== '1') continue;
 			var slot = base[i][j];
-			console.log(slot.stat,slot.value);
 			tmp.push(Boost.Perm(slot.stat,slot.value,'+'));	//+ and not *, cuz stat with 0 by default (ex:ability) wont work
 		}
 	}

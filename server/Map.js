@@ -201,7 +201,9 @@ Map.removeAllAnim = function(){
 
 
 Map.getSpot = function(map,addon,spot){
-	return map.addon[addon] && map.addon[addon].spot[spot];
+	var res = map.addon[addon] && map.addon[addon].spot[spot];
+	if(!res) return ERROR(3,'spot dont exist',map.id,addon,spot);
+	return res;
 }
 
 Map.getPlayerInMap = function(map){
