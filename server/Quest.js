@@ -4,7 +4,7 @@ var db;
 var QUEST_FOLDER = './client/quest/';
 var filePath = require('path').resolve(__dirname,QUEST_FOLDER + 'QuestList.txt');
 var questList = require('fs').readFileSync(filePath);
-var QUEST_ID_LIST = questList.toString().trim().replaceAll('\r\n\r\n','\r\n').split('\r\n');
+var QUEST_ID_LIST = questList.toString().trim().split('\r\n');
 
 var Quest = exports.Quest = function(extra){
 	var tmp = {
@@ -123,6 +123,7 @@ Quest.init = function(dbLink){	//init Module
 	db = dbLink;
 	for(var i in QUEST_ID_LIST){
 		var qid = QUEST_ID_LIST[i];
+		if(!qid) continue;	//in case split mess up...
 		try {
 			var q = Quest(require(QUEST_FOLDER+qid + "/" + qid).quest);
 			if(q.id !== qid) return ERROR(2,'quest filename doesnt match quest id',q.id,qid);

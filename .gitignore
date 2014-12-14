@@ -3,6 +3,8 @@ node_modules/nodetime
 node_modules/nodemailer
 node_modules/jitsu
 node_modules/twit
+server/client/rs
+server/client/zelda
 .npmignore
 story plans
 TODO.txt
