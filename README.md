@@ -3,11 +3,9 @@ Raining Chain
 
 Raining Chain is a open-source NodeJs/HTML5 MMORPG. 
 
-Currently in massive changes. This version is UNSTABLE. New version will come soon.
-
 Play now for free at http://rainingchain.com/.
 
-You can create your own quest using the Quest Creator Software downloadable at http://rainingchain.com/contribution.
+You can create your own quests using the Quest Creator Software downloadable at http://rainingchain.com/contribution.
 
 ![alt tag](http://i1378.photobucket.com/albums/ah83/FCones1944/actor_zps9f43232a.png)
 ![alt tag](http://i1378.photobucket.com/albums/ah83/FCones1944/data_zpsb1cd2886.png)
