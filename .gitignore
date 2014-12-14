@@ -1,8 +1,4 @@
 server/private
-node_modules/nodetime
-node_modules/nodemailer
-node_modules/jitsu
-node_modules/twit
 .npmignore
 story plans
 TODO.txt
