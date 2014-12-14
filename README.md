@@ -7,7 +7,7 @@ Currently in massive changes. This version is UNSTABLE. New version will come so
 
 Play now for free at http://rainingchain.com/.
 
-If you plan on contributing to the project, take a look at the Software Developement Kit. https://github.com/rainingchain/rc_sdk
+You can create your own quest using the Quest Creator Software downloadable at http://rainingchain.com/contribution.
 
 ![alt tag](http://i1378.photobucket.com/albums/ah83/FCones1944/actor_zps9f43232a.png)
 ![alt tag](http://i1378.photobucket.com/albums/ah83/FCones1944/data_zpsb1cd2886.png)
