@@ -136,12 +136,12 @@ Debug.ts = function(socket,d){
 		var npcAll = {};	//all enemy nearby
 		var combatAll = {}; //all combat enemy nearby
 		var playerAll = {}; //all player nearby 
+		var humanAll = {};
 		var bulletAll = {};	//all bullet nearby
 		
 		var all = {};
 		
 		var npc = {};
-		var combat = {};
 		var combat = {};
 		var human = {};
 		var bullet = {};
@@ -221,7 +221,7 @@ Debug.completeQuest = function(key){
 }
 
 Debug.teleportTo = function(key,name){
-	var act = Actor.get(Account.getViaUserName(name));
+	var act = Actor.getViaUserName(name);
 	if(!act) return 'no player with that name';
 	Actor.teleport(Actor.get(key),Actor.Spot(act.x,act.y,act.map));
 }
@@ -298,7 +298,6 @@ Debug.addAbility = function(key){
 	},"ability,slot",'string');
 }
 
-
 Debug.createDevTool = function(){
 	var option = [
 		ItemModel.Option(Debug.ghost,'Ghost'),
@@ -349,10 +348,50 @@ Debug.startQuest = function(key,qid){
 	if(main.questActive !== qid)
 		Main.startQuest(main,qid);
 }
+
 Debug.onStartQuest = function(key,qid){
 	if(!Debug.ACTIVE) return;
 	Quest.get(qid).event._debugSignIn(key);
 	Debug.giveQuestTool(key,qid);
 }
+
+Debug.skipTutorial = function(key){
+	var act = Actor.get(key);
+	Actor.ability.add(act,'Qsystem-start-melee',false);
+	Actor.ability.swap(act,'Qsystem-start-melee',0);
+	
+	Actor.ability.add(act,'Qsystem-start-bullet',false);
+	Actor.ability.swap(act,'Qsystem-start-bullet',1);
+		
+	Actor.ability.add(act,'Qsystem-start-freeze',false);
+	Actor.ability.swap(act,'Qsystem-start-freeze',2);
+	
+	Actor.ability.add(act,'Qsystem-start-fireball',false);
+	Actor.ability.swap(act,'Qsystem-start-fireball',3);
+	
+	Actor.ability.add(act,'Qsystem-start-heal',false);
+	Actor.ability.swap(act,'Qsystem-start-heal',4);
+	
+	Actor.ability.add(act,'Qsystem-start-dodge',false);
+	Actor.ability.swap(act,'Qsystem-start-dodge',5);
+	
+	Main.completeQuest(Main.get(key));
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 

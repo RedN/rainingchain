@@ -234,6 +234,7 @@ Quest.RewardInfo = function(score,exp,item){	//not an attribute of quest...
 
 
 Quest.getChallengeList = function(q){
+	if(typeof q === 'string') return ERROR(3,'q needs to be object');
 	var tmp = {};
 	for(var i in q.challenge){
 		tmp[i] = 0;
@@ -242,10 +243,11 @@ Quest.getChallengeList = function(q){
 }
 
 Quest.getHighscoreList = function(q){
+	if(typeof q === 'string') return ERROR(3,'q needs to be object');
 	var tmp = {};
 	for(var i in q.highscore){
 		tmp[i] = null;
-	}	
+	}
 	return tmp;
 }
 

@@ -6,9 +6,11 @@ var DOWN_MSG = 'The server or your browser seems to have some difficulties...<br
 var LAST_CLICK_TIME = -1;
 var DOWN_TIMEOUT = null;
 var SERVER_RESPONDED = false;
+var HIDE_SOCIALMEDIA = true;
 
 Sign.init = function(){
 	Sign.init.html();
+	Sign.init.html.about();
 	Sign.init.socket();
 	
 	if(localStorage.getItem('username')){
@@ -57,7 +59,7 @@ Sign.init.html = function(){
 			return false;
 		});
 
-	signUpDiv.append('<h3 class="u">Account Data</h3>');
+	signUpDiv.append('<br>');
 	
 	
 	var array = [
@@ -87,11 +89,15 @@ Sign.init.html = function(){
 	signUpDiv.append(Tk.arrayToTable(array).addClass('center'));
 	signUpDiv.append('<br>');
 	//#############
-	signUpDiv.append('<h3 class="u">Social Media: Optional</h3>');
-	signUpDiv.append($('<div>')
+	
+	var socialMedia = $('<div>');
+	signUpDiv.append(socialMedia);
+	
+	socialMedia.append('<h3 class="u">Social Media: Optional</h3>');
+	socialMedia.append($('<div>')
 		.html('Posting about Raining Chain on these accounts will automatically grant you Contribution Points used for cosmetic rewards.')
 	);
-	signUpDiv.append('<br>');
+	socialMedia.append('<br>');
 	var array = [
 		[
 			'Youtube:',
@@ -110,8 +116,11 @@ Sign.init.html = function(){
 			$('<input>').attr({id:"lg-signUpTwitter",placeholder:"*optional*",type:'text'})
 		]
 	];
-	signUpDiv.append(Tk.arrayToTable(array).addClass('center'));
-	signUpDiv.append('<br>');	
+	socialMedia.append(Tk.arrayToTable(array).addClass('center'));
+	socialMedia.append('<br>');	
+	if(HIDE_SOCIALMEDIA)
+		socialMedia.hide();
+	
 	signUpDiv.append($('<button>')
 		.html('Create Account And Play')
 		.click(function(){
@@ -172,26 +181,32 @@ Sign.init.html = function(){
 		.attr({id:"lg-message"})
 	);
 	
-/*
-<div class="lg-container" style="font-family:Kelly Slab; font-size:20px;" align="center">	
-	<h2 class="u">Info</h2>
-	Raining Chain is a F2P open-source MMORPG.<br>
-	<br>
-	For gameplay footage: <a href="https://www.youtube.com/watch?v=feZAAgKC--A">Youtube Videos</a><br>
-	Source Code: <a href="https://github.com/RainingChain/rainingchain">Github</a><br>
-	<br>
-	Players are able to contribute directly to the project with the <a href="https://github.com/RainingChain/rc_sdk">Software Development Kit.</a><br>
-	<a href="https://www.youtube.com/watch?v=3j4d2xkhJP4&list=PLh-MBXZEiyMh5RfWWgGq65ZKGlTAoQT7j">Video tutorials about creating Quest. (Very Easy)</a><br>
-	<br>
-	<a href="http://www.twitch.tv/rainingchain" target="_blank" style="cursor:pointer" title="http://www.twitch.tv/rainingchain">Follow me on Twitch!</a><br>
-	<br>
-	Game designed for Google Chrome.<br>
-	Compatible with IE, Opera & Firefox.<br>
-</div>
-*/
-
-
 }
+
+Sign.init.html.about = function(){
+	var full = $('<div>')
+		.addClass("lg-container")
+		.css({font: '20px Kelly Slab',textAlign:'center'});
+	$('#startDiv').append(full);
+	full.append($('<h2>')
+		.html('What is Raining Chain?') 
+	);
+	
+	full.append('Raining Chain is a F2P <a style="color:blue" href="https://github.com/RainingChain/rainingchain">open-source</a> MMORPG.<br><br>');
+	
+	full.append('Latest gameplay video:<br>')
+	full.append($('<object>')
+		.attr({width:450,height:300,data:"https://www.youtube.com/embed/Xnjb2ZshyHM"})
+	);
+	full.append('<br><br>Run the game on your own computer and <br>'
+		+ 'contribute to the project with the <a style="color:blue" href="http://www.rainingchain.com/contribution/">Quest Creator</a>:<br>')
+	full.append($('<object>')
+		.attr({width:450,height:300,data:"http://www.youtube.com/embed/CCAjNcfS5OI"})
+	);
+	return full;
+}	
+
+
 
 Sign.init.socket = function(){
 	Socket.on('signIn', function (data) {

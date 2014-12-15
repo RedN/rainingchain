@@ -79,7 +79,7 @@ Main.Quest.uncompressDb.verifyIntegrity = function(quest){	//quest= main.quest
 		}	
 		
 		//challenge integrity
-		var chal = Quest.getChallengeList(i);
+		var chal = Quest.getChallengeList(Quest.get(i));
 		for(var j in chal){	//add new version challenge
 			if(typeof quest[i]._challengeDone[j] === 'undefined'){	
 				quest[i]._challengeDone[j] = 0;
@@ -94,7 +94,7 @@ Main.Quest.uncompressDb.verifyIntegrity = function(quest){	//quest= main.quest
 		}
 		
 		//highscore integrity
-		var high = Quest.getHighscoreList(i);
+		var high = Quest.getHighscoreList(Quest.get(i));
 		for(var j in high){	//add new version highscore
 			if(typeof quest[i]._highscore[j] === 'undefined'){	
 				quest[i]._highscore[j] = null;
@@ -127,6 +127,7 @@ Main.QuestActive.uncompressDb = function(questActive){
 Main.quest = {};
 Main.quest.haveDoneTutorial = function(main){
 	if(Debug.ACTIVE) return true;
+	if(Server.isAdmin(main.id)) return true;
 	return !!main.quest.Qtutorial._complete;
 }
 

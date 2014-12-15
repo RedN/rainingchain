@@ -98,13 +98,7 @@ s.newEvent('_death',function(key){ //
 	s.message(key,'You can change your respawn location by interacting with gravestones.');
 });
 s.newEvent('skipTutorial',function(key){ //
-	s.addAbility.permanently(key,'Qsystem-start-melee',0);
-	s.addAbility.permanently(key,'Qsystem-start-bullet',1);
-	s.addAbility.permanently(key,'Qsystem-start-freeze',2);
-	s.addAbility.permanently(key,'Qsystem-start-fireball',3);
-	s.addAbility.permanently(key,'Qsystem-start-heal',4);
-	s.addAbility.permanently(key,'Qsystem-start-dodge',5);
-	s.completeQuest(key);
+	Debug.skipTutorial(key);
 });
 s.newEvent('_complete',function(key){ //
 	s.teleportTown(key);

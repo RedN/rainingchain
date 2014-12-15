@@ -151,12 +151,17 @@ Highscore.saveAllScore = function(main,cb){
 		for(var j in main.quest[i]._highscore){
 			maxcount++
 			Highscore.saveScore(j,main.quest[i]._highscore[j],main.username,function(err){
+				if(err) throw err;
 				if(++count === maxcount){
 					if(cb) cb();
 				}
 			});
 		}
-	}	
+	}
+	if(maxcount === 0){
+		ERROR(3,'highscore count is 0 wtf',main.quest,main.id);
+		cb();
+	}
 }
 
 Highscore.saveScore = function(category,value,username,cb){
