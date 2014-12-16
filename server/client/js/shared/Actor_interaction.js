@@ -3,7 +3,7 @@ eval(loadDependency(['SkillPlotModel','Actor','Quest','Server','ItemModel','Main
 
 (function(){ //}
 
-var DIST = 150;
+var DIST = 200;
 var TOOFAR = function(key){
 	Message.add(key,"You're too far away.");
 }

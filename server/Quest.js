@@ -2,9 +2,7 @@
 eval(loadDependency(['Actor','Highscore','ItemList','Debug','Boss','Message','Challenge','Ability','Main','ItemModel','Equip'],['Quest']));
 var db;
 var QUEST_FOLDER = './client/quest/';
-var filePath = require('path').resolve(__dirname,QUEST_FOLDER + 'QuestList.txt');
-var questList = require('fs').readFileSync(filePath);
-var QUEST_ID_LIST = questList.toString().trim().replaceAll('\r\n','\n').split('\n');
+var QUEST_EXCLUDE = ['QkillTheDragon','Qfifteen'];
 
 var Quest = exports.Quest = function(extra){
 	var tmp = {
@@ -121,6 +119,18 @@ Quest.Statistic = function(countComplete,countStarted,averageRepeat){
 
 Quest.init = function(dbLink){	//init Module
 	db = dbLink;
+	
+	var filePath = require('path').resolve(__dirname,QUEST_FOLDER + 'QuestList.txt');
+	var questList = require('fs').readFileSync(filePath);
+	var QUEST_ID_LIST = questList.toString().trim().replaceAll('\r\n','\n').split('\n');
+	
+	if(NODEJITSU){
+		for(var i in QUEST_EXCLUDE){
+			QUEST_ID_LIST.remove(QUEST_EXCLUDE[i]);
+		}
+	}
+	
+	
 	for(var i in QUEST_ID_LIST){
 		var qid = QUEST_ID_LIST[i];
 		if(!qid) continue;	//in case split mess up...

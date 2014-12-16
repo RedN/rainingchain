@@ -46,7 +46,7 @@ Highscore.Score = function(category,rank,value,username){
 
 Highscore.fetchTopScore = function(category,cb,amount){	//return [Highscore.Score]
 	amount = amount || 15;
-	var req = {category:category};
+	var req = {category:category,value:{$ne:null}};
 	var proj = {username:1,value:1};
 	var sort = {value:DB[category].order === 'ascending' ? 1 : -1};	
 	

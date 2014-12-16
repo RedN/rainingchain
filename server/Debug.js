@@ -6,7 +6,7 @@ var DEV_TOOL = 'DEV_TOOL';
 var QUEST_TOOL_SUFFIX = '_Tool';
 var Debug = exports.Debug = {
 	trackQuestVar:!NODEJITSU,
-	skipTutorial:true,
+	SKIP_TUTORIAL:true,
 	DMG_MOD:{player:1,npc:1,pvp:1},
 	ACTIVE:!NODEJITSU,
 	TOEVAL:'',

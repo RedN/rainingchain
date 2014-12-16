@@ -24,7 +24,7 @@ Dialog.UI('resourceBar',{
 	//######################
 	if(main.hudState.mana !== Main.hudState.INVISIBLE){
 		var pct = Math.round(player.mana/player.manaMax*100)+"%";
-		var title = 'Hp: ' + player.mana + ' / ' + player.manaMax;
+		var title = 'Mana: ' + player.mana + ' / ' + player.manaMax;
 		var bar = $("<div>")
 		.css({background:'rgba(0,0,0,1)',border:'1px solid black',borderRadius:'3px',padding:'2px'})
 		.attr('title',title)

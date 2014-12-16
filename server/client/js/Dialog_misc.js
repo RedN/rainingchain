@@ -110,26 +110,22 @@ Dialog.UI('context',{
 //#####################
 //Dialog.open('questPopup',{text:'hey',time:100})
 //Dialog.open('questPopup',{text:'heasdad asd asjkhd askjd askjd haskdh askd haskd haskdhj akdhas kjdh akjdha kjdhaskj hdask dhasdkj asy',time:3000})
-Dialog.UI('questPopup',{	
-	position:'absolute',
-	left:400,
-	top:100,
-	marginTop:'15px',
-	padding:'3px',
-	border:'2px solid black',
-	zIndex:Dialog.ZINDEX.HIGH,	
-	font:'22px Kelly Slab',
-	color:'black',
-	lineHeight:'100%',
-	backgroundColor:'white',
-	height:'auto',
-	width:'auto',
-	maxWidth:'400px',
-	textAlign:'center',
-	//whiteSpace:'nowrap',
-	display:'inline-block'
 
-},function(html,variable,param){	//param:text
+//param:{text,time}
+Dialog('questPopup','Quest Help',Dialog.Size('auto','auto'),Dialog.Refresh(function(html,variable,param){
+	html.css({	
+		zIndex:Dialog.ZINDEX.HIGH,	
+		font:'18px Kelly Slab',
+		fontSize:'1.5em',
+		color:'black',
+		lineHeight:'100%',
+		backgroundColor:'whit1e',
+		maxWidth:'400px',
+		height:'auto',
+		textAlign:'center',
+		display:'inline-block',
+	});
+	
 	if(!param) return false;
 	if(variable.timeout) 
 		clearTimeout(variable.timeout)
@@ -139,10 +135,8 @@ Dialog.UI('questPopup',{
 	},param.time * 40);
 	
 	html.html(param.text);
-		
-	html.css({fontSize:'2em'});
-		
-});
+
+}));
 
 
 

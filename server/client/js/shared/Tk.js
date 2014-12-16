@@ -1,5 +1,5 @@
 //LICENSED CODE BY SAMUEL MAGNAN FOR RAININGCHAIN.COM, LICENSE INFORMATION AT GITHUB.COM/RAININGCHAIN/RAININGCHAIN
-//rely on Input but client only
+//kinda linked with Input but client only
 
 if(typeof exports === 'undefined') exports = {};
 
@@ -524,6 +524,19 @@ Object.defineProperty(Array.prototype, "insert", {
     enumerable: false,
     value: function (index, item) {
 	  this.splice(index, 0, item);
+	}
+});
+
+Object.defineProperty(Array.prototype, "remove", {
+    enumerable: false,
+    value: function (element,all) {
+		for(var i = this.length-1; i >= 0; i--){
+			if(this[i] === element){
+				this.splice(i,1);
+				if(!all) return this;
+			}
+		}
+		return this;
 	}
 });
 

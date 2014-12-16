@@ -29,7 +29,6 @@ var Main = exports.Main = function(key,extra){
 		//part of temp
 		temp:{},
 		questRating:'',	//name of quest
-		arrow:{},
 		sfx:'',
 		song:'',
 		questComplete:null,

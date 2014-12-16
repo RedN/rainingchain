@@ -8,7 +8,6 @@ Qbtt000
 QlureKill
 QprotectFirstTown
 QtowerDefence
-QcollectFight
 QbulletHeaven
 QpuzzleBridge
 Qdarkness

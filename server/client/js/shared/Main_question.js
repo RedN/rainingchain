@@ -49,11 +49,11 @@ Main.question.init = function(){
 			
 		//#####################
 		var submitAnswer = function(answer){
+			Dialog.close('question');
 			if(main.question) //means question was asked on client
 				return Main.handleQuestionAnswer(main,answer);
 			
 			Message.sendToServer(Message('question',answer,player.name));
-			Dialog.close('question');
 		}
 		
 		if(msg.option.length){

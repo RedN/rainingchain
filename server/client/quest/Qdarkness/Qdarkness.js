@@ -1,4 +1,4 @@
-//11/28/2014 3:42 PM
+//12/15/2014 6:19 PM
 /*jslint node: true, undef:true, sub:true, asi:true, funcscope:true, forin:true, unused:false*//*global True, False, loadAPI*/
 /*Go to http://jshint.com/ and copy paste your code to spot syntax errors.*/
 
@@ -23,15 +23,15 @@ need lantern to enter cave
 s.newVariable({
 	deathCount:0,
 	bossAmount:1,
-	talkBimmy:false,
-	talkDrof:false,
+	talkBimmy:False,
+	talkDrof:False,
 	killBatBoss:0,
-	gotLantern:false,
+	gotLantern:False,
 	killGhost:0,
-	lootChest:false,
-	enterCave:false,
+	lootChest:False,
+	enterCave:False,
 	lastTg:'',
-	chalStrike:false,
+	chalStrike:False,
 	tgCount:0
 });
 
@@ -332,7 +332,7 @@ s.newMapAddon('QfirstTown-high',{
 	}
 });
 s.newMapAddon('QfirstTown-main',{
-	spot:{t1:{x:192,y:1088},t2:{x:320,y:1088},b:{x:1824,y:2432}},
+	spot:{t7:{x:368,y:784},t2:{x:400,y:1136},t1:{x:624,y:1360}},
 	load:function(spot){
 		m.spawnTeleporter(spot.t1,'teleTownWell','well');
 	}

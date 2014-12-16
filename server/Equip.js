@@ -404,6 +404,8 @@ Equip.destroy = function(key,id){
 
 
 Equip.upgrade = function(equip){
+	var equip = Tk.deepClone(equip);	//case Qsystem-
+	
 	for(var i in equip.upgradeInfo.item)	//increase cost to upgrade again
 		equip.upgradeInfo.item[i] = equip.upgradeInfo.item[i] * 2;
 		
@@ -436,10 +438,10 @@ Equip.upgrade.click = function(key,eid){
 	if(!Main.haveItem(main,eid)) 
 		return ERROR(3,'dont have equip') || Message.add(key,'You don\'t have this item.');
 		
-	
-	var newid = Equip.upgrade(equip).id;
 	Main.removeItem(main,eid);
 	Main.removeItem(main,equip.upgradeInfo.item);
+	
+	var newid = Equip.upgrade(equip).id;
 	Main.addItem(main,newid);
 	Equip.removeFromDb(eid);
 	
@@ -470,6 +472,7 @@ Equip.addMasteryExp = function(key,eid,amount){
 	if(!Main.haveItem(main,eid)) 
 		return ERROR(3,'dont have equip') || Message.add(key,'You don\'t have this item.');
 			
+	var equip = Tk.deepClone(equip);	//case Qsystem-
 	equip.masteryExp += amount;
 	equip.def = Equip.Def(equip.defRaw,equip.masteryExp);
 	equip.dmg = Equip.Dmg(equip.dmgRaw,equip.masteryExp);

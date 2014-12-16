@@ -5,8 +5,6 @@ Main.Temp = function(){	//unsued...
 	return {};
 	/*
 	questRating:'',	//name of quest
-	arrowAdd:[],
-	arrowRemove:[],
 	help:'',
 	sfx:'',
 	song:'',
@@ -22,63 +20,6 @@ Main.Temp = function(){	//unsued...
 
 //##################
 
-Main.Arrow = function(x,y,side,time,id,size){
-	return {
-		id:id || Math.randomId(),
-		x:x || 0,
-		y:y || 0,
-		side:side || 'right',
-		time:time || 25*5,
-		size:size || 40,
-		timeout:null,
-		html:null,
-		interval:null,
-		subTimeout:null,
-	}	
-}
-Main.arrow = {};
-//Main.arrow.add(main,Main.Arrow(500,500,'left',25*5,'bob',40));
-Main.arrow.add = function(main,arrow){
-	if(SERVER){
-		main.temp.arrowAdd = main.temp.arrowAdd  || [];
-		main.temp.arrowAdd.push(arrow);
-		return;
-	} 
-	var html = Img.drawArrow(arrow.side,arrow.size);
-	html.css({position:'absolute',left:arrow.x,top:arrow.y});
-	
-	arrow.timeout = setTimeout(function(){
-		Main.arrow.remove(main,arrow.id);
-	},arrow.time*40);
-	
-	arrow.interval = setInterval(function(){	//blink
-        arrow.html.css("opacity", "0.1");
-        arrow.subTimeout = setTimeout(function(){
-           arrow.html.css("opacity", "1");
-        }, 200);
-    },1500);
-		
-	arrow.html = html;
-	$('#gameDiv').append(html);
-	Main.arrow.LIST[arrow.id] = arrow
-	
-};
-//Main.arrow.remove(main,'bob');
-Main.arrow.remove = function(main,id){
-	if(SERVER){
-		main.temp.arrowRemove = main.temp.arrowRemove  || [];
-		main.temp.arrowRemove.push(id);
-	} else {
-		if(Main.arrow.LIST[id]){	
-			clearTimeout(Main.arrow.LIST[id].timeout);
-			clearTimeout(Main.arrow.LIST[id].subTimeout);
-			clearInterval(Main.arrow.LIST[id].interval);
-			Main.arrow.LIST[id].html.remove();
-			delete Main.arrow.LIST[id];
-		}
-	}
-}
-Main.arrow.LIST = {};	//client
 
 
 //##################
@@ -220,11 +161,6 @@ Main.applyTempChange = function(main,temp){	//on client when receive
 			Dialog.open(i,temp.dialog[i]);
 	}
 	
-	for(var i in temp.arrowAdd)
-		Main.arrow.add(main,temp.arrowAdd[i]);
-	for(var i in temp.arrowRemove)
-		Main.arrow.remove(main,temp.arrowRemove[i]);	
-		
 	for(var i in temp.screenEffectAdd)
 		Main.screenEffect.add(main,temp.screenEffectAdd[i]);
 	for(var i in temp.screenEffectRemove)

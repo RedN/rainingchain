@@ -71,7 +71,7 @@ s.newEvent('_start',function(key){ //
 	s.message(key,'You use your first ability by Left-Clicking.');
 	s.callEvent('updateHUD',key);
 	
-	if(Debug.ACTIVE && Debug.skipTutorial)
+	if(Debug.ACTIVE && Debug.SKIP_TUTORIAL)
 		s.setTimeout(key,function(){
 			s.callEvent('skipTutorial',key);
 		},25*2);
@@ -306,7 +306,7 @@ s.newDialogue('ringo','Ringo','villager-male.0',[ //{
 s.newNpc('boss',{
 	name:"Dragon Boss",
 	hp:10000,
-	nevermove:True,
+	maxSpd:s.newNpc.maxSpd(0),
 	boss:s.newNpc.boss('dragon'),
 	sprite:s.newNpc.sprite('dragonKing',1.2),
 	moveRange:s.newNpc.moveRange(3.5,3),

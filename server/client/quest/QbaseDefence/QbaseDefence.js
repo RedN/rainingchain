@@ -1,4 +1,4 @@
-//11/28/2014 4:11 PM
+//12/15/2014 5:48 PM
 /*jslint node: true, undef:true, sub:true, asi:true, funcscope:true, forin:true, unused:false*//*global True, False, loadAPI*/
 /*Go to http://jshint.com/ and copy paste your code to spot syntax errors.*/
 
@@ -315,7 +315,7 @@ s.newMap('base',{
 	}
 });
 s.newMapAddon('QfirstTown-east',{
-	spot:{t3:{x:752,y:48},t2:{x:1232,y:48},a:{x:1648,y:208},t8:{x:48,y:272},s3:{x:2368,y:336},s5:{x:2112,y:560},t1:{x:48,y:528},e1:{x:1136,y:784},t7:{x:48,y:816},s4:{x:704,y:912},e2:{x:2064,y:944},t5:{x:3152,y:1008},s1:{x:2496,y:1168},undefined:{x:1360,y:1200},s2:{x:1056,y:1392},t4:{x:1680,y:1552},t6:{x:2896,y:1552}},
+	spot:{e1:{x:1136,y:720},e2:{x:2000,y:1008},t4:{x:1680,y:1552}},
 	load:function(spot){
 		m.spawnTeleporter(spot.t4,'startGame','zone','down');
 		

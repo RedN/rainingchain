@@ -323,7 +323,7 @@ s.newMap('main',{
 	}
 });
 s.newMapAddon('QfirstTown-east',{
-	spot:{t3:{x:752,y:48},t2:{x:1232,y:48},a:{x:1648,y:208},t8:{x:48,y:272},t1:{x:48,y:528},t7:{x:48,y:816},t5:{x:3152,y:1008},undefined:{x:1360,y:1200},t4:{x:1680,y:1552},t6:{x:2896,y:1552}},
+	spot:{t2:{x:1232,y:48}},
 	load:function(spot){
 		m.spawnTeleporter(spot.t2,'startGame','zone','up');
 	}

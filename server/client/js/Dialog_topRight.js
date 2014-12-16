@@ -147,7 +147,6 @@ Dialog.UI('hint',{
 		.html(main.questHint);
 		
 	html.append(hint);
-	//Main.arrow.add(main,Main.Arrow(1035,172,'right',25*2,'hint'));
 	
 },function(){
 	return '' + main.pref.mapRatio + main.questHint + main.hudState.minimap;
