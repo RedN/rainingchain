@@ -6,7 +6,7 @@ Actor.drawAll = function (ctx){
 	for(var i = 0 ; i < array.length ; i++){
 		var act = array[i];
 		context = Sprite.draw(ctx,act) || context;
-		if(act.combat && (main.pref.overheadHp || act !== player)){
+		if(act.combat && (Main.getPref(main,'overheadHp') || act !== player)){
 			Actor.drawStatus(act,ctx); 
 		}
 	}
@@ -52,14 +52,15 @@ Actor.drawChatHead.func = function(act,ctx){
 	
 	ctx.setFont(20);
 	var length = ctx.length(act.chatHead.text);
-	var rect = [numX-length/2,numX+length/2,numY,numY+20];
+	var rect = {x:numX-length/2,width:length,y:numY,height:20};
 	
 	var safe = 0;
 	do {
 		bad = false;
 		for(var i in Actor.drawChatHead.list){
 			if(Collision.testRectRect(rect,Actor.drawChatHead.list[i])){
-				numY += 10; rect[2] += 10; rect[3] += 10;
+				numY += 10; 
+				rect.y += 10;
 				bad = true;
 				break;
 			}
@@ -67,7 +68,7 @@ Actor.drawChatHead.func = function(act,ctx){
 	}while(bad && safe++<1000)
 	Actor.drawChatHead.list[act.id] = rect;
 	ctx.fillStyle="black";
-	ctx.globalAlpha = 0.2;
+	ctx.globalAlpha = 0.7;
 	ctx.roundRect(numX-5-length/2,numY-2,length+5,24);
 	ctx.globalAlpha = 1;
 	ctx.textAlign = 'center';
@@ -80,7 +81,7 @@ Actor.drawChatHead.func = function(act,ctx){
 
 }
 Actor.drawChatHead.list = {
-	//playername:[x,x,y,y],
+	//playername:rect,
 };
 
 Actor.getSpriteName = function(act){
@@ -99,10 +100,13 @@ Actor.drawStatus = function(act,ctx){	//hp + status
 	var numY = CST.HEIGHT2+act.y-player.y + spriteFromDb.hpBar*sizeMod;
 
 	//hp
+	if(act.hp <= 0) return;
+	ctx.globalAlpha = spriteServer.alpha;
 	ctx.strokeStyle = "black";
 	ctx.roundRect(numX,numY,100,5);
 	ctx.fillStyle = act.type === 'npc' ? 'red' : 'green';
-	ctx.roundRect(numX,numY,Math.max(act.hp/act.hpMax*100,0),5,1);	
+	var hp = Math.min(act.hp,act.hpMax);
+	ctx.roundRect(numX,numY,Math.max(hp/act.hpMax*100,0),5,1);	
 	ctx.fillStyle="black";
 	
 	//################
@@ -116,6 +120,7 @@ Actor.drawStatus = function(act,ctx){	//hp + status
 			count++;
 		}
 	}
+	ctx.globalAlpha = 1;
 }
 
 Actor.drawAll.getMinimapList = function(){	//bad...
@@ -131,7 +136,7 @@ Actor.drawAll.getMinimapList = function(){	//bad...
 			vx:m.x - player.x,
 			vy:m.y - player.y,
 			icon:icon,
-			size:icon.have('color') ? 6 : 16
+			size:Img.getMinimapIconSize(icon),
 		});
 	}
 	return toReturn;

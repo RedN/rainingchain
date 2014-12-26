@@ -2,7 +2,7 @@
 /*jslint node: true, undef:true, sub:true, asi:true, funcscope:true, forin:true, unused:false*//*global True, False, loadAPI*/
 /*Go to http://jshint.com/ and copy paste your code to spot syntax errors.*/
 
-'use strict';
+//'use strict';
 var s = loadAPI('v1.0','QpuzzleBridge',{
 	name:"Puzzle & Bridge",
 	author:"",
@@ -79,7 +79,6 @@ s.newEvent('_death',function(key){ //
 	s.failQuest(key);
 });
 s.newEvent('startGame',function(key){ //
-	if(!s.startQuest(key)) return;
 	s.startChrono(key,'timer',!!s.isChallengeActive(key,'speedrun'));
 	s.displayPopup(key,'Use item "Reset" if stuck.');
 	s.teleport(key,'g0','t1','solo',true);	
@@ -198,10 +197,10 @@ s.newEvent('spawnBridgeH',function(spot){ //
 	});
 });
 s.newEvent('spawnBridgeV',function(spot){ //
-	m.spawnActor(spot,"block-template",{
+	LOL = m.spawnActor(spot,"block-template",{
 		tag:{bridge:true},
 		sprite:s.newNpc.sprite('block-bridgeV'),
-		block:s.newNpc.block(s.newNpc.block.size(2,2),1,'npc'),
+		block:s.newNpc.block(s.newNpc.block.size(2,2),1,false,true,true),
 	});
 });
 s.newEvent('spawn',function(spot,list){ //
@@ -373,7 +372,10 @@ s.newMap('w4',{
 s.newMapAddon('QfirstTown-east',{
 	spot:{t5:{x:3152,y:1008}},
 	load:function(spot){
-		m.spawnTeleporter(spot.t5,'startGame','zone');
+		m.spawnTeleporter(spot.t5,'startGame','zone',{
+			minimapIcon:'minimapIcon.quest',
+			angle:s.newNpc.angle('right'),
+		});
 	}
 });
 

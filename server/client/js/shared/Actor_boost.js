@@ -59,7 +59,7 @@ Actor.boost.removeAll = function(act,stringToMatch){
 	stringToMatch = stringToMatch || '';	//'' = match all
 	for(var i in act.boost.list){
 		for(var j in act.boost.list[i].name){
-			if(act.boost.list[i].name[j].name.have(stringToMatch))
+			if(act.boost.list[i].name[j].name.contains(stringToMatch))
 				Actor.boost.remove(act,act.boost.list[i].name[j]);
 		}
 	}
@@ -103,13 +103,16 @@ Actor.setBoostListBase = function(act){	//could be optimzed to only test things 
 	for(var i in act.boost.list){
 		act.boost.list[i].base = act.boost.list[i].permBase = Stat.getValue(act,i);	
 	}
-	if(act.type === 'player') act.boost.list[i].base = act.boost.list['bullet-spd'].permBase *= 3;
+	if(act.type === 'player') 	//QUICKFIX
+		act.boost.list[i].base = act.boost.list['bullet-spd'].permBase *= 3;
 }
 
 Actor.permBoost = function(act,source,boost){
 	//remove permBoost if boost undefined
-	if(boost){	act.permBoost[source] = Tk.arrayfy(boost);
-	} else { delete act.permBoost[source]; }
+	if(boost)	
+		act.permBoost[source] = Tk.arrayfy(boost);
+	else 
+		delete act.permBoost[source];
 	
 	Actor.permBoost.update(act);
 	

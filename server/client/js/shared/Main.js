@@ -33,7 +33,6 @@ var Main = exports.Main = function(key,extra){
 		song:'',
 		questComplete:null,
 		screenEffect:{},
-		questMarker:{},
 	};
 	for(var i in extra) main[i] = extra[i];
 	Main.reputation.updatePt(main);
@@ -73,6 +72,10 @@ Main.onSignOff = function(main){	//require act to be inited
 
 Main.Pref = function(pref){
 	return SERVER ? null : Pref.getDefaultValue(pref);
+}
+
+Main.getPref = function(main,id){
+	return main.pref[id];
 }
 
 Main.getAct = function(main){

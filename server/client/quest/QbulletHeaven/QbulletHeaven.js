@@ -72,13 +72,13 @@ s.newEvent('_signIn',function(key){ //
 	s.failQuest(key);
 });
 s.newEvent('startGame',function(key){ //teleport and start timer.
-	if(!s.startQuest(key)) return;
 	s.teleport(key,'base','e5','solo',true);
-	//s.setRespawn(key,'QfirstTown-eastCave','t5','main',true);
 	s.setRespawn(key,'QfirstTown-east','a','main',true);
 	
 	if(s.isChallengeActive(key,'powerless')){
 		s.addBoost(key,'globalDmg',0);
+	} else {
+		s.displayPopup(key,'Destroy the towers when they turn blue.',25*3);
 	}
 	if(s.isChallengeActive(key,'infinite')){
 		s.set(key,'timeToSurvive',120*25);
@@ -90,6 +90,7 @@ s.newEvent('startGame',function(key){ //teleport and start timer.
 	} else {
 		s.message(key,'Kill 50 towers and you win!');
 	}
+	
 	s.addBoost(key,'hp-regen',2);
 });
 s.newEvent('surviveLongEnough',function(key){ //
@@ -134,7 +135,6 @@ s.newAbility('tower-dart0','attack',{
 	dmg:s.newAbility.dmg(150,'lightning'),
 	hitAnim:s.newAbility.anim('lightningHit',0.5),
 	maxTimer:500,
-	spd:500,
 	sprite:s.newAbility.sprite('lightningball',1)
 });
 s.newAbility('tower-ice0','attack',{
@@ -147,7 +147,6 @@ s.newAbility('tower-ice0','attack',{
 	hitAnim:s.newAbility.anim('coldHit',0.5),
 	chill:s.newAbility.status(1,1,1),
 	maxTimer:500,
-	spd:500,
 	sprite:s.newAbility.sprite('iceshard',1)
 });
 s.newAbility('tower-onMove0','attack',{
@@ -160,11 +159,14 @@ s.newAbility('tower-onMove0','attack',{
 	type:'bullet',
 	dmg:s.newAbility.dmg(150,'fire'),
 	hitAnim:s.newAbility.anim('fireHit',0.5),
-	spd:40,
+	spd:5,
 	sprite:s.newAbility.sprite('fireball',1),
-	onMove:{
-		type:'bullet'
-	}
+	onMove:s.newAbility.onMove(4,3,{
+		type:'bullet',
+		dmg:s.newAbility.dmg(25,'fire'),
+		sprite:s.newAbility.sprite('fireball',1),
+		spd:10,
+	}),	
 });
 
 s.newNpc('tower-fire',{
@@ -232,7 +234,9 @@ s.newMap('base',{
 s.newMapAddon('QfirstTown-east',{
 	spot:{a:{x:1648,y:208}},
 	load:function(spot){
-		m.spawnTeleporter(spot.a,'startGame','cave');	//add telezone so player can start the quest
+		m.spawnTeleporter(spot.a,'startGame','cave',{	//add telezone so player can start the quest
+			minimapIcon:'minimapIcon.quest',
+		});	
 	}
 });
 

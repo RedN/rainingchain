@@ -157,7 +157,7 @@ Actor.getBulletCollisionMapModList = function(){	//note: Collision.MAP_MOD also 
 	var toReturn = [];
 	for(var i in Actor.LIST){
 		var act = Actor.LIST[i];
-		if(!act || !act.block || !act.block.impactBullet) continue;
+		if(!act || !act.block || (!act.block.impactNpc && !act.block.impactBullet)) continue;
 		
 		var b = act.block;
 		var pos = Collision.getPos({

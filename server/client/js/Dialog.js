@@ -148,23 +148,15 @@ Dialog.UI = function(id,css,create,getOld,interval,loop,close,variable){
 }
 
 Dialog.isMouseOverDialog = function(){
-	if(Dialog.isMouseOverDialog.GLITCHED)
-		return false;
-	var bool = false;
-	var list = document.querySelectorAll( ":hover" );
-	for(var i = 0 ; i < list.length; i++)
-		if(list[i].id && list[i].id.have('ui-id')) 
-			bool = true;
-	
-	if(!bool) Dialog.isMouseOverDialog.COUNT = 0;
-	else Dialog.isMouseOverDialog.COUNT++;
-	if(Dialog.isMouseOverDialog.COUNT > 50)
-		Dialog.isMouseOverDialog.GLITCHED = true;
-	
-	return bool;
+	for(var i in ACTIVE){
+		if(!LIST[i].isDialog) continue;
+		var html = LIST[i].html;
+		if($(html).is(":hover"))
+			return true;		
+	}
+	return false;
+	//document.querySelectorAll( ":hover" );
 }
-Dialog.isMouseOverDialog.COUNT = 0;
-Dialog.isMouseOverDialog.GLITCHED = false;
 
 
 Dialog.ZINDEX = {

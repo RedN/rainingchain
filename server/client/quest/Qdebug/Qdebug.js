@@ -6,6 +6,7 @@ var s = loadAPI('v1.0','Qdebug',{
 	name:'Debug',
 	author:'Admin',
 	dailyTask:false,
+	showInTab:false,
 });
 var m = s.map; var b = s.boss;
 

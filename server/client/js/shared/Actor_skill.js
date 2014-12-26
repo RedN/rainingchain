@@ -23,6 +23,7 @@ Actor.getCombatLevel = function(act){
 }
 
 Actor.addExp = function(act,num){
+	if(typeof num !== 'number' || isNaN(num)) return ERROR(4,'num is not number');
 	act.skill.exp += num || 0;
 	Actor.setFlag(act,'skill');
 }

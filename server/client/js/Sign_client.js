@@ -10,6 +10,7 @@ var HIDE_SOCIALMEDIA = true;
 
 Sign.init = function(){
 	Sign.init.html();
+	Sign.init.html.highscore();
 	Sign.init.html.about();
 	Sign.init.socket();
 	
@@ -207,6 +208,33 @@ Sign.init.html.about = function(){
 }	
 
 
+Sign.init.html.highscore = function(){
+	var full = $('<div>')
+		.addClass("lg-container")
+		.css({font: '20px Kelly Slab',textAlign:'center'});
+	$('#startDiv').append(full);
+	full.append($('<h2>')
+		.html('Highscore - Most Quests Complete') 
+	);
+	full.hide();
+	
+	$.ajax({
+		url: '/highscoreHomePage',
+		data: '',
+		type: 'POST',
+		success: function(data) {
+			for(var i = 0 ; i < data.highscore.length; i++){
+				full.append('Rank ' + data.highscore[i].rank + ': ' + data.highscore[i].username + ' (' + data.highscore[i].value + ' Quests)<br>');
+			}
+			full.show();
+		}
+	});
+	
+	
+	
+	return full;
+}	
+
 
 Sign.init.socket = function(){
 	Socket.on('signIn', function (data) {
@@ -273,7 +301,7 @@ Sign.onclick = function(){
 	
 	if(Game.loading) return Sign.log("Loading images...");
 	
-	if(Tk.getBrowserVersion().have('Safari'))
+	if(Tk.getBrowserVersion().contains('Safari'))
 		return Sign.log("Safari supports canvas-based games very poorly.<br> Use Google Chrome, Firefox, Opera or IE instead.<br>"+
 			//"You are currently using " + Tk.getBrowserVersion() + '.<br>' +
 			'You can download Google Chrome at <br><a target="_blank" href="https://www.google.com/chrome/">www.google.com/chrome/</a>');
@@ -302,7 +330,7 @@ Sign.up = function (){
 	if(pass !== confirm) return Sign.log('Passwords do not match.');
 	
 	var email = $("#lg-signUpEmail").val();
-	if(window.location.hostname.have('rainingchain') && !escape.email(email)) 
+	if(window.location.hostname.contains('rainingchain') && !escape.email(email)) 
 		return Sign.log('Invalid Email.<br> Keep in mind that it\'s your own way to recover your account.');
 	
 	if(!Sign.onclick()) return;

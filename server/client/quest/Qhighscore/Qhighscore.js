@@ -6,8 +6,9 @@ eval(loadDependency(["Quest","Actor","Main"]));
 var s = loadAPI('v1.0','Qhighscore',{
 	name:'Global Highscore',
 	author:'',
-	showIntab:false,
-	dailyTask:false
+	showInTab:false,
+	dailyTask:false,
+	globalHighscore:true,
 });
 var m = s.map; var b = s.boss;
 

@@ -30,8 +30,7 @@ Main.dialogue.end = function(main){
 
 Main.dialogue.selectOption = function(main,option){
 	if(main.questActive && !Party.isLeader(main.id))
-		return Message.add(main.id,Message('questPopup','Only the leader can choose dialogue options.',null,Message.QuestPopup(25*8,false)));
-	
+		return Message.addPopup(key,'Only the leader can choose dialogue options.');
 	if(option.next)
 		Main.dialogue.start(main,{quest:option.quest,npc:option.npc,node:option.next});
 	else Main.dialogue.end(main);

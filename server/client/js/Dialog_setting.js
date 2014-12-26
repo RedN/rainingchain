@@ -34,18 +34,18 @@ Dialog.setting = function(html,variable){
 	html.append('Volume:');
 	html.append($('<button>')
 		.click(function(){
-			Command.execute('pref',['volumeMaster',(main.pref.volumeMaster+10).mm(0,100)]);
-			Command.execute('pref',['volumeSong',(main.pref.volumeSong+10).mm(0,100)]);
-			Command.execute('pref',['volumeSfx',(main.pref.volumeSfx+10).mm(0,100)]);
+			Command.execute('pref',['volumeMaster',(Main.getPref(main,'volumeMaster+10')).mm(0,100)]);
+			Command.execute('pref',['volumeSong',(Main.getPref(main,'volumeSong')+10).mm(0,100)]);
+			Command.execute('pref',['volumeSfx',(Main.getPref(main,'volumeSfx')+10).mm(0,100)]);
 		})
 		.html('+')
 		.attr('title','Increase volume')
 	);
 	html.append($('<button>')
 		.click(function(){
-			Command.execute('pref',['volumeMaster',(main.pref.volumeMaster-10).mm(0,100)]);
-			Command.execute('pref',['volumeSong',(main.pref.volumeSong-10).mm(0,100)]);
-			Command.execute('pref',['volumeSfx',(main.pref.volumeSfx-10).mm(0,100)]);
+			Command.execute('pref',['volumeMaster',(Main.getPref(main,'volumeMaster')-10).mm(0,100)]);
+			Command.execute('pref',['volumeSong',(Main.getPref(main,'volumeSong')-10).mm(0,100)]);
+			Command.execute('pref',['volumeSfx',(Main.getPref(main,'volumeSfx')-10).mm(0,100)]);
 		})
 		.html('-')
 		.attr('title','Decrease volume')

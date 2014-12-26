@@ -85,7 +85,7 @@ ItemList.have = function (inv,id,amount){
 
 ItemList.transfer = function(originInv,destinationInv,id,amount,verifyIfOwn){
 	var list = ItemList.format(id,amount);
-	if(verifyIfOwn && !ItemList.have(originInv,list)) return false;
+	if(verifyIfOwn && !ItemList.contains(originInv,list)) return false;
 	ItemList.remove(originInv,list);
 	ItemList.add(destinationInv,list);	
 	return true;

@@ -39,7 +39,7 @@ var QuestReward = function(score,item,exp){
 	return {
 		score:score || 0,
 		item:item || {},
-		exp:exp || {},	
+		exp:exp,	
 	}
 }
 
@@ -112,20 +112,21 @@ Quest.onReset = function(q,main){	//undo what the quest could have done
 	QuestVar.removeFromDb(q.id,main);
 	
 	var s = q.s;
-	for(var i in q.item)	s.removeItem(key,i,CST.bigInt);
-	for(var i in q.equip) s.removeItem(key,i,CST.bigInt);
-	
-	
+	for(var i in q.item)	
+		s.removeItem(key,i,CST.bigInt);
+	for(var i in q.equip) 
+		s.removeItem(key,i,CST.bigInt);
+		
 	for(var i in act.timeout){
-		if(i.have(q.id,true)) 
+		if(i.contains(q.id,true)) 
 			Actor.timeout.remove(act,i);
 	}
 	for(var i in main.chrono){
-		if(i.have(q.id,true)) 
+		if(i.contains(q.id,true)) 
 			Main.chrono.stop(main,i);
 	}
 	for(var i in act.permBoost){
-		if(i.have(q.id,true)) 
+		if(i.contains(q.id,true)) 
 			Actor.permBoost(act,i);
 	}
 	s.removePreset(act.id);
@@ -134,6 +135,9 @@ Quest.onReset = function(q,main){	//undo what the quest could have done
 	
 	Main.reputation.updateBoost(main);
 	Actor.boost.removeAll(act,q.id);
+	
+	if(s.isInQuestMap(key))
+		s.teleportTown(key);
 	
 	s.enableAttack(key,true);
 	s.enablePvp(key,false);
@@ -156,7 +160,7 @@ Quest.getRandomDaily = function(){
 }
 
 Quest.addPrefix = function(Q,name){
-	if(name.have(Q + '-',true)) return name;
+	if(name.contains(Q + '-',true)) return name;
 	else return Q + '-' + name;
 }
 

@@ -3,8 +3,8 @@ eval(loadDependency(['ItemList','Message','OptionList','Combat','Material','Craf
 var db = null; 	//Equip.init
 
 var Equip = exports.Equip = function(quest,id,piece,type,name,lvl,valueMod,boost,extra,addDb){	//called directly when creating quest equip
-	if(!CST.equip.piece.have(piece || extra.piece)) return ERROR(3,'invalid piece',piece|| extra.piece);
-	if(!CST.equip[piece|| extra.piece].have(type|| extra.type)) return ERROR(3,'piece and type doesnt match',piece|| extra.piece,type|| extra.type);
+	if(!CST.equip.piece.contains(piece || extra.piece)) return ERROR(3,'invalid piece',piece|| extra.piece);
+	if(!CST.equip[piece|| extra.piece].contains(type|| extra.type)) return ERROR(3,'piece and type doesnt match',piece|| extra.piece,type|| extra.type);
 		
 	var equip = {
 		version:'v1.0',

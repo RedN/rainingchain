@@ -20,6 +20,13 @@ Img.load = function(src,container,func){
 
 Img.icon = [];
 
+Img.getMinimapIconSize = function(name){
+	if(name === 'minimapIcon.quest') return 24;
+	if(name === 'minimapIcon.questMarker') return 24;
+	if(name.contains('color')) return 6;
+	return 16;
+}
+
 IconModel = function(id,list,size){
 	size = size || 48;
 	if(DB[id]) return ERROR(3,'id already taken',id);
@@ -82,6 +89,9 @@ IconModel('villager-child',['0','1','2','3','4','5','6','7','8','9','10','11','1
 IconModel('fairy',['0','1','2','3','4','5','6','7','8','9','10','11','12','13','14','15','16'],96);
 IconModel('bad-monster',['0','1','2','3','4','5','6','7','8','9','10','11','12','13','14','15','16'],96);
 IconModel('bad-human',['0','1','2','3','4','5','6','7','8','9','10','11','12','13','14','15','16'],96);
+
+
+
 
 Img.drawIcon = function(ctx,info,x,y,size){	
 	size = size || 32;

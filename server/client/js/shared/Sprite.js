@@ -142,11 +142,17 @@ Sprite.draw = function(ctx,act){	//also does position update calc, client predic
 			ctx.restore();
 		}
 		ctx.globalAlpha = 1;
+		
+		if(Main.getPref(main,'displayMiddleSprite')){
+			ctx.fillStyle = 'red';
+			ctx.fillRect(CST.WIDTH2 - player.x + act.x -4,CST.HEIGHT2 - player.y + act.y -4,8,8);
+			ctx.fillStyle = 'black';
+		}
 	}
 	if(mouseOverInterface || act.type === 'bullet' || act === player) return;
 	
 	if(Collision.testMouseRect(key,{x:posX- sizeOffX,y:posY- sizeOffY,width:sizeOffX*2,height:sizeOffY*2})){
-		if(main.pref.highlightHover){
+		if(Main.getPref(main,'highlightHover')){
 			ctx.globalAlpha = 0.2;
 			ctx.fillRect(posX- sizeOffX,posY- sizeOffY,sizeOffX*2,sizeOffY*2);
 			ctx.globalAlpha = 1;

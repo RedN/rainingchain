@@ -1,6 +1,6 @@
 {
     "name": "rainingchain",
-    "version": "1.0.0-78",
+    "version": "1.0.0-86",
     "description": "Raining Chain",
     "main": "app.js",
     "subdomain": "rainingchain",

@@ -48,7 +48,7 @@ Dialog.UI('tabButton',{
 				Dialog.open('friend');
 			})),
 			applyHudState('tab-feedback',Img.drawIcon.html('system.flag',24,'Leave Feedback',function(){
-				Dialog.open('contactAdmin');
+				Message.addPopup(main.id,'Click the Display/Hide Comments button below the game box.');
 			})),
 			applyHudState('tab-homeTele',Img.drawIcon.html('minimapIcon.door',24,'Abandon Active Quest and teleport to Town',function(){
 				Command.execute('hometele',[]);
@@ -118,7 +118,7 @@ Dialog.UI('inventory',{
 	var nonquest = {};
 	var quest = {};
 	for(var i in main.invList.data)
-		if(main.questActive && i.have(main.questActive))
+		if(main.questActive && i.contains(main.questActive))
 			quest[i] = main.invList.data[i];
 		else 
 			nonquest[i] = main.invList.data[i];
@@ -176,7 +176,7 @@ var convertItemListToArray = function(list,amountPerRow){
 			itemHtml.click((function(i){
 				return function(e){
 					if(!e.shiftKey) Command.execute('transferInvBank',[i,1]);
-					else Command.execute('transferInvBank',[i,main.pref.bankTransferAmount]);
+					else Command.execute('transferInvBank',[i,Main.getPref(main,'bankTransferAmount')]);
 				}
 			})(i))
 			.bind('contextmenu',(function(i){

@@ -37,7 +37,7 @@ Sfx.play = function(id,volume){
 	if(!sfx) return ERROR(3,'no sfx with that id',id);
 	var vol = volume || 1;
 	vol *= sfx.volume;
-	vol *= main.pref.volumeSfx/100 * main.pref.volumeMaster/100;
+	vol *= Main.getPref(main,'volumeSfx')/100 * Main.getPref(main,'volumeMaster')/100;
 	if(vol === 0) return;
 	
 	for(var i in sfx.list){

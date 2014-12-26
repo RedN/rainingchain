@@ -45,13 +45,13 @@ Performance.init = function(){
 		color:'white',
 		font:'1em Kelly Slab',
 	},function(html){
-		if(!main.pref.displayFPS) return false;
+		if(!Main.getPref(main,'displayFPS')) return false;
 		
 		html.addClass('shadow');
 		html.attr('title','Ping: ' + Performance.latencyTime + ' ms. FPS: ' + (1000/Performance.cycleTime).r(0) + '/25.');
 		html.html(Performance.clientPerformance);
 	},function(){
-		return '' + Performance.latencyTime + Performance.clientPerformance + main.pref.displayFPS;
+		return '' + Performance.latencyTime + Performance.clientPerformance + Main.getPref(main,'displayFPS');
 	});
 	
 	
@@ -59,7 +59,7 @@ Performance.init = function(){
 
 /*
 	$("#performanceDiv").css({
-		left:CST.WIDTH-CST.WIDTH/main.pref.mapRatio-50,
+		left:CST.WIDTH-CST.WIDTH/Main.getPref(main,'mapRatio')-50,
 		width:50,
 		height:30,
 		fontFamily:'Kelly Slab',
@@ -67,7 +67,7 @@ Performance.init = function(){
 		whiteSpace:'normal',
 		color:'white',
 	});
-	if(main.pref.displayFPS){
+	if(Main.getPref(main,'displayFPS')){
 		var text = 
 		Draw.setInn erHTML($("#performanceDiv")[0],text);
 	} else {

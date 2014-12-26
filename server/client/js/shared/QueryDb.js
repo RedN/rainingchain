@@ -128,7 +128,7 @@ QueryDb.respond.highscore = function(key,query,cb){
 	QueryDb.getHighscoreForQuest = function(id){
 		var list = {};
 		for(var i in DB.highscore.data)
-			if(i.have(id)) list[i] = 1;
+			if(i.contains(id)) list[i] = 1;
 		return list;
 	}
 	QueryDb.getHighscoreQuestList = function(){

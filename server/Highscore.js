@@ -29,8 +29,13 @@ Highscore.get = function(id){
 	return DB[id] || null;
 }
 
-Highscore.init = function(dbLink){
+Highscore.init = function(dbLink,app){
 	db = dbLink;
+	app.post('/highscoreHomePage',function(req,res){
+		res.send({
+			highscore:Highscore.getHomePageRank()
+		});
+	});
 }
 
 Highscore.Score = function(category,rank,value,username){
@@ -41,8 +46,6 @@ Highscore.Score = function(category,rank,value,username){
 		username:username,	
 	}
 }
-
-
 
 Highscore.fetchTopScore = function(category,cb,amount){	//return [Highscore.Score]
 	amount = amount || 15;
@@ -92,8 +95,6 @@ Highscore.fetchTop15AndUser = function(category,username,cb){
 	},15);
 }
 
-
-
 Highscore.getQuest = function(str){
 	return str.split('-')[0];
 }
@@ -120,7 +121,6 @@ Highscore.compressClient = function(highscore,score){	//score == null for SignIn
 		timestamp:Date.now(),
 	}
 }
-
 
 Highscore.compressDb = function(category,value,username){
 	return {
@@ -172,6 +172,18 @@ Highscore.saveScore = function(category,value,username,cb){
 	);	
 }
 
+Highscore.getHomePageRank = function(){
+	if(Date.now() - Highscore.getHomePageRank.LAST_UPDATE > CST.MIN*5)
+		Highscore.getHomePageRank.update();
+	return Highscore.getHomePageRank.INFO;
+}
+Highscore.getHomePageRank.update = function(){
+	Highscore.fetchTopScore('Qhighscore-questCount',function(list){
+		Highscore.getHomePageRank.INFO = list;
+	},5);
+}
+Highscore.getHomePageRank.INFO = {};
+Highscore.getHomePageRank.LAST_UPDATE = -1;
 
 
-
+Highscore.update

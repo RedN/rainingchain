@@ -56,7 +56,7 @@ Main.removeItem = function(main,id,amount){
 }
 
 Main.haveItem = function(main,id,amount){
-	return ItemList.have(main.invList,id,amount);
+	return ItemList.contains(main.invList,id,amount);
 }
 
 Main.getItemAmount = function(main,id){
@@ -105,7 +105,7 @@ Main.ItemList.init = function(){ //}
 		html.append('Shift-Left Click Amount: ');
 		
 		var input = $('<input>')
-			.val(main.pref.bankTransferAmount)
+			.val(Main.getPref(main,'bankTransferAmount'))
 			.attr('type','number')
 			.attr('max',999999999)
 			.attr('min',1)
@@ -137,7 +137,7 @@ Main.ItemList.init = function(){ //}
 			itemHtml.click((function(i){
 				return function(e){
 					if(!e.shiftKey) Command.execute('transferBankInv',[i,1]);
-					else Command.execute('transferBankInv',[i,main.pref.bankTransferAmount]);
+					else Command.execute('transferBankInv',[i,Main.getPref(main,'bankTransferAmount')]);
 				}
 			})(i))
 			.bind('contextmenu',(function(i){

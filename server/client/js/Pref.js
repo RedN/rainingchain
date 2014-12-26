@@ -37,6 +37,9 @@ Pref('mapRatio','Map Ratio',6,4,7,'Minimap Size');
 Pref('bankTransferAmount','X- Bank',1000,1,9999999999,'Amount of items transfered with Shift + Left Click');
 Pref('orbAmount','X- Orb',1000,1,9999999999,'Amount of orbs used with X- option');
 Pref('controller','Enable Controller',0,0,1,'Play the game with a Xbox 360 Controller.');
+Pref('displayMiddleSprite','Display Middle Sprite',0,0,1,'Display Middle Sprite. 0=false, 1=true');
+
+
 
 Pref.RESET = 'reset';
 

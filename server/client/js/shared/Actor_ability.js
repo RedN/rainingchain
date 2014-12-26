@@ -60,7 +60,8 @@ Actor.Ability = function(normal,quest){
 }
 
 Actor.Ability.compressDb = function(ability){
-	for(var i in ability.normal) ability.normal[i] = ability.normal[i] ? ability.normal[i].id : 0;
+	for(var i in ability.normal) 
+		ability.normal[i] = ability.normal[i] ? ability.normal[i].id : 0;
 	return ability.normal;
 }
 

@@ -4,7 +4,7 @@
 
 'use strict';
 var s = loadAPI('v1.0','Qrgb',{
-	name:"Quest Template",
+	name:"RGB",
 	author:"rc"
 });
 var m = s.map; var b = s.boss;
@@ -24,12 +24,32 @@ s.newVariable({
 	toggleGreen:False,
 	haveQuestMarker:False,
 	killBlue:0,
-	killGreen:0
+	killGreen:0,
+	chrono:0,
+});
+
+s.newChallenge('hp100',"100 Hp","Complete the quest with only 100 max hp.",2,function(key){
+	return true;
+});
+
+s.newChallenge('min4',"Speedrun","Complete the quest within 4 minutes.",2,function(key){
+	return s.get(key,'chrono') < 25*60*4;
+});
+
+s.newChallenge('deathlytower',"Deathly Tower","Towers are harder to kill. WAY HARDER.",2.5,function(key){
+	return true;
+});
+
+s.newHighscore('speedrun',"Fastest Time","Fastest Time with Deathly Tower active.",'ascending',function(key){
+	if(s.isChallengeActive(key,'deathlytower'))
+		return s.get(key,'chrono');	
+	return null;
 });
 
 s.newEvent('talkNpc',function(key){ //
-	if(!s.startQuest(key)) return;
-	
+	if(s.get(key,'toggleBlue') && s.get(key,'toggleGreen')){
+		return s.startDialogue(key,'razfibre','toggleBoth');
+	}	
 	if(!s.get(key,'toggleRed')){
 		return s.startDialogue(key,'razfibre','normalNpc');
 	}
@@ -40,7 +60,18 @@ s.newEvent('talkNpc',function(key){ //
 		return s.startDialogue(key,'razfibre','afterRedSwitch');
 	}
 });
+
+
 s.newEvent('_signIn',function(key){ //
+	if(s.isChallengeActive(key,'hp100')){
+		s.addBoost(key,'hp-max',0.1);
+		s.message(key,'You hp has been lowered because of the challenge.');
+	}
+	if(s.isChallengeActive(key,'min4') || s.isChallengeActive(key,'deathlytower')){
+		s.failQuest(key);
+	}
+	
+	
 	s.addTorchEffect(key,"red",1000000,"rgba(255,0,0,0.3)",10);
 	
 	if(s.get(key,'toggleBlue')){
@@ -51,13 +82,25 @@ s.newEvent('_signIn',function(key){ //
 	if(s.get(key,'toggleGreen')){
 		s.addTorchEffect(key,"green",1000000,"rgba(0,255,0,0.3)",10);
 	} else {
-		//quest marker green
+		s.addQuestMarker(key,"green",'QfirstTown-south','t1');
 	}
 });
+
+s.newEvent('_start',function(key){ //
+	if(s.isChallengeActive(key,'hp100')){
+		s.addBoost(key,'hp-max',0.1);
+		s.message(key,'You hp has been lowered because of the challenge.');
+	}	
+});
+
 s.newEvent('_complete',function(key){ //
-	s.teleportTown(key);
+	if(s.isChallengeActive(key,'min4') || s.isChallengeActive(key,'deathlytower'))
+		s.set(key,'chrono',s.stopChrono(key,'myChrono'));
 });
 s.newEvent('_hint',function(key){ //
+	if(s.get(key,'toggleBlue') && s.get(key,'toggleGreen')){
+		return 'Talk with Razfibre to complete the quest.'; 
+	}
 	if(!s.get(key,'toggleRed'))
 		return 'I wonder what happens if I toggle the red switch.';
 	
@@ -75,14 +118,18 @@ s.newEvent('_hint',function(key){ //
 	}
 });
 s.newEvent('toggleRed',function(key){ //
-	if(!s.startQuest(key)) return;
-	
 	s.startDialogue(key,'razfibre','warningRightBeforeTouching');
+	if(s.isChallengeActive(key,'min4') || s.isChallengeActive(key,'deathlytower')){
+		s.startChrono(key,'myChrono');	
+	}
 });
+
 s.newEvent('toggleRedConfirmed',function(key){ //
 	s.addTorchEffect(key,"red",1000000,"rgba(255,0,0,0.3)",10);
 	s.startDialogue(key,'razfibre','activateSwitch');
 	s.set(key,'toggleRed',true);
+	
+	
 });
 s.newEvent('addQuestMarker',function(key){ //
 	s.set(key,'haveQuestMarker',true);
@@ -95,22 +142,35 @@ s.newEvent('killBlue',function(key){ //
 s.newEvent('killGreen',function(key){ //
 	s.add(key,'killGreen',1);
 });
+
+s.newEvent('toggleBoth',function(key){ //
+	s.teleport(key,'QfirstTown-main','n1','main');
+	s.removeTorchEffect(key,'green');
+	s.removeTorchEffect(key,'red');
+	s.removeTorchEffect(key,'blue');
+});
 s.newEvent('toggleBlue',function(key){ //
 	s.set(key,'toggleBlue',true);
-	if(s.get(key,'toggleGreen'))
-		return s.completeQuest(key);
-	s.addTorchEffect(key,'blue',100000,'rgba(0,0,255,0.3)',10);
 	s.removeQuestMarker(key,'blue');
+	if(s.get(key,'toggleGreen'))
+		return s.callEvent('toggleBoth',key);
+	s.addTorchEffect(key,'blue',100000,'rgba(0,0,255,0.3)',10);
 	s.displayPopup(key,'You activated the blue switch which reactivated the blue RGB parameter. Your RGB is (255,0,255).');
 });
 s.newEvent('toggleGreen',function(key){ //
 	s.set(key,'toggleGreen',true);
-	if(s.get(key,'toggleBlue'))
-		return s.completeQuest(key);
-	s.addTorchEffect(key,'green',100000,'rgba(0,255,0,0.3)',10);
 	s.removeQuestMarker(key,'green');
+	if(s.get(key,'toggleBlue'))
+		return s.callEvent('toggleBoth',key);
+	s.addTorchEffect(key,'green',100000,'rgba(0,255,0,0.3)',10);
 	s.displayPopup(key,'You activated the green switch which reactivated the green RGB parameter. Your RGB is (255,255,0).');
 });
+
+s.newEvent('questComplete',function(key){ //
+	s.completeQuest(key);
+});
+
+
 
 s.newDialogue('razfibre','Razfibre','warrior-male.1',[ //{ 
 	s.newDialogue.node('normalNpc',"Hey! Do NOT touch the red switch! It's dangerous.",[ 	],''),
@@ -124,10 +184,13 @@ s.newDialogue('razfibre','Razfibre','warrior-male.1',[ //{
 	s.newDialogue.node('afterRedSwitch',"Go activate the other switches I marked on your minimap.",[ 
 		s.newDialogue.option("Okay, I will do that.",'','')
 	],''),
-	s.newDialogue.node('warningRightBeforeTouching',"Don't do that! It's dangerous!",[ 
+	s.newDialogue.node('warningRightBeforeTouching',"Don't activate that switch! It's dangerous!",[ 
 		s.newDialogue.option("*Do it anyway.*",'','toggleRedConfirmed'),
 		s.newDialogue.option("*Don't do it.*",'','')
-	],'')
+	],''),
+	s.newDialogue.node('toggleBoth',"Yeah, you made it! Your RGB settings is now back to (255,255,255).",[
+		s.newDialogue.option("No problem.",'','questComplete'),
+	])
 ]); //}
 
 s.newNpc('totem',{
@@ -135,17 +198,12 @@ s.newNpc('totem',{
 	sprite:s.newNpc.sprite('tower-red',1)
 });
 
-s.newMap('main',{
-	name:"Super Map",
-	lvl:0,
-	grid:["0000000000000000000000000000000000000000","0000000000000000000000000000000000000000","0000000000000000000000000000000000000000","0000000000000000000000000000000000000000","0000000000000000000000000000000000000000","0000000000000000000000000000000000000000","0000000000000000000000000000000000000000","0000000000000000000000000000000000000000","0000000000000000000000000000000000000000","0000000000000000000000000000000000000000","0000000000000000000000000000000000000000","0000000000000000000000000000000000000000","0000000000000000000000000000000000000000","0000000000000000000000000000000000000000","0000000000000000000000000000000000000000","0000000000000000000000000000000000000000","0000000000000000000000000000000000000000","0000000000000000000000000000000000000000","0000000000000000000000000000000000000000","0000000000000000000000000000000000000000","0000000000000000000000000000000000000000","0000000000000000000000000000000000000000","0000000000000000000000000000000000000000","0000000000000000000000000000000000000000","0000000000000000000000000000000000000000","0000000000000000000000000000000000000000","0000000000000000000000000000000000000000","0000000000000000000000000000000000000000","0000000000000000000000000000000000000000","0000000000000000000000000000000000000000","0000000000000000000000000000000000000000","0000000000000000000000000000000000000000","0000000000000000000000000000000000000000","0000000000000000000000000000000000000000","0000000000000000000000000000000000000000","0000000000000000000000000000000000000000","0000000000000000000000000000000000000000","0000000000000000000000000000000000000000","0000000000000000000000000000000000000000","0000000000000000000000000000000000000000","0000000000000000000000000000000000000000","0000000000000000000000000000000000000000","0000000000000000000000000000000000000000","0000000000000000000000000000000000000000","0000000000000000000000000000000000000000"],
-	tileset:'v1.2'
-},{
-	spot:{t3:{x:432,y:432},e1:{x:656,y:432},t2:{x:848,y:432},e4:{x:400,y:688},t1:{x:656,y:688},e2:{x:880,y:688},t4:{x:432,y:880},e3:{x:656,y:880},t5:{x:880,y:880}},
-	load:function(spot){
-		m.spawnActor(spot.e1,'bat');
-	}
+s.newNpc('totemBoss',{
+	nevermove:True,
+	sprite:s.newNpc.sprite('tower-red',1),
+	boss:s.newNpc.boss('totem')
 });
+
 s.newMapAddon('QfirstTown-main',{
 	spot:{n1:{x:2400,y:1344},q1:{x:2464,y:1440}},
 	load:function(spot){
@@ -159,7 +217,9 @@ s.newMapAddon('QfirstTown-main',{
 		
 		m.spawnToggle(spot.q1,function(key){
 			return !s.get(key,'toggleRed');
-		},'toggleRed');
+		},'toggleRed',null,null,{
+			minimapIcon:'minimapIcon.quest',
+		});
 	}
 });
 s.newMap('blueSwitchCave',{
@@ -210,6 +270,24 @@ s.newMapAddon('QfirstTown-north',{
 		},'cave');
 	}
 });
+
+
+s.newEvent('teleSouthGreen',function(key){ //
+	if(!s.get(key,'toggleRed'))
+		return s.message(key,'You have no reason to go there.');
+	s.teleport(key,'greenSwitchForest','t1','party',true);	
+	s.setRespawn(key,'QfirstTown-south','t1','main');
+	s.displayPopup(key,'Those red towers seem to strengthen the monster.');
+	
+	var model = s.isChallengeActive(key,'deathlytower')? 'totemBoss' : 'totem';
+	s.spawnActor(key,'greenSwitchForest','e1',model,{tag:{totem:true}});
+	s.spawnActor(key,'greenSwitchForest','e2',model,{tag:{totem:true}});
+	s.spawnActor(key,'greenSwitchForest','e3',model,{tag:{totem:true}});
+
+});
+
+
+		
 s.newMap('greenSwitchForest',{
 	name:"Green Switch Forest",
 	lvl:0,
@@ -243,10 +321,7 @@ s.newMap('greenSwitchForest',{
 			s.teleport(key,'QfirstTown-south','t1','main');
 		},'zone','down');
 		
-		
-		m.spawnActor(spot.e1,'totem',{tag:{totem:true}});
-		m.spawnActor(spot.e2,'totem',{tag:{totem:true}});
-		m.spawnActor(spot.e3,'totem',{tag:{totem:true}});
+
 	},
 	loop:function(spot){
 		m.forEachActor(spot,100,function(key){
@@ -268,14 +343,29 @@ s.newMap('greenSwitchForest',{
 s.newMapAddon('QfirstTown-south',{
 	spot:{t1:{x:48,y:1248}},
 	load:function(spot){
-		m.spawnTeleporter(spot.t1,function(key){
-			if(!s.get(key,'toggleRed'))
-				return s.message(key,'You have no reason to go there.');
-			s.teleport(key,'greenSwitchForest','t1','party',true);	
-			s.setRespawn(key,'QfirstTown-south','t1','main');
-			s.displayPopup(key,'Those red towers seem to strengthen the monster.');
-		},'zone','left');
+		m.spawnTeleporter(spot.t1,'teleSouthGreen','zone','left');
 	}
 });
+
+s.newAbility('fireball','attack',{},{
+	type:"bullet",angleRange:360,amount:3,
+	sprite:s.newAbility.sprite("fireball",1),
+	hitAnim:s.newAbility.anim("fireHit",0.5),
+	dmg:s.newAbility.dmg(200,'fire'),
+	spd:20,
+});
+
+s.newBoss('totem',s.newBoss.variable({rotAngle:0}),function(boss){
+	s.newBoss.phase(boss,'phase0',{
+		loop:function(boss){
+			var angle = b.set(boss,'rotAngle',(b.get(boss,'rotAngle')+1)%360);
+			
+			if(b.get(boss,'_framePhase') % 2 === 0){
+				b.useAbility(boss,'fireball',angle);
+			}	
+		}
+	});
+});
+
 
 s.exports(exports);

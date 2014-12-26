@@ -12,13 +12,17 @@ try {
 	Actor.applyChange(player,data.p);
 	
     //Init Anim
-	for(var i in data.a) Anim(data.a[i]);	
+	for(var i in data.a) 
+		Anim(data.a[i]);	
 	
 	//fix bug if in both list
-	for(var i in data.i) if(data.r && data.r[i]) delete data.r[i];	//incase in both list
+	for(var i in data.i) 
+		if(data.r && data.r[i]) 
+			delete data.r[i];	//incase in both list
 	
 	//Init Full List aka never seen before
-	for(var i in data.i) Receive.initEntity(data.i[i],i);
+	for(var i in data.i) 
+		Receive.initEntity(data.i[i],i);
 	
 	//Update Full List
 	for(var i in data.u){	
@@ -32,6 +36,8 @@ try {
 		var act = ActiveList.get(i);
 		if(act && act.sprite){ 
 			act.sprite.dead = 1/data.r[i] || 1;	//ratio will impact alpha or fade out
+			if(act.isActor)
+				act.hp = 0;
 		} else {
 			ActiveList.removeAny(i);	//ex: strike
 		}			

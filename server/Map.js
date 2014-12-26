@@ -17,11 +17,13 @@ var Map = exports.Map = function(namemodel,version,creatorkey){	//create instanc
 	if(!model) return ERROR(3,'invalid map model',namemodel);
 	tmp.addon = Tk.deepClone(model.addon);
 	
-	for(var i in tmp.addon){ for(var j in tmp.addon[i].spot){
-		tmp.addon[i].spot[j].map = tmp.id;
-		tmp.addon[i].spot[j].addon = i;
-		tmp.addon[i].spot.map = tmp.id;
-	}}
+	for(var i in tmp.addon){ 
+		for(var j in tmp.addon[i].spot){
+			tmp.addon[i].spot[j].map = tmp.id;
+			tmp.addon[i].spot[j].addon = i;
+			tmp.addon[i].spot.map = tmp.id;
+		}
+	}
 	tmp.name = model.name;
 	tmp.model = model.id;
 	tmp.lvl = model.lvl;
@@ -46,9 +48,9 @@ Map.getVersion = function(name){
 }
 
 Map.getInstanceType = function(name){
-	if(name.have('@MAIN')) return 'public';
-	if(name.have('@@')) return 'solo';
-	if(name.have('@')) return 'party';
+	if(name.contains('@MAIN')) return 'public';
+	if(name.contains('@@')) return 'solo';
+	if(name.contains('@')) return 'party';
 	else return 'public';
 }
 

@@ -73,8 +73,6 @@ s.newEvent('_complete',function(key){ //
 	s.callEvent('_abandon',key);
 });
 s.newEvent('startGame',function(key){ //
-	if(!s.startQuest(key)) return;
-	
 	s.teleport(key,'base','t1','solo',true);
 	s.addItem(key,'upgradeSpd');
 	s.addItem(key,'upgradeAmount');
@@ -317,7 +315,10 @@ s.newMap('base',{
 s.newMapAddon('QfirstTown-east',{
 	spot:{e1:{x:1136,y:720},e2:{x:2000,y:1008},t4:{x:1680,y:1552}},
 	load:function(spot){
-		m.spawnTeleporter(spot.t4,'startGame','zone','down');
+		m.spawnTeleporter(spot.t4,'startGame','zone',{
+			minimapIcon:'minimapIcon.quest',
+			angle:s.newNpc.angle('down'),
+		});
 		
 		m.spawnActorGroup(spot.e1,[
 			m.spawnActorGroup.list("slime",1),

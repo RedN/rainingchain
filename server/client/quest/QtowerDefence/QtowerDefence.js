@@ -64,15 +64,13 @@ s.newEvent('_complete',function(key){ //
 	s.callEvent('_abandon',key);
 });
 s.newEvent('startGame',function(key){ //
-	if(!s.startQuest(key)) return;
 	s.teleport(key,'main','t1','solo',true);
 	s.addItem(key,'basic');
 	s.addItem(key,'ice');
 	s.addItem(key,'aoe');
-	s.displayPopup(key,'Use items to place towers.');
+	s.displayPopup(key,'Use items to place towers and kill mushrooms.');
 	s.message(key,'Use the items "Basic", "Fire" and "Ice" to place towers.');
 	s.message(key,'Enemies must not reach the bottom of the map.');
-	s.message(key,'Using your own abilities to kill enemies decreases your score. If it drops below -25, you lose.');
 	
 	if(s.isChallengeActive(key,'hardmode')){
 		s.set(key,'life',3);

@@ -10,7 +10,7 @@ Dialog.UI('chat',{
 	top:CST.HEIGHT-HEIGHT,
 	width:WIDTH,
 	height:HEIGHT,
-	background:'rgba(0,0,0,0.2)',
+	background:'rgba(0,0,0,0.3)',
 	padding:'0px 0px',
 	border:'1px solid black',
 	color:'white',
@@ -21,6 +21,7 @@ Dialog.UI('chat',{
 		return null;
 	}
 	html.show();
+	
 	
 	Dialog.chatBoxText = Dialog.chatBoxText || $("<div>")
 		.attr('id','chatBoxText')
@@ -52,7 +53,7 @@ Dialog.UI('chat',{
 			if(Dialog.chat.getInput())
 				Message.sendChatToServer(Dialog.chat.getInput());
 			else
-				Dialog.chat.blurInput();
+				Dialog.chat.blurInput(true);
 				
 			return false;
 		})
@@ -119,7 +120,7 @@ Dialog.chat.addText = function(text,time){
 	
 	var id = "ChatreceiveaddToHtml-" + Math.randomId();
 	where.innerHTML += '<span id="' + id + '">' + text + '<br></span>';
-	Message.addToHtml.LIST[id] = timer || main.pref.chatTimePublic * 25;
+	Message.addToHtml.LIST[id] = timer || Main.getPref(main,'chatTimePublic') * 25;
 	where.scrollTop += 50;
 	
 	for(var i in Message.addToHtml.LIST){
@@ -138,9 +139,10 @@ Dialog.chat.isInputActive = function(text){
 	return $('#chatBoxInput').is(":focus");
 };
 
-Dialog.chat.blurInput = function(){
-	//$('#chatBoxInput').blur();
+Dialog.chat.blurInput = function(blurInput){
 	$('#gameDiv').focus();
+	if(blurInput)
+		$('#chatBoxInput').blur();
 };
 
 Dialog.chat.focusInput = function(){
@@ -183,7 +185,7 @@ Dialog.UI('dialogue',{
 	top:CST.HEIGHT-HEIGHT,
 	width:WIDTH,
 	height:HEIGHT,
-	background:'rgba(0,0,0,0.5)',
+	background:'rgba(0,0,0,0.8)',
 	padding:'5px 5px',
 	border:'1px solid black',
 	color:'white',
@@ -245,7 +247,7 @@ Dialog.UI('partyClan',{
 	left:0,
 	top:CST.HEIGHT-HEIGHT-30,
 	width:WIDTH,
-	height:HEIGHT,
+	height:30,
 	padding:'5px 5px',
 	color:'white',
 	font:'1.3em Kelly Slab',

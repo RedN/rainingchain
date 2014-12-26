@@ -512,7 +512,7 @@ Object.defineProperty(Object.prototype, "$keys", {
 	}
 });	
 
-Object.defineProperty(Array.prototype, "have", {
+Object.defineProperty(Array.prototype, "contains", {
     enumerable: false,
     value: function(name,begin){
 		if(begin) return this.indexOf(name) === 0;
@@ -539,7 +539,13 @@ Object.defineProperty(Array.prototype, "remove", {
 		return this;
 	}
 });
-
+Object.defineProperty(Array.prototype, "removeAt", {
+    enumerable: false,
+    value: function (i) {
+		this.splice(i,1);
+		return this;
+	}
+});
 
 Object.defineProperty(Object.prototype, "$getMax", {
     enumerable: false,
@@ -673,7 +679,7 @@ String.prototype.keyFullName = function(){
 }
 
 String.prototype.capitalize = function() {
-	if(!this.have(' '))    return this.charAt(0).toUpperCase() + this.slice(1);
+	if(!this.contains(' '))    return this.charAt(0).toUpperCase() + this.slice(1);
 	
 	var array = this.split(' ');
 	for(var i in array) array[i] = array[i].capitalize();
@@ -688,8 +694,10 @@ String.prototype.numberOnly = function(num){
 	return a;
 }
 
-String.prototype.have = function(name){
-	return this.indexOf(name) !== -1;
+String.prototype.contains = function(name,first){
+	if(!first)
+		return this.indexOf(name) !== -1;
+	return this.indexOf(name) === 0;
 }
 
 String.prototype.set = function(pos,value){

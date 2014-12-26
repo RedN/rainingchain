@@ -43,7 +43,7 @@ Clan.enter = function(key,name){
 	var pn = Actor.get(key).name;
 	
 	if(!DB[name]) return Message.add(key,'This clan doesn\'t exist.');
-	if(main.social.clanList.have(name)) return Message.add(key,'You are already in this clan chat.');	;
+	if(main.social.clanList.contains(name)) return Message.add(key,'You are already in this clan chat.');	;
 	main.social.clanList.push(name);
 	Main.setFlag(main,'social,clanList');
 	

@@ -76,7 +76,7 @@ Game.init.other = function(data){
 	
 	if(data.DEV_MESSAGE){
 		setTimeout(function(){
-			Message.add(key,Message('questPopup',data.DEV_MESSAGE,null,Message.QuestPopup(25*30)));
+			Message.addPopup(key,data.DEV_MESSAGE);
 		},10000);
 	}
 	

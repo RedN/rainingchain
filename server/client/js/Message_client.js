@@ -76,5 +76,7 @@ Message.add = function(key,msg){
 	if(typeof msg === 'string') msg = Message('game',msg,Message.CLIENT);
 	Message.receive(msg);
 }
-
+Message.addPopup = function(key,text,time){
+	Message.add(main.id,Message('questPopup',text,null,Message.QuestPopup(time || 25*30,false)));	
+}
 

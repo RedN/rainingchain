@@ -22,7 +22,17 @@ var TESTDISTANCE = function(act,e){	//return false = good distance
 	return false;
 }
 
-
+var testQuestActive = function(act,e){
+	var main = Main.get(act.id);
+	if(e.quest && main.questActive !== e.quest){
+		var q = Quest.get(e.quest);
+		if(q.autoStartQuest){
+			Main.openDialog(main,'quest',e.quest);
+			return false;
+		}
+	}
+	return true;
+}
 
 //Optionlist
 Actor.click = {};
@@ -42,6 +52,8 @@ Actor.click.teleport = function(act,eid){
 	var e = Actor.get(eid);
 	
 	if(TESTDISTANCE(act,e)) return;
+	if(!testQuestActive(act,e)) return;
+	
 	e.teleport(act.id);
 }
 
@@ -49,6 +61,7 @@ Actor.click.dialogue = function(act,eid){
 	var e = Actor.get(eid);
 	var dia = e.dialogue;
 	if(TESTDISTANCE(act,e)) return;
+	if(!testQuestActive(act,e)) return;
 	dia(act.id);
 }
 
@@ -57,24 +70,26 @@ Actor.click.pushable = function(pusher,beingPushed){
 	if(!act.pushable) return ERROR(3,'no pushable');
 	if(act.timeout.movePush) return;	//BAD
 	
-	var pusherAngle = Tk.atan2(act.y - pusher.y,act.x - pusher.x);			//only work with square block
+	var pushery = pusher.y + pusher.sprite.bumperBox.right.y;
+	
+	var pusherAngle = Tk.atan2(act.y - pushery,act.x - pusher.x);			//only work with square block
 	var fact = 360/4;
 	var angle = Math.floor((pusherAngle+fact/2)/fact)*fact%360;
-	
-	Math.floor((pusherAngle+90/2)/90)*90%360
-	
-	if(Math.abs(pusherAngle-angle) > 30) return;
+		
+	if(pusherAngle > 340) pusherAngle -= 360;	//QUICKFIX
+	if(Math.abs(pusherAngle-angle) > 20) return;
 	
 	//Test if too far
-		//Block
 	var blockVarX = 0;	//only supported direction =4
 	var blockVarY = 0;
-	if(angle === 0) blockVarX = act.block.size.right*32;
-	if(angle === 90) blockVarY = act.block.size.left*32;
-	if(angle === 180) blockVarX = act.block.size.down*32;
-	if(angle === 270) blockVarY = act.block.size.up*32;
+	if(angle === 0) blockVarX = act.sprite.bumperBox.left.x;	//-1 cuz 
+	if(angle === 90) blockVarY = act.sprite.bumperBox.up.y;
+	if(angle === 180) blockVarX = act.sprite.bumperBox.right.x;
+	if(angle === 270) blockVarY = act.sprite.bumperBox.down.y;
 	
-		//Player
+	//angle 270 => player down, block up, pushing block upwards
+	
+	//Player
 	var pusherVarX = 0;	//only supported direction =4
 	var pusherVarY = 0;
 	if(angle === 0) pusherVarX = act.sprite.bumperBox.right.x;
@@ -83,12 +98,10 @@ Actor.click.pushable = function(pusher,beingPushed){
 	if(angle === 270) pusherVarY = act.sprite.bumperBox.up.y;
 	
 	var posB = {'x':act.x + blockVarX,'y':act.y+blockVarY};
-	var posP = {'x':pusher.x + pusherVarX,'y':pusher.y+pusherVarY};
+	var posP = {'x':pusher.x + pusherVarX,'y':pushery+pusherVarY};
 	
-	if(Collision.getDistancePtPt(posB,posP) > 64)	return TOOFAR(pusher.id);	//toofar
-	
-	
-	
+	if(Collision.getDistancePtPt(posB,posP) > 32)	return TOOFAR(pusher.id);	//toofar
+		
 	//Check if destination is wall
 	var map = pusher.map;
 	
@@ -155,6 +168,7 @@ Actor.click.loot = function(act,eid){	//need work
 	var e = Actor.get(eid);
 	
 	if(TESTDISTANCE(act,e)) return;
+	if(!testQuestActive(act,e)) return;
 	if(e.quest && e.quest !== Actor.getMain(act).questActive) return Message.add(act.id,"You need to start this quest via the Quest Tab before making progression in it.");
 	
 	if(e.viewedIf(act.id)) e.loot(act.id,eid);
@@ -169,7 +183,7 @@ Actor.click.toggle = function(act,eid){
 	var e = Actor.get(eid);
 	
 	if(TESTDISTANCE(act,e)) return;
-	if(e.quest && e.quest !== Actor.getMain(act).questActive) return Message.add(act.id,"You need to start this quest via the Quest Tab before making progression in it.");
+	if(!testQuestActive(act,e)) return;
 	
 	var sw = e.toggle;
 	if(!sw) return ERROR(3,'not a toggle',e.name);

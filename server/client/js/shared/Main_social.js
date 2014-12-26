@@ -14,6 +14,7 @@ Main.Social = function(){
 		allowedToSendPuush:true,	//TODO
 	};
 }
+
 Main.Social.customChat = function(symbol,color){
 	return {
 		symbol:symbol || 0,

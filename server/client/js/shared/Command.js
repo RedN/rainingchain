@@ -69,7 +69,7 @@ Command.init = function(){
 		
 		var txt = text.slice(1);
 		for(var i in DB){
-			if(!txt.have(i)) continue;
+			if(!txt.contains(i)) continue;
 			var cmd = DB[i];	//a match!
 			var str = cmd.description;
 			for(var j in cmd.param){
@@ -110,7 +110,7 @@ Command.receive.verifyInput = function(d){
 		if(p[i] !== undefined && doc[i].type === 'string'){
 			if(typeof p[i] !== 'string') return 'param' + i + ' is not string'; 
 			
-			if(doc[i].whiteList && !doc[i].whiteList.have(p[i])) return 'param' + i + ' not part of whiteList';
+			if(doc[i].whiteList && !doc[i].whiteList.contains(p[i])) return 'param' + i + ' not part of whiteList';
 		}
 	}
 	for(++i;i < doc.length; i++){
@@ -380,7 +380,7 @@ Command('actorOptionList',"Select an option from the Right-Click Option List of 
 Command('party,join',"Join a party.",true,[ //{
 	Command.Param('string','Party Name (Usually Username)',false),
 ],function(key,name){
-	if(name.have('@') || name.have('!')) return Message.add(key,"You can't join this party.");	//reserved
+	if(name.contains('@') || name.contains('!')) return Message.add(key,"You can't join this party.");	//reserved
 	Main.changeParty(Main.get(key),name);
 }); //}
 
@@ -395,7 +395,7 @@ Command('pvp',"Teleport/Quit to PvP Zone.",true,[ //{
 	return;
 	/*
 	var act = Actor.get(key);
-	if(act.map.have('pvpF4A')){	//TOFIX
+	if(act.map.contains('pvpF4A')){	//TOFIX
 		Actor.teleport(act,act.respawnLoc.safe);
 		Message.add(key,"You can no longer attack or be attacked by other players.");
 	}

@@ -38,6 +38,7 @@ Actor.doInitPack = function(act){
 Actor.undoInitPack = function(draw,id){
 
 	var act = {};
+	act.isActor = true;
 	act.id = id;
 	act.x = draw[1];
 	act.y = draw[2];
@@ -369,7 +370,7 @@ Actor.getSignInPack = function(act){	//for player sign in
 		abilityList:Actor.AbilityList.compressClient(act.abilityList,act),
 		skill:act.skill,
 		permBoost:act.permBoost,
-		'sprite,name':act.sprite.name,	//bad... should compress and uncompress
+		'sprite,name':act.sprite.name,	//bad... should compress and uncompress,
 	};
 }
 
@@ -395,7 +396,7 @@ Actor.uncompressDb = function(act,key){
 		act.abilityChange = Actor.AbilityChange(act.ability.normal);	//bad...
 		act.respawnLoc = Actor.RespawnLoc.uncompressDb(act.respawnLoc);
 		
-		act.skill = act.skill;	//kinda dumb but we
+		act.skill = act.skill;	//kinda dumb but w/e
 		act.context = act.name;
 		act.id = key;
 

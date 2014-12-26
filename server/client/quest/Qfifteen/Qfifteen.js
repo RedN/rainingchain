@@ -117,7 +117,6 @@ s.newEvent('testWin',function(key){ //
 	return bool;
 });
 s.newEvent('startGame',function(key){ //teleport and spawn enemy
-	if(!s.startQuest(key)) return;
 	s.startChrono(key,'timer',true);
 	s.teleport(key,'field','t1','solo',true);
 	s.message(key,'Place the blocks in ascending order.');
@@ -149,7 +148,7 @@ s.newMap('field',{
 						goalPositionX:spot.b1.x + 64 * (goalGrid.indexOf(num) % 4),
 						goalPositionY:spot.b1.y + 64 * (Math.floor(goalGrid.indexOf(num) / 4)),
 					},
-					block:s.newNpc.block(s.newNpc.block.size(2,2),1,'npc'),
+					block:s.newNpc.block(s.newNpc.block.size(2,2),1,0,1,0),
 					sprite:s.newNpc.sprite('number-'+grid[i][j],1),
 					pushable:s.newNpc.pushable(8,8,'pushBlock'),
 				});
@@ -168,7 +167,10 @@ s.newMap('field',{
 s.newMapAddon('QfirstTown-north',{
 	spot:{t3:{x:1728,y:48},t8:{x:880,y:208},t4:{x:3152,y:432},t7:{x:1232,y:1232},t2:{x:48,y:1264},t5:{x:3152,y:1792},t6:{x:3152,y:2448},t1:{x:1280,y:3152}},
 	load: function(spot){
-		m.spawnTeleporter(spot.t6,'startGame','zone','right');
+		m.spawnTeleporter(spot.t6,'startGame','zone',{
+			minimapIcon:'minimapIcon.quest',
+			angle:s.newNpc.angle('right'),
+		});
 	}
 });
 

@@ -22,7 +22,6 @@ s.newVariable({
 });
 
 s.newEvent('talkNpc',function(key){ //triggered by talking to ringo. teleport to main
-	if(!s.startQuest(key)) return;
 	s.teleport(key,'main','t1','party');
 	s.setRespawn(key,'main','t1','party',true);
 });

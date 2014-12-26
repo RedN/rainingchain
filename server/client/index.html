@@ -148,7 +148,15 @@
 		
 		<div id="mainDiv" style="display:none; width: 1280px;  height:720px; margin: 0px auto;">
 			<div  id="gameDiv" style="position:absolute; width:1280px; height:720px; overflow:hidden;"></div>
-			<div id="infoDay" style="position:absolute; white-space:normal; width:1280px; top:720px; font:30px Kelly Slab; color:white;"></div>		
+			
+			<div id="gameBottom" style="position:absolute; white-space:normal; width:1280px; top:720px; font:30px Kelly Slab; color:white;">
+				<div id="infoDay"><br></div>		
+				
+				<button style="font-size: 20px; background-color:black;" onclick="$('#gameComment').toggle();">Display/Hide Comments</button>
+				<div id="gameComment" style="display:none">
+					<!-- Begin Comments JavaScript Code --><script type="text/javascript" async>function ajaxpath_5498679eb80a7(url){return window.location.href == '' ? url : url.replace('&s=','&s=' + escape(window.location.href));}(function(){document.write('<div id="fcs_div_5498679eb80a7"><a title="free comment script" href="http://www.freecommentscript.com">&nbsp;&nbsp;<b>Free HTML User Comments</b>...</a></div>');fcs_5498679eb80a7=document.createElement('script');fcs_5498679eb80a7.type="text/javascript";fcs_5498679eb80a7.src=ajaxpath_5498679eb80a7((document.location.protocol=="https:"?"https:":"http:")+"//www.freecommentscript.com/GetComments2.php?p=5498679eb80a7&s=&Size=10#!5498679eb80a7");setTimeout("document.getElementById('fcs_div_5498679eb80a7').appendChild(fcs_5498679eb80a7)",1);})();</script><noscript><div><a href="http://www.freecommentscript.com" title="free html user comment box">Free Comment Script</a></div></noscript><!-- End Comments JavaScript Code -->
+				</div>
+			</div>
 		</div>
 		<br>
 		

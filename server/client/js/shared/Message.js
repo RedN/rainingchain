@@ -2,7 +2,7 @@
 eval(loadDependency(['Server','Save','ItemList','Main','Contribution'],['Message']));
 
 var Message = exports.Message = function(type,text,from,extra){	//extra comes from Message._something
-	if(!Message.TYPE.have(type)) return ERROR(3,'invalid type',type);
+	if(!Message.TYPE.contains(type)) return ERROR(3,'invalid type',type);
 	var msg = {
 		type:type,
 		text:text,

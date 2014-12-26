@@ -52,6 +52,7 @@ Main.completeQuest = function(main){
 	var firstTimeCompleted = mq._complete === 0;
 	mq._complete++;
 	Main.setFlag(main,'quest',qid);
+	console.log('rated',Main.quest.hasRatedQuest(main,qid));
 	if(!Main.quest.hasRatedQuest(main,qid)) 
 		Main.displayQuestRating(main,qid);
 		
@@ -66,6 +67,8 @@ Main.completeQuest = function(main){
 	Main.quest.applyReward(main,reward,mq,q);
 	
 	Highscore.setNewScore(q,main,mq);	//after reward
+	Main.completeQuest.updateGlobalHighscore(main);
+	
 	Main.questCompleteDialog(main,Tk.deepClone(mq),q,challengeSuccess,dailyTaskSucess,rawBonus,finalBonus,reward,scoreMod);
 	//Tk.deepClone needed cuz asyn highscore and updateCycle change mq
 	
@@ -74,6 +77,14 @@ Main.completeQuest = function(main){
 	
 	Main.resetQuest(main);
 }
+Main.completeQuest.updateGlobalHighscore = function(main){
+	for(var i in Quest.DB){
+		var q = Quest.get(i);
+		if(!q.globalHighscore) continue;
+		Highscore.setNewScore(q,main,main.quest[i]);
+	}
+}
+
 
 Main.quest.updateCycle = function(mq){
 	mq._bonus.cycle.score = Math.max(mq._bonus.cycle.score-CYCLE_REMOVE_SCORE,CYCLE_MIN_SCORE);
@@ -144,7 +155,7 @@ Main.abandonQuest.action = function(main){
 	var q = Quest.get(main.questActive);
 	Quest.onAbandon(q,main);
 	Main.resetQuest(main,true);
-	Main.addMessage(main,'You failed the quest "' + q.name + '".');
+	Main.addMessage(main,'You failed the quest ' + q.name + '.');
 }
 
 Main.resetQuest = function(main,abandon){

@@ -53,8 +53,8 @@ Strike.removeFromList = function(id){
 	delete LIST[id]; 
 }
 
-Strike.drawAll = function(ctx){
-	if(!main.pref.displayAoE) return;
+Strike.drawAll = function(ctx){	//unused cuz no longer send strike info to client
+	if(!Main.getPref(main,'displayAoE')) return;
 	
 	ctx.fillStyle = 'red';
 	for(var i in LIST){

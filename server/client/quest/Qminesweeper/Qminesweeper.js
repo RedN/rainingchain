@@ -87,7 +87,7 @@ s.newEvent('generateBombGrid',function(){ //
 	for(var i = 0 ; i < s.callEvent('getCst','BOMBAMOUNT'); i++){
 		do {
 			var num = Math.floor(Math.random()*100);
-		} while(bombPosition.have(num))	//prevent duplicate
+		} while(bombPosition.contains(num))	//prevent duplicate
 			
 		bombPosition.push(num);
 	}
@@ -97,7 +97,7 @@ s.newEvent('generateBombGrid',function(){ //
 		grid[i] = [];
 		for(var j = 0 ; j < SIZE; j++){
 			var num = i + j*10;
-			grid[i][j] = bombPosition.have(num) ? s.callEvent('getCst','BOMB') : 0;
+			grid[i][j] = bombPosition.contains(num) ? s.callEvent('getCst','BOMB') : 0;
 		}
 	}
 	return grid;
@@ -132,7 +132,6 @@ s.newEvent('getBombAround',function(grid,i,j){ //
 	return count;
 });
 s.newEvent('startGame',function(key){ //teleport and spawn enemy
-	if(!s.startQuest(key)) return;
 	s.startChrono(key,'timer',true);
 	s.teleport(key,'field','t1','party',true);
 	s.setRespawn(key,'QfirstTown-north','t5','main');
@@ -231,7 +230,10 @@ s.newMap('field',{
 s.newMapAddon('QfirstTown-north',{
 	spot:{t3:{x:1728,y:48},t8:{x:880,y:208},t4:{x:3152,y:432},t7:{x:1232,y:1232},t2:{x:48,y:1264},t5:{x:3152,y:1792},t6:{x:3152,y:2448},t1:{x:1280,y:3152}},
 	load: function(spot){
-		m.spawnTeleporter(spot.t5,'startGame','zone','right');
+		m.spawnTeleporter(spot.t5,'startGame','zone',{
+			minimapIcon:'minimapIcon.quest',
+			angle:s.newNpc.angle('right'),
+		});
 	}
 });
 s.exports(exports);

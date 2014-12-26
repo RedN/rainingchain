@@ -22,10 +22,10 @@ Message.receive = function(msg){
 }
 
 Message.receive.parseInput = function(text){	//replace [$1] with Input 1 keycode
-	if(!text || !text.have('[$')) return text;
+	if(!text || !text.contains('[$')) return text;
 	for(var i = 0 ; i <= 6; i++){
 		var str = '[$' + i + ']';
-		while(text.have(str))
+		while(text.contains(str))
 			text = text.replace(str,Input.getKeyName('ability',i,true));	//replaceall with $ is pain
 	}
 	return text;
@@ -85,7 +85,8 @@ Message.receive.public.puush = function(pack){
 	for(var i in main.social.friendList) if(i === pack.from) friend = true;
 	if(pack.from === player.name) friend = true;
 	
-	if(pack.from !== Message.ADMIN_USERNAME && main.pref.puush === 0 || (main.pref.puush === 1 && friend === false)){
+	var puush = Main.getPref(main,'puush');
+	if(pack.from !== Message.ADMIN_USERNAME && puush === 0 || (puush === 1 && friend === false)){
 		return pack.text.replaceAll('a href','span href').replaceAll('</a>','</span>');
 	}
 	return pack.text;
@@ -129,9 +130,9 @@ Message.receive.contribution = function(pack){
 }
 
 Message.receive.signNotification = function(msg){
-	if(main.pref.signNotification === 0) return;
+	if(Main.getPref(main,'signNotification') === 0) return;
 	Message.receive(Message('game',msg.text));	
-	if(main.pref.signNotification === 2) Sfx.play('train');
+	if(Main.getPref(main,'signNotification') === 2) Sfx.play('train');
 }
 
 Message.ADMIN_USERNAME = 'rc';

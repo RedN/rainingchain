@@ -9,9 +9,9 @@ Dialog.UI('resourceBar',{
 	//padding:'0px 0px',
 },function(html){
 	if(main.hudState.hp !== Main.hudState.INVISIBLE){
-		
-		var pct = Math.round(player.hp/player.hpMax*100)+"%";
-		var title = 'Hp: ' + player.hp + ' / ' + player.hpMax;
+		var hp = Math.min(player.hp,player.hpMax);
+		var pct = Math.round(hp/player.hpMax*100)+"%";
+		var title = 'Hp: ' + hp + ' / ' + player.hpMax;
 		var bar = $("<div>")
 		.css({background:'rgba(0,0,0,1)',border:'1px solid black',borderRadius:'3px',padding:'2px'})
 		.attr('title',title)

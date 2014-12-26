@@ -49,8 +49,8 @@ s.newEvent('_start',function(key){ //
 	if(s.isAtSpot(key,'QfirstTown-north','t7',200))
 		s.callEvent('startGame',key);
 });
-s.newEvent('_testSignIn',function(key){ //
-	s.teleport.test(key,1232,1232,'QfirstTown-north');
+s.newEvent('_debugSignIn',function(key){ //
+	s.teleport(key,'QfirstTown-north','t7','main');
 });
 s.newEvent('_getScoreMod',function(key){ //
 	if(!s.isChallengeActive(key,'infinite')) return 1;
@@ -75,7 +75,6 @@ s.newEvent('_complete',function(key){ //
 	s.callEvent('_abandon',key);
 });
 s.newEvent('startGame',function(key){ //teleport and spawn enemy
-	if(!s.startQuest(key)) return;
 	var chronoVisible = !!s.isChallengeActive(key,'speedrun');
 	s.startChrono(key,'timer',chronoVisible);
 	s.teleport(key,'main','t1','solo',true);
@@ -138,9 +137,11 @@ s.newMap('main',{
 	}
 });
 s.newMapAddon('QfirstTown-north',{
-	spot:{g1:{x:1856,y:1664},t3:{x:1728,y:48},s4:{x:1120,y:208},t8:{x:880,y:208},t4:{x:3152,y:432},s5:{x:3104,y:848},s3:{x:2144,y:944},s6:{x:992,y:1264},e2:{x:1936,y:1200},t7:{x:1232,y:1232},t2:{x:48,y:1264},b1:{x:0,y:0},t5:{x:3152,y:1792},e1:{x:1584,y:1936},s8:{x:1216,y:2032},s2:{x:1824,y:2256},s1:{x:2304,y:2288},a:{x:2768,y:2448},t6:{x:3152,y:2448},e3:{x:2416,y:2512},s7:{x:2912,y:2864},t1:{x:1280,y:3152}},
+	spot:{e2:{x:1936,y:1200},t7:{x:1232,y:1232},e1:{x:1584,y:1936},e3:{x:2416,y:2512}},
 	load:function(spot){
-		m.spawnTeleporter(spot.t7,'startGame','cave');
+		m.spawnTeleporter(spot.t7,'startGame','cave',{
+			minimapIcon:'minimapIcon.quest',
+		});
 		
 		m.spawnActorGroup(spot.e1,[
 			m.spawnActorGroup.list("taurus",1),

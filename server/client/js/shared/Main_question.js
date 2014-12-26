@@ -15,7 +15,7 @@ Main.question = function(main,func,text,answerType,option,title){
 	title = title || 'Please answer this question';
 	if(answerType === 'boolean') option = [Message.Question.YES,Message.Question.NO];
 	
-	if(!Main.question.ANSWER_TYPE.have(answerType)) return ERROR(3,'invalid answerType',answerType);
+	if(!Main.question.ANSWER_TYPE.contains(answerType)) return ERROR(3,'invalid answerType',answerType);
 	
 	var msg = Message('question',text,null,Message.Question(answerType,option,title));
 	Main.addMessage(main,msg);

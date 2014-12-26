@@ -96,7 +96,6 @@ s.newEvent('startGame',function(key){ //
 	});
 });
 s.newEvent('talkCyber',function(key){ //
-	if(!s.startQuest(key)) return;
 	s.startDialogue(key,'cyber','intro1');
 });
 s.newEvent('killNpc',function(killer,villagerId){ //
@@ -141,7 +140,7 @@ s.newMap('main',{
 		var possibleEnemy = ['mummy','spirit','skeleton','death','ghost','orc-melee'];
 		var randomSpot = spot[possibleSpot.random()];
 		var randomEnemy = possibleEnemy.random();
-		m.spawnActor(randomSpot,randomEnemy);	//spawn enemy
+		m.spawnActor(randomSpot,randomEnemy,{globalDmg:0.7});	//spawn enemy
 	}
 });
 s.newMapAddon('QfirstTown-main',{
@@ -150,7 +149,8 @@ s.newMapAddon('QfirstTown-main',{
 		m.spawnActor(spot.n3,'npc',{
 			sprite:s.newNpc.sprite('villager-male5'),
 			dialogue:'talkCyber',
-			name:'Cyber'
+			name:'Cyber',
+			minimapIcon:'minimapIcon.quest',
 		});
 	}
 });

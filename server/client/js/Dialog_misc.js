@@ -317,7 +317,7 @@ Dialog.UI('expPopup',{
 		Dialog.close('expPopup');
 	},2000);
 },function(){
-	return '' + Performance.latencyTime + Performance.clientPerformance + main.pref.displayFPS;
+	return '' + Performance.latencyTime + Performance.clientPerformance + Main.getPref(main,'displayFPS');
 });
 
 

@@ -29,7 +29,10 @@ Dialog.questList = function(html,variable,param){
 	for(var i in main.quest){
 		if(!QueryDb.getQuestShowInTab(i)) continue;
 		var mq = main.quest[i];
-		
+		if(!mq._challengeDone){
+			ERROR(3,'mq doesnt have challegenDone',i);
+			continue;
+		}
 		var amountChal = Object.keys(mq._challengeDone).length;
 		var challengeDone = 0; for(var j in mq._challengeDone)	if(mq._challengeDone[j]) challengeDone++;
 		

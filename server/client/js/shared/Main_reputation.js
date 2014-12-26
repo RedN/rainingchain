@@ -232,7 +232,7 @@ Skill.lvlUp = function(act,skill){
 	var key = act.id;
 	Message.add(key,'You are now level ' + sk.lvl[skill] + ' in ' + skill.capitalize() + '!');
 	
-	if(['melee','range','magic'].have(skill)) Message.add(key,'You now deal more damage in ' + skill.capitalize() + '.');
+	if(['melee','range','magic'].contains(skill)) Message.add(key,'You now deal more damage in ' + skill.capitalize() + '.');
 	
 	Server.log(1,key,'Skill.lvlUp',skill,sk.lvl[skill]);
 	Actor.setFlag(act,'skill,lvl');

@@ -121,7 +121,7 @@ Collision.bulletActor.test = function(atk,def){
 	
 	if(def.damagedIf === 'false') return false;
 	if(normal && def.damagedIf !== 'true'){
-		if(Array.isArray(def.damagedIf)) normal = def.damagedIf.have(atk.parent);
+		if(Array.isArray(def.damagedIf)) normal = def.damagedIf.contains(atk.parent);
 		if(def.damagedIf === 'player') normal = parent.type === 'player';
 		if(def.damagedIf === 'npc') normal = parent.type === 'npc';
 		if(typeof def.damagedIf === 'function') normal = def.damagedIf(parent);

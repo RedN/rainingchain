@@ -69,8 +69,7 @@ s.newEvent('_complete',function(key){	//
 	s.callEvent('_abandon',key);
 });
 s.newEvent('startGame',function(key){	//
-	if(!s.startQuest(key)) return;
-	s.message(key,"Break all 10 targets.");
+	s.message(key,"Break all 10 targets in less than 18 seconds.");
 	s.message(key,"Press [$4] to restart the quest quickly.");
 	if(s.isChallengeActive(key,'fireonly')) 
 		s.usePreset(key,'fireonly');
@@ -100,8 +99,15 @@ s.newEvent('endCourse',function(key){	//
 	var time = s.stopChrono(key,'timer');
 	s.set(key,'chrono',time);
 	s.message(key,'Your time: ' + time.frameToChrono());
-	if(!s.isChallengeActive(key,'fivetimes')) 
-		return s.completeQuest(key);
+	if(!s.isChallengeActive(key,'fivetimes')){
+		if(time < 25*18)
+			return s.completeQuest(key);
+		else {
+			s.display(key,'Try harder to get sub 18',25*2);
+			s.callEvent('resetCourse',key);
+			return;
+		}
+	}
 	
 	//else
 	if(time < 25*10) 
@@ -207,7 +213,10 @@ s.newMap('main',{
 s.newMapAddon('QfirstTown-east',{
 	spot:{t6:{x:2880,y:1536}},
 	load: function(spot){
-		m.spawnTeleporter(spot.t6,'startGame','zone','down');
+		m.spawnTeleporter(spot.t6,'startGame','zone',{
+			minimapIcon:'minimapIcon.quest',
+			angle:s.newNpc.angle('down'),
+		});
 	}
 });
 

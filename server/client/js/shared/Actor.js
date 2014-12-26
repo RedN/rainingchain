@@ -109,7 +109,7 @@ var Actor = exports.Actor = function(modelId,extra){
 		
 	act.optionList = Actor.generateOptionList(act);
 	act.onclick = Actor.generateOnclick(act);
-	
+		
 	act.context = act.name;
 	if(act.type === 'npc')
 		act.acc = act.maxSpd/3;
@@ -126,10 +126,15 @@ var Actor = exports.Actor = function(modelId,extra){
 		act.manaMax = act.mana;
 	}
 	
-	Actor.setChange(act,0,true); //set change and old
+		
+	Actor.setChange(act,0,true); //set change and old	
 	act.change = {}; //otherwise, data would be sent twice, in sa.i and sa.u
-	Actor.equip.update(act);	//only if player
-
+	if(act.type === 'player'){	//QUICKFIX, otherwise reuptation ability disappear when login in
+		var ab = Tk.deepClone(act.ability);
+		Actor.equip.update(act);	//only if player
+		act.ability = ab;
+	}
+	
 	return act;
 }
 
@@ -173,7 +178,7 @@ Actor.getViaUserName = function(id){
 }
 
 Actor.isInMap = function(act,map){
-	return act.map.have(map,true);
+	return act.map.contains(map,true);
 }
 
 Actor.addToList = function(bullet){
@@ -473,9 +478,9 @@ Actor.Block = function(size,value,impactPlayer,impactNpc,impactBullet){
 	return {
 		size:size,
 		value:value === undefined ? 1 : value,
-		impactPlayer:impactPlayer === undefined ? true : value,
-		impactNpc:impactNpc === undefined ? true : value,
-		impactBullet:impactBullet === undefined ? true : value,
+		impactPlayer:impactPlayer === undefined ? true : impactPlayer,
+		impactNpc:impactNpc === undefined ? true : impactNpc,
+		impactBullet:impactBullet === undefined ? true : impactBullet,
 	};
 }
 

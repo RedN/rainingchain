@@ -75,7 +75,6 @@ s.newEvent('seeTeleCaveTown',function(key){ //
 	return s.get(key,'killBatBoss') >= s.get(key,'bossAmount');
 });
 s.newEvent('talkBimmy',function(key){ //
-	if(!s.startQuest(key)) return;
 	if(s.get(key,'lootChest')) return s.startDialogue(key,'bimmy','ringdone');
 	if(!s.get(key,'talkBimmy')) return s.startDialogue(key,'bimmy','first');
 	s.startDialogue(key,'bimmy','second');
@@ -327,7 +326,8 @@ s.newMapAddon('QfirstTown-high',{
 		m.spawnActor(spot.n1,'npc',{
 			sprite:s.newNpc.sprite('villager-male5'),
 			name:'Bimmy',
-			dialogue:'talkBimmy'
+			dialogue:'talkBimmy',
+			minimapIcon:'minimapIcon.quest',
 		});
 	}
 });

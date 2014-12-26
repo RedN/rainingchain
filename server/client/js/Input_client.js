@@ -183,7 +183,7 @@ Input.init = function(){
 
 Input.hasFocusOnInput = function(){
 	var str = document.activeElement.constructor.toString();
-	return str.have('HTMLInputElement') || str.have('HTMLTextAreaElement');
+	return str.contains('HTMLInputElement') || str.contains('HTMLTextAreaElement');
 }
 
 Input.onkeydown = function(code,dir,event){
@@ -333,7 +333,7 @@ Input.controller.loop = function(){	//TOFIX bad name
 	if(!navigator.getGamepads) return;
 	var list = navigator.getGamepads();
 	var con = list[0] || list[1] || list[2] || list[3];
-	if(!con || !main.pref.controller) return;
+	if(!con || !Main.getPref(main,'controller')) return;
 	var but = con.buttons;
 	if(!but[0]) return;	//not loaded properly
 	var axe = con.axes;

@@ -94,8 +94,8 @@ Actor.teleport = function(act,spot,force){
 
 Actor.teleport.getMapName = function(act,map){
 	if(!map) return act.map;
-	if(!map.have("@"))	return map + '@MAIN'; 				//main instance
-	if(map.have("@@"))	return map + act.username; 				//alone instance
+	if(!map.contains("@"))	return map + '@MAIN'; 				//main instance
+	if(map.contains("@@"))	return map + act.username; 				//alone instance
 	if(map[map.length-1] === '@') return map + Actor.getPartyName(act);	//party instance
 	return map;
 }
@@ -103,7 +103,7 @@ Actor.teleport.getMapName = function(act,map){
 
 
 Actor.teleport.join = function(act,mort2){	//TOFIX
-	if(mort2.map.have("@@")) return false;
+	if(mort2.map.contains("@@")) return false;
 	
 	Actor.teleport(act,mort2.respawnLoc.recent);
 	return true;

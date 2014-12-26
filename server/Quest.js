@@ -5,50 +5,42 @@ var QUEST_FOLDER = './client/quest/';
 var QUEST_EXCLUDE = ['QkillTheDragon','Qfifteen'];
 
 var Quest = exports.Quest = function(extra){
-	var tmp = {
-		id:'',
-		version:'v1.0',
-		name:'Default Name',
-		icon:'skill.melee',	//usued
-		reward:Quest.Reward(),
-		description:"Default Description",	//unused
-		showInTab:true,
-		showWindowComplete:true,
-		includeInSignInPack:true,
-		dailyTask:true,
-		inMain:true,	//in Main.get(key).quest
-		alwaysActive:false,	//can call event without being questActive (ex: town)
-		skillPlotAllowed:false,
-		admin:false,		//allow extra in item, ability
-		author:'rc',
-		scoreModInfo:'',
-		lvl:0,
-		difficulty:'Easy',
-		challenge:{},
-		preset:{},
-		highscore:{},
-		event:Quest.Event(),
-		skillPlot:[],
-		rating:0,
-		statistic:Quest.Statistic(),
-		playerComment:[],
-		
-	};
+	//Quest.getAPItemplate for template
+	var tmp = {};	
 	for(var i in extra) tmp[i] = extra[i];
 	DB[tmp.id] = tmp;
 	Debug.createQuestTool(tmp);
+	//Quest.fetchPlayerComment(q.id);
 	return tmp;
-	
-	Quest.fetchPlayerComment(q.id);
-	
-	DB[q.id] = q;
-	return q;
 }
 
 var DB = Quest.DB = {};
 
 Quest.getAPItemplate = function(extra){	//todo touse
 	var tmp = {	//note: considering i create the things on the fly, its useless
+		id:'',
+		version:'v1.0',
+		name:'Default Name',
+		reward:Quest.Reward(),
+		showInTab:true,
+		showWindowComplete:true,
+		includeInSignInPack:true,
+		dailyTask:true,
+		inMain:true,	//in Main.get(key).quest
+		globalHighscore:false,	//call updateHighscore everytime a quest complete
+		alwaysActive:false,	//can call event without being questActive (ex: town)
+		skillPlotAllowed:false,
+		admin:false,		//allow extra in item, ability
+		autoStartQuest:true,
+		author:'rc',
+		scoreModInfo:'',
+		lvl:0,
+		difficulty:'Easy',
+		rating:0,
+		statistic:Quest.Statistic(),
+		playerComment:[],
+		reward:Quest.Reward(),
+		//
 		mapAddon:{},
 		map:{},
 		item:{}, 
@@ -63,28 +55,7 @@ Quest.getAPItemplate = function(extra){	//todo touse
 		highscore:{},
 		event:Quest.Event(),
 		skillPlot:[],
-		path:{},
-		//
-		author:'rc',
-		scoreModInfo:'',
-		name:'Default Quest',
-		icon:'skill.melee',	//usued
-		description:"Default Description",	//unused
-		lvl:0,
-		difficulty:'Easy',
-		id:'',
-		version:'v1.0',
-		reward:Quest.Reward(),
-		showInTab:true,
-		showWindowComplete:true,
-		dailyTask:true,
-		inMain:true,	//in Main.get(key).quest
-		alwaysActive:false,	//can call event without being questActive (ex: town)
-		skillPlotAllowed:false,
-		admin:true,		//allow extra in item, ability
-		statistic:Quest.Statistic(),
-		playerComment:[],
-		
+		path:{},		
 	};
 	for(var i in extra)
 		tmp[i] = extra[i];
@@ -135,9 +106,15 @@ Quest.init = function(dbLink){	//init Module
 		var qid = QUEST_ID_LIST[i];
 		if(!qid) continue;	//in case split mess up...
 		try {
-			var q = Quest(require(QUEST_FOLDER+qid + "/" + qid).quest);
-			if(q.id !== qid) return ERROR(2,'quest filename doesnt match quest id',q.id,qid);
-		} catch(err){ ERROR(2,'cant find quest file ' + qid + '. NEVER delete a quest folder manually. Use Quest creator.'); }
+			var req = require(QUEST_FOLDER+qid + "/" + qid);
+		} catch(err){ 
+			ERROR(2,'error with quest file ' + qid + '. Note: NEVER delete a quest folder manually. Use Quest creator.');
+			return;
+		}
+		
+		var q = Quest(req.quest);
+		if(q.id !== qid) 
+			return ERROR(2,'quest filename doesnt match quest id',q.id,qid);
 	}
 }
 

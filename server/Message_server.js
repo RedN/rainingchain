@@ -10,7 +10,10 @@ Message.init = function(dblink){
 Message.add = function(key,textOrMsg){
 	Main.addMessage(Main.get(key),textOrMsg);
 }
-
+Message.addPopup = function(key,text,time){
+	Message.add(key,Message('questPopup',text,null,Message.QuestPopup(time || 25*30,false)));
+}
+		
 Message.broadcast = function(text){
 	Main.forEach(function(main){
 		Main.addMessage(main,text);

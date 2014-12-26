@@ -56,22 +56,12 @@ Actor.getQuestMarkerMinimap = function(act){	//client side
 		
 		var vx = pos.x - act.x;
 		var vy = pos.y - act.y;
-		
-		var diff = Math.pyt(vx,vy);
-		
-		var val = {'6':1.2,'4':1.9,'5':1.5,'7':1};
-		var maxDist = val[main.pref.mapRatio] * CST.WIDTH; //try and error... bad
-		
-		if(diff > maxDist){
-			vx *= maxDist/diff;
-			vy *= maxDist/diff;
-		}
-		
+				
 		ret.push({
 			vx:vx,
 			vy:vy,
 			icon:'minimapIcon.questMarker',
-			size:24,
+			size:Img.getMinimapIconSize('minimapIcon.questMarker'),
 		});
 	}
 	return ret;

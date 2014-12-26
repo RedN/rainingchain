@@ -6,7 +6,7 @@ var DEV_TOOL = 'DEV_TOOL';
 var QUEST_TOOL_SUFFIX = '_Tool';
 var Debug = exports.Debug = {
 	trackQuestVar:!NODEJITSU,
-	SKIP_TUTORIAL:true,
+	SKIP_TUTORIAL:false,
 	DMG_MOD:{player:1,npc:1,pvp:1},
 	ACTIVE:!NODEJITSU,
 	TOEVAL:'',
@@ -79,10 +79,12 @@ Debug.onSignIn = function(key,name){
 	
 	if(!Quest.TESTING.name) return;
 	
+	//Quest.get(BADDD).event._debugSignIn(key);
+	
 	
 	
 	/*
-	if(name.have('rc',true) || Quest.TESTING.everyone){	//put true when uploading for ppl to create quest
+	if(name.contains('rc',true) || Quest.TESTING.everyone){	//put true when uploading for ppl to create quest
 		setTimeout(function(){	//otherwise fucks thing
 			var main = Main.get(key);
 			Quest.get('Qtutorial').event.skipTutorial(key);
@@ -234,7 +236,7 @@ Debug.createQuestTool = function(q){
 		INFO('########### ' + Date.now() + ' ###########');
 		var mq = QuestVar.getViaMain(Main.get(key));
 		for(var i in mq){
-			if(['quest','username','key','_preset'].have(i)) continue;
+			if(['quest','username','key','_preset'].contains(i)) continue;
 			var attr = i;
 			for(var j = attr.length; j < 15; j++)
 				attr += ' ';
@@ -244,15 +246,17 @@ Debug.createQuestTool = function(q){
 	
 	option.push(ItemModel.Option(function(key){
 		Main.question(Main.get(key),function(key,param,value){
-			var mq = QuestVar.getViaMain(Main.get(key));
-			if(value === undefined)	return Message.add(key,param + ' : ' + mq[param]);
-			if(mq[param] !== undefined){
-				if(value === 'true') mq[param] = true;
-				else if(value === 'false') mq[param] = false;
-				else if(!isNaN(value)) mq[param] = +value;
-				else mq[param] = value;
-			}
-			else Message.add(key,"bad name");
+			try {
+				var mq = QuestVar.getViaMain(Main.get(key));
+				if(value === undefined)	return Message.add(key,param + ' : ' + mq[param]);
+				if(mq[param] !== undefined){
+					if(value === 'true') mq[param] = true;
+					else if(value === 'false') mq[param] = false;
+					else if(!isNaN(value)) mq[param] = +value;
+					else mq[param] = value;
+				}
+				else Message.add(key,"bad name");
+			} catch(err){ ERROR.err(3,err); }
 		},'variable,value','string');
 	},'Change Var'));
 	
@@ -351,7 +355,6 @@ Debug.startQuest = function(key,qid){
 
 Debug.onStartQuest = function(key,qid){
 	if(!Debug.ACTIVE) return;
-	Quest.get(qid).event._debugSignIn(key);
 	Debug.giveQuestTool(key,qid);
 }
 
@@ -376,6 +379,7 @@ Debug.skipTutorial = function(key){
 	Actor.ability.swap(act,'Qsystem-start-dodge',5);
 	
 	Main.completeQuest(Main.get(key));
+	Actor.teleport.town(Actor.get(key),true);
 }
 
 

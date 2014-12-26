@@ -31,7 +31,7 @@ Song('game_it_all_day','game_it_all_day.mp3','Getcheffy','http://www.newgrounds.
 Song.play = function(id,volume){
 	var song = DB[id];
 	var vol = volume || 1;
-	vol *= main.pref.volumeSong/100 * main.pref.volumeMaster/100;
+	vol *= Main.getPref(main,'volumeSong')/100 * Main.getPref(main,'volumeMaster')/100;
 	
 	var audio = song.audio;
 	audio.volume = 0;
@@ -55,7 +55,7 @@ Song.BEING_PLAYED = null;
 
 Song.updateVolume = function(){
 	if(Song.BEING_PLAYED)
-		Song.BEING_PLAYED.audio.volume = main.pref.volumeSong/100 * main.pref.volumeMaster/100;
+		Song.BEING_PLAYED.audio.volume = Main.getPref(main,'volumeSong')/100 * Main.getPref(main,'volumeMaster')/100;
 }
 Song.getCurrentSongInfo = function(){
 	if(!Song.BEING_PLAYED) return 'No song being played...';

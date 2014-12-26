@@ -153,6 +153,7 @@ var m = s.map; var b = s.boss;
 	s.newSprite.picture("teleport-cave","picture/teleport-cave.png",128,102,1,{offsetY:-32});
 	
 	s.newSprite.picture("teleport-zone","picture/teleport-zone.png",32,32,1.5,{legs:-1000,side:[0,1,2,3]});
+	s.newSprite.picture("teleport-zoneLight","picture/teleport-zoneLight.png",32,32,1.5,{legs:-1000,side:[0,1,2,3]});
 	s.newSprite.picture("teleport-underground","picture/teleport-underground.png",32,32,2.5);
 	s.newSprite.picture("teleport-well","picture/teleport-well.png",48,48,2);
 		
@@ -542,7 +543,7 @@ s.newAbility('meleeBomb','attack',{
 	type:"strike",width:50,height:50,delay:5,
 	initPosition:s.newAbility.initPosition(0,200),
 	preDelayAnim:s.newAbility.anim("boostWhite",1),
-	dmg:s.newAbility.dmg(400,'melee'),
+	dmg:s.newAbility.dmg(250,'melee'),
 });
 s.newAbility('rangeBomb','attack',{
 	name:'Tornado',icon:'misc.disync',
@@ -552,7 +553,7 @@ s.newAbility('rangeBomb','attack',{
 	type:"strike",width:50,height:50,delay:5,
 	initPosition:s.newAbility.initPosition(0,200),
 	preDelayAnim:s.newAbility.anim("rangeBomb",1),
-	dmg:s.newAbility.dmg(400,'range'),
+	dmg:s.newAbility.dmg(250,'range'),
 });
 s.newAbility('magicBomb','attack',{
 	name:'Magic Explosion',icon:'attackMagic.fireball',
@@ -562,7 +563,7 @@ s.newAbility('magicBomb','attack',{
 	type:"strike",width:50,height:50,delay:5,
 	initPosition:s.newAbility.initPosition(0,200),
 	preDelayAnim:s.newAbility.anim("magicBomb",1),
-	dmg:s.newAbility.dmg(400,'magic'),
+	dmg:s.newAbility.dmg(250,'magic'),
 });
 s.newAbility('fireBomb','attack',{
 	name:'Fire Explosion',icon:'attackMagic.fireball',
@@ -572,7 +573,7 @@ s.newAbility('fireBomb','attack',{
 	type:"strike",width:50,height:50,delay:5,
 	initPosition:s.newAbility.initPosition(0,200),
 	preDelayAnim:s.newAbility.anim("fireBomb",1),
-	dmg:s.newAbility.dmg(400,'fire'),
+	dmg:s.newAbility.dmg(250,'fire'),
 });
 s.newAbility('coldBomb','attack',{
 	name:'Cold Explosion',icon:'attackMagic.crystal',
@@ -582,7 +583,7 @@ s.newAbility('coldBomb','attack',{
 	type:"strike",width:50,height:50,delay:5,
 	initPosition:s.newAbility.initPosition(0,200),
 	preDelayAnim:s.newAbility.anim("coldBomb",1),
-	dmg:s.newAbility.dmg(400,'cold'),
+	dmg:s.newAbility.dmg(250,'cold'),
 });	
 s.newAbility('lightningBomb','attack',{
 	name:'Lightning Explosion',icon:'attackMagic.static',
@@ -592,7 +593,7 @@ s.newAbility('lightningBomb','attack',{
 	type:"strike",width:50,height:50,delay:5,
 	initPosition:s.newAbility.initPosition(0,200),
 	preDelayAnim:s.newAbility.anim("lightningBomb",1),
-	dmg:s.newAbility.dmg(400,'lightning'),
+	dmg:s.newAbility.dmg(250,'lightning'),
 });	
 	
 s.newAbility('fireNova','attack',{
@@ -1139,12 +1140,12 @@ s.newNpc("death",{
 		
 		s.newNpc.abilityAi.ability(s.newAbility(null,'magicBomb',{},{
 			aim:25,
-			dmg:s.newAbility.dmg(25,'magic'),
+			dmg:s.newAbility.dmg(0,'magic'),
 			onDamagePhase:s.newAbility.onDamagePhase(1,{
-				type:"bullet",angleRange:360,amount:8,
+				type:"bullet",angleRange:360,amount:5,
 				sprite:s.newAbility.sprite('shadowball',0.8),
 				hitAnim:s.newAbility.anim('magicHit',0.5),
-				dmg:s.newAbility.dmg(150,'magic'),
+				dmg:s.newAbility.dmg(125,'magic'),
 			}),
 		}),[0.8,0.8,0.8]),
 		s.newNpc.abilityAi.ability('coldBullet',[0.1,0.3,0.3]),
@@ -1597,6 +1598,13 @@ s.newNpc("teleport-zone",{
 	name:"Map Transition",
 	minimapIcon:'minimapIcon.door',
 	sprite:s.newNpc.sprite("teleport-zone",1.5),
+	nevercombat:1,
+	nevermove:1,
+});
+s.newNpc("teleport-zoneLight",{  
+	name:"Map Transition",
+	minimapIcon:'minimapIcon.door',
+	sprite:s.newNpc.sprite("teleport-zoneLight",1.5),
 	nevercombat:1,
 	nevermove:1,
 });
